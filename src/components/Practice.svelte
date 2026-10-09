@@ -10,6 +10,7 @@
     type QuestionResult,
     emptyFilters,
     filterQuestions,
+    filterTopics,
     filtersToQuery,
     frqEarned,
     frqTotal,
@@ -19,6 +20,7 @@
     selectQuestions,
     summarize,
   } from '../lib/practice';
+  import { type FrqLink, frqName, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
   import { readJson, storageKey, writeJson } from '../lib/storage';
 
   interface Props {
@@ -27,9 +29,16 @@
     chapters: { number: number; title: string; hasQuestions: boolean }[];
     units: { id: string; title: string; topics: { id: string; title: string }[] }[];
     tests: PracticeTest[];
+    /** Released AP FRQs with per-part topic tags. */
+    frqs: FrqLink[];
+    /** chapter number -> CED topics it teaches */
+    chapterTopics: Record<string, string[]>;
+    /** Topics learned this year or last year, for FRQ readiness. */
+    learnedTopics: string[];
+    frqsHref: string;
   }
 
-  let { subject, questionsUrl, chapters, units, tests }: Props = $props();
+  let { subject, questionsUrl, chapters, units, tests, frqs, chapterTopics, learnedTopics, frqsHref }: Props = $props();
 
   const historyKey = storageKey(subject, 'practice-history');
   const difficultyLabels: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
@@ -61,6 +70,9 @@
     }),
   );
   const summary = $derived(summarize(results));
+  const learned = $derived(new Set(learnedTopics));
+  const frqTopics = $derived(filterTopics(filters, units, chapterTopics, tests));
+  const frqMatches = $derived(frqTopics.size ? matchFrqs(frqs, frqTopics) : []);
   const allDone = $derived(session.length > 0 && results.length === session.length);
 
   onMount(async () => {
@@ -244,6 +256,38 @@
 
   {#if session.length === 0}
     <p class="notice">No questions match these filters yet. Try clearing some filters.</p>
+  {/if}
+
+  {#if frqMatches.length > 0}
+    <details class="card past-frqs">
+      <summary>
+        <strong>Past AP FRQs on these topics</strong>
+        <span class="muted small">{frqMatches.length} question{frqMatches.length === 1 ? '' : 's'}</span>
+      </summary>
+      <p class="small muted">
+        Released exam questions from AP Central. Do the listed parts, then grade yourself with the scoring guidelines.
+        <a href={frqsHref}>All past FRQs</a>
+      </p>
+      <ul class="plain-list">
+        {#each frqMatches as m (m.frq.year * 10 + m.frq.number)}
+          {@const ready = readyPoints(m.frq, (t) => learned.has(t))}
+          <li>
+            <div>
+              <a href={m.frq.questionUrl} target="_blank" rel="noopener"><strong>{frqName(m.frq)}</strong></a>
+              {m.frq.title}
+              <span class="badge" class:good={ready === pastFrqPoints(m.frq)}>
+                {ready === pastFrqPoints(m.frq) ? '✓ Ready' : `${ready}/${pastFrqPoints(m.frq)} pts ready`}
+              </span>
+            </div>
+            <div class="small muted">
+              Part{m.parts.length > 1 ? 's' : ''} {m.parts.map((p) => p.label).join(', ')} ({m.points} pt{m.points === 1 ? '' : 's'})
+              · <a href={m.frq.scoringUrl} target="_blank" rel="noopener">Scoring guidelines</a>
+              {#if m.frq.samplesUrl}· <a href={m.frq.samplesUrl} target="_blank" rel="noopener">Sample responses</a>{/if}
+            </div>
+          </li>
+        {/each}
+      </ul>
+    </details>
   {/if}
 
   <ol class="plain-list stack">
@@ -512,6 +556,20 @@
   }
   .summary {
     margin-top: 1.5rem;
+  }
+  .past-frqs {
+    margin: 0.5rem 0 1rem;
+  }
+  .past-frqs summary {
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+  .past-frqs li {
+    padding: 0.45rem 0;
+    border-top: 1px solid var(--border);
   }
   .summary h2 {
     margin: 0 0 0.3rem;

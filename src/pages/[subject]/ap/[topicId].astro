@@ -1,8 +1,10 @@
 ---
+import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { coverage, getLessons, getQuestions, getSubjectData, practiceHref, subjectIds, url } from '../../../lib/content';
+import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, subjectIds, url } from '../../../lib/content';
+import { matchFrqs } from '../../../lib/frqs';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -18,6 +20,7 @@ const c = coverage(data, await getLessons(subject), await getQuestions(subject))
 // Chapters that teach this topic (chapters.json), plus any other chapter with content tagged with it.
 const teaching = data.topicChapters.get(topicId) ?? [];
 const alsoTagged = c.chapters.filter((n) => !teaching.includes(n));
+const frqMatches = matchFrqs(pastFrqLinks(data), new Set([topicId]));
 const flat = unit.topics.map((t) => t.id);
 const i = flat.indexOf(topicId);
 const prev = flat[i - 1];
@@ -61,6 +64,21 @@ const next = flat[i + 1];
 
   <h2>Lessons</h2>
   <LessonList lessons={c.lessons} showChapter />
+
+  <h2>Past AP FRQs</h2>
+  {frqMatches.length > 0 ? (
+    <>
+      <p class="small muted">
+        {frqMatches.length} released question{frqMatches.length === 1 ? ' has' : 's have'} parts on this topic. Grade yourself
+        with the scoring guidelines.
+      </p>
+      <div class="stack">
+        {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
+      </div>
+    </>
+  ) : (
+    <p class="muted">No released FRQ parts on this topic in the years listed.</p>
+  )}
 
   <nav class="pager small" aria-label="Topics">
     {prev ? <a href={url(`${subject}/ap/${prev}/`)}>← {prev}</a> : <span></span>}

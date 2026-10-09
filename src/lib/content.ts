@@ -2,6 +2,7 @@
 // so draft handling and sorting stay consistent.
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
+import { type FrqLink, flattenFrqs } from './frqs';
 import { topicIdFromRef } from './validate';
 
 export type Lesson = CollectionEntry<'lessons'>;
@@ -99,4 +100,17 @@ export function formatDate(iso: string): string {
     year: 'numeric',
     timeZone: 'UTC',
   });
+}
+
+/** Past AP FRQs for a subject, flattened for display. */
+export function pastFrqLinks(data: SubjectData): FrqLink[] {
+  return flattenFrqs(data.pastFrqs);
+}
+
+/** A topic counts as learned for FRQ readiness if it is done this year or was covered last year. */
+export function learnedTopic(data: SubjectData) {
+  return (topic: string) => {
+    const s = data.progress.topics.get(topic);
+    return s === 'done' || s === 'review';
+  };
 }

@@ -115,6 +115,32 @@ Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short
 In YAML, text containing a colon followed by a space, or starting with `$`, `{`, `[`, or `*`, must be quoted.
 Inside double quotes, backslashes must be doubled (`"$\\ce{H2O}$"`). Using `|` block text avoids both problems.
 
+## Past AP FRQs
+
+Released exam questions live in `src/data/<subject>/past-frqs.json`. We **link** to College Board's
+PDFs and never copy the question text. Each part is tagged with the CED topics it tests:
+
+```json
+{
+  "number": 2,
+  "title": "Ascorbic acid (vitamin C)",
+  "page": 6,
+  "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q2.pdf",
+  "parts": [
+    { "label": "A(i)", "points": 1, "cedTopics": ["1.1"] },
+    { "label": "B(iii)", "points": 1, "cedTopics": ["8.9"] }
+  ]
+}
+```
+
+- `page` is where the question starts in the questions PDF, so the link opens at the right page.
+- Take point values from the scoring guidelines. A unit test checks that each exam's questions add
+  up to 10, 10, 10, 4, 4, 4, 4.
+- Tag a part with every topic it really needs, not every topic it mentions. These tags drive the
+  "pts ready" badges and the FRQ lists on topic and practice pages.
+
+When a new exam is released (usually in the summer), add an entry at the top of `exams`.
+
 ## Class tests
 
 Add an entry to `src/data/<subject>/tests.json`:

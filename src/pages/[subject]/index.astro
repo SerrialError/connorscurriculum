@@ -21,6 +21,9 @@ const links = [
   { href: url(`${subject}/chapters/`), title: 'Class view', text: 'Lessons by textbook chapter, in class order.' },
   { href: url(`${subject}/ap/`), title: 'AP view', text: `Lessons by ${data.subject.standardsName} unit and topic.` },
   { href: practiceHref(subject, {}), title: 'Practice', text: `${questions.length} questions with explanations.` },
+  ...(data.pastFrqs.length
+    ? [{ href: url(`${subject}/frqs/`), title: 'Past AP FRQs', text: 'Released exam questions, tagged by topic, with scoring guidelines.' }]
+    : []),
 ];
 ---
 

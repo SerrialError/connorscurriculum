@@ -1,7 +1,8 @@
 ---
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { coverage, getLessons, getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
+import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
+import { matchFrqs } from '../../../lib/frqs';
 
 export const getStaticPaths = subjectPaths;
 
@@ -12,6 +13,8 @@ const { progress } = data;
 const statusOf = (id: string) => progress.topics.get(id) ?? null;
 const count = (ids: string[], status: ReturnType<typeof statusOf>) => ids.filter((id) => statusOf(id) === status).length;
 const allIds = [...data.topics.keys()];
+const frqs = pastFrqLinks(data);
+const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
 ---
 
 <Base title={`${data.subject.standardsName} units`} subject={subject}>
@@ -67,7 +70,7 @@ const allIds = [...data.topics.keys()];
                   {notes.map((note) => <div class="small muted">{note}</div>)}
                 </div>
                 <span class="small muted count">
-                  {c.lessons.length} lesson{c.lessons.length === 1 ? '' : 's'} · {c.questions} q
+                  {c.lessons.length} lesson{c.lessons.length === 1 ? '' : 's'} · {c.questions} q · {frqCount(t.id)} FRQ
                 </span>
               </li>
             );

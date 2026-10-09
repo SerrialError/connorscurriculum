@@ -5,6 +5,7 @@ import {
   type PracticeQuestion,
   type PracticeTest,
   emptyFilters,
+  filterTopics,
   filterQuestions,
   filtersToQuery,
   frqEarned,
@@ -163,5 +164,19 @@ describe('grading', () => {
         { type: 'frq', earned: 2, possible: 3 },
       ]),
     ).toEqual({ mcqCorrect: 1, mcqAnswered: 2, frqEarned: 2, frqPossible: 3, frqDone: 1 });
+  });
+});
+
+describe('filterTopics', () => {
+  const units = [{ id: '5', topics: [{ id: '5.1' }, { id: '5.2' }] }];
+  const chapterTopics = { '14': ['5.1', '5.2', '3.13'], '15': ['7.1'] };
+
+  it('is empty without topic, unit, chapter, or test filters', () => {
+    expect(filterTopics({ ...emptyFilters(), difficulty: [1] }, units, chapterTopics, tests).size).toBe(0);
+  });
+
+  it('combines topics, units, chapters, and the test', () => {
+    const f = { ...emptyFilters(), topics: ['9.1'], units: ['5'], chapters: [15], test: 'ch14' };
+    expect([...filterTopics(f, units, chapterTopics, tests)].sort()).toEqual(['3.13', '5.1', '5.2', '7.1', '9.1']);
   });
 });

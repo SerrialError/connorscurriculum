@@ -1,7 +1,7 @@
 ---
 import Practice from '../../../components/Practice.svelte';
 import Base from '../../../layouts/Base.astro';
-import { getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
+import { getQuestions, getSubjectData, learnedTopic, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -11,6 +11,10 @@ const questions = await getQuestions(subject);
 const chapterNumbers = new Set(questions.map((q) => q.data.chapter));
 const chapters = data.chapters.map((c) => ({ number: c.number, title: c.title, hasQuestions: chapterNumbers.has(c.number) }));
 const units = data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) }));
+const frqs = pastFrqLinks(data);
+const chapterTopics = Object.fromEntries(data.chapters.map((c) => [String(c.number), c.cedTopics]));
+const isLearned = learnedTopic(data);
+const learnedTopics = [...data.topics.keys()].filter(isLearned);
 const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections }));
 ---
 
@@ -24,5 +28,9 @@ const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.cha
     chapters={chapters}
     units={units}
     tests={tests}
+    frqs={frqs}
+    chapterTopics={chapterTopics}
+    learnedTopics={learnedTopics}
+    frqsHref={url(`${subject}/frqs/`)}
   />
 </Base>

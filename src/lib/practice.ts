@@ -257,3 +257,25 @@ export function summarize(results: QuestionResult[]): Summary {
   }
   return s;
 }
+
+// ---------------------------------------------------------------------------
+// Past AP FRQs for the current filters
+// ---------------------------------------------------------------------------
+
+/**
+ * CED topics covered by the current filters: selected topics, every topic in selected units,
+ * and the topics taught by selected chapters or by the selected test's chapters.
+ * Empty when no topic-related filter is set.
+ */
+export function filterTopics(
+  f: Filters,
+  units: { id: string; topics: { id: string }[] }[],
+  chapterTopics: Record<string, string[]>,
+  tests: PracticeTest[],
+): Set<string> {
+  const out = new Set(f.topics);
+  for (const u of units) if (f.units.includes(u.id)) for (const t of u.topics) out.add(t.id);
+  const chapters = [...f.chapters, ...(tests.find((t) => t.id === f.test)?.chapters ?? [])];
+  for (const n of chapters) for (const t of chapterTopics[String(n)] ?? []) out.add(t);
+  return out;
+}

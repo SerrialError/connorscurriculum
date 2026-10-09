@@ -33,6 +33,7 @@ src/
     apchem/chapters.json   textbook chapters, the CED topics each one teaches, "not on AP" notes
     apchem/tests.json      class tests
     apchem/progress.json   chapters the class has finished (topic checkmarks follow)
+    apchem/past-frqs.json  released AP FRQs (links only), each part tagged by CED topic
   content/
     lessons/<subject>/<chapter>-<slug>/index.mdx
     questions/<subject>/<chapter>-<slug>.yaml
@@ -78,3 +79,10 @@ Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure
 from the mapping above. Its `lastYear` block records what was covered in Scholars Chemistry,
 based on the owner's answers on 2026-10-09: fully covered were 3.4, 4.8, 8.1, 8.2, 9.1, 9.2, and 9.3,
 and partly covered were 1.5, 3.5, 8.3, and 8.5.
+
+**`past-frqs.json`** links the released AP Chemistry FRQs for 2023–2026, which are the years AP
+Central currently hosts; the older URLs now redirect to a general page. Each of the 169 parts was
+tagged by reading the 2026-10 versions of the questions and scoring guidelines against the CED.
+Point values were copied from the scoring guidelines. Sample-response PDFs exist for 2023–2025,
+and the posted 2026 exam is Version J for questions 2, 3, and 6. The tags are judgment calls, so
+spot-check the ones you use.

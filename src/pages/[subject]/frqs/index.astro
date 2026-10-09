@@ -1,0 +1,99 @@
+---
+import FrqCard from '../../../components/FrqCard.astro';
+import Base from '../../../layouts/Base.astro';
+import { getSubjectData, learnedTopic, pastFrqLinks, subjectPaths } from '../../../lib/content';
+import { frqName, frqTotal, readyPoints } from '../../../lib/frqs';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const frqs = pastFrqLinks(data);
+const learned = learnedTopic(data);
+const ready = frqs.filter((f) => readyPoints(f, learned) === frqTotal(f));
+const mostly = frqs.filter((f) => {
+  const r = readyPoints(f, learned);
+  return r < frqTotal(f) && r >= frqTotal(f) / 2;
+});
+const exams = data.pastFrqs;
+---
+
+<Base title="Past AP FRQs" subject={subject} searchable>
+  <h1>Past AP free-response questions</h1>
+  <p class="prose muted">
+    Released AP Chemistry FRQs from AP Central, with every part tagged by CED topic. Do a question on paper, then grade
+    yourself with the official scoring guidelines. The links open College Board's PDFs.
+  </p>
+
+  {frqs.length === 0 ? (
+    <p class="muted">No past FRQs listed yet.</p>
+  ) : (
+    <>
+      <section class="card summary">
+        <h2>What you can do now</h2>
+        <p>
+          <span class="badge good">✓ Ready</span> means you have learned every topic in the question, this year or last year.
+        </p>
+        <p>
+          <strong>Ready ({ready.length}):</strong>{' '}
+          {ready.length ? ready.map((f, i) => <>{i > 0 && ', '}<a href={`#${f.year}-q${f.number}`}>{frqName(f)}</a></>) : 'none yet'}
+        </p>
+        {mostly.length > 0 && (
+          <p>
+            <strong>At least half ready ({mostly.length}):</strong>{' '}
+            {mostly.map((f, i) => <>{i > 0 && ', '}<a href={`#${f.year}-q${f.number}`}>{frqName(f)}</a></>)}
+          </p>
+        )}
+        <p class="small muted">
+          To practice one topic, open its page under AP topics; it lists just the FRQ parts on that topic.
+        </p>
+      </section>
+
+      {exams.map((exam) => (
+        <section class="exam">
+          <h2 id={String(exam.year)}>{exam.year} exam</h2>
+          <p class="small links">
+            <a href={exam.questionsUrl} target="_blank" rel="noopener">All questions (PDF)</a>
+            <a href={exam.scoringUrl} target="_blank" rel="noopener">All scoring guidelines (PDF)</a>
+          </p>
+          {exam.note && <p class="small muted">{exam.note}</p>}
+          <div class="stack">
+            {frqs
+              .filter((f) => f.year === exam.year)
+              .map((f) => (
+                <div id={`${f.year}-q${f.number}`}>
+                  <FrqCard subject={subject} frq={f} />
+                </div>
+              ))}
+          </div>
+        </section>
+      ))}
+
+      <p class="small muted source">
+        Questions © College Board, linked from AP Central. Topic tags are our own and may be imperfect; if one looks wrong,
+        fix it in <code>src/data/{subject}/past-frqs.json</code>.
+      </p>
+    </>
+  )}
+</Base>
+
+<style>
+  .summary h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.15rem;
+  }
+  .summary p {
+    margin: 0.35rem 0;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+  }
+  .source {
+    margin-top: 2rem;
+  }
+  [id] {
+    scroll-margin-top: 1rem;
+  }
+</style>

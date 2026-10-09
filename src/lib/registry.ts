@@ -67,7 +67,38 @@ export const progressSchema = z.object({
 
 export type LastYear = NonNullable<z.infer<typeof progressSchema>['lastYear']>;
 
+const frqPartSchema = z.object({
+  label: z.string().min(1),
+  points: z.number().int().positive(),
+  cedTopics: z.array(z.string()).min(1, 'tag each part with at least one CED topic'),
+});
+
+export const pastFrqsSchema = z.object({
+  source: z.string().optional(),
+  exams: z.array(
+    z.object({
+      year: z.number().int(),
+      questionsUrl: z.url(),
+      scoringUrl: z.url(),
+      note: z.string().optional(),
+      questions: z.array(
+        z.object({
+          number: z.number().int().positive(),
+          title: z.string().min(1),
+          /** Page in the questions PDF where this question starts. */
+          page: z.number().int().positive().optional(),
+          /** Scoring commentary with sample student responses. */
+          samplesUrl: z.url().optional(),
+          parts: z.array(frqPartSchema).min(1),
+        }),
+      ),
+    }),
+  ),
+});
+
 export type Subject = z.infer<typeof subjectSchema>;
+export type PastFrqExam = z.infer<typeof pastFrqsSchema>['exams'][number];
+export type PastFrq = PastFrqExam['questions'][number];
 export type Ced = z.infer<typeof cedSchema>;
 export type CedUnit = Ced['units'][number];
 export type CedTopic = z.infer<typeof cedTopicSchema> & { unitId: string };
@@ -107,6 +138,8 @@ export interface SubjectData {
   topicChapters: Map<string, number[]>;
   /** Class progress from progress.json (empty if the file is missing). */
   progress: Progress;
+  /** Released AP FRQs with per-part topic tags, newest first (empty if past-frqs.json is missing). */
+  pastFrqs: PastFrqExam[];
 }
 
 export class DataError extends Error {
@@ -221,7 +254,22 @@ function loadSubject(subject: Subject): SubjectData {
   }
   const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters, lastYear);
 
-  return { subject, ced, chapters, tests, topics, chapterMap, topicChapters, progress };
+  const frqFile = join(dir, 'past-frqs.json');
+  const pastFrqs = existsSync(frqFile) ? readJson(frqFile, pastFrqsSchema).exams : [];
+  pastFrqs.forEach((exam, e) => {
+    exam.questions.forEach((q, i) => {
+      q.parts.forEach((part, p) => {
+        part.cedTopics.forEach((id, t) => {
+          if (!topics.has(id)) {
+            throw new DataError(frqFile, `exams[${e}].questions[${i}].parts[${p}].cedTopics[${t}]`, `topic "${id}" is not in ced.json`);
+          }
+        });
+      });
+    });
+  });
+  pastFrqs.sort((a, b) => b.year - a.year);
+
+  return { subject, ced, chapters, tests, topics, chapterMap, topicChapters, progress, pastFrqs };
 }
 
 const listChapters = (ns: number[]) => `Ch. ${ns.join(', ')}`;

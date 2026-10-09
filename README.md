@@ -82,7 +82,7 @@ and partly covered were 1.5, 3.5, 8.3, and 8.5.
 
 **`past-frqs.json`** links the released AP Chemistry FRQs for 2023–2026, which are the years AP
 Central currently hosts; the older URLs now redirect to a general page. Each of the 169 parts was
-tagged by reading the 2026-10 versions of the questions and scoring guidelines against the CED.
+tagged on 2026-10-09 by reading the questions and scoring guidelines against the CED.
 Point values were copied from the scoring guidelines. Sample-response PDFs exist for 2023–2025,
 and the posted 2026 exam is Version J for questions 2, 3, and 6. The tags are judgment calls, so
 spot-check the ones you use.

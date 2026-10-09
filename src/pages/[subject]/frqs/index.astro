@@ -26,7 +26,6 @@ const exams = data.pastFrqs;
   ) : (
     <>
       <section class="card summary">
-        <h2>What you can do now</h2>
         <p>
           <span class="badge good">✓ Ready</span> means you have learned every topic in the question, this year or last year.
         </p>
@@ -40,6 +39,9 @@ const exams = data.pastFrqs;
             {mostly.map((f, i) => <>{i > 0 && ', '}<a href={`#${f.year}-q${f.number}`}>{frqName(f)}</a></>)}
           </p>
         )}
+        <p>
+          <span class="badge good">✓ Ready</span> means you have learned every topic in the question, this year or last year.
+        </p>
       </section>
 
       {exams.map((exam) => (

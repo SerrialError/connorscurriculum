@@ -20,7 +20,7 @@
     selectQuestions,
     summarize,
   } from '../lib/practice';
-  import { type FrqLink, frqName, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
+  import { type FrqLink, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
   import { readJson, storageKey, writeJson } from '../lib/storage';
 
   interface Props {
@@ -36,9 +36,11 @@
     /** Topics learned this year or last year, for FRQ readiness. */
     learnedTopics: string[];
     frqsHref: string;
+    /** Science practice id ("5") -> name ("Mathematical Routines") */
+    practiceNames: Record<string, string>;
   }
 
-  let { subject, questionsUrl, chapters, units, tests, frqs, chapterTopics, learnedTopics, frqsHref }: Props = $props();
+  let { subject, questionsUrl, chapters, units, tests, frqs, chapterTopics, learnedTopics, frqsHref, practiceNames }: Props = $props();
 
   const historyKey = storageKey(subject, 'practice-history');
   const difficultyLabels: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
@@ -278,6 +280,10 @@
               <span class="badge" class:good={ready === pastFrqPoints(m.frq)}>
                 {ready === pastFrqPoints(m.frq) ? '✓ Ready' : `${ready}/${pastFrqPoints(m.frq)} pts ready`}
               </span>
+            </div>
+            <div class="small practices">
+              {frqPractices({ parts: m.parts }).map((id) => practiceNames[id] ?? id).join(' · ')}
+              {#if !m.frq.officialSkills}<span class="muted">(our labels)</span>{/if}
             </div>
             <div class="small muted">
               Part{m.parts.length > 1 ? 's' : ''} {m.parts.map((p) => p.label).join(', ')} ({m.points} pt{m.points === 1 ? '' : 's'})
@@ -566,6 +572,10 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: baseline;
+  }
+  .practices {
+    color: var(--text-2);
+    font-weight: 600;
   }
   .past-frqs li {
     padding: 0.45rem 0;

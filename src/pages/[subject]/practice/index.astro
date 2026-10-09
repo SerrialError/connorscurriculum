@@ -32,5 +32,6 @@ const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.cha
     chapterTopics={chapterTopics}
     learnedTopics={learnedTopics}
     frqsHref={url(`${subject}/frqs/`)}
+    practiceNames={Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name]))}
   />
 </Base>

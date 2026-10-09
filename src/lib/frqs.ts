@@ -5,6 +5,8 @@ export interface FrqPart {
   label: string;
   points: number;
   cedTopics: string[];
+  /** Science-practice skill codes, e.g. "5.F". The practice is the part before the dot. */
+  skills: string[];
 }
 
 export interface FrqLink {
@@ -15,6 +17,8 @@ export interface FrqLink {
   questionUrl: string;
   scoringUrl: string;
   samplesUrl?: string;
+  /** False when the skill tags are ours rather than College Board's. */
+  officialSkills: boolean;
   parts: FrqPart[];
 }
 
@@ -22,6 +26,7 @@ interface ExamInput {
   year: number;
   questionsUrl: string;
   scoringUrl: string;
+  skillsSource?: 'official' | 'unofficial';
   questions: { number: number; title: string; page?: number; samplesUrl?: string; parts: FrqPart[] }[];
 }
 
@@ -34,6 +39,7 @@ export function flattenFrqs(exams: ExamInput[]): FrqLink[] {
       questionUrl: q.page ? `${exam.questionsUrl}#page=${q.page}` : exam.questionsUrl,
       scoringUrl: exam.scoringUrl,
       ...(q.samplesUrl ? { samplesUrl: q.samplesUrl } : {}),
+      officialSkills: exam.skillsSource === 'official',
       parts: q.parts,
     })),
   );
@@ -62,6 +68,12 @@ export const frqTotal = (frq: FrqLink) => frq.parts.reduce((sum, p) => sum + p.p
 /** Points in parts whose every topic has been learned (this year or last year). */
 export function readyPoints(frq: FrqLink, isLearned: (topic: string) => boolean): number {
   return frq.parts.filter((p) => p.cedTopics.every(isLearned)).reduce((sum, p) => sum + p.points, 0);
+}
+
+/** Science-practice ids ("1"–"6") used anywhere in the question, in order. */
+export function frqPractices(frq: Pick<FrqLink, 'parts'>): string[] {
+  const ids = new Set(frq.parts.flatMap((p) => p.skills.map((s) => s.split('.')[0]!)));
+  return [...ids].sort();
 }
 
 export const frqName = (frq: Pick<FrqLink, 'year' | 'number'>) => `${frq.year} Q${frq.number}`;

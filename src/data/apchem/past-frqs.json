@@ -1,5 +1,5 @@
 {
-  "source": "Released AP Chemistry free-response questions and scoring guidelines on AP Central, 2023–2026 (the years AP Central currently hosts). Links only; question text is not copied. Topic tags were assigned per part by reading the scoring guidelines against the CED and should be spot-checked.",
+  "source": "Released AP Chemistry free-response questions and scoring guidelines on AP Central, 2023–2026 (the years AP Central currently hosts). Links only; question text is not copied. Topic tags were assigned per part by reading the scoring guidelines against the CED and should be spot-checked. Science-practice skills for 2023 and 2024 come from College Board's scoring commentaries, and for 2025 from the Chief Reader Report; 2026 skills are our own tags until College Board publishes its report.",
   "exams": [
     {
       "year": 2026,
@@ -12,16 +12,16 @@
           "title": "Dissolving KCl in a calorimeter",
           "page": 3,
           "parts": [
-            { "label": "A(i)", "points": 1, "cedTopics": ["1.5"] },
-            { "label": "A(ii)", "points": 1, "cedTopics": ["1.7"] },
-            { "label": "B", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "C(i)", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "C(ii)", "points": 1, "cedTopics": ["6.4", "6.6"] },
-            { "label": "D", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "E", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "F(i)", "points": 1, "cedTopics": ["4.2", "7.11"] },
-            { "label": "F(ii)", "points": 1, "cedTopics": ["7.11"] },
-            { "label": "F(iii)", "points": 1, "cedTopics": ["7.12"] }
+            { "label": "A(i)", "points": 1, "cedTopics": ["1.5"], "skills": ["3.B"] },
+            { "label": "A(ii)", "points": 1, "cedTopics": ["1.7"], "skills": ["4.A"] },
+            { "label": "B", "points": 1, "cedTopics": ["6.4"], "skills": ["2.C"] },
+            { "label": "C(i)", "points": 1, "cedTopics": ["6.4"], "skills": ["5.F"] },
+            { "label": "C(ii)", "points": 1, "cedTopics": ["6.4", "6.6"], "skills": ["5.F"] },
+            { "label": "D", "points": 1, "cedTopics": ["6.4"], "skills": ["6.G"] },
+            { "label": "E", "points": 1, "cedTopics": ["6.4"], "skills": ["6.D"] },
+            { "label": "F(i)", "points": 1, "cedTopics": ["4.2", "7.11"], "skills": ["5.E"] },
+            { "label": "F(ii)", "points": 1, "cedTopics": ["7.11"], "skills": ["5.F"] },
+            { "label": "F(iii)", "points": 1, "cedTopics": ["7.12"], "skills": ["2.F"] }
           ]
         },
         {
@@ -29,15 +29,15 @@
           "title": "Chromate and dichromate",
           "page": 5,
           "parts": [
-            { "label": "A(i)", "points": 1, "cedTopics": ["2.7"] },
-            { "label": "A(ii)", "points": 1, "cedTopics": ["2.6"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["4.2"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["4.9"] },
-            { "label": "C", "points": 1, "cedTopics": ["9.9"] },
-            { "label": "D", "points": 2, "cedTopics": ["9.11"] },
-            { "label": "E", "points": 1, "cedTopics": ["5.3"] },
-            { "label": "F", "points": 1, "cedTopics": ["5.3"] },
-            { "label": "G", "points": 1, "cedTopics": ["5.3"] }
+            { "label": "A(i)", "points": 1, "cedTopics": ["2.7"], "skills": ["1.A"] },
+            { "label": "A(ii)", "points": 1, "cedTopics": ["2.6"], "skills": ["3.B"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["4.2"], "skills": ["5.E"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["4.9"], "skills": ["6.D"] },
+            { "label": "C", "points": 1, "cedTopics": ["9.9"], "skills": ["6.D"] },
+            { "label": "D", "points": 2, "cedTopics": ["9.11"], "skills": ["5.F"] },
+            { "label": "E", "points": 1, "cedTopics": ["5.3"], "skills": ["6.B"] },
+            { "label": "F", "points": 1, "cedTopics": ["5.3"], "skills": ["5.D"] },
+            { "label": "G", "points": 1, "cedTopics": ["5.3"], "skills": ["3.A"] }
           ]
         },
         {
@@ -45,16 +45,16 @@
           "title": "Nitrous acid",
           "page": 9,
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["4.8"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["8.1"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["8.3"] },
-            { "label": "C(i)", "points": 1, "cedTopics": ["8.3"] },
-            { "label": "C(ii)", "points": 1, "cedTopics": ["7.9"] },
-            { "label": "D", "points": 1, "cedTopics": ["8.5"] },
-            { "label": "E", "points": 1, "cedTopics": ["4.6"] },
-            { "label": "F", "points": 1, "cedTopics": ["8.5", "8.7"] },
-            { "label": "G", "points": 1, "cedTopics": ["7.6"] },
-            { "label": "H", "points": 1, "cedTopics": ["8.5"] }
+            { "label": "A", "points": 1, "cedTopics": ["4.8"], "skills": ["1.A"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["8.1"], "skills": ["5.F"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["8.3"], "skills": ["5.F"] },
+            { "label": "C(i)", "points": 1, "cedTopics": ["8.3"], "skills": ["5.F"] },
+            { "label": "C(ii)", "points": 1, "cedTopics": ["7.9"], "skills": ["6.D"] },
+            { "label": "D", "points": 1, "cedTopics": ["8.5"], "skills": ["5.D"] },
+            { "label": "E", "points": 1, "cedTopics": ["4.6"], "skills": ["5.F"] },
+            { "label": "F", "points": 1, "cedTopics": ["8.5", "8.7"], "skills": ["3.A"] },
+            { "label": "G", "points": 1, "cedTopics": ["7.6"], "skills": ["5.F"] },
+            { "label": "H", "points": 1, "cedTopics": ["8.5"], "skills": ["6.D"] }
           ]
         },
         {
@@ -62,9 +62,9 @@
           "title": "White phosphorus decomposition",
           "page": 12,
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["2.2"] },
-            { "label": "B", "points": 2, "cedTopics": ["7.4"] },
-            { "label": "C", "points": 1, "cedTopics": ["9.3"] }
+            { "label": "A", "points": 1, "cedTopics": ["2.2"], "skills": ["4.A"] },
+            { "label": "B", "points": 2, "cedTopics": ["7.4"], "skills": ["5.F"] },
+            { "label": "C", "points": 1, "cedTopics": ["9.3"], "skills": ["6.D"] }
           ]
         },
         {
@@ -72,10 +72,10 @@
           "title": "CBrClF₂",
           "page": 13,
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["2.1"] },
-            { "label": "B", "points": 1, "cedTopics": ["2.7"] },
-            { "label": "C(i)", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "C(ii)", "points": 1, "cedTopics": ["3.1"] }
+            { "label": "A", "points": 1, "cedTopics": ["2.1"], "skills": ["6.D"] },
+            { "label": "B", "points": 1, "cedTopics": ["2.7"], "skills": ["4.A"] },
+            { "label": "C(i)", "points": 1, "cedTopics": ["3.1"], "skills": ["1.B"] },
+            { "label": "C(ii)", "points": 1, "cedTopics": ["3.1"], "skills": ["4.C"] }
           ]
         },
         {
@@ -83,10 +83,10 @@
           "title": "Spectrophotometry of V²⁺",
           "page": 14,
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["3.13"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["3.13"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["3.7", "3.13"] },
-            { "label": "C", "points": 1, "cedTopics": ["3.7", "3.13"] }
+            { "label": "A", "points": 1, "cedTopics": ["3.13"], "skills": ["3.C"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["3.13"], "skills": ["5.D"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["3.7", "3.13"], "skills": ["5.F"] },
+            { "label": "C", "points": 1, "cedTopics": ["3.7", "3.13"], "skills": ["6.G"] }
           ]
         },
         {
@@ -94,12 +94,13 @@
           "title": "Sodium oxide",
           "page": 16,
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["6.8"] },
-            { "label": "B", "points": 2, "cedTopics": ["4.5", "6.6"] },
-            { "label": "C", "points": 1, "cedTopics": ["2.3"] }
+            { "label": "A", "points": 1, "cedTopics": ["6.8"], "skills": ["5.F"] },
+            { "label": "B", "points": 2, "cedTopics": ["4.5", "6.6"], "skills": ["5.F"] },
+            { "label": "C", "points": 1, "cedTopics": ["2.3"], "skills": ["4.C"] }
           ]
         }
-      ]
+      ],
+      "skillsSource": "unofficial"
     },
     {
       "year": 2025,
@@ -112,16 +113,16 @@
           "page": 3,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q1.pdf",
           "parts": [
-            { "label": "A(i)", "points": 1, "cedTopics": ["1.2"] },
-            { "label": "A(ii)", "points": 1, "cedTopics": ["1.2"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "C", "points": 1, "cedTopics": ["8.2"] },
-            { "label": "D", "points": 1, "cedTopics": ["3.7"] },
-            { "label": "E(i)", "points": 1, "cedTopics": ["7.11"] },
-            { "label": "E(ii)", "points": 1, "cedTopics": ["7.11"] },
-            { "label": "E(iii)", "points": 1, "cedTopics": ["7.11"] },
-            { "label": "F", "points": 1, "cedTopics": ["8.11"] }
+            { "label": "A(i)", "points": 1, "cedTopics": ["1.2"], "skills": ["3.A"] },
+            { "label": "A(ii)", "points": 1, "cedTopics": ["1.2"], "skills": ["6.A"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["3.1"], "skills": ["4.C"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["3.1"], "skills": ["4.C"] },
+            { "label": "C", "points": 1, "cedTopics": ["8.2"], "skills": ["5.F"] },
+            { "label": "D", "points": 1, "cedTopics": ["3.7"], "skills": ["5.F"] },
+            { "label": "E(i)", "points": 1, "cedTopics": ["7.11"], "skills": ["5.B"] },
+            { "label": "E(ii)", "points": 1, "cedTopics": ["7.11"], "skills": ["5.F"] },
+            { "label": "E(iii)", "points": 1, "cedTopics": ["7.11"], "skills": ["2.B"] },
+            { "label": "F", "points": 1, "cedTopics": ["8.11"], "skills": ["2.F"] }
           ]
         },
         {
@@ -130,14 +131,14 @@
           "page": 6,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q2.pdf",
           "parts": [
-            { "label": "A(i)", "points": 1, "cedTopics": ["1.1"] },
-            { "label": "A(ii)", "points": 2, "cedTopics": ["1.3"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["4.6"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["8.5"] },
-            { "label": "B(iii)", "points": 1, "cedTopics": ["8.9"] },
-            { "label": "C(i)", "points": 1, "cedTopics": ["5.2"] },
-            { "label": "C(ii)", "points": 2, "cedTopics": ["5.2"] },
-            { "label": "D", "points": 1, "cedTopics": ["3.1", "3.10"] }
+            { "label": "A(i)", "points": 1, "cedTopics": ["1.1"], "skills": ["5.F"] },
+            { "label": "A(ii)", "points": 2, "cedTopics": ["1.3"], "skills": ["5.F", "3.B"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["4.6"], "skills": ["5.F"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["8.5"], "skills": ["2.D"] },
+            { "label": "B(iii)", "points": 1, "cedTopics": ["8.9"], "skills": ["5.F"] },
+            { "label": "C(i)", "points": 1, "cedTopics": ["5.2"], "skills": ["6.B"] },
+            { "label": "C(ii)", "points": 2, "cedTopics": ["5.2"], "skills": ["5.F"] },
+            { "label": "D", "points": 1, "cedTopics": ["3.1", "3.10"], "skills": ["4.C"] }
           ]
         },
         {
@@ -146,15 +147,15 @@
           "page": 8,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q3.pdf",
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["2.5"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["9.1"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["9.3"] },
-            { "label": "C(i)", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "C(ii)", "points": 2, "cedTopics": ["6.4"] },
-            { "label": "D", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "E", "points": 1, "cedTopics": ["6.8", "6.9"] },
-            { "label": "F(i)", "points": 1, "cedTopics": ["7.4", "7.8"] },
-            { "label": "F(ii)", "points": 1, "cedTopics": ["7.9"] }
+            { "label": "A", "points": 1, "cedTopics": ["2.5"], "skills": ["3.B"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["9.1"], "skills": ["4.A"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["9.3"], "skills": ["6.D"] },
+            { "label": "C(i)", "points": 1, "cedTopics": ["6.4"], "skills": ["5.F"] },
+            { "label": "C(ii)", "points": 2, "cedTopics": ["6.4"], "skills": ["5.F"] },
+            { "label": "D", "points": 1, "cedTopics": ["6.4"], "skills": ["6.G"] },
+            { "label": "E", "points": 1, "cedTopics": ["6.8", "6.9"], "skills": ["5.F"] },
+            { "label": "F(i)", "points": 1, "cedTopics": ["7.4", "7.8"], "skills": ["5.F"] },
+            { "label": "F(ii)", "points": 1, "cedTopics": ["7.9"], "skills": ["6.D"] }
           ]
         },
         {
@@ -163,10 +164,10 @@
           "page": 11,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q4.pdf",
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["2.7"] },
-            { "label": "B", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "C(i)", "points": 1, "cedTopics": ["3.3"] },
-            { "label": "C(ii)", "points": 1, "cedTopics": ["6.5"] }
+            { "label": "A", "points": 1, "cedTopics": ["2.7"], "skills": ["1.A"] },
+            { "label": "B", "points": 1, "cedTopics": ["3.1"], "skills": ["3.C"] },
+            { "label": "C(i)", "points": 1, "cedTopics": ["3.3"], "skills": ["2.C"] },
+            { "label": "C(ii)", "points": 1, "cedTopics": ["6.5"], "skills": ["5.F"] }
           ]
         },
         {
@@ -175,10 +176,10 @@
           "page": 12,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q5.pdf",
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["2.7"] },
-            { "label": "B", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "C", "points": 1, "cedTopics": ["3.3"] },
-            { "label": "D", "points": 1, "cedTopics": ["3.4"] }
+            { "label": "A", "points": 1, "cedTopics": ["2.7"], "skills": ["1.A"] },
+            { "label": "B", "points": 1, "cedTopics": ["3.1"], "skills": ["6.C"] },
+            { "label": "C", "points": 1, "cedTopics": ["3.3"], "skills": ["6.E"] },
+            { "label": "D", "points": 1, "cedTopics": ["3.4"], "skills": ["5.F"] }
           ]
         },
         {
@@ -187,10 +188,10 @@
           "page": 13,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q6.pdf",
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["9.8"] },
-            { "label": "B", "points": 1, "cedTopics": ["4.9", "9.8"] },
-            { "label": "C", "points": 1, "cedTopics": ["9.11"] },
-            { "label": "D", "points": 1, "cedTopics": ["9.8"] }
+            { "label": "A", "points": 1, "cedTopics": ["9.8"], "skills": ["5.E"] },
+            { "label": "B", "points": 1, "cedTopics": ["4.9", "9.8"], "skills": ["5.E"] },
+            { "label": "C", "points": 1, "cedTopics": ["9.11"], "skills": ["6.D"] },
+            { "label": "D", "points": 1, "cedTopics": ["9.8"], "skills": ["2.B"] }
           ]
         },
         {
@@ -199,13 +200,14 @@
           "page": 15,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q7.pdf",
           "parts": [
-            { "label": "A", "points": 1, "cedTopics": ["4.8", "8.6"] },
-            { "label": "B(i)", "points": 1, "cedTopics": ["8.3"] },
-            { "label": "B(ii)", "points": 1, "cedTopics": ["8.3"] },
-            { "label": "C", "points": 1, "cedTopics": ["5.11"] }
+            { "label": "A", "points": 1, "cedTopics": ["4.8", "8.6"], "skills": ["3.B"] },
+            { "label": "B(i)", "points": 1, "cedTopics": ["8.3"], "skills": ["5.F"] },
+            { "label": "B(ii)", "points": 1, "cedTopics": ["8.3"], "skills": ["5.F"] },
+            { "label": "C", "points": 1, "cedTopics": ["5.11"], "skills": ["6.C"] }
           ]
         }
-      ]
+      ],
+      "skillsSource": "official"
     },
     {
       "year": 2024,
@@ -218,15 +220,15 @@
           "page": 5,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q1.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["8.6"] },
-            { "label": "b", "points": 1, "cedTopics": ["3.7"] },
-            { "label": "c", "points": 1, "cedTopics": ["8.5", "8.7"] },
-            { "label": "d(i)", "points": 1, "cedTopics": ["8.5"] },
-            { "label": "d(ii)", "points": 1, "cedTopics": ["8.5", "8.7"] },
-            { "label": "d(iii)", "points": 2, "cedTopics": ["8.5"] },
-            { "label": "e(i)", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "e(ii)", "points": 1, "cedTopics": ["6.4", "6.6"] },
-            { "label": "e(iii)", "points": 1, "cedTopics": ["6.4"] }
+            { "label": "a", "points": 1, "cedTopics": ["8.6"], "skills": ["1.A"] },
+            { "label": "b", "points": 1, "cedTopics": ["3.7"], "skills": ["5.F"] },
+            { "label": "c", "points": 1, "cedTopics": ["8.5", "8.7"], "skills": ["5.D"] },
+            { "label": "d(i)", "points": 1, "cedTopics": ["8.5"], "skills": ["3.A"] },
+            { "label": "d(ii)", "points": 1, "cedTopics": ["8.5", "8.7"], "skills": ["6.F"] },
+            { "label": "d(iii)", "points": 2, "cedTopics": ["8.5"], "skills": ["3.A"] },
+            { "label": "e(i)", "points": 1, "cedTopics": ["6.4"], "skills": ["5.F"] },
+            { "label": "e(ii)", "points": 1, "cedTopics": ["6.4", "6.6"], "skills": ["5.F"] },
+            { "label": "e(iii)", "points": 1, "cedTopics": ["6.4"], "skills": ["6.G"] }
           ]
         },
         {
@@ -235,16 +237,16 @@
           "page": 9,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q2.pdf",
           "parts": [
-            { "label": "a(i)", "points": 1, "cedTopics": ["4.5"] },
-            { "label": "a(ii)", "points": 1, "cedTopics": ["3.4"] },
-            { "label": "b(i)", "points": 1, "cedTopics": ["5.1"] },
-            { "label": "b(ii)", "points": 1, "cedTopics": ["5.1", "5.5"] },
-            { "label": "b(iii)", "points": 1, "cedTopics": ["4.5"] },
-            { "label": "c", "points": 1, "cedTopics": ["4.5"] },
-            { "label": "d", "points": 1, "cedTopics": ["9.1"] },
-            { "label": "e", "points": 1, "cedTopics": ["9.3"] },
-            { "label": "f", "points": 1, "cedTopics": ["8.7"] },
-            { "label": "g", "points": 1, "cedTopics": ["8.9"] }
+            { "label": "a(i)", "points": 1, "cedTopics": ["4.5"], "skills": ["5.F"] },
+            { "label": "a(ii)", "points": 1, "cedTopics": ["3.4"], "skills": ["5.F"] },
+            { "label": "b(i)", "points": 1, "cedTopics": ["5.1"], "skills": ["6.A"] },
+            { "label": "b(ii)", "points": 1, "cedTopics": ["5.1", "5.5"], "skills": ["6.E"] },
+            { "label": "b(iii)", "points": 1, "cedTopics": ["4.5"], "skills": ["2.F"] },
+            { "label": "c", "points": 1, "cedTopics": ["4.5"], "skills": ["6.D"] },
+            { "label": "d", "points": 1, "cedTopics": ["9.1"], "skills": ["4.C"] },
+            { "label": "e", "points": 1, "cedTopics": ["9.3"], "skills": ["6.D"] },
+            { "label": "f", "points": 1, "cedTopics": ["8.7"], "skills": ["5.F"] },
+            { "label": "g", "points": 1, "cedTopics": ["8.9"], "skills": ["5.F"] }
           ]
         },
         {
@@ -253,14 +255,14 @@
           "page": 12,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q3.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["4.9"] },
-            { "label": "b(i)", "points": 1, "cedTopics": ["2.4"] },
-            { "label": "b(ii)", "points": 1, "cedTopics": ["1.7"] },
-            { "label": "c", "points": 2, "cedTopics": ["1.1", "4.5"] },
-            { "label": "d(i)", "points": 1, "cedTopics": ["4.9"] },
-            { "label": "d(ii)", "points": 1, "cedTopics": ["9.8"] },
-            { "label": "d(iii)", "points": 1, "cedTopics": ["9.8"] },
-            { "label": "e", "points": 2, "cedTopics": ["9.11"] }
+            { "label": "a", "points": 1, "cedTopics": ["4.9"], "skills": ["1.A"] },
+            { "label": "b(i)", "points": 1, "cedTopics": ["2.4"], "skills": ["4.C"] },
+            { "label": "b(ii)", "points": 1, "cedTopics": ["1.7"], "skills": ["4.A"] },
+            { "label": "c", "points": 2, "cedTopics": ["1.1", "4.5"], "skills": ["5.F"] },
+            { "label": "d(i)", "points": 1, "cedTopics": ["4.9"], "skills": ["5.E"] },
+            { "label": "d(ii)", "points": 1, "cedTopics": ["9.8"], "skills": ["5.F"] },
+            { "label": "d(iii)", "points": 1, "cedTopics": ["9.8"], "skills": ["6.D"] },
+            { "label": "e", "points": 2, "cedTopics": ["9.11"], "skills": ["5.F"] }
           ]
         },
         {
@@ -269,10 +271,10 @@
           "page": 15,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q4.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "b", "points": 1, "cedTopics": ["6.3"] },
-            { "label": "c", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "d", "points": 1, "cedTopics": ["6.4"] }
+            { "label": "a", "points": 1, "cedTopics": ["6.4"], "skills": ["2.D"] },
+            { "label": "b", "points": 1, "cedTopics": ["6.3"], "skills": ["3.C"] },
+            { "label": "c", "points": 1, "cedTopics": ["6.4"], "skills": ["5.F"] },
+            { "label": "d", "points": 1, "cedTopics": ["6.4"], "skills": ["5.C"] }
           ]
         },
         {
@@ -281,10 +283,10 @@
           "page": 17,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q5.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["7.3"] },
-            { "label": "b(i)", "points": 1, "cedTopics": ["7.3", "7.8"] },
-            { "label": "b(ii)", "points": 1, "cedTopics": ["7.9"] },
-            { "label": "b(iii)", "points": 1, "cedTopics": ["7.9", "7.10"] }
+            { "label": "a", "points": 1, "cedTopics": ["7.3"], "skills": ["5.B"] },
+            { "label": "b(i)", "points": 1, "cedTopics": ["7.3", "7.8"], "skills": ["3.B"] },
+            { "label": "b(ii)", "points": 1, "cedTopics": ["7.9"], "skills": ["2.B"] },
+            { "label": "b(iii)", "points": 1, "cedTopics": ["7.9", "7.10"], "skills": ["6.D"] }
           ]
         },
         {
@@ -293,10 +295,10 @@
           "page": 19,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q6.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["5.3"] },
-            { "label": "b", "points": 1, "cedTopics": ["5.1"] },
-            { "label": "c(i)", "points": 1, "cedTopics": ["2.5"] },
-            { "label": "c(ii)", "points": 1, "cedTopics": ["2.7"] }
+            { "label": "a", "points": 1, "cedTopics": ["5.3"], "skills": ["5.D"] },
+            { "label": "b", "points": 1, "cedTopics": ["5.1"], "skills": ["5.F"] },
+            { "label": "c(i)", "points": 1, "cedTopics": ["2.5"], "skills": ["3.B"] },
+            { "label": "c(ii)", "points": 1, "cedTopics": ["2.7"], "skills": ["6.C"] }
           ]
         },
         {
@@ -305,12 +307,13 @@
           "page": 21,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap24-apc-chemistry-q7.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["3.7"] },
-            { "label": "b", "points": 2, "cedTopics": ["3.7"] },
-            { "label": "c", "points": 1, "cedTopics": ["3.9"] }
+            { "label": "a", "points": 1, "cedTopics": ["3.7"], "skills": ["5.F"] },
+            { "label": "b", "points": 2, "cedTopics": ["3.7"], "skills": ["2.C"] },
+            { "label": "c", "points": 1, "cedTopics": ["3.9"], "skills": ["2.F"] }
           ]
         }
-      ]
+      ],
+      "skillsSource": "official"
     },
     {
       "year": 2023,
@@ -323,16 +326,16 @@
           "page": 5,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q1.pdf",
           "parts": [
-            { "label": "a(i)", "points": 1, "cedTopics": ["1.5"] },
-            { "label": "a(ii)", "points": 1, "cedTopics": ["1.5"] },
-            { "label": "b", "points": 1, "cedTopics": ["1.3"] },
-            { "label": "c", "points": 1, "cedTopics": ["1.1"] },
-            { "label": "d", "points": 1, "cedTopics": ["1.3"] },
-            { "label": "e", "points": 1, "cedTopics": ["1.3"] },
-            { "label": "f(i)", "points": 1, "cedTopics": ["4.9", "9.8"] },
-            { "label": "f(ii)", "points": 1, "cedTopics": ["9.8"] },
-            { "label": "f(iii)", "points": 1, "cedTopics": ["9.9"] },
-            { "label": "f(iv)", "points": 1, "cedTopics": ["9.8"] }
+            { "label": "a(i)", "points": 1, "cedTopics": ["1.5"], "skills": ["3.B"] },
+            { "label": "a(ii)", "points": 1, "cedTopics": ["1.5"], "skills": ["4.A"] },
+            { "label": "b", "points": 1, "cedTopics": ["1.3"], "skills": ["5.F"] },
+            { "label": "c", "points": 1, "cedTopics": ["1.1"], "skills": ["5.F"] },
+            { "label": "d", "points": 1, "cedTopics": ["1.3"], "skills": ["3.B"] },
+            { "label": "e", "points": 1, "cedTopics": ["1.3"], "skills": ["6.G"] },
+            { "label": "f(i)", "points": 1, "cedTopics": ["4.9", "9.8"], "skills": ["5.E"] },
+            { "label": "f(ii)", "points": 1, "cedTopics": ["9.8"], "skills": ["5.F"] },
+            { "label": "f(iii)", "points": 1, "cedTopics": ["9.9"], "skills": ["5.F"] },
+            { "label": "f(iv)", "points": 1, "cedTopics": ["9.8"], "skills": ["6.D"] }
           ]
         },
         {
@@ -341,14 +344,14 @@
           "page": 8,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q2.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["1.1"] },
-            { "label": "b", "points": 2, "cedTopics": ["6.9"] },
-            { "label": "c(i)", "points": 1, "cedTopics": ["2.2"] },
-            { "label": "c(ii)", "points": 2, "cedTopics": ["2.2"] },
-            { "label": "d(i)", "points": 1, "cedTopics": ["2.7"] },
-            { "label": "d(ii)", "points": 1, "cedTopics": ["2.6"] },
-            { "label": "e", "points": 1, "cedTopics": ["7.3"] },
-            { "label": "f", "points": 1, "cedTopics": ["7.4", "3.4"] }
+            { "label": "a", "points": 1, "cedTopics": ["1.1"], "skills": ["5.F"] },
+            { "label": "b", "points": 2, "cedTopics": ["6.9"], "skills": ["5.F"] },
+            { "label": "c(i)", "points": 1, "cedTopics": ["2.2"], "skills": ["5.D"] },
+            { "label": "c(ii)", "points": 2, "cedTopics": ["2.2"], "skills": ["3.A"] },
+            { "label": "d(i)", "points": 1, "cedTopics": ["2.7"], "skills": ["6.E"] },
+            { "label": "d(ii)", "points": 1, "cedTopics": ["2.6"], "skills": ["6.E"] },
+            { "label": "e", "points": 1, "cedTopics": ["7.3"], "skills": ["5.B"] },
+            { "label": "f", "points": 1, "cedTopics": ["7.4", "3.4"], "skills": ["5.F"] }
           ]
         },
         {
@@ -357,14 +360,14 @@
           "page": 11,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q3.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["4.2"] },
-            { "label": "b", "points": 1, "cedTopics": ["5.1"] },
-            { "label": "c", "points": 2, "cedTopics": ["5.1", "5.5"] },
-            { "label": "d", "points": 1, "cedTopics": ["5.2"] },
-            { "label": "e", "points": 2, "cedTopics": ["4.5", "3.7"] },
-            { "label": "f", "points": 1, "cedTopics": ["6.1"] },
-            { "label": "g(i)", "points": 1, "cedTopics": ["6.4"] },
-            { "label": "g(ii)", "points": 1, "cedTopics": ["6.4", "6.6"] }
+            { "label": "a", "points": 1, "cedTopics": ["4.2"], "skills": ["5.E"] },
+            { "label": "b", "points": 1, "cedTopics": ["5.1"], "skills": ["2.E"] },
+            { "label": "c", "points": 2, "cedTopics": ["5.1", "5.5"], "skills": ["6.F", "4.B"] },
+            { "label": "d", "points": 1, "cedTopics": ["5.2"], "skills": ["6.D"] },
+            { "label": "e", "points": 2, "cedTopics": ["4.5", "3.7"], "skills": ["5.F"] },
+            { "label": "f", "points": 1, "cedTopics": ["6.1"], "skills": ["6.D"] },
+            { "label": "g(i)", "points": 1, "cedTopics": ["6.4"], "skills": ["5.F"] },
+            { "label": "g(ii)", "points": 1, "cedTopics": ["6.4", "6.6"], "skills": ["5.F"] }
           ]
         },
         {
@@ -373,9 +376,9 @@
           "page": 15,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q4.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["1.1"] },
-            { "label": "b", "points": 2, "cedTopics": ["8.8"] },
-            { "label": "c", "points": 1, "cedTopics": ["8.8", "8.9"] }
+            { "label": "a", "points": 1, "cedTopics": ["1.1"], "skills": ["5.F"] },
+            { "label": "b", "points": 2, "cedTopics": ["8.8"], "skills": ["2.C"] },
+            { "label": "c", "points": 1, "cedTopics": ["8.8", "8.9"], "skills": ["2.F"] }
           ]
         },
         {
@@ -384,10 +387,10 @@
           "page": 17,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q5.pdf",
           "parts": [
-            { "label": "a(i)", "points": 1, "cedTopics": ["3.4"] },
-            { "label": "a(ii)", "points": 1, "cedTopics": ["3.4"] },
-            { "label": "b", "points": 1, "cedTopics": ["3.8"] },
-            { "label": "c", "points": 1, "cedTopics": ["8.3"] }
+            { "label": "a(i)", "points": 1, "cedTopics": ["3.4"], "skills": ["5.F"] },
+            { "label": "a(ii)", "points": 1, "cedTopics": ["3.4"], "skills": ["5.F"] },
+            { "label": "b", "points": 1, "cedTopics": ["3.8"], "skills": ["3.C"] },
+            { "label": "c", "points": 1, "cedTopics": ["8.3"], "skills": ["6.C"] }
           ]
         },
         {
@@ -396,10 +399,10 @@
           "page": 19,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q6.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "b(i)", "points": 1, "cedTopics": ["3.1"] },
-            { "label": "b(ii)", "points": 1, "cedTopics": ["6.5"] },
-            { "label": "c", "points": 1, "cedTopics": ["2.2", "1.7"] }
+            { "label": "a", "points": 1, "cedTopics": ["3.1"], "skills": ["1.B"] },
+            { "label": "b(i)", "points": 1, "cedTopics": ["3.1"], "skills": ["4.C"] },
+            { "label": "b(ii)", "points": 1, "cedTopics": ["6.5"], "skills": ["5.F"] },
+            { "label": "c", "points": 1, "cedTopics": ["2.2", "1.7"], "skills": ["4.A"] }
           ]
         },
         {
@@ -408,13 +411,14 @@
           "page": 21,
           "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap23-apc-chemistry-q7.pdf",
           "parts": [
-            { "label": "a", "points": 1, "cedTopics": ["3.8"] },
-            { "label": "b(i)", "points": 1, "cedTopics": ["3.7"] },
-            { "label": "b(ii)", "points": 1, "cedTopics": ["7.11"] },
-            { "label": "c", "points": 1, "cedTopics": ["7.12"] }
+            { "label": "a", "points": 1, "cedTopics": ["3.8"], "skills": ["6.A"] },
+            { "label": "b(i)", "points": 1, "cedTopics": ["3.7"], "skills": ["5.F"] },
+            { "label": "b(ii)", "points": 1, "cedTopics": ["7.11"], "skills": ["5.F"] },
+            { "label": "c", "points": 1, "cedTopics": ["7.12"], "skills": ["2.F"] }
           ]
         }
-      ]
+      ],
+      "skillsSource": "official"
     }
   ]
 }

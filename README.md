@@ -84,5 +84,11 @@ and partly covered were 1.5, 3.5, 8.3, and 8.5.
 Central currently hosts; the older URLs now redirect to a general page. Each of the 169 parts was
 tagged on 2026-10-09 by reading the questions and scoring guidelines against the CED.
 Point values were copied from the scoring guidelines. Sample-response PDFs exist for 2023–2025,
-and the posted 2026 exam is Version J for questions 2, 3, and 6. The tags are judgment calls, so
-spot-check the ones you use.
+and the posted 2026 exam is Version J for questions 2, 3, and 6. The topic tags are judgment calls,
+so spot-check the ones you use.
+
+Each part also has its science-practice skill (e.g. 5.F, Mathematical Routines). These are College
+Board's own labels for 2023 and 2024 (scoring commentaries) and 2025 (Chief Reader Report). The 2026
+skills are our own tags, modeled on how earlier years label similar parts, and are shown as "our
+labels" on the site; replace them when the 2026 Chief Reader Report is published. The list of six
+practices and 28 skills in `ced.json` comes from the CED's Science Practices table (pp. 12–13).

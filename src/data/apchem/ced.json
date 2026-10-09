@@ -429,5 +429,161 @@
         }
       ]
     }
+  ],
+  "sciencePractices": [
+    {
+      "id": "1",
+      "name": "Models and Representations",
+      "summary": "Describe models and representations, including across scales.",
+      "skills": [
+        {
+          "id": "1.A",
+          "text": "Describe the components of and quantitative information from models and representations that illustrate particulate-level properties only."
+        },
+        {
+          "id": "1.B",
+          "text": "Describe the components of and quantitative information from models and representations that illustrate both particulate-level and macroscopic-level properties."
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Question and Method",
+      "summary": "Determine scientific questions and methods.",
+      "skills": [
+        {
+          "id": "2.A",
+          "text": "Identify a testable scientific question based on an observation, data, or a model."
+        },
+        {
+          "id": "2.B",
+          "text": "Formulate a hypothesis or predict the results of an experiment."
+        },
+        {
+          "id": "2.C",
+          "text": "Identify experimental procedures that are aligned to a scientific question (which may include a sketch of a lab setup)."
+        },
+        {
+          "id": "2.D",
+          "text": "Make observations or collect data from representations of laboratory setups or results, while attending to precision where appropriate."
+        },
+        {
+          "id": "2.E",
+          "text": "Identify or describe potential sources of experimental error."
+        },
+        {
+          "id": "2.F",
+          "text": "Explain how modifications to an experimental procedure will alter results."
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Representing Data and Phenomena",
+      "summary": "Create representations or models of chemical phenomena.",
+      "skills": [
+        {
+          "id": "3.A",
+          "text": "Represent chemical phenomena using appropriate graphing techniques, including correct scale and units."
+        },
+        {
+          "id": "3.B",
+          "text": "Represent chemical substances or phenomena with appropriate diagrams or models (e.g., electron configuration)."
+        },
+        {
+          "id": "3.C",
+          "text": "Represent visually the relationship between the structures and interactions across multiple levels or scales (e.g., particulate to macroscopic)."
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Model Analysis",
+      "summary": "Analyze and interpret models and representations on a single scale or across multiple scales.",
+      "skills": [
+        {
+          "id": "4.A",
+          "text": "Predict and/or explain chemical properties or phenomena (e.g., of atoms or molecules) using given chemical theories, models, and representations."
+        },
+        {
+          "id": "4.B",
+          "text": "Explain whether a model is consistent with chemical theories."
+        },
+        {
+          "id": "4.C",
+          "text": "Explain the connection between particulate-level and macroscopic properties of a substance using models and representations."
+        },
+        {
+          "id": "4.D",
+          "text": "Explain the degree to which a model or representation describes the connection between particulate-level properties and macroscopic properties."
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Mathematical Routines",
+      "summary": "Solve problems using mathematical relationships.",
+      "skills": [
+        {
+          "id": "5.A",
+          "text": "Identify quantities needed to solve a problem from given information (e.g., text, mathematical expressions, graphs, or tables)."
+        },
+        {
+          "id": "5.B",
+          "text": "Identify an appropriate theory, definition, or mathematical relationship to solve a problem."
+        },
+        {
+          "id": "5.C",
+          "text": "Explain the relationship between variables within an equation when one variable changes."
+        },
+        {
+          "id": "5.D",
+          "text": "Identify information presented graphically to solve a problem."
+        },
+        {
+          "id": "5.E",
+          "text": "Determine a balanced chemical equation for a given chemical phenomenon."
+        },
+        {
+          "id": "5.F",
+          "text": "Calculate, estimate, or predict an unknown quantity from known quantities by selecting and following a logical computational pathway and attending to precision (e.g., performing dimensional analysis and attending to significant figures)."
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Argumentation",
+      "summary": "Develop an explanation or scientific argument.",
+      "skills": [
+        {
+          "id": "6.A",
+          "text": "Make a scientific claim."
+        },
+        {
+          "id": "6.B",
+          "text": "Support a claim with evidence from experimental data."
+        },
+        {
+          "id": "6.C",
+          "text": "Support a claim with evidence from representations or models at the particulate level, such as the structure of atoms and/or molecules."
+        },
+        {
+          "id": "6.D",
+          "text": "Provide reasoning to justify a claim using chemical principles or laws, or using mathematical justification."
+        },
+        {
+          "id": "6.E",
+          "text": "Provide reasoning to justify a claim using connections between particulate and macroscopic scales or levels."
+        },
+        {
+          "id": "6.F",
+          "text": "Explain the connection between experimental results and chemical concepts, processes, or theories."
+        },
+        {
+          "id": "6.G",
+          "text": "Explain how potential sources of experimental error may affect the experimental results."
+        }
+      ]
+    }
   ]
 }

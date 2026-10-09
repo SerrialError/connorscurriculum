@@ -2,7 +2,7 @@
 // One released AP FRQ: links to the official PDFs, readiness, and either all parts with
 // their topics or just the parts that matched a topic.
 import { getSubjectData, learnedTopic, url } from '../lib/content';
-import { type FrqLink, type FrqPart, frqName, frqTotal, readyPoints } from '../lib/frqs';
+import { type FrqLink, type FrqPart, frqName, frqPractices, frqTotal, readyPoints } from '../lib/frqs';
 
 interface Props {
   subject: string;
@@ -19,6 +19,16 @@ const ready = readyPoints(frq, learned);
 const matchedPoints = matched?.reduce((sum, p) => sum + p.points, 0) ?? 0;
 const kind = frq.number <= 3 ? 'Long' : 'Short';
 const marks = { done: '✓', review: '↺', partial: '◐' } as const;
+const practiceName = (id: string) => data.ced.sciencePractices.find((p) => p.id === id)?.name ?? `Practice ${id}`;
+const skillTitle = (id: string) => {
+  const skill = data.skills.get(id);
+  return skill ? `${skill.practice.name}, skill ${id}: ${skill.text}` : id;
+};
+// When showing matched parts only, list the practices those parts use; otherwise the whole question's.
+const practices = frqPractices({ parts: matched ?? frq.parts });
+const sourceNote = frq.officialSkills
+  ? 'Science practices as labeled by College Board.'
+  : 'College Board has not published practice labels for this exam yet; these are our own.';
 ---
 
 <article class="card frq">
@@ -35,6 +45,17 @@ const marks = { done: '✓', review: '↺', partial: '◐' } as const;
     </span>
   </header>
   <p class="small muted meta">{kind} answer · {total} points</p>
+  {practices.length > 0 && (
+    <p class="practices" title={sourceNote}>
+      {practices.map((id) => (
+        <span class="practice">
+          <span class="pnum">{id}</span>
+          {practiceName(id)}
+        </span>
+      ))}
+      {!frq.officialSkills && <span class="small muted">(our labels)</span>}
+    </p>
+  )}
 
   {matched ? (
     <p class="small">
@@ -47,6 +68,11 @@ const marks = { done: '✓', review: '↺', partial: '◐' } as const;
           <span class="label">{p.label}</span>
           <span class="small muted pts">{p.points} pt{p.points === 1 ? '' : 's'}</span>
           <span class="badges">
+            {p.skills.map((id) => (
+              <span class="badge skill" title={skillTitle(id)}>
+                {id}
+              </span>
+            ))}
             {p.cedTopics.map((t) => {
               const s = data.progress.topics.get(t);
               return (
@@ -102,6 +128,39 @@ const marks = { done: '✓', review: '↺', partial: '◐' } as const;
   .label {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+  }
+  .practices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+    margin: 0 0 0.5rem;
+  }
+  .practice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.1rem 0.55rem 0.1rem 0.15rem;
+    border-radius: 0.8rem;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+  }
+  .pnum {
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--surface-2);
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .badge.skill {
+    background: transparent;
+    font-variant-numeric: tabular-nums;
+    cursor: help;
   }
   .links {
     display: flex;

@@ -26,10 +26,18 @@ const cedUnitSchema = z.object({
   topics: z.array(cedTopicSchema).min(1),
 });
 
+const sciencePracticeSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  summary: z.string().optional(),
+  skills: z.array(z.object({ id: z.string().min(1), text: z.string().min(1) })).min(1),
+});
+
 export const cedSchema = z.object({
   verified: z.boolean().default(false),
   source: z.string().optional(),
   units: z.array(cedUnitSchema).min(1),
+  sciencePractices: z.array(sciencePracticeSchema).default([]),
 });
 
 const sectionSchema = z.object({ id: z.string().min(1), title: z.string().min(1) });
@@ -71,6 +79,8 @@ const frqPartSchema = z.object({
   label: z.string().min(1),
   points: z.number().int().positive(),
   cedTopics: z.array(z.string()).min(1, 'tag each part with at least one CED topic'),
+  /** Science-practice skill codes from ced.json, e.g. "5.F". */
+  skills: z.array(z.string()).default([]),
 });
 
 export const pastFrqsSchema = z.object({
@@ -81,6 +91,8 @@ export const pastFrqsSchema = z.object({
       questionsUrl: z.url(),
       scoringUrl: z.url(),
       note: z.string().optional(),
+      /** "official" when skills come from College Board's commentary or Chief Reader Report. */
+      skillsSource: z.enum(['official', 'unofficial']).optional(),
       questions: z.array(
         z.object({
           number: z.number().int().positive(),
@@ -102,6 +114,12 @@ export type PastFrq = PastFrqExam['questions'][number];
 export type Ced = z.infer<typeof cedSchema>;
 export type CedUnit = Ced['units'][number];
 export type CedTopic = z.infer<typeof cedTopicSchema> & { unitId: string };
+export type SciencePractice = z.infer<typeof sciencePracticeSchema>;
+export interface Skill {
+  id: string;
+  text: string;
+  practice: SciencePractice;
+}
 export type Chapter = z.infer<typeof chapterSchema> & {
   /** AP units of this chapter's cedTopics, in CED order. */
   apUnits: string[];
@@ -132,6 +150,8 @@ export interface SubjectData {
   tests: ClassTest[];
   /** topic id ("5.4") -> topic */
   topics: Map<string, CedTopic>;
+  /** skill id ("5.F") -> skill with its science practice */
+  skills: Map<string, Skill>;
   /** chapter number -> chapter */
   chapterMap: Map<number, Chapter>;
   /** topic id -> chapter numbers that teach it (from chapters.json), ascending */
@@ -195,6 +215,16 @@ function loadSubject(subject: Subject): SubjectData {
   });
 
   const unitOrder = ced.units.map((u) => u.id);
+  const skills = new Map<string, Skill>();
+  ced.sciencePractices.forEach((practice, p) => {
+    practice.skills.forEach((skill, k) => {
+      if (skills.has(skill.id)) {
+        throw new DataError(cedFile, `sciencePractices[${p}].skills[${k}].id`, `duplicate skill id "${skill.id}"`);
+      }
+      skills.set(skill.id, { ...skill, practice });
+    });
+  });
+
   const chapterMap = new Map<number, Chapter>();
   const topicChapters = new Map<string, number[]>([...topics.keys()].map((id) => [id, []]));
   const chapters: Chapter[] = rawChapters.map((raw, i) => {
@@ -259,6 +289,11 @@ function loadSubject(subject: Subject): SubjectData {
   pastFrqs.forEach((exam, e) => {
     exam.questions.forEach((q, i) => {
       q.parts.forEach((part, p) => {
+        part.skills.forEach((id, k) => {
+          if (!skills.has(id)) {
+            throw new DataError(frqFile, `exams[${e}].questions[${i}].parts[${p}].skills[${k}]`, `skill "${id}" is not in ced.json sciencePractices`);
+          }
+        });
         part.cedTopics.forEach((id, t) => {
           if (!topics.has(id)) {
             throw new DataError(frqFile, `exams[${e}].questions[${i}].parts[${p}].cedTopics[${t}]`, `topic "${id}" is not in ced.json`);
@@ -269,7 +304,7 @@ function loadSubject(subject: Subject): SubjectData {
   });
   pastFrqs.sort((a, b) => b.year - a.year);
 
-  return { subject, ced, chapters, tests, topics, chapterMap, topicChapters, progress, pastFrqs };
+  return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs };
 }
 
 const listChapters = (ns: number[]) => `Ch. ${ns.join(', ')}`;

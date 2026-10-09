@@ -1,0 +1,54 @@
+---
+// Cycles system -> light -> dark. "System" follows prefers-color-scheme.
+---
+
+<button class="theme-toggle" type="button" aria-label="Color theme: system" title="Color theme">
+  <span aria-hidden="true">◐</span> <span class="label">Auto</span>
+</button>
+
+<script>
+  const labels = { system: 'Auto', light: 'Light', dark: 'Dark' } as const;
+  type Theme = keyof typeof labels;
+  const order: Theme[] = ['system', 'light', 'dark'];
+
+  function current(): Theme {
+    const t = document.documentElement.dataset.theme;
+    return t === 'light' || t === 'dark' ? t : 'system';
+  }
+
+  function apply(theme: Theme) {
+    if (theme === 'system') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme;
+    try {
+      if (theme === 'system') localStorage.removeItem('theme');
+      else localStorage.setItem('theme', theme);
+    } catch {}
+    for (const btn of document.querySelectorAll<HTMLButtonElement>('.theme-toggle')) {
+      btn.setAttribute('aria-label', `Color theme: ${labels[theme]}`);
+      btn.querySelector('.label')!.textContent = labels[theme];
+    }
+  }
+
+  apply(current());
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('.theme-toggle')) {
+    btn.addEventListener('click', () => apply(order[(order.indexOf(current()) + 1) % order.length]!));
+  }
+</script>
+
+<style>
+  .theme-toggle {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-2);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+  }
+</style>

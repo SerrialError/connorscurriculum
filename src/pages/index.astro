@@ -1,0 +1,27 @@
+---
+import Search from '../components/Search.astro';
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/content';
+import { loadRegistry } from '../lib/registry';
+import { SITE_DESCRIPTION, SITE_NAME } from '../site';
+
+const subjects = [...loadRegistry().values()];
+---
+
+<Base title={SITE_NAME}>
+  <h1>{SITE_NAME}</h1>
+  <p class="prose muted">{SITE_DESCRIPTION}</p>
+  <Search />
+  <h2>Subjects</h2>
+  <div class="grid">
+    {subjects.map(({ subject, chapters, ced }) => (
+      <a class="card" href={url(`${subject.id}/`)}>
+        <h3>{subject.name}</h3>
+        <p class="small muted">{subject.textbook}</p>
+        <p class="small">
+          {chapters.length} chapters · {ced.units.length} {subject.standardsName} units
+        </p>
+      </a>
+    ))}
+  </div>
+</Base>

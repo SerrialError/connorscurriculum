@@ -1,0 +1,80 @@
+---
+import Search from '../../components/Search.astro';
+import Base from '../../layouts/Base.astro';
+import { formatDate, getLessons, getQuestions, getSubjectData, practiceHref, subjectPaths, url } from '../../lib/content';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const lessons = await getLessons(subject);
+const questions = await getQuestions(subject);
+// Dated tests first (soonest first), then undated. Past tests are hidden client-side,
+// since a static build can't know today's date.
+const tests = [...data.tests].sort((a, b) => (a.date ?? '9999').localeCompare(b.date ?? '9999'));
+const links = [
+  { href: url(`${subject}/chapters/`), title: 'Class view', text: 'Lessons by textbook chapter, in class order.' },
+  { href: url(`${subject}/ap/`), title: 'AP view', text: `Lessons by ${data.subject.standardsName} unit and topic.` },
+  { href: practiceHref(subject, {}), title: 'Practice', text: `${questions.length} questions with explanations.` },
+  { href: url(`${subject}/checklist/`), title: 'Checklist', text: 'What you know, and what the site still needs.' },
+];
+---
+
+<Base title={data.subject.name} subject={subject}>
+  <h1>{data.subject.name}</h1>
+  <p class="muted">Textbook: <em>{data.subject.textbook}</em> · {lessons.length} lessons · {questions.length} questions</p>
+  <Search placeholder={`Search ${data.subject.name}…`} />
+
+  <h2>Upcoming tests</h2>
+  {tests.length === 0 ? (
+    <p class="muted">No tests scheduled.</p>
+  ) : (
+    <ul class="plain-list stack tests">
+      {tests.map((t) => (
+        <li class="card test" data-date={t.date}>
+          <h3>
+            <a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a> <span class="badge good next" hidden>Next up</span>
+          </h3>
+          <p class="small muted">
+            {t.date ? formatDate(t.date) : 'Date TBA'} · Chapter{t.chapters.length > 1 ? 's' : ''} {t.chapters.join(', ')}
+            {t.sections.length > 0 && <> (§{t.sections.join(', ')})</>}
+          </p>
+          <p><a href={practiceHref(subject, { test: t.id })}>Practice for this test →</a></p>
+        </li>
+      ))}
+    </ul>
+  )}
+  <p class="small muted past-note" hidden></p>
+
+  <h2>Study</h2>
+  <div class="grid">
+    {links.map((l) => (
+      <a class="card" href={l.href}>
+        <h3>{l.title}</h3>
+        <p class="small muted">{l.text}</p>
+      </a>
+    ))}
+  </div>
+</Base>
+
+<script>
+  const today = new Date();
+  const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  let past = 0;
+  let marked = false;
+  for (const li of document.querySelectorAll<HTMLElement>('.test')) {
+    const d = li.dataset.date;
+    if (d && d < iso) {
+      li.hidden = true;
+      past += 1;
+    } else if (d && !marked) {
+      li.querySelector<HTMLElement>('.next')!.hidden = false;
+      marked = true;
+    }
+  }
+  const note = document.querySelector<HTMLElement>('.past-note');
+  if (note && past > 0) {
+    note.hidden = false;
+    note.textContent = `${past} past test${past === 1 ? '' : 's'} hidden.`;
+  }
+</script>

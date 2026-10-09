@@ -1,0 +1,104 @@
+---
+import { render } from 'astro:content';
+import Callout from '../../../components/Callout.astro';
+import Reveal from '../../../components/Reveal.astro';
+import TopicBadges from '../../../components/TopicBadges.astro';
+import YouTube from '../../../components/YouTube.astro';
+import Base from '../../../layouts/Base.astro';
+import {
+  type Lesson,
+  getLessons,
+  getSubjectData,
+  lessonSlug,
+  practiceHref,
+  subjectIds,
+  topicIds,
+  url,
+} from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const subject of subjectIds()) {
+    const lessons = await getLessons(subject);
+    for (const lesson of lessons) {
+      const siblings = lessons.filter((l) => l.data.chapter === lesson.data.chapter);
+      const i = siblings.indexOf(lesson);
+      paths.push({
+        params: { subject, slug: lessonSlug(lesson) },
+        props: { lesson, prev: siblings[i - 1], next: siblings[i + 1] },
+      });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  lesson: Lesson;
+  prev?: Lesson;
+  next?: Lesson;
+}
+
+const { subject } = Astro.params;
+const { lesson, prev, next } = Astro.props;
+const { Content } = await render(lesson);
+const data = getSubjectData(subject);
+const chapter = data.chapterMap.get(lesson.data.chapter)!;
+const topics = topicIds(lesson);
+const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
+const practice = topics.length
+  ? practiceHref(subject, { topic: topics })
+  : practiceHref(subject, { chapter: [chapter.number] });
+const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
+---
+
+<Base
+  title={lesson.data.title}
+  description={lesson.data.summary}
+  subject={subject}
+  searchable={!lesson.data.draft}
+  searchMeta={{ chapter: chapterLabel }}
+>
+  <article class="prose">
+    <p class="breadcrumbs">
+      <a href={url(`${subject}/chapters/`)}>Chapters</a> / <a href={url(`${subject}/chapters/${chapter.number}/`)}>{chapterLabel}</a>
+      {lesson.data.sections.length > 0 && <> · §{lesson.data.sections.join(', ')}</>}
+    </p>
+    <h1>
+      {lesson.data.title}
+      {lesson.data.draft && <span class="badge">Draft</span>}
+    </h1>
+    <TopicBadges subject={subject} topics={topics} />
+    <p class="small muted">By {lesson.data.authors.join(', ')}</p>
+
+    <Content components={{ YouTube, Callout, Reveal }} />
+
+    <footer class="lesson-footer">
+      <a class="button" href={practice}>
+        {topics.length ? `Practice these topics (${topics.join(', ')})` : `Practice Chapter ${chapter.number}`}
+      </a>
+      <nav class="pager small" aria-label="Lessons in this chapter">
+        {prev ? <a href={lessonHref(prev)}>← {prev.data.title}</a> : <span></span>}
+        {next && <a href={lessonHref(next)}>{next.data.title} →</a>}
+      </nav>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  article :global(img) {
+    border-radius: var(--radius);
+    background: #fff;
+  }
+  .lesson-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+  }
+</style>

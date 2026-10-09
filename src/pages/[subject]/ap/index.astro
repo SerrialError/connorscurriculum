@@ -1,0 +1,62 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { coverage, getLessons, getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const cov = coverage(data, await getLessons(subject), await getQuestions(subject));
+---
+
+<Base title={`${data.subject.standardsName} units`} subject={subject}>
+  <h1>{data.subject.standardsName} units and topics</h1>
+  <p class="muted prose">Units in Course at a Glance order, with exam weights. Each topic lists the lessons and questions tagged with it.</p>
+  {data.ced.units.map((unit) => (
+    <section class="unit" id={`unit-${unit.id}`}>
+      <h2>
+        Unit {unit.id}: {unit.title} {unit.examWeight && <span class="badge">{unit.examWeight} of exam</span>}
+      </h2>
+      <ol class="plain-list topics">
+        {unit.topics.map((t) => {
+          const c = cov.get(t.id)!;
+          return (
+            <li>
+              <a href={url(`${subject}/ap/${t.id}/`)}>
+                <span class="num">{t.id}</span> {t.title}
+              </a>
+              <span class="small muted">
+                {c.lessons.length} lesson{c.lessons.length === 1 ? '' : 's'} · {c.questions} q
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .unit h2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .topics li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .topics .small {
+    white-space: nowrap;
+  }
+  .num {
+    display: inline-block;
+    min-width: 2.6rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+</style>

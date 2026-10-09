@@ -1,0 +1,263 @@
+[
+  {
+    "number": 1,
+    "title": "Introduction: Matter, Energy, and Measurement",
+    "apUnits": [],
+    "notOnAP": [
+      "Background only: measurement, units, significant figures"
+    ],
+    "sections": []
+  },
+  {
+    "number": 2,
+    "title": "Atoms, Molecules, and Ions",
+    "apUnits": [
+      "1"
+    ],
+    "notOnAP": [],
+    "sections": []
+  },
+  {
+    "number": 3,
+    "title": "Chemical Reactions and Reaction Stoichiometry",
+    "apUnits": [
+      "1",
+      "4"
+    ],
+    "notOnAP": [],
+    "sections": []
+  },
+  {
+    "number": 4,
+    "title": "Reactions in Aqueous Solution",
+    "apUnits": [
+      "3",
+      "4"
+    ],
+    "notOnAP": [
+      "Memorizing solubility rules beyond “all sodium, potassium, ammonium, and nitrate salts are soluble”",
+      "The terms “oxidizing agent” and “reducing agent”"
+    ],
+    "sections": []
+  },
+  {
+    "number": 5,
+    "title": "Thermochemistry",
+    "apUnits": [
+      "6"
+    ],
+    "notOnAP": [
+      "Technical distinctions between enthalpy and internal energy",
+      "The concept of state functions"
+    ],
+    "sections": []
+  },
+  {
+    "number": 6,
+    "title": "Electronic Structure of Atoms",
+    "apUnits": [
+      "1",
+      "3"
+    ],
+    "notOnAP": [
+      "Assigning quantum numbers to electrons",
+      "Electron configurations of exceptions to the aufbau principle"
+    ],
+    "sections": []
+  },
+  {
+    "number": 7,
+    "title": "Periodic Properties of the Elements",
+    "apUnits": [
+      "1"
+    ],
+    "notOnAP": [],
+    "sections": []
+  },
+  {
+    "number": 8,
+    "title": "Basic Concepts of Chemical Bonding",
+    "apUnits": [
+      "2"
+    ],
+    "notOnAP": [],
+    "sections": []
+  },
+  {
+    "number": 9,
+    "title": "Molecular Geometry and Bonding Theories",
+    "apUnits": [
+      "2"
+    ],
+    "notOnAP": [
+      "Molecular orbital theory",
+      "Derivation and depiction of hybrid orbitals (the sp, sp², sp³ labels are on the exam)",
+      "Hybridization involving d orbitals"
+    ],
+    "sections": []
+  },
+  {
+    "number": 10,
+    "title": "Gases",
+    "apUnits": [
+      "3"
+    ],
+    "notOnAP": [],
+    "sections": []
+  },
+  {
+    "number": 11,
+    "title": "Liquids and Intermolecular Forces",
+    "apUnits": [
+      "3",
+      "6"
+    ],
+    "notOnAP": [
+      "Phase diagrams"
+    ],
+    "sections": []
+  },
+  {
+    "number": 12,
+    "title": "Solids and Modern Materials",
+    "apUnits": [
+      "2",
+      "3"
+    ],
+    "notOnAP": [
+      "Specific crystal structures",
+      "Band theory and semiconductors",
+      "Polymer chemistry (only intermolecular forces in polymers is on the exam, topic 3.1)",
+      "Nanomaterials"
+    ],
+    "sections": []
+  },
+  {
+    "number": 13,
+    "title": "Properties of Solutions",
+    "apUnits": [
+      "3",
+      "9"
+    ],
+    "notOnAP": [
+      "Colligative properties",
+      "Molality, percent by mass, and percent by volume calculations"
+    ],
+    "sections": []
+  },
+  {
+    "number": 14,
+    "title": "Chemical Kinetics",
+    "apUnits": [
+      "5"
+    ],
+    "notOnAP": [
+      "Arrhenius equation calculations"
+    ],
+    "sections": []
+  },
+  {
+    "number": 15,
+    "title": "Chemical Equilibrium",
+    "apUnits": [
+      "7"
+    ],
+    "notOnAP": [
+      "Converting between Kc and Kp"
+    ],
+    "sections": []
+  },
+  {
+    "number": 16,
+    "title": "Acid–Base Equilibria",
+    "apUnits": [
+      "8"
+    ],
+    "notOnAP": [
+      "Lewis acids and bases"
+    ],
+    "sections": []
+  },
+  {
+    "number": 17,
+    "title": "Aqueous Equilibria: Buffers, Titrations, and Solubility",
+    "apUnits": [
+      "7",
+      "8"
+    ],
+    "notOnAP": [
+      "Complex ions",
+      "Qualitative analysis (if covered in this edition)",
+      "Calculating the pH change when acid or base is added to a buffer",
+      "Calculating solubility as a function of pH",
+      "Species concentrations along a polyprotic acid titration curve"
+    ],
+    "sections": []
+  },
+  {
+    "number": 18,
+    "title": "Chemistry of the Environment",
+    "apUnits": [],
+    "notOnAP": [
+      "Entire chapter"
+    ],
+    "sections": []
+  },
+  {
+    "number": 19,
+    "title": "Chemical Thermodynamics",
+    "apUnits": [
+      "9"
+    ],
+    "notOnAP": [],
+    "sections": []
+  },
+  {
+    "number": 20,
+    "title": "Electrochemistry",
+    "apUnits": [
+      "4",
+      "9"
+    ],
+    "notOnAP": [
+      "Labeling electrodes as positive or negative"
+    ],
+    "sections": []
+  },
+  {
+    "number": 21,
+    "title": "Nuclear Chemistry",
+    "apUnits": [],
+    "notOnAP": [
+      "Entire chapter"
+    ],
+    "sections": []
+  },
+  {
+    "number": 22,
+    "title": "Chemistry of the Nonmetals",
+    "apUnits": [],
+    "notOnAP": [
+      "Entire chapter"
+    ],
+    "sections": []
+  },
+  {
+    "number": 23,
+    "title": "Transition Metals and Coordination Chemistry",
+    "apUnits": [],
+    "notOnAP": [
+      "Entire chapter"
+    ],
+    "sections": []
+  },
+  {
+    "number": 24,
+    "title": "The Chemistry of Life: Organic and Biological Chemistry",
+    "apUnits": [],
+    "notOnAP": [
+      "Entire chapter"
+    ],
+    "sections": []
+  }
+]

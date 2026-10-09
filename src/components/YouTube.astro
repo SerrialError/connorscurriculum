@@ -1,0 +1,39 @@
+---
+// Privacy-enhanced YouTube embed (youtube-nocookie.com), lazy-loaded, 16:9.
+interface Props {
+  id: string;
+  /** Start time in seconds. */
+  start?: number;
+  title?: string;
+}
+
+const { id, start = 0, title = 'YouTube video' } = Astro.props;
+if (!/^[\w-]{11}$/.test(id)) throw new Error(`<YouTube id="${id}">: expected an 11-character video id`);
+const src = `https://www.youtube-nocookie.com/embed/${id}${start > 0 ? `?start=${Math.floor(start)}` : ''}`;
+---
+
+<figure class="youtube">
+  <iframe
+    src={src}
+    title={title}
+    loading="lazy"
+    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen></iframe>
+</figure>
+
+<style>
+  .youtube {
+    margin: 1.25rem 0;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+import Checklist from '../../../components/Checklist.svelte';
+import Base from '../../../layouts/Base.astro';
+import { coverage, getLessons, getQuestions, getSubjectData, lessonSlug, subjectPaths, topicIds, url } from '../../../lib/content';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const lessons = await getLessons(subject);
+const questions = await getQuestions(subject);
+const cov = coverage(data, lessons, questions);
+
+const units = data.ced.units.map((u) => ({
+  id: u.id,
+  title: u.title,
+  examWeight: u.examWeight,
+  topics: u.topics.map((t) => {
+    const c = cov.get(t.id)!;
+    return {
+      id: t.id,
+      title: t.title,
+      href: url(`${subject}/ap/${t.id}/`),
+      lessons: c.lessons.length,
+      questions: c.questions,
+      chapters: c.chapters.map((n) => ({ number: n, href: url(`${subject}/chapters/${n}/`) })),
+      status: c.status,
+    };
+  }),
+}));
+
+const classOnly = lessons.filter((l) => topicIds(l).length === 0);
+const classOnlyByChapter = data.chapters
+  .map((c) => ({ chapter: c, lessons: classOnly.filter((l) => l.data.chapter === c.number) }))
+  .filter((g) => g.lessons.length > 0);
+---
+
+<Base title="Checklist" subject={subject}>
+  <h1>{data.subject.standardsName} checklist</h1>
+  <p class="muted prose">
+    Every {data.subject.standardsName} topic in Course at a Glance order. <strong>Covered</strong> means the topic has both lessons
+    and questions, <strong>partial</strong> means only one of them, <strong>none</strong> means neither. Your “I know this” checkmarks
+    are saved in this browser only.
+  </p>
+  {!data.ced.verified && (
+    <p class="notice small">
+      Topic list not yet verified against the current Course and Exam Description. Edit <code>src/data/{subject}/ced.json</code>
+      and set <code>"verified": true</code> once checked.
+    </p>
+  )}
+
+  <Checklist client:load subject={subject} units={units} />
+
+  <h2>Class-only content</h2>
+  <p class="muted small">Lessons that are not tagged with any {data.subject.standardsName} topic.</p>
+  {classOnlyByChapter.length === 0 ? (
+    <p class="muted">None.</p>
+  ) : (
+    classOnlyByChapter.map((g) => (
+      <section>
+        <h3>
+          <a href={url(`${subject}/chapters/${g.chapter.number}/`)}>
+            Chapter {g.chapter.number}: {g.chapter.title}
+          </a>
+        </h3>
+        <ul>
+          {g.lessons.map((l) => (
+            <li>
+              <a href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  )}
+</Base>

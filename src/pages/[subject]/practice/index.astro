@@ -1,0 +1,28 @@
+---
+import Practice from '../../../components/Practice.svelte';
+import Base from '../../../layouts/Base.astro';
+import { getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const questions = await getQuestions(subject);
+const chapterNumbers = new Set(questions.map((q) => q.data.chapter));
+const chapters = data.chapters.map((c) => ({ number: c.number, title: c.title, hasQuestions: chapterNumbers.has(c.number) }));
+const units = data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) }));
+const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections }));
+---
+
+<Base title="Practice" subject={subject}>
+  <h1>Practice</h1>
+  <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
+  <Practice
+    client:load
+    subject={subject}
+    questionsUrl={url(`${subject}/practice/questions.json`)}
+    chapters={chapters}
+    units={units}
+    tests={tests}
+  />
+</Base>

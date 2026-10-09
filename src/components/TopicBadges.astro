@@ -1,0 +1,22 @@
+---
+import { getSubjectData, url } from '../lib/content';
+
+interface Props {
+  subject: string;
+  topics: string[];
+  /** Show "Not on the AP exam" when there are no topics. */
+  classOnlyBadge?: boolean;
+}
+
+const { subject, topics, classOnlyBadge = true } = Astro.props;
+const data = getSubjectData(subject);
+---
+
+<div class="badges">
+  {topics.map((t) => (
+    <a class="badge topic" href={url(`${subject}/ap/${t}/`)} title={data.topics.get(t)?.title}>
+      {t} {data.topics.get(t)?.title}
+    </a>
+  ))}
+  {topics.length === 0 && classOnlyBadge && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+</div>

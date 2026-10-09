@@ -1,0 +1,81 @@
+---
+import LessonList from '../../../components/LessonList.astro';
+import Base from '../../../layouts/Base.astro';
+import { formatDate, getLessons, getQuestions, getSubjectData, practiceHref, subjectIds, url } from '../../../lib/content';
+
+export function getStaticPaths() {
+  return subjectIds().flatMap((subject) =>
+    getSubjectData(subject).chapters.map((c) => ({ params: { subject, n: String(c.number) } })),
+  );
+}
+
+const { subject, n } = Astro.params;
+const data = getSubjectData(subject);
+const chapter = data.chapterMap.get(Number(n))!;
+const lessons = (await getLessons(subject)).filter((l) => l.data.chapter === chapter.number);
+const questionCount = (await getQuestions(subject)).filter((q) => q.data.chapter === chapter.number).length;
+const tests = data.tests.filter((t) => t.chapters.includes(chapter.number));
+const prev = data.chapters[data.chapters.indexOf(chapter) - 1];
+const next = data.chapters[data.chapters.indexOf(chapter) + 1];
+const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
+---
+
+<Base title={chapterLabel} subject={subject} searchable searchMeta={{ chapter: chapterLabel }}>
+  <p class="breadcrumbs"><a href={url(`${subject}/chapters/`)}>Chapters</a> /</p>
+  <h1>{chapterLabel}</h1>
+  <div class="badges">
+    {chapter.apUnits.map((u) => (
+      <a class="badge topic" href={url(`${subject}/ap/#unit-${u}`)}>
+        AP Unit {u}: {data.ced.units.find((x) => x.id === u)?.title}
+      </a>
+    ))}
+    {chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+  </div>
+  {chapter.notOnAP.length > 0 && (
+    <div class="notice small">
+      <strong>Not on the AP exam:</strong>
+      <ul>
+        {chapter.notOnAP.map((x) => <li>{x}</li>)}
+      </ul>
+    </div>
+  )}
+  {chapter.sections.length > 0 && (
+    <details>
+      <summary>Sections</summary>
+      <ul>
+        {chapter.sections.map((s) => <li>{s.id} {s.title}</li>)}
+      </ul>
+    </details>
+  )}
+
+  <div class="actions">
+    <a class="button" href={practiceHref(subject, { chapter: [chapter.number] })}>Practice this chapter ({questionCount})</a>
+    {tests.map((t) => (
+      <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>
+        {t.title}{t.date && ` · ${formatDate(t.date)}`}
+      </a>
+    ))}
+  </div>
+
+  <h2>Lessons</h2>
+  <LessonList lessons={lessons} />
+
+  <nav class="pager small" aria-label="Chapters">
+    {prev ? <a href={url(`${subject}/chapters/${prev.number}/`)}>← Ch. {prev.number}: {prev.title}</a> : <span></span>}
+    {next && <a href={url(`${subject}/chapters/${next.number}/`)}>Ch. {next.number}: {next.title} →</a>}
+  </nav>
+</Base>
+
+<style>
+  .notice ul {
+    margin: 0.3rem 0 0;
+    padding-left: 1.2rem;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+title: Colligative Properties
+subject: apchem
+chapter: 13
+sections: []
+cedTopics: []
+order: 5
+authors: ["sample"]
+summary: Vapor-pressure lowering, boiling-point elevation, freezing-point depression, and osmotic pressure all depend on how many solute particles there are.
+---
+
+<Callout type="not-on-ap">
+Colligative properties, and calculations with molality, are excluded from the AP exam (exclusion
+statements in CED topic 3.8). This lesson is for the class test only.
+</Callout>
+
+A **colligative property** depends on the *number* of dissolved solute particles, not on what those
+particles are. A tablespoon of sugar and a tablespoon of salt affect water differently mainly because
+they put different numbers of particles into solution.
+
+## Counting particles: the van 't Hoff factor
+
+The van 't Hoff factor $i$ is the number of particles each formula unit produces in solution.
+
+| Solute | Dissolves as | Ideal $i$ |
+|---|---|---|
+| Glucose, $\ce{C6H12O6}$ | molecules | 1 |
+| $\ce{NaCl}$ | $\ce{Na+ + Cl-}$ | 2 |
+| $\ce{CaCl2}$ | $\ce{Ca^2+ + 2Cl-}$ | 3 |
+
+<Callout type="warning">
+Measured values of $i$ for ionic compounds are a bit smaller than the ideal values, because some
+oppositely charged ions stay paired in solution. Use the ideal value unless you are given a measured one.
+</Callout>
+
+## Molality
+
+Colligative formulas use **molality**, moles of solute per kilogram of *solvent*:
+
+$$
+m = \frac{\text{mol solute}}{\text{kg solvent}}
+$$
+
+Molality does not change with temperature, which is why it is used here instead of molarity.
+
+## The four properties
+
+**Vapor-pressure lowering** (Raoult's law): a nonvolatile solute lowers the mole fraction of the
+solvent, and the solvent's vapor pressure drops in proportion. $P_\text{solution} = X_\text{solvent}\,P^\circ_\text{solvent}$.
+
+**Boiling-point elevation:** $\Delta T_b = i\,K_b\,m$. For water, $K_b = 0.51\ ^\circ\text{C}/m$.
+
+**Freezing-point depression:** $\Delta T_f = i\,K_f\,m$. For water, $K_f = 1.86\ ^\circ\text{C}/m$.
+
+**Osmotic pressure:** $\Pi = iMRT$, where $M$ is molarity, $R = 0.08206\ \text{L atm mol}^{-1}\,\text{K}^{-1}$, and $T$ is in kelvins.
+
+<Reveal label="Worked example: freezing point of a glucose solution">
+
+18.0 g of glucose ($\ce{C6H12O6}$, 180.16 g/mol) is dissolved in 250. g of water. Find the freezing point.
+
+1. Moles of glucose: $18.0 / 180.16 = 0.0999\ \text{mol}$
+2. Molality: $0.0999\ \text{mol} / 0.250\ \text{kg} = 0.400\ m$
+3. $\Delta T_f = (1)(1.86)(0.400) = 0.744\ ^\circ\text{C}$
+4. Freezing point: $0.00 - 0.744 = -0.744\ ^\circ\text{C}$
+
+At the same molality, $\ce{CaCl2}$ (ideal $i = 3$) would lower the freezing point about three times as much, by roughly $2.23\ ^\circ\text{C}$.
+
+</Reveal>
+
+<Callout type="ap-tip" title="Related AP topics">
+The AP exam does still test the intermolecular-force reasoning behind solutions (topics 3.7 to 3.10).
+Vapor pressure and boiling point are tested as consequences of intermolecular forces, not as colligative
+calculations.
+</Callout>

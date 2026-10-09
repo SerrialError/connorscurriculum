@@ -1,0 +1,34 @@
+---
+import { type Lesson, lessonSlug, topicIds, url } from '../lib/content';
+import TopicBadges from './TopicBadges.astro';
+
+interface Props {
+  lessons: Lesson[];
+  showChapter?: boolean;
+}
+
+const { lessons, showChapter = false } = Astro.props;
+---
+
+{lessons.length === 0 ? (
+  <p class="muted">No lessons yet.</p>
+) : (
+  <ul class="plain-list stack">
+    {lessons.map((l) => (
+      <li class="card">
+        <h3>
+          <a href={url(`${l.data.subject.id}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
+          {l.data.draft && <span class="badge">Draft</span>}
+        </h3>
+        <p class="small muted">
+          {showChapter && <>Chapter {l.data.chapter}{l.data.sections.length > 0 && <> · §{l.data.sections.join(', ')}</>} · </>}
+          by {l.data.authors.join(', ')}
+        </p>
+        {l.data.summary && <p>{l.data.summary}</p>}
+        <div style="margin-top:.5rem">
+          <TopicBadges subject={l.data.subject.id} topics={topicIds(l)} />
+        </div>
+      </li>
+    ))}
+  </ul>
+)}

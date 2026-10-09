@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="440" viewBox="0 0 720 440" font-family="Helvetica, Arial, sans-serif">
+<rect width="720" height="440" fill="#fff"/>
+<line x1="70" x2="690" y1="380" y2="380" stroke="#9aa29d" stroke-width="1.5"/>
+<line x1="70" x2="70" y1="30" y2="380" stroke="#9aa29d" stroke-width="1.5"/>
+<path d="M70,222.50000000000003 L132,222.50000000000003 C194,222.50000000000003 218.79999999999998,65 268.4,65 C318,65 330.4,187.49999999999997 380,187.49999999999997 C429.59999999999997,187.49999999999997 442,135 479.20000000000005,135 C516.4,135 541.2,327.5 603.2,327.5 L690,327.5" fill="none" stroke="#1f6f8b" stroke-width="3" stroke-linejoin="round"/>
+<text x="101" y="210.50000000000003" text-anchor="middle" font-size="16" fill="#1d2321">Reactants</text>
+<text x="268.4" y="53" text-anchor="middle" font-size="16" fill="#1d2321">Transition state 1</text>
+<text x="380" y="213.49999999999997" text-anchor="middle" font-size="16" fill="#1d2321">Intermediate</text>
+<text x="479.20000000000005" y="123" text-anchor="middle" font-size="16" fill="#1d2321">Transition state 2</text>
+<text x="646.6" y="315.5" text-anchor="middle" font-size="16" fill="#1d2321">Products</text>
+<text x="380" y="422" text-anchor="middle" font-size="16" fill="#1d2321">Reaction progress</text>
+<text transform="translate(28 205) rotate(-90)" text-anchor="middle" font-size="16" fill="#1d2321">Potential energy</text>
+</svg>

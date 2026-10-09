@@ -1,0 +1,53 @@
+---
+import LessonList from '../../../components/LessonList.astro';
+import TopicBadges from '../../../components/TopicBadges.astro';
+import Base from '../../../layouts/Base.astro';
+import {
+  formatDate,
+  getLessons,
+  getQuestions,
+  getSubjectData,
+  inTest,
+  practiceHref,
+  subjectIds,
+  topicIds,
+  url,
+} from '../../../lib/content';
+
+export function getStaticPaths() {
+  return subjectIds().flatMap((subject) => getSubjectData(subject).tests.map((t) => ({ params: { subject, id: t.id } })));
+}
+
+const { subject, id } = Astro.params;
+const data = getSubjectData(subject);
+const test = data.tests.find((t) => t.id === id)!;
+const lessons = (await getLessons(subject)).filter((l) => inTest(test, l));
+const questions = (await getQuestions(subject)).filter((q) => inTest(test, q));
+const topics = [...new Set([...lessons, ...questions].flatMap(topicIds))].sort((a, b) =>
+  a.localeCompare(b, undefined, { numeric: true }),
+);
+---
+
+<Base title={test.title} subject={subject} searchable>
+  <h1>{test.title}</h1>
+  <p class="muted">
+    {test.date ? formatDate(test.date) : 'Date TBA'} ·
+    {test.chapters.map((n, i) => (
+      <>
+        {i > 0 && ', '}
+        <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}: {data.chapterMap.get(n)?.title}</a>
+      </>
+    ))}
+    {test.sections.length > 0 && <> · sections {test.sections.join(', ')}</>}
+  </p>
+  <div class="actions">
+    <a class="button" href={practiceHref(subject, { test: test.id })}>Practice for this test ({questions.length})</a>
+    <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'random', n: '10' })}>Random 10</a>
+  </div>
+
+  <h2>{data.subject.standardsName} topics covered</h2>
+  {topics.length ? <TopicBadges subject={subject} topics={topics} /> : <p class="muted">No tagged content yet.</p>}
+
+  <h2>Lessons</h2>
+  <LessonList lessons={lessons} showChapter={test.chapters.length > 1} />
+</Base>

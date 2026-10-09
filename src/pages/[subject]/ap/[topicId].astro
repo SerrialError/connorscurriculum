@@ -1,0 +1,77 @@
+---
+import LessonList from '../../../components/LessonList.astro';
+import Base from '../../../layouts/Base.astro';
+import { coverage, getLessons, getQuestions, getSubjectData, practiceHref, subjectIds, url } from '../../../lib/content';
+
+export function getStaticPaths() {
+  return subjectIds().flatMap((subject) =>
+    [...getSubjectData(subject).topics.keys()].map((topicId) => ({ params: { subject, topicId } })),
+  );
+}
+
+const { subject, topicId } = Astro.params;
+const data = getSubjectData(subject);
+const topic = data.topics.get(topicId)!;
+const unit = data.ced.units.find((u) => u.id === topic.unitId)!;
+const c = coverage(data, await getLessons(subject), await getQuestions(subject)).get(topicId)!;
+// Chapters with tagged content; otherwise chapters mapped to this unit in chapters.json.
+const mapped = data.chapters.filter((ch) => ch.apUnits.includes(unit.id)).map((ch) => ch.number);
+const flat = unit.topics.map((t) => t.id);
+const i = flat.indexOf(topicId);
+const prev = flat[i - 1];
+const next = flat[i + 1];
+---
+
+<Base title={`${topicId} ${topic.title}`} subject={subject} searchable>
+  <p class="breadcrumbs">
+    <a href={url(`${subject}/ap/`)}>{data.subject.standardsName}</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a>
+  </p>
+  <h1>{topicId} {topic.title}</h1>
+
+  <h2>Textbook chapters</h2>
+  {c.chapters.length > 0 ? (
+    <ul>
+      {c.chapters.map((n) => (
+        <li>
+          <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}: {data.chapterMap.get(n)?.title}</a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="muted">
+      No content tagged yet.
+      {mapped.length > 0 && (
+        <>
+          Unit {unit.id} is covered in{' '}
+          {mapped.map((n, j) => (
+            <>
+              {j > 0 && ', '}
+              <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}</a>
+            </>
+          ))}
+          .
+        </>
+      )}
+    </p>
+  )}
+
+  <div class="actions">
+    <a class="button" href={practiceHref(subject, { topic: [topicId] })}>Practice this topic ({c.questions})</a>
+  </div>
+
+  <h2>Lessons</h2>
+  <LessonList lessons={c.lessons} showChapter />
+
+  <nav class="pager small" aria-label="Topics">
+    {prev ? <a href={url(`${subject}/ap/${prev}/`)}>← {prev}</a> : <span></span>}
+    {next && <a href={url(`${subject}/ap/${next}/`)}>{next} →</a>}
+  </nav>
+</Base>
+
+<style>
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+</style>

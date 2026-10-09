@@ -1,0 +1,32 @@
+---
+// Collapsible worked example or answer. Works without JavaScript.
+interface Props {
+  label?: string;
+}
+
+const { label = 'Show answer' } = Astro.props;
+---
+
+<details class="reveal">
+  <summary>{label}</summary>
+  <div class="reveal-body"><slot /></div>
+</details>
+
+<style>
+  .reveal {
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  summary {
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    color: var(--link);
+  }
+  .reveal-body {
+    padding: 0 1rem 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+</style>

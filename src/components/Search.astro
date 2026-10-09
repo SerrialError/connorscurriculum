@@ -1,0 +1,126 @@
+---
+// Site search backed by Pagefind's JS API. The index only exists after `npm run build`.
+import { url } from '../lib/content';
+
+interface Props {
+  placeholder?: string;
+}
+
+const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
+---
+
+<div class="search" data-pagefind-src={url('pagefind/pagefind.js')}>
+  <label class="visually-hidden" for="site-search">Search</label>
+  <input id="site-search" type="search" placeholder={placeholder} autocomplete="off" />
+  <p class="status small muted" aria-live="polite"></p>
+  <ol class="results plain-list"></ol>
+</div>
+
+<script>
+  interface PagefindResult {
+    data(): Promise<{ url: string; excerpt: string; meta: Record<string, string> }>;
+  }
+  interface Pagefind {
+    search(q: string): Promise<{ results: PagefindResult[] }>;
+    options?(o: Record<string, unknown>): Promise<void>;
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('.search')) {
+    const input = root.querySelector('input')!;
+    const status = root.querySelector<HTMLElement>('.status')!;
+    const list = root.querySelector<HTMLOListElement>('.results')!;
+    let pagefind: Pagefind | null = null;
+    let failed = false;
+    let timer: number | undefined;
+    let seq = 0;
+
+    async function load(): Promise<Pagefind | null> {
+      if (pagefind || failed) return pagefind;
+      try {
+        pagefind = (await import(/* @vite-ignore */ root.dataset.pagefindSrc!)) as Pagefind;
+      } catch {
+        failed = true;
+        status.textContent = 'Search works on the built site (npm run build && npm run preview).';
+      }
+      return pagefind;
+    }
+
+    async function run() {
+      const q = input.value.trim();
+      const mine = ++seq;
+      if (!q) {
+        list.replaceChildren();
+        status.textContent = '';
+        return;
+      }
+      const pf = await load();
+      if (!pf) return;
+      const { results } = await pf.search(q);
+      const top = await Promise.all(results.slice(0, 8).map((r) => r.data()));
+      if (mine !== seq) return;
+      status.textContent = results.length === 0 ? 'No results.' : `${results.length} result${results.length === 1 ? '' : 's'}`;
+      list.replaceChildren(
+        ...top.map((r) => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = r.url;
+          a.className = 'title';
+          a.textContent = r.meta.title ?? r.url;
+          const meta = document.createElement('div');
+          meta.className = 'small muted';
+          meta.textContent = [r.meta.subject, r.meta.chapter].filter(Boolean).join(' · ');
+          const excerpt = document.createElement('p');
+          excerpt.className = 'small';
+          excerpt.innerHTML = r.excerpt; // Pagefind escapes page text and adds <mark>
+          li.append(a, meta, excerpt);
+          return li;
+        }),
+      );
+    }
+
+    input.addEventListener('focus', () => void load(), { once: true });
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(run, 150);
+    });
+  }
+</script>
+
+<style>
+  .search {
+    margin: 1rem 0 1.5rem;
+  }
+  input {
+    width: 100%;
+    font: inherit;
+    font-size: 1.05rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+  }
+  input:focus {
+    outline: 3px solid var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .status {
+    margin: 0.4rem 0;
+    min-height: 1.2em;
+  }
+  .results :global(li) {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .results :global(.title) {
+    font-weight: 700;
+  }
+  .results :global(p) {
+    margin: 0.2rem 0 0;
+  }
+  .results :global(mark) {
+    background: var(--warn-soft);
+    color: inherit;
+    padding: 0 0.1em;
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getLessons, getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const lessons = await getLessons(subject);
+const questions = await getQuestions(subject);
+const count = (n: number) => ({
+  lessons: lessons.filter((l) => l.data.chapter === n).length,
+  questions: questions.filter((q) => q.data.chapter === n).length,
+});
+const unitTitle = (id: string) => data.ced.units.find((u) => u.id === id)?.title ?? '';
+---
+
+<Base title="Chapters" subject={subject}>
+  <h1>Chapters</h1>
+  <p class="muted prose">Class order, following <em>{data.subject.textbook}</em>. Class tests follow these chapters.</p>
+  <ol class="plain-list stack">
+    {data.chapters.map((c) => {
+      const n = count(c.number);
+      const offAP = c.apUnits.length === 0;
+      return (
+        <li class="card">
+          <h2 class="h3">
+            <a href={url(`${subject}/chapters/${c.number}/`)}>
+              {c.number}. {c.title}
+            </a>
+          </h2>
+          <p class="small muted">
+            {n.lessons} lesson{n.lessons === 1 ? '' : 's'} · {n.questions} question{n.questions === 1 ? '' : 's'}
+          </p>
+          <div class="badges" style="margin-top:.4rem">
+            {c.apUnits.map((u) => (
+              <a class="badge topic" href={url(`${subject}/ap/#unit-${u}`)}>
+                Unit {u}: {unitTitle(u)}
+              </a>
+            ))}
+            {offAP && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+          </div>
+          {c.notOnAP.length > 0 && !offAP && (
+            <p class="small">
+              <strong>Not on AP:</strong> {c.notOnAP.join('; ')}
+            </p>
+          )}
+          {offAP && c.notOnAP.length > 0 && <p class="small muted">{c.notOnAP.join('; ')}</p>}
+        </li>
+      );
+    })}
+  </ol>
+</Base>
+
+<style>
+  .h3 {
+    font-size: 1.1rem;
+  }
+</style>

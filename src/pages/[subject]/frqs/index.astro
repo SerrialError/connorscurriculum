@@ -20,10 +20,6 @@ const exams = data.pastFrqs;
 
 <Base title="Past AP FRQs" subject={subject} searchable>
   <h1>Past AP free-response questions</h1>
-  <p class="prose muted">
-    Released AP Chemistry FRQs from AP Central, with every part tagged by CED topic. Do a question on paper, then grade
-    yourself with the official scoring guidelines. The links open College Board's PDFs.
-  </p>
 
   {frqs.length === 0 ? (
     <p class="muted">No past FRQs listed yet.</p>
@@ -44,9 +40,6 @@ const exams = data.pastFrqs;
             {mostly.map((f, i) => <>{i > 0 && ', '}<a href={`#${f.year}-q${f.number}`}>{frqName(f)}</a></>)}
           </p>
         )}
-        <p class="small muted">
-          To practice one topic, open its page under AP topics; it lists just the FRQ parts on that topic.
-        </p>
       </section>
 
       {exams.map((exam) => (

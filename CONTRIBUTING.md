@@ -127,24 +127,26 @@ Empty `sections` means the whole chapters. `date` is optional.
 
 ## Class progress
 
-Checkmarks on the chapter list and the AP topics page come from `src/data/<subject>/progress.json`.
-They are the same for everyone. Update the file when the class finishes a chapter:
+When the class finishes a chapter, add its number to `src/data/<subject>/progress.json`:
 
 ```json
-{
-  "chapters": [1, 2, 3, 4, 5, 6],
-  "cedTopics": {
-    "done": ["1.1", "1.5"],
-    "partial": ["1.8"]
-  },
-  "notes": {
-    "1.8": "Ion charges are in Ch. 2; periodic trends come in Ch. 7."
-  }
-}
+{ "chapters": [1, 2, 3, 4, 5, 6] }
 ```
 
-`done` gets a ✓, `partial` gets a ◐, and a note is shown under the topic. When a partial topic is
-finished, move it from `partial` to `done` and delete its note.
+That's all. The AP topics fill in by themselves, because each chapter in `chapters.json` lists
+the CED topics it teaches:
+
+```json
+{ "number": 6, "title": "Electronic Structure of Atoms", "cedTopics": ["1.5", "1.6", "3.11", "3.12"] }
+```
+
+A topic gets a ✓ once **every** chapter that lists it is finished, and a ◐ (with a note such as
+"Started in Ch. 2; continues in Ch. 6.") when only some are. The checkmarks are the same for everyone.
+
+If a topic's mark looks wrong, fix the mapping in `chapters.json` rather than `progress.json`.
+For example, if your teacher covers half-reactions in Ch. 4, remove `"4.9"` from Chapter 20's
+`cedTopics`. The chapter's AP unit badges come from the same list. Every CED topic must be listed
+by at least one chapter (a unit test checks this).
 
 ## Textbook sections
 

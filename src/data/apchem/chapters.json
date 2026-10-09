@@ -2,38 +2,30 @@
   {
     "number": 1,
     "title": "Introduction: Matter, Energy, and Measurement",
-    "apUnits": [],
+    "cedTopics": ["3.9", "4.4"],
     "notOnAP": [
-      "Background only: measurement, units, significant figures"
+      "Measurement, units, and significant figures are background skills, not CED topics"
     ],
     "sections": []
   },
   {
     "number": 2,
     "title": "Atoms, Molecules, and Ions",
-    "apUnits": [
-      "1"
-    ],
+    "cedTopics": ["1.2", "1.5", "1.8"],
     "notOnAP": [],
     "sections": []
   },
   {
     "number": 3,
     "title": "Chemical Reactions and Reaction Stoichiometry",
-    "apUnits": [
-      "1",
-      "4"
-    ],
+    "cedTopics": ["1.1", "1.3", "1.4", "4.1", "4.3", "4.5", "4.7"],
     "notOnAP": [],
     "sections": []
   },
   {
     "number": 4,
     "title": "Reactions in Aqueous Solution",
-    "apUnits": [
-      "3",
-      "4"
-    ],
+    "cedTopics": ["3.7", "4.2", "4.4", "4.5", "4.6", "4.7", "4.8", "4.9"],
     "notOnAP": [
       "Memorizing solubility rules beyond “all sodium, potassium, ammonium, and nitrate salts are soluble”",
       "The terms “oxidizing agent” and “reducing agent”"
@@ -43,9 +35,7 @@
   {
     "number": 5,
     "title": "Thermochemistry",
-    "apUnits": [
-      "6"
-    ],
+    "cedTopics": ["6.1", "6.2", "6.3", "6.4", "6.6", "6.7", "6.8", "6.9"],
     "notOnAP": [
       "Technical distinctions between enthalpy and internal energy",
       "The concept of state functions"
@@ -55,10 +45,7 @@
   {
     "number": 6,
     "title": "Electronic Structure of Atoms",
-    "apUnits": [
-      "1",
-      "3"
-    ],
+    "cedTopics": ["1.5", "1.6", "3.11", "3.12"],
     "notOnAP": [
       "Assigning quantum numbers to electrons",
       "Electron configurations of exceptions to the aufbau principle"
@@ -68,27 +55,21 @@
   {
     "number": 7,
     "title": "Periodic Properties of the Elements",
-    "apUnits": [
-      "1"
-    ],
+    "cedTopics": ["1.6", "1.7", "1.8"],
     "notOnAP": [],
     "sections": []
   },
   {
     "number": 8,
     "title": "Basic Concepts of Chemical Bonding",
-    "apUnits": [
-      "2"
-    ],
+    "cedTopics": ["1.8", "2.1", "2.2", "2.3", "2.5", "2.6"],
     "notOnAP": [],
     "sections": []
   },
   {
     "number": 9,
     "title": "Molecular Geometry and Bonding Theories",
-    "apUnits": [
-      "2"
-    ],
+    "cedTopics": ["2.2", "2.7"],
     "notOnAP": [
       "Molecular orbital theory",
       "Derivation and depiction of hybrid orbitals (the sp, sp², sp³ labels are on the exam)",
@@ -99,19 +80,14 @@
   {
     "number": 10,
     "title": "Gases",
-    "apUnits": [
-      "3"
-    ],
+    "cedTopics": ["3.4", "3.5", "3.6"],
     "notOnAP": [],
     "sections": []
   },
   {
     "number": 11,
     "title": "Liquids and Intermolecular Forces",
-    "apUnits": [
-      "3",
-      "6"
-    ],
+    "cedTopics": ["3.1", "3.3", "6.5"],
     "notOnAP": [
       "Phase diagrams"
     ],
@@ -120,10 +96,7 @@
   {
     "number": 12,
     "title": "Solids and Modern Materials",
-    "apUnits": [
-      "2",
-      "3"
-    ],
+    "cedTopics": ["2.3", "2.4", "3.2"],
     "notOnAP": [
       "Specific crystal structures",
       "Band theory and semiconductors",
@@ -135,10 +108,7 @@
   {
     "number": 13,
     "title": "Properties of Solutions",
-    "apUnits": [
-      "3",
-      "9"
-    ],
+    "cedTopics": ["3.8", "3.9", "3.10", "9.6"],
     "notOnAP": [
       "Colligative properties",
       "Molality, percent by mass, and percent by volume calculations"
@@ -148,9 +118,7 @@
   {
     "number": 14,
     "title": "Chemical Kinetics",
-    "apUnits": [
-      "5"
-    ],
+    "cedTopics": ["5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "3.13"],
     "notOnAP": [
       "Arrhenius equation calculations"
     ],
@@ -159,9 +127,7 @@
   {
     "number": 15,
     "title": "Chemical Equilibrium",
-    "apUnits": [
-      "7"
-    ],
+    "cedTopics": ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"],
     "notOnAP": [
       "Converting between Kc and Kp"
     ],
@@ -170,9 +136,7 @@
   {
     "number": 16,
     "title": "Acid–Base Equilibria",
-    "apUnits": [
-      "8"
-    ],
+    "cedTopics": ["4.8", "8.1", "8.2", "8.3", "8.6", "8.7"],
     "notOnAP": [
       "Lewis acids and bases"
     ],
@@ -181,10 +145,7 @@
   {
     "number": 17,
     "title": "Aqueous Equilibria: Buffers, Titrations, and Solubility",
-    "apUnits": [
-      "7",
-      "8"
-    ],
+    "cedTopics": ["7.11", "7.12", "8.4", "8.5", "8.8", "8.9", "8.10", "8.11"],
     "notOnAP": [
       "Complex ions",
       "Qualitative analysis (if covered in this edition)",
@@ -197,7 +158,7 @@
   {
     "number": 18,
     "title": "Chemistry of the Environment",
-    "apUnits": [],
+    "cedTopics": [],
     "notOnAP": [
       "Entire chapter"
     ],
@@ -206,19 +167,14 @@
   {
     "number": 19,
     "title": "Chemical Thermodynamics",
-    "apUnits": [
-      "9"
-    ],
+    "cedTopics": ["9.1", "9.2", "9.3", "9.4", "9.5", "9.6", "9.7"],
     "notOnAP": [],
     "sections": []
   },
   {
     "number": 20,
     "title": "Electrochemistry",
-    "apUnits": [
-      "4",
-      "9"
-    ],
+    "cedTopics": ["4.9", "9.8", "9.9", "9.10", "9.11"],
     "notOnAP": [
       "Labeling electrodes as positive or negative"
     ],
@@ -227,7 +183,7 @@
   {
     "number": 21,
     "title": "Nuclear Chemistry",
-    "apUnits": [],
+    "cedTopics": [],
     "notOnAP": [
       "Entire chapter"
     ],
@@ -236,7 +192,7 @@
   {
     "number": 22,
     "title": "Chemistry of the Nonmetals",
-    "apUnits": [],
+    "cedTopics": [],
     "notOnAP": [
       "Entire chapter"
     ],
@@ -245,7 +201,7 @@
   {
     "number": 23,
     "title": "Transition Metals and Coordination Chemistry",
-    "apUnits": [],
+    "cedTopics": [],
     "notOnAP": [
       "Entire chapter"
     ],
@@ -254,7 +210,7 @@
   {
     "number": 24,
     "title": "The Chemistry of Life: Organic and Biological Chemistry",
-    "apUnits": [],
+    "cedTopics": [],
     "notOnAP": [
       "Entire chapter"
     ],

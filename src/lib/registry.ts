@@ -37,7 +37,8 @@ const sectionSchema = z.object({ id: z.string().min(1), title: z.string().min(1)
 export const chapterSchema = z.object({
   number: z.number().int().positive(),
   title: z.string().min(1),
-  apUnits: z.array(z.string()).default([]),
+  // CED topics this chapter teaches. Drives class progress and the chapter's AP units.
+  cedTopics: z.array(z.string()).default([]),
   notOnAP: z.array(z.string()).default([]),
   sections: z.array(sectionSchema).default([]),
 });
@@ -51,29 +52,26 @@ export const testSchema = z.object({
 });
 
 export const progressSchema = z.object({
-  // Chapters the class has finished.
+  // Chapters the class has finished. Topic progress is derived from chapters.json.
   chapters: z.array(z.number().int()).default([]),
-  cedTopics: z
-    .object({
-      done: z.array(z.string()).default([]),
-      partial: z.array(z.string()).default([]),
-    })
-    .prefault({}),
-  // Optional one-line note per topic id, shown next to it.
-  notes: z.record(z.string(), z.string()).default({}),
 });
 
 export type Subject = z.infer<typeof subjectSchema>;
 export type Ced = z.infer<typeof cedSchema>;
 export type CedUnit = Ced['units'][number];
 export type CedTopic = z.infer<typeof cedTopicSchema> & { unitId: string };
-export type Chapter = z.infer<typeof chapterSchema>;
+export type Chapter = z.infer<typeof chapterSchema> & {
+  /** AP units of this chapter's cedTopics, in CED order. */
+  apUnits: string[];
+};
 export type ClassTest = z.infer<typeof testSchema>;
 export type TopicProgress = 'done' | 'partial' | null;
 
 export interface Progress {
   chapters: Set<number>;
+  /** Topics with any progress. A topic is done when every chapter that teaches it is finished. */
   topics: Map<string, Exclude<TopicProgress, null>>;
+  /** Short explanation for partly done topics. */
   notes: Map<string, string>;
 }
 
@@ -86,6 +84,8 @@ export interface SubjectData {
   topics: Map<string, CedTopic>;
   /** chapter number -> chapter */
   chapterMap: Map<number, Chapter>;
+  /** topic id -> chapter numbers that teach it (from chapters.json), ascending */
+  topicChapters: Map<string, number[]>;
   /** Class progress from progress.json (empty if the file is missing). */
   progress: Progress;
 }
@@ -126,7 +126,7 @@ function loadSubject(subject: Subject): SubjectData {
   const testsFile = join(dir, 'tests.json');
 
   const ced = readJson(cedFile, cedSchema);
-  const chapters = readJson(chaptersFile, z.array(chapterSchema));
+  const rawChapters = readJson(chaptersFile, z.array(chapterSchema));
   const tests = existsSync(testsFile) ? readJson(testsFile, z.array(testSchema)) : [];
 
   const topics = new Map<string, CedTopic>();
@@ -142,19 +142,26 @@ function loadSubject(subject: Subject): SubjectData {
     });
   });
 
+  const unitOrder = ced.units.map((u) => u.id);
   const chapterMap = new Map<number, Chapter>();
-  chapters.forEach((chapter, i) => {
-    if (chapterMap.has(chapter.number)) {
-      throw new DataError(chaptersFile, `[${i}].number`, `duplicate chapter ${chapter.number}`);
+  const topicChapters = new Map<string, number[]>([...topics.keys()].map((id) => [id, []]));
+  const chapters: Chapter[] = rawChapters.map((raw, i) => {
+    if (chapterMap.has(raw.number)) {
+      throw new DataError(chaptersFile, `[${i}].number`, `duplicate chapter ${raw.number}`);
     }
-    chapterMap.set(chapter.number, chapter);
-    chapter.apUnits.forEach((unitId, j) => {
-      if (!unitIds.has(unitId)) {
-        throw new DataError(chaptersFile, `[${i}].apUnits[${j}]`, `unit "${unitId}" is not in ced.json`);
-      }
+    raw.cedTopics.forEach((id, j) => {
+      const field = `[${i}].cedTopics[${j}]`;
+      if (!topics.has(id)) throw new DataError(chaptersFile, field, `topic "${id}" is not in ced.json`);
+      if (raw.cedTopics.indexOf(id) !== j) throw new DataError(chaptersFile, field, `topic "${id}" is listed twice`);
+      topicChapters.get(id)!.push(raw.number);
     });
+    const units = new Set(raw.cedTopics.map((id) => topics.get(id)!.unitId));
+    const chapter = { ...raw, apUnits: unitOrder.filter((u) => units.has(u)) };
+    chapterMap.set(chapter.number, chapter);
+    return chapter;
   });
   chapters.sort((a, b) => a.number - b.number);
+  for (const list of topicChapters.values()) list.sort((a, b) => a - b);
 
   const testIds = new Set<string>();
   tests.forEach((test, i) => {
@@ -176,21 +183,28 @@ function loadSubject(subject: Subject): SubjectData {
   rawProgress.chapters.forEach((n, i) => {
     if (!chapterMap.has(n)) throw new DataError(progressFile, `chapters[${i}]`, `chapter ${n} is not in chapters.json`);
   });
-  const progress: Progress = { chapters: new Set(rawProgress.chapters), topics: new Map(), notes: new Map() };
-  for (const status of ['done', 'partial'] as const) {
-    rawProgress.cedTopics[status].forEach((id, i) => {
-      const field = `cedTopics.${status}[${i}]`;
-      if (!topics.has(id)) throw new DataError(progressFile, field, `topic "${id}" is not in ced.json`);
-      if (progress.topics.has(id)) throw new DataError(progressFile, field, `topic "${id}" is listed twice`);
-      progress.topics.set(id, status);
-    });
-  }
-  for (const [id, note] of Object.entries(rawProgress.notes)) {
-    if (!topics.has(id)) throw new DataError(progressFile, `notes.${id}`, `topic "${id}" is not in ced.json`);
-    progress.notes.set(id, note);
-  }
+  const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters);
 
-  return { subject, ced, chapters, tests, topics, chapterMap, progress };
+  return { subject, ced, chapters, tests, topics, chapterMap, topicChapters, progress };
+}
+
+const listChapters = (ns: number[]) => `Ch. ${ns.join(', ')}`;
+
+/** Topic status from finished chapters: done if every teaching chapter is finished, partial if some are. */
+export function deriveProgress(finished: Set<number>, topicChapters: Map<string, number[]>): Progress {
+  const progress: Progress = { chapters: finished, topics: new Map(), notes: new Map() };
+  for (const [id, chs] of topicChapters) {
+    const done = chs.filter((n) => finished.has(n));
+    if (done.length === 0) continue;
+    if (done.length === chs.length) {
+      progress.topics.set(id, 'done');
+    } else {
+      progress.topics.set(id, 'partial');
+      const left = chs.filter((n) => !finished.has(n));
+      progress.notes.set(id, `Started in ${listChapters(done)}; continues in ${listChapters(left)}.`);
+    }
+  }
+  return progress;
 }
 
 /** All subjects with their data, sorted by `order`. Re-read on every call so dev picks up edits. */

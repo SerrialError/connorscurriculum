@@ -1,14 +1,3 @@
 {
-  "chapters": [1, 2, 3, 4, 5],
-  "cedTopics": {
-    "done": ["1.1", "1.2", "1.3", "1.4", "3.7", "4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7", "6.1", "6.2", "6.3", "6.4", "6.6", "6.7", "6.8", "6.9"],
-    "partial": ["1.5", "1.8", "4.8", "4.9"]
-  },
-  "notes": {
-    "1.5": "Atomic structure is in Ch. 2; electron configurations come in Ch. 6.",
-    "1.8": "Ion charges from the periodic table are in Ch. 2; periodic trends come in Ch. 7.",
-    "4.8": "Acids, bases, and neutralization are in Ch. 4; conjugate acid-base pairs come in Ch. 16.",
-    "4.9": "Oxidation numbers and redox reactions are in Ch. 4; balancing with half-reactions comes in Ch. 20.",
-    "6.5": "Heats of fusion and vaporization (heating curves) come in Ch. 11."
-  }
+  "chapters": [1, 2, 3, 4, 5]
 }

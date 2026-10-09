@@ -15,8 +15,9 @@ const data = getSubjectData(subject);
 const topic = data.topics.get(topicId)!;
 const unit = data.ced.units.find((u) => u.id === topic.unitId)!;
 const c = coverage(data, await getLessons(subject), await getQuestions(subject)).get(topicId)!;
-// Chapters with tagged content; otherwise chapters mapped to this unit in chapters.json.
-const mapped = data.chapters.filter((ch) => ch.apUnits.includes(unit.id)).map((ch) => ch.number);
+// Chapters that teach this topic (chapters.json), plus any other chapter with content tagged with it.
+const teaching = data.topicChapters.get(topicId) ?? [];
+const alsoTagged = c.chapters.filter((n) => !teaching.includes(n));
 const flat = unit.topics.map((t) => t.id);
 const i = flat.indexOf(topicId);
 const prev = flat[i - 1];
@@ -28,7 +29,7 @@ const next = flat[i + 1];
     <a href={url(`${subject}/ap/`)}>{data.subject.standardsName}</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a>
   </p>
   <h1>{topicId} {topic.title}</h1>
-  {(data.progress.topics.has(topicId) || data.progress.notes.has(topicId)) && (
+  {data.progress.topics.has(topicId) && (
     <p class="status">
       <ProgressMark status={data.progress.topics.get(topicId) ?? null} doneLabel="Covered in class" />
       {data.progress.notes.get(topicId) && <span class="small muted">{data.progress.notes.get(topicId)}</span>}
@@ -36,29 +37,21 @@ const next = flat[i + 1];
   )}
 
   <h2>Textbook chapters</h2>
-  {c.chapters.length > 0 ? (
-    <ul>
-      {c.chapters.map((n) => (
+  {teaching.length > 0 ? (
+    <ul class="plain-list chapters">
+      {teaching.map((n) => (
         <li>
+          <ProgressMark status={data.progress.chapters.has(n) ? 'done' : null} compact />
           <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}: {data.chapterMap.get(n)?.title}</a>
         </li>
       ))}
     </ul>
   ) : (
-    <p class="muted">
-      No content tagged yet.{' '}
-      {mapped.length > 0 && (
-        <>
-          Unit {unit.id} is covered in{' '}
-          {mapped.map((n, j) => (
-            <>
-              {j > 0 && ', '}
-              <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}</a>
-            </>
-          ))}
-          .
-        </>
-      )}
+    <p class="muted">No chapter in chapters.json lists this topic yet.</p>
+  )}
+  {alsoTagged.length > 0 && (
+    <p class="small muted">
+      Also tagged in lessons or questions from Chapter{alsoTagged.length > 1 ? 's' : ''} {alsoTagged.join(', ')}.
     </p>
   )}
 
@@ -81,6 +74,12 @@ const next = flat[i + 1];
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: center;
+  }
+  .chapters li {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.2rem 0;
   }
   .pager {
     display: flex;

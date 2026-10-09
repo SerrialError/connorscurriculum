@@ -30,9 +30,9 @@ src/
   data/
     subjects.json
     apchem/ced.json        AP CED units and topics
-    apchem/chapters.json   textbook chapters, AP unit mapping, "not on AP" notes
+    apchem/chapters.json   textbook chapters, the CED topics each one teaches, "not on AP" notes
     apchem/tests.json      class tests
-    apchem/progress.json   what the class has finished (checkmarks)
+    apchem/progress.json   chapters the class has finished (topic checkmarks follow)
   content/
     lessons/<subject>/<chapter>-<slug>/index.mdx
     questions/<subject>/<chapter>-<slug>.yaml
@@ -67,9 +67,12 @@ CED's exclusion statements (for example: phase diagrams, colligative properties,
 calculations, Kc/Kp conversion, Lewis acid-base concepts). Section lists are empty until someone
 fills them in from the book.
 
-**`progress.json`** marks what the class has finished: Chapters 1–5 as of 2026-10-09. CED topics
-are marked by what Chapters 1–5 teach, compared with each topic's learning objectives in the CED.
-Four topics are only partly covered so far, and each has a note saying which later chapter finishes it:
-1.5 (electron configurations, Ch. 6), 1.8 (periodic trends, Ch. 7), 4.8 (conjugate acid-base pairs,
-Ch. 16), and 4.9 (half-reactions, Ch. 20). Topic 6.5 (energy of phase changes) is left unmarked
-because heating curves come in Ch. 11.
+**Chapter-to-topic mapping.** Each chapter in `chapters.json` lists the CED topics it teaches,
+based on comparing each topic's learning objectives in the CED with the chapter contents. Topics
+taught across several chapters are listed under each one, for example 1.5 (Ch. 2 and 6), 1.8
+(Ch. 2, 7, 8), 3.9 (Ch. 1 and 13), 4.8 (Ch. 4 and 16), and 4.9 (Ch. 4 and 20). One placement could
+not be confirmed for the 15th edition: photoelectron spectroscopy (1.6) is listed under both Ch. 6 and 7.
+Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure reaction rates.
+
+**`progress.json`** lists only finished chapters (1–5 as of 2026-10-09). Topic checkmarks are derived
+from the mapping above.

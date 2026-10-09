@@ -50,12 +50,32 @@ export const testSchema = z.object({
   sections: z.array(z.string()).default([]),
 });
 
+export const progressSchema = z.object({
+  // Chapters the class has finished.
+  chapters: z.array(z.number().int()).default([]),
+  cedTopics: z
+    .object({
+      done: z.array(z.string()).default([]),
+      partial: z.array(z.string()).default([]),
+    })
+    .prefault({}),
+  // Optional one-line note per topic id, shown next to it.
+  notes: z.record(z.string(), z.string()).default({}),
+});
+
 export type Subject = z.infer<typeof subjectSchema>;
 export type Ced = z.infer<typeof cedSchema>;
 export type CedUnit = Ced['units'][number];
 export type CedTopic = z.infer<typeof cedTopicSchema> & { unitId: string };
 export type Chapter = z.infer<typeof chapterSchema>;
 export type ClassTest = z.infer<typeof testSchema>;
+export type TopicProgress = 'done' | 'partial' | null;
+
+export interface Progress {
+  chapters: Set<number>;
+  topics: Map<string, Exclude<TopicProgress, null>>;
+  notes: Map<string, string>;
+}
 
 export interface SubjectData {
   subject: Subject;
@@ -66,6 +86,8 @@ export interface SubjectData {
   topics: Map<string, CedTopic>;
   /** chapter number -> chapter */
   chapterMap: Map<number, Chapter>;
+  /** Class progress from progress.json (empty if the file is missing). */
+  progress: Progress;
 }
 
 export class DataError extends Error {
@@ -149,7 +171,26 @@ function loadSubject(subject: Subject): SubjectData {
     });
   });
 
-  return { subject, ced, chapters, tests, topics, chapterMap };
+  const progressFile = join(dir, 'progress.json');
+  const rawProgress = existsSync(progressFile) ? readJson(progressFile, progressSchema) : progressSchema.parse({});
+  rawProgress.chapters.forEach((n, i) => {
+    if (!chapterMap.has(n)) throw new DataError(progressFile, `chapters[${i}]`, `chapter ${n} is not in chapters.json`);
+  });
+  const progress: Progress = { chapters: new Set(rawProgress.chapters), topics: new Map(), notes: new Map() };
+  for (const status of ['done', 'partial'] as const) {
+    rawProgress.cedTopics[status].forEach((id, i) => {
+      const field = `cedTopics.${status}[${i}]`;
+      if (!topics.has(id)) throw new DataError(progressFile, field, `topic "${id}" is not in ced.json`);
+      if (progress.topics.has(id)) throw new DataError(progressFile, field, `topic "${id}" is listed twice`);
+      progress.topics.set(id, status);
+    });
+  }
+  for (const [id, note] of Object.entries(rawProgress.notes)) {
+    if (!topics.has(id)) throw new DataError(progressFile, `notes.${id}`, `topic "${id}" is not in ced.json`);
+    progress.notes.set(id, note);
+  }
+
+  return { subject, ced, chapters, tests, topics, chapterMap, progress };
 }
 
 /** All subjects with their data, sorted by `order`. Re-read on every call so dev picks up edits. */

@@ -32,10 +32,11 @@ src/
     apchem/ced.json        AP CED units and topics
     apchem/chapters.json   textbook chapters, AP unit mapping, "not on AP" notes
     apchem/tests.json      class tests
+    apchem/progress.json   what the class has finished (checkmarks)
   content/
     lessons/<subject>/<chapter>-<slug>/index.mdx
     questions/<subject>/<chapter>-<slug>.yaml
-  components/              .astro components and Svelte islands (Practice, Checklist)
+  components/              .astro components and the Practice Svelte island
   lib/                     registry, validation, Markdown pipeline, practice logic (+ tests)
   pages/                   routes, all keyed by subject id
 ```
@@ -44,8 +45,8 @@ src/
 
 **`ced.json`** was checked on 2026-10-08 against the *AP Chemistry Course and Exam Description,
 Effective Fall 2024* (AP Central PDF, file revised June 2026). Unit and topic titles come from the
-Course at a Glance, and exam weights from the exam weighting table. `"verified"` is still `false`
-so the checklist shows its notice until you've confirmed it yourself.
+Course at a Glance, and exam weights from the exam weighting table. `"verified"` is still `false`,
+so the AP topics page shows a notice until you have confirmed the list yourself.
 
 The current CED differs from the older (2020) topic list in several places:
 
@@ -65,3 +66,10 @@ older editions: Chapter 3 is "Chemical Reactions and Reaction Stoichiometry" and
 CED's exclusion statements (for example: phase diagrams, colligative properties, Arrhenius-equation
 calculations, Kc/Kp conversion, Lewis acid-base concepts). Section lists are empty until someone
 fills them in from the book.
+
+**`progress.json`** marks what the class has finished: Chapters 1–5 as of 2026-10-09. CED topics
+are marked by what Chapters 1–5 teach, compared with each topic's learning objectives in the CED.
+Four topics are only partly covered so far, and each has a note saying which later chapter finishes it:
+1.5 (electron configurations, Ch. 6), 1.8 (periodic trends, Ch. 7), 4.8 (conjugate acid-base pairs,
+Ch. 16), and 4.9 (half-reactions, Ch. 20). Topic 6.5 (energy of phase changes) is left unmarked
+because heating curves come in Ch. 11.

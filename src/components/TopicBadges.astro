@@ -15,6 +15,8 @@ const data = getSubjectData(subject);
 <div class="badges">
   {topics.map((t) => (
     <a class="badge topic" href={url(`${subject}/ap/${t}/`)} title={data.topics.get(t)?.title}>
+      {data.progress.topics.get(t) === 'done' && <span title="Covered in class">✓</span>}
+      {data.progress.topics.get(t) === 'partial' && <span title="Partly covered in class">◐</span>}
       {t} {data.topics.get(t)?.title}
     </a>
   ))}

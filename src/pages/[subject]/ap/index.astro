@@ -1,4 +1,5 @@
 ---
+import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { coverage, getLessons, getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
 
@@ -7,51 +8,102 @@ export const getStaticPaths = subjectPaths;
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const cov = coverage(data, await getLessons(subject), await getQuestions(subject));
+const { progress } = data;
+const statusOf = (id: string) => progress.topics.get(id) ?? null;
+const countDone = (ids: string[]) => ids.filter((id) => statusOf(id) === 'done').length;
+const countPartial = (ids: string[]) => ids.filter((id) => statusOf(id) === 'partial').length;
+const allIds = [...data.topics.keys()];
 ---
 
 <Base title={`${data.subject.standardsName} units`} subject={subject}>
   <h1>{data.subject.standardsName} units and topics</h1>
   <p class="muted prose">Units in Course at a Glance order, with exam weights. Each topic lists the lessons and questions tagged with it.</p>
-  {data.ced.units.map((unit) => (
-    <section class="unit" id={`unit-${unit.id}`}>
-      <h2>
-        Unit {unit.id}: {unit.title} {unit.examWeight && <span class="badge">{unit.examWeight} of exam</span>}
-      </h2>
-      <ol class="plain-list topics">
-        {unit.topics.map((t) => {
-          const c = cov.get(t.id)!;
-          return (
-            <li>
-              <a href={url(`${subject}/ap/${t.id}/`)}>
-                <span class="num">{t.id}</span> {t.title}
-              </a>
-              <span class="small muted">
-                {c.lessons.length} lesson{c.lessons.length === 1 ? '' : 's'} · {c.questions} q
-              </span>
-            </li>
-          );
-        })}
-      </ol>
-    </section>
-  ))}
+  {progress.topics.size > 0 && (
+    <p class="small legend">
+      <ProgressMark status="done" /> {countDone(allIds)} of {allIds.length}
+      {countPartial(allIds) > 0 && (
+        <>
+          {' '}
+          <ProgressMark status="partial" /> {countPartial(allIds)}
+        </>
+      )}
+    </p>
+  )}
+  {!data.ced.verified && (
+    <p class="notice small">
+      Topic list not yet verified against the current Course and Exam Description. Edit <code>src/data/{subject}/ced.json</code>
+      and set <code>"verified": true</code> once checked.
+    </p>
+  )}
+  {data.ced.units.map((unit) => {
+    const ids = unit.topics.map((t) => t.id);
+    const done = countDone(ids);
+    return (
+      <section class="unit" id={`unit-${unit.id}`}>
+        <h2>
+          Unit {unit.id}: {unit.title} {unit.examWeight && <span class="badge">{unit.examWeight} of exam</span>}
+          {progress.topics.size > 0 && (
+            <span class="unit-progress small muted">
+              {done === ids.length ? '✓ all learned' : `${done}/${ids.length} learned`}
+            </span>
+          )}
+        </h2>
+        <ol class="plain-list topics">
+          {unit.topics.map((t) => {
+            const c = cov.get(t.id)!;
+            const status = statusOf(t.id);
+            const note = progress.notes.get(t.id);
+            return (
+              <li>
+                <ProgressMark status={status} compact />
+                <div class="info">
+                  <span class="num">{t.id}</span>
+                  <a href={url(`${subject}/ap/${t.id}/`)}>{t.title}</a>
+                  {note && <div class="small muted">{note}</div>}
+                </div>
+                <span class="small muted count">
+                  {c.lessons.length} lesson{c.lessons.length === 1 ? '' : 's'} · {c.questions} q
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    );
+  })}
 </Base>
 
 <style>
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
   .unit h2 {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: center;
   }
+  .unit-progress {
+    font-weight: 400;
+    margin-left: auto;
+  }
   .topics li {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.6rem;
+    align-items: start;
     padding: 0.45rem 0;
     border-bottom: 1px solid var(--border);
   }
-  .topics .small {
+  .info {
+    min-width: 0;
+  }
+  .count {
     white-space: nowrap;
+    padding-top: 0.1rem;
   }
   .num {
     display: inline-block;

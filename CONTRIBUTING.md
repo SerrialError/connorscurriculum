@@ -125,6 +125,27 @@ Add an entry to `src/data/<subject>/tests.json`:
 
 Empty `sections` means the whole chapters. `date` is optional.
 
+## Class progress
+
+Checkmarks on the chapter list and the AP topics page come from `src/data/<subject>/progress.json`.
+They are the same for everyone. Update the file when the class finishes a chapter:
+
+```json
+{
+  "chapters": [1, 2, 3, 4, 5, 6],
+  "cedTopics": {
+    "done": ["1.1", "1.5"],
+    "partial": ["1.8"]
+  },
+  "notes": {
+    "1.8": "Ion charges are in Ch. 2; periodic trends come in Ch. 7."
+  }
+}
+```
+
+`done` gets a ✓, `partial` gets a ◐, and a note is shown under the topic. When a partial topic is
+finished, move it from `partial` to `done` and delete its note.
+
 ## Textbook sections
 
 `sections` in `src/data/<subject>/chapters.json` starts empty. To turn on section checking for a

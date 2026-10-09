@@ -1,5 +1,6 @@
 ---
 import LessonList from '../../../components/LessonList.astro';
+import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { formatDate, getLessons, getQuestions, getSubjectData, practiceHref, subjectIds, url } from '../../../lib/content';
 
@@ -23,6 +24,9 @@ const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
 <Base title={chapterLabel} subject={subject} searchable searchMeta={{ chapter: chapterLabel }}>
   <p class="breadcrumbs"><a href={url(`${subject}/chapters/`)}>Chapters</a> /</p>
   <h1>{chapterLabel}</h1>
+  {data.progress.chapters.has(chapter.number) && (
+    <p><ProgressMark status="done" doneLabel="Finished in class" /></p>
+  )}
   <div class="badges">
     {chapter.apUnits.map((u) => (
       <a class="badge topic" href={url(`${subject}/ap/#unit-${u}`)}>

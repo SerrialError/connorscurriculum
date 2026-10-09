@@ -1,5 +1,6 @@
 ---
 import LessonList from '../../../components/LessonList.astro';
+import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { coverage, getLessons, getQuestions, getSubjectData, practiceHref, subjectIds, url } from '../../../lib/content';
 
@@ -27,6 +28,12 @@ const next = flat[i + 1];
     <a href={url(`${subject}/ap/`)}>{data.subject.standardsName}</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a>
   </p>
   <h1>{topicId} {topic.title}</h1>
+  {(data.progress.topics.has(topicId) || data.progress.notes.has(topicId)) && (
+    <p class="status">
+      <ProgressMark status={data.progress.topics.get(topicId) ?? null} doneLabel="Covered in class" />
+      {data.progress.notes.get(topicId) && <span class="small muted">{data.progress.notes.get(topicId)}</span>}
+    </p>
+  )}
 
   <h2>Textbook chapters</h2>
   {c.chapters.length > 0 ? (
@@ -39,7 +46,7 @@ const next = flat[i + 1];
     </ul>
   ) : (
     <p class="muted">
-      No content tagged yet.
+      No content tagged yet.{' '}
       {mapped.length > 0 && (
         <>
           Unit {unit.id} is covered in{' '}
@@ -69,6 +76,12 @@ const next = flat[i + 1];
 </Base>
 
 <style>
+  .status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
   .pager {
     display: flex;
     justify-content: space-between;

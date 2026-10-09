@@ -1,4 +1,5 @@
 ---
+import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { getLessons, getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
 
@@ -18,16 +19,22 @@ const unitTitle = (id: string) => data.ced.units.find((u) => u.id === id)?.title
 <Base title="Chapters" subject={subject}>
   <h1>Chapters</h1>
   <p class="muted prose">Class order, following <em>{data.subject.textbook}</em>. Class tests follow these chapters.</p>
+  {data.progress.chapters.size > 0 && (
+    <p class="small">
+      ✓ The class has finished {data.progress.chapters.size} of {data.chapters.length} chapters.
+    </p>
+  )}
   <ol class="plain-list stack">
     {data.chapters.map((c) => {
       const n = count(c.number);
       const offAP = c.apUnits.length === 0;
       return (
-        <li class="card">
+        <li class:list={['card', { learned: data.progress.chapters.has(c.number) }]}>
           <h2 class="h3">
             <a href={url(`${subject}/chapters/${c.number}/`)}>
               {c.number}. {c.title}
             </a>
+            {data.progress.chapters.has(c.number) && <ProgressMark status="done" />}
           </h2>
           <p class="small muted">
             {n.lessons} lesson{n.lessons === 1 ? '' : 's'} · {n.questions} question{n.questions === 1 ? '' : 's'}
@@ -55,5 +62,12 @@ const unitTitle = (id: string) => data.ced.units.find((u) => u.id === id)?.title
 <style>
   .h3 {
     font-size: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .learned {
+    border-left: 4px solid var(--good);
   }
 </style>

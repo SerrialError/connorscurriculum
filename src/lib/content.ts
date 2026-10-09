@@ -38,12 +38,11 @@ export interface TopicCoverage {
   lessons: Lesson[];
   questions: number;
   chapters: number[];
-  status: 'none' | 'partial' | 'covered';
 }
 
 export function coverage(data: SubjectData, lessons: Lesson[], questions: Question[]): Map<string, TopicCoverage> {
   const map = new Map<string, TopicCoverage>();
-  for (const id of data.topics.keys()) map.set(id, { lessons: [], questions: 0, chapters: [], status: 'none' });
+  for (const id of data.topics.keys()) map.set(id, { lessons: [], questions: 0, chapters: [] });
   const addChapter = (c: TopicCoverage, n: number) => {
     if (!c.chapters.includes(n)) c.chapters.push(n);
   };
@@ -63,9 +62,6 @@ export function coverage(data: SubjectData, lessons: Lesson[], questions: Questi
   }
   for (const c of map.values()) {
     c.chapters.sort((a, b) => a - b);
-    const hasL = c.lessons.length > 0;
-    const hasQ = c.questions > 0;
-    c.status = hasL && hasQ ? 'covered' : hasL || hasQ ? 'partial' : 'none';
   }
   return map;
 }

@@ -1,32 +1,28 @@
 ---
 import Search from '../../components/Search.astro';
 import Base from '../../layouts/Base.astro';
-import { getLessons, getQuestions, getSubjectData, practiceHref, subjectPaths, url } from '../../lib/content';
+import { getSubjectData, practiceHref, subjectPaths, url } from '../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
-const lessons = await getLessons(subject);
-const questions = await getQuestions(subject);
 const progress = data.progress;
 const doneChapters = data.chapters.filter((c) => progress.chapters.has(c.number));
 const topicCounts = { done: 0, review: 0, partial: 0 };
 for (const s of progress.topics.values()) topicCounts[s] += 1;
 
 const links = [
-  { href: url(`${subject}/chapters/`), title: 'Class view', text: 'Lessons by textbook chapter, in class order.' },
-  { href: url(`${subject}/ap/`), title: 'AP view', text: `Lessons by ${data.subject.standardsName} unit and topic.` },
-  { href: practiceHref(subject, {}), title: 'Practice', text: `${questions.length} questions with explanations.` },
-  ...(data.pastFrqs.length
-    ? [{ href: url(`${subject}/frqs/`), title: 'Past AP FRQs', text: 'Released exam questions, tagged by topic, with scoring guidelines.' }]
-    : []),
+  { href: url(`${subject}/chapters/`), title: 'Class view' },
+  { href: url(`${subject}/ap/`), title: 'AP view' },
+  { href: practiceHref(subject, {}), title: 'Practice' },
+  ...(data.pastFrqs.length ? [{ href: url(`${subject}/frqs/`), title: 'Past AP FRQs' }] : []),
 ];
 ---
 
 <Base title={data.subject.name} subject={subject}>
   <h1>{data.subject.name}</h1>
-  <p class="muted">Textbook: <em>{data.subject.textbook}</em> · {lessons.length} lessons · {questions.length} questions</p>
+  <p class="muted">Textbook: <em>{data.subject.textbook}</em></p>
   <Search placeholder={`Search ${data.subject.name}…`} />
 
   {(doneChapters.length > 0 || progress.topics.size > 0) && (
@@ -62,7 +58,6 @@ const links = [
     {links.map((l) => (
       <a class="card" href={l.href}>
         <h3>{l.title}</h3>
-        <p class="small muted">{l.text}</p>
       </a>
     ))}
   </div>

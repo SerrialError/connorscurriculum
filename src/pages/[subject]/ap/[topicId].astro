@@ -32,7 +32,7 @@ const next = flat[i + 1];
   {data.progress.topics.has(topicId) && (
     <p class="status">
       <ProgressMark status={data.progress.topics.get(topicId) ?? null} doneLabel="Covered in class" />
-      {data.progress.notes.get(topicId) && <span class="small muted">{data.progress.notes.get(topicId)}</span>}
+      {data.progress.notes.get(topicId)?.map((note) => <span class="small muted">{note}</span>)}
     </p>
   )}
 

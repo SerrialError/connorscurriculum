@@ -143,6 +143,23 @@ the CED topics it teaches:
 A topic gets a ✓ once **every** chapter that lists it is finished, and a ◐ (with a note such as
 "Started in Ch. 2; continues in Ch. 6.") when only some are. The checkmarks are the same for everyone.
 
+### Last year's course
+
+Topics already seen in an earlier course go in an optional `lastYear` block in the same file:
+
+```json
+"lastYear": {
+  "course": "Scholars Chemistry",
+  "covered": ["3.4", "8.2"],
+  "partial": ["3.5"],
+  "notes": { "3.5": "kinetic molecular theory, but not Maxwell-Boltzmann distributions." }
+}
+```
+
+`covered` topics get a ↺ ("seen last year"), and `partial` ones get a ◐. The note appears as
+"Partly covered in Scholars Chemistry: …". Once a topic is finished this year, the ✓ replaces the
+↺ or ◐. Anything with no mark at all is completely new.
+
 If a topic's mark looks wrong, fix the mapping in `chapters.json` rather than `progress.json`.
 For example, if your teacher covers half-reactions in Ch. 4, remove `"4.9"` from Chapter 20's
 `cedTopics`. The chapter's AP unit badges come from the same list. Every CED topic must be listed

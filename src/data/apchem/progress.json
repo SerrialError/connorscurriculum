@@ -1,3 +1,21 @@
 {
-  "chapters": [1, 2, 3, 4, 5]
+  "chapters": [1, 2, 3, 4, 5],
+  "lastYear": {
+    "course": "Scholars Chemistry",
+    "covered": ["3.4", "4.8", "8.1", "8.2", "9.1", "9.2", "9.3"],
+    "partial": ["1.5", "3.5", "8.3", "8.5"],
+    "notes": {
+      "1.5": "valence electron configurations only.",
+      "3.4": "PV = nRT and partial pressures.",
+      "3.5": "kinetic molecular theory, but not Maxwell-Boltzmann distributions.",
+      "4.8": "conjugate acid-base pairs.",
+      "8.1": "the pH scale.",
+      "8.2": "pH calculations for strong acids and bases.",
+      "8.3": "strong vs. weak acids, but not Ka calculations.",
+      "8.5": "titrations and equivalence points; titration curves only briefly.",
+      "9.1": "predicting the sign of ΔS.",
+      "9.2": "calculating ΔS° from tables.",
+      "9.3": "ΔG = ΔH − TΔS and favorability."
+    }
+  }
 }

@@ -14,7 +14,7 @@ const questions = await getQuestions(subject);
 const tests = [...data.tests].sort((a, b) => (a.date ?? '9999').localeCompare(b.date ?? '9999'));
 const progress = data.progress;
 const doneChapters = data.chapters.filter((c) => progress.chapters.has(c.number));
-const topicCounts = { done: 0, partial: 0 };
+const topicCounts = { done: 0, review: 0, partial: 0 };
 for (const s of progress.topics.values()) topicCounts[s] += 1;
 
 const links = [
@@ -45,6 +45,14 @@ const links = [
           ✓ {topicCounts.done} of {data.topics.size} {data.subject.standardsName} topics
         </a>
         {topicCounts.partial > 0 && <span class="muted"> · ◐ {topicCounts.partial} partly</span>}
+      </p>
+      {topicCounts.review > 0 && (
+        <p>
+          ↺ {topicCounts.review} more seen in {progress.lastYearCourse}
+        </p>
+      )}
+      <p class="small muted">
+        {data.topics.size - topicCounts.done - topicCounts.review - topicCounts.partial} topics are completely new.
       </p>
     </section>
   )}

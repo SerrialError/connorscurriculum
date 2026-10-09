@@ -12,8 +12,10 @@ interface Props {
 }
 
 const { status, compact = false, doneLabel = 'Learned' } = Astro.props;
-const label = status === 'done' ? doneLabel : status === 'partial' ? 'Partly learned' : 'Not yet';
-const icon = status === 'done' ? '✓' : status === 'partial' ? '◐' : '';
+const labels = { done: doneLabel, review: 'Seen last year', partial: 'Partly learned' };
+const icons = { done: '✓', review: '↺', partial: '◐' };
+const label = status ? labels[status] : 'Not yet';
+const icon = status ? icons[status] : '';
 ---
 
 {status && (
@@ -43,6 +45,10 @@ const icon = status === 'done' ? '✓' : status === 'partial' ? '◐' : '';
   .partial {
     background: var(--warn-soft);
     color: var(--warn);
+  }
+  .review {
+    background: var(--tip-soft);
+    color: var(--tip);
   }
   .compact {
     justify-content: center;

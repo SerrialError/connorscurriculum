@@ -54,7 +54,18 @@ export const testSchema = z.object({
 export const progressSchema = z.object({
   // Chapters the class has finished. Topic progress is derived from chapters.json.
   chapters: z.array(z.number().int()).default([]),
+  // CED topics already seen in an earlier course. Shown with their own mark until covered this year.
+  lastYear: z
+    .object({
+      course: z.string().min(1),
+      covered: z.array(z.string()).default([]),
+      partial: z.array(z.string()).default([]),
+      notes: z.record(z.string(), z.string()).default({}),
+    })
+    .optional(),
 });
+
+export type LastYear = NonNullable<z.infer<typeof progressSchema>['lastYear']>;
 
 export type Subject = z.infer<typeof subjectSchema>;
 export type Ced = z.infer<typeof cedSchema>;
@@ -65,14 +76,22 @@ export type Chapter = z.infer<typeof chapterSchema> & {
   apUnits: string[];
 };
 export type ClassTest = z.infer<typeof testSchema>;
-export type TopicProgress = 'done' | 'partial' | null;
+/**
+ * done:    every chapter that teaches it is finished this year
+ * review:  not done this year, but fully covered in last year's course
+ * partial: started this year and/or partly covered last year
+ * null:    new
+ */
+export type TopicProgress = 'done' | 'review' | 'partial' | null;
 
 export interface Progress {
   chapters: Set<number>;
-  /** Topics with any progress. A topic is done when every chapter that teaches it is finished. */
+  /** Name of last year's course, if progress.json has a lastYear block. */
+  lastYearCourse: string | null;
+  /** Topics with any progress. */
   topics: Map<string, Exclude<TopicProgress, null>>;
-  /** Short explanation for partly done topics. */
-  notes: Map<string, string>;
+  /** Short explanations, shown under the topic (topics already done this year have none). */
+  notes: Map<string, string[]>;
 }
 
 export interface SubjectData {
@@ -183,26 +202,69 @@ function loadSubject(subject: Subject): SubjectData {
   rawProgress.chapters.forEach((n, i) => {
     if (!chapterMap.has(n)) throw new DataError(progressFile, `chapters[${i}]`, `chapter ${n} is not in chapters.json`);
   });
-  const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters);
+  const lastYear = rawProgress.lastYear;
+  if (lastYear) {
+    const seen = new Set<string>();
+    for (const list of ['covered', 'partial'] as const) {
+      lastYear[list].forEach((id, i) => {
+        const field = `lastYear.${list}[${i}]`;
+        if (!topics.has(id)) throw new DataError(progressFile, field, `topic "${id}" is not in ced.json`);
+        if (seen.has(id)) throw new DataError(progressFile, field, `topic "${id}" is listed twice`);
+        seen.add(id);
+      });
+    }
+    for (const id of Object.keys(lastYear.notes)) {
+      if (!seen.has(id)) {
+        throw new DataError(progressFile, `lastYear.notes.${id}`, `topic "${id}" is not in lastYear.covered or lastYear.partial`);
+      }
+    }
+  }
+  const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters, lastYear);
 
   return { subject, ced, chapters, tests, topics, chapterMap, topicChapters, progress };
 }
 
 const listChapters = (ns: number[]) => `Ch. ${ns.join(', ')}`;
 
-/** Topic status from finished chapters: done if every teaching chapter is finished, partial if some are. */
-export function deriveProgress(finished: Set<number>, topicChapters: Map<string, number[]>): Progress {
-  const progress: Progress = { chapters: finished, topics: new Map(), notes: new Map() };
+/**
+ * Combine this year's finished chapters with last year's course. This year's ✓ wins; otherwise a
+ * topic fully covered last year is "review"; otherwise any partial coverage is "partial".
+ */
+export function deriveProgress(
+  finished: Set<number>,
+  topicChapters: Map<string, number[]>,
+  lastYear?: LastYear,
+): Progress {
+  const progress: Progress = {
+    chapters: finished,
+    lastYearCourse: lastYear?.course ?? null,
+    topics: new Map(),
+    notes: new Map(),
+  };
   for (const [id, chs] of topicChapters) {
     const done = chs.filter((n) => finished.has(n));
-    if (done.length === 0) continue;
-    if (done.length === chs.length) {
+    const thisYear = done.length === 0 ? null : done.length === chs.length ? 'done' : 'partial';
+    const before = lastYear?.covered.includes(id) ? 'full' : lastYear?.partial.includes(id) ? 'partial' : null;
+
+    if (thisYear === 'done') {
       progress.topics.set(id, 'done');
-    } else {
-      progress.topics.set(id, 'partial');
-      const left = chs.filter((n) => !finished.has(n));
-      progress.notes.set(id, `Started in ${listChapters(done)}; continues in ${listChapters(left)}.`);
+      continue;
     }
+    if (before === 'full') progress.topics.set(id, 'review');
+    else if (thisYear || before) progress.topics.set(id, 'partial');
+    else continue;
+
+    const notes: string[] = [];
+    if (thisYear === 'partial') {
+      const left = chs.filter((n) => !finished.has(n));
+      notes.push(`Started in ${listChapters(done)}; continues in ${listChapters(left)}.`);
+    }
+    if (before) {
+      const detail = lastYear!.notes[id];
+      const what = before === 'full' ? 'Covered' : 'Partly covered';
+      notes.push(`${what} in ${lastYear!.course}${detail ? `: ${detail}` : '.'}`);
+    }
+    progress.notes.set(id, notes);
   }
   return progress;
 }

@@ -23,6 +23,18 @@ Every lesson and question has both kinds of tag:
 | `cedTopics` | AP CED topic ids from `src/data/<subject>/ced.json`. **Required**, but `[]` means "class only, not on the AP exam". | `["5.2", "5.3"]` |
 | `authors` | At least one name | `["Jordan"]` |
 
+## Using the editor (CMS)
+
+Lessons can be written in a browser editor at `/admin/` instead of editing files. It shows a live
+preview with the math, chemistry, and boxes rendered the way the site will show them, and flags
+anything that would break the build (an unclosed `<Callout>`, a stray `{`, an unknown component).
+The chapter and AP topic pickers come from `chapters.json` and `ced.json`. New lessons start as
+drafts, which are hidden on the live site until `draft` is turned off.
+
+To try it locally, run `npm run dev`, open http://localhost:4321/admin/ in Chrome, Edge, or another
+Chromium browser, click **Work with Local Repository**, and pick this repo's folder. Saving writes
+the files straight into `src/content/lessons/`; commit them with git as usual.
+
 ## Lessons
 
 One folder per lesson: `src/content/lessons/<subject>/<chapter>-<slug>/index.mdx`.

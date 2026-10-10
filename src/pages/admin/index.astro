@@ -1,0 +1,30 @@
+---
+// Sveltia CMS. Config is generated from src/data at build time (see src/lib/cms.ts);
+// src/lib/cms-admin.ts registers the lesson preview and starts the CMS.
+import { cmsConfig } from '../../lib/cms';
+import { loadRegistry } from '../../lib/registry';
+import { SITE_NAME } from '../../site';
+
+const SVELTIA_VERSION = '0.233.1';
+const config = JSON.stringify(cmsConfig(loadRegistry())).replaceAll('<', '\\u003c');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit lessons · {SITE_NAME}</title>
+    <script is:inline>
+      window.CMS_MANUAL_INIT = true;
+    </script>
+    <script is:inline src={`https://unpkg.com/@sveltia/cms@${SVELTIA_VERSION}/dist/sveltia-cms.js`}></script>
+    <script type="application/json" id="cms-config" set:html={config} />
+  </head>
+  <body>
+    <script>
+      import '../../lib/cms-admin';
+    </script>
+  </body>
+</html>

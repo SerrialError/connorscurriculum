@@ -373,3 +373,78 @@ button.button {
 .breadcrumbs a {
   color: var(--muted);
 }
+
+/* Lesson components (Callout, Reveal, YouTube). Global rather than scoped so the CMS
+   preview, which renders lessons outside Astro, looks the same as the site. */
+.callout {
+  --c: var(--accent);
+  --c-soft: var(--accent-soft);
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--c);
+  background: var(--c-soft);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.callout.warning {
+  --c: var(--bad);
+  --c-soft: var(--bad-soft);
+}
+
+.callout.ap-tip {
+  --c: var(--tip);
+  --c-soft: var(--tip-soft);
+}
+
+.callout.not-on-ap {
+  --c: var(--warn);
+  --c-soft: var(--warn-soft);
+}
+
+.callout-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  color: var(--c);
+}
+
+.callout-body > :first-child {
+  margin-top: 0;
+}
+
+.callout-body > :last-child {
+  margin-bottom: 0;
+}
+
+.reveal {
+  margin: 1rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.reveal > summary {
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  color: var(--link);
+}
+
+.reveal-body {
+  padding: 0 1rem 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.youtube {
+  margin: 1.25rem 0;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.youtube iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}

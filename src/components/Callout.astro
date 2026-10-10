@@ -1,18 +1,13 @@
 ---
+import { CALLOUT_TYPES, type CalloutType } from '../lib/callouts';
+
 interface Props {
-  type?: 'note' | 'warning' | 'ap-tip' | 'not-on-ap';
+  type?: CalloutType;
   title?: string;
 }
 
-const labels = {
-  note: { icon: 'ℹ', text: 'Note' },
-  warning: { icon: '⚠', text: 'Watch out' },
-  'ap-tip': { icon: '★', text: 'AP tip' },
-  'not-on-ap': { icon: '⊘', text: 'Not on the AP exam' },
-} as const;
-
 const { type = 'note', title } = Astro.props;
-const label = labels[type];
+const label = CALLOUT_TYPES[type];
 if (!label) throw new Error(`<Callout type="${type}">: type must be note, warning, ap-tip, or not-on-ap`);
 ---
 
@@ -20,38 +15,3 @@ if (!label) throw new Error(`<Callout type="${type}">: type must be note, warnin
   <p class="callout-title"><span aria-hidden="true">{label.icon}</span> {title ?? label.text}</p>
   <div class="callout-body"><slot /></div>
 </aside>
-
-<style>
-  .callout {
-    --c: var(--accent);
-    --c-soft: var(--accent-soft);
-    margin: 1.25rem 0;
-    padding: 0.75rem 1rem;
-    border-left: 4px solid var(--c);
-    background: var(--c-soft);
-    border-radius: 0 var(--radius) var(--radius) 0;
-  }
-  .warning {
-    --c: var(--bad);
-    --c-soft: var(--bad-soft);
-  }
-  .ap-tip {
-    --c: var(--tip);
-    --c-soft: var(--tip-soft);
-  }
-  .not-on-ap {
-    --c: var(--warn);
-    --c-soft: var(--warn-soft);
-  }
-  .callout-title {
-    margin: 0 0 0.25rem;
-    font-weight: 700;
-    color: var(--c);
-  }
-  .callout-body :global(> :first-child) {
-    margin-top: 0;
-  }
-  .callout-body :global(> :last-child) {
-    margin-bottom: 0;
-  }
-</style>

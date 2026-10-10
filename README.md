@@ -1,4 +1,4 @@
-# Study Site
+# connorscurriculum
 
 A static study site for AP Chemistry, built so more subjects can be added later. Lessons and
 practice questions are plain files tagged with both a textbook chapter and an AP CED topic, so the
@@ -25,6 +25,14 @@ npm run check     # astro check + vitest
 To host under a sub-path (for example GitHub Pages at `/<repo>/`), build with
 `BASE_PATH=/<repo>/ npm run build`. Set `SITE_URL` to the full site URL if you want canonical URLs.
 The site name lives in `src/site.ts`.
+
+## CI and hosting
+
+`.github/workflows/build.yml` runs `npm run check` and `npm run build` on every push and pull
+request, so a bad tag or a broken lesson shows up as a failed check. Pushes to `main` also deploy
+`dist/` to GitHub Pages at https://serrialerror.github.io/connorscurriculum/. The workflow sets
+`BASE_PATH` and `SITE_URL` itself. Pages must be set to deploy from GitHub Actions (repo Settings →
+Pages → Source: GitHub Actions).
 
 ## Layout
 

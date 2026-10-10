@@ -20,7 +20,7 @@
   processes.site.exec = "npm run dev";
 
   enterShell = ''
-    echo "study site dev shell"
+    echo "connorscurriculum dev shell"
     echo "  node: $(node --version)"
     echo "  npm:  $(npm --version)"
     echo "  npm run dev | npm run build | npm run preview | npm run check"

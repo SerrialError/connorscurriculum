@@ -8,10 +8,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add lessons, questions, and te
 
 ## Running it
 
-Requires Node 22.12 or newer (24 recommended). On NixOS, `nix-shell` provides it.
+The dev environment is managed by [devenv](https://devenv.sh) (`devenv.nix`), which provides
+Node 24 and runs `npm clean-install` whenever `package-lock.json` changes. With direnv, it loads
+automatically when you `cd` into the repo (run `direnv allow` once). Without direnv, run
+`devenv shell`. `devenv up` starts the dev server.
+
+Without Nix, any Node 22.12 or newer works: run `npm install` first.
 
 ```sh
-npm install
 npm run dev       # dev server at http://localhost:4321 (search only works after a build)
 npm run build     # astro build + Pagefind index, output in dist/
 npm run preview   # serve dist/

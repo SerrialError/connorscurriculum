@@ -13,4 +13,22 @@ export default defineConfig({
   markdown: {
     processor: unified({ remarkPlugins, rehypePlugins }),
   },
+  vite: {
+    // The /admin/ lesson preview imports these in the browser. Pre-bundle them at startup so the
+    // dev server doesn't re-bundle mid-session and serve stale copies (a blank editor page).
+    optimizeDeps: {
+      include: [
+        'katex/contrib/mhchem',
+        'rehype-katex',
+        'rehype-stringify',
+        'remark-gfm',
+        'remark-math',
+        'remark-mdx',
+        'remark-parse',
+        'remark-rehype',
+        'unified',
+        'unist-util-visit',
+      ],
+    },
+  },
 });

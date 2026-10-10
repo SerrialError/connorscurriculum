@@ -11,6 +11,11 @@ describe('cmsConfig', () => {
     for (const c of config.collections) expect(c.path).toBe('{{chapter}}-{{slug}}/index');
   });
 
+  it('sends every save through a pull request, including from forks', () => {
+    expect(config.publish_mode).toBe('editorial_workflow');
+    expect(config.backend.open_authoring).toBe(true);
+  });
+
   it('offers every chapter and CED topic as options', () => {
     const apchem = registry.get('apchem')!;
     const fields = Object.fromEntries(config.collections[0]!.fields.map((f) => [f.name, f]));

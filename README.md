@@ -34,6 +34,40 @@ request, so a bad tag or a broken lesson shows up as a failed check. Pushes to `
 `BASE_PATH` and `SITE_URL` itself. Pages must be set to deploy from GitHub Actions (repo Settings →
 Pages → Source: GitHub Actions).
 
+## Editor sign-in
+
+The lesson editor at `/admin/` ([Sveltia CMS](https://sveltiacms.app/)) is configured in
+`src/lib/cms.ts`. Every save goes to a `cms/<collection>/<slug>` branch with its own pull request
+(`publish_mode: editorial_workflow`). Classmates without write access edit in their own fork and
+submit a pull request from there (`open_authoring`). CI builds each pull request, and nothing
+reaches `main` or the live site until you merge it.
+
+"Sign In Using Access Token" works with no setup. "Sign In with GitHub" needs a small login
+service, because GitHub Pages can't complete GitHub's sign-in on its own. Set it up once:
+
+1. **Deploy the Worker.** Open [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth), click
+   **Deploy to Cloudflare Workers**, and sign in or create a free Cloudflare account. Copy the Worker
+   URL, which looks like `https://sveltia-cms-auth.<you>.workers.dev`.
+2. **Register a GitHub OAuth app** at https://github.com/settings/applications/new:
+   - Application name: `connorscurriculum editor`
+   - Homepage URL: `https://serrialerror.github.io/connorscurriculum/`
+   - Authorization callback URL: `<Worker URL>/callback`
+
+   Then click **Generate a new client secret**.
+3. **Give the Worker the app's keys.** In the Cloudflare dashboard, open the Worker, go to
+   Settings → Variables and Secrets, and add:
+   - `GITHUB_CLIENT_ID`: the app's Client ID
+   - `GITHUB_CLIENT_SECRET`: the client secret (type **Secret**)
+   - `ALLOWED_DOMAINS`: `serrialerror.github.io, localhost`
+4. **Point the editor at it.** Set `CMS_AUTH_URL` in `src/lib/cms.ts` to the Worker URL.
+
+Two GitHub settings help here (repo Settings):
+
+- **Branches → add a rule for `main` → Require status checks → `build`.** A lesson that doesn't
+  build can't be merged, from the editor or from GitHub.
+- **Actions → General → Fork pull request workflows.** By default GitHub waits for you to approve
+  CI on a first-time contributor's pull request. Approve it from the pull request page.
+
 ## Layout
 
 ```

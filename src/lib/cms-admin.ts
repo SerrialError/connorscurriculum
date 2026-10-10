@@ -18,7 +18,10 @@ interface SveltiaCms {
 }
 
 const CMS = (window as unknown as { CMS: SveltiaCms }).CMS;
-const config = JSON.parse(document.getElementById('cms-config')!.textContent!) as { collections: { name: string }[] };
+const config = JSON.parse(document.getElementById('cms-config')!.textContent!) as { collections: { name: string }[]; backend: Record<string, unknown> };
+// Sveltia sends "cms.netlify.com" as the site when running on localhost, which the sign-in Worker
+// rejects. Send the real hostname so ALLOWED_DOMAINS ("serrialerror.github.io, localhost") matches.
+config.backend.site_domain = location.hostname;
 const { createElement: h, useEffect, useState } = CMS.React;
 
 const toArray = (v: any): string[] => (v?.toJS ? v.toJS() : Array.isArray(v) ? v : []);

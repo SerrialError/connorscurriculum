@@ -5,8 +5,7 @@ import type { SubjectData } from './registry';
 export const CMS_REPO = 'SerrialError/connorscurriculum';
 
 // GitHub sign-in goes through a sveltia-cms-auth Cloudflare Worker (see README, "Editor sign-in").
-// Empty until the Worker is deployed; signing in with an access token works without it.
-export const CMS_AUTH_URL = '';
+export const CMS_AUTH_URL = 'https://sveltia-cms-auth.serrialerror.workers.dev';
 
 const BODY_HINT = [
   'Markdown. Math: `$k = 0.693/t_{1/2}$` inline, `$$ ... $$` on their own lines for display. Chemistry: `$\\ce{2H2 + O2 -> 2H2O}$`.',

@@ -27,9 +27,6 @@ const exams = data.pastFrqs;
     <>
       <section class="card summary">
         <p>
-          <span class="badge good">✓ Ready</span> means you have learned every topic in the question, this year or last year.
-        </p>
-        <p>
           <strong>Ready ({ready.length}):</strong>{' '}
           {ready.length ? ready.map((f, i) => <>{i > 0 && ', '}<a href={`#${f.year}-q${f.number}`}>{frqName(f)}</a></>) : 'none yet'}
         </p>

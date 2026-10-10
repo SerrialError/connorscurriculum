@@ -28,8 +28,9 @@ The site name lives in `src/site.ts`.
 
 ## CI and hosting
 
-`.github/workflows/build.yml` runs `npm run check` and `npm run build` on every push and pull
-request, so a bad tag or a broken lesson shows up as a failed check. Pushes to `main` also deploy
+`.github/workflows/build.yml` runs `npm run check` and `npm run build` on every pull request and
+every push to `main`, so a bad tag or a broken lesson shows up as a failed check. `main` requires
+that `build` check to pass before anything is merged. Pushes to `main` also deploy
 `dist/` to GitHub Pages at https://serrialerror.github.io/connorscurriculum/. The workflow sets
 `BASE_PATH` and `SITE_URL` itself. Pages must be set to deploy from GitHub Actions (repo Settings →
 Pages → Source: GitHub Actions).
@@ -61,12 +62,10 @@ service, because GitHub Pages can't complete GitHub's sign-in on its own. Set it
    - `ALLOWED_DOMAINS`: `serrialerror.github.io, localhost`
 4. **Point the editor at it.** Set `CMS_AUTH_URL` in `src/lib/cms.ts` to the Worker URL.
 
-Two GitHub settings help here (repo Settings):
-
-- **Branches → add a rule for `main` → Require status checks → `build`.** A lesson that doesn't
-  build can't be merged, from the editor or from GitHub.
-- **Actions → General → Fork pull request workflows.** By default GitHub waits for you to approve
-  CI on a first-time contributor's pull request. Approve it from the pull request page.
+`main` requires the `build` check from GitHub Actions, so a lesson that doesn't build can't be
+merged, from the editor or from GitHub. By default GitHub waits for you to approve CI on a
+first-time contributor's pull request (Settings → Actions → General); approve it from the pull
+request page.
 
 ## Layout
 

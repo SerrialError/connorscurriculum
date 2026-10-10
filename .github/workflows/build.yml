@@ -1,9 +1,11 @@
-# Every push and pull request: type check, unit tests, and a full build (which validates
-# every lesson and question tag). Pushes to main also deploy the site to GitHub Pages.
+# Every pull request and every push to main: type check, unit tests, and a full build (which
+# validates every lesson and question tag). Pushes to main also deploy the site to GitHub Pages.
 name: Build
 
 on:
+  # Only main: other branches are built through their pull request, so they would run twice.
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 

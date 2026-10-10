@@ -4,6 +4,10 @@ import type { SubjectData } from './registry';
 
 export const CMS_REPO = 'SerrialError/connorscurriculum';
 
+// GitHub sign-in goes through a sveltia-cms-auth Cloudflare Worker (see README, "Editor sign-in").
+// Empty until the Worker is deployed; signing in with an access token works without it.
+export const CMS_AUTH_URL = '';
+
 const BODY_HINT = [
   'Markdown. Math: `$k = 0.693/t_{1/2}$` inline, `$$ ... $$` on their own lines for display. Chemistry: `$\\ce{2H2 + O2 -> 2H2O}$`.',
   'Boxes: `<Callout type="note">...</Callout>` (note, warning, ap-tip, not-on-ap), `<Reveal label="Show answer">...</Reveal>`, `<YouTube id="wYqQCojggyM" />`.',
@@ -70,8 +74,8 @@ export function lessonCollection(data: SubjectData) {
         name: 'draft',
         label: 'Draft',
         widget: 'boolean',
-        default: true,
-        hint: 'Drafts are hidden on the live site. Turn off when the lesson is ready.',
+        default: false,
+        hint: 'Saving opens a pull request, and the lesson goes live when it is merged. Turn this on to keep it hidden even after merging.',
       },
       // Raw mode only: the rich-text editor would escape the backslashes and $ in math.
       { name: 'body', label: 'Lesson', widget: 'markdown', modes: ['raw'], hint: BODY_HINT },
@@ -82,7 +86,19 @@ export function lessonCollection(data: SubjectData) {
 export function cmsConfig(registry: Map<string, SubjectData>) {
   return {
     load_config_file: false,
-    backend: { name: 'github', repo: CMS_REPO, branch: 'main' },
+    backend: {
+      name: 'github',
+      repo: CMS_REPO,
+      branch: 'main',
+      ...(CMS_AUTH_URL ? { base_url: CMS_AUTH_URL } : {}),
+      // Classmates without write access edit in their own fork and submit a pull request.
+      open_authoring: true,
+      // The repo is public, so sign-in only needs access to public repos.
+      auth_scope: 'public_repo',
+    },
+    // Every save goes to a cms/... branch with its own pull request; CI builds it and nothing
+    // reaches main (and the live site) until the pull request is merged.
+    publish_mode: 'editorial_workflow',
     media_folder: 'public/media',
     public_folder: '/media',
     collections: [...registry.values()].map(lessonCollection),

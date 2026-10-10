@@ -25,15 +25,25 @@ Every lesson and question has both kinds of tag:
 
 ## Using the editor (CMS)
 
-Lessons can be written in a browser editor at `/admin/` instead of editing files. It shows a live
-preview with the math, chemistry, and boxes rendered the way the site will show them, and flags
-anything that would break the build (an unclosed `<Callout>`, a stray `{`, an unknown component).
-The chapter and AP topic pickers come from `chapters.json` and `ced.json`. New lessons start as
-drafts, which are hidden on the live site until `draft` is turned off.
+Lessons can be written in a browser editor instead of editing files: use the **Write a lesson** link
+at the bottom of any page, or go to `/admin/`. It shows a live preview with the math, chemistry, and
+boxes rendered the way the site will show them, and flags anything that would break the build (an
+unclosed `<Callout>`, a stray `{`, an unknown component). The chapter and AP topic pickers come
+from `chapters.json` and `ced.json`.
 
-To try it locally, run `npm run dev`, open http://localhost:4321/admin/ in Chrome, Edge, or another
-Chromium browser, click **Work with Local Repository**, and pick this repo's folder. Saving writes
-the files straight into `src/content/lessons/`; commit them with git as usual.
+To write a lesson:
+
+1. Make a free GitHub account if you don't have one.
+2. Open the editor and click **Sign In with GitHub**. The first time you save, it makes your own copy
+   (a fork) of the repo. Your edits go there, so you can't break the site.
+3. Write the lesson and click **Save** as often as you like. Each lesson becomes a pull request.
+4. When it's finished, set its status to **In Review**. Connor reviews it, and it goes live once it's merged.
+
+Turning on `draft` keeps a lesson hidden on the live site even after it's merged.
+
+To try the editor without signing in, run `npm run dev`, open http://localhost:4321/admin/ in Chrome,
+Edge, or another Chromium browser, click **Work with Local Repository**, and pick this repo's folder.
+Saving writes the files straight into `src/content/lessons/`; commit them with git as usual.
 
 ## Lessons
 

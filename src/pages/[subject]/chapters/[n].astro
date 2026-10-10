@@ -1,8 +1,10 @@
 ---
+import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, getSubjectData, practiceHref, subjectIds, url } from '../../../lib/content';
+import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, subjectIds, url } from '../../../lib/content';
+import { matchFrqs } from '../../../lib/frqs';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -19,6 +21,21 @@ const tests = data.tests.filter((t) => t.chapters.includes(chapter.number));
 const prev = data.chapters[data.chapters.indexOf(chapter) - 1];
 const next = data.chapters[data.chapters.indexOf(chapter) + 1];
 const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
+
+// CED topics this chapter teaches, in CED order, with where else they are taught.
+const cedOrder = [...data.topics.keys()];
+const topics = [...chapter.cedTopics]
+  .sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b))
+  .map((id) => ({
+    id,
+    title: data.topics.get(id)!.title,
+    status: data.progress.topics.get(id) ?? null,
+    alsoIn: (data.topicChapters.get(id) ?? []).filter((c) => c !== chapter.number),
+  }));
+const frqs = pastFrqLinks(data);
+const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
+const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
+const frqParts = frqMatches.reduce((sum, m) => sum + m.parts.length, 0);
 ---
 
 <Base title={chapterLabel} subject={subject} searchable searchMeta={{ chapter: chapterLabel }}>
@@ -61,8 +78,43 @@ const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
     ))}
   </div>
 
+  {topics.length > 0 && (
+    <>
+      <h2>AP topics in this chapter</h2>
+      <ol class="plain-list topics">
+        {topics.map((t) => (
+          <li>
+            <ProgressMark status={t.status} compact />
+            <div>
+              <span class="num">{t.id}</span>
+              <a href={url(`${subject}/ap/${t.id}/`)}>{t.title}</a>
+              {t.alsoIn.length > 0 && (
+                <div class="small muted">Also in Ch. {t.alsoIn.join(', ')}</div>
+              )}
+            </div>
+            {frqCount(t.id) > 0 && <span class="small muted count">{frqCount(t.id)} FRQ</span>}
+          </li>
+        ))}
+      </ol>
+    </>
+  )}
+
   <h2>Lessons</h2>
   <LessonList lessons={lessons} />
+
+  {frqMatches.length > 0 && (
+    <section id="frqs" data-pagefind-ignore="all">
+      <h2>Past AP FRQs on these topics</h2>
+      <details class="frqs">
+        <summary>
+          {frqMatches.length} released question{frqMatches.length === 1 ? '' : 's'}, {frqParts} part{frqParts === 1 ? '' : 's'}
+        </summary>
+        <div class="stack">
+          {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
+        </div>
+      </details>
+    </section>
+  )}
 
   <nav class="pager small" aria-label="Chapters">
     {prev ? <a href={url(`${subject}/chapters/${prev.number}/`)}>← Ch. {prev.number}: {prev.title}</a> : <span></span>}
@@ -70,10 +122,40 @@ const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
   </nav>
 </Base>
 
+<script>
+  // Arriving via "#frqs" (e.g. from Up next) should show the list, not a closed toggle.
+  if (location.hash === '#frqs') document.querySelector<HTMLDetailsElement>('#frqs details')?.setAttribute('open', '');
+</script>
+
 <style>
   .notice ul {
     margin: 0.3rem 0 0;
     padding-left: 1.2rem;
+  }
+  .topics li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .num {
+    display: inline-block;
+    min-width: 2.6rem;
+    margin-right: 0.35rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .count {
+    white-space: nowrap;
+    padding-top: 0.1rem;
+  }
+  .frqs summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--link);
+    margin-bottom: 0.75rem;
   }
   .pager {
     display: flex;

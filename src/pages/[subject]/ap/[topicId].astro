@@ -65,20 +65,23 @@ const next = flat[i + 1];
   <h2>Lessons</h2>
   <LessonList lessons={c.lessons} showChapter />
 
-  <h2>Past AP FRQs</h2>
-  {frqMatches.length > 0 ? (
-    <>
-      <p class="small muted">
-        {frqMatches.length} released question{frqMatches.length === 1 ? ' has' : 's have'} parts on this topic. Grade yourself
-        with the scoring guidelines.
-      </p>
-      <div class="stack">
-        {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
-      </div>
-    </>
-  ) : (
-    <p class="muted">No released FRQ parts on this topic in the years listed.</p>
-  )}
+  {/* FRQ titles mention other topics; keep them out of this page's search entry. */}
+  <section data-pagefind-ignore="all">
+    <h2>Past AP FRQs</h2>
+    {frqMatches.length > 0 ? (
+      <>
+        <p class="small muted">
+          {frqMatches.length} released question{frqMatches.length === 1 ? ' has' : 's have'} parts on this topic. Grade yourself
+          with the scoring guidelines.
+        </p>
+        <div class="stack">
+          {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
+        </div>
+      </>
+    ) : (
+      <p class="muted">No released FRQ parts on this topic in the years listed.</p>
+    )}
+  </section>
 
   <nav class="pager small" aria-label="Topics">
     {prev ? <a href={url(`${subject}/ap/${prev}/`)}>← {prev}</a> : <span></span>}

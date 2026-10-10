@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/content';
+import { loadRegistry } from '../lib/registry';
+
+const subjects = [...loadRegistry().values()];
+---
+
+<Base title="Page not found">
+  <h1>Page not found</h1>
+  <p class="muted">That page doesn't exist. It may have moved, or the link may have a typo.</p>
+  <ul>
+    {subjects.map(({ subject }) => (
+      <li>
+        <a href={url(`${subject.id}/`)}>{subject.name}</a>
+      </li>
+    ))}
+  </ul>
+</Base>

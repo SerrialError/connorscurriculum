@@ -1,7 +1,7 @@
 ---
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { getLessons, getQuestions, getSubjectData, subjectPaths, url } from '../../../lib/content';
+import { getLessons, getQuestions, getSubjectData, nextChapter, subjectPaths, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -9,50 +9,43 @@ const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const lessons = await getLessons(subject);
 const questions = await getQuestions(subject);
-const count = (n: number) => ({
-  lessons: lessons.filter((l) => l.data.chapter === n).length,
-  questions: questions.filter((q) => q.data.chapter === n).length,
-});
-const unitTitle = (id: string) => data.ced.units.find((u) => u.id === id)?.title ?? '';
+const { progress } = data;
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+const next = nextChapter(data);
+
+/** "AP Units 3, 5 · 1 lesson · 6 questions", leaving out zero counts. */
+const meta = (n: number, apUnits: string[]) => {
+  const l = lessons.filter((x) => x.data.chapter === n).length;
+  const q = questions.filter((x) => x.data.chapter === n).length;
+  return [
+    apUnits.length ? `AP Unit${apUnits.length > 1 ? 's' : ''} ${apUnits.join(', ')}` : 'Not on the AP exam',
+    l && plural(l, 'lesson'),
+    q && plural(q, 'question'),
+  ]
+    .filter(Boolean)
+    .join(' · ');
+};
 ---
 
 <Base title="Chapters" subject={subject}>
   <h1>Chapters</h1>
   <p class="muted prose">Class order, following <em>{data.subject.textbook}</em>. Class tests follow these chapters.</p>
-  {data.progress.chapters.size > 0 && (
-    <p class="small">
-      ✓ The class has finished {data.progress.chapters.size} of {data.chapters.length} chapters.
-    </p>
+  {progress.chapters.size > 0 && (
+    <p class="small">✓ The class has finished {progress.chapters.size} of {data.chapters.length} chapters.</p>
   )}
-  <ol class="plain-list stack">
+  <ol class="plain-list card chapters">
     {data.chapters.map((c) => {
-      const n = count(c.number);
-      const offAP = c.apUnits.length === 0;
+      const done = progress.chapters.has(c.number);
       return (
-        <li class:list={['card', { learned: data.progress.chapters.has(c.number) }]}>
-          <h2 class="h3">
-            <a href={url(`${subject}/chapters/${c.number}/`)}>
-              {c.number}. {c.title}
-            </a>
-            {data.progress.chapters.has(c.number) && <ProgressMark status="done" />}
-          </h2>
-          <p class="small muted">
-            {n.lessons} lesson{n.lessons === 1 ? '' : 's'} · {n.questions} question{n.questions === 1 ? '' : 's'}
-          </p>
-          <div class="badges" style="margin-top:.4rem">
-            {c.apUnits.map((u) => (
-              <a class="badge topic" href={url(`${subject}/ap/#unit-${u}`)}>
-                Unit {u}: {unitTitle(u)}
-              </a>
-            ))}
-            {offAP && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+        <li class:list={{ done, next: c === next }}>
+          <ProgressMark status={done ? 'done' : null} compact doneLabel="Finished in class" />
+          <div class="info">
+            <span class="num">{c.number}.</span>
+            <a href={url(`${subject}/chapters/${c.number}/`)}>{c.title}</a>
+            {c === next && <span class="badge good">Up next</span>}
+            {!done && <div class="small muted">{meta(c.number, c.apUnits)}</div>}
           </div>
-          {c.notOnAP.length > 0 && !offAP && (
-            <p class="small">
-              <strong>Not on AP:</strong> {c.notOnAP.join('; ')}
-            </p>
-          )}
-          {offAP && c.notOnAP.length > 0 && <p class="small muted">{c.notOnAP.join('; ')}</p>}
         </li>
       );
     })}
@@ -60,14 +53,42 @@ const unitTitle = (id: string) => data.ced.units.find((u) => u.id === id)?.title
 </Base>
 
 <style>
-  .h3 {
-    font-size: 1.1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
+  .chapters {
+    padding: 0.25rem 1rem;
   }
-  .learned {
-    border-left: 4px solid var(--good);
+  .chapters li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapters li:last-child {
+    border-bottom: 0;
+  }
+  .info a {
+    font-weight: 600;
+  }
+  .done .info a {
+    color: var(--text-2);
+    font-weight: 500;
+  }
+  .num {
+    display: inline-block;
+    min-width: 1.8rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .done .num {
+    color: var(--text-2);
+    font-weight: 500;
+  }
+  .info .small {
+    margin-top: 0.1rem;
+    padding-left: 1.8rem;
+  }
+  .badge {
+    margin-left: 0.4rem;
   }
 </style>

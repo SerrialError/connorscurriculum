@@ -178,6 +178,11 @@ th {
 }
 
 /* KaTeX: long display equations scroll instead of widening the page. */
+/* Inline math plus the punctuation after it (see rehypeMathPunctuation). */
+.nowrap {
+  white-space: nowrap;
+}
+
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;

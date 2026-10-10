@@ -127,7 +127,8 @@ const nav = subject
   .subnav {
     display: flex;
     gap: 0.1rem;
-    margin-left: -0.55rem;
+    /* Line up the first link's text with the content: page padding minus link padding. */
+    padding-left: calc(1rem - 0.55rem);
     overflow-x: auto;
     padding-bottom: 0.4rem;
   }
@@ -151,6 +152,9 @@ const nav = subject
     padding-bottom: 3rem;
   }
   @media (max-width: 420px) {
+    .subnav {
+      padding-left: calc(1rem - 0.45rem);
+    }
     .subnav a {
       font-size: 0.9rem;
       padding: 0.3rem 0.45rem;

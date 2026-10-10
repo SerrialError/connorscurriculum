@@ -114,3 +114,10 @@ export function learnedTopic(data: SubjectData) {
     return s === 'done' || s === 'review';
   };
 }
+
+/** The chapter to study next: the first unfinished chapter after the last finished one (else the first unfinished). */
+export function nextChapter(data: SubjectData) {
+  const lastDone = Math.max(0, ...data.progress.chapters);
+  const unfinished = data.chapters.filter((c) => !data.progress.chapters.has(c.number));
+  return unfinished.find((c) => c.number > lastDone) ?? unfinished[0];
+}

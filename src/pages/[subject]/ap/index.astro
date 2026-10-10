@@ -15,6 +15,18 @@ const count = (ids: string[], status: ReturnType<typeof statusOf>) => ids.filter
 const allIds = [...data.topics.keys()];
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+/** "1 lesson · 3 FRQs", leaving out zero counts. */
+const counts = (id: string) => {
+  const c = cov.get(id)!;
+  return [
+    c.lessons.length && plural(c.lessons.length, 'lesson'),
+    c.questions && plural(c.questions, 'question'),
+    frqCount(id) && plural(frqCount(id), 'FRQ'),
+  ]
+    .filter(Boolean)
+    .join(' · ');
+};
 ---
 
 <Base title={`${data.subject.standardsName} units`} subject={subject}>
@@ -58,7 +70,6 @@ const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
         </h2>
         <ol class="plain-list topics">
           {unit.topics.map((t) => {
-            const c = cov.get(t.id)!;
             const status = statusOf(t.id);
             const notes = progress.notes.get(t.id) ?? [];
             return (
@@ -69,9 +80,7 @@ const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
                   <a href={url(`${subject}/ap/${t.id}/`)}>{t.title}</a>
                   {notes.map((note) => <div class="small muted">{note}</div>)}
                 </div>
-                <span class="small muted count">
-                  {c.lessons.length} lesson{c.lessons.length === 1 ? '' : 's'} · {c.questions} q · {frqCount(t.id)} FRQ
-                </span>
+                <span class="small muted count">{counts(t.id)}</span>
               </li>
             );
           })}

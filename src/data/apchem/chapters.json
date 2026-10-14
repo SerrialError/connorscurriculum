@@ -48,7 +48,8 @@
     "cedTopics": ["1.5", "1.6", "3.11", "3.12"],
     "notOnAP": [
       "Assigning quantum numbers to electrons",
-      "Electron configurations of exceptions to the aufbau principle"
+      "Electron configurations of exceptions to the aufbau principle",
+      "The Rydberg equation, the Rydberg constant, and Bohr-model energy levels (Eₙ = −hcR/n²), taught in Section 6.3 (only E = hν and c = λν are on the equation sheet)"
     ],
     "sections": []
   },

@@ -1,0 +1,184 @@
+---
+title: Light, Photons, and the Photoelectric Effect
+subject: apchem
+chapter: 6
+sections: ["6.1", "6.2"]
+cedTopics: ["3.11", "3.12"]
+order: 1
+authors: ["Claude"]
+summary: Wavelength, frequency, and photon energy (c = λν and E = hν), the electromagnetic spectrum, and why the photoelectric effect shows light comes in packets.
+---
+
+Chapter 6 starts with light, because light is the tool chemists use to work out where an atom's
+electrons are. Everything here comes down to two equations and the habit of converting units first.
+
+<Callout type="warning">
+On the class test you get a periodic table but **no constants**. Memorize these four:
+
+- Planck's constant: $h = 6.626 \times 10^{-34}\ \text{J·s}$
+- Speed of light: $c = 2.998 \times 10^{8}\ \text{m/s}$
+- Rydberg (Bohr) constant: $2.18 \times 10^{-18}\ \text{J}$ (used in the next lesson)
+- Avogadro's number: $6.022 \times 10^{23}\ \text{mol}^{-1}$
+
+The AP exam does print $h$, $c$, and Avogadro's number on its equation sheet.
+</Callout>
+
+## 1. Light as a wave
+
+**Electromagnetic radiation** is energy that travels as a wave and moves through a vacuum at the speed
+of light, $c$. Every kind, from radio waves to gamma rays, moves at the same speed. The kinds differ
+only in wavelength and frequency.
+
+- **Wavelength** ($\lambda$, lambda): the distance from one crest to the next, in meters.
+- **Frequency** ($\nu$, nu): how many crests pass a point each second, in $\text{s}^{-1}$, also called hertz (Hz).
+
+$$
+c = \lambda \nu
+$$
+
+Because $c$ is fixed, wavelength and frequency are **inversely** related: a shorter wave has a higher frequency.
+
+### Units you need
+
+| Unit | In meters or hertz |
+|---|---|
+| 1 nm (nanometer) | $10^{-9}\ \text{m}$ |
+| 1 µm (micrometer) | $10^{-6}\ \text{m}$ |
+| 1 Å (angstrom) | $10^{-10}\ \text{m}$ |
+| 1 MHz (megahertz) | $10^{6}\ \text{Hz} = 10^{6}\ \text{s}^{-1}$ |
+| 1 GHz (gigahertz) | $10^{9}\ \text{Hz}$ |
+
+<Callout type="warning">
+Convert nm to m **before** you use $c = \lambda\nu$ or $E = hc/\lambda$. Most wrong answers on these
+problems are off by exactly $10^{9}$.
+</Callout>
+
+### The electromagnetic spectrum
+
+From **shortest wavelength (highest energy)** to **longest wavelength (lowest energy)**:
+
+**gamma rays → X-rays → ultraviolet → visible → infrared → microwaves → radio waves**
+
+Visible light runs from about 400 nm (violet) to about 750 nm (red). A way to remember the visible
+order is ROYGBIV, where red has the longest wavelength and violet the shortest.
+
+<Reveal label="Worked example: wavelength of a radio station">
+
+An FM station broadcasts at 88.7 MHz. What is the wavelength?
+
+$$
+\lambda = \frac{c}{\nu} = \frac{2.998 \times 10^{8}\ \text{m/s}}{88.7 \times 10^{6}\ \text{s}^{-1}} = 3.38\ \text{m}
+$$
+
+That's a few meters, which fits: radio waves are the longest waves on the spectrum.
+
+</Reveal>
+
+Two more vocabulary words from class: **monochromatic** radiation has a single wavelength (a laser),
+and **polychromatic** radiation has more than one (sunlight, a light bulb).
+
+## 2. Energy comes in packets
+
+Around 1900 two observations didn't fit the idea of light as a smooth wave:
+
+1. **Blackbody radiation.** A hot solid glows, first red and then white as it gets hotter. Planck could
+   only explain the colors by assuming energy is given off in fixed amounts, called **quanta**
+   (one amount is a **quantum**).
+2. **The photoelectric effect.** Light shining on a clean metal surface knocks electrons out of it.
+   Einstein explained this by treating light as a stream of energy packets, called **photons**.
+
+The energy of **one** photon is
+
+$$
+E = h\nu \qquad\text{or, using } c = \lambda\nu, \qquad E = \frac{hc}{\lambda}
+$$
+
+So energy goes **up** with frequency and **down** with wavelength. A violet photon carries more energy
+than a red one, and an X-ray photon carries far more than either.
+
+<Callout type="note">
+**Quantum theory** says energy is quantized: it can only take certain allowed values, never anything
+in between. Your class notes flag "quanta" and "photon" as words that may appear on the test.
+</Callout>
+
+<Reveal label="Worked example: one photon and a mole of photons">
+
+A violet laser pointer emits light at 405 nm. Find the frequency, the energy of one photon, and the
+energy of one mole of photons.
+
+**Frequency:**
+$$
+\nu = \frac{c}{\lambda} = \frac{2.998 \times 10^{8}\ \text{m/s}}{405 \times 10^{-9}\ \text{m}} = 7.40 \times 10^{14}\ \text{s}^{-1}
+$$
+
+**One photon:**
+$$
+E = h\nu = (6.626 \times 10^{-34}\ \text{J·s})(7.40 \times 10^{14}\ \text{s}^{-1}) = 4.90 \times 10^{-19}\ \text{J}
+$$
+
+**One mole of photons:**
+$$
+(4.90 \times 10^{-19}\ \text{J})(6.022 \times 10^{23}\ \text{mol}^{-1}) = 2.95 \times 10^{5}\ \text{J/mol} = 295\ \text{kJ/mol}
+$$
+
+</Reveal>
+
+### The photoelectric effect in detail
+
+Each metal needs a minimum amount of energy to pull one electron off its surface. This minimum is
+called the **work function**.
+
+- One photon gives its energy to one electron. If that photon's energy is **below** the minimum, no
+  electron leaves, **no matter how bright the light is**. Brighter light means more photons, not
+  stronger ones.
+- If the photon's energy is **above** the minimum, an electron is ejected, and the leftover energy
+  becomes the electron's kinetic energy:
+
+$$
+KE_{\text{electron}} = E_{\text{photon}} - E_{\text{minimum}}
+$$
+
+- Above the threshold, brighter light ejects **more** electrons, but each one has the same kinetic energy.
+
+<Reveal label="Worked example: does the light eject electrons?">
+
+A metal needs at least $4.00 \times 10^{-19}\ \text{J}$ to remove an electron. Will 600. nm light
+eject electrons? Will 400. nm light?
+
+$$
+E_{600} = \frac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{600. \times 10^{-9}} = 3.31 \times 10^{-19}\ \text{J}
+$$
+
+That's below $4.00 \times 10^{-19}$ J, so **no electrons** come off, however bright the 600 nm light is.
+
+$$
+E_{400} = \frac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{400. \times 10^{-9}} = 4.97 \times 10^{-19}\ \text{J}
+$$
+
+That's enough. Each ejected electron has
+$KE = 4.97 \times 10^{-19} - 4.00 \times 10^{-19} = 9.7 \times 10^{-20}\ \text{J}$.
+
+</Reveal>
+
+<Callout type="note">
+One classmate's notes cross out the work function and blackbody radiation, but another study guide
+for this test includes photoelectric kinetic-energy problems. Know the idea and the subtraction above
+in case they come up.
+</Callout>
+
+## 3. What different kinds of light do to molecules
+
+This part is AP material (topic 3.11). Each region of the spectrum carries the right amount of energy
+to cause a different change in a molecule:
+
+| Radiation | What absorbing it does |
+|---|---|
+| Microwave | Makes molecules **rotate** faster |
+| Infrared | Makes bonds **vibrate** |
+| Ultraviolet and visible | Moves **electrons** to higher energy levels |
+
+<Callout type="ap-tip">
+On the AP exam, $E = h\nu$ and $c = \lambda\nu$ are on the equation sheet. What they test is the
+reasoning: which photon has more energy, how wavelength and frequency are related, and which region of
+the spectrum causes which kind of change in a molecule.
+</Callout>

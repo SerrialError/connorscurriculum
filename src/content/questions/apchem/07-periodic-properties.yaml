@@ -1,0 +1,459 @@
+# Practice questions for Chapter 7 (Periodic Properties of the Elements), written for the
+# Chapters 6–7 class test. Original; not taken from the textbook or College Board materials.
+# Questions with cedTopics: [] cover class-test material that is not on the AP exam (Slater's rules,
+# bonding vs nonbonding radius).
+
+- id: apchem-07-zeff-quick
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Using the simple estimate (each core electron shields one proton and valence electrons shield nothing), what is the effective nuclear charge felt by a valence electron in chlorine?
+  choices:
+    - { id: a, text: "+1" }
+    - { id: b, text: "+7" }
+    - { id: c, text: "+10" }
+    - { id: d, text: "+17" }
+  answer: b
+  explanation: |
+    Cl has $Z = 17$ and 10 core electrons ($1s^2\,2s^2\,2p^6$). $Z_{\text{eff}} \approx 17 - 10 = +7$, the same as its number of valence electrons.
+    +17 ignores shielding entirely, and +10 is the number of core electrons.
+
+- id: apchem-07-slater-mg
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Use Slater's rules to find $Z_{\text{eff}}$ for a 3s electron in magnesium ($Z = 12$).
+  choices:
+    - { id: a, text: "2.00" }
+    - { id: b, text: "2.50" }
+    - { id: c, text: "2.85" }
+    - { id: d, text: "9.15" }
+  answer: c
+  explanation: |
+    Mg is $1s^2\ (2s^2\,2p^6)\ (3s^2)$. For one 3s electron:
+
+    - the **other** 3s electron: $1 \times 0.35 = 0.35$
+    - $n - 1$ shell (8 electrons): $8 \times 0.85 = 6.80$
+    - $n - 2$ shell (2 electrons): $2 \times 1.00 = 2.00$
+
+    $S = 9.15$, so $Z_{\text{eff}} = 12 - 9.15 = 2.85$.
+    (d) is $S$, not $Z_{\text{eff}}$. (b) counts both 3s electrons, including the one you're looking at. (a) is the simple core-only estimate.
+
+- id: apchem-07-slater-k
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Use Slater's rules to find $Z_{\text{eff}}$ for the 4s electron in potassium ($Z = 19$).
+  choices:
+    - { id: a, text: "1.00" }
+    - { id: b, text: "2.02" }
+    - { id: c, text: "2.20" }
+    - { id: d, text: "6.80" }
+  answer: c
+  explanation: |
+    K is $1s^2\ 2s^2\,2p^6\ (3s^2\,3p^6)\ (4s^1)$.
+
+    - same shell ($n = 4$): no other electrons
+    - $n - 1$ shell ($3s^2\,3p^6$, 8 electrons): $8 \times 0.85 = 6.80$
+    - $n - 2$ and lower ($1s$, $2s$, $2p$: 10 electrons): $10 \times 1.00 = 10.00$
+
+    $S = 16.80$, so $Z_{\text{eff}} = 19 - 16.80 = 2.20$. 2.02 is an arithmetic slip, and 6.80 is just the $n - 1$ shielding.
+
+- id: apchem-07-na-vs-k-ie
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2", "7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Slater's rules give about the same $Z_{\text{eff}}$ (2.20) for the valence electron of Na and of K. Which statement best explains why K has the **lower** first ionization energy?
+  choices:
+    - { id: a, text: "K has more protons, so its valence electron is attracted more strongly" }
+    - { id: b, text: "K's valence electron is in a higher shell (n = 4), farther from the nucleus, so it is held less strongly" }
+    - { id: c, text: "K's valence electron is paired, so it repels its partner" }
+    - { id: d, text: "K has fewer core electrons than Na" }
+  answer: b
+  explanation: |
+    With about the same effective nuclear charge, the difference is **distance**. By Coulomb's law, attraction falls off with distance, and K's 4s electron is a whole shell farther out than Na's 3s electron.
+    (a) would make the IE higher, not lower. (c) is wrong because a single s electron is unpaired. (d) is backward: K has 18 core electrons and Na has 10.
+
+- id: apchem-07-zeff-across-period
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Why does the effective nuclear charge on the valence electrons increase from Na to Cl?
+  choices:
+    - { id: a, text: "Each element adds a new electron shell" }
+    - { id: b, text: "Each element adds a proton, while the added electron goes into the same shell and shields poorly" }
+    - { id: c, text: "The number of core electrons increases across the period" }
+    - { id: d, text: "Atoms get larger across a period" }
+  answer: b
+  explanation: |
+    Across period 3 the core stays the same ($[\ce{Ne}]$), and each step adds one proton and one electron in the $n = 3$ shell. Electrons in the same shell shield each other only a little, so most of each added proton's charge is felt. (a), (c), and (d) are all false across a period.
+
+- id: apchem-07-largest-radius
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which atom has the **largest** atomic radius?
+  choices:
+    - { id: a, text: "Na" }
+    - { id: b, text: "Mg" }
+    - { id: c, text: "K" }
+    - { id: d, text: "Ca" }
+  answer: c
+  explanation: |
+    Radius increases down a group (more shells) and to the left across a period (lower $Z_{\text{eff}}$). K and Ca are in period 4, so they're bigger than Na and Mg. K is to the left of Ca, so K is the largest.
+
+- id: apchem-07-isoelectronic
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The ions $\ce{S^2-}$, $\ce{Cl-}$, $\ce{K+}$, and $\ce{Ca^2+}$ all have 18 electrons. Which is the **smallest**?
+  choices:
+    - { id: a, text: '$\ce{S^2-}$' }
+    - { id: b, text: '$\ce{Cl-}$' }
+    - { id: c, text: '$\ce{K+}$' }
+    - { id: d, text: '$\ce{Ca^2+}$' }
+  answer: d
+  explanation: |
+    With the same number of electrons, the ion with the most protons pulls them in tightest. $\ce{Ca^2+}$ has 20 protons, the most of the four, so it is the smallest. $\ce{S^2-}$ (16 protons) is the largest.
+
+- id: apchem-07-ion-vs-atom
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which comparison is correct?
+  choices:
+    - { id: a, text: '$\ce{Na+}$ is larger than $\ce{Na}$' }
+    - { id: b, text: '$\ce{Cl-}$ is larger than $\ce{Cl}$' }
+    - { id: c, text: '$\ce{O^2-}$ is smaller than $\ce{O}$' }
+    - { id: d, text: '$\ce{Mg^2+}$ is the same size as $\ce{Mg}$' }
+  answer: b
+  explanation: |
+    An anion has extra electrons but the same number of protons. The added electron–electron repulsion spreads the cloud out, so $\ce{Cl-}$ is larger than $\ce{Cl}$ (and $\ce{O^2-}$ is larger than $\ce{O}$).
+    A cation loses electrons, often its whole outer shell, so $\ce{Na+}$ and $\ce{Mg^2+}$ are **smaller** than their atoms.
+
+- id: apchem-07-bond-length-estimate
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The H–H bond length is 0.74 Å and the Cl–Cl bond length is 1.98 Å. Using bonding atomic radii, estimate the H–Cl bond length.
+  choices:
+    - { id: a, text: "0.62 Å" }
+    - { id: b, text: "1.36 Å" }
+    - { id: c, text: "2.72 Å" }
+    - { id: d, text: "1.24 Å" }
+  answer: b
+  explanation: |
+    A bonding radius is half the bond length between two identical atoms: H is $0.74 / 2 = 0.37$ Å and Cl is $1.98 / 2 = 0.99$ Å.
+    H–Cl $\approx 0.37 + 0.99 = 1.36$ Å. (c) adds the full bond lengths instead of the radii.
+
+- id: apchem-07-bonding-vs-vdw
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How does an atom's bonding atomic radius compare with its nonbonding (van der Waals) radius?
+  choices:
+    - { id: a, text: "The bonding radius is smaller, because the electron clouds of bonded atoms overlap" }
+    - { id: b, text: "The bonding radius is larger, because bonding adds electrons" }
+    - { id: c, text: "They are always equal" }
+    - { id: d, text: "The bonding radius is smaller, because bonding removes protons" }
+  answer: a
+  explanation: |
+    In a bond the electron clouds overlap, so the nuclei sit closer together than two atoms that just touch without bonding. Half of a shorter distance gives a smaller radius.
+
+- id: apchem-07-second-ie-equation
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which equation represents the **second** ionization energy of calcium?
+  choices:
+    - { id: a, text: '$\ce{Ca(g) -> Ca^2+(g) + 2e-}$' }
+    - { id: b, text: '$\ce{Ca+(g) -> Ca^2+(g) + e-}$' }
+    - { id: c, text: '$\ce{Ca(s) -> Ca+(g) + e-}$' }
+    - { id: d, text: '$\ce{Ca(g) + e- -> Ca-(g)}$' }
+  answer: b
+  explanation: |
+    Each ionization energy removes **one** electron from a **gaseous** atom or ion. The second one starts from $\ce{Ca+}$.
+    (a) is the sum of the first and second IEs, (c) starts from a solid, and (d) is an electron affinity.
+
+- id: apchem-07-successive-ie
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7", "1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The first four ionization energies of an element, in kJ/mol, are:
+
+    | IE₁ | IE₂ | IE₃ | IE₄ |
+    |---|---|---|---|
+    | 496 | 4562 | 6912 | 9543 |
+
+    In which group is this element most likely found?
+  choices:
+    - { id: a, text: "Group 1" }
+    - { id: b, text: "Group 2" }
+    - { id: c, text: "Group 13" }
+    - { id: d, text: "Group 14" }
+  answer: a
+  explanation: |
+    The huge jump (about 9×) comes right after the **first** electron. So only one electron is a valence electron, and the second one comes from the core. One valence electron means group 1, and the element forms a +1 ion. (These are sodium's values.)
+
+- id: apchem-07-highest-ie
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which atom has the **highest** first ionization energy?
+  choices:
+    - { id: a, text: "Na" }
+    - { id: b, text: "Si" }
+    - { id: c, text: "S" }
+    - { id: d, text: "Cl" }
+  answer: d
+  explanation: |
+    All four are in period 3, so their valence electrons are in the same shell. Cl has the most protons and the highest $Z_{\text{eff}}$, so it holds its valence electrons most tightly.
+
+- id: apchem-07-ie-dip-n-o
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Oxygen has a **lower** first ionization energy than nitrogen, even though oxygen has more protons. Which explanation is best?
+  choices:
+    - { id: a, text: "Oxygen's valence electrons are in a higher shell than nitrogen's" }
+    - { id: b, text: "The electron removed from oxygen is in a 2p orbital with another electron, and the repulsion between them makes it easier to remove" }
+    - { id: c, text: "Oxygen's electron is removed from a 2s orbital, which is higher in energy than 2p" }
+    - { id: d, text: "Nitrogen has a smaller effective nuclear charge than oxygen" }
+  answer: b
+  explanation: |
+    N is $2p^3$ (↑ ↑ ↑, one electron per orbital). O is $2p^4$ (↑↓ ↑ ↑), with one orbital holding a pair. Repulsion between the two paired electrons raises the energy of one of them, so it takes less energy to remove.
+    (a) is false because both are in $n = 2$. (c) is false because 2s is lower than 2p. (d) is true, but it would make O's IE **higher**, so it can't explain the dip.
+
+- id: apchem-07-ie-dip-mg-al
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Aluminum has a **lower** first ionization energy than magnesium. Which explanation is best?
+  choices:
+    - { id: a, text: "Al's first electron is removed from a 3p orbital, which is higher in energy than Mg's 3s and partly shielded by the 3s electrons" }
+    - { id: b, text: "Al has fewer protons than Mg" }
+    - { id: c, text: "Al's valence electrons are in the n = 4 shell" }
+    - { id: d, text: "Al's 3p electron is paired" }
+  answer: a
+  explanation: |
+    Mg is $[\ce{Ne}]\,3s^2$ and Al is $[\ce{Ne}]\,3s^2\,3p^1$. A 3p electron is higher in energy than a 3s electron, and the filled 3s subshell partly shields it, so less energy is needed to remove it.
+    (b) and (c) are false. (d) is false because a single 3p electron is unpaired.
+
+- id: apchem-07-electron-affinity-equation
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which equation matches the electron affinity of fluorine, and what is the usual sign of its energy change?
+  choices:
+    - { id: a, text: '$\ce{F(g) -> F+(g) + e-}$, positive' }
+    - { id: b, text: '$\ce{F(g) + e- -> F-(g)}$, negative' }
+    - { id: c, text: '$\ce{F2(g) + 2e- -> 2F-(g)}$, positive' }
+    - { id: d, text: '$\ce{F-(g) -> F(g) + e-}$, negative' }
+  answer: b
+  explanation: |
+    Electron affinity is the energy change when a **gaseous atom gains one electron**. For fluorine, energy is released when the electron is added, so the value is negative.
+    (a) is fluorine's first ionization energy, (c) starts from a molecule, and (d) is the reverse process.
+
+- id: apchem-07-noble-gas-ea
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why do noble gases such as Ne have **positive** electron affinities (energy must be added)?
+  choices:
+    - { id: a, text: "Their valence electrons are paired, so they repel the incoming electron" }
+    - { id: b, text: "The added electron would have to go into a new, higher shell, farther from the nucleus and well shielded" }
+    - { id: c, text: "Noble gases have no protons" }
+    - { id: d, text: "Noble gases have the lowest effective nuclear charge in their period" }
+  answer: b
+  explanation: |
+    Ne's $n = 2$ shell is full ($2s^2\,2p^6$), so an extra electron would have to go into 3s. That electron is far away and shielded by all ten electrons, so it feels almost no attraction, and energy has to be put in to add it.
+    (d) is backward: noble gases have the **highest** $Z_{\text{eff}}$ in their period.
+
+- id: apchem-07-electronegativity
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: []
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which atom has the **greatest** electronegativity?
+  choices:
+    - { id: a, text: "S" }
+    - { id: b, text: "Br" }
+    - { id: c, text: "O" }
+    - { id: d, text: "Se" }
+  answer: c
+  explanation: |
+    Electronegativity increases up a group and to the right across a period. O is in period 2, above S and Se, so it beats both. It is also higher than Br, which is in period 4. Only F, N, and Cl come close to oxygen.
+
+- id: apchem-07-metallic-character
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.6"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which element has the most metallic character?
+  choices:
+    - { id: a, text: "Cs" }
+    - { id: b, text: "Na" }
+    - { id: c, text: "Al" }
+    - { id: d, text: "Si" }
+  answer: a
+  explanation: |
+    Metallic character means how easily an atom loses electrons, so it follows the opposite direction from ionization energy: it increases down and to the left. Cs is the lowest and farthest left of these, so it loses its valence electron most easily.
+
+- id: apchem-07-ionic-formula
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: []
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Element X is in group 2 and element Y is in group 15. What is the most likely formula of the ionic compound they form?
+  choices:
+    - { id: a, text: '$\ce{XY}$' }
+    - { id: b, text: '$\ce{X2Y3}$' }
+    - { id: c, text: '$\ce{X3Y2}$' }
+    - { id: d, text: '$\ce{XY2}$' }
+  answer: c
+  explanation: |
+    A group 2 atom loses 2 electrons to form $\ce{X^2+}$. A group 15 atom gains 3 to form $\ce{Y^3-}$. The charges balance with three X and two Y: $3(+2) + 2(-3) = 0$, so the formula is $\ce{X3Y2}$, like $\ce{Mg3N2}$.
+
+- id: apchem-07-na-mg-al-frq
+  type: frq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2", "7.3", "7.4"]
+  cedTopics: ["1.5", "1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Answer the following about sodium, magnesium, and aluminum, which are next to each other in period 3.
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the noble-gas electron configurations of Mg and Al.
+      scoring:
+        - "Mg is $[\\ce{Ne}]\\,3s^2$ and Al is $[\\ce{Ne}]\\,3s^2\\,3p^1$ (both needed)."
+    - label: b
+      points: 1
+      prompt: Use Slater's rules to calculate $Z_{\text{eff}}$ for a 3s electron in Mg.
+      scoring:
+        - "$S = 1(0.35) + 8(0.85) + 2(1.00) = 9.15$, so $Z_{\\text{eff}} = 12 - 9.15 = 2.85$."
+    - label: c
+      points: 1
+      prompt: The first ionization energy of Al is lower than that of Mg. Explain why, using electron configurations.
+      scoring:
+        - "Al's first electron comes from a 3p orbital, which is higher in energy than Mg's 3s and partly shielded by the 3s electrons, so it is easier to remove."
+    - label: d
+      points: 1
+      prompt: The second ionization energy of Na is much larger than the second ionization energy of Mg. Explain.
+      scoring:
+        - "Na's second electron comes from the core ($2p$, $n = 2$), much closer to the nucleus with less shielding; Mg's second electron is still a valence $3s$ electron."
+    - label: e
+      points: 1
+      prompt: Which ion is smaller, $\ce{Na+}$ or $\ce{Mg^2+}$? Justify your answer.
+      scoring:
+        - "$\\ce{Mg^2+}$: both have 10 electrons (isoelectronic), and Mg has more protons (12 vs. 11), so it pulls the same electrons in more tightly."
+  explanation: |
+    **(a)** Mg: $[\ce{Ne}]\,3s^2$. Al: $[\ce{Ne}]\,3s^2\,3p^1$.
+
+    **(b)** For one 3s electron in Mg: the other 3s electron gives $0.35$, the eight $n = 2$ electrons give $8 \times 0.85 = 6.80$, and the two 1s electrons give $2 \times 1.00 = 2.00$. $S = 9.15$ and $Z_{\text{eff}} = 12 - 9.15 = 2.85$.
+
+    **(c)** Mg loses a 3s electron, while Al loses its single 3p electron. The 3p electron is higher in energy and partly shielded by the filled 3s subshell, so less energy removes it, even though Al has one more proton.
+
+    **(d)** After Na loses its one valence electron, $\ce{Na+}$ is $[\ce{Ne}]$, so the next electron must come from the $n = 2$ shell. It is much closer to the nucleus and feels a much larger effective nuclear charge. Mg's second electron is still in $3s$, so $\text{IE}_2$ of Mg is far smaller.
+
+    **(e)** $\ce{Mg^2+}$ is smaller. Both ions are $1s^2\,2s^2\,2p^6$, but Mg has 12 protons pulling on those 10 electrons compared with 11 for Na.

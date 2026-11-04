@@ -1,0 +1,184 @@
+---
+title: Periodic Trends
+subject: apchem
+chapter: 7
+sections: ["7.3", "7.4", "7.5", "7.6"]
+cedTopics: ["1.7", "1.8"]
+order: 2
+authors: ["Claude"]
+summary: Atomic and ionic radius, ionization energy and successive ionization energies, electron affinity, electronegativity, and metallic character, each explained with Zeff and shells.
+---
+
+## The one-picture summary
+
+| Property | Increases going… | Largest |
+|---|---|---|
+| Atomic radius | **down** a group and **left** across a period | bottom left (Cs, Fr) |
+| Ionization energy | **up** a group and **right** across a period | top right (He) |
+| Electron affinity (more negative) | **right** across a period (roughly) | halogens (Cl) |
+| Electronegativity | **up** and **right** | F |
+| Metallic character | **down** and **left** | bottom left |
+
+Every row is explained by the same two ideas from the last lesson:
+
+1. **Across a period**: same shell, more protons, so a **higher Zeff** pulls the electrons in tighter.
+2. **Down a group**: more shells, so the outer electrons are **farther away** and held less tightly.
+
+<Callout type="warning">
+Noble gases are usually left out of the electron-affinity and electronegativity trends. He has the
+highest **ionization energy**, and F is the most **electronegative**. Those are different properties,
+so both statements are true.
+</Callout>
+
+## 1. Atomic radius
+
+Atoms don't have hard edges, so radius is defined from distances between nuclei:
+
+- **Bonding atomic radius**: half the distance between the nuclei of two atoms **bonded** together.
+  The electron clouds overlap, so this radius is smaller.
+- **Nonbonding (van der Waals) radius**: half the distance between two nuclei when the atoms just
+  touch without bonding. The clouds don't overlap, so this radius is larger.
+
+A **bond length** can be estimated by adding the two atoms' bonding radii.
+
+<Reveal label="Worked example: estimate a bond length">
+
+The C–C bond is 1.54 Å and the Br–Br bond is 2.28 Å. Estimate the C–Br bond length.
+
+Bonding radius of C $= 1.54 / 2 = 0.77$ Å. Bonding radius of Br $= 2.28 / 2 = 1.14$ Å.
+
+C–Br $\approx 0.77 + 1.14 = 1.91$ Å.
+
+</Reveal>
+
+**Trends.** Radius increases **down a group** (each period adds a shell) and **decreases left to right**
+(Zeff rises and pulls the same shell in closer).
+
+## 2. Ionic radius
+
+- **Cations are smaller than their atoms.** Losing electrons often empties the outer shell entirely
+  ($\ce{Na}$ is $[\ce{Ne}]\,3s^1$, $\ce{Na+}$ is $[\ce{Ne}]$), and with fewer electrons there is less
+  electron–electron repulsion, so the rest are pulled in.
+- **Anions are larger than their atoms.** The added electron increases electron–electron repulsion,
+  and the electrons spread out. The nuclear charge hasn't changed.
+- For **isoelectronic** ions (same number of electrons), the one with **more protons is smaller**:
+
+$$
+\ce{O^2-} > \ce{F-} > \ce{Na+} > \ce{Mg^2+} > \ce{Al^3+}
+$$
+
+All five have 10 electrons, but the protons go from 8 to 13, so the pull on the same electrons gets stronger.
+
+## 3. Ionization energy
+
+**Ionization energy (IE)** is the minimum energy needed to remove an electron from a gaseous atom or
+ion in its ground state. Energy always has to go in, so IE is always **positive**.
+
+$$
+\text{1st IE:}\ \ce{X(g) -> X+(g) + e-} \qquad \text{2nd IE:}\ \ce{X+(g) -> X^2+(g) + e-}
+$$
+
+**Trends.** IE increases **left to right** (higher Zeff holds the electron more tightly) and **up a
+group** (the electron is closer to the nucleus). A bigger atom has a lower IE. **Metals** have low
+IEs, which is why they form cations easily.
+
+### Successive ionization energies
+
+$\text{IE}_1 < \text{IE}_2 < \text{IE}_3 < \ldots$ always. Each electron removed leaves the same
+number of protons pulling on fewer electrons, so the next one is held more tightly.
+
+<Callout type="warning">
+One set of class notes says the 2nd IE is larger "due to e⁻–e⁻ repulsion." It's the reverse: after
+one electron is gone there's **less** repulsion, and the positive ion holds its remaining electrons
+**more** tightly. That's why the 2nd IE is larger.
+</Callout>
+
+A **huge jump** appears when you've removed all the valence electrons and the next one has to come
+from the core, a shell closer to the nucleus. **The number of electrons removed before the big jump
+equals the number of valence electrons.**
+
+<Reveal label="Worked example: identify the group">
+
+An element in period 3 has these ionization energies (kJ/mol):
+
+| IE₁ | IE₂ | IE₃ | IE₄ |
+|---|---|---|---|
+| 578 | 1817 | 2745 | 11,577 |
+
+The jump comes between IE₃ and IE₄ (about 4×), so the element has **3 valence electrons**. It's in
+group 13: aluminum, which forms $\ce{Al^3+}$.
+
+</Reveal>
+
+### The two dips across a period
+
+The trend has two small exceptions. They're common test questions.
+
+| Dip | Why |
+|---|---|
+| **Group 2 → 13** (Be > B, Mg > Al) | The electron removed from B or Al is a **p** electron. It's higher in energy than an s electron and partly shielded by the filled s subshell, so it's easier to remove. |
+| **Group 15 → 16** (N > O, P > S) | O and S have one **paired** p electron. The repulsion from its partner in the same orbital makes it easier to remove. N and P have three unpaired p electrons, one per orbital. |
+
+<Callout type="ap-tip">
+Photoelectron spectroscopy (PES, AP topic 1.6) measures the energy needed to remove electrons from
+**every** subshell, not just the outermost one. Each peak is a subshell, its height is how many
+electrons are in it, and peaks at higher binding energy come from electrons closer to the nucleus.
+The study materials for this class test don't cover PES, but the AP exam does.
+</Callout>
+
+## 4. Electron affinity
+
+**Electron affinity (EA)** is the energy change when a gaseous atom **gains** an electron:
+
+$$
+\ce{X(g) + e- -> X-(g)}
+$$
+
+For most atoms energy is **released**, so EA is **negative**. A more negative EA means the atom
+holds the extra electron more strongly.
+
+- EA generally gets **more negative left to right**, because Zeff rises. The **halogens** (group 17)
+  have the most negative EAs: one more electron fills their p subshell.
+- **Noble gases** have positive EAs (they don't want one): the added electron would have to start a
+  new shell, farther out.
+- Group 2 (filled s) and group 15 (half-filled p) are less negative than their neighbors, the same
+  pattern as the IE dips.
+- EA changes little down a group.
+
+<Callout type="warning">
+"Higher" or "greater" electron affinity usually means **more negative** (more energy released).
+Read the sign carefully. Ionization energy removes an electron (positive); electron affinity adds
+one (usually negative).
+</Callout>
+
+## 5. Electronegativity
+
+**Electronegativity** is an atom's ability to attract the shared electrons in a **bond**. It
+increases **up** a group and **right** across a period, for the same reasons as ionization energy.
+**Fluorine** is the most electronegative element, followed by O, N, and Cl.
+
+<Callout type="note">
+The textbook covers electronegativity in Section 8.4, but the classmate notes include it on this test.
+</Callout>
+
+## 6. Metals, nonmetals, and metalloids
+
+- **Metals** (left and bottom): shiny, conduct heat and electricity, low IE, so they **lose**
+  electrons and form **cations**.
+- **Nonmetals** (upper right): dull, poor conductors, more negative EA, so they tend to **gain**
+  electrons and form **anions**.
+- **Metalloids** (along the staircase, like Si and Ge) have properties in between.
+- Metallic character increases **down and to the left**, the opposite direction from IE.
+
+## 7. Valence electrons and ionic formulas
+
+AP topic 1.8 connects this to Chapter 2: main-group elements lose or gain electrons to reach a
+noble-gas configuration, so the group number predicts the ion charge.
+
+| Group | 1 | 2 | 13 | 15 | 16 | 17 |
+|---|---|---|---|---|---|---|
+| Valence electrons | 1 | 2 | 3 | 5 | 6 | 7 |
+| Usual ion | +1 | +2 | +3 | −3 | −2 | −1 |
+
+A group 2 metal and a group 17 nonmetal therefore form $\ce{MX2}$ (like $\ce{CaCl2}$), and elements in
+the same group form compounds with the same formula pattern ($\ce{NaCl}$, $\ce{KCl}$, $\ce{RbCl}$).

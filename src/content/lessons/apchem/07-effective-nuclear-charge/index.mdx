@@ -1,0 +1,126 @@
+---
+title: Effective Nuclear Charge and Slater's Rules
+subject: apchem
+chapter: 7
+sections: ["7.2"]
+cedTopics: ["1.7"]
+order: 1
+authors: ["Claude"]
+summary: What Zeff is, the quick core-electron estimate, how to calculate Zeff with Slater's rules, and how Zeff changes across a period and down a group.
+---
+
+Every periodic trend in this chapter is explained by two things: **how strongly the nucleus pulls on
+the outer electrons** (effective nuclear charge) and **how far away those electrons are** (which shell
+they're in).
+
+## 1. What Zeff is
+
+An outer electron doesn't feel the full charge of the nucleus. The electrons between it and the
+nucleus block, or **shield**, part of that charge. The net positive charge an electron actually feels
+is the **effective nuclear charge**:
+
+$$
+Z_{\text{eff}} = Z - S
+$$
+
+- $Z$ is the atomic number, the number of protons.
+- $S$ is the **shielding (screening) constant**, roughly the number of electrons between the nucleus
+  and the electron you're looking at.
+
+Your class notes also write Zeff as **ENC**.
+
+## 2. The quick estimate
+
+Treat every core electron as blocking one full proton and every valence electron as blocking nothing:
+
+$$
+Z_{\text{eff}} \approx Z - (\text{number of core electrons}) = \text{number of valence electrons}
+$$
+
+| Atom | $Z$ | Core electrons | Quick $Z_{\text{eff}}$ |
+|---|---|---|---|
+| Na | 11 | 10 | 1 |
+| Mg | 12 | 10 | 2 |
+| Cl | 17 | 10 | 7 |
+| K | 19 | 18 | 1 |
+
+The quick method is enough for deciding which way a trend goes ("just look at the valence
+electrons"). For an actual number, use Slater's rules.
+
+## 3. Slater's rules
+
+<Callout type="not-on-ap">
+Slater's rules are not on the AP exam, which only uses Zeff to explain trends. They are on the class
+test.
+</Callout>
+
+To find $Z_{\text{eff}}$ for an electron in shell $n$ (an s or p electron):
+
+1. Write the configuration and group it by shell: $(1s)(2s,2p)(3s,3p)(3d)(4s,4p)\ldots$
+2. Ignore everything in higher shells than your electron, and **don't count the electron itself**.
+3. Add up the shielding:
+
+| Other electrons in… | Each one adds to $S$ |
+|---|---|
+| the same shell $n$ | 0.35 (but 0.30 for the other electron in 1s) |
+| shell $n - 1$ | 0.85 |
+| shell $n - 2$ or lower | 1.00 |
+
+4. Subtract: $Z_{\text{eff}} = Z - S$.
+
+<Reveal label="Worked example: Zeff for a 3p electron in chlorine">
+
+Cl ($Z = 17$): $1s^2\ (2s^2 2p^6)\ (3s^2 3p^5)$
+
+- Same shell ($n = 3$): 7 electrons, minus the one we're looking at, is **6**. $6 \times 0.35 = 2.10$
+- Shell $n - 1$ ($n = 2$): **8** electrons. $8 \times 0.85 = 6.80$
+- Shell $n - 2$ ($n = 1$): **2** electrons. $2 \times 1.00 = 2.00$
+
+$S = 2.10 + 6.80 + 2.00 = 10.90$, so $Z_{\text{eff}} = 17 - 10.90 = 6.10$.
+
+</Reveal>
+
+<Reveal label="Worked example: Zeff for the 4s electron in potassium">
+
+K ($Z = 19$): $1s^2\ (2s^2 2p^6)\ (3s^2 3p^6)\ (4s^1)$
+
+- Same shell ($n = 4$): no other electrons. $0$
+- Shell $n - 1$ ($n = 3$): **8** electrons. $8 \times 0.85 = 6.80$
+- Shell $n - 2$ and lower ($n = 1$ and $2$): **10** electrons. $10 \times 1.00 = 10.00$
+
+$S = 16.80$, so $Z_{\text{eff}} = 19 - 16.80 = 2.20$.
+
+</Reveal>
+
+<Callout type="warning">
+One set of class notes gets **2.02** for potassium. The setup in those notes is right, but the
+arithmetic is off: $19 - (2 + 8 + 6.80) = 19 - 16.80 = 2.20$. Also note that the $n - 2$ group
+covers **both** the first and second shells (10 electrons), not just 2s and 2p.
+</Callout>
+
+| Electron | $S$ | $Z_{\text{eff}}$ |
+|---|---|---|
+| Li 2s | $2(0.85) = 1.70$ | 1.30 |
+| C 2p | $3(0.35) + 2(0.85) = 2.75$ | 3.25 |
+| N 2p | $4(0.35) + 2(0.85) = 3.10$ | 3.90 |
+| F 2p | $6(0.35) + 2(0.85) = 3.80$ | 5.20 |
+| Na 3s | $8(0.85) + 2(1.00) = 8.80$ | 2.20 |
+| Mg 3s | $1(0.35) + 8(0.85) + 2(1.00) = 9.15$ | 2.85 |
+| S 3p | $5(0.35) + 8(0.85) + 2(1.00) = 10.55$ | 5.45 |
+
+## 4. How Zeff changes
+
+- **Across a period (left to right), Zeff increases.** Each step adds one proton, but the new electron
+  goes into the same shell, and electrons in the same shell shield each other poorly (only 0.35). Most
+  of the added charge isn't canceled.
+- **Down a group, Zeff on the valence electrons barely changes.** Na and K both come out at 2.20.
+  What changes going down is the **distance**: each period adds a shell, so the valence electrons sit
+  farther from the nucleus.
+- **Core electrons feel a much larger Zeff** than valence electrons, because fewer electrons are
+  between them and the nucleus.
+
+<Callout type="ap-tip">
+On the AP exam, justify trends with **Coulomb's law**: more protons in the same shell means a
+stronger pull; an electron in a higher shell is farther away and feels a weaker pull. Say "greater
+effective nuclear charge" or "more protons with the same shielding." Don't just say "it's to the right."
+</Callout>

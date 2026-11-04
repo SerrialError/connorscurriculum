@@ -51,14 +51,35 @@
       "Electron configurations of exceptions to the aufbau principle",
       "The Rydberg equation, the Rydberg constant, and Bohr-model energy levels (Eₙ = −hcR/n²), taught in Section 6.3 (only E = hν and c = λν are on the equation sheet)"
     ],
-    "sections": []
+    "sections": [
+      { "id": "6.1", "title": "The Wave Nature of Light" },
+      { "id": "6.2", "title": "Quantized Energy and Photons" },
+      { "id": "6.3", "title": "Line Spectra and the Bohr Model" },
+      { "id": "6.4", "title": "The Wave Behavior of Matter" },
+      { "id": "6.5", "title": "Quantum Mechanics and Atomic Orbitals" },
+      { "id": "6.6", "title": "Representations of Orbitals" },
+      { "id": "6.7", "title": "Many-Electron Atoms" },
+      { "id": "6.8", "title": "Electron Configurations" },
+      { "id": "6.9", "title": "Electron Configurations and the Periodic Table" }
+    ]
   },
   {
     "number": 7,
     "title": "Periodic Properties of the Elements",
     "cedTopics": ["1.6", "1.7", "1.8"],
-    "notOnAP": [],
-    "sections": []
+    "notOnAP": [
+      "Calculating Zeff with Slater's rules (the AP exam uses effective nuclear charge and shielding only to explain trends)"
+    ],
+    "sections": [
+      { "id": "7.1", "title": "Development of the Periodic Table" },
+      { "id": "7.2", "title": "Effective Nuclear Charge" },
+      { "id": "7.3", "title": "Sizes of Atoms and Ions" },
+      { "id": "7.4", "title": "Ionization Energy" },
+      { "id": "7.5", "title": "Electron Affinity" },
+      { "id": "7.6", "title": "Metals, Nonmetals, and Metalloids" },
+      { "id": "7.7", "title": "Trends for Group 1 and Group 2 Metals" },
+      { "id": "7.8", "title": "Trends for Selected Nonmetals" }
+    ]
   },
   {
     "number": 8,

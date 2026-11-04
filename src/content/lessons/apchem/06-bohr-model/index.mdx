@@ -1,0 +1,141 @@
+---
+title: Line Spectra and the Bohr Model
+subject: apchem
+chapter: 6
+sections: ["6.3"]
+cedTopics: ["3.12"]
+order: 2
+authors: ["Claude"]
+summary: Why hydrogen gives off only certain colors, how the Bohr model explains it, and how to calculate the energy and wavelength of a jump between levels.
+---
+
+## 1. Continuous and line spectra
+
+Pass light through a prism and it spreads out into its wavelengths, a **spectrum**.
+
+- A **continuous spectrum** contains every wavelength, like a rainbow from sunlight or a light bulb.
+- A **line spectrum** contains only a few specific wavelengths, which show up as separate bright lines.
+
+An **emission spectrum** is the light given off by gas atoms that have been excited (for example by
+electricity in a neon sign). Every element's emission spectrum is a line spectrum, and each element's
+pattern of lines is unique, so the spectrum works like a fingerprint for the element.
+
+## 2. The Bohr model
+
+Bohr explained hydrogen's line spectrum with three ideas:
+
+1. The electron can only move in certain circular orbits, each with a fixed energy. The orbits are
+   numbered $n = 1, 2, 3, \ldots$
+2. While it stays in one allowed orbit, the electron does not give off energy.
+3. The electron can jump from one orbit to another. When it does, it absorbs or emits exactly one
+   photon whose energy equals the energy difference between the two levels.
+
+- **Ground state**: $n = 1$, the lowest energy and the most stable state.
+- **Excited state**: $n = 2$ or higher, with more energy and less stability.
+
+Since only certain energy differences exist, only certain photon energies, and therefore only certain
+wavelengths, can come out. That's why hydrogen gives a line spectrum rather than a continuous one.
+
+### What was wrong with it
+
+- It only works for **hydrogen** and other one-electron species such as $\ce{He+}$ and $\ce{Li^2+}$.
+- Electrons do not really travel in fixed circular paths. The modern picture (next lesson) uses
+  orbitals instead.
+
+### What we kept
+
+- Electrons exist only in certain energy levels.
+- Energy is absorbed or emitted in fixed amounts when an electron changes levels.
+
+<Callout type="warning">
+Two of the class notes list "electrons exist only in certain levels" under the model's **limitations**.
+Those two points are what the model got **right** and what carried into the modern model. The
+limitations are the two bullets under "What was wrong with it."
+</Callout>
+
+## 3. Calculating the energy levels
+
+<Callout type="not-on-ap">
+The equations in this section (the Bohr energy levels and the Rydberg constant) are not on the AP
+exam. They **are** on the class test, and the constant $2.18 \times 10^{-18}$ J is not given, so
+memorize it.
+</Callout>
+
+The energy of the electron in level $n$ of a hydrogen atom is
+
+$$
+E_n = -2.18 \times 10^{-18}\ \text{J}\left(\frac{1}{n^2}\right)
+$$
+
+- Every level is **negative**, because the electron is held by the nucleus. Zero energy means the
+  electron has been pulled all the way off ($n = \infty$).
+- As $n$ gets larger, $E_n$ gets **less negative** (higher in energy), and the levels crowd closer together.
+
+The energy change for a jump from an initial level $n_i$ to a final level $n_f$ is
+
+$$
+\Delta E = -2.18 \times 10^{-18}\ \text{J}\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right)
+$$
+
+| Jump | Levels | Sign of $\Delta E$ | Photon |
+|---|---|---|---|
+| Down (for example $n = 3 \to 2$) | $n_f$ smaller than $n_i$ | negative | **emitted** |
+| Up (for example $n = 1 \to 3$) | $n_f$ larger than $n_i$ | positive | **absorbed** |
+
+Then use the size of $\Delta E$ as the photon's energy in $E = hc/\lambda$. A wavelength is never negative.
+
+<Reveal label="Worked example: emission from n = 6 to n = 2">
+
+$$
+\Delta E = -2.18 \times 10^{-18}\ \text{J}\left(\frac{1}{2^2} - \frac{1}{6^2}\right) = -2.18 \times 10^{-18}(0.2222) = -4.84 \times 10^{-19}\ \text{J}
+$$
+
+$\Delta E$ is negative, so a photon is **emitted**. Its wavelength:
+
+$$
+\lambda = \frac{hc}{|\Delta E|} = \frac{(6.626 \times 10^{-34}\ \text{J·s})(2.998 \times 10^{8}\ \text{m/s})}{4.84 \times 10^{-19}\ \text{J}} = 4.10 \times 10^{-7}\ \text{m} = 410\ \text{nm}
+$$
+
+410 nm is violet, in the visible range. Every hydrogen line that ends at $n = 2$ is visible or near-UV.
+
+</Reveal>
+
+<Reveal label="Worked example: absorption from n = 1 to n = 3">
+
+$$
+\Delta E = -2.18 \times 10^{-18}\left(\frac{1}{3^2} - \frac{1}{1^2}\right) = -2.18 \times 10^{-18}(-0.8889) = +1.94 \times 10^{-18}\ \text{J}
+$$
+
+Positive, so the photon is **absorbed**.
+$\lambda = hc/\Delta E = 1.03 \times 10^{-7}\ \text{m} = 103\ \text{nm}$, in the ultraviolet.
+
+</Reveal>
+
+<Reveal label="Worked example: work backward to the starting level">
+
+A hydrogen line at 434 nm ends in $n = 2$. Which level did the electron start in?
+
+Photon energy: $E = hc/\lambda = (6.626 \times 10^{-34})(2.998 \times 10^{8}) / (434 \times 10^{-9}) = 4.58 \times 10^{-19}$ J.
+The electron dropped, so $\Delta E = -4.58 \times 10^{-19}$ J:
+
+$$
+-4.58 \times 10^{-19} = -2.18 \times 10^{-18}\left(\frac{1}{4} - \frac{1}{n_i^2}\right)
+\quad\Rightarrow\quad \frac{1}{4} - \frac{1}{n_i^2} = 0.210
+\quad\Rightarrow\quad \frac{1}{n_i^2} = 0.040
+\quad\Rightarrow\quad n_i = 5
+$$
+
+</Reveal>
+
+### Which jump gives the most energy?
+
+The levels are farthest apart near $n = 1$, so:
+
+- Any drop **to** $n = 1$ releases more energy (shorter wavelength) than any drop that ends at $n = 2$ or higher.
+- Between two drops, the bigger energy gap gives the **higher frequency** and **shorter wavelength** photon.
+
+<Callout type="ap-tip">
+The AP version of this is qualitative (topic 3.12): a photon's energy equals the gap between two
+electron energy levels, so a bigger gap means a higher-frequency, shorter-wavelength photon. You
+won't need the Rydberg constant on the AP exam.
+</Callout>

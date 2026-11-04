@@ -1,0 +1,104 @@
+---
+title: Quantum Numbers and Orbitals
+subject: apchem
+chapter: 6
+sections: ["6.4", "6.5", "6.6", "6.7"]
+cedTopics: []
+order: 3
+authors: ["Claude"]
+summary: The four quantum numbers and their allowed values, orbital shapes, how many orbitals and electrons fit in a shell, and why 2s is lower in energy than 2p.
+---
+
+<Callout type="not-on-ap">
+The AP exam leaves out assigning quantum numbers to electrons (it says so in the CED). This whole
+lesson is for the class test. The idea of subshells (s, p, d) still matters on the AP exam, because
+electron configurations and photoelectron spectra are built on it.
+</Callout>
+
+## 1. From orbits to orbitals
+
+Electrons behave like waves as well as particles. The **uncertainty principle** (Heisenberg) says we
+can't know both the exact location and the exact speed (momentum) of an electron at the same time.
+So instead of a path like Bohr's orbit, quantum mechanics gives an **orbital**: a region of space
+where the electron is likely to be found.
+
+## 2. The four quantum numbers
+
+Each electron in an atom is described by four quantum numbers.
+
+| Symbol | Name | What it tells you | Allowed values |
+|---|---|---|---|
+| $n$ | principal | size and energy (the shell; matches the period) | $1, 2, 3, \ldots$ |
+| $l$ | azimuthal (angular momentum) | shape (the subshell) | $0$ up to $n - 1$ |
+| $m_l$ | magnetic | which way the orbital points | $-l$ to $+l$, whole numbers |
+| $m_s$ | spin | the electron's spin | $+\tfrac{1}{2}$ or $-\tfrac{1}{2}$ |
+
+Each value of $l$ has a letter:
+
+| $l$ | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| Subshell | s | p | d | f |
+| Orbitals ($2l + 1$) | 1 | 3 | 5 | 7 |
+| Max electrons | 2 | 6 | 10 | 14 |
+
+### Walking through the shells
+
+| $n$ | $l$ values | Subshells | $m_l$ values | Orbitals ($n^2$) | Max electrons ($2n^2$) |
+|---|---|---|---|---|---|
+| 1 | 0 | 1s | 0 | 1 | 2 |
+| 2 | 0, 1 | 2s, 2p | 0; −1, 0, +1 | 4 | 8 |
+| 3 | 0, 1, 2 | 3s, 3p, 3d | 0; −1 to +1; −2 to +2 | 9 | 18 |
+| 4 | 0, 1, 2, 3 | 4s, 4p, 4d, 4f | … | 16 | 32 |
+
+<Callout type="warning">
+$n^2$ counts **orbitals**. $2n^2$ counts **electrons**. And since $l$ stops at $n - 1$, there is no
+1p, 2d, or 3f subshell.
+</Callout>
+
+<Reveal label="Worked example: which sets are allowed?">
+
+Check each set $(n, l, m_l, m_s)$:
+
+- $(3, 2, -2, +\tfrac{1}{2})$: $l = 2$ is allowed for $n = 3$, and $m_l = -2$ is within $-2$ to $+2$. **Allowed** (a 3d electron).
+- $(2, 2, 0, +\tfrac{1}{2})$: $l$ can only be 0 or 1 when $n = 2$. **Not allowed.**
+- $(4, 1, -2, -\tfrac{1}{2})$: for $l = 1$, $m_l$ can only be $-1, 0, +1$. **Not allowed.**
+- $(1, 0, 0, 0)$: $m_s$ must be $\pm\tfrac{1}{2}$. **Not allowed.**
+
+</Reveal>
+
+<Reveal label="Worked example: describe 4d⁷">
+
+- $n = 4$, and d means $l = 2$.
+- $m_l$ runs from $-2$ to $+2$, so the 4d subshell has 5 orbitals.
+- Seven electrons in five orbitals, filled by Hund's rule: ↑↓ ↑↓ ↑ ↑ ↑, which leaves **3 unpaired**.
+- The whole $n = 4$ shell has $4^2 = 16$ orbitals and can hold $2(4)^2 = 32$ electrons.
+
+</Reveal>
+
+## 3. Orbital shapes
+
+- **s orbitals** are spheres. Each shell has one. A 2s orbital is bigger than a 1s, and a 3s is bigger still.
+- **p orbitals** have two lobes on opposite sides of the nucleus (a dumbbell or "propeller"). Starting at
+  $n = 2$, each shell has three of them, $p_x$, $p_y$, and $p_z$, at right angles to each other.
+  A p orbital has a **node** (zero chance of finding the electron) at the nucleus.
+- **d orbitals** mostly have four lobes (a cloverleaf, or the "double-sided pacifier" from class).
+  Starting at $n = 3$, each shell has five.
+
+A higher $n$ means a bigger orbital, so the electron is farther from the nucleus on average.
+
+## 4. Orbital energies in many-electron atoms
+
+- In **hydrogen** (one electron), energy depends only on $n$: 2s and 2p have the same energy.
+  Orbitals with the same energy are called **degenerate**.
+- In atoms with **two or more electrons**, the electrons repel and shield each other, and energy
+  depends on both $n$ and $l$: **2s is lower than 2p**, and $3s < 3p < 3d$.
+- The reason: an s electron spends some time very close to the nucleus (it **penetrates** the inner
+  electrons), so it feels a larger effective nuclear charge than a p electron in the same shell.
+- This is also why 4s fills before 3d, which you'll use in the next lesson.
+
+<Reveal label="Check yourself: in which species are 2s and 2p the same energy?">
+
+Only one-electron species: H, $\ce{He+}$, $\ce{Li^2+}$. Even $\ce{He}$ and $\ce{Li+}$ have two
+electrons, so their 2s is lower than their 2p.
+
+</Reveal>

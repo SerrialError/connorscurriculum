@@ -569,3 +569,237 @@
     **(c)** $E_{450} = 4.41 \times 10^{-19}$ J, so $KE = 4.41 \times 10^{-19} - 3.20 \times 10^{-19} = 1.21 \times 10^{-19}$ J.
 
     **(d)** Brightness is the number of photons. Twice as many photons eject twice as many electrons, but each photon still has $4.41 \times 10^{-19}$ J, so each electron still leaves with $1.21 \times 10^{-19}$ J.
+
+# ---------------------------------------------------------------------------
+# More questions based on classmates' notes (Sophia T, Ryan Rezaei, Jaya, Rebecca)
+# ---------------------------------------------------------------------------
+
+- id: apchem-06-rydberg-wavelength-form
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Use $\dfrac{1}{\lambda} = R_H\left(\dfrac{1}{n_1^2} - \dfrac{1}{n_2^2}\right)$ with $R_H = 1.096776 \times 10^{7}\ \text{m}^{-1}$
+    to find the wavelength of light emitted when an electron in hydrogen falls from $n = 5$ to $n = 2$.
+  choices:
+    - { id: a, text: "410 nm" }
+    - { id: b, text: "434 nm" }
+    - { id: c, text: "656 nm" }
+    - { id: d, text: '$2.30 \times 10^{6}$ nm' }
+  answer: b
+  explanation: |
+    Put the lower level first so the answer is positive:
+
+    $$\frac{1}{\lambda} = (1.096776 \times 10^{7}\ \text{m}^{-1})\left(\frac{1}{2^2} - \frac{1}{5^2}\right) = (1.096776 \times 10^{7})(0.2100) = 2.303 \times 10^{6}\ \text{m}^{-1}$$
+
+    $$\lambda = \frac{1}{2.303 \times 10^{6}\ \text{m}^{-1}} = 4.34 \times 10^{-7}\ \text{m} = 434\ \text{nm}$$
+
+    (d) is $1/\lambda$, not $\lambda$. 656 nm is the 3 → 2 line, and 410 nm is 6 → 2.
+    You get the same answer from $\Delta E = -2.18 \times 10^{-18}\ \text{J}(1/2^2 - 1/5^2)$ followed by $\lambda = hc/|\Delta E|$.
+
+- id: apchem-06-threshold-frequency
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A metal needs at least $6.40 \times 10^{-19}$ J to remove one electron from its surface.
+    What is the **minimum frequency** of light that can eject electrons from it?
+  choices:
+    - { id: a, text: '$9.66 \times 10^{14}\ \text{s}^{-1}$' }
+    - { id: b, text: '$1.04 \times 10^{-15}\ \text{s}^{-1}$' }
+    - { id: c, text: '$3.10 \times 10^{-7}\ \text{s}^{-1}$' }
+    - { id: d, text: '$4.24 \times 10^{-52}\ \text{s}^{-1}$' }
+  answer: a
+  explanation: |
+    One photon must carry at least the minimum energy, so set $E = h\nu$:
+
+    $$\nu = \frac{E}{h} = \frac{6.40 \times 10^{-19}\ \text{J}}{6.626 \times 10^{-34}\ \text{J·s}} = 9.66 \times 10^{14}\ \text{s}^{-1}$$
+
+    (b) is $h/E$ (flipped). (c) is the matching **wavelength** in meters, $hc/E$, with the wrong unit. (d) multiplies instead of dividing.
+
+- id: apchem-06-planck-quanta
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement matches Planck's idea of a **quantum**?
+  choices:
+    - { id: a, text: "Atoms can absorb or emit any amount of energy, as long as it's small" }
+    - { id: b, text: "Atoms absorb or emit energy only in whole-number multiples of a smallest amount, hν" }
+    - { id: c, text: "Light always travels slower in a vacuum than in air" }
+    - { id: d, text: "Electrons move in circular orbits around the nucleus" }
+  answer: b
+  explanation: |
+    A quantum is a fixed, smallest packet of energy. Matter can only gain or lose energy in whole numbers of these packets ($h\nu$, $2h\nu$, $3h\nu$, …), never in between.
+    (d) is Bohr's model, not Planck's quantum idea.
+
+- id: apchem-06-monochromatic
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which light source is the best example of **monochromatic** radiation?
+  choices:
+    - { id: a, text: "Sunlight" }
+    - { id: b, text: "A white light bulb" }
+    - { id: c, text: "A red laser pointer" }
+    - { id: d, text: "A glowing hot stovetop" }
+  answer: c
+  explanation: |
+    Monochromatic radiation has a single wavelength, and a laser gives off essentially one wavelength.
+    Sunlight, a white bulb, and a hot object all give off many wavelengths, so they are **polychromatic**.
+
+- id: apchem-06-emission-process
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a gas discharge tube, what has to happen for an atom to give off a line in its emission spectrum?
+  choices:
+    - { id: a, text: "An electron moves from a lower energy level to a higher one" }
+    - { id: b, text: "An electron that was excited falls back to a lower energy level" }
+    - { id: c, text: "The nucleus absorbs a photon" }
+    - { id: d, text: "The atom loses a proton" }
+  answer: b
+  explanation: |
+    Energy added to the gas first excites electrons to higher levels. A line is **emitted** when an excited electron drops back down, releasing a photon whose energy equals the gap between the levels.
+    (a) is absorption, which takes energy in.
+
+- id: apchem-06-bohr-limitation
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement is a **limitation** of the Bohr model, not one of the ideas it got right?
+  choices:
+    - { id: a, text: "Electrons exist only in certain energy levels" }
+    - { id: b, text: "Energy is absorbed or emitted in fixed amounts when an electron changes levels" }
+    - { id: c, text: "It only works for hydrogen and other one-electron species" }
+    - { id: d, text: "The ground state is the lowest-energy, most stable state" }
+  answer: c
+  explanation: |
+    Bohr's model can't predict the spectra of atoms with two or more electrons, and it pictures electrons in fixed circular orbits, which they don't really follow.
+    (a), (b), and (d) are all still true in the modern model. They're what Bohr got **right**.
+
+- id: apchem-06-joule-units
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which combination of units is equal to one joule (J)?
+  choices:
+    - { id: a, text: '$\text{kg·m/s}^2$' }
+    - { id: b, text: '$\text{kg·m}^2/\text{s}^2$' }
+    - { id: c, text: '$\text{kg·m}^2/\text{s}$' }
+    - { id: d, text: '$\text{m/s}$' }
+  answer: b
+  explanation: |
+    $1\ \text{J} = 1\ \text{kg·m}^2/\text{s}^2$. (a) is a newton, the unit of force. (c) equals J·s, the unit of Planck's constant $h$. (d) is a speed.
+
+- id: apchem-06-orbitals-per-subshell
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many orbitals are in a subshell with $l = 3$?
+  choices:
+    - { id: a, text: "3" }
+    - { id: b, text: "6" }
+    - { id: c, text: "7" }
+    - { id: d, text: "14" }
+  answer: c
+  explanation: |
+    Orbitals per subshell $= 2l + 1 = 2(3) + 1 = 7$. This is an f subshell, with $m_l = -3, -2, -1, 0, +1, +2, +3$. 14 is the most electrons it holds.
+
+- id: apchem-06-last-electron-quantum-numbers
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5", "6.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Fluorine is $1s^2\,2s^2\,2p^5$. Using the convention that each orbital fills with its up arrow ($m_s = +\tfrac{1}{2}$) first, in order $m_l = -1, 0, +1$,
+    which set $(n, l, m_l, m_s)$ describes the **last** electron added?
+  choices:
+    - { id: a, text: '$(2, 1, 0, +\tfrac{1}{2})$' }
+    - { id: b, text: '$(2, 1, 0, -\tfrac{1}{2})$' }
+    - { id: c, text: '$(2, 1, +1, -\tfrac{1}{2})$' }
+    - { id: d, text: '$(2, 2, 0, -\tfrac{1}{2})$' }
+  answer: b
+  explanation: |
+    The five 2p electrons go in as ↑ ($-1$), ↑ ($0$), ↑ ($+1$), then ↓ ($-1$), ↓ ($0$). The diagram is ↑↓ ↑↓ ↑.
+    The 5th electron is the **down** arrow in $m_l = 0$: $(2, 1, 0, -\tfrac{1}{2})$.
+    (a) is the 2nd electron. (d) is impossible because $l$ can't equal $n$.
+
+- id: apchem-06-period-5-d-block
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which subshell is being filled across the transition metals of **period 5** (Y through Cd)?
+  choices:
+    - { id: a, text: "3d" }
+    - { id: b, text: "4d" }
+    - { id: c, text: "5d" }
+    - { id: d, text: "5p" }
+  answer: b
+  explanation: |
+    The d block runs one shell behind the period: the number before d is the period − 1. So period 4 fills 3d, and period 5 fills **4d**.
+
+- id: apchem-06-condensed-gallium
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8", "6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which is the condensed (noble-gas) electron configuration of gallium (Ga, $Z = 31$)?
+  choices:
+    - { id: a, text: '$[\ce{Ar}]\,4s^2\,4p^1$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^1$' }
+    - { id: c, text: '$[\ce{Kr}]\,4p^1$' }
+    - { id: d, text: '$[\ce{Ne}]\,3s^2\,3p^1$' }
+  answer: b
+  explanation: |
+    Start from the noble gas before Ga, which is Ar (18 electrons). Then fill 4s (2), 3d (10), and 4p (1): $18 + 2 + 10 + 1 = 31$.
+    (a) skips the 3d subshell, (c) uses the noble gas **after** Ga, and (d) is aluminum.

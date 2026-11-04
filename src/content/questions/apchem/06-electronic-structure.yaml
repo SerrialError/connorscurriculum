@@ -803,3 +803,207 @@
   explanation: |
     Start from the noble gas before Ga, which is Ar (18 electrons). Then fill 4s (2), 3d (10), and 4p (1): $18 + 2 + 10 + 1 = 31$.
     (a) skips the 3d subshell, (c) uses the noble gas **after** Ga, and (d) is aluminum.
+
+# ---------------------------------------------------------------------------
+# Theory questions (the teacher's Exam 3 note says to focus on concepts, not just the equations)
+# ---------------------------------------------------------------------------
+
+- id: apchem-06-theory-wave-model-fails
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why couldn't the wave model of light explain the photoelectric effect?
+  choices:
+    - { id: a, text: "The wave model predicts that bright enough light of any frequency should eject electrons, but low-frequency light never does" }
+    - { id: b, text: "The wave model predicts that light can't travel through a vacuum" }
+    - { id: c, text: "The wave model says light has no energy" }
+    - { id: d, text: "The wave model predicts that only X-rays can eject electrons" }
+  answer: a
+  explanation: |
+    If light were only a wave, a brighter (more intense) beam should deliver more energy and eventually free electrons at any frequency. In experiments, below a threshold frequency nothing happens no matter how bright the light is.
+    Einstein explained this with photons: each electron gets its energy from **one** photon, and a photon's energy depends on its frequency ($E = h\nu$), not on how bright the beam is.
+
+- id: apchem-06-theory-continuous-vs-line
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which source gives a **line** spectrum instead of a continuous one?
+  choices:
+    - { id: a, text: "A white-hot tungsten filament" }
+    - { id: b, text: "Sunlight passed through a prism" }
+    - { id: c, text: "Neon gas glowing in an electric sign" }
+    - { id: d, text: "A glowing piece of hot iron" }
+  answer: c
+  explanation: |
+    Excited **gas atoms** give off only the wavelengths that match the gaps between their electron energy levels, which shows up as separate lines.
+    Hot solids and the sun give off a continuous range of wavelengths.
+
+- id: apchem-06-theory-matter-waves
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.4"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    According to de Broglie, all moving matter has a wavelength. Why do we notice wave behavior for electrons but not for a thrown baseball?
+  choices:
+    - { id: a, text: "Baseballs don't move fast enough to have a wavelength" }
+    - { id: b, text: "The wavelength is inversely related to mass, and a baseball's mass is so large that its wavelength is far too small to detect" }
+    - { id: c, text: "Only charged particles can have wavelengths" }
+    - { id: d, text: "Electrons travel at the speed of light" }
+  answer: b
+  explanation: |
+    $\lambda = h/mv$, and Planck's constant is tiny. For a tiny mass like an electron's, the wavelength is about the size of an atom, so electrons diffract like waves. For a baseball, the wavelength is unimaginably small.
+    (c) is false because neutral particles have wavelengths too, and (d) is false because electrons in atoms move much slower than light.
+
+- id: apchem-06-theory-orbital-meaning
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In the quantum-mechanical model, what does an orbital represent?
+  choices:
+    - { id: a, text: "The exact circular path an electron follows around the nucleus" }
+    - { id: b, text: "A region of space where there is a high probability of finding the electron" }
+    - { id: c, text: "The amount of energy needed to remove an electron" }
+    - { id: d, text: "A group of elements with similar properties" }
+  answer: b
+  explanation: |
+    Because of the uncertainty principle, we can't follow an electron's exact path. An orbital describes the **probability density** (electron density): where the electron is likely to be.
+    (a) is Bohr's orbit, which the modern model replaced.
+
+- id: apchem-06-theory-n-meaning
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    As the principal quantum number $n$ increases, what happens to an orbital?
+  choices:
+    - { id: a, text: "It gets smaller and lower in energy" }
+    - { id: b, text: "It gets larger and higher in energy, with the electron farther from the nucleus on average" }
+    - { id: c, text: "It changes shape from s to p to d" }
+    - { id: d, text: "Its orientation in space changes" }
+  answer: b
+  explanation: |
+    $n$ sets the **size and energy** of an orbital: a 3s orbital is bigger and higher in energy than a 2s orbital.
+    Shape is set by $l$ (c), and orientation by $m_l$ (d).
+
+- id: apchem-06-theory-4s-before-3d
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.7"]
+  cedTopics: ["1.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In potassium, the 19th electron goes into 4s instead of 3d. Which is the best explanation?
+  choices:
+    - { id: a, text: "4s has a smaller n than 3d" }
+    - { id: b, text: "A 4s electron penetrates closer to the nucleus than a 3d electron, feels a larger Zeff, and so is lower in energy" }
+    - { id: c, text: "The 3d subshell can only hold electrons after it is half-filled" }
+    - { id: d, text: "Hund's rule forbids putting one electron in a d subshell" }
+  answer: b
+  explanation: |
+    In a many-electron atom, energy depends on $l$ as well as $n$. An s electron spends part of its time very close to the nucleus, inside the inner electrons, so it's less shielded. That lowers 4s below 3d for potassium and calcium.
+    (a) is false because 4s has the **larger** $n$. (c) and (d) aren't real rules.
+
+- id: apchem-06-theory-hund-reason
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why do electrons spread out one per orbital in a set of equal-energy orbitals (Hund's rule) before pairing?
+  choices:
+    - { id: a, text: "Electrons in separate orbitals are farther apart, so there is less electron–electron repulsion" }
+    - { id: b, text: "Paired electrons are attracted to the nucleus more strongly" }
+    - { id: c, text: "Each orbital must be filled before the next shell can start" }
+    - { id: d, text: "The Pauli principle forbids two electrons in one orbital" }
+  answer: a
+  explanation: |
+    Electrons repel each other. Putting them in different orbitals of the same energy keeps them apart and lowers the energy of the atom, so that's the ground state.
+    (d) is false because Pauli **allows** two electrons in one orbital, as long as their spins are opposite.
+
+- id: apchem-06-theory-excited-state
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which electron configuration represents a sodium atom in an **excited** state?
+  choices:
+    - { id: a, text: '$1s^2\,2s^2\,2p^6\,3s^1$' }
+    - { id: b, text: '$1s^2\,2s^2\,2p^6\,3p^1$' }
+    - { id: c, text: '$1s^2\,2s^2\,2p^6$' }
+    - { id: d, text: '$1s^2\,2s^2\,2p^6\,3s^2$' }
+  answer: b
+  explanation: |
+    Both (a) and (b) have Na's 11 electrons, but in (b) the outer electron sits in 3p even though the lower-energy 3s is empty. That breaks the aufbau order, so it's an excited state.
+    (a) is the ground state, (c) has only 10 electrons ($\ce{Na+}$), and (d) has 12 (Mg).
+
+- id: apchem-06-theory-identify-element
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which element has the ground-state configuration $[\ce{Kr}]\,5s^2\,4d^{10}\,5p^3$?
+  choices:
+    - { id: a, text: "As" }
+    - { id: b, text: "Sb" }
+    - { id: c, text: "Bi" }
+    - { id: d, text: "Sn" }
+  answer: b
+  explanation: |
+    The 5s and 5p subshells place it in **period 5**, and $5p^3$ is the third element of the p block, which is **group 15**. That's antimony: $36 + 2 + 10 + 3 = 51$.
+    As is the group 15 element in period 4, and Bi is the one in period 6. Sn would end in $5p^2$.
+
+- id: apchem-06-theory-isoelectronic-ar
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which ion has the same electron configuration as argon?
+  choices:
+    - { id: a, text: '$\ce{Na+}$' }
+    - { id: b, text: '$\ce{Ca^2+}$' }
+    - { id: c, text: '$\ce{Br-}$' }
+    - { id: d, text: '$\ce{O^2-}$' }
+  answer: b
+  explanation: |
+    Ar has 18 electrons. $\ce{Ca^2+}$ has $20 - 2 = 18$, so it is isoelectronic with Ar.
+    $\ce{Na+}$ and $\ce{O^2-}$ have 10 electrons (like Ne), and $\ce{Br-}$ has 36 (like Kr).

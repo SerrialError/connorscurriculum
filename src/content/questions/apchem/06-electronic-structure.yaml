@@ -1,0 +1,805 @@
+# Practice questions for Chapter 6 (Electronic Structure of Atoms), written for the
+# Chapters 6–7 class test. Original; not taken from the textbook or College Board materials.
+# Questions with cedTopics: [] cover class-test material that is not on the AP exam.
+# Constants are not given on the class test: h = 6.626e-34 J·s, c = 2.998e8 m/s,
+# 2.18e-18 J (Bohr), 6.022e23 /mol.
+
+- id: apchem-06-em-spectrum-order
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1"]
+  cedTopics: ["3.11"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which list puts the types of radiation in order of **increasing wavelength**?
+  choices:
+    - { id: a, text: "radio, microwave, visible, X-ray" }
+    - { id: b, text: "X-ray, ultraviolet, infrared, microwave" }
+    - { id: c, text: "visible, ultraviolet, infrared, radio" }
+    - { id: d, text: "gamma, infrared, ultraviolet, radio" }
+  answer: b
+  explanation: |
+    From shortest to longest wavelength the spectrum runs gamma → X-ray → ultraviolet → visible → infrared → microwave → radio.
+    Choice (b) follows that order. Choice (a) is reversed, and (c) and (d) each swap ultraviolet with a neighbor.
+
+- id: apchem-06-frequency-from-wavelength
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the frequency of light with a wavelength of 500. nm?
+  choices:
+    - { id: a, text: '$1.67 \times 10^{-15}\ \text{s}^{-1}$' }
+    - { id: b, text: '$1.50 \times 10^{2}\ \text{s}^{-1}$' }
+    - { id: c, text: '$6.00 \times 10^{5}\ \text{s}^{-1}$' }
+    - { id: d, text: '$6.00 \times 10^{14}\ \text{s}^{-1}$' }
+  answer: d
+  explanation: |
+    Convert to meters first: $500.\ \text{nm} = 500. \times 10^{-9}\ \text{m}$.
+
+    $$\nu = \frac{c}{\lambda} = \frac{2.998 \times 10^{8}\ \text{m/s}}{500. \times 10^{-9}\ \text{m}} = 6.00 \times 10^{14}\ \text{s}^{-1}$$
+
+    (c) comes from forgetting to convert nm to m, (a) is $\lambda / c$ (the fraction flipped), and (b) is $c \times \lambda$.
+
+- id: apchem-06-photon-energy
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the energy of **one** photon of blue light with a wavelength of 450. nm?
+  choices:
+    - { id: a, text: '$4.41 \times 10^{-19}\ \text{J}$' }
+    - { id: b, text: '$4.41 \times 10^{-28}\ \text{J}$' }
+    - { id: c, text: '$9.95 \times 10^{-49}\ \text{J}$' }
+    - { id: d, text: '$2.66 \times 10^{5}\ \text{J}$' }
+  answer: a
+  explanation: |
+    $$E = \frac{hc}{\lambda} = \frac{(6.626 \times 10^{-34}\ \text{J·s})(2.998 \times 10^{8}\ \text{m/s})}{450. \times 10^{-9}\ \text{m}} = 4.41 \times 10^{-19}\ \text{J}$$
+
+    (b) skips the nm-to-m conversion. (c) uses $h\lambda / c$. (d) is the energy of a whole **mole** of these photons ($E \times 6.022 \times 10^{23}$).
+
+- id: apchem-06-radio-wavelength
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A radio station broadcasts at 101.1 MHz. What is the wavelength of its signal?
+  choices:
+    - { id: a, text: '$0.337\ \text{m}$' }
+    - { id: b, text: '$2.97\ \text{m}$' }
+    - { id: c, text: '$2.97 \times 10^{6}\ \text{m}$' }
+    - { id: d, text: '$3.03 \times 10^{16}\ \text{m}$' }
+  answer: b
+  explanation: |
+    $101.1\ \text{MHz} = 101.1 \times 10^{6}\ \text{s}^{-1}$.
+
+    $$\lambda = \frac{c}{\nu} = \frac{2.998 \times 10^{8}\ \text{m/s}}{1.011 \times 10^{8}\ \text{s}^{-1}} = 2.97\ \text{m}$$
+
+    (c) treats MHz as Hz, (a) is $\nu / c$, and (d) is $c \times \nu$.
+
+- id: apchem-06-frequency-relationships
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Photon X has three times the frequency of photon Y. Compared with photon Y, photon X has
+  choices:
+    - { id: a, text: "three times the energy and three times the wavelength" }
+    - { id: b, text: "one-third the energy and three times the wavelength" }
+    - { id: c, text: "three times the energy and one-third the wavelength" }
+    - { id: d, text: "the same energy, because all light travels at the same speed" }
+  answer: c
+  explanation: |
+    $E = h\nu$, so energy is directly proportional to frequency: three times the frequency means three times the energy.
+    $c = \lambda\nu$ with $c$ fixed, so wavelength is inversely proportional to frequency: three times the frequency means one-third the wavelength.
+
+- id: apchem-06-photoelectric-brightness
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Orange light shines on a metal surface and no electrons are ejected. Which change is **most likely** to cause electrons to be ejected?
+  choices:
+    - { id: a, text: "Making the orange light much brighter" }
+    - { id: b, text: "Shining the orange light on the metal for a longer time" }
+    - { id: c, text: "Switching to infrared light" }
+    - { id: d, text: "Switching to ultraviolet light" }
+  answer: d
+  explanation: |
+    One photon gives its energy to one electron, so each photon has to carry enough energy by itself.
+    Brighter light or a longer time just delivers more orange photons that are each still too weak.
+    Ultraviolet photons have a shorter wavelength and so **more** energy per photon ($E = hc/\lambda$). Infrared photons have **less** energy than orange ones.
+
+- id: apchem-06-ir-absorption
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.11"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When a molecule absorbs **infrared** radiation, what usually happens?
+  choices:
+    - { id: a, text: "An electron moves to a higher energy level" }
+    - { id: b, text: "The bonds in the molecule vibrate more" }
+    - { id: c, text: "The molecule rotates faster" }
+    - { id: d, text: "The nucleus changes" }
+  answer: b
+  explanation: |
+    Infrared photons carry the right amount of energy to change bond **vibrations**. Microwaves change **rotation** (c), and UV or visible light moves **electrons** to higher levels (a).
+
+- id: apchem-06-line-spectrum-reason
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Excited hydrogen gas gives off light at only a few specific wavelengths instead of a continuous range. Which statement best explains this?
+  choices:
+    - { id: a, text: "Hydrogen atoms absorb all other wavelengths of light" }
+    - { id: b, text: "The electron in hydrogen can only have certain energies, so only certain energy differences exist" }
+    - { id: c, text: "Hydrogen has only one electron, so it can only emit one photon" }
+    - { id: d, text: "Light from a gas always travels slower than light from a solid" }
+  answer: b
+  explanation: |
+    The electron's energy is **quantized**. A photon is emitted when the electron drops from one allowed level to a lower one, and the photon's energy equals that difference.
+    Only a fixed set of differences exists, so only a fixed set of wavelengths comes out: a line spectrum.
+
+- id: apchem-06-bohr-largest-emission
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For an electron in a hydrogen atom, which transition **emits** the photon with the **shortest wavelength**?
+  choices:
+    - { id: a, text: '$n = 4 \to n = 3$' }
+    - { id: b, text: '$n = 3 \to n = 2$' }
+    - { id: c, text: '$n = 2 \to n = 1$' }
+    - { id: d, text: '$n = 1 \to n = 4$' }
+  answer: c
+  explanation: |
+    The shortest wavelength means the largest energy. Hydrogen's levels are farthest apart near $n = 1$, so the drop from 2 to 1 is the biggest of the three emissions ($\lambda = 122$ nm, compared with 656 nm for 3 → 2 and 1875 nm for 4 → 3).
+    Choice (d) is a jump **up**, which absorbs a photon instead of emitting one.
+
+- id: apchem-06-bohr-absorb-sign
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    An electron in a hydrogen atom moves from $n = 2$ to $n = 5$. Which is true?
+  choices:
+    - { id: a, text: '$\Delta E$ is negative and a photon is emitted' }
+    - { id: b, text: '$\Delta E$ is positive and a photon is absorbed' }
+    - { id: c, text: '$\Delta E$ is positive and a photon is emitted' }
+    - { id: d, text: '$\Delta E$ is zero, because energy is conserved' }
+  answer: b
+  explanation: |
+    Moving to a higher level ($n_f > n_i$) needs energy, so the atom absorbs a photon and $\Delta E$ is positive. In
+    $\Delta E = -2.18 \times 10^{-18}(1/n_f^2 - 1/n_i^2)$, the bracket is $1/25 - 1/4$, which is negative, so $\Delta E$ comes out positive.
+
+- id: apchem-06-bohr-energy-level
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the energy of the electron in a hydrogen atom in the $n = 3$ level?
+  choices:
+    - { id: a, text: '$-2.42 \times 10^{-19}\ \text{J}$' }
+    - { id: b, text: '$+2.42 \times 10^{-19}\ \text{J}$' }
+    - { id: c, text: '$-7.27 \times 10^{-19}\ \text{J}$' }
+    - { id: d, text: '$-1.96 \times 10^{-17}\ \text{J}$' }
+  answer: a
+  explanation: |
+    $$E_3 = -2.18 \times 10^{-18}\ \text{J}\left(\frac{1}{3^2}\right) = -2.42 \times 10^{-19}\ \text{J}$$
+
+    The energy is negative because the electron is bound to the nucleus. (c) divides by 3 instead of $3^2$, and (d) multiplies by 9.
+
+- id: apchem-06-bohr-wavelength
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    An electron in a hydrogen atom falls from $n = 4$ to $n = 2$. What is the wavelength of the light, and is it emitted or absorbed?
+  choices:
+    - { id: a, text: "486 nm, emitted" }
+    - { id: b, text: "486 nm, absorbed" }
+    - { id: c, text: "656 nm, emitted" }
+    - { id: d, text: "97.2 nm, emitted" }
+  answer: a
+  explanation: |
+    $$\Delta E = -2.18 \times 10^{-18}\ \text{J}\left(\frac{1}{2^2} - \frac{1}{4^2}\right) = -2.18 \times 10^{-18}(0.1875) = -4.09 \times 10^{-19}\ \text{J}$$
+
+    Negative, so the photon is **emitted**. Use the positive value in $E = hc/\lambda$:
+
+    $$\lambda = \frac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{4.09 \times 10^{-19}} = 4.86 \times 10^{-7}\ \text{m} = 486\ \text{nm}$$
+
+    656 nm is the 3 → 2 line, and 97.2 nm is the 4 → 1 line.
+
+- id: apchem-06-quantum-numbers-allowed
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which set of quantum numbers $(n, l, m_l, m_s)$ is **not** allowed?
+  choices:
+    - { id: a, text: '$(3, 2, -1, +\tfrac{1}{2})$' }
+    - { id: b, text: '$(2, 0, 0, -\tfrac{1}{2})$' }
+    - { id: c, text: '$(4, 1, -2, +\tfrac{1}{2})$' }
+    - { id: d, text: '$(5, 3, 3, -\tfrac{1}{2})$' }
+  answer: c
+  explanation: |
+    $m_l$ runs from $-l$ to $+l$. For $l = 1$ the only choices are $-1, 0, +1$, so $m_l = -2$ is impossible.
+    The others are fine: (a) is a 3d electron, (b) a 2s electron, and (d) a 5f electron ($l = 3$ allows $m_l$ up to $+3$).
+
+- id: apchem-06-orbitals-in-shell
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many orbitals are in the $n = 4$ shell, and what is the most electrons it can hold?
+  choices:
+    - { id: a, text: "4 orbitals, 8 electrons" }
+    - { id: b, text: "8 orbitals, 16 electrons" }
+    - { id: c, text: "16 orbitals, 32 electrons" }
+    - { id: d, text: "16 orbitals, 16 electrons" }
+  answer: c
+  explanation: |
+    Orbitals $= n^2 = 16$ (one 4s, three 4p, five 4d, seven 4f). Each orbital holds 2 electrons, so the shell holds $2n^2 = 32$.
+
+- id: apchem-06-subshell-exists
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which subshell does **not** exist?
+  choices:
+    - { id: a, text: "2d" }
+    - { id: b, text: "3d" }
+    - { id: c, text: "4f" }
+    - { id: d, text: "6s" }
+  answer: a
+  explanation: |
+    $l$ can only go up to $n - 1$. For $n = 2$ that means $l = 0$ (s) or $1$ (p). A d subshell needs $l = 2$, so it first appears at $n = 3$.
+
+- id: apchem-06-electrons-in-subshell
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the maximum number of electrons in an atom that can have $n = 3$ and $l = 1$?
+  choices:
+    - { id: a, text: "2" }
+    - { id: b, text: "3" }
+    - { id: c, text: "6" }
+    - { id: d, text: "18" }
+  answer: c
+  explanation: |
+    $n = 3, l = 1$ is the 3p subshell. It has 3 orbitals ($m_l = -1, 0, +1$), each holding 2 electrons, for 6 in all. 18 is the capacity of the whole $n = 3$ shell.
+
+- id: apchem-06-degenerate-orbitals
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.7"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In which species do the 2s and 2p orbitals have exactly the same energy?
+  choices:
+    - { id: a, text: '$\ce{He+}$' }
+    - { id: b, text: '$\ce{He}$' }
+    - { id: c, text: '$\ce{Li+}$' }
+    - { id: d, text: '$\ce{Li}$' }
+  answer: a
+  explanation: |
+    Orbital energy depends only on $n$ in species with **one** electron (H, $\ce{He+}$, $\ce{Li^2+}$).
+    As soon as there are two or more electrons, shielding and penetration make 2s lower than 2p. $\ce{He}$ and $\ce{Li+}$ have 2 electrons, and $\ce{Li}$ has 3.
+
+- id: apchem-06-uncertainty
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.4"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Why does the modern model describe electrons with orbitals instead of fixed circular orbits?
+  choices:
+    - { id: a, text: "Electrons are too small to have any energy" }
+    - { id: b, text: "The exact position and momentum of an electron can't both be known at once" }
+    - { id: c, text: "Electrons only move in straight lines" }
+    - { id: d, text: "Orbits only exist in atoms with more than one electron" }
+  answer: b
+  explanation: |
+    The Heisenberg **uncertainty principle** means we can't track an exact path, so quantum mechanics gives an orbital instead: a region where the electron is likely to be found.
+
+- id: apchem-06-config-se
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8", "6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which is the ground-state electron configuration of selenium (Se, $Z = 34$)?
+  choices:
+    - { id: a, text: '$[\ce{Ar}]\,4s^2\,4p^4$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^4$' }
+    - { id: c, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^6$' }
+    - { id: d, text: '$[\ce{Kr}]\,4p^4$' }
+  answer: b
+  explanation: |
+    Ar accounts for 18 electrons. Then 4s holds 2, 3d holds 10, and 4p gets the last 4: $18 + 2 + 10 + 4 = 34$.
+    (a) skips the 3d subshell (only 24 electrons), (c) has 36 electrons (that's Kr), and (d) uses the wrong noble-gas core.
+
+- id: apchem-06-unpaired-p
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many unpaired electrons does a ground-state phosphorus atom have?
+  choices:
+    - { id: a, text: "0" }
+    - { id: b, text: "1" }
+    - { id: c, text: "3" }
+    - { id: d, text: "5" }
+  answer: c
+  explanation: |
+    P is $[\ce{Ne}]\,3s^2\,3p^3$. By Hund's rule the three 3p electrons go one per orbital: ↑ ↑ ↑. The 3s electrons are paired, so 3 electrons are unpaired.
+    5 is the number of **valence** electrons, not unpaired ones.
+
+- id: apchem-06-hund-violation
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A student draws the orbital diagram for oxygen as
+
+    | 1s | 2s | 2p | | |
+    |---|---|---|---|---|
+    | ↑↓ | ↑↓ | ↑↓ | ↑↓ | |
+
+    Which rule does this diagram break?
+  choices:
+    - { id: a, text: "The aufbau principle only" }
+    - { id: b, text: "The Pauli exclusion principle only" }
+    - { id: c, text: "Hund's rule only" }
+    - { id: d, text: "None; it is correct" }
+  answer: c
+  explanation: |
+    Each orbital holds two electrons with opposite spins, so Pauli is satisfied, and the lowest subshells are filled first, so aufbau is satisfied.
+    But the four 2p electrons should be spread as ↑↓ ↑ ↑ before a second orbital is paired. Leaving a 2p orbital empty while pairing two others breaks **Hund's rule**.
+
+- id: apchem-06-fe3-config
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which is the electron configuration of $\ce{Fe^3+}$?
+  choices:
+    - { id: a, text: '$[\ce{Ar}]\,4s^2\,3d^3$' }
+    - { id: b, text: '$[\ce{Ar}]\,3d^5$' }
+    - { id: c, text: '$[\ce{Ar}]\,4s^1\,3d^4$' }
+    - { id: d, text: '$[\ce{Ar}]\,4s^2\,3d^6$' }
+  answer: b
+  explanation: |
+    Fe is $[\ce{Ar}]\,4s^2\,3d^6$ (26 electrons). Transition metals lose their **4s** electrons first, then 3d. Removing 3 electrons takes both 4s electrons and one 3d electron, which leaves $[\ce{Ar}]\,3d^5$.
+    (a) removes the 3d electrons first, which is the common mistake. (d) is neutral Fe.
+
+- id: apchem-06-copper-exception
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The actual ground-state configuration of copper ($Z = 29$) is
+  choices:
+    - { id: a, text: '$[\ce{Ar}]\,4s^2\,3d^9$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^1\,3d^{10}$' }
+    - { id: c, text: '$[\ce{Ar}]\,3d^{11}$' }
+    - { id: d, text: '$[\ce{Ar}]\,4s^2\,4p^9$' }
+  answer: b
+  explanation: |
+    Copper is an exception to the aufbau order. One 4s electron moves into 3d to make a completely filled $3d^{10}$ subshell, which is extra stable. Chromium does the same to reach a half-filled $3d^5$: $[\ce{Ar}]\,4s^1\,3d^5$.
+    (a) is the predicted configuration, and (c) and (d) are impossible because d holds at most 10 electrons and p at most 6.
+
+- id: apchem-06-hydrogen-line-frq
+  type: frq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2", "6.3"]
+  cedTopics: ["3.12"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The emission spectrum of hydrogen contains a violet line at 410. nm. The electron ends in the $n = 2$ level.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the frequency of this light.
+      scoring:
+        - "$\\nu = c/\\lambda = (2.998 \\times 10^{8}\\ \\text{m/s})/(410. \\times 10^{-9}\\ \\text{m}) = 7.31 \\times 10^{14}\\ \\text{s}^{-1}$, with units."
+    - label: b
+      points: 1
+      prompt: Calculate the energy of one photon of this light.
+      scoring:
+        - "$E = h\\nu = (6.626 \\times 10^{-34})(7.31 \\times 10^{14}) = 4.84 \\times 10^{-19}\\ \\text{J}$ (or the same value from $hc/\\lambda$)."
+    - label: c
+      points: 2
+      prompt: Determine the energy level $n_i$ the electron started in. Show your work.
+      scoring:
+        - "Sets up $-4.84 \\times 10^{-19} = -2.18 \\times 10^{-18}(1/2^2 - 1/n_i^2)$, using a negative $\\Delta E$ for emission."
+        - "Solves $1/n_i^2 = 0.25 - 0.222 = 0.028$, so $n_i = 6$."
+    - label: d
+      points: 1
+      prompt: Is energy absorbed or emitted in this transition? Justify your answer using the sign of $\Delta E$.
+      scoring:
+        - "Emitted: the electron moves to a lower level ($n_f < n_i$), so $\\Delta E$ is negative and the atom gives off a photon."
+    - label: e
+      points: 1
+      prompt: Explain why hydrogen produces a line spectrum instead of a continuous spectrum.
+      scoring:
+        - "The electron's energy levels are quantized, so only certain energy differences, and therefore only certain photon wavelengths, are possible."
+  explanation: |
+    **(a)** $\nu = \dfrac{2.998 \times 10^{8}\ \text{m/s}}{410. \times 10^{-9}\ \text{m}} = 7.31 \times 10^{14}\ \text{s}^{-1}$
+
+    **(b)** $E = h\nu = (6.626 \times 10^{-34}\ \text{J·s})(7.31 \times 10^{14}\ \text{s}^{-1}) = 4.84 \times 10^{-19}\ \text{J}$
+
+    **(c)** The photon is emitted, so $\Delta E = -4.84 \times 10^{-19}$ J:
+
+    $$-4.84 \times 10^{-19} = -2.18 \times 10^{-18}\left(\frac{1}{4} - \frac{1}{n_i^2}\right) \Rightarrow \frac{1}{4} - \frac{1}{n_i^2} = 0.222 \Rightarrow \frac{1}{n_i^2} = 0.0278 \Rightarrow n_i = 6$$
+
+    **(d)** Emitted. The electron drops from $n = 6$ to $n = 2$, so $\Delta E$ is negative.
+
+    **(e)** The electron can only occupy certain energy levels. A photon's energy has to equal the gap between two levels, and only a fixed set of gaps exists, so only certain wavelengths appear.
+
+- id: apchem-06-photoelectric-frq
+  type: frq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A metal surface needs a minimum of $3.20 \times 10^{-19}$ J to remove one electron.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the longest wavelength of light, in nm, that can eject electrons from this metal.
+      scoring:
+        - "$\\lambda = hc/E = (6.626 \\times 10^{-34})(2.998 \\times 10^{8})/(3.20 \\times 10^{-19}) = 6.21 \\times 10^{-7}\\ \\text{m} = 621\\ \\text{nm}$."
+    - label: b
+      points: 1
+      prompt: Will light with a wavelength of 700. nm eject electrons? Justify with a calculation.
+      scoring:
+        - "No: $E = hc/\\lambda = 2.84 \\times 10^{-19}$ J, which is less than $3.20 \\times 10^{-19}$ J (or: 700 nm is longer than the 621 nm limit)."
+    - label: c
+      points: 1
+      prompt: Light with a wavelength of 450. nm shines on the metal. Calculate the kinetic energy of each ejected electron.
+      scoring:
+        - "$KE = 4.41 \\times 10^{-19} - 3.20 \\times 10^{-19} = 1.21 \\times 10^{-19}$ J."
+    - label: d
+      points: 1
+      prompt: The 450. nm light is made twice as bright. What happens to the number of electrons ejected and to the kinetic energy of each one? Explain.
+      scoring:
+        - "Twice as many electrons are ejected, but each has the same kinetic energy, because brighter light means more photons, each with the same energy."
+  explanation: |
+    **(a)** The longest wavelength corresponds to the smallest photon energy that still works, $3.20 \times 10^{-19}$ J:
+    $\lambda = \dfrac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{3.20 \times 10^{-19}} = 6.21 \times 10^{-7}\ \text{m} = 621\ \text{nm}$.
+
+    **(b)** $E_{700} = \dfrac{1.986 \times 10^{-25}\ \text{J·m}}{700. \times 10^{-9}\ \text{m}} = 2.84 \times 10^{-19}$ J. That's below the minimum, so no electrons are ejected, however bright the light.
+
+    **(c)** $E_{450} = 4.41 \times 10^{-19}$ J, so $KE = 4.41 \times 10^{-19} - 3.20 \times 10^{-19} = 1.21 \times 10^{-19}$ J.
+
+    **(d)** Brightness is the number of photons. Twice as many photons eject twice as many electrons, but each photon still has $4.41 \times 10^{-19}$ J, so each electron still leaves with $1.21 \times 10^{-19}$ J.
+
+# ---------------------------------------------------------------------------
+# More questions based on classmates' notes (Sophia T, Ryan Rezaei, Jaya, Rebecca)
+# ---------------------------------------------------------------------------
+
+- id: apchem-06-rydberg-wavelength-form
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Use $\dfrac{1}{\lambda} = R_H\left(\dfrac{1}{n_1^2} - \dfrac{1}{n_2^2}\right)$ with $R_H = 1.096776 \times 10^{7}\ \text{m}^{-1}$
+    to find the wavelength of light emitted when an electron in hydrogen falls from $n = 5$ to $n = 2$.
+  choices:
+    - { id: a, text: "410 nm" }
+    - { id: b, text: "434 nm" }
+    - { id: c, text: "656 nm" }
+    - { id: d, text: '$2.30 \times 10^{6}$ nm' }
+  answer: b
+  explanation: |
+    Put the lower level first so the answer is positive:
+
+    $$\frac{1}{\lambda} = (1.096776 \times 10^{7}\ \text{m}^{-1})\left(\frac{1}{2^2} - \frac{1}{5^2}\right) = (1.096776 \times 10^{7})(0.2100) = 2.303 \times 10^{6}\ \text{m}^{-1}$$
+
+    $$\lambda = \frac{1}{2.303 \times 10^{6}\ \text{m}^{-1}} = 4.34 \times 10^{-7}\ \text{m} = 434\ \text{nm}$$
+
+    (d) is $1/\lambda$, not $\lambda$. 656 nm is the 3 → 2 line, and 410 nm is 6 → 2.
+    You get the same answer from $\Delta E = -2.18 \times 10^{-18}\ \text{J}(1/2^2 - 1/5^2)$ followed by $\lambda = hc/|\Delta E|$.
+
+- id: apchem-06-threshold-frequency
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A metal needs at least $6.40 \times 10^{-19}$ J to remove one electron from its surface.
+    What is the **minimum frequency** of light that can eject electrons from it?
+  choices:
+    - { id: a, text: '$9.66 \times 10^{14}\ \text{s}^{-1}$' }
+    - { id: b, text: '$1.04 \times 10^{-15}\ \text{s}^{-1}$' }
+    - { id: c, text: '$3.10 \times 10^{-7}\ \text{s}^{-1}$' }
+    - { id: d, text: '$4.24 \times 10^{-52}\ \text{s}^{-1}$' }
+  answer: a
+  explanation: |
+    One photon must carry at least the minimum energy, so set $E = h\nu$:
+
+    $$\nu = \frac{E}{h} = \frac{6.40 \times 10^{-19}\ \text{J}}{6.626 \times 10^{-34}\ \text{J·s}} = 9.66 \times 10^{14}\ \text{s}^{-1}$$
+
+    (b) is $h/E$ (flipped). (c) is the matching **wavelength** in meters, $hc/E$, with the wrong unit. (d) multiplies instead of dividing.
+
+- id: apchem-06-planck-quanta
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement matches Planck's idea of a **quantum**?
+  choices:
+    - { id: a, text: "Atoms can absorb or emit any amount of energy, as long as it's small" }
+    - { id: b, text: "Atoms absorb or emit energy only in whole-number multiples of a smallest amount, hν" }
+    - { id: c, text: "Light always travels slower in a vacuum than in air" }
+    - { id: d, text: "Electrons move in circular orbits around the nucleus" }
+  answer: b
+  explanation: |
+    A quantum is a fixed, smallest packet of energy. Matter can only gain or lose energy in whole numbers of these packets ($h\nu$, $2h\nu$, $3h\nu$, …), never in between.
+    (d) is Bohr's model, not Planck's quantum idea.
+
+- id: apchem-06-monochromatic
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which light source is the best example of **monochromatic** radiation?
+  choices:
+    - { id: a, text: "Sunlight" }
+    - { id: b, text: "A white light bulb" }
+    - { id: c, text: "A red laser pointer" }
+    - { id: d, text: "A glowing hot stovetop" }
+  answer: c
+  explanation: |
+    Monochromatic radiation has a single wavelength, and a laser gives off essentially one wavelength.
+    Sunlight, a white bulb, and a hot object all give off many wavelengths, so they are **polychromatic**.
+
+- id: apchem-06-emission-process
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a gas discharge tube, what has to happen for an atom to give off a line in its emission spectrum?
+  choices:
+    - { id: a, text: "An electron moves from a lower energy level to a higher one" }
+    - { id: b, text: "An electron that was excited falls back to a lower energy level" }
+    - { id: c, text: "The nucleus absorbs a photon" }
+    - { id: d, text: "The atom loses a proton" }
+  answer: b
+  explanation: |
+    Energy added to the gas first excites electrons to higher levels. A line is **emitted** when an excited electron drops back down, releasing a photon whose energy equals the gap between the levels.
+    (a) is absorption, which takes energy in.
+
+- id: apchem-06-bohr-limitation
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement is a **limitation** of the Bohr model, not one of the ideas it got right?
+  choices:
+    - { id: a, text: "Electrons exist only in certain energy levels" }
+    - { id: b, text: "Energy is absorbed or emitted in fixed amounts when an electron changes levels" }
+    - { id: c, text: "It only works for hydrogen and other one-electron species" }
+    - { id: d, text: "The ground state is the lowest-energy, most stable state" }
+  answer: c
+  explanation: |
+    Bohr's model can't predict the spectra of atoms with two or more electrons, and it pictures electrons in fixed circular orbits, which they don't really follow.
+    (a), (b), and (d) are all still true in the modern model. They're what Bohr got **right**.
+
+- id: apchem-06-joule-units
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which combination of units is equal to one joule (J)?
+  choices:
+    - { id: a, text: '$\text{kg·m/s}^2$' }
+    - { id: b, text: '$\text{kg·m}^2/\text{s}^2$' }
+    - { id: c, text: '$\text{kg·m}^2/\text{s}$' }
+    - { id: d, text: '$\text{m/s}$' }
+  answer: b
+  explanation: |
+    $1\ \text{J} = 1\ \text{kg·m}^2/\text{s}^2$. (a) is a newton, the unit of force. (c) equals J·s, the unit of Planck's constant $h$. (d) is a speed.
+
+- id: apchem-06-orbitals-per-subshell
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many orbitals are in a subshell with $l = 3$?
+  choices:
+    - { id: a, text: "3" }
+    - { id: b, text: "6" }
+    - { id: c, text: "7" }
+    - { id: d, text: "14" }
+  answer: c
+  explanation: |
+    Orbitals per subshell $= 2l + 1 = 2(3) + 1 = 7$. This is an f subshell, with $m_l = -3, -2, -1, 0, +1, +2, +3$. 14 is the most electrons it holds.
+
+- id: apchem-06-last-electron-quantum-numbers
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5", "6.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Fluorine is $1s^2\,2s^2\,2p^5$. Using the convention that each orbital fills with its up arrow ($m_s = +\tfrac{1}{2}$) first, in order $m_l = -1, 0, +1$,
+    which set $(n, l, m_l, m_s)$ describes the **last** electron added?
+  choices:
+    - { id: a, text: '$(2, 1, 0, +\tfrac{1}{2})$' }
+    - { id: b, text: '$(2, 1, 0, -\tfrac{1}{2})$' }
+    - { id: c, text: '$(2, 1, +1, -\tfrac{1}{2})$' }
+    - { id: d, text: '$(2, 2, 0, -\tfrac{1}{2})$' }
+  answer: b
+  explanation: |
+    The five 2p electrons go in as ↑ ($-1$), ↑ ($0$), ↑ ($+1$), then ↓ ($-1$), ↓ ($0$). The diagram is ↑↓ ↑↓ ↑.
+    The 5th electron is the **down** arrow in $m_l = 0$: $(2, 1, 0, -\tfrac{1}{2})$.
+    (a) is the 2nd electron. (d) is impossible because $l$ can't equal $n$.
+
+- id: apchem-06-period-5-d-block
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which subshell is being filled across the transition metals of **period 5** (Y through Cd)?
+  choices:
+    - { id: a, text: "3d" }
+    - { id: b, text: "4d" }
+    - { id: c, text: "5d" }
+    - { id: d, text: "5p" }
+  answer: b
+  explanation: |
+    The d block runs one shell behind the period: the number before d is the period − 1. So period 4 fills 3d, and period 5 fills **4d**.
+
+- id: apchem-06-condensed-gallium
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8", "6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which is the condensed (noble-gas) electron configuration of gallium (Ga, $Z = 31$)?
+  choices:
+    - { id: a, text: '$[\ce{Ar}]\,4s^2\,4p^1$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^1$' }
+    - { id: c, text: '$[\ce{Kr}]\,4p^1$' }
+    - { id: d, text: '$[\ce{Ne}]\,3s^2\,3p^1$' }
+  answer: b
+  explanation: |
+    Start from the noble gas before Ga, which is Ar (18 electrons). Then fill 4s (2), 3d (10), and 4p (1): $18 + 2 + 10 + 1 = 31$.
+    (a) skips the 3d subshell, (c) uses the noble gas **after** Ga, and (d) is aluminum.

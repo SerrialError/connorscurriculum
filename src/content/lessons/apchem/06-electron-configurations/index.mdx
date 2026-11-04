@@ -1,0 +1,115 @@
+---
+title: Electron Configurations
+subject: apchem
+chapter: 6
+sections: ["6.7", "6.8", "6.9"]
+cedTopics: ["1.5"]
+order: 4
+authors: ["Claude"]
+summary: The aufbau principle, Pauli exclusion principle, and Hund's rule; writing full and noble-gas configurations and orbital diagrams; counting unpaired electrons; and configurations of ions.
+---
+
+An **electron configuration** lists which subshells an atom's electrons are in, for example
+$1s^2\,2s^2\,2p^4$ for oxygen. The big number is $n$, the letter is the subshell, and the superscript
+is the number of electrons in that subshell.
+
+## 1. The three filling rules
+
+| Rule | What it says |
+|---|---|
+| **Aufbau principle** | Electrons fill the lowest-energy orbitals first. |
+| **Pauli exclusion principle** | No two electrons in the same atom have the same four quantum numbers. So one orbital holds at most **two** electrons, and they must have **opposite spins** (↑↓). |
+| **Hund's rule** | In a set of equal-energy orbitals (like the three 2p), put **one** electron in each, all with the same spin, before pairing any up. |
+
+### Filling order
+
+$$
+1s \to 2s \to 2p \to 3s \to 3p \to 4s \to 3d \to 4p \to 5s \to 4d \to 5p \to 6s \to 4f \to 5d \to 6p \to 7s \to 5f
+$$
+
+You don't need to memorize this list. Read it off the periodic table, left to right and top to bottom:
+
+- Groups 1–2 are the **s block**.
+- Groups 13–18 are the **p block**.
+- The transition metals are the **d block**. The d subshell is one shell behind the period: period 4 fills **3d**.
+- The two rows at the bottom are the **f block**, two shells behind: period 6 fills **4f**.
+
+## 2. Orbital diagrams
+
+Each orbital is a box or line, and each electron is an arrow. Here is nitrogen ($Z = 7$), $1s^2\,2s^2\,2p^3$:
+
+| 1s | 2s | 2p | | |
+|---|---|---|---|---|
+| ↑↓ | ↑↓ | ↑ | ↑ | ↑ |
+
+Three electrons in 2p go into **separate** orbitals with the same spin (Hund's rule), so nitrogen has
+**3 unpaired electrons**.
+
+| 2p diagram for nitrogen | Verdict |
+|---|---|
+| ↑ ↑ ↑ | Correct |
+| ↑↓ ↑ \_\_ | Breaks **Hund's rule** (paired too early) |
+| ↑↑ ↑ \_\_ | Breaks the **Pauli principle** (two electrons with the same spin in one orbital) |
+
+<Callout type="warning">
+Count unpaired electrons from the **orbital diagram**, not from the superscript. Sulfur's $3p^4$ is
+↑↓ ↑ ↑, so it has 2 unpaired electrons, not 4.
+</Callout>
+
+## 3. Noble-gas (condensed) configurations
+
+Replace the filled inner shells with the symbol of the noble gas before the element, in brackets.
+
+| Element | Full configuration | Noble-gas form | Unpaired |
+|---|---|---|---|
+| Na (11) | $1s^2\,2s^2\,2p^6\,3s^1$ | $[\ce{Ne}]\,3s^1$ | 1 |
+| P (15) | $1s^2\,2s^2\,2p^6\,3s^2\,3p^3$ | $[\ce{Ne}]\,3s^2\,3p^3$ | 3 |
+| Ti (22) | $1s^2\,2s^2\,2p^6\,3s^2\,3p^6\,4s^2\,3d^2$ | $[\ce{Ar}]\,4s^2\,3d^2$ | 2 |
+| Br (35) | $\ldots 3p^6\,4s^2\,3d^{10}\,4p^5$ | $[\ce{Ar}]\,4s^2\,3d^{10}\,4p^5$ | 1 |
+
+The electrons written after the bracket in the outermost shell (highest $n$) are the **valence
+electrons**. The bracketed noble-gas core is the **core electrons**. For main-group elements, the
+number of valence electrons matches the group: 1 for group 1, 2 for group 2, 3 for group 13, up to 8
+for group 18. Bromine has 7 valence electrons ($4s^2\,4p^5$); its filled $3d^{10}$ doesn't count.
+
+<Callout type="note">
+Check your work: for a neutral atom the superscripts must add up to the atomic number.
+</Callout>
+
+## 4. Exceptions: Cr and Cu
+
+<Callout type="not-on-ap">
+The AP exam doesn't test the exceptions to the aufbau principle. Your teacher may, so learn these two.
+</Callout>
+
+| Element | Expected | Actual |
+|---|---|---|
+| Cr (24) | $[\ce{Ar}]\,4s^2\,3d^4$ | $[\ce{Ar}]\,4s^1\,3d^5$ |
+| Cu (29) | $[\ce{Ar}]\,4s^2\,3d^9$ | $[\ce{Ar}]\,4s^1\,3d^{10}$ |
+
+Moving one 4s electron into 3d gives a **half-filled** ($d^5$) or **completely filled** ($d^{10}$) d
+subshell, which is extra stable. Mo and Ag, directly below Cr and Cu, do the same thing. Cr ends up
+with 6 unpaired electrons and Cu with 1.
+
+## 5. Configurations of ions
+
+- **Anions** gain electrons into the next open spot: $\ce{S}$ is $[\ce{Ne}]\,3s^2\,3p^4$, so $\ce{S^2-}$ is $[\ce{Ne}]\,3s^2\,3p^6 = [\ce{Ar}]$.
+- **Main-group cations** lose their valence electrons and usually end up like a noble gas: $\ce{Mg^2+}$ is $[\ce{Ne}]$.
+- **Transition-metal cations lose their 4s electrons first**, before any 3d electrons, even though 4s filled first.
+
+| Atom or ion | Configuration |
+|---|---|
+| Fe | $[\ce{Ar}]\,4s^2\,3d^6$ |
+| $\ce{Fe^2+}$ | $[\ce{Ar}]\,3d^6$ |
+| $\ce{Fe^3+}$ | $[\ce{Ar}]\,3d^5$ |
+| $\ce{Zn^2+}$ | $[\ce{Ar}]\,3d^{10}$ |
+
+Atoms or ions with the same configuration are **isoelectronic**. $\ce{O^2-}$, $\ce{F-}$, Ne,
+$\ce{Na+}$, and $\ce{Mg^2+}$ all have 10 electrons and the configuration $1s^2\,2s^2\,2p^6$.
+
+<Callout type="ap-tip">
+On the AP exam (topic 1.5), configurations come with a reason: **Coulomb's law**. The attraction
+between an electron and the nucleus grows with the nuclear charge and shrinks with distance. Electrons
+in a higher shell are farther away and less attracted, so they're easier to remove. Expect to explain
+answers this way in Chapter 7.
+</Callout>

@@ -628,3 +628,220 @@
     - $\ce{F-}$: $Z_{\text{eff}} = 9 - 4.15 = 4.85$
 
     Same electrons, but more protons in $\ce{Na+}$, so its electrons are pulled in tighter and it is the smaller ion.
+
+# ---------------------------------------------------------------------------
+# Theory and "and such" questions (7.1, 7.6–7.8), per the teacher's Exam 3 note
+# ---------------------------------------------------------------------------
+
+- id: apchem-07-theory-moseley
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.1"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Mendeleev ordered the elements by atomic mass. What is the modern periodic table ordered by, and who showed it?
+  choices:
+    - { id: a, text: "Atomic number (number of protons), shown by Moseley" }
+    - { id: b, text: "Number of neutrons, shown by Bohr" }
+    - { id: c, text: "Atomic mass, shown by Planck" }
+    - { id: d, text: "Number of valence electrons, shown by Einstein" }
+  answer: a
+  explanation: |
+    Moseley's X-ray experiments showed that each element has its own **atomic number**, the number of protons. Ordering by atomic number fixes the few places where ordering by mass puts elements in the wrong group (for example, Te and I).
+
+- id: apchem-07-theory-radius-across
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Atomic radius **decreases** from Na to Cl, even though each element has more electrons. Why?
+  choices:
+    - { id: a, text: "Electrons get smaller as more are added" }
+    - { id: b, text: "The valence electrons stay in the same shell while Zeff increases, so they are pulled closer to the nucleus" }
+    - { id: c, text: "Each element across the period adds a new shell" }
+    - { id: d, text: "Atoms on the right have fewer protons" }
+  answer: b
+  explanation: |
+    Across period 3, every valence electron is in $n = 3$, and the core stays the same. Each step adds a proton that the same-shell electrons barely shield, so Zeff rises and pulls the whole $n = 3$ shell in tighter.
+
+- id: apchem-07-theory-penetration
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In a carbon atom, why does a 2s electron feel a slightly **larger** effective nuclear charge than a 2p electron?
+  choices:
+    - { id: a, text: "The 2s electron is in a higher shell" }
+    - { id: b, text: "The 2s orbital has more electrons" }
+    - { id: c, text: "The 2s electron penetrates closer to the nucleus, so the 1s electrons shield it less" }
+    - { id: d, text: "p electrons are not attracted to the nucleus" }
+  answer: c
+  explanation: |
+    An s orbital has some electron density very close to the nucleus, inside the 1s core, while a p orbital has a node at the nucleus. Spending time close in means less shielding and a larger Zeff, which is also why 2s is lower in energy than 2p.
+
+- id: apchem-07-theory-alkali-water
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.7"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What are the products when potassium metal reacts with water?
+  choices:
+    - { id: a, text: '$\ce{K2O}$ and $\ce{H2}$' }
+    - { id: b, text: '$\ce{KOH}$ and $\ce{H2}$' }
+    - { id: c, text: '$\ce{KH}$ and $\ce{O2}$' }
+    - { id: d, text: "No reaction occurs" }
+  answer: b
+  explanation: |
+    Alkali metals react with water to make a metal hydroxide and hydrogen gas: $\ce{2K(s) + 2H2O(l) -> 2KOH(aq) + H2(g)}$.
+    The reaction is vigorous for potassium, more so than for sodium, because K's ionization energy is lower.
+
+- id: apchem-07-theory-group1-reactivity
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.7"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which alkali metal reacts **most** vigorously with water, and why?
+  choices:
+    - { id: a, text: "Li, because it is the smallest" }
+    - { id: b, text: "Na, because it is the most common" }
+    - { id: c, text: "Cs, because its valence electron is farthest from the nucleus and easiest to remove" }
+    - { id: d, text: "They all react equally, because all have one valence electron" }
+  answer: c
+  explanation: |
+    Metal reactivity is about giving up electrons. Going down group 1, the valence electron is in a higher shell, farther from the nucleus, so the ionization energy drops and the metal reacts more readily. Cs is the most reactive of these.
+
+- id: apchem-07-theory-group2-vs-group1
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.7"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why is magnesium less reactive than sodium?
+  choices:
+    - { id: a, text: "Mg has a higher Zeff and must lose two electrons, which takes more energy than Na losing one" }
+    - { id: b, text: "Mg is in a higher period than Na" }
+    - { id: c, text: "Mg has fewer protons than Na" }
+    - { id: d, text: "Mg is a nonmetal" }
+  answer: a
+  explanation: |
+    Mg is one step to the right of Na in period 3, so its valence electrons feel a higher Zeff, and its first IE is higher. It also has to lose two electrons to form $\ce{Mg^2+}$. Both make it react less readily than Na.
+
+- id: apchem-07-theory-halogen-displacement
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which reaction will occur?
+  choices:
+    - { id: a, text: '$\ce{I2 + 2NaCl -> 2NaI + Cl2}$' }
+    - { id: b, text: '$\ce{Br2 + 2NaCl -> 2NaBr + Cl2}$' }
+    - { id: c, text: '$\ce{Cl2 + 2NaI -> 2NaCl + I2}$' }
+    - { id: d, text: '$\ce{I2 + 2NaBr -> 2NaI + Br2}$' }
+  answer: c
+  explanation: |
+    Halogen reactivity decreases down the group: F > Cl > Br > I. A more reactive halogen takes electrons from the ion of a **less** reactive one. $\ce{Cl2}$ is more reactive than iodine, so it turns $\ce{I-}$ into $\ce{I2}$.
+    In (a), (b), and (d) the less reactive halogen is trying to displace a more reactive one, which doesn't happen.
+
+- id: apchem-07-theory-oxides
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.6"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which oxide makes an **acidic** solution when it dissolves in water?
+  choices:
+    - { id: a, text: '$\ce{Na2O}$' }
+    - { id: b, text: '$\ce{CaO}$' }
+    - { id: c, text: '$\ce{MgO}$' }
+    - { id: d, text: '$\ce{SO2}$' }
+  answer: d
+  explanation: |
+    Nonmetal oxides are acidic: $\ce{SO2 + H2O -> H2SO3}$. Metal oxides are basic. For example, $\ce{CaO + H2O -> Ca(OH)2}$ gives a basic solution, and $\ce{Na2O}$ and $\ce{MgO}$ behave the same way.
+
+- id: apchem-07-theory-metalloid
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.6"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which element is a **metalloid** that is used as a semiconductor?
+  choices:
+    - { id: a, text: "Al" }
+    - { id: b, text: "Si" }
+    - { id: c, text: "P" }
+    - { id: d, text: "Mg" }
+  answer: b
+  explanation: |
+    Silicon sits on the staircase between metals and nonmetals. It conducts electricity better than a nonmetal but much worse than a metal, which makes it a semiconductor (used in computer chips).
+    Al and Mg are metals, and P is a nonmetal.
+
+- id: apchem-07-theory-noble-gas-compounds
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Of the noble gases, xenon forms the most compounds (such as $\ce{XeF4}$). Which explanation fits the Chapter 7 trends?
+  choices:
+    - { id: a, text: "Xe has the highest ionization energy of the noble gases" }
+    - { id: b, text: "Xe has a lower ionization energy than the lighter noble gases, so a very electronegative element like F can pull electron density from it" }
+    - { id: c, text: "Xe has an incomplete valence shell" }
+    - { id: d, text: "Xe is a metal" }
+  answer: b
+  explanation: |
+    Ionization energy drops going down group 18, because the valence electrons are farther from the nucleus. Xe's electrons are held loosely enough that fluorine and oxygen can form bonds with it. He, Ne, and Ar have much higher IEs and form no stable compounds under normal conditions.
+    (c) is false because Xe's $5s^2\,5p^6$ shell is full.
+
+- id: apchem-07-theory-halogen-states
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.8"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    At room temperature, which halogen is a **liquid**?
+  choices:
+    - { id: a, text: '$\ce{F2}$' }
+    - { id: b, text: '$\ce{Cl2}$' }
+    - { id: c, text: '$\ce{Br2}$' }
+    - { id: d, text: '$\ce{I2}$' }
+  answer: c
+  explanation: |
+    All the halogens are diatomic. $\ce{F2}$ and $\ce{Cl2}$ are gases, $\ce{Br2}$ is a red-brown liquid, and $\ce{I2}$ is a solid. The bigger molecules lower in the group have stronger attractions between them, so they're more condensed at room temperature.

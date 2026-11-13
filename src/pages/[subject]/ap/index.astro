@@ -192,15 +192,17 @@ const gapLabel = { missing: 'Not in textbook', thin: 'Thin in textbook' } as con
   .info a {
     font-weight: 600;
   }
+  /* Wide enough for "7.10", with a gap before the title; notes line up under the title. */
   .num {
     display: inline-block;
-    min-width: 2.6rem;
+    min-width: 2.7rem;
+    margin-right: 0.45rem;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
   }
   .note,
   .count {
-    padding-left: 2.6rem;
+    padding-left: 3.15rem;
   }
   .badge.gap {
     background: var(--surface-2);

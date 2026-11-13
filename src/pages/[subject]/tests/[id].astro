@@ -1,4 +1,5 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import LessonList from '../../../components/LessonList.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import TopicLegend from '../../../components/TopicLegend.astro';
@@ -33,9 +34,7 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 ---
 
 <Base title={test.title} subject={subject} searchable searchMeta={{ type: 'Class test' }}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
-    <a href={url(`${subject}/tests/`)}>Class tests</a> /
-  </nav>
+  <Breadcrumbs items={[{ href: url(`${subject}/tests/`), label: 'Class tests' }]} />
   <h1>{test.title}</h1>
   <p class="muted">
     {test.date ? formatDate(test.date) : 'Date TBA'}{' · '}

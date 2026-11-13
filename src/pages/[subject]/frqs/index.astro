@@ -29,7 +29,8 @@ const exams = data.pastFrqs;
     <p class="muted">No past FRQs listed yet.</p>
   ) : (
     <>
-      <section class="card summary">
+      <section class="card summary" aria-labelledby="start-h">
+        <h2 id="start-h">Where to start</h2>
         <p>
           <strong>Ready ({ready.length}):</strong>{' '}
           {ready.length ? ready.map((f, i) => <>{i > 0 && ', '}<a href={`#${f.year}-q${f.number}`}>{frqName(f)}</a></>) : 'none yet'}
@@ -68,7 +69,7 @@ const exams = data.pastFrqs;
             <a href={exam.scoringUrl} target="_blank" rel="noopener">All scoring guidelines (PDF)</a>
           </p>
           {exam.note && <p class="small muted">{exam.note}</p>}
-          <div class="stack">
+          <div class="stack exam-cards">
             {frqs
               .filter((f) => f.year === exam.year)
               .map((f) => (
@@ -180,6 +181,11 @@ const exams = data.pastFrqs;
     width: 1.1rem;
     height: 1.1rem;
     accent-color: var(--accent);
+  }
+  /* Two columns on wide screens: half as long to scroll. */
+  .exam-cards {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+    align-items: start;
   }
   .links {
     display: flex;

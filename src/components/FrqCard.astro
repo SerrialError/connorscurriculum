@@ -139,14 +139,20 @@ const sourceNote = frq.officialSkills
 </article>
 
 <style>
+  /* The readiness badge sits top right, or under the title when the card is too narrow for both. */
   .frq header {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem 0.75rem;
-    align-items: baseline;
+    align-items: start;
     justify-content: space-between;
   }
+  .frq header > :global(.badge) {
+    flex: none;
+    margin-top: 0.15rem;
+  }
   h3 {
+    flex: 1 1 14rem;
     margin: 0;
     font-size: 1.05rem;
   }

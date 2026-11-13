@@ -78,7 +78,8 @@ const siteHome = subjectIds.length === 1 ? url(`${subjectIds[0]}/`) : url();
           </a>
         )}
         <span class="spacer"></span>
-        <button class="icon-button search-open" type="button" aria-haspopup="dialog" aria-keyshortcuts="/" title="Search (press /)">
+        {/* Home has its own search box, so no second one in the header there ("/" focuses that box). */}
+        <button class="icon-button search-open" type="button" aria-haspopup="dialog" aria-keyshortcuts="/" title="Search (press /)" hidden={onHome}>
           <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
             <circle cx="10.5" cy="10.5" r="6.5"></circle>
             <path d="m15.5 15.5 5 5"></path>
@@ -208,7 +209,12 @@ const siteHome = subjectIds.length === 1 ? url(`${subjectIds[0]}/`) : url();
         const t = e.target as HTMLElement;
         if (t.closest('input, textarea, select, [contenteditable]')) return;
         e.preventDefault();
-        open();
+        // A page with its own search box (home) uses it instead of the dialog.
+        const inline = document.querySelector<HTMLInputElement>('main .search input');
+        if (inline) {
+          inline.focus();
+          inline.scrollIntoView({ block: 'nearest' });
+        } else open();
       });
     </script>
   </body>

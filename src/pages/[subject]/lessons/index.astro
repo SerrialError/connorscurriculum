@@ -80,11 +80,17 @@ const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
     </form>
   )}
 
+  {/* The key sits by the first badges it explains (phones show no badges here, so no key). */}
+  <div class="legend">
+    <TopicLegend subject={subject} topics={lessons.flatMap(topicIds)} label="AP topic badges:" />
+  </div>
+
   {sections.length > 1 && (
     <nav class="jump-nav" aria-label="Chapters" data-pagefind-ignore>
       <span class="jump-label" aria-hidden="true">Jump to</span>
       {sections.map((s) => <a href={`#ch-${s.chapter.number}`}>Ch. {s.chapter.number}</a>)}
       {samples.length > 0 && <a href="#samples">Sample pages</a>}
+      <a href={url(`${subject}/chapters/`)}>All chapters</a>
     </nav>
   )}
 
@@ -146,9 +152,6 @@ const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
     </section>
   )}
 
-  <div class="legend">
-    <TopicLegend subject={subject} topics={lessons.flatMap(topicIds)} />
-  </div>
 </Base>
 
 <script>

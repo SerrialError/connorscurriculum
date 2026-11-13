@@ -1,4 +1,5 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
@@ -42,7 +43,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
 ---
 
 <Base title={chapterLabel} subject={subject} searchable searchMeta={{ type: 'Chapter' }}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore><a href={url(`${subject}/chapters/`)}>Chapters</a> /</nav>
+  <Breadcrumbs items={[{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/`), label: 'All chapters' }]} />
   <h1>{chapterLabel}</h1>
   <div class="badges status" data-pagefind-ignore>
     {finished && <ProgressMark status="done" doneLabel="Finished in class" />}
@@ -190,8 +191,8 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
   }
   .num {
     display: inline-block;
-    min-width: 2.6rem;
-    margin-right: 0.35rem;
+    min-width: 2.7rem;
+    margin-right: 0.45rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }

@@ -1,4 +1,5 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import {
@@ -45,6 +46,7 @@ const meta = (n: number, apUnits: string[]) => {
 ---
 
 <Base title="Chapters" subject={subject}>
+  <Breadcrumbs items={[{ href: url(`${subject}/lessons/`), label: 'Lessons' }]} />
   <h1>Chapters</h1>
   <p class="muted prose">
     Class order, following <em>{data.subject.textbook}</em>. Open a chapter for its lessons, classmates' notes, AP topics,

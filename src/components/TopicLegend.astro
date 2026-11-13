@@ -7,15 +7,18 @@ interface Props {
   subject: string;
   /** Topics shown on the page; the legend lists the states they have. */
   topics: string[];
+  /** Shown before the key, e.g. "AP topic badges:". */
+  label?: string;
 }
 
-const { subject, topics } = Astro.props;
+const { subject, topics, label } = Astro.props;
 const data = getSubjectData(subject);
 const states = (['done', 'partial', 'review', 'skipped'] as const).filter((s) => topics.some((t) => data.progress.topics.get(t) === s));
 ---
 
 {states.length > 0 && (
   <p class="topic-legend small muted" aria-hidden="true" data-pagefind-ignore>
+    {label && <span class="label">{label}</span>}
     {states.map((s) => (
       <span><span class="icon">{PROGRESS_ICONS[s]}</span> {PROGRESS_LABELS[s].toLowerCase()}</span>
     ))}
@@ -28,6 +31,9 @@ const states = (['done', 'partial', 'review', 'skipped'] as const).filter((s) =>
     flex-wrap: wrap;
     gap: 0.1rem 0.9rem;
     margin: 0.4rem 0 0;
+  }
+  .label {
+    font-weight: 600;
   }
   .icon {
     font-weight: 700;

@@ -22,10 +22,10 @@ const showSubject = subjectIds().length > 1;
 </div>
 
 <script>
-  import { isRealMatch, trimTitle } from '../lib/search-excerpt';
+  import { isRealMatch, pickExcerpt } from '../lib/search-excerpt';
 
   interface PagefindResult {
-    data(): Promise<{ url: string; excerpt: string; meta: Record<string, string> }>;
+    data(): Promise<{ url: string; excerpt: string; meta: Record<string, string>; sub_results?: { title: string; excerpt: string }[] }>;
   }
   interface Pagefind {
     search(q: string): Promise<{ results: PagefindResult[] }>;
@@ -102,8 +102,9 @@ const showSubject = subjectIds().length > 1;
           if (where) meta.append(where);
           const excerpt = document.createElement('p');
           excerpt.className = 'small';
-          // Pagefind escapes page text and adds <mark>. The title is shown above, so don't repeat it.
-          excerpt.innerHTML = r.meta.title ? trimTitle(r.excerpt, r.meta.title) : r.excerpt;
+          // Pagefind escapes page text and adds <mark>. The title is shown above, so don't repeat it,
+          // and if the match was only in the title, show a section that has it.
+          excerpt.innerHTML = pickExcerpt(r.excerpt, r.meta.title ?? '', r.sub_results);
           li.append(a, meta, excerpt);
           return li;
         }),

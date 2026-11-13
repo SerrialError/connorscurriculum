@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Callout from '../../../components/Callout.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
@@ -80,6 +81,7 @@ const testHref = test && url(`${subject}/tests/${test.id}/`);
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 // Not class material: a sample page, or one for a chapter the class hasn't reached.
 const sample = isSample(lesson);
+const byLine = sample ? '' : byline(lesson);
 const ahead = !isTaught(data, chapter.number);
 const testPractice =
   test && testQuestions
@@ -97,24 +99,22 @@ const testPractice =
 >
   <div class:list={['lesson-page', { 'has-toc': showToc }]}>
   <article class="prose">
-    <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
-      {test ? (
-        <>
-          <a href={url(`${subject}/tests/`)}>Class tests</a> / <a href={testHref}>{test.title}</a> /
-        </>
-      ) : (
-        <>
-          <a href={url(`${subject}/lessons/`)}>Lessons</a> / <a href={url(`${subject}/chapters/${chapter.number}/`)}>{chapterLabel}</a>
-          {lesson.data.sections.length > 0 && <> · §{lesson.data.sections.join(', ')}</>}
-        </>
-      )}
-    </nav>
+    <Breadcrumbs
+      items={test
+        ? [{ href: url(`${subject}/tests/`), label: 'Class tests' }, { href: testHref!, label: test.title }]
+        : [{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/${chapter.number}/`), label: `Chapter ${chapter.number}` }]}
+    />
     <h1>
       {lesson.data.title}
       {lesson.data.draft && <span class="badge">Draft</span>}
     </h1>
     <TopicBadges subject={subject} topics={topics} />
-    {!sample && <p class="small muted byline" data-pagefind-ignore>{byline(lesson)}</p>}
+    {/* "Textbook §7.2 · By Jaya": where it is in the book, and who wrote it. */}
+    {(byLine || lesson.data.sections.length > 0) && (
+      <p class="small muted byline" data-pagefind-ignore>
+        {[lesson.data.sections.length > 0 && `Textbook §${lesson.data.sections.join(', §')}`, byLine].filter(Boolean).join(' · ')}
+      </p>
+    )}
     {(sample || ahead) && (
       <p class="sample-note" data-pagefind-ignore>
         <strong>{sample ? 'Sample page, not class material.' : 'Not taught yet.'}</strong>{' '}

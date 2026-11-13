@@ -491,6 +491,20 @@ button.button {
   color: var(--muted);
 }
 
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumbs li + li::before {
+  content: '/';
+  margin-right: 0.4rem;
+}
+
 /* "Jump to" links within a page (exam years, AP units). Plain links, not pills: pills are
    filters you toggle on the Practice page. */
 .jump-nav {

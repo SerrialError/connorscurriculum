@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isRealMatch, trimTitle } from './search-excerpt';
+import { isRealMatch, pickExcerpt, trimTitle } from './search-excerpt';
 
 describe('trimTitle', () => {
   it('drops the page title from the start of an excerpt', () => {
@@ -40,5 +40,25 @@ describe('isRealMatch', () => {
     expect(isRealMatch('zeff', '<mark>Zeff</mark> grows')).toBe(true);
     expect(isRealMatch('pe', 'the <mark>PES</mark> spectrum')).toBe(true);
     expect(isRealMatch('anything', 'no highlights here')).toBe(true);
+  });
+});
+
+describe('pickExcerpt', () => {
+  const title = 'Line Spectra and the Bohr Model';
+  const subs = [
+    { title, excerpt: 'Line Spectra and the <mark>Bohr</mark> Model.' },
+    { title: '2. The Bohr model', excerpt: '2. The <mark>Bohr</mark> model. <mark>Bohr</mark> explained hydrogen.' },
+  ];
+  it('keeps the page excerpt when it still has a match after the title', () => {
+    expect(pickExcerpt('Atoms. The <mark>Bohr</mark> model works.', title, subs)).toBe('Atoms. The <mark>Bohr</mark> model works.');
+  });
+  it('uses a section with the match when the match was only in the title', () => {
+    expect(pickExcerpt('and the <mark>Bohr</mark> Model. 1. Continuous spectra.', title, subs)).toBe('<mark>Bohr</mark> explained hydrogen.');
+  });
+  it('falls back to a matching section heading, then to the page excerpt', () => {
+    const headingOnly = [{ title: 'Bohr', excerpt: '<mark>Bohr</mark>. Next.' }];
+    expect(pickExcerpt('and the <mark>Bohr</mark> Model. Spectra.', title, headingOnly)).toBe('<mark>Bohr</mark>. Next.');
+    expect(pickExcerpt('and the <mark>Bohr</mark> Model. Spectra.', title, [])).toBe('Spectra.');
+    expect(pickExcerpt('No match here.', title, subs)).toBe('No match here.');
   });
 });

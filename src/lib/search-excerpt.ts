@@ -64,3 +64,23 @@ export function isRealMatch(query: string, excerptHtml: string): boolean {
     return marks.some((m) => m.startsWith(head));
   });
 }
+
+const hasMark = (html: string) => html.includes('<mark>');
+
+/**
+ * The excerpt to show under a result: the page's excerpt without its title, unless that leaves no
+ * highlighted match (the match was only in the title, e.g. "bohr" → "Line Spectra and the Bohr
+ * Model"). Then the first section whose text has the match, so the excerpt shows the word searched
+ * for. `subs` are Pagefind's sub-results (one per heading); the one for the page title is skipped.
+ */
+export function pickExcerpt(excerpt: string, title: string, subs: { title: string; excerpt: string }[] = []): string {
+  const main = title ? trimTitle(excerpt, title) : excerpt;
+  if (hasMark(main) || !hasMark(excerpt)) return main;
+  const sections = subs.filter((s) => norm(s.title.trim()) !== norm(title.trim()));
+  for (const s of sections) {
+    const body = trimTitle(s.excerpt, s.title);
+    if (body !== s.excerpt && hasMark(body)) return body;
+  }
+  // Only a section heading matched: show that section with its heading.
+  return sections.find((s) => hasMark(s.excerpt))?.excerpt ?? main;
+}

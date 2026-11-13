@@ -1,4 +1,5 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
@@ -33,9 +34,12 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 ---
 
 <Base title={`${topicId} ${topic.title}`} subject={subject} searchable searchMeta={{ type: 'AP topic' }}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
-    <a href={url(`${subject}/ap/`)}>AP topics</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a> /
-  </nav>
+  <Breadcrumbs
+    items={[
+      { href: url(`${subject}/ap/`), label: 'AP topics' },
+      { href: url(`${subject}/ap/#unit-${unit.id}`), label: `Unit ${unit.id}: ${unit.title}` },
+    ]}
+  />
   <h1>{topicId} {topic.title}</h1>
   {(status || notes.length > 0) && (
     <div class="status">

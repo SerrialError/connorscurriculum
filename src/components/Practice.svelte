@@ -18,6 +18,8 @@
     activeFilterCount,
     amendLastResult,
     countWith,
+    describeScope,
+    describeSet,
     emptyFilters,
     filterQuestions,
     filterTopics,
@@ -33,6 +35,7 @@
     topicAccuracy,
     topicBreakdown,
     wantsStart,
+    weakHasNoHistory,
   } from '../lib/practice';
   import { type FrqLink, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
   import { readJson, storageKey, writeJson } from '../lib/storage';
@@ -94,6 +97,12 @@
 
   /** An in-progress or finished set, saved so a reload or the Back button doesn't lose it. */
   interface Saved {
+    /** Identifies the set in history entries (sets saved before ids existed have none). */
+    id?: string;
+    /** "Chapters 6–7 Test · 10 random" */
+    label?: string;
+    /** e.g. why "weakest topics" is random for now. */
+    note?: string;
     query: string;
     ids: string[];
     index: number;
@@ -112,6 +121,10 @@
   let session = $state<PracticeQuestion[]>([]);
   /** Filters the current session was built from (the setup filters may change afterwards). */
   let sessionQuery = $state('');
+  /** The current set's id, name ("Chapters 6–7 Test · 10 random"), and an optional note. */
+  let setId = $state('');
+  let setLabel = $state('');
+  let setNote = $state('');
   let index = $state(0);
   let history = $state<History>({});
   let copied = $state(false);
@@ -205,6 +218,9 @@
   $effect(() => {
     if (phase === 'setup' || session.length === 0) return;
     const saved: Saved = {
+      id: setId,
+      label: setLabel,
+      note: setNote,
       query: sessionQuery,
       ids: session.map((q) => q.id),
       index,
@@ -215,7 +231,8 @@
       marks: $state.snapshot(marks),
       finished: $state.snapshot(finished),
     };
-    writeJson(savedKey, saved);
+    // The latest few sets, newest first, so Back from a retry can return to the earlier results.
+    writeJson(savedKey, [saved, ...readSets().filter((s) => s.id !== setId)].slice(0, MAX_SAVED));
   });
 
   /**
@@ -224,7 +241,7 @@
    * reviewing a question from the results), so reload and Forward return to the set, and
    * "← Filters" can go back to the setup entry instead of adding one.
    */
-  type NavState = { phase: 'session' | 'results'; depth: number; reviewing?: boolean } | null;
+  type NavState = { phase: 'session' | 'results'; depth: number; reviewing?: boolean; set?: string } | null;
   const navState = (): NavState => {
     const st = window.history.state as NavState;
     return st && (st.phase === 'session' || st.phase === 'results') ? st : null;
@@ -235,10 +252,12 @@
     history = readJson<History>(historyKey, {});
     const onPop = (e: PopStateEvent) => {
       let st = (e.state as NavState) ?? null;
-      // Forward into a set after a reload: the set is in storage, not in memory.
-      if (st && session.length === 0 && !restoreSaved()) st = null;
+      // Forward into a set after a reload, or Back from a retry to the earlier set: that set is
+      // in storage, not in memory.
+      const other = !!st && (session.length === 0 || (!!st.set && st.set !== setId));
+      if (st && other && !restoreSet(st)) st = null;
       if (st?.phase === 'results') {
-        if (phase !== 'results') void showResults(false);
+        if (phase !== 'results' || other) void showResults(false);
         reviewing = false;
       } else if (st?.phase === 'session') {
         reviewing = !!st.reviewing;
@@ -264,7 +283,7 @@
       all = (await res.json()) as PracticeQuestion[];
       // Reloading during a set (or its results) comes back to the same place.
       const st = navState();
-      if (st && restoreSaved()) {
+      if (st && restoreSet(st)) {
         if (st.phase === 'results') {
           await showResults(false);
         } else {
@@ -287,25 +306,31 @@
     }
   }
 
-  /** The saved set, if its questions all still exist. */
-  function readSaved(): Saved | null {
-    const saved = readJson<Saved | null>(savedKey, null);
-    if (!saved || !all || !Array.isArray(saved.ids) || saved.ids.length === 0) return null;
+  const MAX_SAVED = 5;
+
+  /** Saved sets, newest first, leaving out any whose questions no longer all exist. */
+  function readSets(): Saved[] {
+    const raw = readJson<Saved | Saved[] | null>(savedKey, null);
+    const list = Array.isArray(raw) ? raw : raw ? [raw] : [];
+    if (!all) return [];
     const ids = new Set(all.map((q) => q.id));
-    return saved.ids.every((id) => ids.has(id)) ? saved : null;
+    return list.filter((s) => s && Array.isArray(s.ids) && s.ids.length > 0 && s.ids.every((id) => ids.has(id)));
   }
+
+  const answeredIn = (s: Saved) => s.ids.filter((id) => s.checked?.[id] || s.finished?.[id]).length;
 
   function offerResume() {
-    const saved = readSaved();
-    const done = saved ? saved.ids.filter((id) => saved.checked?.[id] || saved.finished?.[id]).length : 0;
-    // Only offer sets that are still unfinished.
-    resumable = saved && saved.phase === 'session' && done < saved.ids.length ? saved : null;
+    const s = readSets()[0];
+    // Only sets that were started (something answered) and not finished. A set left with nothing
+    // answered isn't worth a banner.
+    resumable = s && s.phase === 'session' && answeredIn(s) > 0 && answeredIn(s) < s.ids.length ? s : null;
   }
 
-  /** Load the saved set into memory, if it belongs to this URL (the set's own history entry). */
-  function restoreSaved(): boolean {
-    const s = readSaved();
-    if (!s || s.query !== location.search) return false;
+  /** Load the set a history entry belongs to (by id, or for older entries by URL). */
+  function restoreSet(st: NonNullable<NavState>): boolean {
+    const sets = readSets();
+    const s = st.set ? sets.find((x) => x.id === st.set) : sets[0]?.query === location.search ? sets[0] : undefined;
+    if (!s) return false;
     applySaved(s);
     return true;
   }
@@ -314,6 +339,9 @@
     const byId = new Map(all!.map((q) => [q.id, q]));
     session = s.ids.map((id) => byId.get(id)!);
     sessionQuery = s.query;
+    setId = s.id ?? 'saved';
+    setLabel = s.label ?? describeScope(parseFilters(s.query), tests);
+    setNote = s.note ?? '';
     picks = s.picks ?? {};
     checked = s.checked ?? {};
     revealed = s.revealed ?? {};
@@ -343,56 +371,77 @@
     if (moreCount > 0) moreOpen = true;
   }
 
-  async function begin(questions: PracticeQuestion[], query: string) {
+  async function begin(questions: PracticeQuestion[], query: string, label: string, note = '') {
+    const base = navState()?.depth ?? 0;
     session = questions;
     sessionQuery = query;
+    setId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    setLabel = label;
+    setNote = note;
     index = 0;
     resetAnswers();
     resumable = null;
     reviewing = false;
-    // A history entry per set, so the browser's Back button returns to the filters. A new set
-    // from the results takes the results' place.
-    if (phase === 'setup') window.history.pushState({ phase: 'session', depth: 1 } satisfies NavState, '', location.pathname + query);
-    else history_replace(query, { phase: 'session', depth: navState()?.depth ? 1 : 0 });
+    // A history entry per set: Back from a set returns to the filters, or from a set started on
+    // the results screen (retry, new set) to those results. "← Filters" goes back `depth` entries.
+    const st = (depth: number): NavState => ({ phase: 'session', depth, set: setId });
+    if (phase === 'setup') window.history.pushState(st(1), '', location.pathname + query);
+    else if (base > 0) window.history.pushState(st(base + 1), '', location.pathname + query);
+    else history_replace(query, st(0));
     phase = 'session';
     await showQuestion();
   }
 
+  /** Pick questions for filters `f` from `pool` (the questions they match) and start the set. */
+  function startWith(f: Filters, pool: PracticeQuestion[]) {
+    if (pool.length === 0) return;
+    const picked = selectQuestions(pool, f, history);
+    const note = f.mode === 'weak' && weakHasNoHistory(pool, history) ? 'No practice history on these yet, so the order is random.' : '';
+    void begin(picked, filtersToQuery(f), describeSet(f, tests, picked.length, pool.length), note);
+  }
+
   function start() {
-    if (!all || matching.length === 0) return;
-    void begin(selectQuestions(matching, filters, history), filtersToQuery(filters));
+    if (!all) return;
+    startWith($state.snapshot(filters), matching);
   }
 
   /** Quick start: begin a ready-made set without touching the filters on the setup screen. */
   function startPreset(query: string) {
     if (!all) return;
     const f = parseFilters(query);
-    const qs = filterQuestions(all, f, tests);
-    if (qs.length === 0) return;
-    void begin(selectQuestions(qs, f, history), filtersToQuery(f));
+    startWith(f, filterQuestions(all, f, tests));
   }
 
   function newSetSameFilters() {
     if (!all) return;
-    const f = sessionFilters;
-    void begin(selectQuestions(filterQuestions(all, f, tests), f, history), sessionQuery);
+    startWith(sessionFilters, filterQuestions(all, sessionFilters, tests));
   }
 
   function retryMissed() {
-    void begin([...missed], sessionQuery);
+    void begin([...missed], sessionQuery, `${describeScope(sessionFilters, tests)} · retrying the ${missed.length} you missed`);
+  }
+
+  /** Enter on a filter chip toggles it, like Space. It never starts the set. */
+  function onFilterKey(e: KeyboardEvent) {
+    if (e.key !== 'Enter') return;
+    const t = e.target;
+    if (!(t instanceof HTMLInputElement)) return;
+    e.preventDefault();
+    if (t.type === 'checkbox' || t.type === 'radio') t.click();
   }
 
   async function resume() {
     if (!resumable || !all) return;
     const s = resumable;
     applySaved(s);
-    window.history.pushState({ phase: 'session', depth: 1 } satisfies NavState, '', location.pathname + s.query);
+    window.history.pushState({ phase: 'session', depth: 1, set: setId } satisfies NavState, '', location.pathname + s.query);
     phase = 'session';
     await showQuestion();
   }
 
   function discardResume() {
-    writeJson(savedKey, null);
+    const id = resumable?.id;
+    writeJson(savedKey, readSets().filter((s) => s.id !== id));
     resumable = null;
   }
 
@@ -426,7 +475,7 @@
     if (updateHistory) {
       // Reviewing from the results added a history entry; going back to the results removes it.
       if (reviewing && navState()?.reviewing) window.history.back();
-      else history_replace(sessionQuery, { phase: 'results', depth: navState()?.depth ? 1 : 0 });
+      else history_replace(sessionQuery, { phase: 'results', depth: navState()?.depth ?? 0, set: setId });
     }
     reviewing = false;
     await tick();
@@ -438,8 +487,12 @@
     phase = 'session';
     // A history entry, so Back returns to the results rather than to the filters.
     if (!reviewing) {
-      const depth = navState()?.depth ? 2 : 0;
-      window.history.pushState({ phase: 'session', depth, reviewing: true } satisfies NavState, '', location.pathname + sessionQuery);
+      const base = navState()?.depth ?? 0;
+      window.history.pushState(
+        { phase: 'session', depth: base ? base + 1 : 0, reviewing: true, set: setId } satisfies NavState,
+        '',
+        location.pathname + sessionQuery,
+      );
     }
     reviewing = true;
     go(i);
@@ -580,13 +633,17 @@
 
   const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
   const topicLabel = (key: string) =>
-    key.startsWith('chapter-') ? `Ch. ${key.slice(8)} (class only)` : `${key} ${topicTitles.get(key) ?? ''}`;
+    key.startsWith('chapter-') ? `Ch. ${key.slice(8)} material not on the AP exam` : `${key} ${topicTitles.get(key) ?? ''}`;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   /** The prompt's plain text (math written out at build time); CSS clamps it to two lines. */
   const excerpt = (text: string) => (text.length > 240 ? `${text.slice(0, 238).trimEnd()}…` : text);
   const statusOf = (q: PracticeQuestion) =>
     scores[q.id] === undefined ? 'todo' : scores[q.id] === 1 ? 'right' : scores[q.id] === 0 ? 'wrong' : 'partial';
   const statusText = { todo: 'not answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' } as const;
+  /** Shown with the colour, so right and wrong don't depend on telling red from green. */
+  const statusMark = { todo: '', right: '✓', wrong: '✗', partial: '½' } as const;
+  const allShown = (q: FrqQuestion) => q.parts.every((_, p) => revealed[q.id]?.[p]);
+  const shownCount = (q: FrqQuestion) => q.parts.filter((_, p) => revealed[q.id]?.[p]).length;
 
   /** Human-readable list of active filters, each with a function that removes it. */
   const chips = $derived.by(() => {
@@ -658,9 +715,12 @@
   <!-- ───────────── Setup ───────────── -->
   <div class="setup">
     {#if resumable}
-      {@const done = resumable.ids.filter((id) => resumable!.checked?.[id] || resumable!.finished?.[id]).length}
       <section class="card resume" aria-label="Unfinished set">
-        <p><strong>You have an unfinished set.</strong> <span class="muted">{done} of {resumable.ids.length} answered.</span></p>
+        <p>
+          <strong>Unfinished set{resumable.label ? ':' : '.'}</strong>
+          {#if resumable.label}{resumable.label}.{/if}
+          <span class="muted">{answeredIn(resumable)} of {resumable.ids.length} answered.</span>
+        </p>
         <div class="row">
           <button class="button" type="button" onclick={resume}>Resume</button>
           <button class="button secondary" type="button" onclick={discardResume}>Discard</button>
@@ -691,13 +751,17 @@
       </section>
     {/if}
 
-    <form class="card filters" onsubmit={(e) => { e.preventDefault(); start(); }} aria-labelledby="filters-h">
+    <!-- Only the Start practice button starts a set: Enter on a chip toggles it (onFilterKey). -->
+    <form class="card filters" onsubmit={(e) => e.preventDefault()} onkeydown={onFilterKey} aria-labelledby="filters-h">
       <div class="filters-head">
         <h2 id="filters-h" class="section-h">{presets.length > 0 || historyCount > 0 ? 'Or choose your own' : 'Choose questions'}</h2>
         <span class="small muted head-note">Nothing starts until you press <strong>Start practice</strong>.</span>
-        {#if activeCount > 0 || filters.mode !== 'all' || filters.n !== null}
-          <button class="link-button" type="button" onclick={resetFilters}>Reset all</button>
-        {/if}
+        <!-- Always laid out (hidden when there's nothing to reset), so picking a filter doesn't move the chips. -->
+        <button
+          class="link-button reset"
+          class:invisible={activeCount === 0 && filters.mode === 'all' && filters.n === null}
+          type="button"
+          onclick={resetFilters}>Reset all</button>
       </div>
       <p class="small muted hint">Leave a group empty to include all of it.</p>
 
@@ -910,7 +974,7 @@
           <button class="button secondary small" type="button" onclick={() => copyLink(filtersToQuery(filters))}>
             {copied ? 'Link copied' : 'Copy link'}
           </button>
-          <button class="button start" type="submit" disabled={matching.length === 0}>Start practice →</button>
+          <button class="button start" type="button" disabled={matching.length === 0} onclick={start}>Start practice →</button>
         </div>
       </div>
     </form>
@@ -928,8 +992,8 @@
           <ul class="plain-list weak">
             {#each weakSpots as [key, acc] (key)}
               <li>
-                <a href={`${topicsHref}${key}/`}>{topicLabel(key)}</a>
-                <span class="small muted">{pct(acc)} recently</span>
+                <a class="w-topic" href={`${topicsHref}${key}/`}>{topicLabel(key)}</a>
+                <span class="small muted w-pct">{pct(acc)} recently</span>
                 <button type="button" class="link-button small" onclick={() => startPreset(topicQuery(key))}>
                   Start {plural(presetSize(topicQuery(key)), 'question')}<span class="visually-hidden"> on {topicLabel(key)}</span> →
                 </button>
@@ -967,6 +1031,9 @@
     <div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={session.length} aria-valuenow={answered}>
       <span style:width={`${(answered / session.length) * 100}%`}></span>
     </div>
+    {#if setLabel}
+      <p class="set-label small"><strong>{setLabel}</strong>{#if setNote}<span class="muted">{' · '}{setNote}</span>{/if}</p>
+    {/if}
 
     {#snippet qnav()}
       <nav class="qnav" aria-label="Questions in this set">
@@ -978,7 +1045,7 @@
             aria-current={i === index ? 'step' : undefined}
             aria-label={`Question ${i + 1}, ${statusText[st]}`}
             onclick={() => go(i)}
-          >{i + 1}</button>
+          >{#if statusMark[st]}<span class="qmark" aria-hidden="true">{statusMark[st]}</span>{/if}{i + 1}</button>
         {/each}
       </nav>
     {/snippet}
@@ -1002,7 +1069,7 @@
             {#each q.cedTopics as t (t)}
               <a class="badge topic" href={`${topicsHref}${t}/`} title={topicTitles.get(t)} target="_blank" rel="noopener">{t}</a>
             {:else}
-              <span class="badge not-ap">Class only</span>
+              <span class="badge not-ap">Not on the AP exam</span>
             {/each}
             <span class="badge">{difficultyLabels[q.difficulty]}</span>
           </div>
@@ -1066,9 +1133,13 @@
               <span class="small muted">Misclicked? You can still change your marks above.</span>
             </p>
             <div class="explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
-          {:else if q.parts.length > 1 && !q.parts.every((_, p) => revealed[q.id]?.[p])}
-            <p class="show-all">
-              <button class="button secondary small" type="button" onclick={() => q.parts.forEach((_, p) => reveal(q, p))}>Show all scoring</button>
+          {:else}
+            <p class="small muted marking" aria-live="polite">
+              {#if allShown(q)}
+                Check every point you earned, then press <strong>Done marking</strong>.
+              {:else}
+                Scoring shown for {shownCount(q)} of {plural(q.parts.length, 'part')}. Show it for every part, then check the points you earned.
+              {/if}
             </p>
           {/if}
         {/if}
@@ -1081,8 +1152,9 @@
             <button class="button" type="button" disabled={!picks[q.id]} onclick={() => check(q)}>Check answer</button>
           {:else if q.type === 'frq' && !finished[q.id]}
             <button class="button secondary" type="button" onclick={next}>Skip</button>
-            <button class="button" type="button" disabled={!q.parts.every((_, p) => revealed[q.id]?.[p])} onclick={() => finish(q)}>
-              Done marking ({frqEarned(q, marks[q.id] ?? [])}/{frqTotal(q)})
+            <!-- One button, so focus stays put when it turns from "Show all scoring" into "Done marking". -->
+            <button class="button" type="button" onclick={() => (allShown(q) ? finish(q) : q.parts.forEach((_, p) => reveal(q, p)))}>
+              {allShown(q) ? `Done marking (${frqEarned(q, marks[q.id] ?? [])}/${frqTotal(q)})` : q.parts.length > 1 ? 'Show all scoring' : 'Show scoring'}
             </button>
           {:else}
             <button class="button" type="button" bind:this={nextButton} onclick={next}>
@@ -1101,6 +1173,7 @@
   <section class="results" aria-labelledby="results-h">
     <div class="card score">
       <h2 id="results-h" tabindex="-1" bind:this={resultsHeading}>Results</h2>
+      {#if setLabel}<p class="small muted set-label">{setLabel}</p>{/if}
       <div class="score-row">
         {#if summary.mcqAnswered}
           <div class="stat">
@@ -1123,11 +1196,11 @@
       {/if}
       <div class="actions">
         {#if missed.length > 0}
-          <button class="button" type="button" onclick={retryMissed}>Retry the {plural(missed.length, 'question')} I missed</button>
+          <button class="button" type="button" onclick={retryMissed}>Retry the {missed.length} I missed</button>
         {/if}
         {#if skipped.length > 0}
           <button class="button" class:secondary={missed.length > 0} type="button" onclick={() => reviewQuestion(session.indexOf(skipped[0]!))}>
-            Answer the {plural(skipped.length, 'skipped question')}
+            Answer the {skipped.length} skipped
           </button>
         {/if}
         <button class="button" class:secondary={missed.length > 0 || skipped.length > 0} type="button" onclick={newSetSameFilters}>New set, same filters</button>
@@ -1159,7 +1232,7 @@
         {#each session as s, i (s.id)}
           {@const st = statusOf(s)}
           <li>
-            <span class={`qdot static ${st}`} aria-hidden="true">{i + 1}</span>
+            <span class={`qdot static ${st}`} aria-hidden="true">{#if statusMark[st]}<span class="qmark">{statusMark[st]}</span>{/if}{i + 1}</span>
             <span class="r-text">
               <span class="visually-hidden">Question {i + 1}, {statusText[st]}:</span>
               {excerpt(s.promptText)}
@@ -1177,10 +1250,6 @@
 {/if}
 
 <style>
-  .lead {
-    margin: 0 0 1rem;
-    color: var(--text-2);
-  }
   .section-h {
     font-size: 1rem;
     margin: 0 0 0.5rem;
@@ -1223,6 +1292,19 @@
   }
   .head-note {
     flex: 1 1 12rem;
+  }
+  .reset.invisible {
+    visibility: hidden;
+  }
+  .set-label {
+    margin: -0.25rem 0 0.75rem;
+    color: var(--text-2);
+  }
+  .score .set-label {
+    margin: -0.35rem 0 0.6rem;
+  }
+  .marking {
+    margin: 0.5rem 0 0;
   }
   .chip-sub.ahead {
     font-style: italic;
@@ -1524,13 +1606,25 @@
   .history p {
     margin: 0 0 0.4rem;
   }
+  /* Topic, score, and start link in fixed columns, so the links line up row to row. */
   .weak li {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 7rem auto;
     gap: 0.25rem 0.75rem;
     align-items: baseline;
     padding: 0.35rem 0;
     border-top: 1px solid var(--border);
+  }
+  .weak .link-button {
+    justify-self: end;
+  }
+  @media (max-width: 520px) {
+    .weak li {
+      grid-template-columns: auto 1fr;
+    }
+    .w-topic {
+      grid-column: 1 / -1;
+    }
   }
 
   /* Session */
@@ -1561,8 +1655,10 @@
     margin-bottom: 1rem;
   }
   .qdot {
-    display: inline-grid;
-    place-items: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
     min-width: 2rem;
     height: 2rem;
     padding: 0 0.3rem;
@@ -1575,6 +1671,9 @@
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
+  }
+  .qmark {
+    font-size: 0.72rem;
   }
   .qdot.static {
     cursor: default;
@@ -1777,9 +1876,6 @@
     background: var(--tip-soft);
     color: var(--text);
   }
-  .show-all {
-    margin: 0.5rem 0 0;
-  }
   .verdict .small {
     display: block;
     font-weight: 400;
@@ -1819,10 +1915,6 @@
     }
     .question {
       padding: 1rem;
-    }
-    .breakdown li {
-      grid-template-columns: minmax(0, 1fr) 3.5rem 4.2rem;
-      gap: 0.5rem;
     }
   }
   .q-actions {
@@ -1904,6 +1996,23 @@
   .b-num {
     text-align: right;
     font-variant-numeric: tabular-nums;
+  }
+  /* Phones: the topic name gets the whole line; its bar and score go underneath. */
+  @media (max-width: 520px) {
+    .breakdown li {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: 'label label' 'bar num';
+      gap: 0.2rem 0.75rem;
+    }
+    .b-label {
+      grid-area: label;
+    }
+    .bar {
+      grid-area: bar;
+    }
+    .b-num {
+      grid-area: num;
+    }
   }
   .review li {
     display: flex;

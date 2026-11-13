@@ -23,6 +23,10 @@ import {
   topicAccuracy,
   topicBreakdown,
   wantsStart,
+  chapterRange,
+  describeScope,
+  describeSet,
+  weakHasNoHistory,
   CLASS_ONLY_UNIT,
   HISTORY_LIMIT,
 } from './practice';
@@ -281,5 +285,32 @@ describe('amendLastResult', () => {
   });
   it('records a score when there is none yet', () => {
     expect(amendLastResult({}, 'q', 0.25)).toEqual({ q: [0.25] });
+  });
+});
+
+describe('naming a set', () => {
+  const tests: PracticeTest[] = [{ id: 'ch6-7-test', title: 'Chapters 6–7 Test', chapters: [6, 7], sections: [] }];
+  it('names the test and how the set was picked', () => {
+    expect(describeSet(parseFilters('?test=ch6-7-test&mode=random'), tests, 10, 116)).toBe('Chapters 6–7 Test · 10 random');
+    expect(describeSet(parseFilters('?test=ch6-7-test&mode=weak'), tests, 10, 116)).toBe(
+      'Chapters 6–7 Test · 10 on your weakest topics',
+    );
+    expect(describeSet(parseFilters('?test=ch6-7-test'), tests, 116, 116)).toBe('Chapters 6–7 Test · all 116 in order');
+  });
+  it('lists the other filters, and says "All questions" when there are none', () => {
+    expect(describeScope(parseFilters('?chapter=7,6&difficulty=3,1&type=mcq'), tests)).toBe('Ch. 6–7 · Easy, Hard · Multiple choice');
+    expect(describeScope(parseFilters(`?unit=1,${CLASS_ONLY_UNIT}&topic=1.7`), tests)).toBe('Unit 1, Not on the AP exam · Topic 1.7');
+    expect(describeSet(parseFilters('?mode=random&n=5'), tests, 3, 3)).toBe('All questions · all 3, shuffled');
+  });
+  it('chapterRange', () => {
+    expect(chapterRange([9, 8])).toBe('Ch. 8–9');
+    expect(chapterRange([6, 8])).toBe('Ch. 6, 8');
+    expect(chapterRange([7])).toBe('Ch. 7');
+  });
+  it('knows when "weakest topics" has no history to go on', () => {
+    const qs = [mcq('a'), mcq('b', { cedTopics: ['5.2'] })];
+    expect(weakHasNoHistory(qs, {})).toBe(true);
+    expect(weakHasNoHistory(qs, { other: [1] })).toBe(true);
+    expect(weakHasNoHistory(qs, { b: [0] })).toBe(false);
   });
 });

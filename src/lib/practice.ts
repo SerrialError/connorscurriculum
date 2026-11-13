@@ -370,3 +370,59 @@ export function topicBreakdown(questions: PracticeQuestion[], scores: Record<str
     (a, b) => a.score / a.count - b.score / b.count || a.key.localeCompare(b.key, undefined, { numeric: true }),
   );
 }
+
+// ---------------------------------------------------------------------------
+// Naming a set
+// ---------------------------------------------------------------------------
+
+/** "Ch. 8–9", "Ch. 6, 8", "Ch. 7" */
+export function chapterRange(ns: number[]): string {
+  const sorted = [...ns].sort((a, b) => a - b);
+  const consecutive = sorted.every((n, i) => i === 0 || n === sorted[i - 1]! + 1);
+  if (sorted.length > 1 && consecutive) return `Ch. ${sorted[0]}–${sorted.at(-1)}`;
+  return `Ch. ${sorted.join(', ')}`;
+}
+
+const DIFFICULTY_NAMES: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
+
+/** What the filters select, e.g. "Chapters 6–7 Test · Hard" or "All questions". */
+export function describeScope(f: Filters, tests: PracticeTest[]): string {
+  const parts: string[] = [];
+  if (f.test) parts.push(tests.find((t) => t.id === f.test)?.title ?? f.test);
+  if (f.chapters.length) parts.push(chapterRange(f.chapters));
+  const units = f.units.map((u) => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`));
+  if (units.length) parts.push(units.join(', '));
+  if (f.topics.length) parts.push(`${f.topics.length === 1 ? 'Topic' : 'Topics'} ${f.topics.join(', ')}`);
+  if (f.difficulty.length) parts.push([...f.difficulty].sort((a, b) => a - b).map((d) => DIFFICULTY_NAMES[d]).join(', '));
+  if (f.type) parts.push(f.type === 'mcq' ? 'Multiple choice' : 'Free response');
+  return parts.length ? parts.join(' · ') : 'All questions';
+}
+
+/**
+ * A one-line name for a set, shown above its questions and results:
+ * "Chapters 6–7 Test · 10 random", "Ch. 7 · Hard · 10 on your weakest topics".
+ */
+export function describeSet(f: Filters, tests: PracticeTest[], size: number, matching: number): string {
+  const all = size >= matching;
+  const how =
+    f.mode === 'random'
+      ? all
+        ? `all ${size}, shuffled`
+        : `${size} random`
+      : f.mode === 'weak'
+        ? all
+          ? `all ${size}, weakest topics first`
+          : `${size} on your weakest topics`
+        : all
+          ? `all ${size} in order`
+          : `first ${size} in order`;
+  return `${describeScope(f, tests)} · ${how}`;
+}
+
+/**
+ * True when "weakest topics" has nothing to go on: none of the matching questions has been
+ * answered on this device, so the order is effectively random.
+ */
+export function weakHasNoHistory(matching: PracticeQuestion[], history: History): boolean {
+  return topicAccuracy(matching, history).size === 0;
+}

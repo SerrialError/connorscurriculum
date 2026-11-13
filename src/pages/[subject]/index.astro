@@ -1,6 +1,7 @@
 ---
 import Search from '../../components/Search.astro';
 import TopicBadges from '../../components/TopicBadges.astro';
+import TopicLegend from '../../components/TopicLegend.astro';
 import Base from '../../layouts/Base.astro';
 import {
   chapterRange,
@@ -102,6 +103,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
             </p>
           </div>
         ))}
+        <TopicLegend subject={subject} topics={nowInfo.flatMap((c) => c.topics)} />
       </section>
     )}
 
@@ -123,13 +125,11 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
         )}
         <div class="actions">
           {testQuestions > 0 && (
-            <a class="button" href={practiceHref(subject, { test: test.id })}>Practice for this test ({testQuestions})</a>
+            <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Practice for this test ({testQuestions})</a>
           )}
           <a class="button secondary" href={url(`${subject}/tests/${test.id}/`)}>Lessons and topics</a>
         </div>
-        {data.tests.length > 1 && (
-          <p class="small"><a href={url(`${subject}/tests/`)}>All class tests</a></p>
-        )}
+        <p class="small"><a href={url(`${subject}/tests/`)}>All class tests</a></p>
       </section>
     )}
   </div>
@@ -203,6 +203,10 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
       <a class="card" href={url(`${subject}/chapters/`)}>
         <h3>Chapters</h3>
         <p class="small muted">Class order. Each chapter has its lessons, classmates' notes, AP topics, and practice.</p>
+      </a>
+      <a class="card" href={url(`${subject}/tests/`)}>
+        <h3>Class tests</h3>
+        <p class="small muted">Each test's review sheet, the lessons it covers, and practice for it.</p>
       </a>
       <a class="card" href={url(`${subject}/ap/`)}>
         <h3>AP topics</h3>

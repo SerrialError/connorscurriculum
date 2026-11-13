@@ -17,10 +17,14 @@ const data = getSubjectData(subject);
   {topics.map((t) => {
     const s = data.progress.topics.get(t);
     return (
-      <a class="badge topic" href={url(`${subject}/ap/${t}/`)} title={data.topics.get(t)?.title}>
+      <a
+        class="badge topic"
+        href={url(`${subject}/ap/${t}/`)}
+        title={`${t} ${data.topics.get(t)?.title ?? ''}${s ? ` (${PROGRESS_LABELS[s].toLowerCase()})` : ''}`}
+      >
         {s && (
           <>
-            <span aria-hidden="true" title={PROGRESS_LABELS[s]}>{PROGRESS_ICONS[s]}</span>
+            <span aria-hidden="true">{PROGRESS_ICONS[s]}</span>
             <span class="visually-hidden">({PROGRESS_LABELS[s]})</span>
           </>
         )}

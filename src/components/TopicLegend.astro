@@ -1,0 +1,36 @@
+---
+// One-line key for the class-progress icons on topic badges, listing only the icons that appear.
+import { getSubjectData } from '../lib/content';
+import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
+
+interface Props {
+  subject: string;
+  /** Topics shown on the page; the legend lists the states they have. */
+  topics: string[];
+}
+
+const { subject, topics } = Astro.props;
+const data = getSubjectData(subject);
+const states = (['done', 'partial', 'review', 'skipped'] as const).filter((s) => topics.some((t) => data.progress.topics.get(t) === s));
+---
+
+{states.length > 0 && (
+  <p class="topic-legend small muted" aria-hidden="true">
+    {states.map((s) => (
+      <span><span class="icon">{PROGRESS_ICONS[s]}</span> {PROGRESS_LABELS[s].toLowerCase()}</span>
+    ))}
+  </p>
+)}
+
+<style>
+  .topic-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem 0.9rem;
+    margin: 0.4rem 0 0;
+  }
+  .icon {
+    font-weight: 700;
+    color: var(--text-2);
+  }
+</style>

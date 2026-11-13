@@ -1,6 +1,7 @@
 ---
 import { type Lesson, groupLessons, lessonSlug, topicIds, url } from '../lib/content';
 import TopicBadges from './TopicBadges.astro';
+import TopicLegend from './TopicLegend.astro';
 
 interface Props {
   lessons: Lesson[];
@@ -11,9 +12,11 @@ interface Props {
   headingLevel?: 2 | 3;
   /** Shown when there are no lessons. */
   empty?: string;
+  /** Show the key for the progress icons on topic badges. */
+  legend?: boolean;
 }
 
-const { lessons, showChapter = false, grouped = false, headingLevel = 3, empty = 'No lessons yet.' } = Astro.props;
+const { lessons, showChapter = false, grouped = false, headingLevel = 3, empty = 'No lessons yet.', legend = true } = Astro.props;
 const groups = grouped ? groupLessons(lessons) : [{ kind: 'all', heading: '', lessons }];
 const H = `h${headingLevel}` as 'h2' | 'h3';
 ---
@@ -43,6 +46,7 @@ const H = `h${headingLevel}` as 'h2' | 'h3';
     </>
   ))
 )}
+{legend && lessons.length > 0 && <TopicLegend subject={lessons[0]!.data.subject.id} topics={lessons.flatMap(topicIds)} />}
 
 <style>
   .group-h {

@@ -15,24 +15,31 @@ interface Props {
   searchable?: boolean;
   /** Extra Pagefind metadata shown with search results. */
   searchMeta?: { chapter?: string };
+  /** Nav item to highlight, when it isn't the one the URL belongs to (e.g. "Tests"). */
+  section?: string;
 }
 
-const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {} } = Astro.props;
+const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {}, section } = Astro.props;
 const subjectData = subject ? getSubjectData(subject) : undefined;
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
 const path = Astro.url.pathname;
-// Each nav item also owns the pages under it: lessons and class tests belong to Chapters.
-const nav = subject
+// Each nav item also owns the pages under it: lessons belong to Chapters. Pass `section` to
+// highlight a different item (a test review sheet is a lesson, but belongs to Tests).
+const nav: NavItem[] = subject
   ? [
       { href: url(`${subject}/`), label: 'Home', exact: true },
-      { href: url(`${subject}/chapters/`), label: 'Chapters', also: [url(`${subject}/lessons/`), url(`${subject}/tests/`)] },
-      { href: url(`${subject}/ap/`), label: 'AP topics' },
+      { href: url(`${subject}/chapters/`), label: 'Chapters', also: [url(`${subject}/lessons/`)] },
+      { href: url(`${subject}/tests/`), label: 'Tests' },
       { href: url(`${subject}/practice/`), label: 'Practice' },
-      { href: url(`${subject}/frqs/`), label: 'Past FRQs' },
+      { href: url(`${subject}/ap/`), label: 'AP topics' },
+      { href: url(`${subject}/frqs/`), label: 'Past FRQs', short: 'FRQs' },
     ]
   : [];
-const isCurrent = (n: (typeof nav)[number]) =>
+type NavItem = { href: string; label: string; exact?: boolean; also?: string[]; short?: string };
+const matches = (n: NavItem) =>
   n.exact ? path === n.href : [n.href, ...(n.also ?? [])].some((h) => path.startsWith(h));
+const isCurrent = (n: NavItem) => (section ? n.label === section : matches(n));
+const onHome = subject !== undefined && path === url(`${subject}/`);
 ---
 
 <!doctype html>
@@ -57,7 +64,11 @@ const isCurrent = (n: (typeof nav)[number]) =>
       <div class="wrap bar">
         <a class:list={['brand', { 'has-subject': !!subjectData }]} href={url()}>{SITE_NAME}</a>
         {subjectData && (
-          <a class="subject" href={url(`${subject}/`)}>
+          <a class="subject" href={url(`${subject}/`)} aria-current={onHome ? 'page' : undefined}>
+            <svg class="home-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11 12 3l9 8"></path>
+              <path d="M5 9.5V21h14V9.5"></path>
+            </svg>
             {subjectData.subject.name}
           </a>
         )}
@@ -75,7 +86,14 @@ const isCurrent = (n: (typeof nav)[number]) =>
         <nav class="wrap subnav" aria-label={subjectData?.subject.name}>
           {nav.map((n) => (
             <a href={n.href} class:list={{ 'nav-home': n.exact }} aria-current={isCurrent(n) ? 'page' : undefined}>
-              {n.label}
+              {n.short ? (
+                <>
+                  <span class="long">{n.label}</span>
+                  <span class="short">{n.short}</span>
+                </>
+              ) : (
+                n.label
+              )}
             </a>
           ))}
         </nav>
@@ -186,6 +204,10 @@ const isCurrent = (n: (typeof nav)[number]) =>
   .subject:hover {
     color: var(--link);
   }
+  .home-icon,
+  .subnav .short {
+    display: none;
+  }
   .spacer {
     flex: 1;
   }
@@ -246,11 +268,25 @@ const isCurrent = (n: (typeof nav)[number]) =>
     .brand.has-subject {
       display: none;
     }
+    /* The subject name is the home link here (the nav's Home is hidden), so make it look like one. */
     .subject {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
       color: var(--text);
       font-weight: 800;
       border-left: 0;
-      padding-left: 0;
+      padding: 0.25rem 0.5rem 0.25rem 0.4rem;
+      margin-left: -0.4rem;
+      border-radius: 8px;
+    }
+    .subject[aria-current='page'] {
+      background: var(--accent-soft);
+      color: var(--link);
+    }
+    .home-icon {
+      display: block;
+      flex: none;
     }
     .search-label {
       display: none;
@@ -263,12 +299,16 @@ const isCurrent = (n: (typeof nav)[number]) =>
       padding-left: calc(1rem - 0.4rem);
     }
     .subnav a {
-      font-size: 0.9rem;
-      padding: 0.35rem 0.45rem;
+      font-size: 0.875rem;
+      padding: 0.35rem 0.4rem;
     }
     /* The subject name in the bar is the home link here. */
-    .subnav a.nav-home {
+    .subnav a.nav-home,
+    .subnav .long {
       display: none;
+    }
+    .subnav .short {
+      display: inline;
     }
   }
   .search-dialog {

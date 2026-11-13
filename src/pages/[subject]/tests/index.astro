@@ -1,40 +1,92 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { chapterRange, formatDate, getQuestions, getSubjectData, inTest, practiceHref, subjectPaths, testsByDate, url } from '../../../lib/content';
+import { chapterRange, formatDate, getLessons, getQuestions, getSubjectData, inTest, lessonSlug, practiceHref, subjectPaths, testsByDate, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const questions = await getQuestions(subject);
-const tests = testsByDate(data);
+const lessons = await getLessons(subject);
+// Newest first. Upcoming and past are worked out in the browser (see the script below), so the
+// grouping stays right between builds; the build-time split is the no-JavaScript fallback.
+const tests = testsByDate(data).map((t) => ({
+  t,
+  n: questions.filter((q) => inTest(t, q)).length,
+  review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
+}));
+const today = new Date().toISOString().slice(0, 10);
+const isUpcoming = (date?: string) => !!date && date >= today;
 ---
 
 <Base title="Class tests" subject={subject}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${subject}/chapters/`)}>Chapters</a> /</nav>
   <h1>Class tests</h1>
+  <p class="muted prose">Each test has its review sheet, the lessons it covers, and practice questions for it.</p>
   {tests.length === 0 ? (
     <p class="muted">No class tests listed yet.</p>
   ) : (
-    <ul class="plain-list stack">
-      {tests.map((t) => {
-        const n = questions.filter((q) => inTest(t, q)).length;
-        return (
-          <li class="card">
-            <h2><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h2>
-            <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
-            {n > 0 && (
-              <p class="small"><a href={practiceHref(subject, { test: t.id })}>Practice for this test ({n})</a></p>
-            )}
-          </li>
-        );
-      })}
-    </ul>
+    ['upcoming', 'past'].map((group) => (
+      <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={!tests.some((x) => (group === 'upcoming') === isUpcoming(x.t.date))}>
+        <h2 id={`${group}-h`}>{group === 'upcoming' ? 'Upcoming' : 'Past tests'}</h2>
+        <ul class="plain-list stack">
+          {tests.map(({ t, n, review }) => (
+            <li class="card test" data-date={t.date ?? ''} hidden={(group === 'upcoming') !== isUpcoming(t.date)}>
+              <h3><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h3>
+              <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
+              {review.length > 0 && (
+                <ul class="plain-list review-links">
+                  {review.map((l) => (
+                    <li><a href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a></li>
+                  ))}
+                </ul>
+              )}
+              <div class="actions">
+                {n > 0 && <a class="button" href={practiceHref(subject, { test: t.id, start: '1' })}>Practice all {n} questions</a>}
+                <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>Lessons and topics</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
   )}
 </Base>
 
+<script>
+  // Put each test under Upcoming or Past using today's date, and hide a group with no tests.
+  const today = new Date();
+  const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  for (const group of document.querySelectorAll<HTMLElement>('.test-group')) {
+    const upcoming = group.dataset.group === 'upcoming';
+    let shown = 0;
+    for (const li of group.querySelectorAll<HTMLElement>('li.test')) {
+      const date = li.dataset.date;
+      li.hidden = upcoming !== (!!date && date >= iso);
+      if (!li.hidden) shown++;
+    }
+    group.hidden = shown === 0;
+  }
+</script>
+
 <style>
-  h2 {
+  h3 {
     font-size: 1.15rem;
+    margin: 0;
+  }
+  .test p {
+    margin: 0.2rem 0 0;
+  }
+  .review-links {
+    margin: 0.5rem 0 0;
+  }
+  .review-links a {
+    font-weight: 600;
+  }
+  .review-links a::before {
+    content: '★ ';
+    color: var(--tip);
+  }
+  .test .actions {
+    margin: 0.75rem 0 0;
   }
 </style>

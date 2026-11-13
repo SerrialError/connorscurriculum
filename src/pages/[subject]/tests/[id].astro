@@ -1,6 +1,7 @@
 ---
 import LessonList from '../../../components/LessonList.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
+import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
 import {
   formatDate,
@@ -33,7 +34,7 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 
 <Base title={test.title} subject={subject} searchable>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href={url(`${subject}/chapters/`)}>Chapters</a> / <a href={url(`${subject}/tests/`)}>Class tests</a> /
+    <a href={url(`${subject}/tests/`)}>Class tests</a> /
   </nav>
   <h1>{test.title}</h1>
   <p class="muted">
@@ -63,21 +64,29 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 
   {questions.length > 0 ? (
     <div class="actions">
-      <a class="button" href={practiceHref(subject, { test: test.id })}>Practice all {questions.length} questions</a>
-      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'random', n: '10' })}>Random 10</a>
-      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'weak', n: '10' })}>Weakest topics</a>
+      <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Practice all {questions.length} questions</a>
+      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'random', n: '10', start: '1' })}>Random 10</a>
+      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'weak', n: '10', start: '1' })}>Weakest topics</a>
+      <a class="button secondary" href={practiceHref(subject, { test: test.id })}>Choose filters</a>
     </div>
   ) : (
     <p class="muted">No practice questions for this test yet.</p>
   )}
 
   <h2>{data.subject.standardsName} topics covered</h2>
-  {topics.length ? <TopicBadges subject={subject} topics={topics} /> : <p class="muted">No tagged content yet.</p>}
+  {topics.length ? (
+    <>
+      <TopicBadges subject={subject} topics={topics} />
+      <TopicLegend subject={subject} topics={topics} />
+    </>
+  ) : (
+    <p class="muted">No tagged content yet.</p>
+  )}
 
   {byChapter.map((c) => (
     <section aria-labelledby={`ch-${c.n}`}>
       <h2 id={`ch-${c.n}`}>Chapter {c.n}: {c.chapter.title}</h2>
-      <LessonList lessons={c.lessons} grouped />
+      <LessonList lessons={c.lessons} grouped legend={false} />
     </section>
   ))}
 </Base>

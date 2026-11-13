@@ -24,11 +24,6 @@ const exams = data.pastFrqs;
     Real AP exam questions from AP Central. Each one links to the question and its scoring guidelines, and shows how many
     points are on topics you've already learned. To find FRQs on one chapter or topic, use its chapter or topic page.
   </p>
-  {exams.length > 1 && (
-    <nav class="year-nav" aria-label="Exam years">
-      {exams.map((e) => <a href={`#${e.year}`}>{e.year}</a>)}
-    </nav>
-  )}
 
   {frqs.length === 0 ? (
     <p class="muted">No past FRQs listed yet.</p>
@@ -50,8 +45,22 @@ const exams = data.pastFrqs;
         </p>
       </section>
 
+      <div class="toolbar">
+        {exams.length > 1 && (
+          <nav class="year-nav" aria-label="Exam years">
+            {exams.map((e) => <a href={`#${e.year}`}>{e.year}</a>)}
+          </nav>
+        )}
+        {ready.length > 0 && (
+          <label class="ready-toggle small">
+            <input type="checkbox" id="ready-only" />
+            Only ready ({ready.length})
+          </label>
+        )}
+      </div>
+
       {exams.map((exam) => (
-        <section class="exam">
+        <section class="exam" data-exam>
           <h2 id={String(exam.year)}>{exam.year} exam</h2>
           <p class="small links">
             <a href={exam.questionsUrl} target="_blank" rel="noopener">All questions (PDF)</a>
@@ -62,7 +71,7 @@ const exams = data.pastFrqs;
             {frqs
               .filter((f) => f.year === exam.year)
               .map((f) => (
-                <div id={`${f.year}-q${f.number}`}>
+                <div id={`${f.year}-q${f.number}`} data-ready={readyPoints(f, learned) === frqTotal(f) ? '' : undefined}>
                   <FrqCard subject={subject} frq={f} />
                 </div>
               ))}
@@ -78,6 +87,28 @@ const exams = data.pastFrqs;
   )}
 </Base>
 
+<script>
+  // "Only ready": hide questions you're not ready for, and exam years left empty.
+  const toggle = document.querySelector<HTMLInputElement>('#ready-only');
+  const apply = () => {
+    const only = !!toggle?.checked;
+    for (const exam of document.querySelectorAll<HTMLElement>('[data-exam]')) {
+      let shown = 0;
+      for (const q of exam.querySelectorAll<HTMLElement>('.stack > [id]')) {
+        q.hidden = only && !q.hasAttribute('data-ready');
+        if (!q.hidden) shown++;
+      }
+      exam.hidden = shown === 0;
+    }
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('.year-nav a')) {
+      const exam = document.getElementById(a.hash.slice(1))?.closest<HTMLElement>('[data-exam]');
+      a.hidden = !!exam?.hidden;
+    }
+  };
+  toggle?.addEventListener('change', apply);
+  apply();
+</script>
+
 <style>
   .summary h2 {
     margin: 0 0 0.4rem;
@@ -86,11 +117,43 @@ const exams = data.pastFrqs;
   .summary p {
     margin: 0.35rem 0;
   }
-  .year-nav {
+  /* Year links and the filter stay in reach on this long page. */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 3;
     display: flex;
     flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem -1rem 0;
+    padding: 0.5rem 1rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .year-nav {
+    display: flex;
     gap: 0.35rem;
-    margin: 0 0 1rem;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .year-nav a {
+    flex: none;
+  }
+  .ready-toggle {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .ready-toggle input {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--accent);
   }
   .year-nav a {
     font-size: 0.85rem;
@@ -113,6 +176,6 @@ const exams = data.pastFrqs;
     margin-top: 2rem;
   }
   [id] {
-    scroll-margin-top: 1rem;
+    scroll-margin-top: 4.5rem;
   }
 </style>

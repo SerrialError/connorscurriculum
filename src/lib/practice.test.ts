@@ -21,6 +21,8 @@ import {
   summarize,
   topicAccuracy,
   topicBreakdown,
+  wantsStart,
+  CLASS_ONLY_UNIT,
   HISTORY_LIMIT,
 } from './practice';
 
@@ -119,6 +121,19 @@ describe('URL filters', () => {
   });
 });
 
+describe('wantsStart', () => {
+  it('starts only when start is set to something truthy', () => {
+    expect(wantsStart('?test=x&start=1')).toBe(true);
+    expect(wantsStart('?start')).toBe(true);
+    expect(wantsStart('?test=x')).toBe(false);
+    expect(wantsStart('?start=0')).toBe(false);
+  });
+
+  it('is not a filter: it never ends up in the filter query', () => {
+    expect(filtersToQuery(parseFilters('?test=x&mode=random&start=1'))).toBe('?test=x&mode=random');
+  });
+});
+
 describe('filterQuestions', () => {
   const ids = (qs: PracticeQuestion[]) => qs.map((q) => q.id);
 
@@ -135,6 +150,15 @@ describe('filterQuestions', () => {
   it('treats units and topics as one OR group', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), topics: ['5.2'] }, tests))).toEqual(['q2']);
     expect(ids(filterQuestions(questions, { ...emptyFilters(), topics: ['5.2'], units: ['7'] }, tests))).toEqual(['q2', 'f1']);
+  });
+
+  it('selects class-only questions (no CED topic) with the class-only unit', () => {
+    expect(ids(filterQuestions(questions, { ...emptyFilters(), units: [CLASS_ONLY_UNIT] }, tests))).toEqual(['q3']);
+    expect(ids(filterQuestions(questions, { ...emptyFilters(), units: [CLASS_ONLY_UNIT, '7'] }, tests))).toEqual(['q3', 'f1']);
+    // With the class-only entry, unit counts add up to the total.
+    const total = ['5', '7', CLASS_ONLY_UNIT].reduce((n, u) => n + countWith(questions, emptyFilters(), tests, { units: [u] }), 0);
+    expect(total).toBe(questions.length);
+    expect(parseFilters('?unit=class').units).toEqual([CLASS_ONLY_UNIT]);
   });
 
   it('counts matches for a changed filter without changing the others', () => {

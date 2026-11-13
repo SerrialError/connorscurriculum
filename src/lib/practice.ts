@@ -64,6 +64,18 @@ export interface Filters {
 }
 
 export const DEFAULT_COUNT = 10;
+
+/**
+ * Pseudo unit for questions with no CED topic (class-test material that is not on the AP exam),
+ * so the unit filter can select them and the unit counts add up to the total. URL: ?unit=class.
+ */
+export const CLASS_ONLY_UNIT = 'class';
+
+/** `?start=1` on a practice link starts the set right away instead of showing the setup screen. */
+export function wantsStart(search: string): boolean {
+  const v = new URLSearchParams(search).get('start');
+  return v !== null && v !== '0' && v !== 'false';
+}
 export const MAX_COUNT = 200;
 
 /** Default count for a mode: every question in order, or a set of DEFAULT_COUNT when shuffled or weakest-first. */
@@ -127,6 +139,7 @@ export function filtersToQuery(f: Filters): string {
 /**
  * Filters combine with AND across kinds and OR within a kind. Units and topics are one
  * "CED" kind: a question matches if it is in any selected unit or has any selected topic.
+ * The CLASS_ONLY_UNIT unit matches questions with no CED topic.
  */
 export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests: PracticeTest[]): PracticeQuestion[] {
   const test = f.test ? tests.find((t) => t.id === f.test) : undefined;
@@ -137,7 +150,8 @@ export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests
       if (test.sections.length && !q.sections.some((s) => test.sections.includes(s))) return false;
     }
     if (f.units.length || f.topics.length) {
-      const inUnit = q.units.some((u) => f.units.includes(u));
+      const inUnit =
+        q.units.some((u) => f.units.includes(u)) || (q.cedTopics.length === 0 && f.units.includes(CLASS_ONLY_UNIT));
       const hasTopic = q.cedTopics.some((t) => f.topics.includes(t));
       if (!inUnit && !hasTopic) return false;
     }

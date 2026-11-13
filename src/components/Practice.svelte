@@ -12,11 +12,11 @@
     type Mode,
     type PracticeQuestion,
     type PracticeTest,
+    CLASS_ONLY_UNIT,
     DEFAULT_COUNT,
     MAX_COUNT,
     activeFilterCount,
     countWith,
-    defaultCount,
     emptyFilters,
     filterQuestions,
     filterTopics,
@@ -31,6 +31,7 @@
     summarize,
     topicAccuracy,
     topicBreakdown,
+    wantsStart,
   } from '../lib/practice';
   import { type FrqLink, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
   import { readJson, storageKey, writeJson } from '../lib/storage';
@@ -85,6 +86,7 @@
   const savedKey = storageKey(subject, 'practice-session');
   const difficultyLabels: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
   const modeLabels: Record<Mode, string> = { all: 'In order', random: 'Shuffled', weak: 'Weakest topics first' };
+  const typeLabels = { mcq: 'Multiple choice', frq: 'Free response' } as const;
   const countChoices = [5, 10, 20];
 
   type Phase = 'setup' | 'session' | 'results';
@@ -114,6 +116,12 @@
   let copied = $state(false);
   let resumable = $state<Saved | null>(null);
   let customCount = $state(false);
+  /** "More options" (unit/topic, class test, type, order) is open. */
+  let moreOpen = $state(false);
+  /** The student picked an order themselves; until then, choosing a count shuffles (see setCount). */
+  let orderChosen = $state(false);
+  /** Reviewing a question from the results screen: Back (and "Back to results") return there. */
+  let reviewing = $state(false);
 
   // Per-question answer state, keyed by question id.
   let picks = $state<Record<string, string>>({});
@@ -139,6 +147,11 @@
   const sessionFrqTopics = $derived(filterTopics(sessionFilters, units, chapterTopics, tests));
   const sessionFrqMatches = $derived(sessionFrqTopics.size ? matchFrqs(frqs, sessionFrqTopics) : []);
   const emptyCurrent = $derived(chapters.filter((c) => c.current && !c.hasQuestions));
+  const hasClassOnly = $derived(all?.some((q) => q.cedTopics.length === 0) ?? false);
+  /** Settings inside "More options" that differ from the defaults. */
+  const moreCount = $derived(
+    (filters.test ? 1 : 0) + filters.units.length + filters.topics.length + (filters.type ? 1 : 0) + (orderChosen && filters.mode !== 'all' ? 1 : 0),
+  );
   const visibleUnits = $derived(
     units.filter((u) => usedUnits.has(u.id) || filters.units.includes(u.id) || u.topics.some((t) => filters.topics.includes(t.id))),
   );
@@ -203,15 +216,20 @@
   });
 
   onMount(() => {
-    filters = parseFilters(location.search);
-    customCount = filters.n !== null && !countChoices.includes(filters.n);
+    setFilters(parseFilters(location.search));
     history = readJson<History>(historyKey, {});
     const onPop = (e: PopStateEvent) => {
       const p = (e.state as { phase?: Phase } | null)?.phase;
-      if ((p === 'session' || p === 'results') && session.length) phase = p;
-      else {
+      if (p === 'results' && session.length) {
+        reviewing = false;
+        if (phase !== 'results') void showResults(false);
+      } else if (p === 'session' && session.length) {
+        phase = 'session';
+        void showQuestion();
+      } else {
+        reviewing = false;
         phase = 'setup';
-        filters = parseFilters(location.search);
+        setFilters(parseFilters(location.search));
         offerResume();
       }
     };
@@ -226,6 +244,12 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       all = (await res.json()) as PracticeQuestion[];
       offerResume();
+      // Links like "Random 10" on a test page are a complete set: start it right away. The setup
+      // screen (with those filters) stays one Back press away.
+      if (wantsStart(location.search)) {
+        history_replace(filtersToQuery(filters), null);
+        start();
+      }
     } catch (err) {
       loadError = `Could not load questions (${(err as Error).message}).`;
     }
@@ -252,12 +276,21 @@
     finished = {};
   }
 
+  /** Replace the setup filters, opening "More options" when any of them are set. */
+  function setFilters(f: Filters) {
+    filters = f;
+    customCount = f.n !== null && !countChoices.includes(f.n);
+    orderChosen = f.mode !== 'all';
+    if (moreCount > 0) moreOpen = true;
+  }
+
   async function begin(questions: PracticeQuestion[], query: string) {
     session = questions;
     sessionQuery = query;
     index = 0;
     resetAnswers();
     resumable = null;
+    reviewing = false;
     // A history entry per set, so the browser's Back button returns to the filters.
     if (phase === 'setup') window.history.pushState({ phase: 'session' }, '', location.pathname + query);
     else history_replace(query, { phase: 'session' });
@@ -304,8 +337,8 @@
   }
 
   function backToSetup() {
-    filters = parseFilters(sessionQuery);
-    customCount = filters.n !== null && !countChoices.includes(filters.n);
+    setFilters(parseFilters(sessionQuery));
+    reviewing = false;
     history_replace(sessionQuery, null);
     phase = 'setup';
     offerResume();
@@ -314,8 +347,9 @@
 
   async function showQuestion() {
     await tick();
-    const top = questionHeading?.closest('.session')?.getBoundingClientRect().top ?? 0;
-    if (top < 0 || top > window.innerHeight / 2) window.scrollTo({ top: window.scrollY + top - 12 });
+    // The set sits just under the page title, so the top of the page shows the header, the
+    // progress bar, and the start of the question.
+    window.scrollTo({ top: 0 });
     questionHeading?.focus({ preventScroll: true });
   }
 
@@ -324,9 +358,14 @@
     void showQuestion();
   }
 
-  async function showResults() {
+  async function showResults(updateHistory = true) {
     phase = 'results';
-    history_replace(sessionQuery, { phase: 'results' });
+    if (updateHistory) {
+      // Reviewing from the results added a history entry; going back to the results removes it.
+      if (reviewing) window.history.back();
+      else history_replace(sessionQuery, { phase: 'results' });
+    }
+    reviewing = false;
     await tick();
     window.scrollTo({ top: 0 });
     resultsHeading?.focus({ preventScroll: true });
@@ -334,8 +373,21 @@
 
   function reviewQuestion(i: number) {
     phase = 'session';
-    history_replace(sessionQuery, { phase: 'session' });
+    // A history entry, so Back returns to the results rather than to the filters.
+    if (!reviewing) window.history.pushState({ phase: 'session' }, '', location.pathname + sessionQuery);
+    reviewing = true;
     go(i);
+  }
+
+  function endSet() {
+    const left = session.length - answered;
+    if (
+      !reviewing &&
+      left > session.length / 2 &&
+      !confirm(`End this set now? ${plural(left, 'question')} ${left === 1 ? "isn't" : "aren't"} answered yet. You can still answer them from the results.`)
+    )
+      return;
+    void showResults();
   }
 
   function toggle<T>(list: T[], value: T): T[] {
@@ -378,6 +430,13 @@
     const el = e.target as HTMLElement;
     if (el.closest('input[type="text"], input[type="number"], textarea, select, [contenteditable]')) return;
     const q = current;
+    // ← → move between questions, even before answering (they don't change the picked choice).
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      if (e.shiftKey) return;
+      e.preventDefault();
+      go(index + (e.key === 'ArrowRight' ? 1 : -1));
+      return;
+    }
     if (q.type === 'mcq' && !checked[q.id]) {
       const key = e.key.toLowerCase();
       const byLetter = q.choices.find((c) => c.id === key);
@@ -392,32 +451,42 @@
         e.preventDefault();
         void check(q);
       }
-      return;
     }
-    if (e.key === 'ArrowRight' && !el.closest('input')) go(index + 1);
-    if (e.key === 'ArrowLeft' && !el.closest('input')) go(index - 1);
   }
 
   function setMode(mode: Mode) {
-    // Switching between "in order" and a smaller set picks a sensible count, unless one was chosen.
-    if (filters.n === defaultCount(filters.mode)) filters.n = defaultCount(mode);
+    orderChosen = true;
     filters.mode = mode;
   }
 
-  function setCount(n: number | null) {
-    customCount = false;
+  /**
+   * Choosing a number of questions shuffles, so "10 questions" isn't the same first 10 every
+   * time, unless the student picked an order. "All" goes back to in order.
+   */
+  function setCount(n: number | null, custom = false) {
+    customCount = custom;
     filters.n = n;
+    if (!orderChosen) filters.mode = n === null ? 'all' : 'random';
   }
 
   function applyPreset(query: string) {
-    filters = parseFilters(query);
-    customCount = filters.n !== null && !countChoices.includes(filters.n);
+    setFilters(parseFilters(query));
   }
 
   function practiceTopic(id: string) {
-    filters = { ...emptyFilters(), topics: [id], mode: 'random', n: DEFAULT_COUNT };
-    customCount = false;
+    setFilters({ ...emptyFilters(), topics: [id], mode: 'random', n: DEFAULT_COUNT });
     void tick().then(() => document.querySelector('.start-bar')?.scrollIntoView({ block: 'nearest' }));
+  }
+
+  function resetFilters() {
+    filters = emptyFilters();
+    customCount = false;
+    orderChosen = false;
+  }
+
+  /** One-at-a-time checkbox group: checking an option replaces the other; unchecking clears it. */
+  function pickOne<T>(value: T, checked: boolean): T | null {
+    return checked ? value : null;
   }
 
   function clearHistory() {
@@ -457,11 +526,12 @@
       const t = tests.find((x) => x.id === filters.test);
       out.push({ label: t?.title ?? filters.test, remove: () => (filters.test = null) });
     }
-    for (const u of filters.units) out.push({ label: `Unit ${u}`, remove: () => (filters.units = filters.units.filter((x) => x !== u)) });
+    for (const u of filters.units)
+      out.push({ label: u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`, remove: () => (filters.units = filters.units.filter((x) => x !== u)) });
     for (const t of filters.topics) out.push({ label: `Topic ${t}`, remove: () => (filters.topics = filters.topics.filter((x) => x !== t)) });
     for (const d of filters.difficulty)
       out.push({ label: difficultyLabels[d]!, remove: () => (filters.difficulty = filters.difficulty.filter((x) => x !== d)) });
-    if (filters.type) out.push({ label: filters.type === 'mcq' ? 'Multiple choice' : 'Free response', remove: () => (filters.type = null) });
+    if (filters.type) out.push({ label: typeLabels[filters.type], remove: () => (filters.type = null) });
     return out;
   });
 </script>
@@ -492,7 +562,7 @@
             </div>
             <div class="small practices">
               {frqPractices({ parts: m.parts }).map((id) => practiceNames[id] ?? id).join(' · ')}
-              {#if !m.frq.officialSkills}<span class="muted">(our labels)</span>{/if}
+              {#if !m.frq.officialSkills}<span class="muted" title="College Board hasn’t published science-practice labels for this exam; these are ours.">(our practice labels)</span>{/if}
             </div>
             <div class="small muted">
               Part{m.parts.length > 1 ? 's' : ''} {m.parts.map((p) => p.label).join(', ')} ({plural(m.points, 'pt')})
@@ -528,7 +598,7 @@
       </section>
     {/if}
 
-    <p class="lead">Choose what to practice, then press <strong>Start</strong>. Nothing starts until you do.</p>
+    <p class="lead">Pick what to study, then press <strong>Start practice</strong>. Nothing starts until you do.</p>
 
     {#if presets.length > 0 || historyCount > 0}
       <section class="presets" aria-labelledby="presets-h">
@@ -562,12 +632,12 @@
 
     <form class="card filters" onsubmit={(e) => { e.preventDefault(); start(); }} aria-labelledby="filters-h">
       <div class="filters-head">
-        <h2 id="filters-h" class="section-h">Filters</h2>
+        <h2 id="filters-h" class="section-h">{presets.length > 0 || historyCount > 0 ? 'Or choose your own' : 'Choose questions'}</h2>
         {#if activeCount > 0 || filters.mode !== 'all' || filters.n !== null}
-          <button class="link-button" type="button" onclick={() => { filters = emptyFilters(); customCount = false; }}>Reset all</button>
+          <button class="link-button" type="button" onclick={resetFilters}>Reset all</button>
         {/if}
       </div>
-      <p class="small muted hint">Pick as many as you like. Options in the same group are combined with “or”, and different groups with “and”.</p>
+      <p class="small muted hint">Leave a group empty to include all of it.</p>
 
       <fieldset>
         <legend>Chapter</legend>
@@ -593,57 +663,6 @@
         {/if}
       </fieldset>
 
-      {#if tests.length > 0}
-        <fieldset>
-          <legend>Class test</legend>
-          <div class="chips">
-            <label class="chip">
-              <input type="radio" name="test" checked={filters.test === null} onchange={() => (filters.test = null)} />
-              <span>Any</span>
-            </label>
-            {#each tests as t (t.id)}
-              <label class="chip">
-                <input type="radio" name="test" checked={filters.test === t.id} onchange={() => (filters.test = t.id)} />
-                <span>{t.title}</span>
-                {@render count(countWith(all, filters, tests, { test: t.id }))}
-              </label>
-            {/each}
-          </div>
-        </fieldset>
-      {/if}
-
-      <fieldset>
-        <legend>AP unit or topic</legend>
-        {#each visibleUnits as u (u.id)}
-          {@const picked = u.topics.filter((t) => filters.topics.includes(t.id)).length}
-          <details class="unit" open={picked > 0}>
-            <summary>
-              <span>
-                Unit {u.id}: {u.title}
-                {#if filters.units.includes(u.id)}<span class="badge topic">whole unit</span>{:else if picked}<span class="badge topic">{picked} selected</span>{/if}
-              </span>
-              {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
-            </summary>
-            <div class="chips">
-              <label class="chip">
-                <input type="checkbox" checked={filters.units.includes(u.id)} onchange={() => (filters.units = toggle(filters.units, u.id))} />
-                <span>Whole unit</span>
-                {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
-              </label>
-              {#each u.topics.filter((t) => usedTopics.has(t.id) || filters.topics.includes(t.id)) as t (t.id)}
-                <label class="chip">
-                  <input type="checkbox" checked={filters.topics.includes(t.id)} onchange={() => (filters.topics = toggle(filters.topics, t.id))} />
-                  <span>{t.id} <span class="chip-sub">{t.title}</span></span>
-                  {@render count(countWith(all, filters, tests, { units: [], topics: [t.id] }))}
-                </label>
-              {/each}
-            </div>
-          </details>
-        {:else}
-          <p class="small muted">No tagged questions yet.</p>
-        {/each}
-      </fieldset>
-
       <div class="two-col">
         <fieldset>
           <legend>Difficulty</legend>
@@ -656,38 +675,6 @@
               </label>
             {/each}
           </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Question type</legend>
-          <div class="chips">
-            {#each [[null, 'Any'], ['mcq', 'Multiple choice'], ['frq', 'Free response']] as const as [value, label] (label)}
-              <label class="chip">
-                <input type="radio" name="type" checked={filters.type === value} onchange={() => (filters.type = value)} />
-                <span>{label}</span>
-                {#if value}{@render count(countWith(all, filters, tests, { type: value }))}{/if}
-              </label>
-            {/each}
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Order</legend>
-          <div class="chips">
-            {#each ['all', 'random', 'weak'] as const as m (m)}
-              <label class="chip">
-                <input type="radio" name="mode" checked={filters.mode === m} onchange={() => setMode(m)} />
-                <span>{modeLabels[m]}</span>
-              </label>
-            {/each}
-          </div>
-          {#if filters.mode === 'weak'}
-            <p class="small muted">
-              {historyCount > 0
-                ? 'Topics you have missed most come first, then topics you haven’t tried.'
-                : 'You haven’t answered anything yet on this device, so this works like Shuffled for now.'}
-            </p>
-          {/if}
         </fieldset>
 
         <fieldset>
@@ -704,7 +691,7 @@
               </label>
             {/each}
             <label class="chip">
-              <input type="radio" name="count" checked={customCount} onchange={() => { customCount = true; filters.n ??= DEFAULT_COUNT; }} />
+              <input type="radio" name="count" checked={customCount} onchange={() => setCount(filters.n ?? DEFAULT_COUNT, true)} />
               <span>Other</span>
             </label>
             {#if customCount}
@@ -726,6 +713,111 @@
           </div>
         </fieldset>
       </div>
+
+      <details class="more" bind:open={moreOpen}>
+        <summary>
+          <span class="more-title">More options</span>
+          {#if moreCount > 0 && !moreOpen}
+            <span class="badge topic">{moreCount} set</span>
+          {:else}
+            <span class="small muted">AP unit or topic{tests.length > 0 ? ', class test' : ''}, question type, order</span>
+          {/if}
+        </summary>
+
+        <fieldset>
+          <legend>AP unit or topic</legend>
+          {#each visibleUnits as u (u.id)}
+            {@const picked = u.topics.filter((t) => filters.topics.includes(t.id)).length}
+            <details class="unit" open={picked > 0}>
+              <summary>
+                <span>
+                  Unit {u.id}: {u.title}
+                  {#if filters.units.includes(u.id)}<span class="badge topic">whole unit</span>{:else if picked}<span class="badge topic">{picked} selected</span>{/if}
+                </span>
+                {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
+              </summary>
+              <div class="chips">
+                <label class="chip">
+                  <input type="checkbox" checked={filters.units.includes(u.id)} onchange={() => (filters.units = toggle(filters.units, u.id))} />
+                  <span>Whole unit</span>
+                  {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
+                </label>
+                {#each u.topics.filter((t) => usedTopics.has(t.id) || filters.topics.includes(t.id)) as t (t.id)}
+                  <label class="chip">
+                    <input type="checkbox" checked={filters.topics.includes(t.id)} onchange={() => (filters.topics = toggle(filters.topics, t.id))} />
+                    <span>{t.id} <span class="chip-sub">{t.title}</span></span>
+                    {@render count(countWith(all, filters, tests, { units: [], topics: [t.id] }))}
+                  </label>
+                {/each}
+              </div>
+            </details>
+          {:else}
+            <p class="small muted">No tagged questions yet.</p>
+          {/each}
+          {#if hasClassOnly || filters.units.includes(CLASS_ONLY_UNIT)}
+            <div class="chips class-only">
+              <label class="chip">
+                <input
+                  type="checkbox"
+                  checked={filters.units.includes(CLASS_ONLY_UNIT)}
+                  onchange={() => (filters.units = toggle(filters.units, CLASS_ONLY_UNIT))}
+                />
+                <span>Not on the AP exam <span class="chip-sub">class tests only</span></span>
+                {@render count(countWith(all, filters, tests, { units: [CLASS_ONLY_UNIT], topics: [] }))}
+              </label>
+            </div>
+          {/if}
+        </fieldset>
+
+        <div class="two-col">
+          {#if tests.length > 0}
+            <fieldset>
+              <legend>Class test</legend>
+              <div class="chips">
+                {#each tests as t (t.id)}
+                  <label class="chip">
+                    <input type="checkbox" checked={filters.test === t.id} onchange={(e) => (filters.test = pickOne(t.id, e.currentTarget.checked))} />
+                    <span>{t.title}</span>
+                    {@render count(countWith(all, filters, tests, { test: t.id }))}
+                  </label>
+                {/each}
+              </div>
+            </fieldset>
+          {/if}
+
+          <fieldset>
+            <legend>Question type</legend>
+            <div class="chips">
+              {#each ['mcq', 'frq'] as const as value (value)}
+                <label class="chip">
+                  <input type="checkbox" checked={filters.type === value} onchange={(e) => (filters.type = pickOne(value, e.currentTarget.checked))} />
+                  <span>{typeLabels[value]}</span>
+                  {@render count(countWith(all, filters, tests, { type: value }))}
+                </label>
+              {/each}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Order</legend>
+            <div class="chips">
+              {#each ['all', 'random', 'weak'] as const as m (m)}
+                <label class="chip">
+                  <input type="radio" name="mode" checked={filters.mode === m} onchange={() => setMode(m)} />
+                  <span>{modeLabels[m]}</span>
+                </label>
+              {/each}
+            </div>
+            {#if filters.mode === 'weak'}
+              <p class="small muted">
+                {historyCount > 0
+                  ? 'Topics you have missed most come first, then topics you haven’t tried.'
+                  : 'You haven’t answered anything yet on this device, so this works like Shuffled for now.'}
+              </p>
+            {/if}
+          </fieldset>
+        </div>
+      </details>
 
       <div class="start-bar" aria-live="polite">
         <div class="start-info">
@@ -791,9 +883,13 @@
     <div class="session-bar">
       <button class="link-button" type="button" onclick={backToSetup}>← Filters</button>
       <span class="small muted progress-text">{answered} of {session.length} answered</span>
-      <button class="button secondary small" type="button" onclick={showResults}>
-        {answered === session.length ? 'See results' : 'Finish'}
-      </button>
+      {#if reviewing}
+        <button class="button secondary small" type="button" onclick={() => showResults()}>Back to results</button>
+      {:else if answered === session.length}
+        <button class="button secondary small" type="button" onclick={() => showResults()}>See results</button>
+      {:else}
+        <button class="button secondary small" type="button" onclick={endSet}>End set</button>
+      {/if}
     </div>
     <div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={session.length} aria-valuenow={answered}>
       <span style:width={`${(answered / session.length) * 100}%`}></span>
@@ -1167,8 +1263,43 @@
     opacity: 0.6;
   }
   .chip:has(input:checked) .count {
-    background: rgb(255 255 255 / 0.25);
-    color: inherit;
+    background: var(--accent-ink);
+    color: var(--accent);
+  }
+  .more {
+    border-top: 1px solid var(--border);
+    margin: 0 -1.1rem;
+    padding: 0 1.1rem;
+  }
+  .more > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.6rem;
+    align-items: baseline;
+    padding: 0.8rem 0;
+  }
+  .more > summary::-webkit-details-marker {
+    display: none;
+  }
+  .more > summary::before {
+    content: '▸';
+    color: var(--muted);
+    transition: transform 0.15s;
+  }
+  .more[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  .more-title {
+    font-weight: 700;
+    color: var(--link);
+  }
+  .more[open] > summary {
+    margin-bottom: 0.25rem;
+  }
+  .class-only {
+    margin-top: 0.4rem;
   }
   .unit {
     border: 1px solid var(--border);
@@ -1535,6 +1666,8 @@
     font-size: 0.875rem;
   }
   .opt {
+    /* The legend floats (so it sits inside the grey box); each row starts below it. */
+    clear: both;
     display: flex;
     gap: 0.5rem;
     align-items: baseline;
@@ -1588,7 +1721,8 @@
   .kbd-hint {
     margin-top: 0.6rem;
   }
-  @media (hover: none) {
+  /* No keyboard hint on touch screens and phones. */
+  @media (hover: none), (pointer: coarse), (max-width: 640px) {
     .kbd-hint {
       display: none;
     }

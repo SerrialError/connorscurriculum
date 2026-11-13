@@ -57,18 +57,31 @@ export interface Filters {
   topics: string[];
   difficulty: number[];
   type: QuestionType | null;
+  /** Question order: as listed (chapter order), shuffled, or weakest topics first. */
   mode: Mode;
-  n: number;
+  /** How many questions to practice; null means every matching question. */
+  n: number | null;
 }
 
 export const DEFAULT_COUNT = 10;
+export const MAX_COUNT = 200;
+
+/** Default count for a mode: every question in order, or a set of DEFAULT_COUNT when shuffled or weakest-first. */
+export const defaultCount = (mode: Mode): number | null => (mode === 'all' ? null : DEFAULT_COUNT);
 
 export function emptyFilters(): Filters {
-  return { chapters: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: 'all', n: DEFAULT_COUNT };
+  return { chapters: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: 'all', n: null };
+}
+
+/** Number of filters that narrow the question pool (order and count are not filters). */
+export function activeFilterCount(f: Filters): number {
+  return f.chapters.length + (f.test ? 1 : 0) + f.units.length + f.topics.length + f.difficulty.length + (f.type ? 1 : 0);
 }
 
 // ---------------------------------------------------------------------------
 // URL encoding: ?chapter=14,15&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&mode=random&n=10
+// `n` is written only when it differs from the mode's default (every question for "all", 10
+// otherwise); `n=all` means every matching question.
 // ---------------------------------------------------------------------------
 
 const list = (v: string | null) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : []);
@@ -85,8 +98,11 @@ export function parseFilters(search: string): Filters {
   f.type = type === 'mcq' || type === 'frq' ? type : null;
   const mode = p.get('mode');
   f.mode = mode === 'random' || mode === 'weak' ? mode : 'all';
-  const n = Number(p.get('n'));
-  f.n = Number.isInteger(n) && n > 0 ? Math.min(n, 200) : DEFAULT_COUNT;
+  const rawN = p.get('n');
+  const n = Number(rawN);
+  if (rawN === 'all') f.n = null;
+  else if (rawN && Number.isInteger(n) && n > 0) f.n = Math.min(n, MAX_COUNT);
+  else f.n = defaultCount(f.mode);
   return f;
 }
 
@@ -99,7 +115,7 @@ export function filtersToQuery(f: Filters): string {
   if (f.difficulty.length) p.set('difficulty', f.difficulty.join(','));
   if (f.type) p.set('type', f.type);
   if (f.mode !== 'all') p.set('mode', f.mode);
-  if (f.mode !== 'all' && f.n !== DEFAULT_COUNT) p.set('n', String(f.n));
+  if (f.n !== defaultCount(f.mode)) p.set('n', f.n === null ? 'all' : String(f.n));
   const s = p.toString().replaceAll('%2C', ',');
   return s ? `?${s}` : '';
 }
@@ -129,6 +145,24 @@ export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests
     if (f.type && q.type !== f.type) return false;
     return true;
   });
+}
+
+/**
+ * How many questions would match if `patch` replaced part of the filters. Used to show a count
+ * next to each filter option (e.g. "Ch. 7 · 64") given the other filters already chosen.
+ */
+export function countWith(
+  questions: PracticeQuestion[],
+  f: Filters,
+  tests: PracticeTest[],
+  patch: Partial<Filters>,
+): number {
+  return filterQuestions(questions, { ...f, ...patch }, tests).length;
+}
+
+/** Number of questions a session with these settings will have. */
+export function sessionSize(matching: number, f: Pick<Filters, 'n'>): number {
+  return f.n === null ? matching : Math.min(f.n, matching);
 }
 
 // ---------------------------------------------------------------------------
@@ -200,8 +234,9 @@ export function selectQuestions(
   history: History,
   rng: Rng = Math.random,
 ): PracticeQuestion[] {
-  if (f.mode === 'all') return matching;
-  if (f.mode === 'random') return shuffle(matching, rng).slice(0, f.n);
+  const n = f.n ?? matching.length;
+  if (f.mode === 'all') return matching.slice(0, n);
+  if (f.mode === 'random') return shuffle(matching, rng).slice(0, n);
 
   const accuracy = topicAccuracy(matching, history);
   const weakness = (q: PracticeQuestion) => Math.min(...topicKeys(q).map((k) => accuracy.get(k) ?? UNSEEN_ACCURACY));
@@ -209,7 +244,7 @@ export function selectQuestions(
   return shuffle(matching, rng)
     .map((q) => ({ q, w: weakness(q) }))
     .sort((a, b) => a.w - b.w)
-    .slice(0, f.n)
+    .slice(0, n)
     .map(({ q }) => q);
 }
 
@@ -278,4 +313,37 @@ export function filterTopics(
   const chapters = [...f.chapters, ...(tests.find((t) => t.id === f.test)?.chapters ?? [])];
   for (const n of chapters) for (const t of chapterTopics[String(n)] ?? []) out.add(t);
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// Results screen
+// ---------------------------------------------------------------------------
+
+export interface TopicScore {
+  /** CED topic id, or "chapter-N" for class-only questions (see topicKeys). */
+  key: string;
+  /** Sum of question scores (0–1 each). */
+  score: number;
+  count: number;
+}
+
+/**
+ * Per-topic scores for one session, weakest first (ties by key in CED order).
+ * `scores` maps question id to its 0–1 score; unanswered questions are left out.
+ */
+export function topicBreakdown(questions: PracticeQuestion[], scores: Record<string, number>): TopicScore[] {
+  const map = new Map<string, TopicScore>();
+  for (const q of questions) {
+    const s = scores[q.id];
+    if (s === undefined) continue;
+    for (const key of topicKeys(q)) {
+      const t = map.get(key) ?? { key, score: 0, count: 0 };
+      t.score += s;
+      t.count += 1;
+      map.set(key, t);
+    }
+  }
+  return [...map.values()].sort(
+    (a, b) => a.score / a.count - b.score / b.count || a.key.localeCompare(b.key, undefined, { numeric: true }),
+  );
 }

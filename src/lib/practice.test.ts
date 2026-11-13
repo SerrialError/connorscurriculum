@@ -4,6 +4,8 @@ import {
   type McqQuestion,
   type PracticeQuestion,
   type PracticeTest,
+  activeFilterCount,
+  countWith,
   emptyFilters,
   filterTopics,
   filterQuestions,
@@ -15,8 +17,10 @@ import {
   recordResult,
   seededRng,
   selectQuestions,
+  sessionSize,
   summarize,
   topicAccuracy,
+  topicBreakdown,
   HISTORY_LIMIT,
 } from './practice';
 
@@ -80,7 +84,34 @@ describe('URL filters', () => {
     expect(f.difficulty).toEqual([2]);
     expect(f.type).toBeNull();
     expect(f.mode).toBe('all');
-    expect(f.n).toBe(10);
+    expect(f.n).toBeNull();
+  });
+
+  it('defaults the count to all questions in order, or 10 when shuffled or weakest-first', () => {
+    expect(parseFilters('').n).toBeNull();
+    expect(parseFilters('?mode=random').n).toBe(10);
+    expect(parseFilters('?mode=weak&n=-1').n).toBe(10);
+    expect(parseFilters('?mode=random&n=all').n).toBeNull();
+    expect(parseFilters('?n=5').n).toBe(5);
+    expect(parseFilters('?n=9999').n).toBe(200);
+  });
+
+  it('writes n only when it differs from the default for the mode', () => {
+    expect(filtersToQuery({ ...emptyFilters(), mode: 'random', n: 10 })).toBe('?mode=random');
+    expect(filtersToQuery({ ...emptyFilters(), mode: 'random', n: null })).toBe('?mode=random&n=all');
+    expect(filtersToQuery({ ...emptyFilters(), n: 5 })).toBe('?n=5');
+    for (const f of [
+      { ...emptyFilters(), mode: 'random' as const, n: null },
+      { ...emptyFilters(), mode: 'weak' as const, n: 25 },
+      { ...emptyFilters(), n: 3 },
+    ]) {
+      expect(parseFilters(filtersToQuery(f))).toEqual(f);
+    }
+  });
+
+  it('keeps old links (?mode=random&n=10) working', () => {
+    const f = parseFilters('?test=ch6-7-test&mode=random&n=10');
+    expect(f).toMatchObject({ test: 'ch6-7-test', mode: 'random', n: 10 });
   });
 
   it('gives an empty query for default filters', () => {
@@ -106,6 +137,19 @@ describe('filterQuestions', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), topics: ['5.2'], units: ['7'] }, tests))).toEqual(['q2', 'f1']);
   });
 
+  it('counts matches for a changed filter without changing the others', () => {
+    const f = { ...emptyFilters(), difficulty: [1] };
+    expect(countWith(questions, f, tests, { chapters: [14] })).toBe(1);
+    expect(countWith(questions, f, tests, { chapters: [13] })).toBe(1);
+    expect(countWith(questions, f, tests, { chapters: [15] })).toBe(0);
+    expect(f.chapters).toEqual([]);
+  });
+
+  it('counts active filters, leaving out order and count', () => {
+    expect(activeFilterCount({ ...emptyFilters(), mode: 'random', n: 5 })).toBe(0);
+    expect(activeFilterCount({ ...emptyFilters(), chapters: [6, 7], test: 'x', type: 'mcq' })).toBe(4);
+  });
+
   it('filters by difficulty and type', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), difficulty: [2, 3] }, tests))).toEqual(['q2', 'f1']);
     expect(ids(filterQuestions(questions, { ...emptyFilters(), type: 'frq' }, tests))).toEqual(['f1']);
@@ -113,8 +157,19 @@ describe('filterQuestions', () => {
 });
 
 describe('selection', () => {
-  it('returns all matching questions in order for mode "all"', () => {
-    expect(selectQuestions(questions, { mode: 'all', n: 1 }, {})).toBe(questions);
+  it('returns matching questions in order for mode "all", up to n', () => {
+    expect(selectQuestions(questions, { mode: 'all', n: null }, {})).toEqual(questions);
+    expect(selectQuestions(questions, { mode: 'all', n: 2 }, {}).map((q) => q.id)).toEqual(['q1', 'q2']);
+  });
+
+  it('shuffles every matching question when n is null', () => {
+    expect(selectQuestions(questions, { mode: 'random', n: null }, {}, seededRng(3))).toHaveLength(questions.length);
+  });
+
+  it('reports the session size', () => {
+    expect(sessionSize(40, { n: null })).toBe(40);
+    expect(sessionSize(40, { n: 10 })).toBe(10);
+    expect(sessionSize(4, { n: 10 })).toBe(4);
   });
 
   it('returns N random questions for mode "random"', () => {
@@ -178,5 +233,17 @@ describe('filterTopics', () => {
   it('combines topics, units, chapters, and the test', () => {
     const f = { ...emptyFilters(), topics: ['9.1'], units: ['5'], chapters: [15], test: 'ch14' };
     expect([...filterTopics(f, units, chapterTopics, tests)].sort()).toEqual(['3.13', '5.1', '5.2', '7.1', '9.1']);
+  });
+});
+
+describe('topicBreakdown', () => {
+  it('scores each topic in a session, weakest first, skipping unanswered questions', () => {
+    const b = topicBreakdown(questions, { q1: 1, q2: 0, f1: 0.5 });
+    expect(b).toEqual([
+      { key: '5.2', score: 0, count: 1 },
+      { key: '7.3', score: 0.5, count: 1 },
+      { key: '5.1', score: 1, count: 1 },
+    ]);
+    expect(topicBreakdown(questions, { q3: 0 })).toEqual([{ key: 'chapter-13', score: 0, count: 1 }]);
   });
 });

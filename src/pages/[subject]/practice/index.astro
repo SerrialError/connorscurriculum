@@ -1,7 +1,7 @@
 ---
 import Practice from '../../../components/Practice.svelte';
 import Base from '../../../layouts/Base.astro';
-import { getQuestions, getSubjectData, learnedTopic, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
+import { getQuestions, getSubjectData, inTest, learnedTopic, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -9,16 +9,35 @@ const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const questions = await getQuestions(subject);
 const chapterNumbers = new Set(questions.map((q) => q.data.chapter));
-const chapters = data.chapters.map((c) => ({ number: c.number, title: c.title, hasQuestions: chapterNumbers.has(c.number) }));
+const current = new Set(data.progress.current);
+const chapters = data.chapters.map((c) => ({
+  number: c.number,
+  title: c.title,
+  hasQuestions: chapterNumbers.has(c.number),
+  current: current.has(c.number),
+}));
 const units = data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) }));
 const frqs = pastFrqLinks(data);
 const chapterTopics = Object.fromEntries(data.chapters.map((c) => [String(c.number), c.cedTopics]));
 const isLearned = learnedTopic(data);
 const learnedTopics = [...data.topics.keys()].filter(isLearned);
 const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections }));
+
+// Quick picks: class tests with questions (newest first), then a mixed set from everything.
+const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const presets = [
+  ...[...data.tests]
+    .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+    .map((t) => ({ t, n: questions.filter((q) => inTest(t, q)).length }))
+    .filter(({ n }) => n > 0)
+    .map(({ t, n }) => ({ label: t.title, query: `?test=${t.id}`, note: `All ${plural(n, 'question')}, in order` })),
+  ...(questions.length > 0
+    ? [{ label: 'Mixed review', query: '?mode=random', note: `10 random from all ${questions.length}` }]
+    : []),
+];
 ---
 
-<Base title="Practice" subject={subject}>
+<Base title="Practice" subject={subject} description="Practice questions by chapter, AP topic, class test, and difficulty.">
   <h1>Practice</h1>
   <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
   <Practice
@@ -32,6 +51,9 @@ const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.cha
     chapterTopics={chapterTopics}
     learnedTopics={learnedTopics}
     frqsHref={url(`${subject}/frqs/`)}
+    topicsHref={url(`${subject}/ap/`)}
+    chaptersHref={url(`${subject}/chapters/`)}
     practiceNames={Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name]))}
+    presets={presets}
   />
 </Base>

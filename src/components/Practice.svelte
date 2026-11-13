@@ -18,6 +18,7 @@
     MAX_COUNT,
     activeFilterCount,
     amendLastResult,
+    chapterRange,
     countWith,
     describeScope,
     describeSet,
@@ -140,6 +141,10 @@
   let moreOpen = $state(false);
   /** The student picked an order themselves; until then, choosing a count shuffles (see setCount). */
   let orderChosen = $state(false);
+  /** Long sets: the question grid is open ("Jump to a question"). */
+  let jumpOpen = $state(false);
+  /** What the number box shows while typing (filters.n only takes valid numbers). */
+  let countText = $state('');
   /** Reviewing a question from the results screen: Back (and "Back to results") return there. */
   let reviewing = $state(false);
   /** "Clear history" was pressed once; the inline confirmation is showing. */
@@ -161,8 +166,10 @@
   const setSize = $derived(sessionSize(matching.length, filters));
   const activeCount = $derived(activeFilterCount(filters));
   const topicTitles = $derived(new Map(units.flatMap((u) => u.topics.map((t) => [t.id, t.title] as const))));
-  const usedTopics = $derived(new Set(all?.flatMap((q) => q.cedTopics) ?? []));
-  const usedUnits = $derived(new Set(all?.flatMap((q) => q.units) ?? []));
+  /** Questions the chapter filter allows (all class chapters when none is picked): topic and unit lists come from these. */
+  const inChapters = $derived(all ? filterQuestions(all, { ...emptyFilters(), chapters: filters.chapters }, tests) : []);
+  const usedTopics = $derived(new Set(inChapters.flatMap((q) => q.cedTopics)));
+  const usedUnits = $derived(new Set(inChapters.flatMap((q) => q.units)));
   const learned = $derived(new Set(learnedTopics));
   const frqTopics = $derived(filterTopics(filters, units, chapterTopics, tests));
   const frqMatches = $derived(frqTopics.size ? matchFrqs(frqs, frqTopics) : []);
@@ -170,10 +177,16 @@
   const sessionFrqTopics = $derived(filterTopics(sessionFilters, units, chapterTopics, tests));
   const sessionFrqMatches = $derived(sessionFrqTopics.size ? matchFrqs(frqs, sessionFrqTopics) : []);
   const emptyCurrent = $derived(chapters.filter((c) => c.current && !c.hasQuestions));
-  const hasClassOnly = $derived(all?.some((q) => q.cedTopics.length === 0) ?? false);
+  // With no chapter picked, practice draws from the chapters the class has reached; questions
+  // for later chapters (samples) come in only when their chapter is picked.
+  const taughtChapters = $derived(chapters.filter((c) => c.hasQuestions && (c.finished || c.current)).map((c) => c.number));
+  const laterChapters = $derived(chapters.filter((c) => c.hasQuestions && !c.finished && !c.current).map((c) => c.number));
+  /** The default pool's name: "Ch. 6–7" when later chapters are left out, else "All questions". */
+  const everything = $derived(laterChapters.length && taughtChapters.length ? chapterRange(taughtChapters) : 'All questions');
+  const hasClassOnly = $derived(inChapters.some((q) => q.cedTopics.length === 0));
   /** Settings inside "More options" that differ from the defaults. */
   const moreCount = $derived(
-    (filters.test ? 1 : 0) + filters.units.length + filters.topics.length + (filters.type ? 1 : 0) + (orderChosen && filters.mode !== 'all' ? 1 : 0),
+    (filters.test ? 1 : 0) + filters.units.length + filters.topics.length + (filters.type ? 1 : 0),
   );
   const visibleUnits = $derived(
     units.filter((u) => usedUnits.has(u.id) || filters.units.includes(u.id) || u.topics.some((t) => filters.topics.includes(t.id))),
@@ -205,10 +218,13 @@
   const study = $derived(lessonsForMissed(missed, lessons));
   const current = $derived(session[index]);
 
-  /** Topics with history, weakest first, for the "Your weak spots" list. */
+  /**
+   * Topics with history, weakest first, for the "Topics to work on" list. Only class chapters, like
+   * the "Weakest topics" quick start, which appears only when this list has something in it.
+   */
   const weakSpots = $derived.by(() => {
     if (!all) return [];
-    return [...topicAccuracy(all, history)]
+    return [...topicAccuracy(filterQuestions(all, emptyFilters(), tests), history)]
       .filter(([k, acc]) => !k.startsWith('chapter-') && acc < 0.75)
       .sort((a, b) => a[1] - b[1])
       .slice(0, 4);
@@ -220,6 +236,11 @@
     if (!all || phase !== 'setup') return;
     const q = filtersToQuery(filters);
     if (location.search !== q) history_replace(q, null);
+  });
+
+  // During a set the page title ("Practice") is hidden, so the question starts higher on phones.
+  $effect(() => {
+    document.body.dataset.practice = phase;
   });
 
   // Save the session after every change.
@@ -305,10 +326,9 @@
       offerResume();
       // Links like "Random 10" on a test page are a complete set: start it right away. The setup
       // screen (with those filters) stays one Back press away.
-      if (wantsStart(location.search)) {
-        history_replace(filtersToQuery(filters), null);
-        start();
-      }
+      // The set replaces the setup entry, so Back returns to the page the link was on; "← Filters"
+      // still opens the setup screen.
+      if (wantsStart(location.search)) start(true);
     } catch (err) {
       loadError = `Could not load questions (${(err as Error).message}).`;
     }
@@ -348,7 +368,7 @@
     session = s.ids.map((id) => byId.get(id)!);
     sessionQuery = s.query;
     setId = s.id ?? 'saved';
-    setLabel = s.label ?? describeScope(parseFilters(s.query), tests);
+    setLabel = s.label ?? describeScope(parseFilters(s.query), tests, everything);
     setNote = s.note ?? '';
     picks = s.picks ?? {};
     checked = s.checked ?? {};
@@ -375,11 +395,16 @@
   function setFilters(f: Filters) {
     filters = f;
     customCount = f.n !== null && !countChoices.includes(f.n);
+    countText = String(f.n ?? DEFAULT_COUNT);
     orderChosen = f.mode !== 'all';
     if (moreCount > 0) moreOpen = true;
   }
 
-  async function begin(questions: PracticeQuestion[], query: string, label: string, note = '') {
+  /**
+   * Start a set. `replace`: the set takes over the current (setup) history entry instead of
+   * adding one, for links that start a set right away (?start=1).
+   */
+  async function begin(questions: PracticeQuestion[], query: string, label: string, note = '', replace = false) {
     const base = navState()?.depth ?? 0;
     session = questions;
     sessionQuery = query;
@@ -391,26 +416,29 @@
     resumable = null;
     reviewing = false;
     // A history entry per set: Back from a set returns to the filters, or from a set started on
-    // the results screen (retry, new set) to those results. "← Filters" goes back `depth` entries.
+    // the results screen (retry, new set) to those results. "← Filters" goes back `depth` entries;
+    // at depth 0 there is no setup entry below (the set came from a link), so it replaces the set's.
     const st = (depth: number): NavState => ({ phase: 'session', depth, set: setId });
-    if (phase === 'setup') window.history.pushState(st(1), '', location.pathname + query);
-    else if (base > 0) window.history.pushState(st(base + 1), '', location.pathname + query);
-    else history_replace(query, st(0));
+    if (phase === 'setup' && replace) history_replace(query, st(0));
+    else if (phase === 'setup') window.history.pushState(st(1), '', location.pathname + query);
+    else if (phase === 'results') window.history.pushState(st(base > 0 ? base + 1 : 0), '', location.pathname + query);
+    else history_replace(query, st(base));
+    jumpOpen = false;
     phase = 'session';
     await showQuestion();
   }
 
   /** Pick questions for filters `f` from `pool` (the questions they match) and start the set. */
-  function startWith(f: Filters, pool: PracticeQuestion[]) {
+  function startWith(f: Filters, pool: PracticeQuestion[], replace = false) {
     if (pool.length === 0) return;
     const picked = selectQuestions(pool, f, history);
     const note = f.mode === 'weak' && weakHasNoHistory(pool, history) ? 'No practice history on these yet, so the order is random.' : '';
-    void begin(picked, filtersToQuery(f), describeSet(f, tests, picked.length, pool.length), note);
+    void begin(picked, filtersToQuery(f), describeSet(f, tests, picked.length, pool.length, everything), note, replace);
   }
 
-  function start() {
+  function start(replace = false) {
     if (!all) return;
-    startWith($state.snapshot(filters), matching);
+    startWith($state.snapshot(filters), matching, replace);
   }
 
   /** Quick start: begin a ready-made set without touching the filters on the setup screen. */
@@ -426,7 +454,7 @@
   }
 
   function retryMissed() {
-    void begin([...missed], sessionQuery, `${describeScope(sessionFilters, tests)} · retrying the ${missed.length} you missed`);
+    void begin([...missed], sessionQuery, `${describeScope(sessionFilters, tests, everything)} · retrying the ${missed.length} you missed`);
   }
 
   /** Enter on a filter chip toggles it, like Space. It never starts the set. */
@@ -616,6 +644,7 @@
   function setCount(n: number | null, custom = false) {
     customCount = custom;
     filters.n = n;
+    if (n !== null) countText = String(n);
     if (!orderChosen) filters.mode = n === null ? 'all' : 'random';
   }
 
@@ -635,6 +664,26 @@
     customCount = false;
     orderChosen = false;
   }
+
+  /** The "Other" number box: whole numbers from 1 to MAX_COUNT; anything else is ignored. */
+  function onCountInput(text: string) {
+    countText = text;
+    const v = Number(text);
+    if (text.trim() !== '' && Number.isInteger(v) && v > 0) filters.n = Math.min(v, MAX_COUNT);
+  }
+
+  /** Leaving the box: show the number the set will really have (at most what matches). */
+  function onCountBlur() {
+    const n = filters.n ?? DEFAULT_COUNT;
+    const shown = matching.length > 0 ? Math.min(n, matching.length) : n;
+    filters.n = shown;
+    countText = String(shown);
+  }
+  const countInvalid = $derived.by(() => {
+    if (!customCount) return false;
+    const v = Number(countText);
+    return countText.trim() === '' || !Number.isInteger(v) || v < 1;
+  });
 
   /** One-at-a-time checkbox group: checking an option replaces the other; unchecking clears it. */
   function pickOne<T>(value: T, checked: boolean): T | null {
@@ -765,7 +814,7 @@
       </section>
     {/if}
 
-    {#if presets.length > 0 || historyCount > 0}
+    {#if presets.length > 0 || weakSpots.length > 0}
       <section class="presets" aria-labelledby="presets-h">
         <div class="presets-head">
           <h2 id="presets-h" class="section-h">Quick start</h2>
@@ -778,7 +827,7 @@
               {#if p.note}<span class="small muted">{p.note}</span>{/if}
             </button>
           {/each}
-          {#if historyCount > 0}
+          {#if weakSpots.length > 0}
             <button type="button" class="preset" onclick={() => startPreset(`?mode=weak&n=${DEFAULT_COUNT}`)}>
               <span class="preset-label">Weakest topics <span aria-hidden="true">→</span></span>
               <span class="small muted">{plural(presetSize(`?mode=weak&n=${DEFAULT_COUNT}`), 'question')} on what you've missed most</span>
@@ -791,7 +840,7 @@
     <!-- Only the Start practice button starts a set: Enter on a chip toggles it (onFilterKey). -->
     <form class="card filters" onsubmit={(e) => e.preventDefault()} onkeydown={onFilterKey} aria-labelledby="filters-h">
       <div class="filters-head">
-        <h2 id="filters-h" class="section-h">{presets.length > 0 || historyCount > 0 ? 'Or choose your own' : 'Choose questions'}</h2>
+        <h2 id="filters-h" class="section-h">{presets.length > 0 || weakSpots.length > 0 ? 'Or choose your own' : 'Choose questions'}</h2>
         <span class="small muted head-note">Nothing starts until you press <strong>Start practice</strong>.</span>
         <!-- Always laid out (hidden when there's nothing to reset), so picking a filter doesn't move the chips. -->
         <button
@@ -800,7 +849,10 @@
           type="button"
           onclick={resetFilters}>Reset all</button>
       </div>
-      <p class="small muted hint">Leave a group empty to include all of it.</p>
+      <p class="small muted hint">
+        Leave a group empty to include all of it.
+        {#if laterChapters.length > 0}No chapter picked means {everything}, the chapters taught so far; {chapterRange(laterChapters)} comes in only when you pick it.{/if}
+      </p>
 
       <fieldset>
         <legend>Chapter</legend>
@@ -812,7 +864,7 @@
                 checked={filters.chapters.includes(c.number)}
                 onchange={() => (filters.chapters = toggle(filters.chapters, c.number))}
               />
-              <span>Ch. {c.number} <span class="chip-sub">{c.title}</span>{#if !c.finished && !c.current}<span class="chip-sub ahead">{' · not taught yet'}</span>{/if}</span>
+              <span>Ch. {c.number} <span class="chip-sub">{c.title}</span>{#if !c.finished && !c.current}<span class="chip-sub ahead">{' · sample, not taught yet'}</span>{/if}</span>
               {@render count(countWith(all, filters, tests, { chapters: [c.number] }))}
             </label>
           {/each}
@@ -827,7 +879,7 @@
         {/if}
       </fieldset>
 
-      <div class="two-col">
+      <div class="three-col">
         <fieldset>
           <legend>Difficulty</legend>
           <div class="chips">
@@ -864,17 +916,42 @@
                 <input
                   class="num"
                   type="number"
+                  inputmode="numeric"
                   min="1"
-                  max={MAX_COUNT}
-                  value={filters.n ?? DEFAULT_COUNT}
-                  oninput={(e) => {
-                    const v = Number(e.currentTarget.value);
-                    if (Number.isInteger(v) && v > 0) filters.n = Math.min(v, MAX_COUNT);
-                  }}
+                  max={Math.max(1, Math.min(MAX_COUNT, matching.length))}
+                  value={countText}
+                  aria-invalid={countInvalid}
+                  aria-describedby="count-help"
+                  oninput={(e) => onCountInput(e.currentTarget.value)}
+                  onblur={onCountBlur}
                 />
               </label>
+              <span id="count-help" class="small count-help" class:warn={countInvalid || (filters.n ?? 0) > matching.length}>
+                {#if countInvalid}Type a whole number{:else if (filters.n ?? 0) > matching.length}Only {matching.length} match{:else}max {Math.min(MAX_COUNT, matching.length)}{/if}
+              </span>
             {/if}
           </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Order</legend>
+          <div class="chips">
+            {#each ['all', 'random', 'weak'] as const as m (m)}
+              <label class="chip">
+                <input type="radio" name="mode" checked={filters.mode === m} onchange={() => setMode(m)} />
+                <span>{modeLabels[m]}</span>
+              </label>
+            {/each}
+          </div>
+          {#if filters.mode === 'weak'}
+            <p class="small muted order-note">
+              {historyCount > 0
+                ? 'Topics you have missed most come first, then topics you haven’t tried.'
+                : 'You haven’t answered anything yet on this device, so this works like Shuffled for now.'}
+            </p>
+          {:else if !orderChosen}
+            <p class="small muted order-note">Picking a number shuffles; All goes in order.</p>
+          {/if}
         </fieldset>
       </div>
 
@@ -884,7 +961,7 @@
           {#if moreCount > 0 && !moreOpen}
             <span class="badge topic">{moreCount} set</span>
           {:else}
-            <span class="small muted">AP unit or topic{tests.length > 0 ? ', class test' : ''}, question type, order</span>
+            <span class="small muted">AP unit or topic{tests.length > 0 ? ', class test' : ''}, question type</span>
           {/if}
         </summary>
 
@@ -962,24 +1039,6 @@
             </div>
           </fieldset>
 
-          <fieldset>
-            <legend>Order</legend>
-            <div class="chips">
-              {#each ['all', 'random', 'weak'] as const as m (m)}
-                <label class="chip">
-                  <input type="radio" name="mode" checked={filters.mode === m} onchange={() => setMode(m)} />
-                  <span>{modeLabels[m]}</span>
-                </label>
-              {/each}
-            </div>
-            {#if filters.mode === 'weak'}
-              <p class="small muted">
-                {historyCount > 0
-                  ? 'Topics you have missed most come first, then topics you haven’t tried.'
-                  : 'You haven’t answered anything yet on this device, so this works like Shuffled for now.'}
-              </p>
-            {/if}
-          </fieldset>
         </div>
       </details>
 
@@ -991,7 +1050,7 @@
           {:else}
             <strong>{plural(setSize, 'question')}</strong>
             <span class="small muted">
-              {#if setSize < matching.length}from {matching.length} matching{:else if activeCount === 0}all questions{:else}match{/if}
+              {#if setSize < matching.length}from {matching.length} matching{:else if activeCount === 0}{everything === 'All questions' ? 'all questions' : `all of ${everything}`}{:else}match{/if}
               · {modeLabels[filters.mode].toLowerCase()}
             </span>
           {/if}
@@ -1068,12 +1127,22 @@
     <div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={session.length} aria-valuenow={answered}>
       <span style:width={`${(answered / session.length) * 100}%`}></span>
     </div>
-    {#if setLabel}
-      <p class="set-label small"><strong>{setLabel}</strong>{#if setNote}<span class="muted">{' · '}{setNote}</span>{/if}</p>
+    {#if setLabel || session.length > 24}
+      <div class="set-line">
+        {#if setLabel}
+          <p class="set-label small"><strong>{setLabel}</strong>{#if setNote}<span class="muted">{' · '}{setNote}</span>{/if}</p>
+        {/if}
+        {#if session.length > 24}
+          <!-- Long sets: keep the question grid out of the way until it's wanted. -->
+          <button type="button" class="link-button small jump-toggle" aria-expanded={jumpOpen} aria-controls="qnav" onclick={() => (jumpOpen = !jumpOpen)}>
+            {jumpOpen ? 'Hide question list' : 'Question list'}
+          </button>
+        {/if}
+      </div>
     {/if}
 
     {#snippet qnav()}
-      <nav class="qnav" aria-label="Questions in this set">
+      <nav class="qnav" id="qnav" aria-label="Questions in this set">
         {#each session as s, i (s.id)}
           {@const st = statusOf(s)}
           <button
@@ -1086,13 +1155,7 @@
         {/each}
       </nav>
     {/snippet}
-    {#if session.length > 24}
-      <!-- Long sets: keep the question grid out of the way until it's wanted. -->
-      <details class="qnav-toggle">
-        <summary class="small">Jump to a question</summary>
-        {@render qnav()}
-      </details>
-    {:else if session.length > 1}
+    {#if session.length > 24 ? jumpOpen : session.length > 1}
       {@render qnav()}
     {/if}
 
@@ -1100,16 +1163,12 @@
       <article class="card question" aria-labelledby="q-heading">
         <header class="q-head">
           <h2 id="q-heading" tabindex="-1" bind:this={questionHeading}>Question {index + 1} <span class="muted">of {session.length}</span></h2>
-          <div class="badges">
-            <span class="badge">{q.type === 'mcq' ? 'Multiple choice' : 'Free response'}</span>
-            <span class="badge">Ch. {q.chapter}</span>
-            {#each q.cedTopics as t (t)}
-              <a class="badge topic" href={`${topicsHref}${t}/`} title={topicTitles.get(t)} target="_blank" rel="noopener">{t}</a>
-            {:else}
-              <span class="badge not-ap">Not on the AP exam</span>
-            {/each}
-            <span class="badge">{difficultyLabels[q.difficulty]}</span>
-          </div>
+          <!-- One quiet line, so the prompt and choices start high on small phones. -->
+          <p class="q-meta small muted">
+            {q.type === 'mcq' ? 'Multiple choice' : 'Free response'} · Ch. {q.chapter} ·
+            {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${topicsHref}${t}/`} title={topicTitles.get(t)} target="_blank" rel="noopener"><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
+            · {difficultyLabels[q.difficulty]}
+          </p>
         </header>
 
         {#if q.type === 'frq' && !finished[q.id]}
@@ -1356,8 +1415,20 @@
     visibility: hidden;
   }
   .set-label {
-    margin: -0.25rem 0 0.75rem;
+    margin: 0;
     color: var(--text-2);
+  }
+  /* The set's name and "Jump to a question" share one line under the progress bar. */
+  .set-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.1rem 1rem;
+    margin: -0.35rem 0 0.6rem;
+  }
+  .jump-toggle {
+    margin-left: auto;
   }
   .score .set-label {
     margin: -0.35rem 0 0.6rem;
@@ -1433,6 +1504,24 @@
     color: var(--muted);
     margin-bottom: 0.45rem;
     padding: 0;
+  }
+  .three-col {
+    display: grid;
+    gap: 0 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+  .order-note {
+    margin: 0.4rem 0 0;
+  }
+  .count-help {
+    color: var(--muted);
+  }
+  .count-help.warn {
+    color: var(--warn);
+    font-weight: 600;
+  }
+  .num[aria-invalid='true'] {
+    border-color: var(--warn);
   }
   .two-col {
     display: grid;
@@ -1776,10 +1865,18 @@
   .q-head {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-    align-items: center;
+    gap: 0.1rem 1rem;
+    align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+  .q-meta {
+    margin: 0;
+  }
+  @media (max-width: 480px) {
+    .question {
+      padding: 0.9rem 1rem;
+    }
   }
   .prompt,
   .explanation,
@@ -1977,15 +2074,6 @@
   }
   .q-actions .button {
     padding-inline: 0.85rem;
-  }
-  .qnav-toggle {
-    margin-bottom: 0.75rem;
-  }
-  .qnav-toggle summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--link);
-    margin-bottom: 0.5rem;
   }
   @media (max-width: 480px) {
     /* The main action (Check, Done marking, Next) goes first and full width on phones. */

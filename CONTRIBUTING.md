@@ -95,8 +95,9 @@ failing that, an AP topic), so tag `sections` on both lessons and questions.
 Sample content: `authors: ["sample"]` marks a page or question written only to show the format. Sample
 pages, and anything in a chapter the class hasn't reached yet (not finished or current in
 `progress.json`), are labelled as not class material, listed in a closed "Sample pages" section at
-the end of the Lessons page, and left off the home page. Mixed review in Practice only draws from
-chapters the class has reached.
+the end of the Lessons page, and left off the home page. Practice leaves their questions out unless
+the student picks their chapter (or a class test covering it): with no chapter picked, sets come
+from the chapters the class has reached.
 
 Watch out for curly braces `{ }` in ordinary MDX text (outside `$...$`): MDX reads them as code.
 Write `\{` or put the text inside math.

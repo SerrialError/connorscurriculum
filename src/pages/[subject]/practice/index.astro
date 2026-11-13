@@ -53,7 +53,7 @@ const mixed = mixedReview(
   new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
 );
 if (mixed) {
-  presets.push({ label: 'Mixed review', query: mixed.query, note: `10 random from ${chapterRange(mixed.chapters)} (${mixed.count})` });
+  presets.push({ label: 'Mixed review', query: mixed.query, note: `10 random from the ${mixed.count} questions in ${chapterRange(mixed.chapters).replace('Ch. ', 'Ch.\u00a0')}` });
 }
 // Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.
 const lessons: PracticeLesson[] = (await getLessons(subject))
@@ -62,7 +62,7 @@ const lessons: PracticeLesson[] = (await getLessons(subject))
 ---
 
 <Base title="Practice" subject={subject} description="Practice questions by chapter, AP topic, class test, and difficulty.">
-  <h1>Practice</h1>
+  <h1 class="practice-title">Practice</h1>
   <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
   <Practice
     client:load
@@ -82,3 +82,18 @@ const lessons: PracticeLesson[] = (await getLessons(subject))
     lessons={lessons}
   />
 </Base>
+
+<style>
+  /* During a set the title is for screen readers only: on phones the question starts higher. */
+  :global(body[data-practice='session']) .practice-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  :global(body[data-practice='session'] main) {
+    padding-top: 1rem;
+  }
+</style>

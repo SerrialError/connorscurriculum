@@ -185,6 +185,18 @@ describe('filterQuestions', () => {
     expect(activeFilterCount({ ...emptyFilters(), chapters: [6, 7], test: 'x', type: 'mcq' })).toBe(4);
   });
 
+  it('leaves out samples and later chapters unless their chapter is picked', () => {
+    const qs = [mcq('a'), mcq('b', { chapter: 15, extra: true, difficulty: 2 })];
+    const later: PracticeTest[] = [{ id: 't15', title: 'Ch. 15 Test', chapters: [15], sections: [] }];
+    expect(ids(filterQuestions(qs, emptyFilters(), later))).toEqual(['a']);
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), topics: ['5.1'] }, later))).toEqual(['a']);
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), difficulty: [2] }, later))).toEqual([]);
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), chapters: [15] }, later))).toEqual(['b']);
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), chapters: [14, 15] }, later))).toEqual(['a', 'b']);
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), test: 't15' }, later))).toEqual(['b']);
+    expect(countWith(qs, emptyFilters(), later, { chapters: [15] })).toBe(1);
+  });
+
   it('filters by difficulty and type', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), difficulty: [2, 3] }, tests))).toEqual(['q2', 'f1']);
     expect(ids(filterQuestions(questions, { ...emptyFilters(), type: 'frq' }, tests))).toEqual(['f1']);
@@ -305,6 +317,14 @@ describe('naming a set', () => {
     expect(describeScope(parseFilters('?chapter=7,6&difficulty=3,1&type=mcq'), tests)).toBe('Ch. 6–7 · Easy, Hard · Multiple choice');
     expect(describeScope(parseFilters(`?unit=1,${CLASS_ONLY_UNIT}&topic=1.7`), tests)).toBe('Unit 1, Not on the AP exam · Topic 1.7');
     expect(describeSet(parseFilters('?mode=random&n=5'), tests, 3, 3)).toBe('All questions · all 3, shuffled');
+  });
+  it('names the default pool when later chapters are left out', () => {
+    expect(describeScope(emptyFilters(), tests, 'Ch. 6–7')).toBe('Ch. 6–7');
+    expect(describeScope(parseFilters('?difficulty=3'), tests, 'Ch. 6–7')).toBe('Ch. 6–7 · Hard');
+    expect(describeScope(parseFilters('?chapter=7&difficulty=3'), tests, 'Ch. 6–7')).toBe('Ch. 7 · Hard');
+    expect(describeScope(parseFilters('?test=ch6-7-test'), tests, 'Ch. 6–7')).toBe('Chapters 6–7 Test');
+    expect(describeScope(parseFilters('?topic=3.12'), tests, 'Ch. 6–7')).toBe('Topic 3.12');
+    expect(describeSet(parseFilters('?mode=weak'), tests, 10, 116, 'Ch. 6–7')).toBe('Ch. 6–7 · 10 on your weakest topics');
   });
   it('chapterRange', () => {
     expect(chapterRange([9, 8])).toBe('Ch. 8–9');

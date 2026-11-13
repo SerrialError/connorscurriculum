@@ -3,7 +3,7 @@
 import { dirname, join } from 'node:path';
 import type { APIRoute, GetStaticPaths, ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
-import { type Question, getQuestions, getSubjectData, subjectPaths, topicIds } from '../../../lib/content';
+import { type Question, getQuestions, getSubjectData, isClassContent, subjectPaths, topicIds } from '../../../lib/content';
 import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../../../lib/markdown';
 import type { PracticeQuestion } from '../../../lib/practice';
 
@@ -42,6 +42,8 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
     promptText: await renderPlainText(q.data.prompt),
     image: await questionImage(q),
     explanationHtml: await renderMarkdown(q.data.explanation),
+    // Samples and later chapters stay out of practice unless their chapter is picked.
+    ...(isClassContent(data, q) ? {} : { extra: true }),
   };
   if (q.data.type === 'mcq') {
     return {

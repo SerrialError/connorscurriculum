@@ -27,6 +27,11 @@ interface PracticeQuestionBase {
   promptText: string;
   image?: { src: string; width: number; height: number; alt: string };
   explanationHtml: string;
+  /**
+   * Not class material yet: a sample question, or one from a chapter the class hasn't reached.
+   * Left out of practice unless its chapter is picked (see filterQuestions).
+   */
+  extra?: boolean;
 }
 
 export interface McqQuestion extends PracticeQuestionBase {
@@ -142,11 +147,15 @@ export function filtersToQuery(f: Filters): string {
  * Filters combine with AND across kinds and OR within a kind. Units and topics are one
  * "CED" kind: a question matches if it is in any selected unit or has any selected topic.
  * The CLASS_ONLY_UNIT unit matches questions with no CED topic.
+ * `extra` questions (samples, chapters not taught yet) only match when their chapter is picked,
+ * by the chapter filter or by the class test's chapters: no chapter picked means the class's
+ * chapters, not everything.
  */
 export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests: PracticeTest[]): PracticeQuestion[] {
   const test = f.test ? tests.find((t) => t.id === f.test) : undefined;
   return questions.filter((q) => {
     if (f.chapters.length && !f.chapters.includes(q.chapter)) return false;
+    if (q.extra && !f.chapters.includes(q.chapter) && !test?.chapters.includes(q.chapter)) return false;
     if (f.test) {
       if (!test || !test.chapters.includes(q.chapter)) return false;
       if (test.sections.length && !q.sections.some((s) => test.sections.includes(s))) return false;
@@ -385,9 +394,14 @@ export function chapterRange(ns: number[]): string {
 
 const DIFFICULTY_NAMES: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
 
-/** What the filters select, e.g. "Chapters 6–7 Test · Hard" or "All questions". */
-export function describeScope(f: Filters, tests: PracticeTest[]): string {
+/**
+ * What the filters select, e.g. "Chapters 6–7 Test · Hard" or "All questions". `everything` names
+ * the pool when no chapter or test is picked (e.g. "Ch. 6–7" when later chapters are left out).
+ */
+export function describeScope(f: Filters, tests: PracticeTest[], everything = 'All questions'): string {
   const parts: string[] = [];
+  // "Ch. 6–7 · Hard": name the default pool unless a chapter, test, unit, or topic already says where from.
+  if (!f.test && !f.chapters.length && !f.units.length && !f.topics.length && everything !== 'All questions') parts.push(everything);
   if (f.test) parts.push(tests.find((t) => t.id === f.test)?.title ?? f.test);
   if (f.chapters.length) parts.push(chapterRange(f.chapters));
   const units = f.units.map((u) => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`));
@@ -395,14 +409,14 @@ export function describeScope(f: Filters, tests: PracticeTest[]): string {
   if (f.topics.length) parts.push(`${f.topics.length === 1 ? 'Topic' : 'Topics'} ${f.topics.join(', ')}`);
   if (f.difficulty.length) parts.push([...f.difficulty].sort((a, b) => a - b).map((d) => DIFFICULTY_NAMES[d]).join(', '));
   if (f.type) parts.push(f.type === 'mcq' ? 'Multiple choice' : 'Free response');
-  return parts.length ? parts.join(' · ') : 'All questions';
+  return parts.length ? parts.join(' · ') : everything;
 }
 
 /**
  * A one-line name for a set, shown above its questions and results:
  * "Chapters 6–7 Test · 10 random", "Ch. 7 · Hard · 10 on your weakest topics".
  */
-export function describeSet(f: Filters, tests: PracticeTest[], size: number, matching: number): string {
+export function describeSet(f: Filters, tests: PracticeTest[], size: number, matching: number, everything?: string): string {
   const all = size >= matching;
   const how =
     f.mode === 'random'
@@ -416,7 +430,7 @@ export function describeSet(f: Filters, tests: PracticeTest[], size: number, mat
         : all
           ? `all ${size} in order`
           : `first ${size} in order`;
-  return `${describeScope(f, tests)} · ${how}`;
+  return `${describeScope(f, tests, everything)} · ${how}`;
 }
 
 /**

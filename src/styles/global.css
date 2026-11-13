@@ -599,3 +599,11 @@ button.button {
   border: 0;
   display: block;
 }
+
+/* Links that open a new tab (official PDFs) say so: an arrow, read out as "opens in a new tab". */
+a[target='_blank']::after {
+  content: '\2009↗' / ' (opens in a new tab)';
+  font-size: 0.85em;
+  text-decoration: none;
+  display: inline-block;
+}

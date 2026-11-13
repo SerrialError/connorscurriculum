@@ -19,6 +19,7 @@ import {
   lessonSlug,
   practiceHref,
   practiceStart,
+  testPracticeLinks,
   subjectIds,
   topicIds,
   url,
@@ -83,10 +84,7 @@ const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0
 const sample = isSample(lesson);
 const byLine = sample ? '' : byline(lesson);
 const ahead = !isTaught(data, chapter.number);
-const testPractice =
-  test && testQuestions
-    ? { href: practiceHref(subject, { test: test.id, start: '1' }), label: `Start all ${testQuestions} test questions` }
-    : null;
+const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id, testQuestions) : null;
 ---
 
 <Base
@@ -125,7 +123,13 @@ const testPractice =
     {test && (
       <p class="test-note">
         Review sheet for the <a href={testHref}>{test.title}</a>.
-        {testPractice && <> When you're done, <a href={testPractice.href}>start the test's {testQuestions} practice questions</a>.</>}
+        {testPractice && (
+          <>
+            {' '}When you're done, practice:{' '}
+            {testPractice.random && <><a href={testPractice.random.href}>10 random test questions</a> or{' '}</>}
+            <a href={testPractice.all.href}>all {testQuestions}</a>.
+          </>
+        )}
       </p>
     )}
     {!test && practice && (
@@ -147,25 +151,28 @@ const testPractice =
 
     <footer class="lesson-footer" data-pagefind-ignore>
       {test ? (
-        <div class="actions">
-          {testPractice && <a class="button" href={testPractice.href}>{testPractice.label}</a>}
-          <a class="button secondary" href={testHref}>Back to the {test.title}</a>
-        </div>
+        <>
+          {testPractice && (
+            <div class="actions">
+              {testPractice.random && <a class="button" href={testPractice.random.href}>{testPractice.random.label}</a>}
+              <a class:list={['button', { secondary: !!testPractice.random }]} href={testPractice.all.href}>{testPractice.all.label}</a>
+            </div>
+          )}
+          <p class="small all-lessons"><a href={testHref}>Back to the {test.title}</a></p>
+        </>
       ) : (
         <>
-          <div class="actions">
-            {practice && (
-              <>
-                <a class="button" href={practice.start.href}>{practice.start.label}</a>
-                <a class="button secondary" href={practice.setup}>Choose filters</a>
-              </>
-            )}
-            <a class="button secondary" href={url(`${subject}/chapters/${chapter.number}/#lessons`)}>All Chapter {chapter.number} lessons</a>
-          </div>
+          {practice && (
+            <div class="actions">
+              <a class="button" href={practice.start.href}>{practice.start.label}</a>
+              <a class="button secondary" href={practice.setup}>Choose filters</a>
+            </div>
+          )}
           <nav class="pager" aria-label="Lessons in this chapter">
             {prev ? <a href={lessonHref(prev)}><span class="small muted">← Previous</span>{prev.data.title}</a> : <span></span>}
             {next && <a class="next" href={lessonHref(next)}><span class="small muted">Next →</span>{next.data.title}</a>}
           </nav>
+          <p class="small all-lessons"><a href={url(`${subject}/chapters/${chapter.number}/#lessons`)}>All Chapter {chapter.number} lessons</a></p>
         </>
       )}
     </footer>
@@ -322,5 +329,11 @@ const testPractice =
     margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--border);
+  }
+  .all-lessons {
+    margin: 0.75rem 0 0;
+  }
+  .all-lessons a {
+    font-weight: 600;
   }
 </style>

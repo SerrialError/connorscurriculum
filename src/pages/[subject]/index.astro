@@ -13,9 +13,9 @@ import {
   lessonHref,
   nextChapter,
   pastFrqLinks,
-  practiceHref,
   practiceStart,
   subjectPaths,
+  testPracticeLinks,
   testsByDate,
   url,
 } from '../../lib/content';
@@ -61,6 +61,7 @@ const nowInfo = nowChapters.map((c) => chapterInfo(c.number));
 const test = testsByDate(data)[0];
 const testReview = test ? lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)) : [];
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
+const testLinks = test ? testPracticeLinks(subject, test.id, testQuestions) : null;
 // Has the test happened? Decided again in the browser (script below), since the site is built
 // once and read for weeks. The day of the test still counts as upcoming.
 const today = new Date().toISOString().slice(0, 10);
@@ -79,7 +80,6 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
 
 <Base title={data.subject.name} subject={subject}>
   <h1>{data.subject.name}</h1>
-  <p class="muted lede">Textbook: <em>{data.subject.textbook}</em></p>
   <Search placeholder="Search lessons, notes, topics…" />
 
   <div class="dash">
@@ -134,14 +134,17 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
             ))}
           </ul>
         )}
-        {testQuestions > 0 && (
+        {testLinks && testQuestions > 0 && (
           <>
             <div class="actions if-upcoming">
-              <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Start all {testQuestions} test questions</a>
+              <a class="button" href={(testLinks.random ?? testLinks.all).href}>{(testLinks.random ?? testLinks.all).label}</a>
+              {testLinks.random && <a class="button secondary" href={testLinks.all.href}>{testLinks.all.label}</a>}
             </div>
+            {/* After the test: review practice, as quiet links. */}
             <p class="small if-past review-practice">
-              <a href={practiceHref(subject, { test: test.id, start: '1' })}>Practice all {testQuestions} test questions</a>
-              <span class="muted"> · good review for later tests and the AP exam</span>
+              <span class="muted">Review:</span>{' '}
+              <a href={(testLinks.random ?? testLinks.all).href}>{testLinks.random ? `${testLinks.random.label.replace('Start ', '')} from the test` : testLinks.all.label}</a>
+              {testLinks.random && <><span class="muted"> · </span><a href={testLinks.all.href}>all {testQuestions}</a></>}
             </p>
           </>
         )}
@@ -247,9 +250,6 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
 </script>
 
 <style>
-  .lede {
-    margin-top: -0.25rem;
-  }
   .dash {
     display: grid;
     gap: 1rem;
@@ -344,6 +344,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   /* Two wide cards rather than three narrow ones, matching the cards above. */
   .lesson-cards {
     gap: 1rem;
+    align-items: start;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
   }
   .notes-line a {

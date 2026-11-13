@@ -359,10 +359,19 @@ const siteHome = subjectIds.length === 1 ? url(`${subjectIds[0]}/`) : url();
     .subnav {
       gap: 0;
       padding-left: calc(1rem - 0.4rem);
+      padding-bottom: 0.15rem;
     }
+    /* Tap targets at least 44px tall on phones. */
     .subnav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
       font-size: 0.875rem;
-      padding: 0.35rem 0.4rem;
+      padding: 0 0.4rem;
+    }
+    .subject,
+    .icon-button {
+      min-height: 2.75rem;
     }
     /* The subject name in the bar is the home link here. */
     .subnav a.nav-home,

@@ -70,7 +70,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
       {t.date && <span class="muted"> · {formatDate(t.date)}</span>}
     </p>
   ))}
-  {questionCount === 0 && (
+  {questionCount === 0 && lessons.length > 0 && (
     <p class="small muted">
       No practice questions for this chapter yet.
       {frqMatches.length > 0 && <> Try the <a href="#frqs">past AP FRQs on its topics</a> below.</>}
@@ -79,12 +79,17 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
 
   <section id="lessons" aria-labelledby="lessons-h">
     <h2 id="lessons-h">Lessons and notes</h2>
+    {/* One line for an empty chapter, covering both lessons and practice questions. */}
     <LessonList
       lessons={lessons}
       grouped
-      empty={current
-        ? 'No lessons yet: the class is on this chapter now. Use the AP topics and past FRQs below.'
-        : 'No lessons yet.'}
+      empty={[
+        questionCount === 0 ? 'No lessons or practice questions yet.' : 'No lessons yet.',
+        current && 'The class is on this chapter now:',
+        current && (frqMatches.length > 0 ? 'study its AP topics and past FRQs below.' : 'study its AP topics below.'),
+      ]
+        .filter(Boolean)
+        .join(' ')}
     />
     {lessons.length === 0 && (
       <p class="small"><a href={CONTRIBUTE_URL}>Share your notes or write a lesson for this chapter</a></p>
@@ -127,10 +132,9 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
   {frqMatches.length > 0 && (
     <section id="frqs" data-pagefind-ignore="all" aria-labelledby="frqs-h">
       <h2 id="frqs-h">Past AP FRQs on these topics</h2>
-      <details class="frqs">
-        <summary>
-          Show {frqCountLabel(frqMatches)}
-        </summary>
+      {/* Open on chapters with no lessons: the FRQs are the main thing to study there. */}
+      <details class="frqs" open={lessons.length === 0}>
+        <summary>{frqCountLabel(frqMatches)}</summary>
         <div class="stack">
           {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
         </div>

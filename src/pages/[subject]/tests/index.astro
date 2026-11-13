@@ -1,6 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { chapterRange, formatDate, getLessons, getQuestions, getSubjectData, inTest, lessonSlug, practiceHref, subjectPaths, testsByDate, url } from '../../../lib/content';
+import { chapterRange, currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, lessonSlug, subjectPaths, testPracticeLinks, testsByDate, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -14,9 +14,11 @@ const tests = testsByDate(data).map((t) => ({
   t,
   n: questions.filter((q) => inTest(t, q)).length,
   review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
+  links: testPracticeLinks(subject, t.id, questions.filter((q) => inTest(t, q)).length),
 }));
 const today = new Date().toISOString().slice(0, 10);
 const isUpcoming = (date?: string) => !!date && date >= today;
+const now = currentChapters(data);
 ---
 
 <Base title="Class tests" subject={subject}>
@@ -26,10 +28,10 @@ const isUpcoming = (date?: string) => !!date && date >= today;
     <p class="muted">No class tests listed yet.</p>
   ) : (
     ['upcoming', 'past'].map((group) => (
-      <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={!tests.some((x) => (group === 'upcoming') === isUpcoming(x.t.date))}>
+      <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={group === 'past' && !tests.some((x) => !isUpcoming(x.t.date))}>
         <h2 id={`${group}-h`}>{group === 'upcoming' ? 'Upcoming' : 'Past tests'}</h2>
         <ul class="plain-list stack">
-          {tests.map(({ t, n, review }) => (
+          {tests.map(({ t, n, review, links }) => (
             <li class="card test" data-date={t.date ?? ''} hidden={(group === 'upcoming') !== isUpcoming(t.date)}>
               <h3><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h3>
               <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
@@ -40,20 +42,41 @@ const isUpcoming = (date?: string) => !!date && date >= today;
                   ))}
                 </ul>
               )}
-              <div class="actions">
-                {n > 0 && <a class="button" href={practiceHref(subject, { test: t.id, start: '1' })}>Start all {n} questions</a>}
-                <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>Open test page</a>
-              </div>
+              {n > 0 && (
+                <div class="actions">
+                  {links.random && (
+                    <a class="button" href={links.random!.href}>{links.random!.label}</a>
+                  )}
+                  <a class:list={['button', { secondary: !!links.random }]} href={links.all.href}>{links.all.label}</a>
+                </div>
+              )}
             </li>
           ))}
         </ul>
+        {group === 'upcoming' && (
+          <p class="muted none-upcoming" hidden={tests.some((x) => isUpcoming(x.t.date))}>
+            No test date announced yet.
+            {now.length > 0 && (
+              <>
+                {' '}The class is on{' '}
+                {now.map((c, i) => (
+                  <>
+                    {i > 0 && ' and '}
+                    <a href={url(`${subject}/chapters/${c.number}/`)}>Ch. {c.number}</a>
+                  </>
+                ))}{' '}
+                now.
+              </>
+            )}
+          </p>
+        )}
       </section>
     ))
   )}
 </Base>
 
 <script>
-  // Put each test under Upcoming or Past using today's date, and hide a group with no tests.
+  // Put each test under Upcoming or Past using today's date, hide Past when empty, and say so when nothing is upcoming.
   const today = new Date();
   const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   for (const group of document.querySelectorAll<HTMLElement>('.test-group')) {
@@ -64,7 +87,8 @@ const isUpcoming = (date?: string) => !!date && date >= today;
       li.hidden = upcoming !== (!!date && date >= iso);
       if (!li.hidden) shown++;
     }
-    group.hidden = shown === 0;
+    if (upcoming) group.querySelector<HTMLElement>('.none-upcoming')!.hidden = shown > 0;
+    else group.hidden = shown === 0;
   }
 </script>
 

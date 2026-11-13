@@ -12,6 +12,7 @@ import {
   inTest,
   lessonSlug,
   practiceHref,
+  testPracticeLinks,
   subjectIds,
   topicIds,
   url,
@@ -26,6 +27,7 @@ const data = getSubjectData(subject);
 const test = data.tests.find((t) => t.id === id)!;
 const lessons = (await getLessons(subject)).filter((l) => inTest(test, l));
 const questions = (await getQuestions(subject)).filter((q) => inTest(test, q));
+const links = testPracticeLinks(subject, test.id, questions.length);
 const cedOrder = [...data.topics.keys()];
 const topics = [...new Set([...lessons, ...questions].flatMap(topicIds))].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
 const reviewSheets = lessons.filter((l) => l.data.kind === 'review');
@@ -63,8 +65,8 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 
   {questions.length > 0 ? (
     <div class="actions" data-pagefind-ignore>
-      <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Start all {questions.length} questions</a>
-      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'random', n: '10', start: '1' })}>Start 10 random</a>
+      {links.random && <a class="button" href={links.random.href}>{links.random.label}</a>}
+      <a class:list={['button', { secondary: !!links.random }]} href={links.all.href}>{links.all.label}</a>
       <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'weak', n: '10', start: '1' })}>Start 10 on your weakest topics</a>
       <a class="button secondary" href={practiceHref(subject, { test: test.id })}>Choose filters</a>
     </div>

@@ -94,6 +94,24 @@ export function practiceStart(
   };
 }
 
+/**
+ * Practice links for a class test: a set of DEFAULT_COUNT random questions (the main action, a
+ * sensible length for one sitting) and all of them in order. With DEFAULT_COUNT or fewer
+ * questions there is only "all".
+ */
+export function testPracticeLinks(
+  subject: string,
+  testId: string,
+  total: number,
+): { random: { href: string; label: string } | null; all: { href: string; label: string } } {
+  const all = { href: practiceHref(subject, { test: testId, start: '1' }), label: `All ${total} in order` };
+  if (total <= DEFAULT_COUNT) return { random: null, all: { ...all, label: `Start all ${total} question${total === 1 ? '' : 's'}` } };
+  return {
+    random: { href: practiceHref(subject, { test: testId, mode: 'random', n: String(DEFAULT_COUNT), start: '1' }), label: `Start ${DEFAULT_COUNT} random questions` },
+    all,
+  };
+}
+
 export function practiceHref(subject: string, query: Record<string, string | string[] | number[] | undefined>): string {
   const p = new URLSearchParams();
   for (const [k, v] of Object.entries(query)) {

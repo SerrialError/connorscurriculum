@@ -2,7 +2,7 @@
 // One released AP FRQ: links to the official PDFs, readiness, and either all parts with
 // their topics or just the parts that matched a topic.
 import { getSubjectData, learnedTopic, url } from '../lib/content';
-import { type FrqLink, type FrqPart, frqName, frqPractices, frqTotal, readyPoints } from '../lib/frqs';
+import { type FrqLink, type FrqPart, frqName, frqPractices, frqTotal, readinessLabel, readyPoints } from '../lib/frqs';
 import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
 
 interface Props {
@@ -16,7 +16,7 @@ const { subject, frq, matched } = Astro.props;
 const data = getSubjectData(subject);
 const learned = learnedTopic(data);
 const total = frqTotal(frq);
-const ready = readyPoints(frq, learned);
+const ready = readinessLabel(readyPoints(frq, learned), total);
 const matchedPoints = matched?.reduce((sum, p) => sum + p.points, 0) ?? 0;
 const kind = frq.number <= 3 ? 'Long' : 'Short';
 const practiceName = (id: string) => data.ced.sciencePractices.find((p) => p.id === id)?.name ?? `Practice ${id}`;
@@ -36,12 +36,7 @@ const sourceNote = frq.officialSkills
       <a href={frq.questionUrl} target="_blank" rel="noopener">{frqName(frq)}</a>
       <span class="title">{frq.title}</span>
     </h3>
-    <span
-      class:list={['badge', { good: ready === total }]}
-      title="Points in parts whose topics you have all learned (this year or last year)"
-    >
-      {ready === total ? '✓ Ready' : `${ready}/${total} pts ready`}
-    </span>
+    <span class:list={['badge', { good: ready.full }]} title={ready.title}>{ready.text}</span>
   </header>
   <p class="small muted meta">{kind} answer · {total} points</p>
   {matched ? (

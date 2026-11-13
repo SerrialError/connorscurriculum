@@ -133,15 +133,12 @@ const meta = (n: number, apUnits: string[]) => {
     padding-inline: 1rem;
     background: var(--accent-soft);
   }
-  /* Chapters with lessons or questions stand out; the rest are listed for reference. */
+  /* Chapters with lessons or questions are bold; every chapter is a working link (AP topics, FRQs). */
   .info a {
     font-weight: 700;
   }
   .empty .info a {
-    font-weight: 400;
-  }
-  .empty:not(.now) .info a {
-    color: var(--text-2);
+    font-weight: 500;
   }
   .num {
     font-weight: 700;

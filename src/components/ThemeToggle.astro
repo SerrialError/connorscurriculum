@@ -2,8 +2,13 @@
 // Cycles system -> light -> dark. "System" follows prefers-color-scheme.
 ---
 
+<!-- Shows the current theme: an icon (sun, moon, or half-and-half for "follows your device") and,
+     on wider screens, "Theme: Auto". -->
 <button class="theme-toggle" type="button" aria-label="Color theme: Auto. Switch to Light" title="Color theme: Auto (click for Light)">
-  <span aria-hidden="true">◐</span> <span class="label">Auto</span>
+  <svg class="icon i-system" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" /></svg>
+  <svg class="icon i-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+  <svg class="icon i-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+  <span class="text" aria-hidden="true">Theme: <span class="label">Auto</span></span>
 </button>
 
 <script>
@@ -29,6 +34,7 @@
       btn.setAttribute('aria-label', `Color theme: ${labels[theme]}. Switch to ${next}`);
       btn.title = `Color theme: ${labels[theme]} (click for ${next})`;
       btn.querySelector('.label')!.textContent = labels[theme];
+      btn.dataset.theme = theme;
     }
   }
 
@@ -51,6 +57,24 @@
     cursor: pointer;
     white-space: nowrap;
   }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .icon {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: none;
+  }
+  .theme-toggle:not([data-theme="light"], [data-theme="dark"]) .i-light,
+  .theme-toggle:not([data-theme="light"], [data-theme="dark"]) .i-dark,
+  .theme-toggle[data-theme="light"] .i-system,
+  .theme-toggle[data-theme="light"] .i-dark,
+  .theme-toggle[data-theme="dark"] .i-system,
+  .theme-toggle[data-theme="dark"] .i-light {
+    display: none;
+  }
   .theme-toggle:hover {
     border-color: var(--accent);
   }
@@ -58,6 +82,17 @@
   @media (max-width: 520px) {
     .theme-toggle {
       min-height: 2.75rem;
+      min-width: 2.75rem;
+      justify-content: center;
+      padding: 0;
+    }
+    /* Icon only; the accessible name and tooltip still say "Color theme: Auto". */
+    .text {
+      display: none;
+    }
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
     }
   }
 </style>

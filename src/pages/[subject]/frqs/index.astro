@@ -20,6 +20,15 @@ const exams = data.pastFrqs;
 
 <Base title="Past AP FRQs" subject={subject} searchable>
   <h1>Past AP free-response questions</h1>
+  <p class="muted prose">
+    Real AP exam questions from AP Central. Each one links to the question and its scoring guidelines, and shows how many
+    points are on topics you've already learned. To find FRQs on one chapter or topic, use its chapter or topic page.
+  </p>
+  {exams.length > 1 && (
+    <nav class="year-nav" aria-label="Exam years">
+      {exams.map((e) => <a href={`#${e.year}`}>{e.year}</a>)}
+    </nav>
+  )}
 
   {frqs.length === 0 ? (
     <p class="muted">No past FRQs listed yet.</p>
@@ -76,6 +85,24 @@ const exams = data.pastFrqs;
   }
   .summary p {
     margin: 0.35rem 0;
+  }
+  .year-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0 0 1rem;
+  }
+  .year-nav a {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    text-decoration: none;
+  }
+  .year-nav a:hover {
+    border-color: var(--accent);
   }
   .links {
     display: flex;

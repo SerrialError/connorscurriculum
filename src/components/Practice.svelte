@@ -799,7 +799,7 @@
       <span style:width={`${(answered / session.length) * 100}%`}></span>
     </div>
 
-    {#if session.length > 1}
+    {#snippet qnav()}
       <nav class="qnav" aria-label="Questions in this set">
         {#each session as s, i (s.id)}
           {@const st = statusOf(s)}
@@ -812,6 +812,15 @@
           >{i + 1}</button>
         {/each}
       </nav>
+    {/snippet}
+    {#if session.length > 24}
+      <!-- Long sets: keep the question grid out of the way until it's wanted. -->
+      <details class="qnav-toggle">
+        <summary class="small">Jump to a question</summary>
+        {@render qnav()}
+      </details>
+    {:else if session.length > 1}
+      {@render qnav()}
     {/if}
 
     {#key q.id}
@@ -1535,7 +1544,27 @@
   .q-actions .button {
     padding-inline: 0.85rem;
   }
+  .qnav-toggle {
+    margin-bottom: 0.75rem;
+  }
+  .qnav-toggle summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--link);
+    margin-bottom: 0.5rem;
+  }
   @media (max-width: 480px) {
+    /* The main action (Check, Done marking, Next) goes first and full width on phones. */
+    .q-actions .button:not(.secondary) {
+      order: -1;
+      flex: 1 1 100%;
+    }
+    .q-actions .spacer {
+      display: none;
+    }
+    .q-actions .button.secondary {
+      flex: 1;
+    }
     .question {
       padding: 1rem;
     }

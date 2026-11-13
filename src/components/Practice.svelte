@@ -33,6 +33,7 @@
     lessonsForMissed,
     parseFilters,
     recordResult,
+    retryWords,
     selectQuestions,
     sessionSize,
     summarize,
@@ -41,7 +42,7 @@
     wantsStart,
     weakHasNoHistory,
   } from '../lib/practice';
-  import { type FrqLink, frqCountLabel, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
+  import { type FrqLink, frqCountLabel, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readinessLabel, readyPoints } from '../lib/frqs';
   import { readJson, storageKey, writeJson } from '../lib/storage';
 
   interface Preset {
@@ -149,6 +150,11 @@
   let reviewing = $state(false);
   /** "Clear history" was pressed once; the inline confirmation is showing. */
   let confirmClear = $state(false);
+  /**
+   * The page was opened with filters in the address (a link to a filtered set): those filters go
+   * first, and Quick start moves below them.
+   */
+  let arrivedWithFilters = $state(false);
 
   // Per-question answer state, keyed by question id.
   let picks = $state<Record<string, string>>({});
@@ -184,9 +190,21 @@
   /** The default pool's name: "Ch. 6–7" when later chapters are left out, else "All questions". */
   const everything = $derived(laterChapters.length && taughtChapters.length ? chapterRange(taughtChapters) : 'All questions');
   const hasClassOnly = $derived(inChapters.some((q) => q.cedTopics.length === 0));
+  /**
+   * Chapter chips: the chapters taught so far (and any other picked chapter). Chapters the class
+   * hasn't reached that have sample questions go under "More options", as "Later chapters".
+   */
+  const mainChapters = $derived(
+    chapters.filter((c) => (c.hasQuestions || filters.chapters.includes(c.number)) && !laterChapters.includes(c.number)),
+  );
+  const laterChapterList = $derived(chapters.filter((c) => laterChapters.includes(c.number)));
   /** Settings inside "More options" that differ from the defaults. */
   const moreCount = $derived(
-    (filters.test ? 1 : 0) + filters.units.length + filters.topics.length + (filters.type ? 1 : 0),
+    (filters.test ? 1 : 0) +
+      filters.units.length +
+      filters.topics.length +
+      (filters.type ? 1 : 0) +
+      filters.chapters.filter((n) => laterChapters.includes(n)).length,
   );
   const visibleUnits = $derived(
     units.filter((u) => usedUnits.has(u.id) || filters.units.includes(u.id) || u.topics.some((t) => filters.topics.includes(t.id))),
@@ -230,6 +248,7 @@
       .slice(0, 4);
   });
   const historyCount = $derived(Object.keys(history).length);
+  const hasQuickStart = $derived(presets.length > 0 || weakSpots.length > 0);
 
   // Keep the URL in sync with the setup filters, so reloading or copying the address keeps them.
   $effect(() => {
@@ -277,7 +296,9 @@
   };
 
   onMount(() => {
-    setFilters(parseFilters(location.search));
+    const initial = parseFilters(location.search);
+    arrivedWithFilters = activeFilterCount(initial) > 0 || initial.n !== null || initial.mode !== 'all';
+    setFilters(initial);
     history = readJson<History>(historyKey, {});
     const onPop = (e: PopStateEvent) => {
       let st = (e.state as NavState) ?? null;
@@ -453,8 +474,10 @@
     startWith(sessionFilters, filterQuestions(all, sessionFilters, tests));
   }
 
+  const retry = $derived(retryWords(missed.map((q) => scores[q.id]!)));
+
   function retryMissed() {
-    void begin([...missed], sessionQuery, `${describeScope(sessionFilters, tests, everything)} · retrying the ${missed.length} you missed`);
+    void begin([...missed], sessionQuery, `${describeScope(sessionFilters, tests, everything)} · ${retry.set}`);
   }
 
   /** Enter on a filter chip toggles it, like Space. It never starts the set. */
@@ -754,14 +777,12 @@
       </p>
       <ul class="plain-list">
         {#each matches as m (m.frq.year * 10 + m.frq.number)}
-          {@const ready = readyPoints(m.frq, (t) => learned.has(t))}
+          {@const ready = readinessLabel(readyPoints(m.frq, (t) => learned.has(t)), pastFrqPoints(m.frq))}
           <li>
             <div>
               <a href={m.frq.questionUrl} target="_blank" rel="noopener"><strong>{frqName(m.frq)}</strong></a>
               {m.frq.title}
-              <span class="badge" class:good={ready === pastFrqPoints(m.frq)}>
-                {ready === pastFrqPoints(m.frq) ? '✓ Ready' : `${ready}/${pastFrqPoints(m.frq)} pts ready`}
-              </span>
+              <span class="badge" class:good={ready.full} title={ready.title}>{ready.text}</span>
             </div>
             <div class="small practices">
               {frqPractices({ parts: m.parts }).map((id) => practiceNames[id] ?? id).join(' · ')}
@@ -793,6 +814,18 @@
   <span class="count" class:zero={n === 0}>{n}</span>
 {/snippet}
 
+{#snippet chapterChip(c: Props['chapters'][number])}
+  <label class="chip" title={c.title}>
+    <input
+      type="checkbox"
+      checked={filters.chapters.includes(c.number)}
+      onchange={() => (filters.chapters = toggle(filters.chapters, c.number))}
+    />
+    <span>Ch. {c.number} <span class="chip-sub">{c.title}</span></span>
+    {@render count(countWith(all!, filters, tests, { chapters: [c.number] }))}
+  </label>
+{/snippet}
+
 {#if loadError}
   <p class="notice">{loadError}</p>
 {:else if !all}
@@ -814,7 +847,7 @@
       </section>
     {/if}
 
-    {#if presets.length > 0 || weakSpots.length > 0}
+    {#snippet quickStart()}
       <section class="presets" aria-labelledby="presets-h">
         <div class="presets-head">
           <h2 id="presets-h" class="section-h">Quick start</h2>
@@ -835,13 +868,15 @@
           {/if}
         </div>
       </section>
+    {/snippet}
+    {#if hasQuickStart && !arrivedWithFilters}
+      {@render quickStart()}
     {/if}
 
     <!-- Only the Start practice button starts a set: Enter on a chip toggles it (onFilterKey). -->
     <form class="card filters" onsubmit={(e) => e.preventDefault()} onkeydown={onFilterKey} aria-labelledby="filters-h">
       <div class="filters-head">
-        <h2 id="filters-h" class="section-h">{presets.length > 0 || weakSpots.length > 0 ? 'Or choose your own' : 'Choose questions'}</h2>
-        <span class="small muted head-note">Nothing starts until you press <strong>Start practice</strong>.</span>
+        <h2 id="filters-h" class="section-h">{hasQuickStart && !arrivedWithFilters ? 'Or choose your own' : 'Choose questions'}</h2>
         <!-- Always laid out (hidden when there's nothing to reset), so picking a filter doesn't move the chips. -->
         <button
           class="link-button reset"
@@ -849,32 +884,19 @@
           type="button"
           onclick={resetFilters}>Reset all</button>
       </div>
-      <p class="small muted hint">
-        Leave a group empty to include all of it.
-        {#if laterChapters.length > 0}No chapter picked means {everything}, the chapters taught so far; {chapterRange(laterChapters)} comes in only when you pick it.{/if}
-      </p>
 
       <fieldset>
         <legend>Chapter</legend>
         <div class="chips">
-          {#each chapters.filter((c) => c.hasQuestions || filters.chapters.includes(c.number)) as c (c.number)}
-            <label class="chip" title={c.title}>
-              <input
-                type="checkbox"
-                checked={filters.chapters.includes(c.number)}
-                onchange={() => (filters.chapters = toggle(filters.chapters, c.number))}
-              />
-              <span>Ch. {c.number} <span class="chip-sub">{c.title}</span>{#if !c.finished && !c.current}<span class="chip-sub ahead">{' · sample, not taught yet'}</span>{/if}</span>
-              {@render count(countWith(all, filters, tests, { chapters: [c.number] }))}
-            </label>
+          {#each mainChapters as c (c.number)}
+            {@render chapterChip(c)}
           {/each}
         </div>
         {#if emptyCurrent.length > 0}
           <p class="small muted chapter-note">
-            In class now:
-            {#each emptyCurrent as c, i (c.number)}{i > 0 ? ' and ' : ''}<a href={`${chaptersHref}${c.number}/`}>Ch. {c.number}</a>{/each}.
-            {emptyCurrent.length === 1 ? 'It has' : 'They have'} no practice questions yet; {emptyCurrent.length === 1 ? 'its chapter page lists' : 'their chapter pages list'}
-            past AP FRQs on the same topics.
+            No questions yet for
+            {#each emptyCurrent as c, i (c.number)}{i > 0 ? ' or ' : ''}<a href={`${chaptersHref}${c.number}/`}>Ch.&nbsp;{c.number}</a>{/each}
+            (in class now).
           </p>
         {/if}
       </fieldset>
@@ -943,14 +965,8 @@
               </label>
             {/each}
           </div>
-          {#if filters.mode === 'weak'}
-            <p class="small muted order-note">
-              {historyCount > 0
-                ? 'Topics you have missed most come first, then topics you haven’t tried.'
-                : 'You haven’t answered anything yet on this device, so this works like Shuffled for now.'}
-            </p>
-          {:else if !orderChosen}
-            <p class="small muted order-note">Picking a number shuffles; All goes in order.</p>
+          {#if filters.mode === 'weak' && historyCount === 0}
+            <p class="small muted order-note">No answers on this device yet, so this is shuffled for now.</p>
           {/if}
         </fieldset>
       </div>
@@ -960,8 +976,8 @@
           <span class="more-title">More options</span>
           {#if moreCount > 0 && !moreOpen}
             <span class="badge topic">{moreCount} set</span>
-          {:else}
-            <span class="small muted">AP unit or topic{tests.length > 0 ? ', class test' : ''}, question type</span>
+          {:else if !moreOpen}
+            <span class="small muted">AP unit or topic{tests.length > 0 ? ', class test' : ''}, question type{laterChapterList.length > 0 ? ', later chapters' : ''}</span>
           {/if}
         </summary>
 
@@ -1039,41 +1055,59 @@
             </div>
           </fieldset>
 
+          {#if laterChapterList.length > 0}
+            <!-- Sample questions for chapters the class hasn't reached: never in a set unless picked here. -->
+            <fieldset>
+              <legend>Later chapters <span class="legend-sub">samples, not taught yet</span></legend>
+              <div class="chips">
+                {#each laterChapterList as c (c.number)}
+                  {@render chapterChip(c)}
+                {/each}
+              </div>
+            </fieldset>
+          {/if}
         </div>
+        <p class="copy-row">
+          <button class="link-button small" type="button" onclick={() => copyLink(filtersToQuery(filters))}>
+            {copied ? 'Link copied' : 'Copy a link to these filters'}
+          </button>
+        </p>
       </details>
 
-      <div class="start-bar" aria-live="polite">
-        <div class="start-info">
+      <!-- Sticky, so Start is always in reach. On phones it is one short row: the count and Start. -->
+      <div class="start-bar">
+        <div class="start-info" aria-live="polite">
           {#if matching.length === 0}
             <strong>No questions match.</strong>
-            <span class="small muted">Remove a filter to see more.</span>
+            <span class="small muted sub">Remove a filter.</span>
           {:else}
             <strong>{plural(setSize, 'question')}</strong>
-            <span class="small muted">
-              {#if setSize < matching.length}from {matching.length} matching{:else if activeCount === 0}{everything === 'All questions' ? 'all questions' : `all of ${everything}`}{:else}match{/if}
-              · {modeLabels[filters.mode].toLowerCase()}
+            <span class="small muted sub">
+              {#if setSize < matching.length}from {matching.length} matching{:else if activeCount === 0}{everything === 'All questions' ? 'all questions' : `all of ${everything}`}{:else}all that match{/if}
+              <span class="mode">· {modeLabels[filters.mode].toLowerCase()}</span>
             </span>
           {/if}
-          {#if chips.length > 0}
-            <ul class="plain-list active-chips" aria-label="Active filters">
-              {#each chips as c (c.label)}
-                <li>
-                  <button type="button" class="active-chip" onclick={c.remove} aria-label={`Remove filter: ${c.label}`}>
-                    {c.label} <span aria-hidden="true">×</span>
-                  </button>
-                </li>
-              {/each}
-            </ul>
-          {/if}
         </div>
-        <div class="row">
-          <button class="button secondary small" type="button" onclick={() => copyLink(filtersToQuery(filters))}>
-            {copied ? 'Link copied' : 'Copy link'}
-          </button>
-          <button class="button start" type="button" disabled={matching.length === 0} onclick={start}>Start practice →</button>
-        </div>
+        {#if chips.length > 0}
+          <ul class="plain-list active-chips" aria-label="Active filters">
+            {#each chips as c (c.label)}
+              <li>
+                <button type="button" class="active-chip" onclick={c.remove} aria-label={`Remove filter: ${c.label}`}>
+                  {c.label} <span aria-hidden="true">×</span>
+                </button>
+              </li>
+            {/each}
+          </ul>
+        {/if}
+        <button class="button start" type="button" disabled={matching.length === 0} onclick={() => start()}>
+          Start<span class="start-long"> practice</span> →
+        </button>
       </div>
     </form>
+
+    {#if hasQuickStart && arrivedWithFilters}
+      <div class="presets-after">{@render quickStart()}</div>
+    {/if}
 
     {@render pastFrqs(frqMatches)}
 
@@ -1166,7 +1200,7 @@
           <!-- One quiet line, so the prompt and choices start high on small phones. -->
           <p class="q-meta small muted">
             {q.type === 'mcq' ? 'Multiple choice' : 'Free response'} · Ch. {q.chapter} ·
-            {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${topicsHref}${t}/`} title={topicTitles.get(t)} target="_blank" rel="noopener"><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
+            {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${topicsHref}${t}/`} title={topicTitles.get(t)}><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
             · {difficultyLabels[q.difficulty]}
           </p>
         </header>
@@ -1294,7 +1328,7 @@
       {/if}
       <div class="actions">
         {#if missed.length > 0}
-          <button class="button" type="button" onclick={retryMissed}>Retry the {missed.length} I missed</button>
+          <button class="button" type="button" onclick={retryMissed}>{retry.button}</button>
         {/if}
         {#if skipped.length > 0}
           <button class="button" class:secondary={missed.length > 0} type="button" onclick={() => reviewQuestion(session.indexOf(skipped[0]!))}>
@@ -1393,6 +1427,9 @@
   }
 
   /* Quick start */
+  .presets-after {
+    margin-top: 1.25rem;
+  }
   .presets {
     margin-bottom: 1.25rem;
   }
@@ -1408,8 +1445,8 @@
   .filters-head .section-h {
     margin: 0;
   }
-  .head-note {
-    flex: 1 1 12rem;
+  .filters-head {
+    justify-content: space-between;
   }
   .reset.invisible {
     visibility: hidden;
@@ -1435,9 +1472,6 @@
   }
   .marking {
     margin: 0.5rem 0 0;
-  }
-  .chip-sub.ahead {
-    font-style: italic;
   }
   .chapter-note {
     margin: 0.5rem 0 0;
@@ -1486,9 +1520,6 @@
   /* Filters */
   .filters {
     padding: 1rem 1.1rem 0;
-  }
-  .hint {
-    margin: 0 0 0.75rem;
   }
   fieldset {
     border: 0;
@@ -1686,11 +1717,11 @@
     position: sticky;
     bottom: 0;
     z-index: 2;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'info start' 'chips start';
+    gap: 0.4rem 1rem;
     align-items: center;
-    justify-content: space-between;
     margin: 0 -1.1rem;
     padding: 0.75rem 1.1rem;
     border-top: 1px solid var(--border);
@@ -1698,19 +1729,22 @@
     border-radius: 0 0 var(--radius) var(--radius);
     box-shadow: 0 -6px 16px -10px rgb(0 0 0 / 0.25);
   }
+  .start-bar:not(:has(.active-chips)) {
+    grid-template-areas: 'info start';
+  }
   .start-info {
+    grid-area: info;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 0.5rem;
+    gap: 0 0.5rem;
     align-items: baseline;
     min-width: 0;
-    flex: 1 1 14rem;
   }
   .active-chips {
+    grid-area: chips;
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem;
-    flex-basis: 100%;
   }
   .active-chip {
     font: inherit;
@@ -1727,7 +1761,50 @@
     border-color: var(--accent);
   }
   .start {
+    grid-area: start;
     min-width: 10rem;
+  }
+  /* Phones: one short row (count on the left, Start on the right); the picked chips are in the form above. */
+  @media (max-width: 520px) {
+    .start-bar {
+      grid-template-areas: 'info start';
+      padding: 0.45rem 1.1rem;
+      column-gap: 0.75rem;
+    }
+    .start-info {
+      display: grid;
+      line-height: 1.25;
+    }
+    .start-info .sub {
+      font-size: 0.8rem;
+    }
+    .start-info .sub .mode {
+      display: none;
+    }
+    .active-chips {
+      display: none;
+    }
+    .start {
+      min-width: 0;
+      min-height: 2.75rem;
+      padding-inline: 1.1rem;
+    }
+    .start-long {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+  .copy-row {
+    margin: 0 0 1rem;
+  }
+  .legend-sub {
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
   }
   .link-button {
     font: inherit;

@@ -514,3 +514,15 @@ export function lessonsForMissed(
     chapters: [...chapters].sort((a, b) => a - b),
   };
 }
+
+/**
+ * Words for the questions to retry after a set (score below 1). With partial credit on any of
+ * them (FRQs), "missed" would be wrong, so they are "without full marks".
+ */
+export function retryWords(scores: number[]): { button: string; set: string } {
+  const n = scores.length;
+  if (scores.some((s) => s > 0)) {
+    return { button: `Retry the ${n} without full marks`, set: `retrying the ${n} without full marks` };
+  }
+  return { button: `Retry the ${n} I missed`, set: `retrying the ${n} you missed` };
+}

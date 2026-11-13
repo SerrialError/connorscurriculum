@@ -88,3 +88,18 @@ export function frqCountLabel(matches: Pick<FrqMatch, 'parts'>[], noun = 'past F
   const label = `${q} ${noun}${q === 1 ? '' : 's'}`;
   return parts === q ? label : `${label} (${parts} parts)`;
 }
+
+/**
+ * The readiness badge on an FRQ card, in plain words: "✓ Ready" when every part is on topics
+ * already learned, else how many of its points are. `title` explains it on hover.
+ */
+export function readinessLabel(ready: number, total: number): { text: string; title: string; full: boolean } {
+  const full = total > 0 && ready >= total;
+  return {
+    full,
+    text: full ? '✓ Ready' : ready === 0 ? 'Topics not learned yet' : `${ready} of ${total} pts on topics you've learned`,
+    title: full
+      ? 'You have learned every topic in this question (this year or last year).'
+      : 'Points in parts whose topics you have all learned (this year or last year).',
+  };
+}

@@ -84,8 +84,10 @@ const lessons: PracticeLesson[] = (await getLessons(subject))
 </Base>
 
 <style>
-  /* During a set the title is for screen readers only: on phones the question starts higher. */
-  :global(body[data-practice='session']) .practice-title {
+  /* During a set and on its results the title is for screen readers only: on phones the question
+     (or score) starts higher, and the two screens look alike. */
+  :global(body[data-practice='session']) .practice-title,
+  :global(body[data-practice='results']) .practice-title {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -93,7 +95,8 @@ const lessons: PracticeLesson[] = (await getLessons(subject))
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  :global(body[data-practice='session'] main) {
+  :global(body[data-practice='session'] main),
+  :global(body[data-practice='results'] main) {
     padding-top: 1rem;
   }
 </style>

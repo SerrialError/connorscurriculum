@@ -892,7 +892,7 @@
   difficulty: 2
   authors: ["Claude"]
   prompt: |
-    For calcium, between which two successive ionization energies is the **largest** jump?
+    For calcium, among the first five ionization energies, between which two successive ones is the **largest** jump?
   choices:
     - { id: a, text: "IE₁ and IE₂" }
     - { id: b, text: "IE₂ and IE₃" }
@@ -1058,14 +1058,14 @@
   prompt: |
     The electron affinity of chlorine (−349 kJ/mol) is **more negative** than that of fluorine (−328 kJ/mol), even though F is higher in the group. Which explanation is best?
   choices:
-    - { id: a, text: "Cl has a higher effective nuclear charge than F" }
+    - { id: a, text: "Cl has more valence electrons than F, so it attracts an extra electron more strongly" }
     - { id: b, text: "F is so small that an added electron enters a crowded 2p subshell, where repulsion from the other electrons cancels part of the attraction" }
     - { id: c, text: "The added electron in Cl goes into a 4s orbital, which is lower in energy" }
     - { id: d, text: "F is less electronegative than Cl" }
   answer: b
   explanation: |
     The usual trend says the smaller atom should attract an extra electron more strongly. But F's $n = 2$ shell is very compact, so the incoming electron is squeezed close to seven other valence electrons and the repulsion is large. Cl's $n = 3$ shell is bigger, so the electrons are more spread out, and the net energy released is a little larger.
-    (a) is false: the valence Zeff is about the same for both (+7 by the simple estimate). (c) is false: the electron goes into 3p. (d) is backward: F is the most electronegative element.
+    (a) is false: both have seven valence electrons ($ns^2\,np^5$). (c) is false: the electron goes into 3p. (d) is backward: F is the most electronegative element.
 
 - id: apchem-07-ea-near-zero-pair
   type: mcq
@@ -1349,11 +1349,11 @@
     - { id: a, text: "I has fewer protons than F" }
     - { id: b, text: "The valence shell is farther from the nucleus and more shielded, so bonding electrons are attracted less strongly" }
     - { id: c, text: "I has more valence electrons than F" }
-    - { id: d, text: "The effective nuclear charge on the valence electrons increases down the group" }
+    - { id: d, text: "The effective nuclear charge on the valence electrons drops sharply down the group" }
   answer: b
   explanation: |
     Electronegativity is how strongly an atom pulls on the electrons in a bond. Going down group 17, the valence electrons (and so any bonding electrons) are in a higher shell, farther from the nucleus. With roughly the same Zeff, Coulomb attraction is weaker at the larger distance.
-    (a) and (c) are false: I has more protons (53) and the same 7 valence electrons. (d) is false: Zeff stays roughly constant down a group.
+    (a) and (c) are false: I has more protons (53) and the same 7 valence electrons. (d) is false: Zeff stays about the same down a group by the simple estimate (+7), and Slater's rules even give a slight rise (5.20 for F, 7.60 for I). The change that matters is distance.
 
 - id: apchem-07-ie-ions-identify-frq
   type: frq
@@ -1380,7 +1380,7 @@
       points: 1
       prompt: Identify element Y. Justify your answer using the data.
       scoring:
-        - "S: the large jump is between IE₆ and IE₇ (about 3×, far bigger than any earlier ratio), so Y has six valence electrons (group 16), which in period 3 is S."
+        - "S: the large jump is between IE₆ and IE₇ (IE₇ is more than 3× IE₆, a rise of about 18,600 kJ/mol, by far the biggest step), so Y has six valence electrons (group 16), which in period 3 is S."
     - label: c
       points: 1
       prompt: Explain why IE₃ of X is so much larger than IE₂.

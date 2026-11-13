@@ -1108,7 +1108,7 @@
   subject: apchem
   chapter: 6
   sections: ["6.8", "6.9"]
-  cedTopics: []
+  cedTopics: ["1.5"]
   difficulty: 3
   authors: ["Claude"]
   prompt: |

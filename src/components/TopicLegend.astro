@@ -15,7 +15,7 @@ const states = (['done', 'partial', 'review', 'skipped'] as const).filter((s) =>
 ---
 
 {states.length > 0 && (
-  <p class="topic-legend small muted" aria-hidden="true">
+  <p class="topic-legend small muted" aria-hidden="true" data-pagefind-ignore>
     {states.map((s) => (
       <span><span class="icon">{PROGRESS_ICONS[s]}</span> {PROGRESS_LABELS[s].toLowerCase()}</span>
     ))}

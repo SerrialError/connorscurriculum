@@ -13,7 +13,7 @@ const { subject, topics, classOnlyBadge = true } = Astro.props;
 const data = getSubjectData(subject);
 ---
 
-<div class="badges">
+<div class="badges" data-pagefind-ignore>
   {topics.map((t) => {
     const s = data.progress.topics.get(t);
     return (

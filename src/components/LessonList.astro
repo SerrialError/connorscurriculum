@@ -26,8 +26,8 @@ const H = `h${headingLevel}` as 'h2' | 'h3';
 ) : (
   groups.map((g) => (
     <>
-      {grouped && groups.length > 1 && <H class="group-h">{g.heading}</H>}
-      <ul class="plain-list lessons card">
+      {grouped && groups.length > 1 && <H class="group-h" data-pagefind-ignore>{g.heading}</H>}
+      <ul class="plain-list lessons card" data-pagefind-ignore>
         {g.lessons.map((l) => (
           <li class:list={[l.data.kind]}>
             <a class="title" href={url(`${l.data.subject.id}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>

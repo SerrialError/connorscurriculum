@@ -1,0 +1,30 @@
+import { describe, expect, it } from 'vitest';
+import { trimTitle } from './search-excerpt';
+
+describe('trimTitle', () => {
+  it('drops the page title from the start of an excerpt', () => {
+    expect(trimTitle('1.7 Periodic Trends. Atomic radius decreases across a period.', '1.7 Periodic Trends')).toBe(
+      'Atomic radius decreases across a period.',
+    );
+  });
+
+  it('handles highlighted words in the title', () => {
+    expect(trimTitle("Effective Nuclear Charge and <mark>Slater's</mark> Rules. Use <mark>Slater's</mark> rules", "Effective Nuclear Charge and Slater's Rules")).toBe(
+      "Use <mark>Slater's</mark> rules",
+    );
+    expect(trimTitle('Periodic <mark>Trends</mark>. Radius shrinks', 'Periodic Trends')).toBe('Radius shrinks');
+    expect(trimTitle('1.7 <mark>Periodic</mark> <mark>Trends.</mark> Started in Ch. 7', '1.7 Periodic Trends')).toBe('Started in Ch. 7');
+  });
+
+  it('drops the end of the title when the excerpt starts mid-heading', () => {
+    expect(trimTitle("Charge and Slater's Rules. Shielding by inner electrons", "Effective Nuclear Charge and Slater's Rules")).toBe(
+      'Shielding by inner electrons',
+    );
+  });
+
+  it('leaves other excerpts alone', () => {
+    expect(trimTitle('Atomic radius decreases', '1.7 Periodic Trends')).toBe('Atomic radius decreases');
+    expect(trimTitle('Periodic Trendsetters are', 'Periodic Trends')).toBe('Periodic Trendsetters are');
+    expect(trimTitle('1.7 Periodic Trends', '1.7 Periodic Trends')).toBe('1.7 Periodic Trends');
+  });
+});

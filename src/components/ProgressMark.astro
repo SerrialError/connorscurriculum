@@ -18,7 +18,7 @@ const icon = status ? PROGRESS_ICONS[status] : '';
 ---
 
 {status && (
-  <span class:list={['mark', status, { compact }]} title={label}>
+  <span class:list={['mark', status, { compact }]} title={label} data-pagefind-ignore>
     <span aria-hidden="true">{icon}</span>
     {compact ? <span class="visually-hidden">{label}</span> : <span>{label}</span>}
   </span>

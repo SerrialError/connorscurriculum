@@ -20,6 +20,8 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
 </div>
 
 <script>
+  import { trimTitle } from '../lib/search-excerpt';
+
   interface PagefindResult {
     data(): Promise<{ url: string; excerpt: string; meta: Record<string, string> }>;
   }
@@ -85,7 +87,8 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
           meta.textContent = [r.meta.subject, r.meta.chapter].filter(Boolean).join(' · ');
           const excerpt = document.createElement('p');
           excerpt.className = 'small';
-          excerpt.innerHTML = r.excerpt; // Pagefind escapes page text and adds <mark>
+          // Pagefind escapes page text and adds <mark>. The title is shown above, so don't repeat it.
+          excerpt.innerHTML = r.meta.title ? trimTitle(r.excerpt, r.meta.title) : r.excerpt;
           li.append(a, meta, excerpt);
           return li;
         }),

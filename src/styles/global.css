@@ -178,10 +178,48 @@ th {
   background: var(--surface-2);
 }
 
+/* Narrow screens: tighter tables, so most fit without scrolling. */
+@media (max-width: 480px) {
+  table {
+    font-size: 0.9rem;
+  }
+  th,
+  td {
+    padding: 0.35rem 0.45rem;
+  }
+}
+
+/* A table that still scrolls sideways fades at the edge(s) with more columns, so it's clear there's more. */
+@supports (animation-timeline: scroll()) {
+  table {
+    animation: scroll-fade linear both;
+  }
+  /* A separate rule after the shorthand (which resets the timeline), so minifiers can't fold it in. */
+  html table {
+    animation-timeline: scroll(self inline);
+  }
+  @keyframes scroll-fade {
+    0% {
+      mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+    }
+    2%,
+    98% {
+      mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+    }
+    100% {
+      mask-image: linear-gradient(to right, transparent, #000 2.5rem);
+    }
+  }
+}
+
 /* KaTeX: long display equations scroll instead of widening the page. */
 /* Inline math plus the punctuation after it (see rehypeMathPunctuation). */
 .nowrap {
   white-space: nowrap;
+}
+/* ...but long math inside can still wrap between terms, as it would without the wrapper. */
+.nowrap .katex {
+  white-space: normal;
 }
 
 .katex-display {

@@ -172,6 +172,23 @@ export function currentChapters(data: SubjectData) {
   return data.progress.current.map((n) => data.chapterMap.get(n)!).filter(Boolean);
 }
 
+/** What to show as "Now in class": the current chapters, or the next unfinished one ("Up next"). */
+export function nowChapters(data: SubjectData) {
+  const now = currentChapters(data);
+  if (now.length) return { label: 'Now in class', chapters: now };
+  const next = nextChapter(data);
+  return { label: 'Up next', chapters: next ? [next] : [] };
+}
+
+/**
+ * Has the test happened, as of the build? Pages mark tests with data-test-date and Base.astro's
+ * script decides again by the reader's date, since the site is built once and read for weeks.
+ * The day of the test still counts as upcoming.
+ */
+export function isPastTest(test: { date?: string } | undefined, today = new Date().toISOString().slice(0, 10)): boolean {
+  return !!test?.date && test.date < today;
+}
+
 /** Class tests, latest first (undated tests last, in file order). */
 export function testsByDate(data: SubjectData) {
   return [...data.tests].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));

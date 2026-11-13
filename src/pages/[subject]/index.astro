@@ -1,9 +1,9 @@
 ---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Search from '../../components/Search.astro';
 import Base from '../../layouts/Base.astro';
 import {
   chapterRange,
-  currentChapters,
   formatDate,
   getLessons,
   getQuestions,
@@ -11,15 +11,17 @@ import {
   inTest,
   isClassContent,
   lessonHref,
-  nextChapter,
+  nowChapters,
   pastFrqLinks,
   practiceStart,
   subjectPaths,
   testPracticeLinks,
   testsByDate,
+  isPastTest,
   url,
 } from '../../lib/content';
 import { frqCountLabel, matchFrqs } from '../../lib/frqs';
+import { plural } from '../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
@@ -29,7 +31,6 @@ const { progress } = data;
 // Class material only: sample pages for chapters the class hasn't reached stay off the home page.
 const lessons = (await getLessons(subject)).filter((l) => isClassContent(data, l));
 const questions = (await getQuestions(subject)).filter((q) => isClassContent(data, q));
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const cedOrder = [...data.topics.keys()];
 const inCedOrder = (ids: string[]) => [...ids].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
 const frqs = pastFrqLinks(data);
@@ -38,9 +39,7 @@ const topicCounts = { done: 0, review: 0, partial: 0, skipped: 0 };
 for (const s of progress.topics.values()) topicCounts[s] += 1;
 const newCount = data.topics.size - topicCounts.done - topicCounts.review - topicCounts.partial - topicCounts.skipped;
 
-// "Now in class": the current chapters, or the next unfinished chapter when none are listed.
-const now = currentChapters(data);
-const nowChapters = now.length ? now : [nextChapter(data)].filter((c) => c !== undefined);
+const now = nowChapters(data);
 const chapterInfo = (n: number) => {
   const c = data.chapterMap.get(n)!;
   const frqMatches = matchFrqs(frqs, new Set(c.cedTopics));
@@ -55,17 +54,14 @@ const chapterInfo = (n: number) => {
     frqs: frqMatches.length ? frqCountLabel(frqMatches) : '',
   };
 };
-const nowInfo = nowChapters.map((c) => chapterInfo(c.number));
+const nowInfo = now.chapters.map((c) => chapterInfo(c.number));
 
 // Latest class test, with its review sheets.
 const test = testsByDate(data)[0];
 const testReview = test ? lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)) : [];
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 const testLinks = test ? testPracticeLinks(subject, test.id, testQuestions) : null;
-// Has the test happened? Decided again in the browser (script below), since the site is built
-// once and read for weeks. The day of the test still counts as upcoming.
-const today = new Date().toISOString().slice(0, 10);
-const testPast = !!test?.date && test.date < today;
+const testPast = isPastTest(test);
 
 // Lessons for the latest finished chapters with any, most recent first.
 const recent = [...progress.chapters]
@@ -79,13 +75,14 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
 ---
 
 <Base title={data.subject.name} subject={subject}>
+  <Breadcrumbs items={[{ href: url(), label: 'All classes' }]} />
   <h1>{data.subject.name}</h1>
   <Search placeholder="Search lessons, notes, topics…" />
 
   <div class="dash">
     {nowInfo.length > 0 && (
       <section class="card now" aria-labelledby="now-h">
-        <p class="eyebrow">{now.length ? 'Now in class' : 'Up next'}</p>
+        <p class="eyebrow">{now.label}</p>
         <h2 id="now-h">{chapterRange(nowInfo.map((c) => c.chapter.number))}</h2>
         {/* Compact: one line per chapter. The topic list lives on the chapter page. */}
         {nowInfo.map((c) => (
@@ -123,7 +120,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
         <p class="eyebrow"><span class="if-upcoming">Next class test</span><span class="if-past">Latest class test</span></p>
         <h2 id="test-h"><a href={url(`${subject}/tests/${test.id}/`)}>{test.title}</a></h2>
         <p class="small muted">
-          {test.date ? formatDate(test.date) : 'Date TBA'} · {chapterRange(test.chapters)}<span class="if-past"> · done</span>
+          {test.date ? <><span class="if-past">Taken </span>{formatDate(test.date)}</> : 'Date TBA'} · {chapterRange(test.chapters)}
         </p>
         {testReview.length > 0 && (
           <ul class="plain-list review-links">
@@ -142,8 +139,8 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
             </div>
             {/* After the test: review practice, as quiet links. */}
             <p class="small if-past review-practice">
-              <span class="muted">Review:</span>{' '}
-              <a href={(testLinks.random ?? testLinks.all).href}>{testLinks.random ? `${testLinks.random.label.replace('Start ', '')} from the test` : testLinks.all.label}</a>
+              <span class="muted">Practice:</span>{' '}
+              <a href={(testLinks.random ?? testLinks.all).href}>{testLinks.random ? `${testLinks.random.label.replace('Start ', '').replace(' questions', '')}` : testLinks.all.label}</a>
               {testLinks.random && <><span class="muted"> · </span><a href={testLinks.all.href}>all {testQuestions}</a></>}
             </p>
           </>
@@ -240,15 +237,6 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
 
 </Base>
 
-<script is:inline>
-  // Past or upcoming, by the reader's date (the build date can be weeks old).
-  (() => {
-    const d = new Date();
-    const today = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
-    for (const el of document.querySelectorAll('[data-test-date]')) el.toggleAttribute('data-past', el.dataset.testDate < today);
-  })();
-</script>
-
 <style>
   .dash {
     display: grid;
@@ -276,10 +264,6 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   }
   .test .eyebrow {
     color: var(--tip);
-  }
-  .test:not([data-past]) .if-past,
-  .test[data-past] .if-upcoming {
-    display: none;
   }
   /* A test that's over is review material: no coloured stripe, no big button. */
   .test[data-past] {

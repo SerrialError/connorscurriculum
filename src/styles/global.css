@@ -652,3 +652,9 @@ a[target='_blank']::after {
   text-decoration: none;
   display: inline-block;
 }
+
+/* Class tests: text for before or after the test date (see the script in Base.astro). */
+[data-test-date]:not([data-past]) .if-past,
+[data-test-date][data-past] .if-upcoming {
+  display: none;
+}

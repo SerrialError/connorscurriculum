@@ -1018,3 +1018,183 @@
   explanation: |
     Ar has 18 electrons. $\ce{Ca^2+}$ has $20 - 2 = 18$, so it is isoelectronic with Ar.
     $\ce{Na+}$ and $\ce{O^2-}$ have 10 electrons (like Ne), and $\ce{Br-}$ has 36 (like Kr).
+
+# ---------------------------------------------------------------------------
+# Harder multi-step questions (added after the Ch. 6–7 test)
+# ---------------------------------------------------------------------------
+
+- id: apchem-06-photoelectric-threshold-from-ke
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Light with a wavelength of 250. nm shines on a metal, and each ejected electron has a kinetic energy of $3.50 \times 10^{-19}$ J.
+    What is the **longest** wavelength of light that can eject electrons from this metal?
+  choices:
+    - { id: a, text: "174 nm" }
+    - { id: b, text: "250. nm" }
+    - { id: c, text: "447 nm" }
+    - { id: d, text: "568 nm" }
+  answer: c
+  explanation: |
+    **Step 1: photon energy.**
+    $$E = \frac{hc}{\lambda} = \frac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{250. \times 10^{-9}\ \text{m}} = 7.95 \times 10^{-19}\ \text{J}$$
+
+    **Step 2: minimum energy to remove an electron.** $KE = E_{\text{photon}} - E_{\text{min}}$, so
+    $E_{\text{min}} = 7.95 \times 10^{-19} - 3.50 \times 10^{-19} = 4.45 \times 10^{-19}$ J.
+
+    **Step 3: the wavelength with exactly that energy.**
+    $$\lambda_{\max} = \frac{hc}{E_{\text{min}}} = \frac{1.986 \times 10^{-25}\ \text{J·m}}{4.45 \times 10^{-19}\ \text{J}} = 4.47 \times 10^{-7}\ \text{m} = 447\ \text{nm}$$
+
+    (d) uses the kinetic energy as if it were the minimum energy. (a) adds the two energies instead of subtracting.
+
+- id: apchem-06-moles-of-photons-laser
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A green laser with a wavelength of 532 nm delivers 0.250 J of light energy. How many **moles** of photons is that?
+  choices:
+    - { id: a, text: '$1.11 \times 10^{-6}$ mol' }
+    - { id: b, text: '$6.70 \times 10^{17}$ mol' }
+    - { id: c, text: '$1.11 \times 10^{3}$ mol' }
+    - { id: d, text: '$4.03 \times 10^{41}$ mol' }
+  answer: a
+  explanation: |
+    **Energy of one photon:**
+    $$E = \frac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{532 \times 10^{-9}\ \text{m}} = 3.73 \times 10^{-19}\ \text{J}$$
+
+    **Number of photons:** $\dfrac{0.250\ \text{J}}{3.73 \times 10^{-19}\ \text{J/photon}} = 6.70 \times 10^{17}$ photons
+
+    **Moles:** $\dfrac{6.70 \times 10^{17}}{6.022 \times 10^{23}\ \text{mol}^{-1}} = 1.11 \times 10^{-6}$ mol
+
+    (b) stops at the number of photons. (c) forgets to convert nm to m. (d) multiplies by Avogadro's number instead of dividing.
+
+- id: apchem-06-photon-break-bond
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    It takes 495 kJ to break one mole of O=O bonds. What is the **longest** wavelength of light whose photons each have enough energy to break one O=O bond?
+  choices:
+    - { id: a, text: "242 nm" }
+    - { id: b, text: '$2.42 \times 10^{5}$ nm' }
+    - { id: c, text: '$4.01 \times 10^{-22}$ nm' }
+    - { id: d, text: "Any wavelength works if the light is bright enough" }
+  answer: a
+  explanation: |
+    One photon breaks one bond, so first find the energy for **one** bond:
+    $$\frac{495 \times 10^{3}\ \text{J/mol}}{6.022 \times 10^{23}\ \text{bonds/mol}} = 8.22 \times 10^{-19}\ \text{J per bond}$$
+
+    Then the wavelength of a photon with that energy:
+    $$\lambda = \frac{hc}{E} = \frac{1.986 \times 10^{-25}\ \text{J·m}}{8.22 \times 10^{-19}\ \text{J}} = 2.42 \times 10^{-7}\ \text{m} = 242\ \text{nm}$$
+
+    Shorter wavelengths have even more energy per photon and also work. (b) leaves the energy in kJ. (c) uses the energy for a whole mole as if it were one photon. (d) is the wave-model mistake: brightness adds photons, not energy per photon.
+
+- id: apchem-06-diamagnetic-ion
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8", "6.9"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A species with **no** unpaired electrons is diamagnetic (weakly pushed out of a magnetic field); one with unpaired electrons is paramagnetic (pulled in).
+    Which ion is **diamagnetic**?
+  choices:
+    - { id: a, text: '$\ce{Fe^2+}$' }
+    - { id: b, text: '$\ce{Cu^2+}$' }
+    - { id: c, text: '$\ce{Zn^2+}$' }
+    - { id: d, text: '$\ce{Mn^2+}$' }
+  answer: c
+  explanation: |
+    Remove the 4s electrons first, then fill the 3d orbitals by Hund's rule:
+
+    - $\ce{Fe^2+}$: $[\ce{Ar}]\,3d^6$ → ↑↓ ↑ ↑ ↑ ↑, 4 unpaired
+    - $\ce{Cu^2+}$: $[\ce{Ar}]\,3d^9$ → ↑↓ ↑↓ ↑↓ ↑↓ ↑, 1 unpaired
+    - $\ce{Zn^2+}$: $[\ce{Ar}]\,3d^{10}$ → all paired, **0 unpaired**
+    - $\ce{Mn^2+}$: $[\ce{Ar}]\,3d^5$ → ↑ ↑ ↑ ↑ ↑, 5 unpaired
+
+    Only $\ce{Zn^2+}$ has every electron paired. A common mistake is taking electrons from 3d first, which would give $\ce{Zn^2+}$ as $4s^2\,3d^8$ with two unpaired electrons.
+
+- id: apchem-06-most-unpaired
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8", "6.9"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which ground-state species has the **most** unpaired electrons?
+  choices:
+    - { id: a, text: '$\ce{Fe^3+}$' }
+    - { id: b, text: '$\ce{Co^2+}$' }
+    - { id: c, text: '$\ce{Cr}$' }
+    - { id: d, text: '$\ce{V^3+}$' }
+  answer: c
+  explanation: |
+    - $\ce{Fe^3+}$: $[\ce{Ar}]\,3d^5$, 5 unpaired
+    - $\ce{Co^2+}$: $[\ce{Ar}]\,3d^7$ (↑↓ ↑↓ ↑ ↑ ↑), 3 unpaired
+    - $\ce{Cr}$: $[\ce{Ar}]\,4s^1\,3d^5$ (the exception), **6 unpaired**: one in 4s and five in 3d
+    - $\ce{V^3+}$: $[\ce{Ar}]\,3d^2$, 2 unpaired
+
+    If you write Cr by the normal filling order, $4s^2\,3d^4$, you get only 4 unpaired and would pick $\ce{Fe^3+}$. The real configuration moves one 4s electron into 3d to make a half-filled d subshell.
+
+- id: apchem-06-ionize-from-n2-frq
+  type: frq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2", "6.3"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A hydrogen atom has its electron in the $n = 2$ level. Use $E_n = -2.18 \times 10^{-18}\ \text{J}\,(1/n^2)$.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the magnitude of the energy of the electron in the $n = 2$ level.
+      scoring:
+        - "$|E_2| = 2.18 \\times 10^{-18}/2^2 = 5.45 \\times 10^{-19}$ J (the sign isn't graded for a single level)."
+    - label: b
+      points: 1
+      prompt: Calculate the minimum energy, in kJ/mol, needed to remove the electron completely from one mole of hydrogen atoms in the $n = 2$ level.
+      scoring:
+        - "$\\Delta E = E_\\infty - E_2 = +5.45 \\times 10^{-19}$ J per atom; $\\times 6.022 \\times 10^{23} = 3.28 \\times 10^{5}$ J/mol $= 328$ kJ/mol."
+    - label: c
+      points: 1
+      prompt: Calculate the longest wavelength of light, in nm, that can remove the electron from the $n = 2$ level.
+      scoring:
+        - "$\\lambda = hc/E = (1.986 \\times 10^{-25})/(5.45 \\times 10^{-19}) = 3.64 \\times 10^{-7}$ m $= 364$ nm (365 nm also accepted)."
+    - label: d
+      points: 1
+      prompt: A 300. nm photon removes the electron from the $n = 2$ level. Calculate the kinetic energy of the freed electron.
+      scoring:
+        - "$E_{\\text{photon}} = hc/(300. \\times 10^{-9}) = 6.62 \\times 10^{-19}$ J; $KE = 6.62 \\times 10^{-19} - 5.45 \\times 10^{-19} = 1.17 \\times 10^{-19}$ J."
+  explanation: |
+    **(a)** $E_2 = -2.18 \times 10^{-18}\ \text{J}\,(1/4) = -5.45 \times 10^{-19}$ J, so the magnitude is $5.45 \times 10^{-19}$ J.
+    For a single level the teacher grades the magnitude; the negative sign just says the electron is bound.
+
+    **(b)** Removing the electron means going from $n = 2$ to $n = \infty$, where $E = 0$:
+    $\Delta E = 0 - (-5.45 \times 10^{-19}) = +5.45 \times 10^{-19}$ J per atom. Here the sign **does** matter: it is positive because energy is absorbed.
+    Per mole: $(5.45 \times 10^{-19})(6.022 \times 10^{23}) = 3.28 \times 10^{5}$ J/mol $= 328$ kJ/mol.
+
+    **(c)** The longest wavelength is the photon with exactly this energy:
+    $\lambda = \dfrac{(6.626 \times 10^{-34})(2.998 \times 10^{8})}{5.45 \times 10^{-19}} = 3.64 \times 10^{-7}\ \text{m} = 364$ nm.
+
+    **(d)** $E_{300} = \dfrac{1.986 \times 10^{-25}}{300. \times 10^{-9}} = 6.62 \times 10^{-19}$ J. The extra energy beyond what's needed to free the electron becomes kinetic energy:
+    $KE = 6.62 \times 10^{-19} - 5.45 \times 10^{-19} = 1.17 \times 10^{-19}$ J.

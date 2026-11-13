@@ -845,3 +845,611 @@
   answer: c
   explanation: |
     All the halogens are diatomic. $\ce{F2}$ and $\ce{Cl2}$ are gases, $\ce{Br2}$ is a red-brown liquid, and $\ce{I2}$ is a solid. The bigger molecules lower in the group have stronger attractions between them, so they're more condensed at room temperature.
+
+# ---------------------------------------------------------------------------
+# More depth on ionization energy, electron affinity, and ion size (added after the Ch. 6–7 test)
+# Data used: first IEs (kJ/mol) Li 520, Be 899, B 801, C 1086, N 1402, O 1314, F 1681, Ne 2081,
+# Na 496, Mg 738, Al 578, P 1012, S 1000; electron affinities C −122, N ≈ 0 (slightly positive),
+# O −141, F −328, Cl −349.
+# ---------------------------------------------------------------------------
+
+- id: apchem-07-ie-table-identify-al
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7", "1.8"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A **period 3** element has these successive ionization energies, in kJ/mol:
+
+    | IE₁ | IE₂ | IE₃ | IE₄ | IE₅ |
+    |---|---|---|---|---|
+    | 578 | 1817 | 2745 | 11577 | 14842 |
+
+    Which element is it?
+  choices:
+    - { id: a, text: "Mg" }
+    - { id: b, text: "Al" }
+    - { id: c, text: "Si" }
+    - { id: d, text: "P" }
+  answer: b
+  explanation: |
+    Look at the ratio between each IE and the one before it, not the raw differences:
+
+    - IE₂/IE₁ = 3.1, IE₃/IE₂ = 1.5, **IE₄/IE₃ = 4.2**, IE₅/IE₄ = 1.3
+
+    The big jump comes after the **third** electron, so three electrons are valence electrons and the fourth comes from the $[\ce{Ne}]$ core. Three valence electrons in period 3 is aluminum, $[\ce{Ne}]\,3s^2\,3p^1$.
+    Mg (a) would jump after IE₂, Si (c) after IE₄, and P (d) after IE₅. The 1817 − 578 step looks large in kJ/mol, but it's only about 3×; the core jump is the one that dwarfs its neighbors.
+
+- id: apchem-07-ie-largest-jump-ca
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For calcium, between which two successive ionization energies is the **largest** jump?
+  choices:
+    - { id: a, text: "IE₁ and IE₂" }
+    - { id: b, text: "IE₂ and IE₃" }
+    - { id: c, text: "IE₃ and IE₄" }
+    - { id: d, text: "IE₄ and IE₅" }
+  answer: b
+  explanation: |
+    Ca is $[\ce{Ar}]\,4s^2$: two valence electrons. IE₁ and IE₂ remove the two 4s electrons. IE₃ has to remove a $3p$ electron from the $[\ce{Ar}]$ core of $\ce{Ca^2+}$, which is a whole shell closer to the nucleus and much less shielded.
+    (The real values are 590, 1145, 4912, and 6491 kJ/mol: the IE₂ → IE₃ step is more than 4×.)
+
+- id: apchem-07-ie-data-chloride-formula
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7", "1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Element X has these successive ionization energies (kJ/mol): 550, 1064, 4138, 5500.
+    What is the most likely formula of the compound X forms with chlorine?
+  choices:
+    - { id: a, text: '$\ce{XCl}$' }
+    - { id: b, text: '$\ce{XCl2}$' }
+    - { id: c, text: '$\ce{XCl3}$' }
+    - { id: d, text: '$\ce{X2Cl}$' }
+  answer: b
+  explanation: |
+    The jump comes between IE₂ (1064) and IE₃ (4138), about 4×, so X has two valence electrons and forms $\ce{X^2+}$. Chlorine forms $\ce{Cl-}$, so the neutral compound is $\ce{XCl2}$.
+    (These values fit strontium, a group 2 metal.)
+
+- id: apchem-07-ie-same-exception-as-be-b
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Boron (801 kJ/mol) has a lower first ionization energy than beryllium (899 kJ/mol). Which other pair shows a dip for the **same reason**?
+  choices:
+    - { id: a, text: "O is lower than N" }
+    - { id: b, text: "Al is lower than Mg" }
+    - { id: c, text: "Na is lower than Ne" }
+    - { id: d, text: "K is lower than Na" }
+  answer: b
+  explanation: |
+    Be ($2s^2$) → B ($2s^2\,2p^1$): B's first electron comes from a **p** subshell, which is higher in energy than 2s and partly shielded by the filled 2s pair. Mg ($3s^2$) → Al ($3s^2\,3p^1$) is the same group 2 → group 13 situation one period down.
+    (a) is a dip too, but for a different reason: O's removed electron is **paired** in a 2p orbital, and the pair repels. (c) is the start of a new shell, and (d) is the normal trend down a group, not an exception.
+
+- id: apchem-07-ie-rank-mg-al-p-s
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which list puts Mg, Al, P, and S in order of **increasing** first ionization energy?
+  choices:
+    - { id: a, text: "Mg < Al < P < S" }
+    - { id: b, text: "Al < Mg < S < P" }
+    - { id: c, text: "Al < Mg < P < S" }
+    - { id: d, text: "Mg < Al < S < P" }
+  answer: b
+  explanation: |
+    The general trend rises across period 3, but **both** exceptions show up here:
+
+    - **Al < Mg**: Al's first electron is a 3p electron, higher in energy than Mg's 3s and partly shielded by it.
+    - **S < P**: P is $3p^3$ (↑ ↑ ↑). S is $3p^4$ (↑↓ ↑ ↑), and the paired electron is pushed off more easily by repulsion.
+
+    So Al (578) < Mg (738) < S (1000) < P (1012). (a) is the "just follow the trend" answer, and (c) and (d) each catch only one of the two exceptions.
+
+- id: apchem-07-ie2-largest
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which atom has the **largest second** ionization energy?
+  choices:
+    - { id: a, text: "Ne" }
+    - { id: b, text: "Na" }
+    - { id: c, text: "Mg" }
+    - { id: d, text: "Al" }
+  answer: b
+  explanation: |
+    Work out where the second electron comes from in each case:
+
+    - **Na**: $\ce{Na+}$ is $[\ce{Ne}]$, so IE₂ removes a **2p core** electron, pulled by 11 protons.
+    - **Ne**: IE₂ also removes a 2p electron, but from $\ce{Ne+}$, with only 10 protons.
+    - **Mg** and **Al**: IE₂ removes a 3s electron, which is a valence electron in a higher shell.
+
+    Both Na and Ne lose a 2p electron, and Na has one more proton holding it, so Na's IE₂ is the largest (about 4560 kJ/mol, vs. 3950 for Ne, 1820 for Al, and 1450 for Mg).
+    Ne is the tempting answer because it has the highest IE₁, but IE₂ is a different question.
+
+- id: apchem-07-ie-trend-electron-config-frq
+  type: frq
+  subject: apchem
+  chapter: 7
+  sections: ["7.4", "7.5"]
+  cedTopics: ["1.5", "1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The table gives data for three period 2 elements.
+
+    | Element | First IE (kJ/mol) | Second IE (kJ/mol) | Electron affinity (kJ/mol) |
+    |---|---|---|---|
+    | N | 1402 | 2856 | about 0 (slightly positive) |
+    | O | 1314 | 3388 | −141 |
+    | F | 1681 | 3374 | −328 |
+  parts:
+    - label: a
+      points: 1
+      prompt: Draw (or describe) the 2p orbital diagrams of N and O.
+      scoring:
+        - "N: ↑ ↑ ↑ (one electron in each 2p orbital); O: ↑↓ ↑ ↑ (one 2p orbital holds a pair). Both needed."
+    - label: b
+      points: 1
+      prompt: Explain why the first ionization energy of O is lower than that of N, even though O has more protons.
+      scoring:
+        - "The electron removed from O is one of a pair in the same 2p orbital; the repulsion between the paired electrons makes it easier to remove than any of N's unpaired 2p electrons."
+    - label: c
+      points: 1
+      prompt: Explain why the first ionization energy of F is higher than that of O.
+      scoring:
+        - "F has one more proton and its electrons are in the same shell (n = 2), so Zeff is larger and the electrons are held more tightly; both lose a paired 2p electron, so the pairing effect doesn't change the comparison."
+    - label: d
+      points: 1
+      prompt: The **second** ionization energy of O is larger than that of N. Explain using the electron configurations of $\ce{N+}$ and $\ce{O+}$.
+      scoring:
+        - "$\\ce{O+}$ is $2p^3$ (no paired 2p electrons) and has 8 protons, while $\\ce{N+}$ is $2p^2$ with 7 protons; removing an unpaired electron from the higher-Zeff $\\ce{O+}$ takes more energy."
+    - label: e
+      points: 1
+      prompt: Explain why nitrogen's electron affinity is close to zero, while oxygen's is clearly negative.
+      scoring:
+        - "An electron added to N breaks up the half-filled $2p^3$ set and must pair, so the repulsion cancels nearly all of N's attraction for it; O's added electron also pairs, but O has one more proton (higher Zeff), so the attraction wins and energy is released."
+  explanation: |
+    **(a)** N is $1s^2\,2s^2\,2p^3$: ↑ ↑ ↑. O is $1s^2\,2s^2\,2p^4$: ↑↓ ↑ ↑.
+
+    **(b)** In O, one 2p orbital holds two electrons. Their repulsion raises the energy of one of them, so it comes off more easily than an electron from N's half-filled set, where every electron is alone in its orbital. That outweighs O's extra proton.
+
+    **(c)** From O to F, the valence shell is still $n = 2$ and one more proton is added. Electrons in the same shell shield each other poorly, so Zeff goes up and the 2p electrons are held tighter. Both O and F lose a paired electron, so the pairing effect is the same for both and the normal trend wins.
+
+    **(d)** $\ce{N+}$ is $2p^2$ and $\ce{O+}$ is $2p^3$. Now the situation is flipped: $\ce{O+}$ has a half-filled set with no pairs to help, and it has one more proton. So $\text{IE}_2(\ce{O}) > \text{IE}_2(\ce{N})$ (3388 vs. 2856 kJ/mol). (F's IE₂ is about the same as O's because $\ce{F+}$ is $2p^4$ and loses a paired electron, offsetting its extra proton.)
+
+    **(e)** An electron added to N ($2p^3 \to 2p^4$) has to pair in an orbital that already holds one electron, and the extra repulsion cancels nearly all the attraction, so N's EA is about zero. An electron added to O ($2p^4 \to 2p^5$) also pairs, but O has one more proton and a higher Zeff, so the attraction clearly wins and 141 kJ/mol is released. Compare carbon: its added electron goes into an **empty** 2p orbital with no pairing, and its EA is −122 kJ/mol. That's why N, not O, stands out as the exception.
+
+- id: apchem-07-ea-cl-vs-f
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The electron affinity of chlorine (−349 kJ/mol) is **more negative** than that of fluorine (−328 kJ/mol), even though F is higher in the group. Which explanation is best?
+  choices:
+    - { id: a, text: "Cl has a higher effective nuclear charge than F" }
+    - { id: b, text: "F is so small that an added electron enters a crowded 2p subshell, where repulsion from the other electrons cancels part of the attraction" }
+    - { id: c, text: "The added electron in Cl goes into a 4s orbital, which is lower in energy" }
+    - { id: d, text: "F is less electronegative than Cl" }
+  answer: b
+  explanation: |
+    The usual trend says the smaller atom should attract an extra electron more strongly. But F's $n = 2$ shell is very compact, so the incoming electron is squeezed close to seven other valence electrons and the repulsion is large. Cl's $n = 3$ shell is bigger, so the electrons are more spread out, and the net energy released is a little larger.
+    (a) is false: the valence Zeff is about the same for both (+7 by the simple estimate). (c) is false: the electron goes into 3p. (d) is backward: F is the most electronegative element.
+
+- id: apchem-07-ea-near-zero-pair
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which pair of elements **both** have electron affinities that are close to zero or positive (little or no energy released when an electron is added)?
+  choices:
+    - { id: a, text: "Be and N" }
+    - { id: b, text: "C and O" }
+    - { id: c, text: "Li and F" }
+    - { id: d, text: "B and Si" }
+  answer: a
+  explanation: |
+    - **Be** ($2s^2$): the 2s subshell is full, so the added electron has to go into a higher-energy 2p orbital.
+    - **N** ($2p^3$): the 2p set is half-filled, so the added electron has to pair, and the repulsion cancels most of the attraction.
+
+    The same pattern holds down the table: group 2 (filled s) and group 15 (half-filled p) are the dips in electron affinity, and the noble gases (filled shell) are positive. C, O, Li, F, B, and Si all release energy when they gain an electron.
+
+- id: apchem-07-ea-sign-meaning
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Element X has an electron affinity of −200 kJ/mol and element Y has an electron affinity of −45 kJ/mol. Which statement is correct?
+  choices:
+    - { id: a, text: "Adding an electron to X releases more energy than adding one to Y" }
+    - { id: b, text: "Adding an electron to Y releases more energy, because −45 is larger than −200" }
+    - { id: c, text: "Both processes absorb energy, because the values are negative" }
+    - { id: d, text: "X has a lower attraction for an added electron than Y" }
+  answer: a
+  explanation: |
+    By the sign convention used in the book, a **negative** electron affinity means energy is **released** when the gaseous atom gains an electron. The more negative the value, the more energy is released and the more strongly the atom attracts the electron. −200 kJ/mol is more negative than −45 kJ/mol, so X releases more.
+    (b) compares the numbers as if bigger meant more energy released, which is backward for negative values. (c) has the sign meaning reversed.
+
+- id: apchem-07-ea-rank-c-n-o-f
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which list puts C, N, O, and F in order from **most negative** to **least negative** electron affinity?
+  choices:
+    - { id: a, text: "F, O, N, C" }
+    - { id: b, text: "F, O, C, N" }
+    - { id: c, text: "N, C, O, F" }
+    - { id: d, text: "C, N, O, F" }
+  answer: b
+  explanation: |
+    The general trend is more negative to the right, with nitrogen as the exception: F (−328) is most negative, then O (−141), then C (−122), and N (about 0) is last.
+    N is out of place because an added electron would have to pair in its half-filled 2p set. C's added electron goes into an **empty** 2p orbital ($2p^2 \to 2p^3$) with no pairing, so C releases a fair amount of energy.
+    (a) follows the trend without the exception. (c) and (d) run the wrong way.
+
+- id: apchem-07-ea-c-vs-n
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Carbon has a much more negative electron affinity than nitrogen, even though nitrogen has more protons. Why?
+  choices:
+    - { id: a, text: "An electron added to C goes into an empty 2p orbital, but an electron added to N must pair with another electron" }
+    - { id: b, text: "Carbon has a larger atomic radius, so it has more room for the electron" }
+    - { id: c, text: "Nitrogen's added electron goes into the n = 3 shell" }
+    - { id: d, text: "Carbon has a higher effective nuclear charge than nitrogen" }
+  answer: a
+  explanation: |
+    C is $2p^2$ (↑ ↑ _), so the extra electron takes the empty orbital: $2p^3$, no pairing. N is $2p^3$ (↑ ↑ ↑), so the extra electron must share an orbital, and the added repulsion cancels most of the attraction.
+    (c) is false because N's 2p subshell still has room. (d) is backward: Zeff increases from C to N.
+
+- id: apchem-07-ea-second-oxygen
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.5"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Oxygen's first electron affinity is −141 kJ/mol. The energy change for $\ce{O-(g) + e- -> O^2-(g)}$ is **positive**, roughly +750 kJ/mol. Which statement best explains the positive value?
+  choices:
+    - { id: a, text: "The second electron must go into the n = 3 shell" }
+    - { id: b, text: "The second electron is being added to an ion that is already negative, so it is repelled by the ion's overall negative charge" }
+    - { id: c, text: "Oxygen has a lower Zeff after gaining the first electron, because a proton is lost" }
+    - { id: d, text: "The value is positive because it measures energy released" }
+  answer: b
+  explanation: |
+    $\ce{O-}$ already has one more electron than protons, so a second incoming electron is pushed away by that net negative charge. Energy has to be **added** to force it on, so the value is positive.
+    (a) is false: $\ce{O-}$ is $2p^5$, so the second electron still fits in 2p and gives $\ce{O^2-}$ the neon configuration. (c) is false because gaining electrons never changes the number of protons. (d) has the sign convention backward.
+    $\ce{O^2-}$ is still common in solids like MgO, because the strong attraction to the surrounding cations (lattice energy, Chapter 8) more than pays for that energy cost.
+
+- id: apchem-07-ion-radius-rank-mixed
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which list puts $\ce{Mg^2+}$, $\ce{Na+}$, $\ce{K+}$, $\ce{Cl-}$, and $\ce{S^2-}$ in order of **increasing** radius?
+  choices:
+    - { id: a, text: '$\ce{Mg^2+} < \ce{Na+} < \ce{K+} < \ce{Cl-} < \ce{S^2-}$' }
+    - { id: b, text: '$\ce{K+} < \ce{Na+} < \ce{Mg^2+} < \ce{S^2-} < \ce{Cl-}$' }
+    - { id: c, text: '$\ce{Na+} < \ce{Mg^2+} < \ce{K+} < \ce{S^2-} < \ce{Cl-}$' }
+    - { id: d, text: '$\ce{Mg^2+} < \ce{Na+} < \ce{Cl-} < \ce{S^2-} < \ce{K+}$' }
+  answer: a
+  explanation: |
+    Sort first by how many shells hold electrons, then by protons within each isoelectronic group:
+
+    - $\ce{Mg^2+}$ and $\ce{Na+}$ have 10 electrons ($n = 2$ is the outer shell). Mg has more protons (12 vs. 11), so $\ce{Mg^2+} < \ce{Na+}$.
+    - $\ce{K+}$, $\ce{Cl-}$, and $\ce{S^2-}$ have 18 electrons ($n = 3$ outer shell), so all three are larger than the first two. More protons means smaller: $\ce{K+}$ (19 protons) < $\ce{Cl-}$ (17) < $\ce{S^2-}$ (16).
+
+    (d) treats $\ce{K+}$ as larger than the anions because K is in period 4, but $\ce{K+}$ has lost its entire $n = 4$ shell.
+
+- id: apchem-07-largest-na-f-species
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species is the **largest**?
+  choices:
+    - { id: a, text: '$\ce{Na}$' }
+    - { id: b, text: '$\ce{Na+}$' }
+    - { id: c, text: '$\ce{F}$' }
+    - { id: d, text: '$\ce{F-}$' }
+  answer: a
+  explanation: |
+    Only the Na atom has an electron in the $n = 3$ shell ($3s^1$). $\ce{Na+}$, F, and $\ce{F-}$ all have their outer electrons in $n = 2$, so Na is the largest by far.
+    "Anions are big" is true compared with the **parent atom** ($\ce{F-}$ > F) and compared with an isoelectronic cation ($\ce{F-}$ > $\ce{Na+}$), but a neutral atom with an extra shell is bigger still.
+
+- id: apchem-07-isoelectronic-rank-ne-series
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    $\ce{N^3-}$, $\ce{O^2-}$, $\ce{F-}$, $\ce{Na+}$, $\ce{Mg^2+}$, and $\ce{Al^3+}$ all have 10 electrons. Which list goes from **largest to smallest**?
+  choices:
+    - { id: a, text: '$\ce{N^3-} > \ce{O^2-} > \ce{F-} > \ce{Na+} > \ce{Mg^2+} > \ce{Al^3+}$' }
+    - { id: b, text: '$\ce{Al^3+} > \ce{Mg^2+} > \ce{Na+} > \ce{F-} > \ce{O^2-} > \ce{N^3-}$' }
+    - { id: c, text: '$\ce{N^3-} > \ce{Al^3+} > \ce{O^2-} > \ce{Mg^2+} > \ce{F-} > \ce{Na+}$' }
+    - { id: d, text: '$\ce{F-} > \ce{O^2-} > \ce{N^3-} > \ce{Na+} > \ce{Mg^2+} > \ce{Al^3+}$' }
+  answer: a
+  explanation: |
+    With the same 10 electrons in every ion, size depends only on the number of protons pulling on them: N (7) has the fewest, so $\ce{N^3-}$ is largest, and Al (13) has the most, so $\ce{Al^3+}$ is smallest.
+    (c) sorts by the size of the charge instead of by protons. (d) gets the anions backward.
+
+- id: apchem-07-fe2-vs-fe3-radius
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why is $\ce{Fe^3+}$ smaller than $\ce{Fe^2+}$?
+  choices:
+    - { id: a, text: '$\ce{Fe^3+}$ has more protons' }
+    - { id: b, text: 'Both have 26 protons, but $\ce{Fe^3+}$ has one fewer electron, so there is less electron–electron repulsion and each electron is pulled in more tightly' }
+    - { id: c, text: '$\ce{Fe^3+}$ has lost its entire n = 3 shell' }
+    - { id: d, text: '$\ce{Fe^3+}$ has more unpaired electrons, and unpaired electrons are closer to the nucleus' }
+  answer: b
+  explanation: |
+    $\ce{Fe^2+}$ is $[\ce{Ar}]\,3d^6$ and $\ce{Fe^3+}$ is $[\ce{Ar}]\,3d^5$. The nucleus is the same, so removing an electron leaves fewer electrons to repel each other and share the same 26+ charge. The rest contract.
+    The rule of thumb: for ions of the same element, **the more positive the charge, the smaller the ion**. (c) is false because 3d and 3s/3p electrons remain.
+
+- id: apchem-07-transition-radius-flat
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2", "7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Across period 3 from Na to Cl, atomic radius drops a lot. Across the transition metals of period 4 (Sc to Zn), it changes much less. Which explanation is best?
+  choices:
+    - { id: a, text: "The transition metals add electrons to a new shell" }
+    - { id: b, text: "In the transition metals the added electrons go into the inner 3d subshell, which shields the outer 4s electrons fairly well, so the Zeff on the 4s electrons rises only slowly" }
+    - { id: c, text: "The transition metals don't gain protons from one element to the next" }
+    - { id: d, text: "d electrons don't repel s electrons" }
+  answer: b
+  explanation: |
+    Radius is set by the outermost electrons, which are 4s for these metals. From Sc to Zn each step adds a proton, but the new electron goes into **3d**, which is closer to the nucleus than 4s. An inner electron shields the 4s electrons much better than a same-shell electron would, so most of each new proton's charge is canceled and Zeff on 4s barely changes.
+    Across period 3, the new electron is in the same shell ($n = 3$) as the others and shields poorly, so Zeff climbs steeply.
+
+- id: apchem-07-radius-rank-f-o-s-si
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which list puts F, O, S, and Si in order of **increasing** atomic radius?
+  choices:
+    - { id: a, text: "F < O < S < Si" }
+    - { id: b, text: "Si < S < O < F" }
+    - { id: c, text: "O < F < S < Si" }
+    - { id: d, text: "F < O < Si < S" }
+  answer: a
+  explanation: |
+    F and O are in period 2 ($n = 2$ valence shell), so they are smaller than S and Si (period 3). Within each period, more protons means a higher Zeff and a smaller atom: F < O, and S < Si.
+    (c) and (d) each flip one pair, which is what happens if you forget that radius **decreases** to the right.
+
+- id: apchem-07-shielding-core-vs-valence
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.2"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement about shielding is correct?
+  choices:
+    - { id: a, text: "Valence electrons shield each other just as well as core electrons shield valence electrons" }
+    - { id: b, text: "Core electrons shield valence electrons much more effectively than valence electrons in the same shell shield each other" }
+    - { id: c, text: "Shielding increases sharply across a period, which is why atoms get smaller" }
+    - { id: d, text: "Electrons farther from the nucleus shield the inner electrons" }
+  answer: b
+  explanation: |
+    Core electrons sit between the nucleus and the valence shell, so they cancel almost one proton each. Electrons in the same shell are spread around the nucleus at about the same distance and block very little of its charge.
+    That's why Zeff rises across a period: the core (and its shielding) stays the same while protons are added. (c) is backward, and (d) is backward too: outer electrons barely shield inner ones.
+
+- id: apchem-07-metallic-rank
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.6"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which list puts Si, Al, Ca, and Rb in order of **increasing** metallic character?
+  choices:
+    - { id: a, text: "Si < Al < Ca < Rb" }
+    - { id: b, text: "Rb < Ca < Al < Si" }
+    - { id: c, text: "Al < Si < Ca < Rb" }
+    - { id: d, text: "Si < Ca < Al < Rb" }
+  answer: a
+  explanation: |
+    Metallic character is how easily an atom gives up its valence electrons, so it rises as ionization energy falls: **down** a group and to the **left**.
+    Si (a metalloid) and Al are in period 3, with Al to the left. Ca is in period 4 and Rb in period 5, both far left. So Si < Al < Ca < Rb.
+
+- id: apchem-07-electronegativity-down-group
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: []
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why does electronegativity decrease from F to I?
+  choices:
+    - { id: a, text: "I has fewer protons than F" }
+    - { id: b, text: "The valence shell is farther from the nucleus and more shielded, so bonding electrons are attracted less strongly" }
+    - { id: c, text: "I has more valence electrons than F" }
+    - { id: d, text: "The effective nuclear charge on the valence electrons increases down the group" }
+  answer: b
+  explanation: |
+    Electronegativity is how strongly an atom pulls on the electrons in a bond. Going down group 17, the valence electrons (and so any bonding electrons) are in a higher shell, farther from the nucleus. With roughly the same Zeff, Coulomb attraction is weaker at the larger distance.
+    (a) and (c) are false: I has more protons (53) and the same 7 valence electrons. (d) is false: Zeff stays roughly constant down a group.
+
+- id: apchem-07-ie-ions-identify-frq
+  type: frq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3", "7.4"]
+  cedTopics: ["1.7", "1.8"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Elements X and Y are both in **period 3**. Their successive ionization energies (kJ/mol) are:
+
+    | | IE₁ | IE₂ | IE₃ | IE₄ | IE₅ | IE₆ | IE₇ |
+    |---|---|---|---|---|---|---|---|
+    | X | 738 | 1451 | 7733 | 10543 | | | |
+    | Y | 1000 | 2252 | 3357 | 4556 | 7004 | 8496 | 27107 |
+  parts:
+    - label: a
+      points: 1
+      prompt: Identify element X. Justify your answer using the data.
+      scoring:
+        - "Mg: the large jump is between IE₂ and IE₃ (about 5×), so X has two valence electrons (group 2), and the period 3 group 2 element is Mg."
+    - label: b
+      points: 1
+      prompt: Identify element Y. Justify your answer using the data.
+      scoring:
+        - "S: the large jump is between IE₆ and IE₇ (about 3×, far bigger than any earlier ratio), so Y has six valence electrons (group 16), which in period 3 is S."
+    - label: c
+      points: 1
+      prompt: Explain why IE₃ of X is so much larger than IE₂.
+      scoring:
+        - "IE₃ removes an electron from the $n = 2$ core (2p) of $\\ce{Mg^2+}$, which is closer to the nucleus and far less shielded, so it feels a much larger Zeff than the 3s valence electrons."
+    - label: d
+      points: 1
+      prompt: Write the formula of the ionic compound formed by X and Y.
+      scoring:
+        - "MgS (X forms $\\ce{X^2+}$ and Y forms $\\ce{Y^2-}$, so they combine 1:1)."
+    - label: e
+      points: 1
+      prompt: Which ion is larger, the ion of X or the ion of Y? Justify your answer.
+      scoring:
+        - "$\\ce{S^2-}$ is larger: it has 18 electrons with $n = 3$ as its outer shell, while $\\ce{Mg^2+}$ has 10 electrons with $n = 2$ outermost (and S²⁻ also has fewer protons per electron)."
+  explanation: |
+    **(a)** Ratios for X: IE₂/IE₁ = 2.0, **IE₃/IE₂ = 5.3**, IE₄/IE₃ = 1.4. The core is reached at the third electron, so X has 2 valence electrons. Group 2, period 3: **magnesium**, $[\ce{Ne}]\,3s^2$.
+
+    **(b)** Ratios for Y: 2.3, 1.5, 1.4, 1.5, 1.2, then **IE₇/IE₆ = 3.2**. Six electrons come off before the core, so Y is in group 16. Period 3: **sulfur**, $[\ce{Ne}]\,3s^2\,3p^4$. (The step from IE₄ to IE₅ is a little bigger because IE₅ starts on the 3s pair, but it is nowhere near the core jump.)
+
+    **(c)** After two electrons leave, $\ce{Mg^2+}$ is $1s^2\,2s^2\,2p^6$. The next electron is a 2p electron, one shell closer to the nucleus, shielded only by the two 1s electrons. It feels a far larger Zeff than the 3s electrons did.
+
+    **(d)** Mg forms $\ce{Mg^2+}$ and S forms $\ce{S^2-}$ (gaining 2 electrons to reach the argon configuration), so the compound is **MgS**.
+
+    **(e)** $\ce{S^2-}$ is larger. It has three occupied shells; $\ce{Mg^2+}$ has lost its whole $n = 3$ shell and has only two. On top of that, $\ce{S^2-}$ has 16 protons for 18 electrons, while $\ce{Mg^2+}$ has 12 protons for 10.
+
+- id: apchem-07-ions-k-ca-frq
+  type: frq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3", "7.4"]
+  cedTopics: ["1.5", "1.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Answer the following about argon and the ions near it in the periodic table.
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the electron configuration of $\ce{Ca^2+}$, and name one anion with the same configuration.
+      scoring:
+        - "$1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^6$ (or $[\\ce{Ar}]$); $\\ce{Cl-}$ or $\\ce{S^2-}$ (or $\\ce{P^3-}$)."
+    - label: b
+      points: 1
+      prompt: Rank $\ce{Cl-}$, $\ce{K+}$, $\ce{Ca^2+}$, and $\ce{S^2-}$ from smallest to largest radius.
+      scoring:
+        - "$\\ce{Ca^2+} < \\ce{K+} < \\ce{Cl-} < \\ce{S^2-}$."
+    - label: c
+      points: 1
+      prompt: Justify your ranking in part (b).
+      scoring:
+        - "All four have 18 electrons in the same shells; the one with more protons (Ca 20, K 19, Cl 17, S 16) pulls the electrons in more tightly and is smaller."
+    - label: d
+      points: 1
+      prompt: A K atom is much larger than a $\ce{K+}$ ion. Explain.
+      scoring:
+        - "K has one electron in the $n = 4$ shell; $\\ce{K+}$ has lost it, so its outermost electrons are in $n = 3$, closer to the nucleus (and fewer electrons share the same 19 protons)."
+    - label: e
+      points: 1
+      prompt: The first ionization energy of Ca (590 kJ/mol) is higher than that of K (419 kJ/mol), but the **second** ionization energy of K is much higher than that of Ca. Explain both facts.
+      scoring:
+        - "IE₁: both remove a 4s electron, and Ca has one more proton (higher Zeff), so Ca's is higher. IE₂: K's second electron comes from the $[\\ce{Ar}]$ core ($3p$, $n = 3$), while Ca's second electron is still a 4s valence electron, so K's IE₂ is much larger."
+  explanation: |
+    **(a)** Ca has 20 electrons; $\ce{Ca^2+}$ has 18: $1s^2\,2s^2\,2p^6\,3s^2\,3p^6$, the same as Ar. $\ce{Cl-}$ (17 + 1) and $\ce{S^2-}$ (16 + 2) also have 18 electrons.
+
+    **(b)** $\ce{Ca^2+} < \ce{K+} < \ce{Cl-} < \ce{S^2-}$.
+
+    **(c)** This is an isoelectronic series, so the only difference is nuclear charge: 20, 19, 17, and 16 protons pulling on the same 18 electrons. More protons, smaller ion.
+
+    **(d)** K is $[\ce{Ar}]\,4s^1$. Losing the 4s electron removes the whole $n = 4$ shell, so the outer electrons of $\ce{K+}$ are in $n = 3$. On top of that, 19 protons now pull on 18 electrons instead of 19.
+
+    **(e)** First IE: both lose a 4s electron from the same shell, and Ca has 20 protons vs. 19, so the higher Zeff makes Ca's IE₁ larger. Second IE: $\ce{K+}$ is $[\ce{Ar}]$, so K's second electron is a 3p core electron, a shell closer and much less shielded (IE₂ ≈ 3050 kJ/mol). $\ce{Ca+}$ still has a 4s electron to lose (IE₂ ≈ 1145 kJ/mol).

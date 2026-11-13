@@ -77,7 +77,7 @@ src/
     apchem/ced.json        AP CED units and topics
     apchem/chapters.json   textbook chapters, the CED topics each one teaches, "not on AP" notes
     apchem/tests.json      class tests
-    apchem/progress.json   chapters the class has finished (topic checkmarks follow)
+    apchem/progress.json   chapters finished and in progress (topic checkmarks follow)
     apchem/past-frqs.json  released AP FRQs (links only), each part tagged by CED topic
   content/
     lessons/<subject>/<chapter>-<slug>/index.mdx
@@ -120,7 +120,7 @@ taught across several chapters are listed under each one, for example 1.5 (Ch. 2
 not be confirmed for the 15th edition: photoelectron spectroscopy (1.6) is listed under both Ch. 6 and 7.
 Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure reaction rates.
 
-**`progress.json`** lists finished chapters (1–5 as of 2026-10-09); topic checkmarks are derived
+**`progress.json`** lists finished chapters (1–7 as of 2026-11-12, with 8 and 9 in progress as `current`); topic checkmarks are derived
 from the mapping above. Its `lastYear` block records what was covered in Scholars Chemistry,
 based on the owner's answers on 2026-10-09: fully covered were 3.4, 4.8, 8.1, 8.2, 9.1, 9.2, and 9.3,
 and partly covered were 1.5, 3.5, 8.3, and 8.5.

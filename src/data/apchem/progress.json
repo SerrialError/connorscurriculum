@@ -1,5 +1,6 @@
 {
-  "chapters": [1, 2, 3, 4, 5],
+  "chapters": [1, 2, 3, 4, 5, 6, 7],
+  "current": [8, 9],
   "lastYear": {
     "course": "Scholars Chemistry",
     "covered": ["3.4", "4.8", "8.1", "8.2", "9.1", "9.2", "9.3"],

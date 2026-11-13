@@ -68,7 +68,8 @@
     "title": "Periodic Properties of the Elements",
     "cedTopics": ["1.6", "1.7", "1.8"],
     "notOnAP": [
-      "Calculating Zeff with Slater's rules (the AP exam uses effective nuclear charge and shielding only to explain trends)"
+      "Calculating Zeff with Slater's rules (the AP exam uses effective nuclear charge and shielding only to explain trends)",
+      "Group-by-group descriptive chemistry in Sections 7.7–7.8 (reactions of the alkali and alkaline earth metals, halogens, noble gases); the AP exam tests the trends, not the facts about each group"
     ],
     "sections": [
       { "id": "7.1", "title": "Development of the Periodic Table" },
@@ -84,7 +85,7 @@
   {
     "number": 8,
     "title": "Basic Concepts of Chemical Bonding",
-    "cedTopics": ["1.8", "2.1", "2.2", "2.3", "2.5", "2.6"],
+    "cedTopics": ["1.7", "1.8", "2.1", "2.2", "2.3", "2.5", "2.6"],
     "notOnAP": [],
     "sections": []
   },
@@ -130,7 +131,7 @@
   {
     "number": 13,
     "title": "Properties of Solutions",
-    "cedTopics": ["3.8", "3.9", "3.10", "9.6"],
+    "cedTopics": ["3.7", "3.8", "3.9", "3.10", "9.6"],
     "notOnAP": [
       "Colligative properties",
       "Molality, percent by mass, and percent by volume calculations"

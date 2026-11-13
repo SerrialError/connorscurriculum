@@ -115,8 +115,8 @@ fills them in from the book.
 
 **Chapter-to-topic mapping.** Each chapter in `chapters.json` lists the CED topics it teaches,
 based on comparing each topic's learning objectives in the CED with the chapter contents. Topics
-taught across several chapters are listed under each one, for example 1.5 (Ch. 2 and 6), 1.8
-(Ch. 2, 7, 8), 3.9 (Ch. 1 and 13), 4.8 (Ch. 4 and 16), and 4.9 (Ch. 4 and 20). One placement could
+taught across several chapters are listed under each one, for example 1.5 (Ch. 2 and 6), 1.7 (Ch. 7, and Ch. 8 for electronegativity), 1.8
+(Ch. 2, 7, 8), 3.7 (Ch. 4 and 13), 3.9 (Ch. 1 and 13), 4.8 (Ch. 4 and 16), and 4.9 (Ch. 4 and 20). One placement could
 not be confirmed for the 15th edition: photoelectron spectroscopy (1.6) is listed under both Ch. 6 and 7.
 Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure reaction rates.
 

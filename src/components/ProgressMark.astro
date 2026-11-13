@@ -1,21 +1,20 @@
 ---
 // Class progress marker for a chapter or CED topic. Text label is always present
 // (visually hidden in compact mode) so the state is not shown by color alone.
+import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
 import type { TopicProgress } from '../lib/registry';
 
 interface Props {
   status: TopicProgress;
   /** Icon only, with a hidden label. */
   compact?: boolean;
-  /** Label for "done" (default "Learned"). */
+  /** Label for "done" (default "Covered in class"). */
   doneLabel?: string;
 }
 
-const { status, compact = false, doneLabel = 'Learned' } = Astro.props;
-const labels = { done: doneLabel, review: 'Seen last year', partial: 'Partly learned' };
-const icons = { done: '✓', review: '↺', partial: '◐' };
-const label = status ? labels[status] : 'Not yet';
-const icon = status ? icons[status] : '';
+const { status, compact = false, doneLabel } = Astro.props;
+const label = status ? (status === 'done' && doneLabel ? doneLabel : PROGRESS_LABELS[status]) : 'Not yet';
+const icon = status ? PROGRESS_ICONS[status] : '';
 ---
 
 {status && (
@@ -50,6 +49,10 @@ const icon = status ? icons[status] : '';
     background: var(--tip-soft);
     color: var(--tip);
   }
+  .skipped {
+    background: var(--bad-soft);
+    color: var(--bad);
+  }
   .compact {
     justify-content: center;
     width: 1.5rem;
@@ -63,5 +66,9 @@ const icon = status ? icons[status] : '';
     width: 1.5rem;
     height: 1.5rem;
     flex: none;
+    padding: 0;
+    border: 1.5px dashed var(--border);
+    border-radius: 50%;
+    background: transparent;
   }
 </style>

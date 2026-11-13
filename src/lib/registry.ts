@@ -64,6 +64,9 @@ export const progressSchema = z.object({
   chapters: z.array(z.number().int()).default([]),
   // Chapters the class is working on now (not finished yet), in class order.
   current: z.array(z.number().int()).default([]),
+  // CED topics the class skipped even though a chapter teaching them is finished: topic id -> what
+  // happened, shown to students. These get no checkmark.
+  notCovered: z.record(z.string(), z.string().min(1)).default({}),
   // CED topics already seen in an earlier course. Shown with their own mark until covered this year.
   lastYear: z
     .object({
@@ -76,6 +79,26 @@ export const progressSchema = z.object({
 });
 
 export type LastYear = NonNullable<z.infer<typeof progressSchema>['lastYear']>;
+
+/**
+ * AP topics the textbook teaches thinly or not at all, so students know to learn them elsewhere.
+ * One entry per topic, plus general skills (labs, science practices) that aren't a single topic.
+ */
+const gapSchema = z.object({
+  /** "missing": the book doesn't teach it; "thin": a short treatment that won't be enough for the exam. */
+  coverage: z.enum(['missing', 'thin']),
+  /** What the textbook does. */
+  book: z.string().min(1),
+  /** What students need from somewhere else. */
+  learn: z.string().min(1),
+});
+
+export const textbookGapsSchema = z.object({
+  topics: z.array(gapSchema.extend({ id: z.string().min(1) })).default([]),
+  other: z.array(gapSchema.extend({ title: z.string().min(1) })).default([]),
+});
+
+export type TextbookGap = z.infer<typeof gapSchema>;
 
 const frqPartSchema = z.object({
   label: z.string().min(1),
@@ -131,9 +154,10 @@ export type ClassTest = z.infer<typeof testSchema>;
  * done:    every chapter that teaches it is finished this year
  * review:  not done this year, but fully covered in last year's course
  * partial: started this year and/or partly covered last year
+ * skipped: its chapters are finished, but the class didn't cover it (progress.json notCovered)
  * null:    new
  */
-export type TopicProgress = 'done' | 'review' | 'partial' | null;
+export type TopicProgress = 'done' | 'review' | 'partial' | 'skipped' | null;
 
 export interface Progress {
   chapters: Set<number>;
@@ -164,6 +188,11 @@ export interface SubjectData {
   progress: Progress;
   /** Released AP FRQs with per-part topic tags, newest first (empty if past-frqs.json is missing). */
   pastFrqs: PastFrqExam[];
+  /** Topics the textbook covers thinly or not at all (empty if textbook-gaps.json is missing). */
+  textbookGaps: {
+    topics: Map<string, TextbookGap>;
+    other: (TextbookGap & { title: string })[];
+  };
 }
 
 export class DataError extends Error {
@@ -292,7 +321,35 @@ function loadSubject(subject: Subject): SubjectData {
       }
     }
   }
-  const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters, lastYear, rawProgress.current);
+  for (const id of Object.keys(rawProgress.notCovered)) {
+    const field = `notCovered.${id}`;
+    if (!topics.has(id)) throw new DataError(progressFile, field, `topic "${id}" is not in ced.json`);
+    if (!topicChapters.get(id)!.some((n) => rawProgress.chapters.includes(n))) {
+      throw new DataError(progressFile, field, `no finished chapter teaches topic "${id}" yet, so there is nothing to override`);
+    }
+  }
+  const progress = deriveProgress(
+    new Set(rawProgress.chapters),
+    topicChapters,
+    lastYear,
+    rawProgress.current,
+    rawProgress.notCovered,
+  );
+
+  const gapsFile = join(dir, 'textbook-gaps.json');
+  const rawGaps = existsSync(gapsFile) ? readJson(gapsFile, textbookGapsSchema) : textbookGapsSchema.parse({});
+  const gapTopics = new Map<string, TextbookGap>();
+  rawGaps.topics.forEach(({ id, ...gap }, i) => {
+    const field = `topics[${i}].id`;
+    if (!topics.has(id)) throw new DataError(gapsFile, field, `topic "${id}" is not in ced.json`);
+    if (gapTopics.has(id)) throw new DataError(gapsFile, field, `topic "${id}" is listed twice`);
+    gapTopics.set(id, gap);
+  });
+  // Keep CED order regardless of the file's order.
+  const textbookGaps = {
+    topics: new Map([...topics.keys()].filter((id) => gapTopics.has(id)).map((id) => [id, gapTopics.get(id)!])),
+    other: rawGaps.other,
+  };
 
   const frqFile = join(dir, 'past-frqs.json');
   const pastFrqs = existsSync(frqFile) ? readJson(frqFile, pastFrqsSchema).exams : [];
@@ -314,7 +371,7 @@ function loadSubject(subject: Subject): SubjectData {
   });
   pastFrqs.sort((a, b) => b.year - a.year);
 
-  return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs };
+  return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs, textbookGaps };
 }
 
 const listChapters = (ns: number[]) => `Ch. ${ns.join(', ')}`;
@@ -328,6 +385,7 @@ export function deriveProgress(
   topicChapters: Map<string, number[]>,
   lastYear?: LastYear,
   current: number[] = [],
+  notCovered: Record<string, string> = {},
 ): Progress {
   const progress: Progress = {
     chapters: finished,
@@ -340,6 +398,19 @@ export function deriveProgress(
     const done = chs.filter((n) => finished.has(n));
     const thisYear = done.length === 0 ? null : done.length === chs.length ? 'done' : 'partial';
     const before = lastYear?.covered.includes(id) ? 'full' : lastYear?.partial.includes(id) ? 'partial' : null;
+    const skipped = notCovered[id];
+
+    if (skipped !== undefined) {
+      // Skipped in class: no checkmark, even if every chapter teaching it is finished.
+      progress.topics.set(id, before === 'full' ? 'review' : 'skipped');
+      const notes = [`Not covered in class: ${skipped}`];
+      if (before) {
+        const detail = lastYear!.notes[id];
+        notes.push(`${before === 'full' ? 'Covered' : 'Partly covered'} in ${lastYear!.course}${detail ? `: ${detail}` : '.'}`);
+      }
+      progress.notes.set(id, notes);
+      continue;
+    }
 
     if (thisYear === 'done') {
       progress.topics.set(id, 'done');

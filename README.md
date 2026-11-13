@@ -77,7 +77,8 @@ src/
     apchem/ced.json        AP CED units and topics
     apchem/chapters.json   textbook chapters, the CED topics each one teaches, "not on AP" notes
     apchem/tests.json      class tests
-    apchem/progress.json   chapters finished and in progress (topic checkmarks follow)
+    apchem/progress.json   chapters finished and in progress (topic checkmarks follow), topics skipped in class
+    apchem/textbook-gaps.json  AP topics the textbook covers thinly, and where to learn them
     apchem/past-frqs.json  released AP FRQs (links only), each part tagged by CED topic
   content/
     lessons/<subject>/<chapter>-<slug>/index.mdx
@@ -118,6 +119,9 @@ based on comparing each topic's learning objectives in the CED with the chapter 
 taught across several chapters are listed under each one, for example 1.5 (Ch. 2 and 6), 1.7 (Ch. 7, and Ch. 8 for electronegativity), 1.8
 (Ch. 2, 7, 8), 3.7 (Ch. 4 and 13), 3.9 (Ch. 1 and 13), 4.8 (Ch. 4 and 16), and 4.9 (Ch. 4 and 20). One placement could
 not be confirmed for the 15th edition: photoelectron spectroscopy (1.6) is listed under both Ch. 6 and 7.
+The class skipped it, so `progress.json` lists it under `notCovered` and it shows as "Skipped in class"
+rather than ✓, and `textbook-gaps.json` lists it with the other topics the book covers thinly
+(1.4, 3.9, 3.11, 3.13, 4.4, 6.3, 9.4, 9.7, and lab skills).
 Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure reaction rates.
 
 **`progress.json`** lists finished chapters (1–7 as of 2026-11-12, with 8 and 9 in progress as `current`); topic checkmarks are derived

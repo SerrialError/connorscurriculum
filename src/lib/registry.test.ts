@@ -83,3 +83,43 @@ describe('current chapters', () => {
     }
   });
 });
+
+describe('topics not covered in class', () => {
+  const topicChapters = new Map([
+    ['1.6', [6, 7]],
+    ['3.4', [10]],
+    ['1.7', [7, 8]],
+  ]);
+  const lastYear = { course: 'Scholars Chemistry', covered: ['3.4'], partial: ['1.7'], notes: {} };
+
+  it('marks a topic skipped instead of done when its chapters are finished', () => {
+    const p = deriveProgress(new Set([6, 7]), topicChapters, undefined, [], { '1.6': 'learn it on your own.' });
+    expect(p.topics.get('1.6')).toBe('skipped');
+    expect(p.notes.get('1.6')).toEqual(['Not covered in class: learn it on your own.']);
+  });
+
+  it("keeps last year's review mark and notes for a skipped topic", () => {
+    const p = deriveProgress(new Set([7, 10]), topicChapters, lastYear, [], { '3.4': 'skipped.', '1.7': 'skipped.' });
+    expect(p.topics.get('3.4')).toBe('review');
+    expect(p.notes.get('3.4')).toEqual(['Not covered in class: skipped.', 'Covered in Scholars Chemistry.']);
+    expect(p.topics.get('1.7')).toBe('skipped');
+    expect(p.notes.get('1.7')).toHaveLength(2);
+  });
+
+  it('apchem: PES (1.6) is not checked off', () => {
+    const data = getSubjectData('apchem');
+    expect(data.progress.topics.get('1.6')).toBe('skipped');
+  });
+});
+
+describe('textbook gaps', () => {
+  it('apchem: lists gap topics that exist, in CED order', () => {
+    const data = getSubjectData('apchem');
+    const ids = [...data.textbookGaps.topics.keys()];
+    expect(ids.length).toBeGreaterThan(0);
+    for (const id of ids) expect(data.topics.has(id)).toBe(true);
+    const order = [...data.topics.keys()];
+    expect([...ids].sort((a, b) => order.indexOf(a) - order.indexOf(b))).toEqual(ids);
+    expect(data.textbookGaps.topics.get('1.6')?.coverage).toBe('missing');
+  });
+});

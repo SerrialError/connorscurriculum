@@ -3,6 +3,7 @@
 // their topics or just the parts that matched a topic.
 import { getSubjectData, learnedTopic, url } from '../lib/content';
 import { type FrqLink, type FrqPart, frqName, frqPractices, frqTotal, readyPoints } from '../lib/frqs';
+import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
 
 interface Props {
   subject: string;
@@ -18,7 +19,6 @@ const total = frqTotal(frq);
 const ready = readyPoints(frq, learned);
 const matchedPoints = matched?.reduce((sum, p) => sum + p.points, 0) ?? 0;
 const kind = frq.number <= 3 ? 'Long' : 'Short';
-const marks = { done: '✓', review: '↺', partial: '◐' } as const;
 const practiceName = (id: string) => data.ced.sciencePractices.find((p) => p.id === id)?.name ?? `Practice ${id}`;
 const skillOf = (id: string) => data.skills.get(id);
 // Unique per page: each question appears at most once on a page.
@@ -99,9 +99,9 @@ const sourceNote = frq.officialSkills
                     class="badge topic"
                     href={url(`${subject}/ap/${t}/`)}
                     title={data.topics.get(t)?.title}
-                    aria-label={`Topic ${t}: ${data.topics.get(t)?.title}`}
+                    aria-label={`Topic ${t}: ${data.topics.get(t)?.title}${s ? ` (${PROGRESS_LABELS[s]})` : ''}`}
                   >
-                    {s && <span aria-hidden="true">{marks[s]}</span>}
+                    {s && <span aria-hidden="true">{PROGRESS_ICONS[s]}</span>}
                     {t}
                   </a>
                 );

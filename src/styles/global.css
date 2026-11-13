@@ -136,7 +136,8 @@ h1 {
 }
 
 h2 {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.005em;
 }
 
 h3 {
@@ -340,12 +341,24 @@ button.button {
 }
 
 .button:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.08);
+}
+
+.button.secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  filter: none;
 }
 
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  filter: none;
+}
+
+.button.secondary:disabled:hover {
+  border-color: var(--border);
+  background: transparent;
 }
 
 .actions {
@@ -368,6 +381,34 @@ button.button {
   font-size: 0.875rem;
   color: var(--muted);
   margin: 1.2rem 0 0;
+}
+
+/* Previous / next links at the bottom of chapter, topic, and lesson pages. */
+.pager {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+.pager a {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pager a:hover {
+  border-color: var(--accent);
+}
+
+.pager a.next {
+  text-align: right;
+  grid-column: -2;
 }
 
 .breadcrumbs a {

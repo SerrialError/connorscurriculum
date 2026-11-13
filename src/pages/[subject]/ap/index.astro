@@ -9,7 +9,7 @@ export const getStaticPaths = subjectPaths;
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const cov = coverage(data, await getLessons(subject), await getQuestions(subject));
-const { progress } = data;
+const { progress, textbookGaps } = data;
 const statusOf = (id: string) => progress.topics.get(id) ?? null;
 const count = (ids: string[], status: ReturnType<typeof statusOf>) => ids.filter((id) => statusOf(id) === status).length;
 const allIds = [...data.topics.keys()];
@@ -27,30 +27,40 @@ const counts = (id: string) => {
     .filter(Boolean)
     .join(' · ');
 };
+const gapLabel = { missing: 'Not in textbook', thin: 'Thin in textbook' } as const;
 ---
 
 <Base title={`${data.subject.standardsName} units`} subject={subject}>
   <h1>{data.subject.standardsName} units and topics</h1>
-  <p class="muted prose">Units in Course at a Glance order, with exam weights. Each topic lists the lessons and questions tagged with it.</p>
+  <p class="muted prose">
+    Every topic on the AP exam, in Course and Exam Description order. Open a topic for its lessons, practice questions,
+    and past FRQs.
+  </p>
+
+  <nav class="unit-nav" aria-label="Units">
+    {data.ced.units.map((u) => (
+      <a href={`#unit-${u.id}`} title={u.title}>Unit {u.id}</a>
+    ))}
+    {textbookGaps.topics.size > 0 && <a href="#textbook-gaps">Textbook gaps</a>}
+  </nav>
+
   {progress.topics.size > 0 && (
     <p class="small legend">
-      <span><ProgressMark status="done" /> {count(allIds, 'done')} this year</span>
+      <span><ProgressMark status="done" compact /> {count(allIds, 'done')} covered in class</span>
+      {count(allIds, 'partial') > 0 && (
+        <span><ProgressMark status="partial" compact /> {count(allIds, 'partial')} partly covered</span>
+      )}
       {count(allIds, 'review') > 0 && (
         <span>
-          <ProgressMark status="review" /> {count(allIds, 'review')}
-          {progress.lastYearCourse && <> in {progress.lastYearCourse}</>}
+          <ProgressMark status="review" compact /> {count(allIds, 'review')} seen
+          {progress.lastYearCourse ? <> in {progress.lastYearCourse}</> : ' last year'}
         </span>
       )}
-      {count(allIds, 'partial') > 0 && (
-        <span><ProgressMark status="partial" /> {count(allIds, 'partial')}</span>
+      {count(allIds, 'skipped') > 0 && (
+        <span><ProgressMark status="skipped" compact /> {count(allIds, 'skipped')} skipped in class</span>
       )}
-      <span class="new">{count(allIds, null)} new</span>
-    </p>
-  )}
-  {!data.ced.verified && (
-    <p class="notice small">
-      Topic list not yet verified against the current Course and Exam Description. Edit <code>src/data/{subject}/ced.json</code>
-      and set <code>"verified": true</code> once checked.
+      <span><ProgressMark status={null} compact /> {count(allIds, null)} new</span>
+      {textbookGaps.topics.size > 0 && <span><span class="badge gap">⚑</span> thin in textbook</span>}
     </p>
   )}
   {data.ced.units.map((unit) => {
@@ -58,29 +68,32 @@ const counts = (id: string) => {
     const done = count(ids, 'done');
     const review = count(ids, 'review');
     return (
-      <section class="unit" id={`unit-${unit.id}`}>
-        <h2>
-          Unit {unit.id}: {unit.title} {unit.examWeight && <span class="badge">{unit.examWeight} of exam</span>}
+      <section class="unit" id={`unit-${unit.id}`} aria-labelledby={`unit-${unit.id}-h`}>
+        <div class="unit-head">
+          <h2 id={`unit-${unit.id}-h`}>Unit {unit.id}: {unit.title}</h2>
+          {unit.examWeight && <span class="badge">{unit.examWeight} of exam</span>}
           {progress.topics.size > 0 && (
             <span class="unit-progress small muted">
-              {done === ids.length ? '✓ all learned' : `${done}/${ids.length} learned`}
+              {done === ids.length ? '✓ all covered' : `${done}/${ids.length} covered`}
               {review > 0 && ` · ${review} seen last year`}
             </span>
           )}
-        </h2>
-        <ol class="plain-list topics">
+        </div>
+        <ol class="plain-list topics card">
           {unit.topics.map((t) => {
             const status = statusOf(t.id);
             const notes = progress.notes.get(t.id) ?? [];
+            const gap = textbookGaps.topics.get(t.id);
             return (
               <li>
                 <ProgressMark status={status} compact />
                 <div class="info">
                   <span class="num">{t.id}</span>
                   <a href={url(`${subject}/ap/${t.id}/`)}>{t.title}</a>
-                  {notes.map((note) => <div class="small muted">{note}</div>)}
+                  {gap && <span class="badge gap">⚑ {gapLabel[gap.coverage]}</span>}
+                  {notes.map((note) => <div class="small muted note">{note}</div>)}
+                  {counts(t.id) && <div class="small muted count">{counts(t.id)}</div>}
                 </div>
-                <span class="small muted count">{counts(t.id)}</span>
               </li>
             );
           })}
@@ -88,49 +101,152 @@ const counts = (id: string) => {
       </section>
     );
   })}
+
+  {(textbookGaps.topics.size > 0 || textbookGaps.other.length > 0) && (
+    <section id="textbook-gaps" aria-labelledby="gaps-h">
+      <h2 id="gaps-h">What the textbook covers thinly</h2>
+      <p class="prose">
+        <em>{data.subject.textbook}</em> doesn't teach these well enough for the AP exam. Learn them from AP Classroom
+        (the topic videos and practice), this site's lessons, or your teacher.
+      </p>
+      <div class="stack">
+        {[...textbookGaps.topics].map(([id, gap]) => (
+          <article class="card gap-card">
+            <h3>
+              <a href={url(`${subject}/ap/${id}/`)}>{id} {data.topics.get(id)!.title}</a>
+              <span class="badge gap">{gapLabel[gap.coverage]}</span>
+            </h3>
+            <p><strong>In the book:</strong> {gap.book}</p>
+            <p><strong>Learn elsewhere:</strong> {gap.learn}</p>
+          </article>
+        ))}
+        {textbookGaps.other.map((gap) => (
+          <article class="card gap-card">
+            <h3>
+              {gap.title}
+              <span class="badge gap">{gapLabel[gap.coverage]}</span>
+            </h3>
+            <p><strong>In the book:</strong> {gap.book}</p>
+            <p><strong>Learn elsewhere:</strong> {gap.learn}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+  {/* For maintainers: kept at the bottom so it doesn't push the topics down. */}
+  {!data.ced.verified && (
+    <p class="small muted unverified">
+      Topic list not yet verified against the current Course and Exam Description. Edit <code>src/data/{subject}/ced.json</code>
+      and set <code>"verified": true</code> once checked.
+    </p>
+  )}
 </Base>
 
 <style>
+  .unit-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 1rem 0;
+  }
+  .unit-nav a {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    text-decoration: none;
+  }
+  .unit-nav a:hover {
+    border-color: var(--accent);
+  }
   .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 1rem;
+    gap: 0.4rem 1.1rem;
     align-items: center;
+    color: var(--text-2);
   }
   .legend > span {
     display: inline-flex;
     gap: 0.35rem;
     align-items: center;
   }
-  .unit h2 {
+  .unit {
+    scroll-margin-top: 1rem;
+  }
+  .unit-head {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
+    gap: 0.25rem 0.6rem;
+    align-items: baseline;
+    margin: 2rem 0 0.6rem;
+  }
+  .unit-head h2 {
+    margin: 0;
   }
   .unit-progress {
-    font-weight: 400;
     margin-left: auto;
+  }
+  .topics {
+    padding: 0 1rem;
   }
   .topics li {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 0.6rem;
     align-items: start;
-    padding: 0.45rem 0;
+    padding: 0.55rem 0;
     border-bottom: 1px solid var(--border);
   }
-  .info {
-    min-width: 0;
+  .topics li:last-child {
+    border-bottom: 0;
   }
-  .count {
-    white-space: nowrap;
-    padding-top: 0.1rem;
+  .info a {
+    font-weight: 600;
   }
   .num {
     display: inline-block;
     min-width: 2.6rem;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
+  }
+  .note,
+  .count {
+    padding-left: 2.6rem;
+  }
+  .badge.gap {
+    background: var(--surface-2);
+    color: var(--text-2);
+    font-size: 0.72rem;
+  }
+  .info .badge.gap {
+    margin-left: 0.4rem;
+    vertical-align: 0.1em;
+  }
+  .unverified {
+    margin-top: 2.5rem;
+  }
+  #textbook-gaps {
+    scroll-margin-top: 1rem;
+    margin-top: 2.5rem;
+  }
+  .gap-card h3 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+    font-size: 1.05rem;
+  }
+  .gap-card p {
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 480px) {
+    .note,
+    .count {
+      padding-left: 0;
+    }
   }
 </style>

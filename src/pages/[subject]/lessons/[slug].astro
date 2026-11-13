@@ -8,6 +8,7 @@ import Base from '../../../layouts/Base.astro';
 import {
   type Lesson,
   getLessons,
+  getQuestions,
   getSubjectData,
   lessonSlug,
   practiceHref,
@@ -45,9 +46,15 @@ const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(lesson.data.chapter)!;
 const topics = topicIds(lesson);
 const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
-const practice = topics.length
-  ? practiceHref(subject, { topic: topics })
-  : practiceHref(subject, { chapter: [chapter.number] });
+// Practice the lesson's topics; fall back to its chapter when no question has those topics.
+const questions = await getQuestions(subject);
+const topicQuestions = questions.filter((q) => topicIds(q).some((t) => topics.includes(t))).length;
+const chapterQuestions = questions.filter((q) => q.data.chapter === chapter.number).length;
+const practice = topicQuestions
+  ? { href: practiceHref(subject, { topic: topics }), label: `Practice these topics (${topicQuestions})` }
+  : chapterQuestions
+    ? { href: practiceHref(subject, { chapter: [chapter.number] }), label: `Practice Chapter ${chapter.number} (${chapterQuestions})` }
+    : null;
 const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
 ---
 
@@ -59,10 +66,10 @@ const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
   searchMeta={{ chapter: chapterLabel }}
 >
   <article class="prose">
-    <p class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href={url(`${subject}/chapters/`)}>Chapters</a> / <a href={url(`${subject}/chapters/${chapter.number}/`)}>{chapterLabel}</a>
       {lesson.data.sections.length > 0 && <> · §{lesson.data.sections.join(', ')}</>}
-    </p>
+    </nav>
     <h1>
       {lesson.data.title}
       {lesson.data.draft && <span class="badge">Draft</span>}
@@ -73,12 +80,13 @@ const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
     <Content components={{ YouTube, Callout, Reveal }} />
 
     <footer class="lesson-footer">
-      <a class="button" href={practice}>
-        {topics.length ? `Practice these topics (${topics.join(', ')})` : `Practice Chapter ${chapter.number}`}
-      </a>
-      <nav class="pager small" aria-label="Lessons in this chapter">
-        {prev ? <a href={lessonHref(prev)}>← {prev.data.title}</a> : <span></span>}
-        {next && <a href={lessonHref(next)}>{next.data.title} →</a>}
+      <div class="actions">
+        {practice && <a class="button" href={practice.href}>{practice.label}</a>}
+        <a class="button secondary" href={url(`${subject}/chapters/${chapter.number}/#lessons`)}>All Chapter {chapter.number} lessons</a>
+      </div>
+      <nav class="pager" aria-label="Lessons in this chapter">
+        {prev ? <a href={lessonHref(prev)}><span class="small muted">← Previous</span>{prev.data.title}</a> : <span></span>}
+        {next && <a class="next" href={lessonHref(next)}><span class="small muted">Next →</span>{next.data.title}</a>}
       </nav>
     </footer>
   </article>
@@ -93,12 +101,5 @@ const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
     margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--border);
-  }
-  .pager {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.25rem;
-    flex-wrap: wrap;
   }
 </style>

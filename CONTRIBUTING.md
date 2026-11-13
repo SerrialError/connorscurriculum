@@ -57,6 +57,7 @@ subject: apchem
 chapter: 14
 sections: []
 cedTopics: ["5.1", "5.2"]
+kind: lesson        # lesson, notes (your class notes), or review (a test review sheet)
 order: 1            # position within the chapter (lower first)
 authors: ["Jordan"]
 summary: One sentence shown on cards and in search.
@@ -176,7 +177,8 @@ Add an entry to `src/data/<subject>/tests.json`:
 { "id": "ch15-test", "title": "Chapter 15 Test", "date": "2026-12-03", "chapters": [15], "sections": [] }
 ```
 
-Empty `sections` means the whole chapters. `date` is optional.
+Empty `sections` means the whole chapters. `date` is optional. A lesson with `kind: review` in one
+of the test's chapters is featured at the top of the test page and on the subject page.
 
 ## Class progress
 
@@ -187,8 +189,8 @@ the chapters the class is working on now in `current` (optional; a chapter can't
 { "chapters": [1, 2, 3, 4, 5, 6, 7], "current": [8, 9] }
 ```
 
-The first `current` chapter is shown as "Up next" on the subject page. Without `current`, that is the
-first unfinished chapter after the last finished one.
+The `current` chapters are shown as "Now in class" on the subject and chapters pages. Without
+`current`, the first unfinished chapter after the last finished one is shown as "Up next".
 
 That's all. The AP topics fill in by themselves, because each chapter in `chapters.json` lists
 the CED topics it teaches:
@@ -217,10 +219,43 @@ Topics already seen in an earlier course go in an optional `lastYear` block in t
 "Partly covered in Scholars Chemistry: …". Once a topic is finished this year, the ✓ replaces the
 ↺ or ◐. Anything with no mark at all is completely new.
 
+### Topics the class skipped
+
+If the class finished a chapter but skipped one of its AP topics, list it in `notCovered` with a
+short note for students. It then shows "! Skipped in class" instead of a ✓:
+
+```json
+"notCovered": { "1.6": "the class skipped photoelectron spectroscopy in Ch. 6–7, so learn it on your own." }
+```
+
+The build fails if the topic doesn't exist or none of its chapters is finished yet.
+
+### Other mapping fixes
+
 If a topic's mark looks wrong, fix the mapping in `chapters.json` rather than `progress.json`.
 For example, if your teacher covers half-reactions in Ch. 4, remove `"4.9"` from Chapter 20's
 `cedTopics`. The chapter's AP unit badges come from the same list. Every CED topic must be listed
 by at least one chapter (a unit test checks this).
+
+## Topics the textbook covers thinly
+
+`src/data/<subject>/textbook-gaps.json` (optional) lists AP topics the textbook teaches only briefly
+(`"thin"`) or not at all (`"missing"`), so students know to learn them elsewhere. Each entry says
+what the book does and what students need from somewhere else:
+
+```json
+{
+  "topics": [
+    { "id": "3.13", "coverage": "thin", "book": "A short treatment in Ch. 14.", "learn": "A = εbc and calibration curves." }
+  ],
+  "other": [
+    { "title": "Lab skills", "coverage": "thin", "book": "…", "learn": "…" }
+  ]
+}
+```
+
+These show up on the AP topics page, on each listed topic's page, and next to the topic on chapter
+pages. The build fails on an unknown or duplicate topic id.
 
 ## Textbook sections
 

@@ -16,3 +16,10 @@ describe('rehypeMathPunctuation', () => {
     expect(await renderMarkdown('$\\ce{H2O}$.')).not.toContain('katex-error');
   });
 });
+
+describe('rehypeMathSearchIgnore', () => {
+  it('hides the MathML copy of math from the search index', async () => {
+    const html = await renderMarkdown('$x^2$');
+    expect(html).toMatch(/<span class="katex-mathml" data-pagefind-ignore="all">/);
+  });
+});

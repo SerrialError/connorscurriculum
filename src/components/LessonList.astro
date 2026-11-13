@@ -1,34 +1,86 @@
 ---
-import { type Lesson, lessonSlug, topicIds, url } from '../lib/content';
+import { type Lesson, groupLessons, lessonSlug, topicIds, url } from '../lib/content';
 import TopicBadges from './TopicBadges.astro';
 
 interface Props {
   lessons: Lesson[];
   showChapter?: boolean;
+  /** Split into "Test review", "Lessons", and "Class notes" with subheadings. */
+  grouped?: boolean;
+  /** Heading level for group headings. */
+  headingLevel?: 2 | 3;
+  /** Shown when there are no lessons. */
+  empty?: string;
 }
 
-const { lessons, showChapter = false } = Astro.props;
+const { lessons, showChapter = false, grouped = false, headingLevel = 3, empty = 'No lessons yet.' } = Astro.props;
+const groups = grouped ? groupLessons(lessons) : [{ kind: 'all', heading: '', lessons }];
+const H = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 {lessons.length === 0 ? (
-  <p class="muted">No lessons yet.</p>
+  <p class="muted">{empty}</p>
 ) : (
-  <ul class="plain-list stack">
-    {lessons.map((l) => (
-      <li class="card">
-        <h3>
-          <a href={url(`${l.data.subject.id}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
-          {l.data.draft && <span class="badge">Draft</span>}
-        </h3>
-        <p class="small muted">
-          {showChapter && <>Chapter {l.data.chapter}{l.data.sections.length > 0 && <> · §{l.data.sections.join(', ')}</>} · </>}
-          by {l.data.authors.join(', ')}
-        </p>
-        {l.data.summary && <p>{l.data.summary}</p>}
-        <div style="margin-top:.5rem">
-          <TopicBadges subject={l.data.subject.id} topics={topicIds(l)} />
-        </div>
-      </li>
-    ))}
-  </ul>
+  groups.map((g) => (
+    <>
+      {grouped && groups.length > 1 && <H class="group-h">{g.heading}</H>}
+      <ul class="plain-list lessons card">
+        {g.lessons.map((l) => (
+          <li class:list={[l.data.kind]}>
+            <a class="title" href={url(`${l.data.subject.id}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
+            {l.data.draft && <span class="badge">Draft</span>}
+            {l.data.summary && <p class="summary">{l.data.summary}</p>}
+            <div class="meta">
+              <span class="small muted">
+                {showChapter && <>Ch. {l.data.chapter}{l.data.sections.length > 0 && <> · §{l.data.sections.join(', ')}</>} · </>}
+                by {l.data.authors.join(', ')}
+              </span>
+              <TopicBadges subject={l.data.subject.id} topics={topicIds(l)} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
+  ))
 )}
+
+<style>
+  .group-h {
+    font-size: 1rem;
+    margin: 1.25rem 0 0.5rem;
+    color: var(--text-2);
+  }
+  .lessons {
+    padding: 0 1.1rem;
+  }
+  .lessons li {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .lessons li:last-child {
+    border-bottom: 0;
+  }
+  .title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .review .title::before {
+    content: '★ ';
+    color: var(--tip);
+  }
+  .summary {
+    margin: 0.2rem 0 0.35rem;
+    color: var(--text-2);
+    font-size: 0.95rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    align-items: center;
+    margin-top: 0.3rem;
+  }
+  .meta :global(.badge) {
+    font-size: 0.75rem;
+  }
+</style>

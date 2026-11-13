@@ -1,6 +1,7 @@
 ---
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
+import Search from '../components/Search.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getSubjectData, url } from '../lib/content';
 import { SITE_DESCRIPTION, SITE_NAME } from '../site';
@@ -20,14 +21,18 @@ const { title, description = SITE_DESCRIPTION, subject, searchable = false, sear
 const subjectData = subject ? getSubjectData(subject) : undefined;
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
 const path = Astro.url.pathname;
+// Each nav item also owns the pages under it: lessons and class tests belong to Chapters.
 const nav = subject
   ? [
-      { href: url(`${subject}/chapters/`), label: 'Chapters' },
+      { href: url(`${subject}/`), label: 'Home', exact: true },
+      { href: url(`${subject}/chapters/`), label: 'Chapters', also: [url(`${subject}/lessons/`), url(`${subject}/tests/`)] },
       { href: url(`${subject}/ap/`), label: 'AP topics' },
       { href: url(`${subject}/practice/`), label: 'Practice' },
       { href: url(`${subject}/frqs/`), label: 'Past FRQs' },
     ]
   : [];
+const isCurrent = (n: (typeof nav)[number]) =>
+  n.exact ? path === n.href : [n.href, ...(n.also ?? [])].some((h) => path.startsWith(h));
 ---
 
 <!doctype html>
@@ -36,6 +41,7 @@ const nav = subject
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
     <title>{pageTitle}</title>
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
     <script is:inline>
@@ -46,29 +52,43 @@ const nav = subject
     </script>
   </head>
   <body>
-    <a class="skip visually-hidden" href="#main">Skip to content</a>
+    <a class="skip" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap bar">
-        <a class="brand" href={url()}>{SITE_NAME}</a>
+        <a class:list={['brand', { 'has-subject': !!subjectData }]} href={url()}>{SITE_NAME}</a>
         {subjectData && (
           <a class="subject" href={url(`${subject}/`)}>
             {subjectData.subject.name}
           </a>
         )}
         <span class="spacer"></span>
+        <button class="icon-button search-open" type="button" aria-haspopup="dialog" aria-keyshortcuts="/" title="Search (press /)">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <circle cx="10.5" cy="10.5" r="6.5"></circle>
+            <path d="m15.5 15.5 5 5"></path>
+          </svg>
+          <span class="search-label">Search</span>
+        </button>
         <ThemeToggle />
       </div>
       {nav.length > 0 && (
-        <nav class="wrap subnav" aria-label="Subject">
+        <nav class="wrap subnav" aria-label={subjectData?.subject.name}>
           {nav.map((n) => (
-            <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>
+            <a href={n.href} class:list={{ 'nav-home': n.exact }} aria-current={isCurrent(n) ? 'page' : undefined}>
               {n.label}
             </a>
           ))}
         </nav>
       )}
     </header>
-    <main id="main" class="wrap" data-pagefind-body={searchable ? '' : undefined}>
+    <dialog class="search-dialog" aria-label="Search">
+      <div class="search-dialog-head">
+        <strong>Search{subjectData && ` ${subjectData.subject.name}`}</strong>
+        <button class="icon-button search-close" type="button" aria-label="Close search">✕</button>
+      </div>
+      <Search id="header-search" placeholder="Lessons, chapters, AP topics…" />
+    </dialog>
+    <main id="main" class="wrap" tabindex="-1" data-pagefind-body={searchable ? '' : undefined}>
       {searchable && (
         <div hidden>
           <span data-pagefind-meta="title">{title}</span>
@@ -80,20 +100,60 @@ const nav = subject
     </main>
     <footer class="site-footer wrap small muted">
       <p>
+        <a href={url()}>All classes</a> · <a href={url('admin/')}>Write a lesson</a>
+      </p>
+      <p>
         Not affiliated with or endorsed by College Board or Pearson. AP® is a registered trademark of College Board.
       </p>
-      <p><a href={url('admin/')}>Write a lesson</a></p>
     </footer>
+    <script>
+      const dialog = document.querySelector<HTMLDialogElement>('.search-dialog')!;
+      const input = dialog.querySelector<HTMLInputElement>('input')!;
+      const open = () => {
+        if (dialog.open) return;
+        dialog.showModal();
+        input.focus();
+        input.select();
+      };
+      document.querySelector('.search-open')!.addEventListener('click', open);
+      dialog.querySelector('.search-close')!.addEventListener('click', () => dialog.close());
+      // Escape closes right away (a search box would otherwise use the first Escape to clear itself).
+      dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          dialog.close();
+        }
+      });
+      // Click on the backdrop closes the dialog.
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+      // "/" opens search, unless the user is typing somewhere.
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+        const t = e.target as HTMLElement;
+        if (t.closest('input, textarea, select, [contenteditable]')) return;
+        e.preventDefault();
+        open();
+      });
+    </script>
   </body>
 </html>
 
 <style>
+  .skip {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 10;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 700;
+  }
   .skip:focus {
-    position: static !important;
-    width: auto;
-    height: auto;
-    clip: auto;
-    padding: 0.5rem;
+    top: 0.5rem;
   }
   .site-header {
     background: var(--surface);
@@ -102,7 +162,7 @@ const nav = subject
   .bar {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     min-height: 3.25rem;
   }
   .brand {
@@ -116,26 +176,51 @@ const nav = subject
     color: var(--text-2);
     text-decoration: none;
     font-weight: 600;
-    padding-left: 0.75rem;
+    padding-left: 0.6rem;
     border-left: 1px solid var(--border);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .brand:hover,
+  .subject:hover {
+    color: var(--link);
+  }
   .spacer {
     flex: 1;
   }
+  .icon-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.1rem;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-2);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .icon-button:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
   .subnav {
     display: flex;
-    gap: 0.1rem;
+    gap: 0.15rem;
     /* Line up the first link's text with the content: page padding minus link padding. */
-    padding-left: calc(1rem - 0.55rem);
+    padding-left: calc(1rem - 0.6rem);
     overflow-x: auto;
-    padding-bottom: 0.4rem;
+    scrollbar-width: none;
+    padding-bottom: 0.45rem;
   }
   .subnav a {
-    padding: 0.3rem 0.55rem;
-    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
     color: var(--text-2);
     text-decoration: none;
     font-weight: 600;
@@ -144,6 +229,7 @@ const nav = subject
   }
   .subnav a:hover {
     background: var(--surface-2);
+    color: var(--text);
   }
   .subnav a[aria-current='page'] {
     background: var(--accent-soft);
@@ -152,19 +238,68 @@ const nav = subject
   main {
     padding-bottom: 3rem;
   }
-  @media (max-width: 420px) {
+  main:focus {
+    outline: none;
+  }
+  /* Narrow screens: the subject name stands in for the site name, and the nav links shrink to fit. */
+  @media (max-width: 520px) {
+    .brand.has-subject {
+      display: none;
+    }
+    .subject {
+      color: var(--text);
+      font-weight: 800;
+      border-left: 0;
+      padding-left: 0;
+    }
+    .search-label {
+      display: none;
+    }
+    .icon-button.search-open {
+      padding: 0.3rem 0.55rem;
+    }
     .subnav {
-      padding-left: calc(1rem - 0.45rem);
+      gap: 0;
+      padding-left: calc(1rem - 0.4rem);
     }
     .subnav a {
       font-size: 0.9rem;
-      padding: 0.3rem 0.45rem;
+      padding: 0.35rem 0.45rem;
     }
+    /* The subject name in the bar is the home link here. */
+    .subnav a.nav-home {
+      display: none;
+    }
+  }
+  .search-dialog {
+    width: min(40rem, calc(100vw - 1.5rem));
+    max-height: min(80vh, 40rem);
+    margin: 8vh auto auto;
+    padding: 1rem 1.1rem 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 20px 50px rgb(0 0 0 / 0.3);
+  }
+  .search-dialog::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  .search-dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .search-dialog :global(.search) {
+    margin: 0.75rem 0 0.5rem;
   }
   .site-footer {
     text-align: center;
     border-top: 1px solid var(--border);
     padding-top: 1rem;
     padding-bottom: 2rem;
+  }
+  .site-footer p {
+    margin: 0.4rem 0;
   }
 </style>

@@ -1,7 +1,7 @@
 ---
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { getLessons, getQuestions, getSubjectData, nextChapter, subjectPaths, url } from '../../../lib/content';
+import { formatDate, getLessons, getQuestions, getSubjectData, nextChapter, subjectPaths, testsByDate, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -11,8 +11,10 @@ const lessons = await getLessons(subject);
 const questions = await getQuestions(subject);
 const { progress } = data;
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
-
-const next = nextChapter(data);
+const current = new Set(progress.current);
+// Without "current" chapters, mark the next unfinished one instead.
+const next = current.size ? undefined : nextChapter(data);
+const tests = testsByDate(data);
 
 /** "AP Units 3, 5 · 1 lesson · 6 questions", leaving out zero counts. */
 const meta = (n: number, apUnits: string[]) => {
@@ -30,21 +32,44 @@ const meta = (n: number, apUnits: string[]) => {
 
 <Base title="Chapters" subject={subject}>
   <h1>Chapters</h1>
-  <p class="muted prose">Class order, following <em>{data.subject.textbook}</em>. Class tests follow these chapters.</p>
-  {progress.chapters.size > 0 && (
-    <p class="small">✓ The class has finished {progress.chapters.size} of {data.chapters.length} chapters.</p>
+  <p class="muted prose">
+    Class order, following <em>{data.subject.textbook}</em>. Open a chapter for its lessons, classmates' notes, AP topics,
+    and practice.
+  </p>
+
+  {tests.length > 0 && (
+    <section class="tests" aria-labelledby="tests-h">
+      <h2 id="tests-h" class="visually-hidden">Class tests</h2>
+      <p class="small">
+        <strong>Class tests:</strong>{' '}
+        {tests.map((t, i) => (
+          <>
+            {i > 0 && ' · '}
+            <a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a>
+            {t.date && <span class="muted"> ({formatDate(t.date)})</span>}
+          </>
+        ))}
+      </p>
+    </section>
   )}
+
+  <p class="small legend">
+    <span><ProgressMark status="done" compact doneLabel="Finished in class" /> Finished ({progress.chapters.size} of {data.chapters.length})</span>
+    {current.size > 0 && <span><span class="badge now">Now</span> In class now</span>}
+  </p>
+
   <ol class="plain-list card chapters">
     {data.chapters.map((c) => {
       const done = progress.chapters.has(c.number);
+      const isNow = current.has(c.number) || c === next;
       return (
-        <li class:list={{ done, next: c === next }}>
+        <li class:list={{ done, now: isNow }}>
           <ProgressMark status={done ? 'done' : null} compact doneLabel="Finished in class" />
+          <span class="num">{c.number}</span>
           <div class="info">
-            <span class="num">{c.number}.</span>
             <a href={url(`${subject}/chapters/${c.number}/`)}>{c.title}</a>
-            {c === next && <span class="badge good">Up next</span>}
-            {!done && <div class="small muted">{meta(c.number, c.apUnits)}</div>}
+            {isNow && <span class="badge now">{current.size ? 'Now' : 'Up next'}</span>}
+            <div class="small muted">{meta(c.number, c.apUnits)}</div>
           </div>
         </li>
       );
@@ -53,42 +78,61 @@ const meta = (n: number, apUnits: string[]) => {
 </Base>
 
 <style>
+  .tests p {
+    margin: 0 0 0.5rem;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    align-items: center;
+    color: var(--text-2);
+  }
+  .legend > span {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
   .chapters {
     padding: 0.25rem 1rem;
   }
   .chapters li {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.6rem;
+    grid-template-columns: auto 2rem minmax(0, 1fr);
+    gap: 0.5rem;
     align-items: start;
-    padding: 0.55rem 0;
+    padding: 0.6rem 0;
     border-bottom: 1px solid var(--border);
   }
   .chapters li:last-child {
     border-bottom: 0;
   }
+  .chapters li.now {
+    margin: 0 -1rem;
+    padding-inline: 1rem;
+    background: var(--accent-soft);
+  }
   .info a {
     font-weight: 600;
   }
   .done .info a {
-    color: var(--text-2);
     font-weight: 500;
   }
   .num {
-    display: inline-block;
-    min-width: 1.8rem;
-    font-weight: 600;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
-  }
-  .done .num {
+    text-align: right;
     color: var(--text-2);
-    font-weight: 500;
   }
   .info .small {
     margin-top: 0.1rem;
-    padding-left: 1.8rem;
   }
-  .badge {
+  .badge.now {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: transparent;
+  }
+  .info .badge {
     margin-left: 0.4rem;
   }
 </style>

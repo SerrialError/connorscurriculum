@@ -1,0 +1,40 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { chapterRange, formatDate, getQuestions, getSubjectData, inTest, practiceHref, subjectPaths, testsByDate, url } from '../../../lib/content';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const questions = await getQuestions(subject);
+const tests = testsByDate(data);
+---
+
+<Base title="Class tests" subject={subject}>
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${subject}/chapters/`)}>Chapters</a> /</nav>
+  <h1>Class tests</h1>
+  {tests.length === 0 ? (
+    <p class="muted">No class tests listed yet.</p>
+  ) : (
+    <ul class="plain-list stack">
+      {tests.map((t) => {
+        const n = questions.filter((q) => inTest(t, q)).length;
+        return (
+          <li class="card">
+            <h2><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h2>
+            <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
+            {n > 0 && (
+              <p class="small"><a href={practiceHref(subject, { test: t.id })}>Practice for this test ({n})</a></p>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  )}
+</Base>
+
+<style>
+  h2 {
+    font-size: 1.15rem;
+  }
+</style>

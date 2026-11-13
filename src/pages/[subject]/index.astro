@@ -2,105 +2,367 @@
 import Search from '../../components/Search.astro';
 import TopicBadges from '../../components/TopicBadges.astro';
 import Base from '../../layouts/Base.astro';
-import { getSubjectData, nextChapter, pastFrqLinks, practiceHref, subjectPaths, url } from '../../lib/content';
+import {
+  chapterRange,
+  currentChapters,
+  formatDate,
+  getLessons,
+  getQuestions,
+  getSubjectData,
+  inTest,
+  lessonSlug,
+  nextChapter,
+  pastFrqLinks,
+  practiceHref,
+  subjectPaths,
+  testsByDate,
+  url,
+} from '../../lib/content';
 import { matchFrqs } from '../../lib/frqs';
 
 export const getStaticPaths = subjectPaths;
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
-const progress = data.progress;
-const doneChapters = data.chapters.filter((c) => progress.chapters.has(c.number));
-const topicCounts = { done: 0, review: 0, partial: 0 };
-for (const s of progress.topics.values()) topicCounts[s] += 1;
-
-const next = nextChapter(data);
+const { progress } = data;
+const lessons = await getLessons(subject);
+const questions = await getQuestions(subject);
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const cedOrder = [...data.topics.keys()];
-const nextTopics = next ? [...next.cedTopics].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b)) : [];
-const nextFrqs = matchFrqs(pastFrqLinks(data), new Set(nextTopics));
-const nextFrqParts = nextFrqs.reduce((sum, m) => sum + m.parts.length, 0);
+const inCedOrder = (ids: string[]) => [...ids].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
+const frqs = pastFrqLinks(data);
+
+const topicCounts = { done: 0, review: 0, partial: 0, skipped: 0 };
+for (const s of progress.topics.values()) topicCounts[s] += 1;
+const newCount = data.topics.size - topicCounts.done - topicCounts.review - topicCounts.partial - topicCounts.skipped;
+
+// "Now in class": the current chapters, or the next unfinished chapter when none are listed.
+const now = currentChapters(data);
+const nowChapters = now.length ? now : [nextChapter(data)].filter((c) => c !== undefined);
+const chapterInfo = (n: number) => {
+  const c = data.chapterMap.get(n)!;
+  const frqParts = matchFrqs(frqs, new Set(c.cedTopics)).reduce((sum, m) => sum + m.parts.length, 0);
+  return {
+    chapter: c,
+    topics: inCedOrder(c.cedTopics),
+    lessons: lessons.filter((l) => l.data.chapter === n).length,
+    questions: questions.filter((q) => q.data.chapter === n).length,
+    frqParts,
+  };
+};
+const nowInfo = nowChapters.map((c) => chapterInfo(c.number));
+
+// Latest class test, with its review sheets.
+const test = testsByDate(data)[0];
+const testReview = test ? lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)) : [];
+const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
+
+// Finished chapters with something to study, most recent first.
+const review = [...progress.chapters]
+  .sort((a, b) => b - a)
+  .map(chapterInfo)
+  .filter((c) => c.lessons > 0 || c.questions > 0);
+
+const gapCount = data.textbookGaps.topics.size;
+const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skipped').map(([id]) => id));
 ---
 
 <Base title={data.subject.name} subject={subject}>
   <h1>{data.subject.name}</h1>
-  <p class="muted">Textbook: <em>{data.subject.textbook}</em></p>
-  <Search placeholder={`Search ${data.subject.name}…`} />
+  <p class="muted lede">Textbook: <em>{data.subject.textbook}</em></p>
+  <Search placeholder={`Search ${data.subject.name} lessons, chapters, and topics…`} />
 
-  {(doneChapters.length > 0 || progress.topics.size > 0) && (
-    <section class="card progress">
-      <h2>Class progress</h2>
-      <p>
-        <a href={url(`${subject}/chapters/`)}>
-          ✓ {doneChapters.length} of {data.chapters.length} chapters
-        </a>
-        {doneChapters.length > 0 && (
-          <span class="muted"> (finished: {doneChapters.map((c) => c.number).join(', ')})</span>
-        )}
-      </p>
-      <p>
-        <a href={url(`${subject}/ap/`)}>
-          ✓ {topicCounts.done} of {data.topics.size} {data.subject.standardsName} topics
-        </a>
-        {topicCounts.partial > 0 && <span class="muted"> · ◐ {topicCounts.partial} partly</span>}
-      </p>
-      {topicCounts.review > 0 && (
-        <p>
-          ↺ {topicCounts.review} more seen in {progress.lastYearCourse}
+  <div class="dash">
+    {nowInfo.length > 0 && (
+      <section class="card now" aria-labelledby="now-h">
+        <p class="eyebrow">{now.length ? 'Now in class' : 'Up next'}</p>
+        <h2 id="now-h">{chapterRange(nowInfo.map((c) => c.chapter.number))}</h2>
+        {nowInfo.map((c) => (
+          <div class="now-chapter">
+            <h3>
+              <a href={url(`${subject}/chapters/${c.chapter.number}/`)}>
+                Chapter {c.chapter.number}: {c.chapter.title}
+              </a>
+            </h3>
+            <TopicBadges subject={subject} topics={c.topics} />
+            <p class="small links">
+              {c.lessons + c.questions === 0 ? (
+                <span class="muted">No lessons or practice questions yet.</span>
+              ) : (
+                <>
+                  <span class="muted">{[c.lessons && plural(c.lessons, 'lesson'), c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
+                  {c.questions > 0 && <a href={practiceHref(subject, { chapter: [c.chapter.number] })}>Practice</a>}
+                </>
+              )}
+              {c.frqParts > 0 && (
+                <a href={url(`${subject}/chapters/${c.chapter.number}/#frqs`)}>
+                  {plural(c.frqParts, 'past AP FRQ part')} on these topics
+                </a>
+              )}
+            </p>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {test && (
+      <section class="card test" aria-labelledby="test-h">
+        <p class="eyebrow">Latest class test</p>
+        <h2 id="test-h"><a href={url(`${subject}/tests/${test.id}/`)}>{test.title}</a></h2>
+        <p class="small muted">
+          {test.date ? formatDate(test.date) : 'Date TBA'} · {chapterRange(test.chapters)}
         </p>
-      )}
-      <p class="small muted">
-        {data.topics.size - topicCounts.done - topicCounts.review - topicCounts.partial} topics are completely new.
-      </p>
+        {testReview.length > 0 && (
+          <ul class="plain-list review-links">
+            {testReview.map((l) => (
+              <li>
+                <a href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div class="actions">
+          {testQuestions > 0 && (
+            <a class="button" href={practiceHref(subject, { test: test.id })}>Practice for this test ({testQuestions})</a>
+          )}
+          <a class="button secondary" href={url(`${subject}/tests/${test.id}/`)}>Lessons and topics</a>
+        </div>
+        {data.tests.length > 1 && (
+          <p class="small"><a href={url(`${subject}/tests/`)}>All class tests</a></p>
+        )}
+      </section>
+    )}
+  </div>
+
+  {review.length > 0 && (
+    <section aria-labelledby="review-h">
+      <h2 id="review-h">Review finished chapters</h2>
+      <div class="grid">
+        {review.map((c) => (
+          <div class="card chapter-card">
+            <h3>
+              <a href={url(`${subject}/chapters/${c.chapter.number}/`)}>
+                <span class="muted">Ch. {c.chapter.number}</span> {c.chapter.title}
+              </a>
+            </h3>
+            <p class="small muted">
+              {[c.lessons && plural(c.lessons, 'lesson'), c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}
+            </p>
+            <p class="small links">
+              <a href={url(`${subject}/chapters/${c.chapter.number}/#lessons`)}>Lessons</a>
+              {c.questions > 0 && <a href={practiceHref(subject, { chapter: [c.chapter.number] })}>Practice</a>}
+            </p>
+          </div>
+        ))}
+      </div>
     </section>
   )}
 
-  {next && (
-    <section class="card up-next">
-      <h2>Up next</h2>
-      <p class="chapter">
-        <a href={url(`${subject}/chapters/${next.number}/`)}>
-          Chapter {next.number}: {next.title}
+  <section aria-labelledby="progress-h">
+    <h2 id="progress-h">Class progress</h2>
+    <div class="card progress">
+      <div class="stats">
+        <a class="stat" href={url(`${subject}/chapters/`)}>
+          <span class="big">{progress.chapters.size}<span class="of">/{data.chapters.length}</span></span>
+          <span class="small">chapters finished</span>
         </a>
-      </p>
-      <TopicBadges subject={subject} topics={nextTopics} />
-      <p class="links small">
-        {nextFrqParts > 0 && (
-          <a href={url(`${subject}/chapters/${next.number}/#frqs`)}>
-            {nextFrqParts} past AP FRQ part{nextFrqParts === 1 ? '' : 's'} on these topics
-          </a>
+        <a class="stat" href={url(`${subject}/ap/`)}>
+          <span class="big">{topicCounts.done}<span class="of">/{data.topics.size}</span></span>
+          <span class="small">{data.subject.standardsName} topics covered</span>
+        </a>
+      </div>
+      <ul class="plain-list small breakdown">
+        {topicCounts.partial > 0 && <li><span class="mk partial" aria-hidden="true">◐</span><span>{topicCounts.partial} partly covered</span></li>}
+        {topicCounts.review > 0 && <li><span class="mk review" aria-hidden="true">↺</span><span>{topicCounts.review} seen in {progress.lastYearCourse}</span></li>}
+        {topicCounts.skipped > 0 && (
+          <li>
+            <span class="mk skipped" aria-hidden="true">!</span>
+            <span>{topicCounts.skipped} skipped in class:{' '}
+            {skippedIds.map((id, i) => (
+              <>
+                {i > 0 && ', '}
+                <a href={url(`${subject}/ap/${id}/`)}>{id} {data.topics.get(id)!.title}</a>
+              </>
+            ))}</span>
+          </li>
         )}
-        <a href={practiceHref(subject, { chapter: [next.number] })}>Practice this chapter</a>
-      </p>
-    </section>
-  )}
+        <li><span class="mk" aria-hidden="true"></span><span>{newCount} completely new</span></li>
+        {gapCount > 0 && (
+          <li>
+            <span class="mk gap" aria-hidden="true">⚑</span>
+            <a href={url(`${subject}/ap/#textbook-gaps`)}>{gapCount} topics the textbook covers thinly</a>
+          </li>
+        )}
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="map-h">
+    <h2 id="map-h">Where things are</h2>
+    <div class="grid map">
+      <a class="card" href={url(`${subject}/chapters/`)}>
+        <h3>Chapters</h3>
+        <p class="small muted">Class order. Each chapter has its lessons, classmates' notes, AP topics, and practice.</p>
+      </a>
+      <a class="card" href={url(`${subject}/ap/`)}>
+        <h3>AP topics</h3>
+        <p class="small muted">AP exam order, with what the class has covered and what the textbook skips.</p>
+      </a>
+      <a class="card" href={url(`${subject}/practice/`)}>
+        <h3>Practice</h3>
+        <p class="small muted">Build a set of questions by chapter, topic, test, or difficulty, then check your answers.</p>
+      </a>
+      <a class="card" href={url(`${subject}/frqs/`)}>
+        <h3>Past AP FRQs</h3>
+        <p class="small muted">Released exam questions, marked by which ones you're ready for.</p>
+      </a>
+    </div>
+  </section>
 </Base>
 
 <style>
-  .progress {
-    margin-top: 1rem;
+  .lede {
+    margin-top: -0.25rem;
   }
-  .progress h2 {
-    margin: 0 0 0.3rem;
-    font-size: 1.15rem;
+  .dash {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    align-items: start;
   }
-  .progress p {
-    margin: 0.2rem 0;
+  .eyebrow {
+    margin: 0 !important;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
   }
-  .up-next {
-    margin-top: 1rem;
+  .dash h2 {
+    margin: 0.1rem 0 0.4rem;
+    font-size: 1.3rem;
   }
-  .up-next h2 {
-    margin: 0 0 0.3rem;
-    font-size: 1.15rem;
+  .now {
+    border-top: 4px solid var(--accent);
   }
-  .up-next .chapter {
-    margin: 0 0 0.5rem;
-    font-weight: 600;
+  .test {
+    border-top: 4px solid var(--tip);
   }
-  .up-next .links {
+  .test .eyebrow {
+    color: var(--tip);
+  }
+  .now-chapter {
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .now-chapter:first-of-type {
+    border-top: 0;
+    padding-top: 0.2rem;
+  }
+  .now-chapter h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+  }
+  .links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 1rem;
-    margin: 0.75rem 0 0;
+    gap: 0.3rem 1rem;
+    margin: 0.5rem 0 0 !important;
+  }
+  .review-links {
+    margin: 0.5rem 0 0;
+  }
+  .review-links a {
+    font-weight: 600;
+  }
+  .review-links a::before {
+    content: '★ ';
+    color: var(--tip);
+  }
+  .test .actions {
+    margin-bottom: 0.25rem;
+  }
+  .chapter-card h3 {
+    font-size: 1.05rem;
+  }
+  .chapter-card h3 a {
+    text-decoration: none;
+  }
+  .chapter-card h3 a:hover {
+    text-decoration: underline;
+  }
+  .progress {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+    align-items: center;
+  }
+  .stats {
+    display: flex;
+    gap: 2rem;
+  }
+  .stat {
+    display: grid;
+    color: inherit;
+    text-decoration: none;
+  }
+  .stat:hover .small {
+    text-decoration: underline;
+  }
+  .big {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .of {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .breakdown {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .breakdown li {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .mk {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1.5px dashed var(--border);
+  }
+  .mk.partial,
+  .mk.review,
+  .mk.skipped,
+  .mk.gap {
+    border: 0;
+  }
+  .mk.partial {
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+  .mk.review {
+    background: var(--tip-soft);
+    color: var(--tip);
+  }
+  .mk.skipped {
+    background: var(--bad-soft);
+    color: var(--bad);
+  }
+  .mk.gap {
+    background: var(--surface-2);
+    color: var(--text-2);
+  }
+  .map h3 {
+    color: var(--link);
   }
 </style>

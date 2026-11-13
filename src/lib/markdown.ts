@@ -9,6 +9,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import type { Element, ElementContent, Root } from 'hast';
 import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 
 const PUNCTUATION = /^[,.;:!?)\]]+/;
 const isInlineMath = (node: ElementContent | undefined): node is Element =>
@@ -49,8 +50,21 @@ export function rehypeMathPunctuation() {
   return (tree: Root) => walk(tree);
 }
 
+/**
+ * Keep KaTeX's hidden MathML copy (and its TeX source annotation, e.g. "\ce{X(g) -> ...}") out of
+ * the search index, so search excerpts show the rendered math once instead of three times.
+ */
+export function rehypeMathSearchIgnore() {
+  // visit() also reaches math inside MDX components such as <Callout>.
+  return (tree: Root) =>
+    visit(tree, 'element', (node: Element) => {
+      const cls = node.properties?.className;
+      if (Array.isArray(cls) && cls.includes('katex-mathml')) node.properties['dataPagefindIgnore'] = 'all';
+    });
+}
+
 export const remarkPlugins = [remarkMath];
-export const rehypePlugins = [rehypeKatex, rehypeMathPunctuation];
+export const rehypePlugins = [rehypeKatex, rehypeMathPunctuation, rehypeMathSearchIgnore];
 
 const processor = unified()
   .use(remarkParse)
@@ -59,6 +73,7 @@ const processor = unified()
   .use(remarkRehype)
   .use(rehypeKatex)
   .use(rehypeMathPunctuation)
+  .use(rehypeMathSearchIgnore)
   .use(rehypeStringify);
 
 export async function renderMarkdown(source: string): Promise<string> {

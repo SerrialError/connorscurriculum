@@ -59,6 +59,18 @@ export function lessonCollection(data: SubjectData) {
         hint: 'Optional, e.g. 14.3',
       },
       {
+        name: 'kind',
+        label: 'Kind',
+        widget: 'select',
+        default: 'lesson',
+        options: [
+          { label: 'Lesson (teaches a topic)', value: 'lesson' },
+          { label: 'Notes (your own class notes)', value: 'notes' },
+          { label: 'Test review sheet', value: 'review' },
+        ],
+        hint: 'Chapter and test pages group lessons by kind. Review sheets are shown first on the test page.',
+      },
+      {
         name: 'order',
         label: 'Order in chapter',
         widget: 'number',

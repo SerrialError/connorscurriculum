@@ -4,14 +4,16 @@ import { url } from '../lib/content';
 
 interface Props {
   placeholder?: string;
+  /** Input id; must be unique on the page (the header search uses its own). */
+  id?: string;
 }
 
-const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
+const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' } = Astro.props;
 ---
 
 <div class="search" data-pagefind-src={url('pagefind/pagefind.js')}>
-  <label class="visually-hidden" for="site-search">Search</label>
-  <input id="site-search" type="search" placeholder={placeholder} autocomplete="off" />
+  <label class="visually-hidden" for={id}>Search</label>
+  <input id={id} type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
   <p class="status small muted" aria-live="polite"></p>
   <ol class="results plain-list"></ol>
 </div>
@@ -55,10 +57,17 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
       }
       const pf = await load();
       if (!pf) return;
-      const { results } = await pf.search(q);
+      const search = await pf.search(q);
+      if (!search) return; // superseded by a newer query
+      const { results } = search;
       const top = await Promise.all(results.slice(0, 8).map((r) => r.data()));
       if (mine !== seq) return;
-      status.textContent = results.length === 0 ? 'No results.' : `${results.length} result${results.length === 1 ? '' : 's'}`;
+      status.textContent =
+        results.length === 0
+          ? 'No results. Try fewer or different words.'
+          : results.length > top.length
+            ? `Top ${top.length} of ${results.length} results`
+            : `${results.length} result${results.length === 1 ? '' : 's'}`;
       list.replaceChildren(
         ...top.map((r) => {
           const li = document.createElement('li');
@@ -78,6 +87,12 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
       );
     }
 
+    // Enter opens the first result.
+    input.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const first = list.querySelector<HTMLAnchorElement>('a');
+      if (first) location.href = first.href;
+    });
     input.addEventListener('focus', () => void load(), { once: true });
     input.addEventListener('input', () => {
       clearTimeout(timer);
@@ -101,7 +116,8 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
     color: var(--text);
   }
   input:focus {
-    outline: 3px solid var(--accent-soft);
+    outline: 3px solid var(--accent);
+    outline-offset: 1px;
     border-color: var(--accent);
   }
   .status {

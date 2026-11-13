@@ -100,6 +100,9 @@ const lessons = defineCollection({
         title: z.string().min(1),
         ...tagShape,
         order: z.number().default(0),
+        // lesson: a teaching page; notes: a classmate's notes; review: a test review sheet.
+        // Chapter and test pages group lessons by kind, and review sheets are featured.
+        kind: z.enum(['lesson', 'notes', 'review']).default('lesson'),
         draft: z.boolean().default(false),
         summary: z.string().optional(),
       })

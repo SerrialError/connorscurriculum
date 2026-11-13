@@ -126,3 +126,34 @@ export function nextChapter(data: SubjectData) {
   const unfinished = data.chapters.filter((c) => !data.progress.chapters.has(c.number));
   return unfinished.find((c) => c.number > lastDone) ?? unfinished[0];
 }
+
+/** Chapters the class is on now (progress.json "current"), in class order. */
+export function currentChapters(data: SubjectData) {
+  return data.progress.current.map((n) => data.chapterMap.get(n)!).filter(Boolean);
+}
+
+/** Class tests, latest first (undated tests last, in file order). */
+export function testsByDate(data: SubjectData) {
+  return [...data.tests].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+}
+
+export const LESSON_KINDS = [
+  { kind: 'review', heading: 'Test review' },
+  { kind: 'lesson', heading: 'Lessons' },
+  { kind: 'notes', heading: 'Class notes' },
+] as const;
+
+/** Lessons split into review sheets, lessons, and classmates' notes, leaving out empty groups. */
+export function groupLessons(lessons: Lesson[]) {
+  return LESSON_KINDS.map((k) => ({ ...k, lessons: lessons.filter((l) => l.data.kind === k.kind) })).filter(
+    (g) => g.lessons.length > 0,
+  );
+}
+
+/** "Ch. 8–9", "Ch. 6, 8", "Ch. 7" */
+export function chapterRange(ns: number[]): string {
+  const sorted = [...ns].sort((a, b) => a - b);
+  const consecutive = sorted.every((n, i) => i === 0 || n === sorted[i - 1]! + 1);
+  if (sorted.length > 1 && consecutive) return `Ch. ${sorted[0]}–${sorted.at(-1)}`;
+  return `Ch. ${sorted.join(', ')}`;
+}

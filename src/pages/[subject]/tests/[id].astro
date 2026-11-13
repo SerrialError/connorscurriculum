@@ -50,12 +50,12 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
   </p>
 
   {reviewSheets.length > 0 && (
-    <section class="card start-here" aria-labelledby="review-h">
-      <p class="eyebrow" id="review-h">Start here</p>
+    <section class="card review-card" aria-labelledby="review-h">
+      <p class="eyebrow" id="review-h">{reviewSheets.length > 1 ? 'Review sheets' : 'Review sheet'}</p>
       <ul class="plain-list">
         {reviewSheets.map((l) => (
           <li>
-            <a class="title" href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>★ {l.data.title}</a>
+            <a class="title" href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
             {l.data.summary && <p class="small muted">{l.data.summary}</p>}
           </li>
         ))}
@@ -93,7 +93,7 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 </Base>
 
 <style>
-  .start-here {
+  .review-card {
     margin: 1rem 0;
     border-left: 4px solid var(--tip);
   }
@@ -105,11 +105,11 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
     text-transform: uppercase;
     color: var(--tip);
   }
-  .start-here .title {
+  .review-card .title {
     font-weight: 700;
     font-size: 1.1rem;
   }
-  .start-here p {
+  .review-card p {
     margin: 0.2rem 0 0;
   }
 </style>

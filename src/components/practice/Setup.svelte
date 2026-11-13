@@ -26,6 +26,7 @@
     type Filters,
     type PracticeQuestion,
     type PracticeTest,
+    ALL_QUESTIONS,
     CLASS_ONLY_UNIT,
     COUNT_CHOICES,
     DEFAULT_COUNT,
@@ -427,7 +428,7 @@
       {:else}
         <strong>{plural(setSize, 'question')}</strong>
         <span class="small muted sub">
-          {#if setSize < matching.length}from {matching.length} matching{:else if chips.length === 0}{everything === 'All questions' ? 'all questions' : `all of ${everything}`}{:else}all that match{/if}
+          {#if setSize < matching.length}from {matching.length} matching{:else if chips.length === 0}{everything === ALL_QUESTIONS ? 'all questions' : `all of ${everything}`}{:else}all that match{/if}
           <span class="mode">· {MODE_LABELS[filters.mode].toLowerCase()}</span>
         </span>
       {/if}

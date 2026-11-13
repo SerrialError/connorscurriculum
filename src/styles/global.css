@@ -466,6 +466,34 @@ button.button {
   font-size: 0.9rem;
 }
 
+/* Small pill buttons in the header (Search, theme) and the search dialog. */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.icon-button:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+/* Phones: 44px tap targets. */
+@media (max-width: 520px) {
+  .icon-button {
+    min-height: 2.75rem;
+  }
+}
+
 /* A button that looks like a link (for actions that don't navigate). */
 .link-button {
   font: inherit;

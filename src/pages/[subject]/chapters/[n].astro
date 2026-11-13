@@ -6,6 +6,7 @@ import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
 import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { plural } from '../../../lib/text';
 import { CONTRIBUTE_URL } from '../../../site';
 
 export function getStaticPaths() {
@@ -85,8 +86,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
       grouped
       empty={[
         questionCount === 0 ? 'No lessons or practice questions yet.' : 'No lessons yet.',
-        current && 'The class is on this chapter now:',
-        current && (frqMatches.length > 0 ? 'study its AP topics and past FRQs below.' : 'study its AP topics below.'),
+        current && (frqMatches.length > 0 ? 'Study its AP topics and past FRQs below.' : 'Study its AP topics below.'),
       ]
         .filter(Boolean)
         .join(' ')}
@@ -113,7 +113,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
               )}
               {t.alsoIn.length > 0 && <div class="small muted">Also in Ch. {t.alsoIn.join(', ')}</div>}
             </div>
-            {frqCount(t.id) > 0 && <span class="small muted count">{frqCount(t.id)} FRQ{frqCount(t.id) === 1 ? '' : 's'}</span>}
+            {frqCount(t.id) > 0 && <span class="small muted count">{plural(frqCount(t.id), 'FRQ')}</span>}
           </li>
         ))}
       </ol>

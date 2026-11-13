@@ -1,5 +1,6 @@
 // Past AP free-response questions: flattening, matching parts to topics, and readiness.
 // Plain TypeScript (no Astro imports) so the practice island and tests can use it.
+import { plural } from './text';
 
 export interface FrqPart {
   label: string;
@@ -85,7 +86,7 @@ export const frqName = (frq: Pick<FrqLink, 'year' | 'number'>) => `${frq.year} Q
 export function frqCountLabel(matches: Pick<FrqMatch, 'parts'>[], noun = 'past FRQ'): string {
   const q = matches.length;
   const parts = matches.reduce((sum, m) => sum + m.parts.length, 0);
-  const label = `${q} ${noun}${q === 1 ? '' : 's'}`;
+  const label = plural(q, noun);
   return parts === q ? label : `${label} (${parts} parts)`;
 }
 

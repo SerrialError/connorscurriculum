@@ -13,6 +13,7 @@ import {
   testsByDate,
   url,
 } from '../../../lib/content';
+import { plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
@@ -21,7 +22,6 @@ const data = getSubjectData(subject);
 const lessons = await getLessons(subject);
 const questions = await getQuestions(subject);
 const { progress } = data;
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const current = new Set(progress.current);
 // Without "current" chapters, mark the next unfinished one instead.
 const next = current.size ? undefined : nextChapter(data);

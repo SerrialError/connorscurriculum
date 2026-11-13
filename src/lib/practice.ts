@@ -490,10 +490,13 @@ export function chapterRange(ns: number[]): string {
  * What the filters select, e.g. "Chapters 6–7 Test · Hard" or "All questions". `everything` names
  * the pool when no chapter or test is picked (e.g. "Ch. 6–7" when later chapters are left out).
  */
-export function describeScope(f: Filters, tests: PracticeTest[], everything = 'All questions'): string {
+/** The name of the whole question pool, when no chapter is left out of it. */
+export const ALL_QUESTIONS = 'All questions';
+
+export function describeScope(f: Filters, tests: PracticeTest[], everything = ALL_QUESTIONS): string {
   const parts: string[] = [];
   // "Ch. 6–7 · Hard": name the default pool unless a chapter, test, unit, or topic already says where from.
-  if (!f.test && !f.chapters.length && !f.units.length && !f.topics.length && everything !== 'All questions') parts.push(everything);
+  if (!f.test && !f.chapters.length && !f.units.length && !f.topics.length && everything !== ALL_QUESTIONS) parts.push(everything);
   if (f.test) parts.push(tests.find((t) => t.id === f.test)?.title ?? f.test);
   if (f.chapters.length) parts.push(chapterRange(f.chapters));
   const units = f.units.map(unitLabel);

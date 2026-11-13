@@ -3,6 +3,7 @@ import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
 import { matchFrqs } from '../../../lib/frqs';
+import { plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
@@ -15,7 +16,6 @@ const count = (ids: string[], status: ReturnType<typeof statusOf>) => ids.filter
 const allIds = [...data.topics.keys()];
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 /** "1 lesson · 3 past FRQs", leaving out zero counts. */
 const counts = (id: string) => {
   const c = cov.get(id)!;

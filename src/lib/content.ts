@@ -4,6 +4,8 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
 import { type FrqLink, flattenFrqs } from './frqs';
 import { DEFAULT_COUNT } from './practice';
+import { isPast, isoDate } from './dates';
+import { plural } from './text';
 import { topicIdFromRef } from './validate';
 
 export type Lesson = CollectionEntry<'lessons'>;
@@ -87,7 +89,7 @@ export function practiceStart(
   /** Appended to the label, e.g. "on these topics". */
   about = '',
 ): { href: string; label: string } {
-  const what = total <= DEFAULT_COUNT ? `Start all ${total} question${total === 1 ? '' : 's'}` : `Start ${DEFAULT_COUNT} random questions`;
+  const what = total <= DEFAULT_COUNT ? `Start all ${plural(total, 'question')}` : `Start ${DEFAULT_COUNT} random questions`;
   return {
     // The defaults are DEFAULT_COUNT questions, shuffled.
     href: practiceHref(subject, { ...query, start: '1' }),
@@ -106,7 +108,7 @@ export function testPracticeLinks(
   total: number,
 ): { random: { href: string; label: string } | null; all: { href: string; label: string } } {
   const all = { href: practiceHref(subject, { test: testId, mode: 'all', n: 'all', start: '1' }), label: `All ${total} in order` };
-  if (total <= DEFAULT_COUNT) return { random: null, all: { ...all, label: `Start all ${total} question${total === 1 ? '' : 's'}` } };
+  if (total <= DEFAULT_COUNT) return { random: null, all: { ...all, label: `Start all ${plural(total, 'question')}` } };
   return {
     random: { href: practiceHref(subject, { test: testId, start: '1' }), label: `Start ${DEFAULT_COUNT} random questions` },
     all,
@@ -182,12 +184,9 @@ export function nowChapters(data: SubjectData) {
 
 /**
  * Has the test happened, as of the build? Pages mark tests with data-test-date and Base.astro's
- * script decides again by the reader's date, since the site is built once and read for weeks.
- * The day of the test still counts as upcoming.
+ * script decides again by the reader's date.
  */
-export function isPastTest(test: { date?: string } | undefined, today = new Date().toISOString().slice(0, 10)): boolean {
-  return !!test?.date && test.date < today;
-}
+export const isPastTest = (test: { date?: string } | undefined): boolean => isPast(test?.date, isoDate(new Date()));
 
 /** Class tests, latest first (undated tests last, in file order). */
 export function testsByDate(data: SubjectData) {

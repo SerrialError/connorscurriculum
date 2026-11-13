@@ -99,6 +99,11 @@ the end of the Lessons page, and left off the home page. Practice leaves their q
 the student picks their chapter (or a class test covering it): with no chapter picked, sets come
 from the chapters the class has reached.
 
+Practice links: `/<subject>/practice/?chapter=7&difficulty=3` opens the practice page with those
+filters ticked (`topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=5|all` work the same
+way; the defaults are 10 questions, shuffled). Add `start=1` to start that set right away. While a
+set is open its address also has a `seed`, so the same link opens the same questions.
+
 Watch out for curly braces `{ }` in ordinary MDX text (outside `$...$`): MDX reads them as code.
 Write `\{` or put the text inside math.
 
@@ -286,7 +291,8 @@ chapter, fill it in:
 2. Create `src/data/<id>/ced.json`, `chapters.json`, and (optionally) `tests.json`.
 3. Add content under `src/content/lessons/<id>/` and `src/content/questions/<id>/`.
 
-No code changes are needed.
+No code changes are needed. The site's home page (`/`) lists every class with what it's on now;
+each class has its own home at `/<id>/`.
 
 ## Before you push
 

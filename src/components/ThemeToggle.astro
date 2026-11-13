@@ -4,7 +4,7 @@
 
 <!-- Shows the current theme: an icon (sun, moon, or half-and-half for "follows your device") and,
      on wider screens, "Theme: Auto". -->
-<button class="theme-toggle" type="button" aria-label="Color theme: Auto. Switch to Light" title="Color theme: Auto (click for Light)">
+<button class="icon-button theme-toggle" type="button" aria-label="Color theme: Auto. Switch to Light" title="Color theme: Auto (click for Light)">
   <svg class="icon i-system" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" /></svg>
   <svg class="icon i-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
   <svg class="icon i-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
@@ -45,43 +45,21 @@
 </script>
 
 <style>
-  .theme-toggle {
-    font: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-2);
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
+  /* One icon at a time: the current theme's (Auto until the script sets data-theme). */
   .icon {
+    display: none;
     width: 1.05rem;
     height: 1.05rem;
     flex: none;
   }
-  .theme-toggle:not([data-theme="light"], [data-theme="dark"]) .i-light,
-  .theme-toggle:not([data-theme="light"], [data-theme="dark"]) .i-dark,
-  .theme-toggle[data-theme="light"] .i-system,
-  .theme-toggle[data-theme="light"] .i-dark,
-  .theme-toggle[data-theme="dark"] .i-system,
-  .theme-toggle[data-theme="dark"] .i-light {
-    display: none;
+  .theme-toggle:not([data-theme="light"], [data-theme="dark"]) .i-system,
+  [data-theme="light"] .i-light,
+  [data-theme="dark"] .i-dark {
+    display: block;
   }
-  .theme-toggle:hover {
-    border-color: var(--accent);
-  }
-  /* Phones: a 44px tap target, like the other header buttons. */
+  /* Phones: a 44px square, icon only. */
   @media (max-width: 520px) {
     .theme-toggle {
-      min-height: 2.75rem;
       min-width: 2.75rem;
       justify-content: center;
       padding: 0;

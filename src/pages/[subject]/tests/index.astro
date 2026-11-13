@@ -1,6 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { chapterRange, currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, lessonSlug, subjectPaths, testPracticeLinks, testsByDate, url } from '../../../lib/content';
+import { chapterRange, currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, subjectPaths, testPracticeLinks, testsByDate, url } from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -16,8 +16,7 @@ const tests = testsByDate(data).map((t) => ({
   review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
   links: testPracticeLinks(subject, t.id, questions.filter((q) => inTest(t, q)).length),
 }));
-const today = new Date().toISOString().slice(0, 10);
-const isUpcoming = (date?: string) => !!date && date >= today;
+const isUpcoming = (t: { date?: string }) => !isPastTest(t);
 const now = currentChapters(data);
 ---
 
@@ -28,11 +27,11 @@ const now = currentChapters(data);
     <p class="muted">No class tests listed yet.</p>
   ) : (
     ['upcoming', 'past'].map((group) => (
-      <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={group === 'past' && !tests.some((x) => !isUpcoming(x.t.date))}>
+      <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={group === 'past' && !tests.some((x) => !isUpcoming(x.t))}>
         <h2 id={`${group}-h`}>{group === 'upcoming' ? 'Upcoming' : 'Past tests'}</h2>
         <ul class="plain-list stack">
           {tests.map(({ t, n, review, links }) => (
-            <li class="card test" data-date={t.date ?? ''} hidden={(group === 'upcoming') !== isUpcoming(t.date)}>
+            <li class="card test" data-date={t.date ?? ''} hidden={(group === 'upcoming') !== isUpcoming(t)}>
               <h3><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h3>
               <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
               {review.length > 0 && (
@@ -54,7 +53,7 @@ const now = currentChapters(data);
           ))}
         </ul>
         {group === 'upcoming' && (
-          <p class="muted none-upcoming" hidden={tests.some((x) => isUpcoming(x.t.date))}>
+          <p class="muted none-upcoming" hidden={tests.some((x) => isUpcoming(x.t))}>
             No test date announced yet.
             {now.length > 0 && (
               <>
@@ -76,15 +75,15 @@ const now = currentChapters(data);
 </Base>
 
 <script>
+  import { isPast, isoDate } from '../../../lib/dates';
+
   // Put each test under Upcoming or Past using today's date, hide Past when empty, and say so when nothing is upcoming.
-  const today = new Date();
-  const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const today = isoDate(new Date());
   for (const group of document.querySelectorAll<HTMLElement>('.test-group')) {
     const upcoming = group.dataset.group === 'upcoming';
     let shown = 0;
     for (const li of group.querySelectorAll<HTMLElement>('li.test')) {
-      const date = li.dataset.date;
-      li.hidden = upcoming !== (!!date && date >= iso);
+      li.hidden = upcoming === isPast(li.dataset.date, today);
       if (!li.hidden) shown++;
     }
     if (upcoming) group.querySelector<HTMLElement>('.none-upcoming')!.hidden = shown > 0;
@@ -105,10 +104,6 @@ const now = currentChapters(data);
   }
   .review-links a {
     font-weight: 600;
-  }
-  .review-links a::before {
-    content: '★ ';
-    color: var(--tip);
   }
   .test .actions {
     margin: 0.75rem 0 0;

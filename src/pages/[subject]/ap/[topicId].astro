@@ -6,6 +6,7 @@ import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
 import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { plural } from '../../../lib/text';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -30,7 +31,6 @@ const flat = [...data.topics.keys()];
 const i = flat.indexOf(topicId);
 const prev = flat[i - 1];
 const next = flat[i + 1];
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 ---
 
 <Base title={`${topicId} ${topic.title}`} subject={subject} searchable searchMeta={{ type: 'AP topic' }}>

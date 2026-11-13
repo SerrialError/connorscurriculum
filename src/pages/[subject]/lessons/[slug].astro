@@ -16,6 +16,7 @@ import {
   isSample,
   isTaught,
   kindLabel,
+  lessonHref,
   lessonSlug,
   practiceHref,
   practiceStart,
@@ -74,7 +75,6 @@ const practice = practiceCount
       setup: practiceHref(subject, practiceQuery),
     }
   : null;
-const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
 // A test review sheet belongs to its test: link to the test and practice the whole test, not
 // just the sheet's topics, and leave out the chapter's previous/next lessons.
 const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;

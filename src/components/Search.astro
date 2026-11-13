@@ -23,6 +23,7 @@ const showSubject = subjectIds().length > 1;
 
 <script>
   import { isRealMatch, pickExcerpt } from '../lib/search-excerpt';
+  import { plural } from '../lib/text';
 
   interface PagefindResult {
     data(): Promise<{ url: string; excerpt: string; meta: Record<string, string>; sub_results?: { title: string; excerpt: string }[] }>;
@@ -81,7 +82,7 @@ const showSubject = subjectIds().length > 1;
           ? 'No results. Try fewer or different words.'
           : total > top.length
             ? `Top ${top.length} of ${total} results`
-            : `${total} result${total === 1 ? '' : 's'}`;
+            : plural(total, 'result');
       list.replaceChildren(
         ...top.map((r) => {
           const li = document.createElement('li');

@@ -1,7 +1,8 @@
 ---
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
-import Search from '../components/Search.astro';
+import ScrollCues from '../components/ScrollCues.astro';
+import SearchDialog from '../components/SearchDialog.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getSubjectData, url } from '../lib/content';
 import { CONTRIBUTE_URL, SITE_DESCRIPTION, SITE_NAME } from '../site';
@@ -102,13 +103,7 @@ const hasSearchBox = onHome || path === url();
         </nav>
       )}
     </header>
-    <dialog class="search-dialog" aria-label="Search">
-      <div class="search-dialog-head">
-        <strong>Search{subjectData && ` ${subjectData.subject.name}`}</strong>
-        <button class="icon-button search-close" type="button" aria-keyshortcuts="Escape">Close <kbd>Esc</kbd></button>
-      </div>
-      <Search id="header-search" placeholder="Lessons, chapters, AP topics…" />
-    </dialog>
+    <SearchDialog title={subjectData ? `Search ${subjectData.subject.name}` : 'Search'} />
     <main id="main" class="wrap" tabindex="-1" data-pagefind-body={searchable ? '' : undefined}>
       {searchable && (
         <div hidden data-pagefind-ignore>
@@ -129,98 +124,15 @@ const hasSearchBox = onHome || path === url();
         Not affiliated with or endorsed by College Board or Pearson. AP® is a registered trademark of College Board.
       </p>
     </footer>
-    <script>
-      const dialog = document.querySelector<HTMLDialogElement>('.search-dialog')!;
-      const input = dialog.querySelector<HTMLInputElement>('input')!;
-      const openButton = document.querySelector<HTMLButtonElement>('.search-open')!;
-      // Where focus goes back to when the dialog closes: what had it before, else the Search button.
-      let returnTo: HTMLElement | null = null;
-      const open = () => {
-        if (dialog.open) return;
-        const active = document.activeElement as HTMLElement | null;
-        returnTo = active && active !== document.body && active.id !== 'main' ? active : openButton;
-        dialog.showModal();
-        input.focus();
-        input.select();
-      };
-      const close = () => {
-        dialog.close();
-        returnTo?.focus();
-      };
-      openButton.addEventListener('click', open);
-      dialog.querySelector('.search-close')!.addEventListener('click', close);
-      // Escape closes right away (a search box would otherwise use the first Escape to clear itself).
-      dialog.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          close();
-          return;
-        }
-        // ↑ ↓ move between the search box and the results.
-        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-        const stops = [input, ...dialog.querySelectorAll<HTMLElement>('.results a.title, .more:not([hidden])')];
-        const i = stops.indexOf(document.activeElement as HTMLElement);
-        if (i < 0 || stops.length < 2) return;
-        e.preventDefault();
-        stops[Math.max(0, Math.min(stops.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)))]!.focus();
-      });
-      // Click on the backdrop closes the dialog.
-      dialog.addEventListener('click', (e) => {
-        if (e.target === dialog) close();
-      });
-      // Tables and equations wider than the screen get a "Scroll sideways" caption (global.css).
-      // Practice renders questions after load, so re-check when the page changes.
-      const markScrollers = () => {
-        for (const el of document.querySelectorAll<HTMLElement>('main table, main .katex-display')) {
-          const over = el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2;
-          if (!over) el.removeAttribute('data-scrolls');
-          else if (!el.hasAttribute('data-scrolls')) el.setAttribute('data-scrolls', '');
-        }
-      };
-      let queued = false;
-      const queueMark = () => {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(() => {
-          queued = false;
-          markScrollers();
-        });
-      };
-      markScrollers();
-      addEventListener('resize', queueMark);
-      document.addEventListener('toggle', queueMark, true);
-      new MutationObserver(queueMark).observe(document.getElementById('main')!, { childList: true, subtree: true });
-      document.addEventListener(
-        'scroll',
-        (e) => {
-          const el = e.target;
-          if (!(el instanceof HTMLElement) || !el.hasAttribute('data-scrolls')) return;
-          if (el.scrollLeft > 2) el.setAttribute('data-scrolls', 'seen');
-        },
-        true,
-      );
-
-      // "/" opens search, unless the user is typing somewhere.
-      document.addEventListener('keydown', (e) => {
-        if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
-        const t = e.target as HTMLElement;
-        if (t.closest('input, textarea, select, [contenteditable]')) return;
-        e.preventDefault();
-        // A page with its own search box (home) uses it instead of the dialog.
-        const inline = document.querySelector<HTMLInputElement>('main .search input');
-        if (inline) {
-          inline.focus();
-          inline.scrollIntoView({ block: 'nearest' });
-        } else open();
-      });
-    </script>
+    <ScrollCues />
     <script is:inline>
       // Class tests (data-test-date): past or upcoming by the reader's date, since the build can be
-      // weeks old. Shows .if-past or .if-upcoming inside (global.css).
+      // weeks old. Shows .if-past or .if-upcoming inside (global.css). Same rule as isPast() in
+      // lib/dates.ts, written out because an inline script runs before the page is first drawn.
       (() => {
         const d = new Date();
         const today = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
-        for (const el of document.querySelectorAll('[data-test-date]')) el.toggleAttribute('data-past', el.dataset.testDate < today);
+        for (const el of document.querySelectorAll('[data-test-date]')) el.toggleAttribute('data-past', !!el.dataset.testDate && el.dataset.testDate < today);
       })();
     </script>
   </body>
@@ -278,26 +190,6 @@ const hasSearchBox = onHome || path === url();
   }
   .spacer {
     flex: 1;
-  }
-  .icon-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    min-height: 2.1rem;
-    font: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-2);
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .icon-button:hover {
-    border-color: var(--accent);
-    color: var(--text);
   }
   .subnav {
     display: flex;
@@ -375,8 +267,7 @@ const hasSearchBox = onHome || path === url();
       font-size: 0.875rem;
       padding: 0 0.4rem;
     }
-    .subject,
-    .icon-button {
+    .subject {
       min-height: 2.75rem;
     }
     /* The subject name in the bar is the home link here. */
@@ -397,41 +288,6 @@ const hasSearchBox = onHome || path === url();
       font-size: 0.82rem;
       padding-inline: 0.28rem;
     }
-  }
-  .search-dialog {
-    width: min(40rem, calc(100vw - 1.5rem));
-    max-height: min(80vh, 40rem);
-    margin: 8vh auto auto;
-    padding: 1rem 1.1rem 0.25rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    color: var(--text);
-    box-shadow: 0 20px 50px rgb(0 0 0 / 0.3);
-  }
-  .search-dialog::backdrop {
-    background: rgb(0 0 0 / 0.35);
-  }
-  .search-close kbd {
-    font: inherit;
-    font-size: 0.72rem;
-    padding: 0 0.3rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--muted);
-  }
-  @media (hover: none), (pointer: coarse) {
-    .search-close kbd {
-      display: none;
-    }
-  }
-  .search-dialog-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .search-dialog :global(.search) {
-    margin: 0.75rem 0 0.5rem;
   }
   .site-footer {
     text-align: center;

@@ -18,6 +18,7 @@ import {
   topicIds,
   url,
 } from '../../../lib/content';
+import { plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
@@ -47,7 +48,6 @@ const emptyNow = taught
 const emptyDone = taught.filter((c) => !current.has(c.number) && !sections.some((s) => s.chapter === c)).map((c) => c.number);
 // Filter chips: the everyday kinds first.
 const kindCounts = [...LESSON_KINDS].sort((a, b) => (a.kind === 'review' ? 1 : 0) - (b.kind === 'review' ? 1 : 0)).map((k) => ({ ...k, n: lessons.filter((l) => l.data.kind === k.kind).length })).filter((k) => k.n > 0);
-const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
 ---
 
 <Base

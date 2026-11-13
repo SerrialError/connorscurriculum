@@ -20,6 +20,7 @@
     type PracticeQuestion,
     type PracticeTest,
     type SetSpec,
+    ALL_QUESTIONS,
     WEAK_NO_HISTORY_NOTE,
     amendLastResult,
     chapterRange,
@@ -115,7 +116,7 @@
   const taughtChapters = $derived(chapters.filter((c) => c.hasQuestions && (c.finished || c.current)).map((c) => c.number));
   const laterChapters = $derived(chapters.filter((c) => c.hasQuestions && !c.finished && !c.current).map((c) => c.number));
   /** The default pool's name: "Ch. 6–7" when later chapters are left out, else "All questions". */
-  const everything = $derived(laterChapters.length && taughtChapters.length ? chapterRange(taughtChapters) : 'All questions');
+  const everything = $derived(laterChapters.length && taughtChapters.length ? chapterRange(taughtChapters) : ALL_QUESTIONS);
   const setFilters = $derived(parseFilters(set.query));
   const setFrqTopics = $derived(filterTopics(setFilters, units, chapterTopics, tests));
   const weakSpots = $derived(all ? weakTopics(filterQuestions(all, emptyFilters(), tests), history) : []);

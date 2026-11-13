@@ -112,7 +112,8 @@ Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short
     - { id: b, text: "12.5%" }
   answer: b                # must be one of the choice ids
   explanation: |
-    Why b is right, and why the others are wrong.
+    Why (B) is right, and why the others are wrong. Students see the choices
+    labeled A, B, C, D, so refer to them as (A), (B), and so on.
 
 - id: apchem-14-mechanism-frq
   type: frq

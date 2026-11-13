@@ -44,25 +44,41 @@ const sourceNote = frq.officialSkills
     </span>
   </header>
   <p class="small muted meta">{kind} answer · {total} points</p>
-  {practices.length > 0 && (
-    <p class="practices" title={sourceNote}>
-      {practices.map((id) => (
-        <span class="practice">
-          <span class="pnum">{id}</span>
-          {practiceName(id)}
-        </span>
-      ))}
-      {!frq.officialSkills && <span class="small muted">(our labels)</span>}
-    </p>
-  )}
-
   {matched ? (
-    <p class="small">
-      Part{matched.length > 1 ? 's' : ''} {matched.map((p) => p.label).join(', ')} ({matchedPoints} pt{matchedPoints === 1 ? '' : 's'})
-    </p>
+    <>
+      <p class="small">
+        Part{matched.length > 1 ? 's' : ''} {matched.map((p) => p.label).join(', ')} ({matchedPoints} pt{matchedPoints === 1 ? '' : 's'})
+      </p>
+      {practices.length > 0 && (
+        <div class="practices-block">
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && ' (our labels; College Board hasn’t published them for this exam)'}</p>
+          <p class="practices" title={sourceNote}>
+            {practices.map((id) => (
+              <span class="practice">
+                <span class="pnum">{id}</span>
+                {practiceName(id)}
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
+    </>
   ) : (
     <details class="parts-toggle">
-      <summary>Show {frq.parts.length} parts</summary>
+      <summary>Show {frq.parts.length} parts and science practices</summary>
+      {practices.length > 0 && (
+        <div class="practices-block">
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && ' (our labels; College Board hasn’t published them for this exam)'}</p>
+          <p class="practices" title={sourceNote}>
+            {practices.map((id) => (
+              <span class="practice">
+                <span class="pnum">{id}</span>
+                {practiceName(id)}
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
       <ul class="plain-list parts">
         {frq.parts.map((p, i) => (
           <li>
@@ -163,6 +179,9 @@ const sourceNote = frq.officialSkills
   .label {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+  }
+  .practices-h {
+    margin: 0.25rem 0 0.3rem;
   }
   .practices {
     display: flex;

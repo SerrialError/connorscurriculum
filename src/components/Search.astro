@@ -16,6 +16,7 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
   <input id={id} type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
   <p class="status small muted" aria-live="polite"></p>
   <ol class="results plain-list"></ol>
+  <button class="more link-button small" type="button" hidden>Show all results</button>
 </div>
 
 <script>
@@ -31,6 +32,9 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
     const input = root.querySelector('input')!;
     const status = root.querySelector<HTMLElement>('.status')!;
     const list = root.querySelector<HTMLOListElement>('.results')!;
+    const more = root.querySelector<HTMLButtonElement>('.more')!;
+    const PAGE = 8;
+    let limit = PAGE;
     let pagefind: Pagefind | null = null;
     let failed = false;
     let timer: number | undefined;
@@ -53,6 +57,7 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
       if (!q) {
         list.replaceChildren();
         status.textContent = '';
+        more.hidden = true;
         return;
       }
       const pf = await load();
@@ -60,7 +65,7 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
       const search = await pf.search(q);
       if (!search) return; // superseded by a newer query
       const { results } = search;
-      const top = await Promise.all(results.slice(0, 8).map((r) => r.data()));
+      const top = await Promise.all(results.slice(0, limit).map((r) => r.data()));
       if (mine !== seq) return;
       status.textContent =
         results.length === 0
@@ -85,7 +90,16 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
           return li;
         }),
       );
+      more.hidden = results.length <= top.length;
+      more.textContent = `Show all ${results.length} results`;
     }
+
+    more.addEventListener('click', () => {
+      limit = Infinity;
+      // Keep focus in the list: the first newly shown result.
+      const before = list.children.length;
+      void run().then(() => list.children[before]?.querySelector('a')?.focus());
+    });
 
     // Enter opens the first result.
     input.addEventListener('keydown', (e) => {
@@ -95,6 +109,7 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
     });
     input.addEventListener('focus', () => void load(), { once: true });
     input.addEventListener('input', () => {
+      limit = PAGE;
       clearTimeout(timer);
       timer = window.setTimeout(run, 150);
     });
@@ -119,6 +134,17 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
     outline: 3px solid var(--accent);
     outline-offset: 1px;
     border-color: var(--accent);
+  }
+  .more {
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: none;
+    border: 0;
+    padding: 0.5rem 0;
+    color: var(--link);
+    text-decoration: underline;
+    cursor: pointer;
   }
   .status {
     margin: 0.4rem 0;

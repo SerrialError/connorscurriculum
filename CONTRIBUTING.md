@@ -180,11 +180,15 @@ Empty `sections` means the whole chapters. `date` is optional.
 
 ## Class progress
 
-When the class finishes a chapter, add its number to `src/data/<subject>/progress.json`:
+When the class finishes a chapter, add its number to `src/data/<subject>/progress.json`, and list
+the chapters the class is working on now in `current` (optional; a chapter can't be in both lists):
 
 ```json
-{ "chapters": [1, 2, 3, 4, 5, 6] }
+{ "chapters": [1, 2, 3, 4, 5, 6, 7], "current": [8, 9] }
 ```
+
+The first `current` chapter is shown as "Up next" on the subject page. Without `current`, that is the
+first unfinished chapter after the last finished one.
 
 That's all. The AP topics fill in by themselves, because each chapter in `chapters.json` lists
 the CED topics it teaches:

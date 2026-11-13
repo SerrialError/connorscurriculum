@@ -62,6 +62,8 @@ export const testSchema = z.object({
 export const progressSchema = z.object({
   // Chapters the class has finished. Topic progress is derived from chapters.json.
   chapters: z.array(z.number().int()).default([]),
+  // Chapters the class is working on now (not finished yet), in class order.
+  current: z.array(z.number().int()).default([]),
   // CED topics already seen in an earlier course. Shown with their own mark until covered this year.
   lastYear: z
     .object({
@@ -135,6 +137,8 @@ export type TopicProgress = 'done' | 'review' | 'partial' | null;
 
 export interface Progress {
   chapters: Set<number>;
+  /** Chapters being studied now, in the order listed in progress.json. */
+  current: number[];
   /** Name of last year's course, if progress.json has a lastYear block. */
   lastYearCourse: string | null;
   /** Topics with any progress. */
@@ -265,6 +269,12 @@ function loadSubject(subject: Subject): SubjectData {
   rawProgress.chapters.forEach((n, i) => {
     if (!chapterMap.has(n)) throw new DataError(progressFile, `chapters[${i}]`, `chapter ${n} is not in chapters.json`);
   });
+  rawProgress.current.forEach((n, i) => {
+    const field = `current[${i}]`;
+    if (!chapterMap.has(n)) throw new DataError(progressFile, field, `chapter ${n} is not in chapters.json`);
+    if (rawProgress.chapters.includes(n)) throw new DataError(progressFile, field, `chapter ${n} is already listed as finished`);
+    if (rawProgress.current.indexOf(n) !== i) throw new DataError(progressFile, field, `chapter ${n} is listed twice`);
+  });
   const lastYear = rawProgress.lastYear;
   if (lastYear) {
     const seen = new Set<string>();
@@ -282,7 +292,7 @@ function loadSubject(subject: Subject): SubjectData {
       }
     }
   }
-  const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters, lastYear);
+  const progress = deriveProgress(new Set(rawProgress.chapters), topicChapters, lastYear, rawProgress.current);
 
   const frqFile = join(dir, 'past-frqs.json');
   const pastFrqs = existsSync(frqFile) ? readJson(frqFile, pastFrqsSchema).exams : [];
@@ -317,9 +327,11 @@ export function deriveProgress(
   finished: Set<number>,
   topicChapters: Map<string, number[]>,
   lastYear?: LastYear,
+  current: number[] = [],
 ): Progress {
   const progress: Progress = {
     chapters: finished,
+    current,
     lastYearCourse: lastYear?.course ?? null,
     topics: new Map(),
     notes: new Map(),

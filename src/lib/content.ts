@@ -115,8 +115,13 @@ export function learnedTopic(data: SubjectData) {
   };
 }
 
-/** The chapter to study next: the first unfinished chapter after the last finished one (else the first unfinished). */
+/**
+ * The chapter to study next: the first chapter the class is working on now (progress.json "current"),
+ * else the first unfinished chapter after the last finished one (else the first unfinished).
+ */
 export function nextChapter(data: SubjectData) {
+  const current = data.progress.current.map((n) => data.chapterMap.get(n)).find((c) => c !== undefined);
+  if (current) return current;
   const lastDone = Math.max(0, ...data.progress.chapters);
   const unfinished = data.chapters.filter((c) => !data.progress.chapters.has(c.number));
   return unfinished.find((c) => c.number > lastDone) ?? unfinished[0];

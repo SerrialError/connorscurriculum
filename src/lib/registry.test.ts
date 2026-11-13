@@ -67,3 +67,19 @@ describe('apchem data', () => {
     expect(unmapped).toEqual([]);
   });
 });
+
+describe('current chapters', () => {
+  it('passes the chapters being studied through to progress, in order', () => {
+    const p = deriveProgress(new Set([1]), new Map([['1.1', [1]]]), undefined, [9, 8]);
+    expect(p.current).toEqual([9, 8]);
+    expect(deriveProgress(new Set(), new Map()).current).toEqual([]);
+  });
+
+  it('apchem: current chapters exist and are not already finished', () => {
+    const data = getSubjectData('apchem');
+    for (const n of data.progress.current) {
+      expect(data.chapterMap.has(n)).toBe(true);
+      expect(data.progress.chapters.has(n)).toBe(false);
+    }
+  });
+});

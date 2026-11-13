@@ -25,8 +25,9 @@ Every lesson and question has both kinds of tag:
 
 ## Using the editor (CMS)
 
-Lessons can be written in a browser editor instead of editing files: use the **Write a lesson** link
-at the bottom of any page, or go to `/admin/`. It shows a live preview with the math, chemistry, and
+Lessons can be written in a browser editor instead of editing files: open
+[the editor](https://serrialerror.github.io/connorscurriculum/admin/) (`/admin/` on the site). The
+**Share your notes or write a lesson** link at the bottom of every page leads to this section. It shows a live preview with the math, chemistry, and
 boxes rendered the way the site will show them, and flags anything that would break the build (an
 unclosed `<Callout>`, a stray `{`, an unknown component). The chapter and AP topic pickers come
 from `chapters.json` and `ced.json`.
@@ -85,6 +86,17 @@ Worked solution, hidden until clicked.
 
 `Callout`, `Reveal`, and `YouTube` are available in every lesson without importing them.
 `\ce{...}` (mhchem) works anywhere math works.
+
+Every lesson shows up on the **Lessons** page (`/<subject>/lessons/`), grouped by chapter, and on its
+chapter page. The home page lists the lessons and notes for the latest finished chapters. Practice
+links a question to the `kind: lesson` pages from its chapter that share one of its `sections` (or,
+failing that, an AP topic), so tag `sections` on both lessons and questions.
+
+Sample content: `authors: ["sample"]` marks a page or question written only to show the format. Sample
+pages, and anything in a chapter the class hasn't reached yet (not finished or current in
+`progress.json`), are labelled as not class material, listed in a closed "Sample pages" section at
+the end of the Lessons page, and left off the home page. Mixed review in Practice only draws from
+chapters the class has reached.
 
 Watch out for curly braces `{ }` in ordinary MDX text (outside `$...$`): MDX reads them as code.
 Write `\{` or put the text inside math.

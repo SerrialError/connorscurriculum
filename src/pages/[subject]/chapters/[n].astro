@@ -4,7 +4,8 @@ import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
-import { matchFrqs } from '../../../lib/frqs';
+import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { CONTRIBUTE_URL } from '../../../site';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -38,11 +39,9 @@ const topics = [...chapter.cedTopics]
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
 const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
-const frqParts = frqMatches.reduce((sum, m) => sum + m.parts.length, 0);
-const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
 ---
 
-<Base title={chapterLabel} subject={subject} searchable searchMeta={{ chapter: chapterLabel }}>
+<Base title={chapterLabel} subject={subject} searchable searchMeta={{ type: 'Chapter' }}>
   <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore><a href={url(`${subject}/chapters/`)}>Chapters</a> /</nav>
   <h1>{chapterLabel}</h1>
   <div class="badges status" data-pagefind-ignore>
@@ -83,11 +82,11 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
       lessons={lessons}
       grouped
       empty={current
-        ? 'No lessons yet: the class is on this chapter now. Use the AP topics and past FRQs below, or write a lesson.'
+        ? 'No lessons yet: the class is on this chapter now. Use the AP topics and past FRQs below.'
         : 'No lessons yet.'}
     />
     {lessons.length === 0 && (
-      <p class="small"><a href={url('admin/')}>Write a lesson for this chapter</a></p>
+      <p class="small"><a href={CONTRIBUTE_URL}>Share your notes or write a lesson for this chapter</a></p>
     )}
   </section>
 
@@ -108,7 +107,7 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
               )}
               {t.alsoIn.length > 0 && <div class="small muted">Also in Ch. {t.alsoIn.join(', ')}</div>}
             </div>
-            {frqCount(t.id) > 0 && <span class="small muted count">{frqCount(t.id)} FRQ</span>}
+            {frqCount(t.id) > 0 && <span class="small muted count">{frqCount(t.id)} FRQ{frqCount(t.id) === 1 ? '' : 's'}</span>}
           </li>
         ))}
       </ol>
@@ -129,7 +128,7 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
       <h2 id="frqs-h">Past AP FRQs on these topics</h2>
       <details class="frqs">
         <summary>
-          Show {plural(frqMatches.length, 'released question')} ({plural(frqParts, 'part')})
+          Show {frqCountLabel(frqMatches)}
         </summary>
         <div class="stack">
           {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}

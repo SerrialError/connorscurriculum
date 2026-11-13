@@ -158,11 +158,41 @@ export function testsByDate(data: SubjectData) {
   return [...data.tests].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
 }
 
+/** The class has reached this chapter: it's finished or being studied now (progress.json). */
+export function isTaught(data: SubjectData, chapter: number): boolean {
+  return data.progress.chapters.has(chapter) || data.progress.current.includes(chapter);
+}
+
+/**
+ * Sample content: pages written to show the format (authors: ["sample"]), not class material.
+ * They're labelled as samples and kept out of the home page and the lessons list's main part.
+ */
+export function isSample(entry: Lesson | Question): boolean {
+  return entry.data.authors.length === 1 && entry.data.authors[0]!.trim().toLowerCase() === 'sample';
+}
+
+/** Class material: not a sample, and from a chapter the class has reached. */
+export function isClassContent(data: SubjectData, entry: Lesson | Question): boolean {
+  return !isSample(entry) && isTaught(data, entry.data.chapter);
+}
+
+/** "By Jaya", or "Sample page" for samples. */
+export function byline(lesson: Lesson): string {
+  return isSample(lesson) ? 'Sample page' : `By ${lesson.data.authors.join(', ')}`;
+}
+
+export const lessonHref = (lesson: Lesson) => url(`${lesson.data.subject.id}/lessons/${lessonSlug(lesson)}/`);
+
 export const LESSON_KINDS = [
-  { kind: 'review', heading: 'Test review' },
-  { kind: 'lesson', heading: 'Lessons' },
-  { kind: 'notes', heading: 'Class notes' },
+  { kind: 'review', heading: 'Test review', label: 'Review sheet' },
+  { kind: 'lesson', heading: 'Lessons', label: 'Lesson' },
+  { kind: 'notes', heading: "Classmates' notes", label: 'Notes' },
 ] as const;
+
+/** "Lesson", "Notes", or "Review sheet", for search results and tags. */
+export function kindLabel(lesson: Lesson): string {
+  return LESSON_KINDS.find((k) => k.kind === lesson.data.kind)!.label;
+}
 
 /** Lessons split into review sheets, lessons, and classmates' notes, leaving out empty groups. */
 export function groupLessons(lessons: Lesson[]) {

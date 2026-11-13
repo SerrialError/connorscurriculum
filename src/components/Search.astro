@@ -1,6 +1,6 @@
 ---
 // Site search backed by Pagefind's JS API. The index only exists after `npm run build`.
-import { url } from '../lib/content';
+import { subjectIds, url } from '../lib/content';
 
 interface Props {
   placeholder?: string;
@@ -9,9 +9,11 @@ interface Props {
 }
 
 const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' } = Astro.props;
+// With one class, every result is from it, so results don't repeat its name.
+const showSubject = subjectIds().length > 1;
 ---
 
-<div class="search" data-pagefind-src={url('pagefind/pagefind.js')}>
+<div class="search" data-pagefind-src={url('pagefind/pagefind.js')} data-show-subject={showSubject ? '' : undefined}>
   <label class="visually-hidden" for={id}>Search</label>
   <input id={id} type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
   <p class="status small muted" aria-live="polite"></p>
@@ -87,9 +89,17 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
           a.href = r.url;
           a.className = 'title';
           a.textContent = r.meta.title ?? r.url;
+          // "Lesson · Chapter 6: …": what kind of page it is, and where it lives.
           const meta = document.createElement('div');
-          meta.className = 'small muted';
-          meta.textContent = [r.meta.subject, r.meta.chapter].filter(Boolean).join(' · ');
+          meta.className = 'small muted result-meta';
+          if (r.meta.type) {
+            const tag = document.createElement('span');
+            tag.className = 'type';
+            tag.textContent = r.meta.type;
+            meta.append(tag);
+          }
+          const where = [root.hasAttribute('data-show-subject') ? r.meta.subject : '', r.meta.chapter].filter(Boolean).join(' · ');
+          if (where) meta.append(where);
           const excerpt = document.createElement('p');
           excerpt.className = 'small';
           // Pagefind escapes page text and adds <mark>. The title is shown above, so don't repeat it.
@@ -158,12 +168,30 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
     margin: 0.4rem 0;
     min-height: 1.2em;
   }
+  /* Nothing typed yet: no empty line under the box. */
+  .status:empty {
+    margin: 0;
+    min-height: 0;
+  }
   .results :global(li) {
     padding: 0.6rem 0;
     border-bottom: 1px solid var(--border);
   }
   .results :global(.title) {
     font-weight: 700;
+  }
+  .results :global(.result-meta) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.1rem 0.5rem;
+  }
+  .results :global(.type) {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-2);
   }
   .results :global(p) {
     margin: 0.2rem 0 0;

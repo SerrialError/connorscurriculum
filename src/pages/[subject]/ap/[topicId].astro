@@ -4,7 +4,7 @@ import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
-import { matchFrqs } from '../../../lib/frqs';
+import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -32,7 +32,7 @@ const next = flat[i + 1];
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 ---
 
-<Base title={`${topicId} ${topic.title}`} subject={subject} searchable>
+<Base title={`${topicId} ${topic.title}`} subject={subject} searchable searchMeta={{ type: 'AP topic' }}>
   <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
     <a href={url(`${subject}/ap/`)}>AP topics</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a> /
   </nav>
@@ -95,7 +95,7 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
     {frqMatches.length > 0 ? (
       <>
         <p class="small muted">
-          {plural(frqMatches.length, 'released question')} {frqMatches.length === 1 ? 'has' : 'have'} parts on this topic.
+          {frqCountLabel(frqMatches)} on this topic.
           Grade yourself with the scoring guidelines.
         </p>
         <div class="stack">

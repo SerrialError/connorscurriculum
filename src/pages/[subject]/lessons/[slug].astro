@@ -3,15 +3,18 @@ import { render } from 'astro:content';
 import Callout from '../../../components/Callout.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
-import TopicLegend from '../../../components/TopicLegend.astro';
 import YouTube from '../../../components/YouTube.astro';
 import Base from '../../../layouts/Base.astro';
 import {
   type Lesson,
+  byline,
   getLessons,
   getQuestions,
   getSubjectData,
   inTest,
+  isSample,
+  isTaught,
+  kindLabel,
   lessonSlug,
   practiceHref,
   practiceStart,
@@ -75,6 +78,9 @@ const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
 const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;
 const testHref = test && url(`${subject}/tests/${test.id}/`);
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
+// Not class material: a sample page, or one for a chapter the class hasn't reached.
+const sample = isSample(lesson);
+const ahead = !isTaught(data, chapter.number);
 const testPractice =
   test && testQuestions
     ? { href: practiceHref(subject, { test: test.id, start: '1' }), label: `Start all ${testQuestions} test questions` }
@@ -86,7 +92,7 @@ const testPractice =
   description={lesson.data.summary}
   subject={subject}
   searchable={!lesson.data.draft}
-  searchMeta={{ chapter: chapterLabel }}
+  searchMeta={{ type: sample || ahead ? 'Sample page' : kindLabel(lesson), chapter: chapterLabel }}
   section={test ? 'Tests' : undefined}
 >
   <div class:list={['lesson-page', { 'has-toc': showToc }]}>
@@ -98,7 +104,7 @@ const testPractice =
         </>
       ) : (
         <>
-          <a href={url(`${subject}/chapters/`)}>Chapters</a> / <a href={url(`${subject}/chapters/${chapter.number}/`)}>{chapterLabel}</a>
+          <a href={url(`${subject}/lessons/`)}>Lessons</a> / <a href={url(`${subject}/chapters/${chapter.number}/`)}>{chapterLabel}</a>
           {lesson.data.sections.length > 0 && <> · §{lesson.data.sections.join(', ')}</>}
         </>
       )}
@@ -108,8 +114,14 @@ const testPractice =
       {lesson.data.draft && <span class="badge">Draft</span>}
     </h1>
     <TopicBadges subject={subject} topics={topics} />
-    <TopicLegend subject={subject} topics={topics} />
-    <p class="small muted" data-pagefind-ignore>By {lesson.data.authors.join(', ')}</p>
+    {!sample && <p class="small muted byline" data-pagefind-ignore>{byline(lesson)}</p>}
+    {(sample || ahead) && (
+      <p class="sample-note" data-pagefind-ignore>
+        <strong>{sample ? 'Sample page, not class material.' : 'Not taught yet.'}</strong>{' '}
+        {sample ? 'It was written to show what a lesson looks like' : 'It was written'} before the class reached Chapter {chapter.number}, so
+        it may not match how your teacher covers it. Use it as a preview at most.
+      </p>
+    )}
     {test && (
       <p class="test-note">
         Review sheet for the <a href={testHref}>{test.title}</a>.
@@ -290,6 +302,15 @@ const testPractice =
   article :global(img) {
     border-radius: var(--radius);
     background: #fff;
+  }
+  .byline {
+    margin: 0.4rem 0 0;
+  }
+  .sample-note {
+    padding: 0.6rem 0.9rem;
+    border-left: 4px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    background: var(--warn-soft);
   }
   .test-note {
     padding: 0.6rem 0.9rem;

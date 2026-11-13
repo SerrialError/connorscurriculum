@@ -16,13 +16,13 @@ const allIds = [...data.topics.keys()];
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
-/** "1 lesson · 3 FRQs", leaving out zero counts. */
+/** "1 lesson · 3 past FRQs", leaving out zero counts. */
 const counts = (id: string) => {
   const c = cov.get(id)!;
   return [
     c.lessons.length && plural(c.lessons.length, 'lesson'),
     c.questions && plural(c.questions, 'question'),
-    frqCount(id) && plural(frqCount(id), 'FRQ'),
+    frqCount(id) && plural(frqCount(id), 'past FRQ'),
   ]
     .filter(Boolean)
     .join(' · ');

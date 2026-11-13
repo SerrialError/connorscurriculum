@@ -77,3 +77,14 @@ export function frqPractices(frq: Pick<FrqLink, 'parts'>): string[] {
 }
 
 export const frqName = (frq: Pick<FrqLink, 'year' | 'number'>) => `${frq.year} Q${frq.number}`;
+
+/**
+ * How many past FRQs match, counted the same way everywhere: questions, plus the matching parts
+ * when that's a different number. "10 past FRQs (12 parts)", "1 past FRQ".
+ */
+export function frqCountLabel(matches: Pick<FrqMatch, 'parts'>[], noun = 'past FRQ'): string {
+  const q = matches.length;
+  const parts = matches.reduce((sum, m) => sum + m.parts.length, 0);
+  const label = `${q} ${noun}${q === 1 ? '' : 's'}`;
+  return parts === q ? label : `${label} (${parts} parts)`;
+}

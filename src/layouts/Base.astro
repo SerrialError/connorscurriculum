@@ -5,7 +5,7 @@ import Search from '../components/Search.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getSubjectData, url } from '../lib/content';
 import { loadRegistry } from '../lib/registry';
-import { SITE_DESCRIPTION, SITE_NAME } from '../site';
+import { CONTRIBUTE_URL, SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 interface Props {
   title: string;
@@ -14,26 +14,25 @@ interface Props {
   subject?: string;
   /** Pagefind indexes only pages that set this. */
   searchable?: boolean;
-  /** Extra Pagefind metadata shown with search results. */
-  searchMeta?: { chapter?: string };
+  /** Extra Pagefind metadata shown with search results: the kind of page ("Lesson", "Chapter"…) and its chapter. */
+  searchMeta?: { type?: string; chapter?: string };
   /** Nav item to highlight, when it isn't the one the URL belongs to (e.g. "Tests"). */
   section?: string;
-  /** The footer's "Write a lesson" link; off where it would only distract (practice). */
-  writeLink?: boolean;
 }
 
-const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {}, section, writeLink = true } = Astro.props;
+const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {}, section } = Astro.props;
 const subjectData = subject ? getSubjectData(subject) : undefined;
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
 const path = Astro.url.pathname;
-// Each nav item also owns the pages under it: lessons belong to Chapters. Pass `section` to
-// highlight a different item (a test review sheet is a lesson, but belongs to Tests).
+// Each nav item also owns the pages under it: Lessons owns lessons and the chapter pages (its list
+// is grouped by chapter). Pass `section` to highlight a different item (a test review sheet is a
+// lesson, but belongs to Tests).
 const nav: NavItem[] = subject
   ? [
       { href: url(`${subject}/`), label: 'Home', exact: true },
-      { href: url(`${subject}/chapters/`), label: 'Chapters', also: [url(`${subject}/lessons/`)] },
-      { href: url(`${subject}/tests/`), label: 'Tests' },
+      { href: url(`${subject}/lessons/`), label: 'Lessons', also: [url(`${subject}/chapters/`)] },
       { href: url(`${subject}/practice/`), label: 'Practice' },
+      { href: url(`${subject}/tests/`), label: 'Tests' },
       { href: url(`${subject}/ap/`), label: 'AP topics' },
       { href: url(`${subject}/frqs/`), label: 'Past FRQs', short: 'FRQs' },
     ]
@@ -117,19 +116,17 @@ const siteHome = subjectIds.length === 1 ? url(`${subjectIds[0]}/`) : url();
         <div hidden data-pagefind-ignore>
           <span data-pagefind-meta="title">{title}</span>
           {subjectData && <span data-pagefind-meta="subject">{subjectData.subject.name}</span>}
+          {searchMeta.type && <span data-pagefind-meta="type">{searchMeta.type}</span>}
           {searchMeta.chapter && <span data-pagefind-meta="chapter">{searchMeta.chapter}</span>}
         </div>
       )}
       <slot />
     </main>
     <footer class="site-footer wrap small muted">
-      {(subjectIds.length > 1 || writeLink) && (
-        <p>
-          {subjectIds.length > 1 && <a href={url()}>All classes</a>}
-          {subjectIds.length > 1 && writeLink && ' · '}
-          {writeLink && <a href={url('admin/')}>Write a lesson</a>}
-        </p>
-      )}
+      <p>
+        {subjectIds.length > 1 && <><a href={url()}>All classes</a> · </>}
+        <a href={CONTRIBUTE_URL}>Share your notes or write a lesson</a>
+      </p>
       <p>
         Not affiliated with or endorsed by College Board or Pearson. AP® is a registered trademark of College Board.
       </p>

@@ -18,7 +18,7 @@ const mostly = frqs.filter((f) => {
 const exams = data.pastFrqs;
 ---
 
-<Base title="Past AP FRQs" subject={subject} searchable>
+<Base title="Past AP FRQs" subject={subject} searchable searchMeta={{ type: 'Past FRQs' }}>
   <h1>Past AP free-response questions</h1>
   <p class="muted prose">
     Real AP exam questions from AP Central. Each one links to the question and its scoring guidelines, and shows how many

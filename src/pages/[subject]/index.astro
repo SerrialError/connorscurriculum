@@ -9,7 +9,8 @@ import {
   getQuestions,
   getSubjectData,
   inTest,
-  lessonSlug,
+  isClassContent,
+  lessonHref,
   nextChapter,
   pastFrqLinks,
   practiceHref,
@@ -18,15 +19,16 @@ import {
   testsByDate,
   url,
 } from '../../lib/content';
-import { matchFrqs } from '../../lib/frqs';
+import { frqCountLabel, matchFrqs } from '../../lib/frqs';
 
 export const getStaticPaths = subjectPaths;
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const { progress } = data;
-const lessons = await getLessons(subject);
-const questions = await getQuestions(subject);
+// Class material only: sample pages for chapters the class hasn't reached stay off the home page.
+const lessons = (await getLessons(subject)).filter((l) => isClassContent(data, l));
+const questions = (await getQuestions(subject)).filter((q) => isClassContent(data, q));
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const cedOrder = [...data.topics.keys()];
 const inCedOrder = (ids: string[]) => [...ids].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
@@ -41,13 +43,16 @@ const now = currentChapters(data);
 const nowChapters = now.length ? now : [nextChapter(data)].filter((c) => c !== undefined);
 const chapterInfo = (n: number) => {
   const c = data.chapterMap.get(n)!;
-  const frqParts = matchFrqs(frqs, new Set(c.cedTopics)).reduce((sum, m) => sum + m.parts.length, 0);
+  const frqMatches = matchFrqs(frqs, new Set(c.cedTopics));
+  const own = lessons.filter((l) => l.data.chapter === n);
   return {
     chapter: c,
     topics: inCedOrder(c.cedTopics),
-    lessons: lessons.filter((l) => l.data.chapter === n).length,
+    lessons: own.length,
+    teaching: own.filter((l) => l.data.kind === 'lesson'),
+    notes: own.filter((l) => l.data.kind === 'notes'),
     questions: questions.filter((q) => q.data.chapter === n).length,
-    frqParts,
+    frqs: frqMatches.length ? frqCountLabel(frqMatches) : '',
   };
 };
 const nowInfo = nowChapters.map((c) => chapterInfo(c.number));
@@ -57,11 +62,12 @@ const test = testsByDate(data)[0];
 const testReview = test ? lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)) : [];
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 
-// Finished chapters with something to study, most recent first.
-const review = [...progress.chapters]
+// Lessons for the latest finished chapters with any, most recent first.
+const recent = [...progress.chapters]
   .sort((a, b) => b - a)
   .map(chapterInfo)
-  .filter((c) => c.lessons > 0 || c.questions > 0);
+  .filter((c) => c.lessons > 0)
+  .slice(0, 3);
 
 const gapCount = data.textbookGaps.topics.size;
 const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skipped').map(([id]) => id));
@@ -70,7 +76,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
 <Base title={data.subject.name} subject={subject}>
   <h1>{data.subject.name}</h1>
   <p class="muted lede">Textbook: <em>{data.subject.textbook}</em></p>
-  <Search placeholder={`Search ${data.subject.name} lessons, chapters, and topics…`} />
+  <Search placeholder="Search lessons, notes, topics…" />
 
   <div class="dash">
     {nowInfo.length > 0 && (
@@ -95,9 +101,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
                   {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
                 </>
               )}
-              {c.frqParts > 0 && (
-                <a href={url(`${subject}/chapters/${c.chapter.number}/#frqs`)}>{plural(c.frqParts, 'past AP FRQ part')}</a>
-              )}
+              {c.frqs && <a href={url(`${subject}/chapters/${c.chapter.number}/#frqs`)}>{c.frqs}</a>}
             </p>
           </div>
         ))}
@@ -120,7 +124,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
           <ul class="plain-list review-links">
             {testReview.map((l) => (
               <li>
-                <a href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
+                <a href={lessonHref(l)}>{l.data.title}</a>
               </li>
             ))}
           </ul>
@@ -136,24 +140,46 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     )}
   </div>
 
-  {review.length > 0 && (
-    <section aria-labelledby="review-h">
-      <h2 id="review-h">Review finished chapters</h2>
-      <div class="grid">
-        {review.map((c) => (
+  {recent.length > 0 && (
+    <section aria-labelledby="lessons-h">
+      <div class="section-head">
+        <h2 id="lessons-h">Lessons</h2>
+        <a href={url(`${subject}/lessons/`)}>All lessons and notes →</a>
+      </div>
+      <div class="grid lesson-cards">
+        {recent.map((c) => (
           <div class="card chapter-card">
             <h3>
               <a href={url(`${subject}/chapters/${c.chapter.number}/`)}>
                 <span class="muted">Ch. {c.chapter.number}</span> {c.chapter.title}
               </a>
             </h3>
-            <p class="small muted">
-              {[c.lessons && plural(c.lessons, 'lesson'), c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}
-            </p>
-            <p class="small links">
-              <a href={url(`${subject}/chapters/${c.chapter.number}/#lessons`)}>Lessons</a>
-              {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
-            </p>
+            {c.teaching.length > 0 && (
+              <ul class="plain-list lesson-links">
+                {c.teaching.map((l) => (
+                  <li><a href={lessonHref(l)}>{l.data.title}</a></li>
+                ))}
+              </ul>
+            )}
+            {c.notes.length > 0 && (
+              <p class="small notes-line">
+                <span class="muted">Classmates' notes:</span>{' '}
+                {c.notes.map((l, i) => (
+                  <>
+                    {i > 0 && <span class="muted"> · </span>}
+                    <a href={lessonHref(l)}>{l.data.authors.join(', ')}</a>
+                  </>
+                ))}
+              </p>
+            )}
+            {c.questions > 0 && (
+              <p class="small practice-line">
+                <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>
+                  {practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}
+                </a>
+                <span class="muted"> · {c.questions} in this chapter</span>
+              </p>
+            )}
           </div>
         ))}
       </div>
@@ -199,31 +225,6 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     </div>
   </section>
 
-  <section aria-labelledby="map-h">
-    <h2 id="map-h">Where things are</h2>
-    <div class="grid map">
-      <a class="card" href={url(`${subject}/chapters/`)}>
-        <h3>Chapters</h3>
-        <p class="small muted">Class order. Each chapter has its lessons, classmates' notes, AP topics, and practice.</p>
-      </a>
-      <a class="card" href={url(`${subject}/tests/`)}>
-        <h3>Class tests</h3>
-        <p class="small muted">Each test's review sheet, the lessons it covers, and practice for it.</p>
-      </a>
-      <a class="card" href={url(`${subject}/ap/`)}>
-        <h3>AP topics</h3>
-        <p class="small muted">AP exam order, with what the class has covered and what the textbook skips.</p>
-      </a>
-      <a class="card" href={url(`${subject}/practice/`)}>
-        <h3>Practice</h3>
-        <p class="small muted">Build a set of questions by chapter, topic, test, or difficulty, then check your answers.</p>
-      </a>
-      <a class="card" href={url(`${subject}/frqs/`)}>
-        <h3>Past AP FRQs</h3>
-        <p class="small muted">Released exam questions, marked by which ones you're ready for.</p>
-      </a>
-    </div>
-  </section>
 </Base>
 
 <style>
@@ -293,8 +294,37 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   .test .actions {
     margin-bottom: 0.25rem;
   }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+  .section-head a {
+    font-weight: 600;
+  }
   .chapter-card h3 {
     font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+  /* Two wide cards rather than three narrow ones, matching the cards above. */
+  .lesson-cards {
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+  .notes-line a {
+    white-space: nowrap;
+  }
+  .lesson-links li {
+    padding: 0.15rem 0;
+  }
+  .lesson-links a {
+    font-weight: 600;
+  }
+  .notes-line,
+  .practice-line {
+    margin-top: 0.5rem !important;
   }
   .chapter-card h3 a {
     text-decoration: none;
@@ -372,8 +402,5 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   .mk.gap {
     background: var(--surface-2);
     color: var(--text-2);
-  }
-  .map h3 {
-    color: var(--link);
   }
 </style>

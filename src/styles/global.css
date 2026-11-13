@@ -113,6 +113,17 @@ a {
   text-underline-offset: 0.15em;
 }
 
+/* `hidden` wins over component display rules (cards, flex rows). */
+[hidden] {
+  display: none !important;
+}
+
+/* Checkboxes and radio buttons in the site's colour, not the browser's blue. */
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent);
+}
+
 a:hover {
   text-decoration-thickness: 2px;
 }

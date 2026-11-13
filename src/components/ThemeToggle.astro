@@ -2,7 +2,7 @@
 // Cycles system -> light -> dark. "System" follows prefers-color-scheme.
 ---
 
-<button class="theme-toggle" type="button" aria-label="Color theme: system" title="Color theme">
+<button class="theme-toggle" type="button" aria-label="Color theme: Auto. Switch to Light" title="Color theme: Auto (click for Light)">
   <span aria-hidden="true">◐</span> <span class="label">Auto</span>
 </button>
 
@@ -23,8 +23,11 @@
       if (theme === 'system') localStorage.removeItem('theme');
       else localStorage.setItem('theme', theme);
     } catch {}
+    // Shows the current theme; the label and tooltip say what a click switches to.
+    const next = labels[order[(order.indexOf(theme) + 1) % order.length]!];
     for (const btn of document.querySelectorAll<HTMLButtonElement>('.theme-toggle')) {
-      btn.setAttribute('aria-label', `Color theme: ${labels[theme]}`);
+      btn.setAttribute('aria-label', `Color theme: ${labels[theme]}. Switch to ${next}`);
+      btn.title = `Color theme: ${labels[theme]} (click for ${next})`;
       btn.querySelector('.label')!.textContent = labels[theme];
     }
   }

@@ -1,7 +1,17 @@
 ---
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, getSubjectData, nextChapter, subjectPaths, testsByDate, url } from '../../../lib/content';
+import {
+  formatDate,
+  getLessons,
+  getQuestions,
+  getSubjectData,
+  isClassContent,
+  nextChapter,
+  subjectPaths,
+  testsByDate,
+  url,
+} from '../../../lib/content';
 
 export const getStaticPaths = subjectPaths;
 
@@ -16,14 +26,18 @@ const current = new Set(progress.current);
 const next = current.size ? undefined : nextChapter(data);
 const tests = testsByDate(data);
 
-/** "AP Units 3, 5 · 1 lesson · 6 questions", leaving out zero counts. */
+/** "AP Units 3, 5 · 1 lesson · 6 questions", leaving out zero counts. Sample pages are counted as such. */
 const meta = (n: number, apUnits: string[]) => {
-  const l = lessons.filter((x) => x.data.chapter === n).length;
-  const q = questions.filter((x) => x.data.chapter === n).length;
+  const ls = lessons.filter((x) => x.data.chapter === n);
+  const qs = questions.filter((x) => x.data.chapter === n);
+  const l = ls.filter((x) => isClassContent(data, x)).length;
+  const q = qs.filter((x) => isClassContent(data, x)).length;
   return [
     apUnits.length ? `AP Unit${apUnits.length > 1 ? 's' : ''} ${apUnits.join(', ')}` : 'Not on the AP exam',
     l && plural(l, 'lesson'),
     q && plural(q, 'question'),
+    ls.length - l && plural(ls.length - l, 'sample page'),
+    qs.length - q && plural(qs.length - q, 'sample question'),
   ]
     .filter(Boolean)
     .join(' · ');
@@ -34,7 +48,7 @@ const meta = (n: number, apUnits: string[]) => {
   <h1>Chapters</h1>
   <p class="muted prose">
     Class order, following <em>{data.subject.textbook}</em>. Open a chapter for its lessons, classmates' notes, AP topics,
-    and practice.
+    and practice, or see <a href={url(`${subject}/lessons/`)}>every lesson</a> on one page.
   </p>
 
   {tests.length > 0 && (
@@ -62,7 +76,8 @@ const meta = (n: number, apUnits: string[]) => {
     {data.chapters.map((c) => {
       const done = progress.chapters.has(c.number);
       const isNow = current.has(c.number) || c === next;
-      const hasContent = lessons.some((l) => l.data.chapter === c.number) || questions.some((q) => q.data.chapter === c.number);
+      // Only class material counts: sample pages for later chapters don't make a chapter stand out.
+      const hasContent = [...lessons, ...questions].some((x) => x.data.chapter === c.number && isClassContent(data, x));
       return (
         <li class:list={{ done, now: isNow, empty: !hasContent }}>
           <ProgressMark status={done ? 'done' : null} compact doneLabel="Finished in class" />

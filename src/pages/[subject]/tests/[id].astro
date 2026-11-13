@@ -32,7 +32,7 @@ const others = lessons.filter((l) => l.data.kind !== 'review');
 const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)!, lessons: others.filter((l) => l.data.chapter === n) }));
 ---
 
-<Base title={test.title} subject={subject} searchable>
+<Base title={test.title} subject={subject} searchable searchMeta={{ type: 'Class test' }}>
   <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
     <a href={url(`${subject}/tests/`)}>Class tests</a> /
   </nav>

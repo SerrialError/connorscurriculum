@@ -4,25 +4,34 @@
 # Constants are not given on the class test: h = 6.626e-34 J·s, c = 2.998e8 m/s,
 # 2.18e-18 J (Bohr), 6.022e23 /mol.
 
-- id: apchem-06-em-spectrum-order
+- id: apchem-06-wavelength-energy-order
   type: mcq
   subject: apchem
   chapter: 6
-  sections: ["6.1"]
-  cedTopics: ["3.11"]
+  sections: ["6.1", "6.2"]
+  cedTopics: ["3.12"]
   difficulty: 1
   authors: ["Claude"]
   prompt: |
-    Which list puts the types of radiation in order of **increasing wavelength**?
+    Four photons have these wavelengths:
+
+    | Photon | W | X | Y | Z |
+    |---|---|---|---|---|
+    | $\lambda$ (m) | $1.5 \times 10^{-1}$ | $8.0 \times 10^{-6}$ | $4.5 \times 10^{-7}$ | $2.0 \times 10^{-10}$ |
+
+    Which list puts them in order of **increasing energy**?
   choices:
-    - { id: a, text: "radio, microwave, visible, X-ray" }
-    - { id: b, text: "X-ray, ultraviolet, infrared, microwave" }
-    - { id: c, text: "visible, ultraviolet, infrared, radio" }
-    - { id: d, text: "gamma, infrared, ultraviolet, radio" }
-  answer: b
+    - { id: a, text: "W, X, Y, Z" }
+    - { id: b, text: "Z, Y, X, W" }
+    - { id: c, text: "W, Y, X, Z" }
+    - { id: d, text: "W, Z, Y, X" }
+  answer: a
   explanation: |
-    From shortest to longest wavelength the spectrum runs gamma → X-ray → ultraviolet → visible → infrared → microwave → radio.
-    Choice (b) follows that order. Choice (a) is reversed, and (c) and (d) each swap ultraviolet with a neighbor.
+    $E = hc/\lambda$, so the **longer** the wavelength, the **lower** the energy. Increasing energy means decreasing wavelength:
+    W ($10^{-1}$ m) > X ($10^{-6}$ m) > Y ($10^{-7}$ m) > Z ($10^{-10}$ m) in wavelength, so W, X, Y, Z in energy.
+    (b) is the order of increasing **wavelength**. (c) treats $4.5 \times 10^{-7}$ as longer than $8.0 \times 10^{-6}$; compare the exponents first.
+    (d) sorts by the numbers in front (1.5, 2.0, 4.5, 8.0) and ignores the powers of ten.
+    You don't need to know which region of the spectrum each one is in; the numbers are enough.
 
 - id: apchem-06-frequency-from-wavelength
   type: mcq
@@ -120,17 +129,17 @@
   difficulty: 2
   authors: ["Claude"]
   prompt: |
-    Orange light shines on a metal surface and no electrons are ejected. Which change is **most likely** to cause electrons to be ejected?
+    Orange light with a wavelength of 610 nm shines on a metal surface and no electrons are ejected. Which change is **most likely** to cause electrons to be ejected?
   choices:
-    - { id: a, text: "Making the orange light much brighter" }
-    - { id: b, text: "Shining the orange light on the metal for a longer time" }
-    - { id: c, text: "Switching to infrared light" }
-    - { id: d, text: "Switching to ultraviolet light" }
+    - { id: a, text: "Making the 610 nm light much brighter" }
+    - { id: b, text: "Shining the 610 nm light on the metal for a longer time" }
+    - { id: c, text: "Switching to light with a wavelength of 950 nm" }
+    - { id: d, text: "Switching to light with a wavelength of 250 nm" }
   answer: d
   explanation: |
     One photon gives its energy to one electron, so each photon has to carry enough energy by itself.
-    Brighter light or a longer time just delivers more orange photons that are each still too weak.
-    Ultraviolet photons have a shorter wavelength and so **more** energy per photon ($E = hc/\lambda$). Infrared photons have **less** energy than orange ones.
+    Brighter light or a longer time just delivers more 610 nm photons that are each still too weak.
+    By $E = hc/\lambda$, a **shorter** wavelength means **more** energy per photon. A 250 nm photon has $610/250 \approx 2.4$ times the energy of a 610 nm photon, while a 950 nm photon has **less** energy than a 610 nm one.
 
 - id: apchem-06-ir-absorption
   type: mcq
@@ -220,17 +229,19 @@
   difficulty: 2
   authors: ["Claude"]
   prompt: |
-    What is the energy of the electron in a hydrogen atom in the $n = 3$ level?
+    What is the **magnitude** of the energy of the electron in a hydrogen atom in the $n = 3$ level?
   choices:
-    - { id: a, text: '$-2.42 \times 10^{-19}\ \text{J}$' }
-    - { id: b, text: '$+2.42 \times 10^{-19}\ \text{J}$' }
-    - { id: c, text: '$-7.27 \times 10^{-19}\ \text{J}$' }
-    - { id: d, text: '$-1.96 \times 10^{-17}\ \text{J}$' }
+    - { id: a, text: '$2.42 \times 10^{-19}\ \text{J}$' }
+    - { id: b, text: '$7.27 \times 10^{-19}\ \text{J}$' }
+    - { id: c, text: '$1.96 \times 10^{-17}\ \text{J}$' }
+    - { id: d, text: '$2.18 \times 10^{-18}\ \text{J}$' }
   answer: a
   explanation: |
     $$E_3 = -2.18 \times 10^{-18}\ \text{J}\left(\frac{1}{3^2}\right) = -2.42 \times 10^{-19}\ \text{J}$$
 
-    The energy is negative because the electron is bound to the nucleus. (c) divides by 3 instead of $3^2$, and (d) multiplies by 9.
+    The magnitude is $2.42 \times 10^{-19}$ J. (b) divides by 3 instead of $3^2$, (c) multiplies by 9, and (d) is the $n = 1$ value (forgot to divide).
+
+    **Sign:** the physically correct value is negative, because the bound electron has less energy than a free one. For the energy of a **single level**, the teacher grades the magnitude and doesn't care about the sign. For a **change** between levels, $\Delta E$, the sign matters: negative means a photon is emitted, positive means one is absorbed.
 
 - id: apchem-06-bohr-wavelength
   type: mcq

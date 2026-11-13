@@ -3,7 +3,7 @@ import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, subjectIds, url } from '../../../lib/content';
+import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
 import { matchFrqs } from '../../../lib/frqs';
 
 export function getStaticPaths() {
@@ -33,7 +33,7 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 ---
 
 <Base title={`${topicId} ${topic.title}`} subject={subject} searchable>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
+  <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
     <a href={url(`${subject}/ap/`)}>AP topics</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a> /
   </nav>
   <h1>{topicId} {topic.title}</h1>
@@ -55,9 +55,12 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
     </aside>
   )}
 
-  <div class="actions">
+  <div class="actions" data-pagefind-ignore>
     {c.questions > 0 ? (
-      <a class="button" href={practiceHref(subject, { topic: [topicId] })}>Practice this topic ({c.questions})</a>
+      <>
+        <a class="button" href={practiceStart(subject, { topic: [topicId] }, c.questions).href}>{practiceStart(subject, { topic: [topicId] }, c.questions).label}</a>
+        <a class="button secondary" href={practiceHref(subject, { topic: [topicId] })}>Choose filters ({plural(c.questions, 'question')})</a>
+      </>
     ) : (
       <p class="small muted">No practice questions on this topic yet.{frqMatches.length > 0 && ' Try the past AP FRQs below.'}</p>
     )}

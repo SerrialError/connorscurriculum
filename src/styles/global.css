@@ -191,11 +191,16 @@ th {
 
 /* A table that still scrolls sideways fades at the edge(s) with more columns, so it's clear there's more. */
 @supports (animation-timeline: scroll()) {
-  table {
+  /* The section nav and long display equations too, on screens too narrow for them. */
+  table,
+  .subnav,
+  .katex-display {
     animation: scroll-fade linear both;
   }
   /* A separate rule after the shorthand (which resets the timeline), so minifiers can't fold it in. */
-  html table {
+  html table,
+  html .subnav,
+  html .katex-display {
     animation-timeline: scroll(self inline);
   }
   @keyframes scroll-fade {

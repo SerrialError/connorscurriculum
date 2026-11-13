@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import type { APIRoute, GetStaticPaths, ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import { type Question, getQuestions, getSubjectData, subjectPaths, topicIds } from '../../../lib/content';
-import { renderInlineMarkdown, renderMarkdown } from '../../../lib/markdown';
+import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../../../lib/markdown';
 import type { PracticeQuestion } from '../../../lib/practice';
 
 export const getStaticPaths = subjectPaths satisfies GetStaticPaths;
@@ -39,6 +39,7 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
     units: [...new Set(cedTopics.map((t) => data.topics.get(t)!.unitId))],
     difficulty: q.data.difficulty,
     promptHtml: await renderMarkdown(q.data.prompt),
+    promptText: await renderPlainText(q.data.prompt),
     image: await questionImage(q),
     explanationHtml: await renderMarkdown(q.data.explanation),
   };

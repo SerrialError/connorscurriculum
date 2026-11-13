@@ -80,15 +80,15 @@ const exams = data.pastFrqs;
       ))}
 
       <p class="small muted source">
-        Questions © College Board, linked from AP Central. Topic tags are our own and may be imperfect; if one looks wrong,
-        fix it in <code>src/data/{subject}/past-frqs.json</code>.
+        Questions © College Board, linked from AP Central. The topic tags are ours, so a few may be off.
       </p>
     </>
   )}
 </Base>
 
 <script>
-  // "Only ready": hide questions you're not ready for, and exam years left empty.
+  // "Only ready": hide questions you're not ready for, and exam years left empty. The choice is
+  // kept in the address (?ready=1), so a reload or a shared link keeps it.
   const toggle = document.querySelector<HTMLInputElement>('#ready-only');
   const apply = () => {
     const only = !!toggle?.checked;
@@ -105,8 +105,34 @@ const exams = data.pastFrqs;
       a.hidden = !!exam?.hidden;
     }
   };
-  toggle?.addEventListener('change', apply);
+  const save = () => {
+    const u = new URL(location.href);
+    if (toggle?.checked) u.searchParams.set('ready', '1');
+    else u.searchParams.delete('ready');
+    history.replaceState(history.state, '', u);
+  };
+  /** A link (or address) pointing at a question the filter hides turns the filter off first. */
+  const reveal = (id: string) => {
+    const target = id && document.getElementById(id);
+    if (!toggle?.checked || !target || !target.closest('[hidden]')) return;
+    toggle.checked = false;
+    apply();
+    save();
+  };
+  if (toggle) {
+    toggle.checked = new URLSearchParams(location.search).get('ready') === '1';
+    toggle.addEventListener('change', () => {
+      apply();
+      save();
+    });
+  }
   apply();
+  reveal(decodeURIComponent(location.hash.slice(1)));
+  if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+    if (a) reveal(decodeURIComponent(a.hash.slice(1)));
+  });
 </script>
 
 <style>

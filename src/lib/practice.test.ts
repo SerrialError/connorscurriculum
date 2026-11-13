@@ -15,6 +15,7 @@ import {
   isCorrect,
   parseFilters,
   recordResult,
+  amendLastResult,
   seededRng,
   selectQuestions,
   sessionSize,
@@ -35,6 +36,7 @@ const mcq = (id: string, over: Partial<McqQuestion> = {}): McqQuestion => ({
   units: ['5'],
   difficulty: 1,
   promptHtml: '',
+  promptText: '',
   explanationHtml: '',
   choices: [
     { id: 'a', html: 'A' },
@@ -53,6 +55,7 @@ const frq: FrqQuestion = {
   units: ['7'],
   difficulty: 3,
   promptHtml: '',
+  promptText: '',
   explanationHtml: '',
   parts: [
     { label: 'a', promptHtml: '', points: 2, scoringHtml: ['x', 'y'] },
@@ -269,5 +272,14 @@ describe('topicBreakdown', () => {
       { key: '5.1', score: 1, count: 1 },
     ]);
     expect(topicBreakdown(questions, { q3: 0 })).toEqual([{ key: 'chapter-13', score: 0, count: 1 }]);
+  });
+});
+
+describe('amendLastResult', () => {
+  it('replaces the latest score instead of adding one', () => {
+    expect(amendLastResult({ q: [1, 0.5] }, 'q', 1)).toEqual({ q: [1, 1] });
+  });
+  it('records a score when there is none yet', () => {
+    expect(amendLastResult({}, 'q', 0.25)).toEqual({ q: [0.25] });
   });
 });

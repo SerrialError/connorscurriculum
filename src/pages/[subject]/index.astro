@@ -15,6 +15,7 @@ import {
   nextChapter,
   pastFrqLinks,
   practiceHref,
+  practiceStart,
   subjectPaths,
   testsByDate,
   url,
@@ -92,7 +93,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
               ) : (
                 <>
                   <span class="muted">{[c.lessons && plural(c.lessons, 'lesson'), c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
-                  {c.questions > 0 && <a href={practiceHref(subject, { chapter: [c.chapter.number] })}>Practice</a>}
+                  {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
                 </>
               )}
               {c.frqParts > 0 && (
@@ -125,7 +126,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
         )}
         <div class="actions">
           {testQuestions > 0 && (
-            <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Practice for this test ({testQuestions})</a>
+            <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Start all {testQuestions} test questions</a>
           )}
           <a class="button secondary" href={url(`${subject}/tests/${test.id}/`)}>Lessons and topics</a>
         </div>
@@ -150,7 +151,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
             </p>
             <p class="small links">
               <a href={url(`${subject}/chapters/${c.chapter.number}/#lessons`)}>Lessons</a>
-              {c.questions > 0 && <a href={practiceHref(subject, { chapter: [c.chapter.number] })}>Practice</a>}
+              {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
             </p>
           </div>
         ))}

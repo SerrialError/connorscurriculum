@@ -4,6 +4,7 @@ import '../styles/global.css';
 import Search from '../components/Search.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getSubjectData, url } from '../lib/content';
+import { loadRegistry } from '../lib/registry';
 import { SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 interface Props {
@@ -40,6 +41,9 @@ const matches = (n: NavItem) =>
   n.exact ? path === n.href : [n.href, ...(n.also ?? [])].some((h) => path.startsWith(h));
 const isCurrent = (n: NavItem) => (section ? n.label === section : matches(n));
 const onHome = subject !== undefined && path === url(`${subject}/`);
+// One class: the site's home is that class ("/" redirects there), and there's no class list to link to.
+const subjectIds = [...loadRegistry().keys()];
+const siteHome = subjectIds.length === 1 ? url(`${subjectIds[0]}/`) : url();
 ---
 
 <!doctype html>
@@ -62,7 +66,7 @@ const onHome = subject !== undefined && path === url(`${subject}/`);
     <a class="skip" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap bar">
-        <a class:list={['brand', { 'has-subject': !!subjectData }]} href={url()}>{SITE_NAME}</a>
+        <a class:list={['brand', { 'has-subject': !!subjectData }]} href={siteHome}>{SITE_NAME}</a>
         {subjectData && (
           <a class="subject" href={url(`${subject}/`)} aria-current={onHome ? 'page' : undefined}>
             <svg class="home-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
@@ -102,13 +106,13 @@ const onHome = subject !== undefined && path === url(`${subject}/`);
     <dialog class="search-dialog" aria-label="Search">
       <div class="search-dialog-head">
         <strong>Search{subjectData && ` ${subjectData.subject.name}`}</strong>
-        <button class="icon-button search-close" type="button" aria-label="Close search">✕</button>
+        <button class="icon-button search-close" type="button" aria-keyshortcuts="Escape">Close <kbd>Esc</kbd></button>
       </div>
       <Search id="header-search" placeholder="Lessons, chapters, AP topics…" />
     </dialog>
     <main id="main" class="wrap" tabindex="-1" data-pagefind-body={searchable ? '' : undefined}>
       {searchable && (
-        <div hidden>
+        <div hidden data-pagefind-ignore>
           <span data-pagefind-meta="title">{title}</span>
           {subjectData && <span data-pagefind-meta="subject">{subjectData.subject.name}</span>}
           {searchMeta.chapter && <span data-pagefind-meta="chapter">{searchMeta.chapter}</span>}
@@ -118,7 +122,7 @@ const onHome = subject !== undefined && path === url(`${subject}/`);
     </main>
     <footer class="site-footer wrap small muted">
       <p>
-        <a href={url()}>All classes</a> · <a href={url('admin/')}>Write a lesson</a>
+        {subjectIds.length > 1 && <><a href={url()}>All classes</a> · </>}<a href={url('admin/')}>Write a lesson</a>
       </p>
       <p>
         Not affiliated with or endorsed by College Board or Pearson. AP® is a registered trademark of College Board.
@@ -311,6 +315,16 @@ const onHome = subject !== undefined && path === url(`${subject}/`);
       display: inline;
     }
   }
+  /* The smallest phones: tighter links so all five fit without scrolling. */
+  @media (max-width: 380px) {
+    .subnav {
+      padding-left: calc(1rem - 0.3rem);
+    }
+    .subnav a {
+      font-size: 0.82rem;
+      padding-inline: 0.28rem;
+    }
+  }
   .search-dialog {
     width: min(40rem, calc(100vw - 1.5rem));
     max-height: min(80vh, 40rem);
@@ -324,6 +338,19 @@ const onHome = subject !== undefined && path === url(`${subject}/`);
   }
   .search-dialog::backdrop {
     background: rgb(0 0 0 / 0.35);
+  }
+  .search-close kbd {
+    font: inherit;
+    font-size: 0.72rem;
+    padding: 0 0.3rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+  }
+  @media (hover: none), (pointer: coarse) {
+    .search-close kbd {
+      display: none;
+    }
   }
   .search-dialog-head {
     display: flex;

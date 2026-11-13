@@ -3,7 +3,7 @@ import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, subjectIds, url } from '../../../lib/content';
+import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
 import { matchFrqs } from '../../../lib/frqs';
 
 export function getStaticPaths() {
@@ -43,9 +43,9 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
 ---
 
 <Base title={chapterLabel} subject={subject} searchable searchMeta={{ chapter: chapterLabel }}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${subject}/chapters/`)}>Chapters</a> /</nav>
+  <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore><a href={url(`${subject}/chapters/`)}>Chapters</a> /</nav>
   <h1>{chapterLabel}</h1>
-  <div class="badges status">
+  <div class="badges status" data-pagefind-ignore>
     {finished && <ProgressMark status="done" doneLabel="Finished in class" />}
     {current && <span class="badge now">● Now in class</span>}
     {chapter.apUnits.map((u) => (
@@ -56,9 +56,14 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
     {chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
   </div>
 
-  <div class="actions">
+  <div class="actions" data-pagefind-ignore>
     {questionCount > 0 && (
-      <a class="button" href={practiceHref(subject, { chapter: [chapter.number] })}>Practice this chapter ({questionCount})</a>
+      <>
+        <a class="button" href={practiceStart(subject, { chapter: [chapter.number] }, questionCount).href}>
+          {practiceStart(subject, { chapter: [chapter.number] }, questionCount).label}
+        </a>
+        <a class="button secondary" href={practiceHref(subject, { chapter: [chapter.number] })}>Choose filters ({questionCount} questions)</a>
+      </>
     )}
     {tests.map((t) => (
       <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>

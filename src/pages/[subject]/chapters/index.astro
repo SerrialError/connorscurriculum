@@ -62,8 +62,9 @@ const meta = (n: number, apUnits: string[]) => {
     {data.chapters.map((c) => {
       const done = progress.chapters.has(c.number);
       const isNow = current.has(c.number) || c === next;
+      const hasContent = lessons.some((l) => l.data.chapter === c.number) || questions.some((q) => q.data.chapter === c.number);
       return (
-        <li class:list={{ done, now: isNow }}>
+        <li class:list={{ done, now: isNow, empty: !hasContent }}>
           <ProgressMark status={done ? 'done' : null} compact doneLabel="Finished in class" />
           <span class="num">{c.number}</span>
           <div class="info">
@@ -115,11 +116,15 @@ const meta = (n: number, apUnits: string[]) => {
     padding-inline: 1rem;
     background: var(--accent-soft);
   }
+  /* Chapters with lessons or questions stand out; the rest are listed for reference. */
   .info a {
-    font-weight: 600;
+    font-weight: 700;
   }
-  .done .info a {
-    font-weight: 500;
+  .empty .info a {
+    font-weight: 400;
+  }
+  .empty:not(.now) .info a {
+    color: var(--text-2);
   }
   .num {
     font-weight: 700;

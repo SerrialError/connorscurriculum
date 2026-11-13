@@ -3,6 +3,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
 import { type FrqLink, flattenFrqs } from './frqs';
+import { DEFAULT_COUNT } from './practice';
 import { topicIdFromRef } from './validate';
 
 export type Lesson = CollectionEntry<'lessons'>;
@@ -73,7 +74,27 @@ export function inTest(test: SubjectData['tests'][number], entry: Lesson | Quest
   return test.sections.length === 0 || entry.data.sections.some((s) => test.sections.includes(s));
 }
 
-export function practiceHref(subject: string, query: Record<string, string | string[] | number[]>): string {
+/**
+ * Practice links follow one rule across the site:
+ * - a "Start …" button (practiceStart) begins a set right away (?start=1);
+ * - a "Choose filters" link (practiceHref without start) opens the setup screen with those
+ *   filters already picked, and nothing starts until the student presses Start practice.
+ */
+export function practiceStart(
+  subject: string,
+  query: { chapter?: number[]; topic?: string[] },
+  total: number,
+  /** Appended to the label, e.g. "on these topics". */
+  about = '',
+): { href: string; label: string } {
+  const what = total <= DEFAULT_COUNT ? `Start all ${total} question${total === 1 ? '' : 's'}` : `Start ${DEFAULT_COUNT} random questions`;
+  return {
+    href: practiceHref(subject, { ...query, mode: 'random', n: String(DEFAULT_COUNT), start: '1' }),
+    label: about ? `${what} ${about}` : what,
+  };
+}
+
+export function practiceHref(subject: string, query: Record<string, string | string[] | number[] | undefined>): string {
   const p = new URLSearchParams();
   for (const [k, v] of Object.entries(query)) {
     const s = Array.isArray(v) ? v.join(',') : v;

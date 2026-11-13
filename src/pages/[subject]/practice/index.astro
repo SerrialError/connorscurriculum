@@ -15,6 +15,7 @@ const chapters = data.chapters.map((c) => ({
   title: c.title,
   hasQuestions: chapterNumbers.has(c.number),
   current: current.has(c.number),
+  finished: data.progress.chapters.has(c.number),
 }));
 const units = data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) }));
 const frqs = pastFrqLinks(data);

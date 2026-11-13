@@ -14,6 +14,7 @@ import {
   inTest,
   lessonSlug,
   practiceHref,
+  practiceStart,
   subjectIds,
   topicIds,
   url,
@@ -52,11 +53,19 @@ const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
 const questions = await getQuestions(subject);
 const topicQuestions = questions.filter((q) => topicIds(q).some((t) => topics.includes(t))).length;
 const chapterQuestions = questions.filter((q) => q.data.chapter === chapter.number).length;
-const practice = topicQuestions
-  ? { href: practiceHref(subject, { topic: topics }), label: `Practice these topics (${topicQuestions})` }
-  : chapterQuestions
-    ? { href: practiceHref(subject, { chapter: [chapter.number] }), label: `Practice Chapter ${chapter.number} (${chapterQuestions})` }
-    : null;
+const practiceQuery: { topic?: string[]; chapter?: number[] } = topicQuestions ? { topic: topics } : { chapter: [chapter.number] };
+const practiceCount = topicQuestions || chapterQuestions;
+const practice = practiceCount
+  ? {
+      start: practiceStart(
+        subject,
+        practiceQuery,
+        practiceCount,
+        topicQuestions ? (topics.length === 1 ? 'on this topic' : 'on these topics') : `from Chapter ${chapter.number}`,
+      ),
+      setup: practiceHref(subject, practiceQuery),
+    }
+  : null;
 const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
 // A test review sheet belongs to its test: link to the test and practice the whole test, not
 // just the sheet's topics, and leave out the chapter's previous/next lessons.
@@ -65,7 +74,7 @@ const testHref = test && url(`${subject}/tests/${test.id}/`);
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 const testPractice =
   test && testQuestions
-    ? { href: practiceHref(subject, { test: test.id, start: '1' }), label: `Practice for this test (${testQuestions})` }
+    ? { href: practiceHref(subject, { test: test.id, start: '1' }), label: `Start all ${testQuestions} test questions` }
     : null;
 ---
 
@@ -78,7 +87,7 @@ const testPractice =
   section={test ? 'Tests' : undefined}
 >
   <article class="prose">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
       {test ? (
         <>
           <a href={url(`${subject}/tests/`)}>Class tests</a> / <a href={testHref}>{test.title}</a> /
@@ -96,17 +105,17 @@ const testPractice =
     </h1>
     <TopicBadges subject={subject} topics={topics} />
     <TopicLegend subject={subject} topics={topics} />
-    <p class="small muted">By {lesson.data.authors.join(', ')}</p>
+    <p class="small muted" data-pagefind-ignore>By {lesson.data.authors.join(', ')}</p>
     {test && (
       <p class="test-note">
         Review sheet for the <a href={testHref}>{test.title}</a>.
-        {testPractice && <> When you're done, <a href={testPractice.href}>practice for the test ({testQuestions} questions)</a>.</>}
+        {testPractice && <> When you're done, <a href={testPractice.href}>start the test's {testQuestions} practice questions</a>.</>}
       </p>
     )}
 
     <Content components={{ YouTube, Callout, Reveal }} />
 
-    <footer class="lesson-footer">
+    <footer class="lesson-footer" data-pagefind-ignore>
       {test ? (
         <div class="actions">
           {testPractice && <a class="button" href={testPractice.href}>{testPractice.label}</a>}
@@ -115,7 +124,12 @@ const testPractice =
       ) : (
         <>
           <div class="actions">
-            {practice && <a class="button" href={practice.href}>{practice.label}</a>}
+            {practice && (
+              <>
+                <a class="button" href={practice.start.href}>{practice.start.label}</a>
+                <a class="button secondary" href={practice.setup}>Choose filters</a>
+              </>
+            )}
             <a class="button secondary" href={url(`${subject}/chapters/${chapter.number}/#lessons`)}>All Chapter {chapter.number} lessons</a>
           </div>
           <nav class="pager" aria-label="Lessons in this chapter">

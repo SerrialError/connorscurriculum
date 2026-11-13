@@ -16,6 +16,7 @@
     DEFAULT_COUNT,
     MAX_COUNT,
     activeFilterCount,
+    amendLastResult,
     countWith,
     emptyFilters,
     filterQuestions,
@@ -46,7 +47,7 @@
   interface Props {
     subject: string;
     questionsUrl: string;
-    chapters: { number: number; title: string; hasQuestions: boolean; current: boolean }[];
+    chapters: { number: number; title: string; hasQuestions: boolean; current: boolean; finished: boolean }[];
     units: { id: string; title: string; topics: { id: string; title: string }[] }[];
     tests: PracticeTest[];
     /** Released AP FRQs with per-part topic tags. */
@@ -122,6 +123,8 @@
   let orderChosen = $state(false);
   /** Reviewing a question from the results screen: Back (and "Back to results") return there. */
   let reviewing = $state(false);
+  /** "Clear history" was pressed once; the inline confirmation is showing. */
+  let confirmClear = $state(false);
 
   // Per-question answer state, keyed by question id.
   let picks = $state<Record<string, string>>({});
@@ -215,15 +218,30 @@
     writeJson(savedKey, saved);
   });
 
+  /**
+   * What a history entry holds. Setup entries have no state. A set's entries remember their phase
+   * and how many entries above the setup entry they are (1 for the set or its results, 2 when
+   * reviewing a question from the results), so reload and Forward return to the set, and
+   * "← Filters" can go back to the setup entry instead of adding one.
+   */
+  type NavState = { phase: 'session' | 'results'; depth: number; reviewing?: boolean } | null;
+  const navState = (): NavState => {
+    const st = window.history.state as NavState;
+    return st && (st.phase === 'session' || st.phase === 'results') ? st : null;
+  };
+
   onMount(() => {
     setFilters(parseFilters(location.search));
     history = readJson<History>(historyKey, {});
     const onPop = (e: PopStateEvent) => {
-      const p = (e.state as { phase?: Phase } | null)?.phase;
-      if (p === 'results' && session.length) {
-        reviewing = false;
+      let st = (e.state as NavState) ?? null;
+      // Forward into a set after a reload: the set is in storage, not in memory.
+      if (st && session.length === 0 && !restoreSaved()) st = null;
+      if (st?.phase === 'results') {
         if (phase !== 'results') void showResults(false);
-      } else if (p === 'session' && session.length) {
+        reviewing = false;
+      } else if (st?.phase === 'session') {
+        reviewing = !!st.reviewing;
         phase = 'session';
         void showQuestion();
       } else {
@@ -231,6 +249,7 @@
         phase = 'setup';
         setFilters(parseFilters(location.search));
         offerResume();
+        void tick().then(() => window.scrollTo({ top: 0 }));
       }
     };
     window.addEventListener('popstate', onPop);
@@ -243,6 +262,19 @@
       const res = await fetch(questionsUrl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       all = (await res.json()) as PracticeQuestion[];
+      // Reloading during a set (or its results) comes back to the same place.
+      const st = navState();
+      if (st && restoreSaved()) {
+        if (st.phase === 'results') {
+          await showResults(false);
+        } else {
+          reviewing = !!st.reviewing;
+          phase = 'session';
+          await showQuestion();
+        }
+        return;
+      }
+      if (st) history_replace(location.search, null);
       offerResume();
       // Links like "Random 10" on a test page are a complete set: start it right away. The setup
       // screen (with those filters) stays one Back press away.
@@ -255,16 +287,43 @@
     }
   }
 
-  function offerResume() {
+  /** The saved set, if its questions all still exist. */
+  function readSaved(): Saved | null {
     const saved = readJson<Saved | null>(savedKey, null);
-    if (!saved || !all || !Array.isArray(saved.ids)) return void (resumable = null);
-    const byId = new Map(all.map((q) => [q.id, q]));
-    const done = saved.ids.filter((id) => saved.checked?.[id] || saved.finished?.[id]).length;
-    // Only offer sets that are still unfinished and whose questions all still exist.
-    resumable = saved.phase === 'session' && done < saved.ids.length && saved.ids.every((id) => byId.has(id)) ? saved : null;
+    if (!saved || !all || !Array.isArray(saved.ids) || saved.ids.length === 0) return null;
+    const ids = new Set(all.map((q) => q.id));
+    return saved.ids.every((id) => ids.has(id)) ? saved : null;
   }
 
-  function history_replace(query: string, state: { phase: Phase } | null) {
+  function offerResume() {
+    const saved = readSaved();
+    const done = saved ? saved.ids.filter((id) => saved.checked?.[id] || saved.finished?.[id]).length : 0;
+    // Only offer sets that are still unfinished.
+    resumable = saved && saved.phase === 'session' && done < saved.ids.length ? saved : null;
+  }
+
+  /** Load the saved set into memory, if it belongs to this URL (the set's own history entry). */
+  function restoreSaved(): boolean {
+    const s = readSaved();
+    if (!s || s.query !== location.search) return false;
+    applySaved(s);
+    return true;
+  }
+
+  function applySaved(s: Saved) {
+    const byId = new Map(all!.map((q) => [q.id, q]));
+    session = s.ids.map((id) => byId.get(id)!);
+    sessionQuery = s.query;
+    picks = s.picks ?? {};
+    checked = s.checked ?? {};
+    revealed = s.revealed ?? {};
+    marks = s.marks ?? {};
+    finished = s.finished ?? {};
+    index = Math.min(Math.max(0, s.index), session.length - 1);
+    resumable = null;
+  }
+
+  function history_replace(query: string, state: NavState) {
     window.history.replaceState(state, '', location.pathname + query);
   }
 
@@ -291,9 +350,10 @@
     resetAnswers();
     resumable = null;
     reviewing = false;
-    // A history entry per set, so the browser's Back button returns to the filters.
-    if (phase === 'setup') window.history.pushState({ phase: 'session' }, '', location.pathname + query);
-    else history_replace(query, { phase: 'session' });
+    // A history entry per set, so the browser's Back button returns to the filters. A new set
+    // from the results takes the results' place.
+    if (phase === 'setup') window.history.pushState({ phase: 'session', depth: 1 } satisfies NavState, '', location.pathname + query);
+    else history_replace(query, { phase: 'session', depth: navState()?.depth ? 1 : 0 });
     phase = 'session';
     await showQuestion();
   }
@@ -301,6 +361,15 @@
   function start() {
     if (!all || matching.length === 0) return;
     void begin(selectQuestions(matching, filters, history), filtersToQuery(filters));
+  }
+
+  /** Quick start: begin a ready-made set without touching the filters on the setup screen. */
+  function startPreset(query: string) {
+    if (!all) return;
+    const f = parseFilters(query);
+    const qs = filterQuestions(all, f, tests);
+    if (qs.length === 0) return;
+    void begin(selectQuestions(qs, f, history), filtersToQuery(f));
   }
 
   function newSetSameFilters() {
@@ -315,18 +384,9 @@
 
   async function resume() {
     if (!resumable || !all) return;
-    const byId = new Map(all.map((q) => [q.id, q]));
     const s = resumable;
-    session = s.ids.map((id) => byId.get(id)!);
-    sessionQuery = s.query;
-    picks = s.picks ?? {};
-    checked = s.checked ?? {};
-    revealed = s.revealed ?? {};
-    marks = s.marks ?? {};
-    finished = s.finished ?? {};
-    index = Math.min(Math.max(0, s.index), session.length - 1);
-    resumable = null;
-    window.history.pushState({ phase: 'session' }, '', location.pathname + s.query);
+    applySaved(s);
+    window.history.pushState({ phase: 'session', depth: 1 } satisfies NavState, '', location.pathname + s.query);
     phase = 'session';
     await showQuestion();
   }
@@ -337,6 +397,9 @@
   }
 
   function backToSetup() {
+    // Go back to the setup entry the set was started from, so Forward returns to the set.
+    const depth = navState()?.depth ?? 0;
+    if (depth > 0) return window.history.go(-depth);
     setFilters(parseFilters(sessionQuery));
     reviewing = false;
     history_replace(sessionQuery, null);
@@ -362,8 +425,8 @@
     phase = 'results';
     if (updateHistory) {
       // Reviewing from the results added a history entry; going back to the results removes it.
-      if (reviewing) window.history.back();
-      else history_replace(sessionQuery, { phase: 'results' });
+      if (reviewing && navState()?.reviewing) window.history.back();
+      else history_replace(sessionQuery, { phase: 'results', depth: navState()?.depth ? 1 : 0 });
     }
     reviewing = false;
     await tick();
@@ -374,19 +437,16 @@
   function reviewQuestion(i: number) {
     phase = 'session';
     // A history entry, so Back returns to the results rather than to the filters.
-    if (!reviewing) window.history.pushState({ phase: 'session' }, '', location.pathname + sessionQuery);
+    if (!reviewing) {
+      const depth = navState()?.depth ? 2 : 0;
+      window.history.pushState({ phase: 'session', depth, reviewing: true } satisfies NavState, '', location.pathname + sessionQuery);
+    }
     reviewing = true;
     go(i);
   }
 
+  /** No "are you sure": unanswered questions can still be answered from the results. */
   function endSet() {
-    const left = session.length - answered;
-    if (
-      !reviewing &&
-      left > session.length / 2 &&
-      !confirm(`End this set now? ${plural(left, 'question')} ${left === 1 ? "isn't" : "aren't"} answered yet. You can still answer them from the results.`)
-    )
-      return;
     void showResults();
   }
 
@@ -411,6 +471,16 @@
     revealed[q.id] ??= q.parts.map(() => false);
     revealed[q.id]![part] = true;
     marks[q.id] ??= q.parts.map((p) => p.scoringHtml.map(() => false));
+  }
+
+  function setMark(q: FrqQuestion, part: number, point: number, value: boolean) {
+    marks[q.id] ??= q.parts.map((p) => p.scoringHtml.map(() => false));
+    marks[q.id]![part]![point] = value;
+    // Changing a mark after "Done marking" corrects the score already saved for this attempt.
+    if (finished[q.id]) {
+      history = amendLastResult(history, q.id, frqEarned(q, marks[q.id]!) / frqTotal(q));
+      writeJson(historyKey, history);
+    }
   }
 
   async function finish(q: FrqQuestion) {
@@ -469,14 +539,16 @@
     if (!orderChosen) filters.mode = n === null ? 'all' : 'random';
   }
 
-  function applyPreset(query: string) {
-    setFilters(parseFilters(query));
-  }
-
-  function practiceTopic(id: string) {
-    setFilters({ ...emptyFilters(), topics: [id], mode: 'random', n: DEFAULT_COUNT });
-    void tick().then(() => document.querySelector('.start-bar')?.scrollIntoView({ block: 'nearest' }));
-  }
+  /** Up to DEFAULT_COUNT shuffled questions on one topic (or class-only chapter), from the weak-spots list. */
+  const topicQuery = (key: string) =>
+    key.startsWith('chapter-')
+      ? `?chapter=${key.slice(8)}&unit=${CLASS_ONLY_UNIT}&mode=random&n=${DEFAULT_COUNT}`
+      : `?topic=${key}&mode=random&n=${DEFAULT_COUNT}`;
+  const presetSize = (query: string) => {
+    if (!all) return 0;
+    const f = parseFilters(query);
+    return sessionSize(filterQuestions(all, f, tests).length, f);
+  };
 
   function resetFilters() {
     filters = emptyFilters();
@@ -490,9 +562,9 @@
   }
 
   function clearHistory() {
-    if (!confirm('Clear your saved practice history on this device? Weakest-first ordering starts over.')) return;
     history = {};
     writeJson(historyKey, {});
+    confirmClear = false;
   }
 
   async function copyLink(query: string) {
@@ -510,13 +582,11 @@
   const topicLabel = (key: string) =>
     key.startsWith('chapter-') ? `Ch. ${key.slice(8)} (class only)` : `${key} ${topicTitles.get(key) ?? ''}`;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
-  const excerpt = (html: string) => {
-    const text = html.replace(/<annotation[\s\S]*?<\/annotation>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-    return text.length > 110 ? `${text.slice(0, 108).trimEnd()}…` : text;
-  };
+  /** The prompt's plain text (math written out at build time); CSS clamps it to two lines. */
+  const excerpt = (text: string) => (text.length > 240 ? `${text.slice(0, 238).trimEnd()}…` : text);
   const statusOf = (q: PracticeQuestion) =>
-    scores[q.id] === undefined ? 'todo' : scores[q.id] === 1 ? 'right' : scores[q.id] === 0 ? 'wrong' : 'part';
-  const statusText = { todo: 'not answered', right: 'correct', wrong: 'incorrect', part: 'partial credit' } as const;
+    scores[q.id] === undefined ? 'todo' : scores[q.id] === 1 ? 'right' : scores[q.id] === 0 ? 'wrong' : 'partial';
+  const statusText = { todo: 'not answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' } as const;
 
   /** Human-readable list of active filters, each with a function that removes it. */
   const chips = $derived.by(() => {
@@ -598,32 +668,23 @@
       </section>
     {/if}
 
-    <p class="lead">Pick what to study, then press <strong>Start practice</strong>. Nothing starts until you do.</p>
-
     {#if presets.length > 0 || historyCount > 0}
       <section class="presets" aria-labelledby="presets-h">
-        <h2 id="presets-h" class="section-h">Quick picks</h2>
+        <div class="presets-head">
+          <h2 id="presets-h" class="section-h">Quick start</h2>
+          <span class="small muted">One tap starts the set.</span>
+        </div>
         <div class="preset-row">
           {#each presets as p (p.query)}
-            <button
-              type="button"
-              class="preset"
-              aria-pressed={filtersToQuery(filters) === p.query}
-              onclick={() => applyPreset(p.query)}
-            >
-              <span class="preset-label">{p.label}</span>
+            <button type="button" class="preset" onclick={() => startPreset(p.query)}>
+              <span class="preset-label">{p.label} <span aria-hidden="true">→</span></span>
               {#if p.note}<span class="small muted">{p.note}</span>{/if}
             </button>
           {/each}
           {#if historyCount > 0}
-            <button
-              type="button"
-              class="preset"
-              aria-pressed={filtersToQuery(filters) === '?mode=weak'}
-              onclick={() => applyPreset('?mode=weak')}
-            >
-              <span class="preset-label">Weakest topics</span>
-              <span class="small muted">10 questions, based on your answers</span>
+            <button type="button" class="preset" onclick={() => startPreset(`?mode=weak&n=${DEFAULT_COUNT}`)}>
+              <span class="preset-label">Weakest topics <span aria-hidden="true">→</span></span>
+              <span class="small muted">{plural(presetSize(`?mode=weak&n=${DEFAULT_COUNT}`), 'question')} on what you've missed most</span>
             </button>
           {/if}
         </div>
@@ -633,6 +694,7 @@
     <form class="card filters" onsubmit={(e) => { e.preventDefault(); start(); }} aria-labelledby="filters-h">
       <div class="filters-head">
         <h2 id="filters-h" class="section-h">{presets.length > 0 || historyCount > 0 ? 'Or choose your own' : 'Choose questions'}</h2>
+        <span class="small muted head-note">Nothing starts until you press <strong>Start practice</strong>.</span>
         {#if activeCount > 0 || filters.mode !== 'all' || filters.n !== null}
           <button class="link-button" type="button" onclick={resetFilters}>Reset all</button>
         {/if}
@@ -649,16 +711,17 @@
                 checked={filters.chapters.includes(c.number)}
                 onchange={() => (filters.chapters = toggle(filters.chapters, c.number))}
               />
-              <span>Ch. {c.number} <span class="chip-sub">{c.title}</span></span>
+              <span>Ch. {c.number} <span class="chip-sub">{c.title}</span>{#if !c.finished && !c.current}<span class="chip-sub ahead">{' · not taught yet'}</span>{/if}</span>
               {@render count(countWith(all, filters, tests, { chapters: [c.number] }))}
             </label>
           {/each}
         </div>
         {#if emptyCurrent.length > 0}
-          <p class="small muted">
-            {#each emptyCurrent as c, i (c.number)}{i > 0 ? ' and ' : ''}<a href={`${chaptersHref}${c.number}/`}>Ch. {c.number}</a>{/each}
-            (what the class is on now) {emptyCurrent.length === 1 ? 'has' : 'have'} no practice questions yet. The chapter
-            {emptyCurrent.length === 1 ? 'page lists' : 'pages list'} past AP FRQs on {emptyCurrent.length === 1 ? 'its' : 'their'} topics.
+          <p class="small muted chapter-note">
+            In class now:
+            {#each emptyCurrent as c, i (c.number)}{i > 0 ? ' and ' : ''}<a href={`${chaptersHref}${c.number}/`}>Ch. {c.number}</a>{/each}.
+            {emptyCurrent.length === 1 ? 'It has' : 'They have'} no practice questions yet; {emptyCurrent.length === 1 ? 'its chapter page lists' : 'their chapter pages list'}
+            past AP FRQs on the same topics.
           </p>
         {/if}
       </fieldset>
@@ -867,12 +930,22 @@
               <li>
                 <a href={`${topicsHref}${key}/`}>{topicLabel(key)}</a>
                 <span class="small muted">{pct(acc)} recently</span>
-                <button type="button" class="link-button small" onclick={() => practiceTopic(key)}>Set up practice</button>
+                <button type="button" class="link-button small" onclick={() => startPreset(topicQuery(key))}>
+                  Start {plural(presetSize(topicQuery(key)), 'question')}<span class="visually-hidden"> on {topicLabel(key)}</span> →
+                </button>
               </li>
             {/each}
           </ul>
         {/if}
-        <button type="button" class="link-button small muted-link" onclick={clearHistory}>Clear history</button>
+        {#if confirmClear}
+          <div class="confirm row" role="group" aria-label="Clear history">
+            <span class="small">Clear your practice history on this device? This can't be undone.</span>
+            <button type="button" class="button small danger" onclick={clearHistory}>Clear history</button>
+            <button type="button" class="button secondary small" onclick={() => (confirmClear = false)}>Cancel</button>
+          </div>
+        {:else}
+          <button type="button" class="link-button small muted-link" onclick={() => (confirmClear = true)}>Clear history</button>
+        {/if}
       </section>
     {/if}
   </div>
@@ -935,6 +1008,11 @@
           </div>
         </header>
 
+        {#if q.type === 'frq' && !finished[q.id]}
+          <p class="frq-hint small">
+            <strong>Write your answers on paper first.</strong> Then show the scoring for each part and check every point you earned.
+          </p>
+        {/if}
         <div class="prompt">{@html q.promptHtml}</div>
         {#if q.image}
           <img src={q.image.src} width={q.image.width} height={q.image.height} alt={q.image.alt} decoding="async" />
@@ -964,15 +1042,15 @@
           {/if}
         {:else}
           {#each q.parts as part, p (part.label)}
-            <section class="part">
+            <section class="frq-part">
               <h3>({part.label}) <span class="small muted">{plural(part.points, 'pt')}</span></h3>
               <div class="prompt">{@html part.promptHtml}</div>
               {#if revealed[q.id]?.[p]}
-                <fieldset class="scoring" disabled={!!finished[q.id]}>
+                <fieldset class="scoring">
                   <legend class="small">Scoring: check each point you earned</legend>
                   {#each part.scoringHtml as s, k (k)}
                     <label class="opt">
-                      <input type="checkbox" bind:checked={marks[q.id]![p]![k]} />
+                      <input type="checkbox" checked={!!marks[q.id]?.[p]?.[k]} onchange={(e) => setMark(q, p, k, e.currentTarget.checked)} />
                       <span>{@html s}</span>
                     </label>
                   {/each}
@@ -983,14 +1061,14 @@
             </section>
           {/each}
           {#if finished[q.id]}
-            <p class="verdict ok" role="status">You earned {frqEarned(q, marks[q.id] ?? [])} of {frqTotal(q)} points.</p>
+            <p class="verdict ok" role="status">
+              You earned {frqEarned(q, marks[q.id] ?? [])} of {frqTotal(q)} points.
+              <span class="small muted">Misclicked? You can still change your marks above.</span>
+            </p>
             <div class="explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
-          {:else if !q.parts.every((_, p) => revealed[q.id]?.[p])}
-            <p class="small muted frq-hint">
-              Write your answers on paper first. Then show the scoring and check each point you earned.
-              {#if q.parts.length > 1}
-                <button class="link-button small" type="button" onclick={() => q.parts.forEach((_, p) => reveal(q, p))}>Show all scoring</button>
-              {/if}
+          {:else if q.parts.length > 1 && !q.parts.every((_, p) => revealed[q.id]?.[p])}
+            <p class="show-all">
+              <button class="button secondary small" type="button" onclick={() => q.parts.forEach((_, p) => reveal(q, p))}>Show all scoring</button>
             </p>
           {/if}
         {/if}
@@ -1084,7 +1162,7 @@
             <span class={`qdot static ${st}`} aria-hidden="true">{i + 1}</span>
             <span class="r-text">
               <span class="visually-hidden">Question {i + 1}, {statusText[st]}:</span>
-              {excerpt(s.promptHtml)}
+              {excerpt(s.promptText)}
             </span>
             <button type="button" class="link-button small" onclick={() => reviewQuestion(i)}>
               {st === 'todo' ? 'Answer' : 'Review'}<span class="visually-hidden"> question {i + 1}</span>
@@ -1127,9 +1205,41 @@
     margin: 0;
   }
 
-  /* Quick picks */
+  /* Quick start */
   .presets {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .presets-head,
+  .filters-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .presets-head .section-h,
+  .filters-head .section-h {
+    margin: 0;
+  }
+  .head-note {
+    flex: 1 1 12rem;
+  }
+  .chip-sub.ahead {
+    font-style: italic;
+  }
+  .chapter-note {
+    margin: 0.5rem 0 0;
+  }
+  .confirm {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background: var(--bad-soft);
+  }
+  .button.danger {
+    background: var(--bad);
+    border-color: var(--bad);
+    color: var(--surface);
   }
   .preset-row {
     display: grid;
@@ -1164,12 +1274,6 @@
   /* Filters */
   .filters {
     padding: 1rem 1.1rem 0;
-  }
-  .filters-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
   }
   .hint {
     margin: 0 0 0.75rem;
@@ -1486,7 +1590,7 @@
     border-color: var(--bad);
     color: var(--bad);
   }
-  .qdot.part {
+  .qdot.partial {
     background: var(--warn-soft);
     border-color: var(--warn);
     color: var(--warn);
@@ -1643,10 +1747,10 @@
     margin-top: 0.5rem;
     padding-top: 0.25rem;
   }
-  .part {
+  .frq-part {
     margin: 0.75rem 0 1rem;
   }
-  .part h3 {
+  .frq-part h3 {
     margin: 0 0 0.25rem;
     font-size: 1rem;
   }
@@ -1664,6 +1768,21 @@
     letter-spacing: 0;
     color: var(--text-2);
     font-size: 0.875rem;
+  }
+  .frq-hint {
+    margin: 0 0 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-left: 4px solid var(--tip);
+    border-radius: 0 8px 8px 0;
+    background: var(--tip-soft);
+    color: var(--text);
+  }
+  .show-all {
+    margin: 0.5rem 0 0;
+  }
+  .verdict .small {
+    display: block;
+    font-weight: 400;
   }
   .opt {
     /* The legend floats (so it sits inside the grey box); each row starts below it. */
@@ -1798,6 +1917,11 @@
     min-width: 0;
     font-size: 0.92rem;
     color: var(--text-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
   }
 
   .past-frqs {

@@ -23,6 +23,8 @@ interface PracticeQuestionBase {
   units: string[];
   difficulty: number;
   promptHtml: string;
+  /** The prompt as one line of plain text (math written out), for the results list. */
+  promptText: string;
   image?: { src: string; width: number; height: number; alt: string };
   explanationHtml: string;
 }
@@ -191,6 +193,13 @@ export const HISTORY_LIMIT = 10;
 export function recordResult(history: History, questionId: string, score: number): History {
   const prev = history[questionId] ?? [];
   return { ...history, [questionId]: [...prev, Math.max(0, Math.min(1, score))].slice(-HISTORY_LIMIT) };
+}
+
+/** Replace the most recent score for a question (a corrected self-mark), or record it if there is none. */
+export function amendLastResult(history: History, questionId: string, score: number): History {
+  const prev = history[questionId] ?? [];
+  if (prev.length === 0) return recordResult(history, questionId, score);
+  return { ...history, [questionId]: [...prev.slice(0, -1), Math.max(0, Math.min(1, score))] };
 }
 
 /** Keys used for "weak topics": CED topics, or the chapter for class-only questions. */

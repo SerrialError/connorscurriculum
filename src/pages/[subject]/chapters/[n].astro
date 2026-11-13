@@ -43,7 +43,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
 ---
 
 <Base title={chapterLabel} subject={subject} searchable searchMeta={{ type: 'Chapter' }}>
-  <Breadcrumbs items={[{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/`), label: 'All chapters' }]} />
+  <Breadcrumbs items={[{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/`), label: 'Chapters' }]} />
   <h1>{chapterLabel}</h1>
   <div class="badges status" data-pagefind-ignore>
     {finished && <ProgressMark status="done" doneLabel="Finished in class" />}
@@ -61,7 +61,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
       <a class="button" href={practiceStart(subject, { chapter: [chapter.number] }, questionCount).href}>
         {practiceStart(subject, { chapter: [chapter.number] }, questionCount).label}
       </a>
-      <a class="button secondary" href={practiceHref(subject, { chapter: [chapter.number] })}>Choose filters ({questionCount} questions)</a>
+      <a class="button secondary" href={practiceHref(subject, { chapter: [chapter.number] })}>Pick your own set ({questionCount} questions)</a>
     </div>
   )}
   {tests.map((t) => (

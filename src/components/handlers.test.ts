@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 // set, so Back skipped the filters). Handlers passed by name must take no parameters, or only an
 // event; anything else needs an arrow function: `onclick={() => start()}`.
 const dir = new URL('.', import.meta.url).pathname;
-const components = readdirSync(dir).filter((f) => f.endsWith('.svelte'));
+const components = (readdirSync(dir, { recursive: true }) as string[]).filter((f) => f.endsWith('.svelte'));
 
 function paramsOf(source: string, name: string): string | null {
   const fn = new RegExp(`function\\s+${name}\\s*(?:<[^>]*>)?\\(([^)]*)\\)`).exec(source);
@@ -21,7 +21,10 @@ describe('event handlers passed by name', () => {
     it(`${file}: take no arguments other than the event`, () => {
       const source = readFileSync(join(dir, file), 'utf8');
       const bad: string[] = [];
-      for (const [, name] of source.matchAll(/\bon[a-z]+=\{([A-Za-z_$][\w$]*)\}/g)) {
+      // DOM elements only (lowercase tags, svelte:window): a component's callback props, such as
+      // onreview={review}, get whatever arguments the component passes.
+      const elementTags = [...source.matchAll(/<([a-z][\w:-]*)\b((?:[^>"'{]|"[^"]*"|'[^']*'|\{[^}]*\})*)>/g)].map((m) => m[2]!);
+      for (const [, name] of elementTags.join(' ').matchAll(/\bon[a-z]+=\{([A-Za-z_$][\w$]*)\}/g)) {
         const params = paramsOf(source, name!);
         if (params === null) continue; // not a local function (e.g. a prop)
         if (params === '' || /^\w+\s*:\s*\w*Event\b/.test(params)) continue;

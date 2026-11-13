@@ -77,7 +77,7 @@ export function inTest(test: SubjectData['tests'][number], entry: Lesson | Quest
 /**
  * Practice links follow one rule across the site:
  * - a "Start …" button (practiceStart) begins a set right away (?start=1);
- * - a "Choose filters" link (practiceHref without start) opens the setup screen with those
+ * - a "Pick your own set" link (practiceHref without start) opens the setup screen with those
  *   filters already picked, and nothing starts until the student presses Start practice.
  */
 export function practiceStart(
@@ -89,7 +89,8 @@ export function practiceStart(
 ): { href: string; label: string } {
   const what = total <= DEFAULT_COUNT ? `Start all ${total} question${total === 1 ? '' : 's'}` : `Start ${DEFAULT_COUNT} random questions`;
   return {
-    href: practiceHref(subject, { ...query, mode: 'random', n: String(DEFAULT_COUNT), start: '1' }),
+    // The defaults are DEFAULT_COUNT questions, shuffled.
+    href: practiceHref(subject, { ...query, start: '1' }),
     label: about ? `${what} ${about}` : what,
   };
 }
@@ -104,10 +105,10 @@ export function testPracticeLinks(
   testId: string,
   total: number,
 ): { random: { href: string; label: string } | null; all: { href: string; label: string } } {
-  const all = { href: practiceHref(subject, { test: testId, start: '1' }), label: `All ${total} in order` };
+  const all = { href: practiceHref(subject, { test: testId, mode: 'all', n: 'all', start: '1' }), label: `All ${total} in order` };
   if (total <= DEFAULT_COUNT) return { random: null, all: { ...all, label: `Start all ${total} question${total === 1 ? '' : 's'}` } };
   return {
-    random: { href: practiceHref(subject, { test: testId, mode: 'random', n: String(DEFAULT_COUNT), start: '1' }), label: `Start ${DEFAULT_COUNT} random questions` },
+    random: { href: practiceHref(subject, { test: testId, start: '1' }), label: `Start ${DEFAULT_COUNT} random questions` },
     all,
   };
 }

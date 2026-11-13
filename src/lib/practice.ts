@@ -72,11 +72,20 @@ export interface Filters {
 
 export const DEFAULT_COUNT = 10;
 
+/** The "How many" choices; "All" and "Other" (a number box) come with them. */
+export const COUNT_CHOICES: readonly number[] = [5, 10, 20];
+
+export const DIFFICULTY_LABELS: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
+export const MODE_LABELS: Record<Mode, string> = { all: 'In order', random: 'Shuffled', weak: 'Weakest first' };
+export const TYPE_LABELS: Record<QuestionType, string> = { mcq: 'Multiple choice', frq: 'Free response' };
+
 /**
  * Pseudo unit for questions with no CED topic (class-test material that is not on the AP exam),
  * so the unit filter can select them and the unit counts add up to the total. URL: ?unit=class.
  */
 export const CLASS_ONLY_UNIT = 'class';
+
+export const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
 
 /** `?start=1` on a practice link starts the set right away instead of showing the setup screen. */
 export function wantsStart(search: string): boolean {
@@ -85,11 +94,14 @@ export function wantsStart(search: string): boolean {
 }
 export const MAX_COUNT = 200;
 
-/** Default count for a mode: every question in order, or a set of DEFAULT_COUNT when shuffled or weakest-first. */
-export const defaultCount = (mode: Mode): number | null => (mode === 'all' ? null : DEFAULT_COUNT);
+/**
+ * Every control starts at its default: 10 questions, shuffled. Order and count are independent
+ * (neither changes the other), so "How many: All" with "Order: Shuffled" is every question shuffled.
+ */
+export const DEFAULT_MODE: Mode = 'random';
 
 export function emptyFilters(): Filters {
-  return { chapters: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: 'all', n: null };
+  return { chapters: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: DEFAULT_MODE, n: DEFAULT_COUNT };
 }
 
 /** Number of filters that narrow the question pool (order and count are not filters). */
@@ -98,9 +110,9 @@ export function activeFilterCount(f: Filters): number {
 }
 
 // ---------------------------------------------------------------------------
-// URL encoding: ?chapter=14,15&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&mode=random&n=10
-// `n` is written only when it differs from the mode's default (every question for "all", 10
-// otherwise); `n=all` means every matching question.
+// URL encoding: ?chapter=14,15&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&mode=all&n=5
+// `mode` and `n` are written only when they differ from the defaults (shuffled, 10 questions);
+// `n=all` means every matching question.
 // ---------------------------------------------------------------------------
 
 const list = (v: string | null) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : []);
@@ -116,12 +128,12 @@ export function parseFilters(search: string): Filters {
   const type = p.get('type');
   f.type = type === 'mcq' || type === 'frq' ? type : null;
   const mode = p.get('mode');
-  f.mode = mode === 'random' || mode === 'weak' ? mode : 'all';
+  f.mode = mode === 'all' || mode === 'random' || mode === 'weak' ? mode : DEFAULT_MODE;
   const rawN = p.get('n');
   const n = Number(rawN);
   if (rawN === 'all') f.n = null;
   else if (rawN && Number.isInteger(n) && n > 0) f.n = Math.min(n, MAX_COUNT);
-  else f.n = defaultCount(f.mode);
+  else f.n = DEFAULT_COUNT;
   return f;
 }
 
@@ -133,10 +145,91 @@ export function filtersToQuery(f: Filters): string {
   if (f.topics.length) p.set('topic', f.topics.join(','));
   if (f.difficulty.length) p.set('difficulty', f.difficulty.join(','));
   if (f.type) p.set('type', f.type);
-  if (f.mode !== 'all') p.set('mode', f.mode);
-  if (f.n !== defaultCount(f.mode)) p.set('n', f.n === null ? 'all' : String(f.n));
+  if (f.mode !== DEFAULT_MODE) p.set('mode', f.mode);
+  if (f.n !== DEFAULT_COUNT) p.set('n', f.n === null ? 'all' : String(f.n));
+  return toSearch(p);
+}
+
+const toSearch = (p: URLSearchParams) => {
   const s = p.toString().replaceAll('%2C', ',');
   return s ? `?${s}` : '';
+};
+
+/** Every control at its default (nothing for "Reset all" to reset). */
+export const isDefaultFilters = (f: Filters): boolean =>
+  activeFilterCount(f) === 0 && f.mode === DEFAULT_MODE && f.n === DEFAULT_COUNT;
+
+// ---------------------------------------------------------------------------
+// A set in the URL. While a set is on screen the address names it, so reloading, bookmarking, or
+// sharing the link reopens the same set:
+//   ?chapter=7&difficulty=3&start=1&seed=k3x9a0          the filters that made it, plus a seed
+//   ?chapter=7&start=1&seed=k3x9a0&ids=q1,q7,q9          exact questions (retrying the missed ones)
+// The seed fixes the shuffle, so the same link gives the same questions (except "weakest first",
+// which depends on the student's own answers). It also names this attempt, so a reload finds the
+// answers saved for it. The setup screen's address is the same minus start/seed/ids: the filters
+// that produced the set, which is where "← Filters" returns.
+// ---------------------------------------------------------------------------
+
+export interface SetSpec {
+  filters: Filters;
+  /** Null for a link that asks to start a set (?start=1) but has no seed yet. */
+  seed: string | null;
+  /** The exact questions, in order, or null to pick them from the filters with the seed. */
+  ids: string[] | null;
+}
+
+/** The set a URL names, or null for the setup screen. */
+export function parseSet(search: string): SetSpec | null {
+  if (!wantsStart(search)) return null;
+  const p = new URLSearchParams(search);
+  const ids = list(p.get('ids'));
+  const seed = p.get('seed');
+  return {
+    filters: parseFilters(search),
+    seed: seed && /^[a-z0-9]{1,16}$/i.test(seed) ? seed : null,
+    ids: ids.length ? ids : null,
+  };
+}
+
+export function setToQuery(spec: SetSpec): string {
+  const p = new URLSearchParams(filtersToQuery(spec.filters));
+  p.set('start', '1');
+  if (spec.seed) p.set('seed', spec.seed);
+  if (spec.ids) p.set('ids', spec.ids.join(','));
+  return toSearch(p);
+}
+
+/** The setup screen's address for any practice URL: its filters alone. */
+export const setupQuery = (search: string): string => filtersToQuery(parseFilters(search));
+
+export function newSeed(rng: Rng = Math.random): string {
+  return Math.floor(rng() * 36 ** 6)
+    .toString(36)
+    .padStart(6, '0');
+}
+
+/** A PRNG from a seed string (FNV-1a hash into seededRng). */
+export function rngFromSeed(seed: string): Rng {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) h = Math.imul(h ^ seed.charCodeAt(i), 0x01000193);
+  return seededRng(h >>> 0);
+}
+
+/**
+ * The questions of the set a URL names: its ids (skipping any that no longer exist), or the
+ * questions its filters match, picked with its seed.
+ */
+export function questionsForSet(
+  all: PracticeQuestion[],
+  spec: { filters: Filters; seed: string; ids: string[] | null },
+  tests: PracticeTest[],
+  history: History,
+): PracticeQuestion[] {
+  if (spec.ids) {
+    const byId = new Map(all.map((q) => [q.id, q]));
+    return [...new Set(spec.ids)].flatMap((id) => byId.get(id) ?? []);
+  }
+  return selectQuestions(filterQuestions(all, spec.filters, tests), spec.filters, history, rngFromSeed(spec.seed));
 }
 
 // ---------------------------------------------------------------------------
@@ -392,7 +485,6 @@ export function chapterRange(ns: number[]): string {
   return `Ch. ${sorted.join(', ')}`;
 }
 
-const DIFFICULTY_NAMES: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
 
 /**
  * What the filters select, e.g. "Chapters 6–7 Test · Hard" or "All questions". `everything` names
@@ -404,11 +496,11 @@ export function describeScope(f: Filters, tests: PracticeTest[], everything = 'A
   if (!f.test && !f.chapters.length && !f.units.length && !f.topics.length && everything !== 'All questions') parts.push(everything);
   if (f.test) parts.push(tests.find((t) => t.id === f.test)?.title ?? f.test);
   if (f.chapters.length) parts.push(chapterRange(f.chapters));
-  const units = f.units.map((u) => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`));
+  const units = f.units.map(unitLabel);
   if (units.length) parts.push(units.join(', '));
   if (f.topics.length) parts.push(`${f.topics.length === 1 ? 'Topic' : 'Topics'} ${f.topics.join(', ')}`);
-  if (f.difficulty.length) parts.push([...f.difficulty].sort((a, b) => a - b).map((d) => DIFFICULTY_NAMES[d]).join(', '));
-  if (f.type) parts.push(f.type === 'mcq' ? 'Multiple choice' : 'Free response');
+  if (f.difficulty.length) parts.push([...f.difficulty].sort((a, b) => a - b).map((d) => DIFFICULTY_LABELS[d]).join(', '));
+  if (f.type) parts.push(TYPE_LABELS[f.type]);
   return parts.length ? parts.join(' · ') : everything;
 }
 
@@ -437,6 +529,9 @@ export function describeSet(f: Filters, tests: PracticeTest[], size: number, mat
  * True when "weakest topics" has nothing to go on: none of the matching questions has been
  * answered on this device, so the order is effectively random.
  */
+/** Shown with a "weakest first" set when weakHasNoHistory. */
+export const WEAK_NO_HISTORY_NOTE = 'No practice history on these yet, so the order is random.';
+
 export function weakHasNoHistory(matching: PracticeQuestion[], history: History): boolean {
   return topicAccuracy(matching, history).size === 0;
 }
@@ -458,7 +553,7 @@ export function mixedReview(
   const chapters = withQuestions.filter((n) => taught.has(n));
   if (chapters.length === 0) return null;
   const count = questions.filter((q) => taught.has(q.chapter)).length;
-  const query = chapters.length === withQuestions.length ? '?mode=random' : `?chapter=${chapters.join(',')}&mode=random`;
+  const query = chapters.length === withQuestions.length ? '' : `?chapter=${chapters.join(',')}`;
   return { query, chapters, count };
 }
 
@@ -525,4 +620,75 @@ export function retryWords(scores: number[]): { button: string; set: string } {
     return { button: `Retry the ${n} without full marks`, set: `retrying the ${n} without full marks` };
   }
   return { button: `Retry the ${n} I missed`, set: `retrying the ${n} you missed` };
+}
+
+// ---------------------------------------------------------------------------
+// Setup screen helpers
+// ---------------------------------------------------------------------------
+
+/** "Other" in How many: a count that isn't one of the COUNT_CHOICES chips. */
+export const isCustomCount = (n: number | null): boolean => n !== null && !COUNT_CHOICES.includes(n);
+
+export interface FilterChip {
+  label: string;
+  /** The control is under "More options" (its summary names these chips while it's closed). */
+  more: boolean;
+  /** The filters with this one removed. */
+  without: Filters;
+}
+
+/**
+ * The narrowing filters as removable chips, in the order the controls appear. `laterChapters`
+ * are the chapters listed under More options.
+ */
+export function filterChips(f: Filters, tests: PracticeTest[], laterChapters: number[]): FilterChip[] {
+  const out: FilterChip[] = [];
+  const add = (label: string, more: boolean, patch: Partial<Filters>) => out.push({ label, more, without: { ...f, ...patch } });
+  for (const n of f.chapters) add(`Ch. ${n}`, laterChapters.includes(n), { chapters: f.chapters.filter((x) => x !== n) });
+  if (f.test) add(tests.find((t) => t.id === f.test)?.title ?? f.test, true, { test: null });
+  for (const u of f.units) add(unitLabel(u), true, { units: f.units.filter((x) => x !== u) });
+  for (const t of f.topics) add(`Topic ${t}`, true, { topics: f.topics.filter((x) => x !== t) });
+  for (const d of f.difficulty) add(DIFFICULTY_LABELS[d]!, false, { difficulty: f.difficulty.filter((x) => x !== d) });
+  if (f.type) add(TYPE_LABELS[f.type], true, { type: null });
+  return out;
+}
+
+/** Below this recent accuracy a topic is listed under "Topics to work on". */
+export const WEAK_THRESHOLD = 0.75;
+
+/**
+ * Topics with history that are below WEAK_THRESHOLD, weakest first (CED topics only: class-only
+ * chapter keys have no topic page or practice link of their own).
+ */
+export function weakTopics(questions: PracticeQuestion[], history: History, max = 4): [string, number][] {
+  return [...topicAccuracy(questions, history)]
+    .filter(([k, acc]) => !k.startsWith('chapter-') && acc < WEAK_THRESHOLD)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, max);
+}
+
+/** Practice filters for one AP topic. */
+export const topicQuery = (topic: string): string => filtersToQuery({ ...emptyFilters(), topics: [topic] });
+
+// ---------------------------------------------------------------------------
+// Answer status
+// ---------------------------------------------------------------------------
+
+export type ScoreStatus = 'todo' | 'right' | 'wrong' | 'partial';
+
+/** A question's status from its 0–1 score (undefined: not answered). */
+export const scoreStatus = (score: number | undefined): ScoreStatus =>
+  score === undefined ? 'todo' : score === 1 ? 'right' : score === 0 ? 'wrong' : 'partial';
+
+export const STATUS_TEXT: Record<ScoreStatus, string> = { todo: 'not answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' };
+/** Shown with the colour, so right and wrong don't depend on telling red from green. */
+export const STATUS_MARK: Record<ScoreStatus, string> = { todo: '', right: '✓', wrong: '✗', partial: '½' };
+
+/** The 0–1 score of an answered question: right/wrong for MCQ, points earned for FRQ. */
+export function questionScore(
+  q: PracticeQuestion,
+  a: { picks: Record<string, string>; checked: Record<string, boolean>; marks: Record<string, boolean[][]>; finished: Record<string, boolean> },
+): number | undefined {
+  if (q.type === 'mcq') return a.checked[q.id] ? (isCorrect(q, a.picks[q.id] ?? '') ? 1 : 0) : undefined;
+  return a.finished[q.id] ? frqEarned(q, a.marks[q.id] ?? []) / frqTotal(q) : undefined;
 }

@@ -135,7 +135,7 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
     {!test && practice && (
       <p class="practice-top small" data-pagefind-ignore>
         <span class="muted">Practice:</span> <a href={practice.start.href}>{practice.start.label}</a>
-        <span class="muted"> · </span><a href={practice.setup}>Choose filters</a>
+        <span class="muted"> · </span><a href={practice.setup}>Pick your own set</a>
       </p>
     )}
     {showToc && (
@@ -165,7 +165,7 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
           {practice && (
             <div class="actions">
               <a class="button" href={practice.start.href}>{practice.start.label}</a>
-              <a class="button secondary" href={practice.setup}>Choose filters</a>
+              <a class="button secondary" href={practice.setup}>Pick your own set</a>
             </div>
           )}
           <nav class="pager" aria-label="Lessons in this chapter">

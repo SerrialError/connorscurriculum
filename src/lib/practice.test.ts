@@ -34,6 +34,19 @@ import {
   lessonsFor,
   lessonsForMissed,
   mixedReview,
+  isDefaultFilters,
+  newSeed,
+  parseSet,
+  questionsForSet,
+  rngFromSeed,
+  setToQuery,
+  setupQuery,
+  filterChips,
+  isCustomCount,
+  questionScore,
+  scoreStatus,
+  topicQuery,
+  weakTopics,
 } from './practice';
 
 const mcq = (id: string, over: Partial<McqQuestion> = {}): McqQuestion => ({
@@ -86,9 +99,9 @@ const tests: PracticeTest[] = [
 
 describe('URL filters', () => {
   it('round-trips through the query string', () => {
-    const f = { ...emptyFilters(), chapters: [14, 15], test: 'ch14', topics: ['5.1', '5.2'], units: ['7'], difficulty: [1, 3], type: 'mcq' as const, mode: 'random' as const, n: 5 };
+    const f = { ...emptyFilters(), chapters: [14, 15], test: 'ch14', topics: ['5.1', '5.2'], units: ['7'], difficulty: [1, 3], type: 'mcq' as const, mode: 'all' as const, n: 5 };
     const q = filtersToQuery(f);
-    expect(q).toBe('?chapter=14,15&test=ch14&unit=7&topic=5.1,5.2&difficulty=1,3&type=mcq&mode=random&n=5');
+    expect(q).toBe('?chapter=14,15&test=ch14&unit=7&topic=5.1,5.2&difficulty=1,3&type=mcq&mode=all&n=5');
     expect(parseFilters(q)).toEqual(f);
   });
 
@@ -97,39 +110,46 @@ describe('URL filters', () => {
     expect(f.chapters).toEqual([14]);
     expect(f.difficulty).toEqual([2]);
     expect(f.type).toBeNull();
-    expect(f.mode).toBe('all');
-    expect(f.n).toBeNull();
+    expect(f.mode).toBe('random');
+    expect(f.n).toBe(10);
   });
 
-  it('defaults the count to all questions in order, or 10 when shuffled or weakest-first', () => {
-    expect(parseFilters('').n).toBeNull();
-    expect(parseFilters('?mode=random').n).toBe(10);
-    expect(parseFilters('?mode=weak&n=-1').n).toBe(10);
-    expect(parseFilters('?mode=random&n=all').n).toBeNull();
-    expect(parseFilters('?n=5').n).toBe(5);
+  it('defaults to 10 shuffled questions, and order and count never depend on each other', () => {
+    expect(emptyFilters()).toMatchObject({ mode: 'random', n: 10 });
+    expect(parseFilters('')).toMatchObject({ mode: 'random', n: 10 });
+    expect(parseFilters('?mode=all')).toMatchObject({ mode: 'all', n: 10 });
+    expect(parseFilters('?n=all')).toMatchObject({ mode: 'random', n: null });
+    expect(parseFilters('?mode=weak&n=-1')).toMatchObject({ mode: 'weak', n: 10 });
+    expect(parseFilters('?n=5')).toMatchObject({ mode: 'random', n: 5 });
     expect(parseFilters('?n=9999').n).toBe(200);
   });
 
-  it('writes n only when it differs from the default for the mode', () => {
-    expect(filtersToQuery({ ...emptyFilters(), mode: 'random', n: 10 })).toBe('?mode=random');
-    expect(filtersToQuery({ ...emptyFilters(), mode: 'random', n: null })).toBe('?mode=random&n=all');
+  it('writes order and count only when they differ from the defaults', () => {
+    expect(filtersToQuery({ ...emptyFilters(), mode: 'random', n: 10 })).toBe('');
+    expect(filtersToQuery({ ...emptyFilters(), mode: 'all', n: null })).toBe('?mode=all&n=all');
     expect(filtersToQuery({ ...emptyFilters(), n: 5 })).toBe('?n=5');
     for (const f of [
       { ...emptyFilters(), mode: 'random' as const, n: null },
       { ...emptyFilters(), mode: 'weak' as const, n: 25 },
+      { ...emptyFilters(), mode: 'all' as const, n: 3 },
       { ...emptyFilters(), n: 3 },
     ]) {
       expect(parseFilters(filtersToQuery(f))).toEqual(f);
     }
   });
 
-  it('keeps old links (?mode=random&n=10) working', () => {
+  it('keeps explicit older links (?mode=random&n=10) working', () => {
     const f = parseFilters('?test=ch6-7-test&mode=random&n=10');
     expect(f).toMatchObject({ test: 'ch6-7-test', mode: 'random', n: 10 });
+    expect(filtersToQuery(f)).toBe('?test=ch6-7-test');
   });
 
   it('gives an empty query for default filters', () => {
     expect(filtersToQuery(emptyFilters())).toBe('');
+    expect(isDefaultFilters(emptyFilters())).toBe(true);
+    expect(isDefaultFilters({ ...emptyFilters(), mode: 'all' })).toBe(false);
+    expect(isDefaultFilters({ ...emptyFilters(), n: null })).toBe(false);
+    expect(isDefaultFilters({ ...emptyFilters(), chapters: [7] })).toBe(false);
   });
 });
 
@@ -142,7 +162,64 @@ describe('wantsStart', () => {
   });
 
   it('is not a filter: it never ends up in the filter query', () => {
-    expect(filtersToQuery(parseFilters('?test=x&mode=random&start=1'))).toBe('?test=x&mode=random');
+    expect(filtersToQuery(parseFilters('?test=x&mode=all&start=1&seed=abc&ids=q1'))).toBe('?test=x&mode=all');
+  });
+});
+
+describe('a set in the URL', () => {
+  it('is the setup screen without start=1', () => {
+    expect(parseSet('?chapter=7&seed=abc')).toBeNull();
+    expect(parseSet('')).toBeNull();
+  });
+
+  it('round-trips filters, seed, and ids', () => {
+    const spec = { filters: { ...emptyFilters(), chapters: [7], difficulty: [3], mode: 'all' as const, n: 5 }, seed: 'k3x9a0', ids: null };
+    const q = setToQuery(spec);
+    expect(q).toBe('?chapter=7&difficulty=3&mode=all&n=5&start=1&seed=k3x9a0');
+    expect(parseSet(q)).toEqual(spec);
+    const picked = { filters: emptyFilters(), seed: 'abc123', ids: ['q2', 'q1'] };
+    expect(setToQuery(picked)).toBe('?start=1&seed=abc123&ids=q2,q1');
+    expect(parseSet(setToQuery(picked))).toEqual(picked);
+  });
+
+  it('accepts a link with no seed yet, and rejects junk seeds', () => {
+    expect(parseSet('?chapter=7&start=1')).toEqual({ filters: { ...emptyFilters(), chapters: [7] }, seed: null, ids: null });
+    expect(parseSet('?start=1&seed=<script>')?.seed).toBeNull();
+  });
+
+  it('returns to exactly the filters that made the set', () => {
+    const f = { ...emptyFilters(), test: 'ch14', type: 'frq' as const, mode: 'all' as const, n: null };
+    expect(setupQuery(setToQuery({ filters: f, seed: 'abc', ids: ['q1'] }))).toBe(filtersToQuery(f));
+    expect(setupQuery('?chapter=7&start=1')).toBe('?chapter=7');
+  });
+
+  it('gives the same questions for the same seed, so a shared link opens the same set', () => {
+    const many = Array.from({ length: 30 }, (_, i) => mcq(`m${i}`));
+    const spec = { filters: { ...emptyFilters(), chapters: [14], n: 5 }, seed: 'abc123', ids: null };
+    const a = questionsForSet(many, spec, tests, {}).map((q) => q.id);
+    const b = questionsForSet(many, spec, tests, {}).map((q) => q.id);
+    expect(a).toHaveLength(5);
+    expect(b).toEqual(a);
+    const other = questionsForSet(many, { ...spec, seed: 'zzz999' }, tests, {}).map((q) => q.id);
+    expect(other).not.toEqual(a);
+  });
+
+  it('uses the exact ids when given, in order, skipping missing and repeated ones', () => {
+    const spec = { filters: emptyFilters(), seed: 'abc', ids: ['f1', 'gone', 'q1', 'f1'] };
+    expect(questionsForSet(questions, spec, tests, {}).map((q) => q.id)).toEqual(['f1', 'q1']);
+  });
+
+  it('keeps "in order" in order', () => {
+    const spec = { filters: { ...emptyFilters(), mode: 'all' as const, n: null }, seed: 'abc', ids: null };
+    expect(questionsForSet(questions, spec, tests, {}).map((q) => q.id)).toEqual(filterQuestions(questions, spec.filters, tests).map((q) => q.id));
+  });
+
+  it('makes short URL-safe seeds and a repeatable rng per seed', () => {
+    expect(newSeed(seededRng(1))).toMatch(/^[a-z0-9]{6}$/);
+    const r1 = rngFromSeed('abc');
+    const r2 = rngFromSeed('abc');
+    expect([r1(), r1()]).toEqual([r2(), r2()]);
+    expect(rngFromSeed('abd')()).not.toBe(rngFromSeed('abc')());
   });
 });
 
@@ -312,7 +389,7 @@ describe('naming a set', () => {
     expect(describeSet(parseFilters('?test=ch6-7-test&mode=weak'), tests, 10, 116)).toBe(
       'Chapters 6–7 Test · 10 on your weakest topics',
     );
-    expect(describeSet(parseFilters('?test=ch6-7-test'), tests, 116, 116)).toBe('Chapters 6–7 Test · all 116 in order');
+    expect(describeSet(parseFilters('?test=ch6-7-test&mode=all&n=all'), tests, 116, 116)).toBe('Chapters 6–7 Test · all 116 in order');
   });
   it('lists the other filters, and says "All questions" when there are none', () => {
     expect(describeScope(parseFilters('?chapter=7,6&difficulty=3,1&type=mcq'), tests)).toBe('Ch. 6–7 · Easy, Hard · Multiple choice');
@@ -343,10 +420,10 @@ describe('naming a set', () => {
 describe('mixedReview', () => {
   const qs = [{ chapter: 6 }, { chapter: 6 }, { chapter: 7 }, { chapter: 14 }];
   it('draws only from taught chapters', () => {
-    expect(mixedReview(qs, new Set([1, 6, 7, 8]))).toEqual({ query: '?chapter=6,7&mode=random', chapters: [6, 7], count: 3 });
+    expect(mixedReview(qs, new Set([1, 6, 7, 8]))).toEqual({ query: '?chapter=6,7', chapters: [6, 7], count: 3 });
   });
   it('needs no chapter filter when every chapter with questions is taught', () => {
-    expect(mixedReview(qs, new Set([6, 7, 14]))).toEqual({ query: '?mode=random', chapters: [6, 7, 14], count: 4 });
+    expect(mixedReview(qs, new Set([6, 7, 14]))).toEqual({ query: '', chapters: [6, 7, 14], count: 4 });
   });
   it('is null when nothing with questions is taught', () => {
     expect(mixedReview(qs, new Set([1]))).toBeNull();
@@ -404,5 +481,62 @@ describe('retryWords', () => {
   it('says "without full marks" when any got partial credit', () => {
     expect(retryWords([0.5, 0.25, 0.8]).button).toBe('Retry the 3 without full marks');
     expect(retryWords([0, 0.5]).set).toBe('retrying the 2 without full marks');
+  });
+});
+
+describe('setup helpers', () => {
+  it('treats only counts without their own chip as "Other"', () => {
+    expect(isCustomCount(null)).toBe(false);
+    expect(isCustomCount(10)).toBe(false);
+    expect(isCustomCount(7)).toBe(true);
+  });
+
+  it('lists the narrowing filters as chips, each removing only itself', () => {
+    const f = { ...emptyFilters(), chapters: [7, 14], test: 'ch14', difficulty: [3], type: 'frq' as const, mode: 'all' as const };
+    const chips = filterChips(f, tests, [14]);
+    expect(chips.map((c) => [c.label, c.more])).toEqual([
+      ['Ch. 7', false],
+      ['Ch. 14', true],
+      ['Ch 14', true],
+      ['Hard', false],
+      ['Free response', true],
+    ]);
+    expect(chips[0]!.without).toEqual({ ...f, chapters: [14] });
+    expect(chips[4]!.without).toEqual({ ...f, type: null });
+    expect(filterChips(emptyFilters(), tests, [])).toEqual([]);
+  });
+
+  it('links a topic to its practice filters', () => {
+    expect(topicQuery('1.7')).toBe('?topic=1.7');
+  });
+
+  it('lists weak topics, weakest first, leaving out strong and class-only ones', () => {
+    const qs = [mcq('a', { cedTopics: ['1.1'] }), mcq('b', { cedTopics: ['1.2'] }), mcq('c', { cedTopics: ['1.3'] }), mcq('d', { cedTopics: [] })];
+    const history = { a: [0, 1], b: [0], c: [1], d: [0] };
+    expect(weakTopics(qs, history)).toEqual([
+      ['1.2', 0],
+      ['1.1', 0.5],
+    ]);
+    expect(weakTopics(qs, history, 1)).toHaveLength(1);
+  });
+});
+
+describe('scores', () => {
+  const none = { picks: {}, checked: {}, marks: {}, finished: {} };
+  it('scores a checked MCQ 1 or 0, and nothing before Check', () => {
+    const q = mcq('m');
+    expect(questionScore(q, { ...none, picks: { m: 'b' } })).toBeUndefined();
+    expect(questionScore(q, { ...none, picks: { m: 'b' }, checked: { m: true } })).toBe(1);
+    expect(questionScore(q, { ...none, picks: { m: 'a' }, checked: { m: true } })).toBe(0);
+  });
+
+  it('scores an FRQ by points earned once marking is done', () => {
+    const marks = { f1: [[true, false], [true]] };
+    expect(questionScore(frq, { ...none, marks })).toBeUndefined();
+    expect(questionScore(frq, { ...none, marks, finished: { f1: true } })).toBeCloseTo(2 / 3);
+  });
+
+  it('turns a score into a status', () => {
+    expect([undefined, 1, 0, 0.5].map(scoreStatus)).toEqual(['todo', 'right', 'wrong', 'partial']);
   });
 });

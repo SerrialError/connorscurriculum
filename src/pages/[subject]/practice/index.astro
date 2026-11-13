@@ -1,5 +1,5 @@
 ---
-import Practice from '../../../components/Practice.svelte';
+import Practice from '../../../components/practice/Practice.svelte';
 import Base from '../../../layouts/Base.astro';
 import {
   chapterRange,
@@ -15,7 +15,7 @@ import {
   topicIds,
   url,
 } from '../../../lib/content';
-import { type PracticeLesson, mixedReview } from '../../../lib/practice';
+import { DEFAULT_COUNT, type PracticeLesson, mixedReview } from '../../../lib/practice';
 
 export const getStaticPaths = subjectPaths;
 
@@ -38,22 +38,28 @@ const isLearned = learnedTopic(data);
 const learnedTopics = [...data.topics.keys()].filter(isLearned);
 const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections }));
 
-// Quick picks: class tests with questions (newest first), then a mixed set from the chapters the
-// class has reached (not sample questions from later chapters).
+// Quick start: the latest class test with questions (10 random, or all in order), and a mixed set
+// from the chapters the class has reached when that isn't the same pool as the test.
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
-const presets = [
-  ...[...data.tests]
-    .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
-    .map((t) => ({ t, n: questions.filter((q) => inTest(t, q)).length }))
-    .filter(({ n }) => n > 0)
-    .map(({ t, n }) => ({ label: t.title, query: `?test=${t.id}`, note: `All ${plural(n, 'question')}, in order` })),
-];
+const presets: { label: string; query: string; note?: string; alt?: { label: string; query: string } }[] = [];
+const latest = [...data.tests]
+  .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+  .map((t) => ({ t, n: questions.filter((q) => inTest(t, q)).length }))
+  .find(({ n }) => n > 0);
+if (latest) {
+  const { t, n } = latest;
+  presets.push(
+    n > DEFAULT_COUNT
+      ? { label: t.title, query: `?test=${t.id}`, note: `${DEFAULT_COUNT} random from its ${n} questions`, alt: { label: `All ${n} in order`, query: `?test=${t.id}&mode=all&n=all` } }
+      : { label: t.title, query: `?test=${t.id}&mode=all&n=all`, note: `All ${plural(n, 'question')}, in order` },
+  );
+}
 const mixed = mixedReview(
   questions.map((q) => q.data),
   new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
 );
-if (mixed) {
-  presets.push({ label: 'Mixed review', query: mixed.query, note: `10 random from the ${mixed.count} questions in ${chapterRange(mixed.chapters).replace('Ch. ', 'Ch.\u00a0')}` });
+if (mixed && mixed.count !== latest?.n) {
+  presets.push({ label: 'Mixed review', query: mixed.query, note: `${DEFAULT_COUNT} random from the ${mixed.count} questions in ${chapterRange(mixed.chapters).replace('Ch. ', 'Ch.\u00a0')}` });
 }
 // Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.
 const lessons: PracticeLesson[] = (await getLessons(subject))

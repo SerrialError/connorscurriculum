@@ -294,6 +294,24 @@ table[data-scrolls='seen']::after,
   white-space: nowrap;
 }
 
+/* Visible on wider screens; on phones only screen readers get it (e.g. "Start practice" -> "Start"). */
+@media (max-width: 640px) {
+  .wide-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* A small heading inside a card or above a group of cards. */
+.section-h {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
 /* Cards and lists */
 .card {
   display: block;
@@ -435,6 +453,28 @@ button.button {
 .button.secondary:disabled:hover {
   border-color: var(--border);
   background: transparent;
+}
+
+.button.small {
+  min-height: 2.25rem;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+/* A button that looks like a link (for actions that don't navigate). */
+.link-button {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  color: var(--link);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.link-button.small {
+  font-size: 0.875rem;
 }
 
 .actions {

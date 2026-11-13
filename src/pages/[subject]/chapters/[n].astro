@@ -56,21 +56,20 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
     {chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
   </div>
 
-  <div class="actions" data-pagefind-ignore>
-    {questionCount > 0 && (
-      <>
-        <a class="button" href={practiceStart(subject, { chapter: [chapter.number] }, questionCount).href}>
-          {practiceStart(subject, { chapter: [chapter.number] }, questionCount).label}
-        </a>
-        <a class="button secondary" href={practiceHref(subject, { chapter: [chapter.number] })}>Choose filters ({questionCount} questions)</a>
-      </>
-    )}
-    {tests.map((t) => (
-      <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>
-        {t.title}{t.date && ` · ${formatDate(t.date)}`}
+  {questionCount > 0 && (
+    <div class="actions" data-pagefind-ignore>
+      <a class="button" href={practiceStart(subject, { chapter: [chapter.number] }, questionCount).href}>
+        {practiceStart(subject, { chapter: [chapter.number] }, questionCount).label}
       </a>
-    ))}
-  </div>
+      <a class="button secondary" href={practiceHref(subject, { chapter: [chapter.number] })}>Choose filters ({questionCount} questions)</a>
+    </div>
+  )}
+  {tests.map((t) => (
+    <p class="test-link" data-pagefind-ignore>
+      <span class="muted">Class test:</span> <a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a>
+      {t.date && <span class="muted"> · {formatDate(t.date)}</span>}
+    </p>
+  ))}
   {questionCount === 0 && (
     <p class="small muted">
       No practice questions for this chapter yet.
@@ -93,7 +92,7 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
   </section>
 
   {topics.length > 0 && (
-    <section aria-labelledby="topics-h">
+    <section id="topics" aria-labelledby="topics-h">
       <h2 id="topics-h">AP topics in this chapter</h2>
       <ol class="plain-list topics">
         {topics.map((t) => (
@@ -166,6 +165,12 @@ const plural = (k: number, word: string) => `${k} ${word}${k === 1 ? '' : 's'}`;
 <style>
   .status {
     margin-bottom: 0.25rem;
+  }
+  .test-link {
+    margin: 0 0 1rem;
+  }
+  .test-link a {
+    font-weight: 600;
   }
   .badge.now {
     background: var(--accent);

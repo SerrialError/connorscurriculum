@@ -20,7 +20,7 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
 </div>
 
 <script>
-  import { trimTitle } from '../lib/search-excerpt';
+  import { isRealMatch, trimTitle } from '../lib/search-excerpt';
 
   interface PagefindResult {
     data(): Promise<{ url: string; excerpt: string; meta: Record<string, string> }>;
@@ -67,14 +67,19 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
       const search = await pf.search(q);
       if (!search) return; // superseded by a newer query
       const { results } = search;
-      const top = await Promise.all(results.slice(0, limit).map((r) => r.data()));
+      // Load a few more than are shown, so loose matches can be dropped and the count stays right
+      // for small result sets (where loose matches show up).
+      const loaded = await Promise.all(results.slice(0, Math.max(limit, 30)).map((r) => r.data()));
       if (mine !== seq) return;
+      const kept = loaded.filter((r) => isRealMatch(q, r.excerpt));
+      const total = results.length - (loaded.length - kept.length);
+      const top = kept.slice(0, limit);
       status.textContent =
-        results.length === 0
+        total === 0
           ? 'No results. Try fewer or different words.'
-          : results.length > top.length
-            ? `Top ${top.length} of ${results.length} results`
-            : `${results.length} result${results.length === 1 ? '' : 's'}`;
+          : total > top.length
+            ? `Top ${top.length} of ${total} results`
+            : `${total} result${total === 1 ? '' : 's'}`;
       list.replaceChildren(
         ...top.map((r) => {
           const li = document.createElement('li');
@@ -93,8 +98,8 @@ const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' 
           return li;
         }),
       );
-      more.hidden = results.length <= top.length;
-      more.textContent = `Show all ${results.length} results`;
+      more.hidden = total <= top.length;
+      more.textContent = `Show all ${total} results`;
     }
 
     more.addEventListener('click', () => {

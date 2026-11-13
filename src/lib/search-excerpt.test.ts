@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { trimTitle } from './search-excerpt';
+import { isRealMatch, trimTitle } from './search-excerpt';
 
 describe('trimTitle', () => {
   it('drops the page title from the start of an excerpt', () => {
@@ -26,5 +26,19 @@ describe('trimTitle', () => {
     expect(trimTitle('Atomic radius decreases', '1.7 Periodic Trends')).toBe('Atomic radius decreases');
     expect(trimTitle('Periodic Trendsetters are', 'Periodic Trends')).toBe('Periodic Trendsetters are');
     expect(trimTitle('1.7 Periodic Trends', '1.7 Periodic Trends')).toBe('1.7 Periodic Trends');
+  });
+});
+
+describe('isRealMatch', () => {
+  it('drops matches on a much shorter word', () => {
+    expect(isRealMatch('xyzzy', 'the <mark>X</mark> → <mark>X⁺</mark> + e⁻')).toBe(false);
+  });
+  it('keeps real and stemmed matches', () => {
+    expect(isRealMatch('slater', "Use <mark>Slater’s</mark> rules")).toBe(true);
+    expect(isRealMatch('ionization energies', 'first <mark>ionization</mark> energy')).toBe(true);
+    expect(isRealMatch('Zeff', '<mark>Z_eff</mark> grows')).toBe(true);
+    expect(isRealMatch('zeff', '<mark>Zeff</mark> grows')).toBe(true);
+    expect(isRealMatch('pe', 'the <mark>PES</mark> spectrum')).toBe(true);
+    expect(isRealMatch('anything', 'no highlights here')).toBe(true);
   });
 });

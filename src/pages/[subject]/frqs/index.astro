@@ -47,7 +47,8 @@ const exams = data.pastFrqs;
 
       <div class="toolbar">
         {exams.length > 1 && (
-          <nav class="year-nav" aria-label="Exam years">
+          <nav class="year-nav jump-nav" aria-label="Exam years">
+            <span class="jump-label" aria-hidden="true">Jump to</span>
             {exams.map((e) => <a href={`#${e.year}`}>{e.year}</a>)}
           </nav>
         )}
@@ -159,8 +160,7 @@ const exams = data.pastFrqs;
     border-bottom: 1px solid var(--border);
   }
   .year-nav {
-    display: flex;
-    gap: 0.35rem;
+    flex-wrap: nowrap;
     min-width: 0;
     max-width: 100%;
     overflow-x: auto;
@@ -180,18 +180,6 @@ const exams = data.pastFrqs;
     width: 1.1rem;
     height: 1.1rem;
     accent-color: var(--accent);
-  }
-  .year-nav a {
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 0.25rem 0.7rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    text-decoration: none;
-  }
-  .year-nav a:hover {
-    border-color: var(--accent);
   }
   .links {
     display: flex;

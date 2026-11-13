@@ -217,6 +217,28 @@ th {
   }
 }
 
+/* Set by a script in Base.astro on tables and equations that are wider than the screen: a caption
+   that stays in view while the box scrolls, so the hidden columns aren't missed. */
+table[data-scrolls]::after,
+.katex-display[data-scrolls]::after {
+  content: 'Scroll sideways for more →';
+  display: block;
+  position: sticky;
+  left: 0;
+  width: max-content;
+  margin-top: 0.3rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font: 600 0.75rem/1.5 var(--font);
+}
+/* Once scrolled, the caption has done its job (hidden, not removed, so nothing jumps). */
+table[data-scrolls='seen']::after,
+.katex-display[data-scrolls='seen']::after {
+  visibility: hidden;
+}
+
 /* KaTeX: long display equations scroll instead of widening the page. */
 /* Inline math plus the punctuation after it (see rehypeMathPunctuation). */
 .nowrap {
@@ -456,6 +478,26 @@ button.button {
 
 .breadcrumbs a {
   color: var(--muted);
+}
+
+/* "Jump to" links within a page (exam years, AP units). Plain links, not pills: pills are
+   filters you toggle on the Practice page. */
+.jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.9rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.jump-nav .jump-label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.jump-nav a {
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Lesson components (Callout, Reveal, YouTube). Global rather than scoped so the CMS

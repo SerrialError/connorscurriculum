@@ -46,3 +46,21 @@ export function trimTitle(html: string, title: string): string {
   if (!rest.trim()) return html;
   return rest;
 }
+
+const letters = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}]/gu, '');
+
+/**
+ * Pagefind sometimes matches a query to a much shorter word ("xyzzy" highlights "X"). A result
+ * counts as a real match when some highlighted word starts with the first three letters of a query
+ * word (the whole word if it is shorter). Excerpts with no highlights are kept: the match may be in
+ * the title or metadata.
+ */
+export function isRealMatch(query: string, excerptHtml: string): boolean {
+  const marks = [...excerptHtml.matchAll(/<mark>([^<]*)<\/mark>/g)].map((m) => letters(m[1]!)).filter(Boolean);
+  if (marks.length === 0) return true;
+  const words = query.split(/\s+/).map(letters).filter(Boolean);
+  return words.some((w) => {
+    const head = w.slice(0, 3);
+    return marks.some((m) => m.startsWith(head));
+  });
+}

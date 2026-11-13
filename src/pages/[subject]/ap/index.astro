@@ -37,7 +37,8 @@ const gapLabel = { missing: 'Not in textbook', thin: 'Thin in textbook' } as con
     and past FRQs.
   </p>
 
-  <nav class="unit-nav" aria-label="Units">
+  <nav class="unit-nav jump-nav" aria-label="Units">
+    <span class="jump-label" aria-hidden="true">Jump to</span>
     {data.ced.units.map((u) => (
       <a href={`#unit-${u.id}`} title={u.title}>Unit {u.id}</a>
     ))}
@@ -144,22 +145,7 @@ const gapLabel = { missing: 'Not in textbook', thin: 'Thin in textbook' } as con
 
 <style>
   .unit-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
     margin: 1rem 0;
-  }
-  .unit-nav a {
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 0.25rem 0.65rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    text-decoration: none;
-  }
-  .unit-nav a:hover {
-    border-color: var(--accent);
   }
   .legend {
     display: flex;

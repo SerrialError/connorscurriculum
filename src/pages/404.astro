@@ -5,26 +5,35 @@ import { url } from '../lib/content';
 import { loadRegistry } from '../lib/registry';
 
 const subjects = [...loadRegistry().values()];
+// With one class, show its usual header and nav, so the page looks like the rest of the site.
+const only = subjects.length === 1 ? subjects[0]!.subject : undefined;
 ---
 
-<Base title="Page not found">
+<Base title="Page not found" subject={only?.id}>
   <h1>Page not found</h1>
   <p class="muted">That page doesn't exist. It may have moved, or the link may have a typo. Try searching:</p>
   <Search />
-  <h2>Or start from a class</h2>
-  <ul class="plain-list links">
-    {subjects.map(({ subject }) => (
-      <li class="card">
-        <a href={url(`${subject.id}/`)}><strong>{subject.name}</strong></a>
-        <span class="small">
-          <a href={url(`${subject.id}/chapters/`)}>Chapters</a>{' · '}
-          <a href={url(`${subject.id}/ap/`)}>AP topics</a>{' · '}
-          <a href={url(`${subject.id}/practice/`)}>Practice</a>{' · '}
-          <a href={url(`${subject.id}/frqs/`)}>Past FRQs</a>
-        </span>
-      </li>
-    ))}
-  </ul>
+  {only ? (
+    <p>Or go to the <a href={url(`${only.id}/`)}>{only.name} home page</a>.</p>
+  ) : (
+    <>
+      <h2>Or start from a class</h2>
+      <ul class="plain-list links">
+        {subjects.map(({ subject }) => (
+          <li class="card">
+            <a href={url(`${subject.id}/`)}><strong>{subject.name}</strong></a>
+            <span class="small">
+              <a href={url(`${subject.id}/chapters/`)}>Chapters</a>{' · '}
+              <a href={url(`${subject.id}/tests/`)}>Tests</a>{' · '}
+              <a href={url(`${subject.id}/practice/`)}>Practice</a>{' · '}
+              <a href={url(`${subject.id}/ap/`)}>AP topics</a>{' · '}
+              <a href={url(`${subject.id}/frqs/`)}>Past FRQs</a>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
 </Base>
 
 <style>

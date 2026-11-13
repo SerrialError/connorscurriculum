@@ -1,7 +1,5 @@
 ---
 import Search from '../../components/Search.astro';
-import TopicBadges from '../../components/TopicBadges.astro';
-import TopicLegend from '../../components/TopicLegend.astro';
 import Base from '../../layouts/Base.astro';
 import {
   chapterRange,
@@ -79,6 +77,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
       <section class="card now" aria-labelledby="now-h">
         <p class="eyebrow">{now.length ? 'Now in class' : 'Up next'}</p>
         <h2 id="now-h">{chapterRange(nowInfo.map((c) => c.chapter.number))}</h2>
+        {/* Compact: one line per chapter. The topic list lives on the chapter page. */}
         {nowInfo.map((c) => (
           <div class="now-chapter">
             <h3>
@@ -86,25 +85,27 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
                 Chapter {c.chapter.number}: {c.chapter.title}
               </a>
             </h3>
-            <TopicBadges subject={subject} topics={c.topics} />
             <p class="small links">
-              {c.lessons + c.questions === 0 ? (
-                <span class="muted">No lessons or practice questions yet.</span>
-              ) : (
+              {c.topics.length > 0 && (
+                <a href={url(`${subject}/chapters/${c.chapter.number}/#topics`)}>{plural(c.topics.length, 'AP topic')}</a>
+              )}
+              {c.lessons + c.questions > 0 && (
                 <>
                   <span class="muted">{[c.lessons && plural(c.lessons, 'lesson'), c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
                   {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
                 </>
               )}
               {c.frqParts > 0 && (
-                <a href={url(`${subject}/chapters/${c.chapter.number}/#frqs`)}>
-                  {plural(c.frqParts, 'past AP FRQ part')} on these topics
-                </a>
+                <a href={url(`${subject}/chapters/${c.chapter.number}/#frqs`)}>{plural(c.frqParts, 'past AP FRQ part')}</a>
               )}
             </p>
           </div>
         ))}
-        <TopicLegend subject={subject} topics={nowInfo.flatMap((c) => c.topics)} />
+        {nowInfo.every((c) => c.lessons + c.questions === 0) && (
+          <p class="small muted empty-note">
+            No lessons or practice questions yet. Use the AP topics and past FRQs above.
+          </p>
+        )}
       </section>
     )}
 
@@ -128,7 +129,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
           {testQuestions > 0 && (
             <a class="button" href={practiceHref(subject, { test: test.id, start: '1' })}>Start all {testQuestions} test questions</a>
           )}
-          <a class="button secondary" href={url(`${subject}/tests/${test.id}/`)}>Lessons and topics</a>
+          <a class="button secondary" href={url(`${subject}/tests/${test.id}/`)}>Open test page</a>
         </div>
         <p class="small"><a href={url(`${subject}/tests/`)}>All class tests</a></p>
       </section>
@@ -265,14 +266,19 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     padding-top: 0.2rem;
   }
   .now-chapter h3 {
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.15rem;
     font-size: 1.05rem;
+  }
+  .empty-note {
+    margin: 0.6rem 0 0 !important;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
   }
   .links {
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem 1rem;
-    margin: 0.5rem 0 0 !important;
+    margin: 0 !important;
   }
   .review-links {
     margin: 0.5rem 0 0;

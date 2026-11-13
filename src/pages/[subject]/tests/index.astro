@@ -42,7 +42,7 @@ const isUpcoming = (date?: string) => !!date && date >= today;
               )}
               <div class="actions">
                 {n > 0 && <a class="button" href={practiceHref(subject, { test: t.id, start: '1' })}>Start all {n} questions</a>}
-                <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>Lessons and topics</a>
+                <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>Open test page</a>
               </div>
             </li>
           ))}

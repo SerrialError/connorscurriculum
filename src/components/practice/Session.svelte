@@ -259,7 +259,11 @@
             <button class="button secondary" type="button" onclick={next}>Skip</button>
             <!-- One button, so focus stays put when "Show all scoring" turns into "Done marking". -->
             <button class="button" type="button" onclick={() => (attempt.allShown(q) ? finish(q) : q.parts.forEach((_, p) => attempt.reveal(q, p)))}>
-              {attempt.allShown(q) ? `Done marking (${attempt.earned(q)}/${frqTotal(q)})` : q.parts.length > 1 ? 'Show all scoring' : 'Show scoring'}
+              {#if attempt.allShown(q)}
+                Done<span class="wide-only"> marking</span> ({attempt.earned(q)}/{frqTotal(q)})
+              {:else}
+                {q.parts.length > 1 ? 'Show all scoring' : 'Show scoring'}
+              {/if}
             </button>
           {:else}
             <button class="button" type="button" bind:this={nextButton} onclick={next}>

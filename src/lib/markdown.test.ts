@@ -4,7 +4,7 @@ import { renderMarkdown, renderPlainText } from './markdown';
 describe('rehypeMathPunctuation', () => {
   it('keeps a comma after inline math on the same line', async () => {
     const html = await renderMarkdown('rate of $0.060$, water forms.');
-    expect(html).toMatch(/<span class="nowrap"><span class="katex">[\s\S]*<\/span>,<\/span> water forms\./);
+    expect(html).toMatch(/<span class="nowrap"><span class="katex katex-short">[\s\S]*<\/span>,<\/span> water forms\./);
   });
 
   it('leaves math without trailing punctuation alone', async () => {
@@ -49,5 +49,25 @@ describe('remarkDisplayMathParagraphs', () => {
   it('leaves single-dollar math and $$ inside a sentence inline', async () => {
     expect(await renderMarkdown('$1.50 \\times 10^{2}$')).not.toContain('katex-display');
     expect(await renderMarkdown('so $$x$$ is')).not.toContain('katex-display');
+  });
+});
+
+describe('short inline math', () => {
+  it('marks short inline math so it stays on one line', async () => {
+    const html = await renderMarkdown('in magnesium ($Z = 12$). Then $n = 3 \\to 2$ and $\\ce{Mg^2+}$?');
+    expect(html.match(/class="katex katex-short"/g)).toHaveLength(3);
+  });
+
+  it('leaves long inline math and display math free to wrap', async () => {
+    const long = await renderMarkdown('so $S = 1(0.35) + 8(0.85) + 2(1.00) = 9.15$ here');
+    expect(long).not.toContain('katex-short');
+    expect(await renderMarkdown('Step:\n\n$$x = 1$$\n\nDone.')).not.toContain('katex-short');
+  });
+});
+
+describe('opening brackets before inline math', () => {
+  it('keep "(" with the math after it', async () => {
+    const html = await renderMarkdown('in magnesium ($Z = 12$).');
+    expect(html).toMatch(/magnesium <span class="nowrap">\(<span class="katex katex-short">[\s\S]*?<\/span>\)\.<\/span>/);
   });
 });

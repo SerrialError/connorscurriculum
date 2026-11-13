@@ -14,39 +14,52 @@ import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { hasClass, mathText, plainText } from './math-text';
 
-const PUNCTUATION = /^[,.;:!?)\]]+/;
+/** Punctuation that belongs to the math next to it: closing marks after it, an opening bracket before it. */
+const AFTER = /^[,.;:!?)\]]+/;
+const BEFORE = /[([]$/;
 const isInlineMath = (node: ElementContent | undefined): node is Element =>
   node?.type === 'element' &&
   node.tagName === 'span' &&
   Array.isArray(node.properties?.className) &&
   node.properties.className.includes('katex');
 
+/** Inline math up to this many characters (as plain text) never breaks across lines. */
+export const SHORT_MATH = 20;
+
 /**
- * Keep punctuation that directly follows inline math on the same line as the math,
- * so a narrow screen never starts a line with ", water…". Wraps both in <span class="nowrap">.
+ * Keep inline math and the punctuation touching it on one line, so a narrow screen never starts
+ * a line with ", water…" or ends one with "(": the math and that punctuation are wrapped in
+ * <span class="nowrap">. Short inline math ("n = 3 → 2", "Mg²⁺") also gets class "katex-short",
+ * which keeps it on one line; longer math can still wrap between terms.
  */
 export function rehypeMathPunctuation() {
   const walk = (parent: Root | Element) => {
     const out: (typeof parent.children)[number][] = [];
     const kids = parent.children;
+    const display = parent.type === 'element' && hasClass(parent, 'katex-display');
     for (let i = 0; i < kids.length; i++) {
       const node = kids[i]!;
-      const next = kids[i + 1];
-      if (isInlineMath(node as ElementContent) && next?.type === 'text') {
-        const punct = next.value.match(PUNCTUATION)?.[0];
-        if (punct) {
-          out.push({
-            type: 'element',
-            tagName: 'span',
-            properties: { className: ['nowrap'] },
-            children: [node as ElementContent, { type: 'text', value: punct }],
-          });
-          next.value = next.value.slice(punct.length);
-          continue;
-        }
+      if (!isInlineMath(node as ElementContent)) {
+        if (node.type === 'element') walk(node);
+        out.push(node);
+        continue;
       }
-      if (node.type === 'element' && !isInlineMath(node)) walk(node);
-      out.push(node);
+      const math = node as Element;
+      if (!display && plainText(math).length <= SHORT_MATH) math.properties.className = [...(math.properties.className as string[]), 'katex-short'];
+      const prev = out.at(-1);
+      const next = kids[i + 1];
+      const before = prev?.type === 'text' ? prev.value.match(BEFORE)?.[0] : undefined;
+      const after = next?.type === 'text' ? next.value.match(AFTER)?.[0] : undefined;
+      if (!before && !after) {
+        out.push(math);
+        continue;
+      }
+      if (before && prev?.type === 'text') prev.value = prev.value.slice(0, -before.length);
+      if (after && next?.type === 'text') next.value = next.value.slice(after.length);
+      const children: ElementContent[] = [math];
+      if (before) children.unshift({ type: 'text', value: before });
+      if (after) children.push({ type: 'text', value: after });
+      out.push({ type: 'element', tagName: 'span', properties: { className: ['nowrap'] }, children });
     }
     parent.children = out as typeof parent.children;
   };

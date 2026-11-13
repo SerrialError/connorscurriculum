@@ -259,6 +259,11 @@ table[data-scrolls='seen']::after,
 .nowrap .katex {
   white-space: normal;
 }
+/* Short inline math (see rehypeMathPunctuation) stays on one line: no "n =" / "3 → 2" splits. */
+.katex.katex-short,
+.nowrap .katex.katex-short {
+  white-space: nowrap;
+}
 
 .katex-display {
   overflow-x: auto;

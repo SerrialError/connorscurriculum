@@ -10,6 +10,7 @@
     type History,
     type McqQuestion,
     type Mode,
+    type PracticeLesson,
     type PracticeQuestion,
     type PracticeTest,
     CLASS_ONLY_UNIT,
@@ -27,6 +28,8 @@
     frqEarned,
     frqTotal,
     isCorrect,
+    lessonsFor,
+    lessonsForMissed,
     parseFilters,
     recordResult,
     selectQuestions,
@@ -37,7 +40,7 @@
     wantsStart,
     weakHasNoHistory,
   } from '../lib/practice';
-  import { type FrqLink, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
+  import { type FrqLink, frqCountLabel, frqName, frqPractices, frqTotal as pastFrqPoints, matchFrqs, readyPoints } from '../lib/frqs';
   import { readJson, storageKey, writeJson } from '../lib/storage';
 
   interface Preset {
@@ -68,6 +71,8 @@
     practiceNames: Record<string, string>;
     /** Ready-made filter sets shown above the filters (class tests, etc.). */
     presets: Preset[];
+    /** Lessons to point to from explanations and results ("Study this"). */
+    lessons: PracticeLesson[];
   }
 
   let {
@@ -84,6 +89,7 @@
     chaptersHref,
     practiceNames,
     presets,
+    lessons,
   }: Props = $props();
 
   const historyKey = storageKey(subject, 'practice-history');
@@ -148,6 +154,7 @@
 
   let questionHeading = $state<HTMLElement | null>(null);
   let nextButton = $state<HTMLButtonElement | null>(null);
+  let verdictEl = $state<HTMLElement | null>(null);
   let resultsHeading = $state<HTMLElement | null>(null);
 
   const matching = $derived(all ? filterQuestions(all, filters, tests) : []);
@@ -195,6 +202,7 @@
   const missed = $derived(session.filter((q) => scores[q.id] !== undefined && scores[q.id]! < 1));
   const skipped = $derived(session.filter((q) => scores[q.id] === undefined));
   const breakdown = $derived(topicBreakdown(session, scores));
+  const study = $derived(lessonsForMissed(missed, lessons));
   const current = $derived(session[index]);
 
   /** Topics with history, weakest first, for the "Your weak spots" list. */
@@ -516,8 +524,28 @@
     if (!picks[q.id] || checked[q.id]) return;
     checked[q.id] = true;
     save(q.id, isCorrect(q, picks[q.id]!) ? 1 : 0);
+    await showVerdict();
+  }
+
+  /**
+   * After Check or Done marking: keep the right/wrong verdict in view and put focus on Next.
+   * If the verdict, explanation, and Next don't all fit on screen (small phones), the verdict goes
+   * to the top of the screen rather than scrolling down to Next.
+   */
+  async function showVerdict() {
     await tick();
-    nextButton?.focus();
+    nextButton?.focus({ preventScroll: true });
+    const v = verdictEl?.getBoundingClientRect();
+    const n = nextButton?.getBoundingClientRect();
+    if (!v || !n) return;
+    const margin = 12;
+    if (n.bottom - v.top + 2 * margin <= window.innerHeight) {
+      // Everything fits: scroll as little as possible to show it all.
+      if (n.bottom + margin > window.innerHeight) window.scrollBy({ top: n.bottom + margin - window.innerHeight });
+      else if (v.top < margin) window.scrollBy({ top: v.top - margin });
+    } else if (v.top < margin || v.top > window.innerHeight / 3) {
+      window.scrollBy({ top: v.top - margin });
+    }
   }
 
   function reveal(q: FrqQuestion, part: number) {
@@ -539,8 +567,7 @@
   async function finish(q: FrqQuestion) {
     finished[q.id] = true;
     save(q.id, frqEarned(q, marks[q.id] ?? []) / frqTotal(q));
-    await tick();
-    nextButton?.focus();
+    await showVerdict();
   }
 
   function next() {
@@ -670,7 +697,7 @@
     <details class="card past-frqs">
       <summary>
         <span class="summary-title">Past AP FRQs on these topics</span>
-        <span class="muted small">{plural(matches.length, 'released question')}</span>
+        <span class="muted small">{frqCountLabel(matches)}</span>
       </summary>
       <p class="small muted">
         Real exam questions from AP Central. Do the listed parts, then grade yourself with the scoring guidelines.
@@ -700,6 +727,16 @@
         {/each}
       </ul>
     </details>
+  {/if}
+{/snippet}
+
+{#snippet studyThis(q: PracticeQuestion)}
+  {@const found = lessonsFor(q, lessons)}
+  {#if found.length > 0}
+    <p class="study small">
+      <span class="study-label">Study this in the lesson:</span>
+      {#each found as l, i (l.href)}{i > 0 ? ' · ' : ' '}<a href={l.href}>{l.title}</a>{/each}
+    </p>
   {/if}
 {/snippet}
 
@@ -1102,10 +1139,11 @@
             {/each}
           </fieldset>
           {#if done}
-            <p class="verdict" class:ok={isCorrect(q, picks[q.id]!)} role="status">
+            <p class="verdict" class:ok={isCorrect(q, picks[q.id]!)} role="status" bind:this={verdictEl}>
               {isCorrect(q, picks[q.id]!) ? '✓ Correct' : `✗ Not quite. The answer is ${q.answer.toUpperCase()}.`}
             </p>
             <div class="explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
+            {@render studyThis(q)}
           {/if}
         {:else}
           {#each q.parts as part, p (part.label)}
@@ -1128,11 +1166,12 @@
             </section>
           {/each}
           {#if finished[q.id]}
-            <p class="verdict ok" role="status">
+            <p class="verdict ok" role="status" bind:this={verdictEl}>
               You earned {frqEarned(q, marks[q.id] ?? [])} of {frqTotal(q)} points.
               <span class="small muted">Misclicked? You can still change your marks above.</span>
             </p>
             <div class="explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
+            {@render studyThis(q)}
           {:else}
             <p class="small muted marking" aria-live="polite">
               {#if allShown(q)}
@@ -1207,6 +1246,26 @@
         <button class="button secondary" type="button" onclick={backToSetup}>Change filters</button>
       </div>
     </div>
+
+    {#if study.lessons.length > 0 || study.chapters.length > 0}
+      <section class="card study-card" aria-labelledby="study-h">
+        <h3 id="study-h" class="section-h">Read up on what you missed</h3>
+        <ul class="plain-list study-list">
+          {#each study.lessons as s (s.lesson.href)}
+            <li>
+              <a href={s.lesson.href}>{s.lesson.title}</a>
+              <span class="small muted">Ch. {s.lesson.chapter} · {plural(s.missed, 'missed question')}</span>
+            </li>
+          {/each}
+          {#each study.chapters as n (n)}
+            <li>
+              <a href={`${chaptersHref}${n}/#lessons`}>Chapter {n} lessons and notes</a>
+              <span class="small muted">for the other questions you missed</span>
+            </li>
+          {/each}
+        </ul>
+      </section>
+    {/if}
 
     {#if breakdown.length > 0}
       <section class="card">
@@ -1447,6 +1506,11 @@
   }
   .count.zero {
     opacity: 0.6;
+  }
+  /* Options that would match nothing stay usable but recede. */
+  .chip:has(.count.zero):not(:has(input:checked)) {
+    border-style: dashed;
+    color: var(--muted);
   }
   .chip:has(input:checked) .count {
     background: var(--accent-ink);
@@ -1845,6 +1909,28 @@
     border-top: 1px solid var(--border);
     margin-top: 0.5rem;
     padding-top: 0.25rem;
+  }
+  .study {
+    margin: 0.75rem 0 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background: var(--accent-soft);
+  }
+  .study a {
+    font-weight: 600;
+  }
+  .study-label {
+    color: var(--text-2);
+  }
+  .study-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.6rem;
+    padding: 0.35rem 0;
+  }
+  .study-list a {
+    font-weight: 600;
   }
   .frq-part {
     margin: 0.75rem 0 1rem;

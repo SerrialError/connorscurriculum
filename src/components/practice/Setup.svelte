@@ -3,15 +3,17 @@
   // "Start practice" is pressed (Enter on a chip only toggles it). Every control just shows
   // `filters`, and changing one changes only that one.
   import { matchFrqs } from '../../lib/frqs';
-  import { countWith, emptyFilters, filterQuestions, filterTopics, isDefaultFilters, sessionSize, toggled } from '../../lib/practice/filters';
-  import { ALL_QUESTIONS, DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
+  import { countWith, emptyFilters, filterQuestions, filterTopics, isDefaultFilters, toggled } from '../../lib/practice/filters';
+  import { DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
   import type { Filters, PracticeQuestion } from '../../lib/practice/types';
   import { filtersToQuery } from '../../lib/practice/url';
-  import { byId, plural } from '../../lib/text';
+  import { byId } from '../../lib/text';
   import Chip from './Chip.svelte';
   import { type PracticeChapter, getCourse } from './context';
   import CountPicker from './CountPicker.svelte';
   import PastFrqs from './PastFrqs.svelte';
+  import Presets from './Presets.svelte';
+  import StartBar from './StartBar.svelte';
   import TopicPicker from './TopicPicker.svelte';
 
   interface Props {
@@ -23,7 +25,7 @@
   }
 
   let { all, filters = $bindable(), weakest, onstart }: Props = $props();
-  const { tests, chapters, laterChapters, units, presets, everything, chapterTopics, frqs, hrefs } = getCourse();
+  const { tests, chapters, laterChapters, units, presets, chapterTopics, frqs, hrefs } = getCourse();
 
   let moreOpen = $state(false);
   let copied = $state(false);
@@ -31,7 +33,6 @@
   let resets = $state(0);
 
   const matching = $derived(filterQuestions(all, filters, tests));
-  const setSize = $derived(sessionSize(matching.length, filters));
   /** Chapter chips: chapters with class questions (and any other picked chapter, e.g. from a link). */
   const mainChapters = $derived(chapters.filter((c) => (c.hasQuestions || filters.chapters.includes(c.number)) && !laterChapters.includes(c.number)));
   const laterChapterList = $derived(chapters.filter((c) => laterChapters.includes(c.number)));
@@ -54,9 +55,7 @@
     .filter(Boolean)
     .join(', ')
     .replace(/^./, (c) => c.toUpperCase());
-
-  const weakestFirst: Filters = { ...emptyFilters(), mode: 'weak' };
-  const weakestSize = $derived(sessionSize(filterQuestions(all, weakestFirst, tests).length, weakestFirst));
+  const hasQuickStart = $derived(presets.length > 0 || weakest);
 
   /** Enter on a filter chip toggles it, like Space. It never starts the set. */
   function onFilterKey(e: KeyboardEvent) {
@@ -95,39 +94,13 @@
   </Chip>
 {/snippet}
 
-{#if presets.length > 0 || weakest}
-  <section class="presets" aria-labelledby="presets-h">
-    <h2 id="presets-h" class="section-h">Quick start</h2>
-    <div class="preset-row">
-      {#each presets as p (p.label)}
-        <div class="preset">
-          <button type="button" class="preset-main" onclick={() => onstart(p.filters)}>
-            <span class="preset-label">{p.label} <span aria-hidden="true">→</span></span>
-            {#if p.note}<span class="small muted">{p.note}</span>{/if}
-          </button>
-          {#if p.alt}
-            {@const alt = p.alt}
-            <button type="button" class="link-button small preset-alt" onclick={() => onstart(alt.filters)}>
-              {alt.label}<span class="visually-hidden"> ({p.label})</span> <span aria-hidden="true">→</span>
-            </button>
-          {/if}
-        </div>
-      {/each}
-      {#if weakest}
-        <div class="preset">
-          <button type="button" class="preset-main" onclick={() => onstart(weakestFirst)}>
-            <span class="preset-label">Weakest topics <span aria-hidden="true">→</span></span>
-            <span class="small muted">{plural(weakestSize, 'question')} on what you've missed most</span>
-          </button>
-        </div>
-      {/if}
-    </div>
-  </section>
+{#if hasQuickStart}
+  <Presets {all} {weakest} {onstart} />
 {/if}
 
 <form class="card filters" onsubmit={(e) => e.preventDefault()} onkeydown={onFilterKey} aria-labelledby="filters-h">
   <div class="filters-head">
-    <h2 id="filters-h" class="section-h">{presets.length > 0 || weakest ? 'Or pick your own set' : 'Pick your own set'}</h2>
+    <h2 id="filters-h" class="section-h">{hasQuickStart ? 'Or pick your own set' : 'Pick your own set'}</h2>
     <!-- Always laid out (hidden when there's nothing to reset), so picking a filter doesn't move the chips. -->
     <button class="link-button reset" class:invisible={isDefaultFilters(filters)} type="button" onclick={() => resetAll()}>Reset all</button>
   </div>
@@ -255,47 +228,14 @@
     </p>
   </details>
 
-  <!-- Sticky, so Start is always in reach. On phones it is one short row: the count and Start. -->
-  <!-- With nothing matching, the picked filters show at every width, each with its remove button. -->
-  <div class="start-bar" class:none={matching.length === 0}>
-    <div class="start-info" aria-live="polite">
-      {#if matching.length === 0 && chips.length === 0}
-        <strong>No practice questions yet.</strong>
-      {:else if matching.length === 0}
-        <strong>No questions match.</strong>
-        <span class="small muted sub">Remove a filter.</span>
-      {:else}
-        <strong>{plural(setSize, 'question')}</strong>
-        <span class="small muted sub">
-          {#if setSize < matching.length}from {matching.length} matching{:else if chips.length === 0}{everything === ALL_QUESTIONS ? 'all questions' : `all of ${everything}`}{:else}all that match{/if}
-          <span class="mode">· {MODE_LABELS[filters.mode].toLowerCase()}</span>
-        </span>
-      {/if}
-    </div>
-    {#if chips.length > 0}
-      <ul class="plain-list active-chips" aria-label="Active filters">
-        {#each chips as c (c.label)}
-          <li>
-            <button type="button" class="active-chip" onclick={() => (filters = c.without)} aria-label={`Remove filter: ${c.label}`}>
-              {c.label} <span aria-hidden="true">×</span>
-            </button>
-          </li>
-        {/each}
-      </ul>
-    {/if}
-    <button class="button start" type="button" disabled={matching.length === 0} onclick={() => onstart($state.snapshot(filters))}>
-      Start<span class="wide-only"> practice</span> →
-    </button>
-  </div>
+  <StartBar bind:filters matching={matching.length} {chips} {onstart} />
 </form>
 
 <PastFrqs matches={frqMatches} />
 
 <style>
-  /* Quick start */
-  .presets {
-    margin-bottom: 1.25rem;
-  }
+
+  /* Filters */
   .filters-head {
     display: flex;
     flex-wrap: wrap;
@@ -310,64 +250,6 @@
   .reset.invisible {
     visibility: hidden;
   }
-  /* The cards share the row's width, however many there are. */
-  .preset-row {
-    display: grid;
-    gap: 0.6rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  }
-  /* A card: the main button fills it; an optional second way to start sits under it. */
-  .preset {
-    display: grid;
-    align-content: start;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
-  .preset:has(.preset-main:hover) {
-    border-color: var(--accent);
-  }
-  .preset-main {
-    display: grid;
-    gap: 0.1rem;
-    text-align: left;
-    font: inherit;
-    color: var(--text);
-    background: none;
-    border: 0;
-    border-radius: var(--radius);
-    padding: 0.65rem 0.85rem;
-    cursor: pointer;
-  }
-  .preset-label {
-    font-weight: 700;
-    color: var(--link);
-  }
-  .preset-alt {
-    justify-self: start;
-    margin: -0.35rem 0.85rem 0.45rem;
-  }
-  /* A single card is a strip across the row, its second way to start on the right. */
-  .preset:only-child {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: 1rem;
-  }
-  .preset:only-child .preset-main {
-    flex: 1 1 16rem;
-  }
-  .preset:only-child .preset-alt {
-    margin: -0.35rem 0.85rem 0.6rem;
-  }
-  @media (min-width: 641px) {
-    .preset:only-child .preset-alt {
-      margin: 0 1rem 0 0;
-    }
-  }
-
-  /* Filters */
   .filters {
     padding: 1rem 1.1rem 0;
   }
@@ -440,88 +322,4 @@
     margin: 0 0 1rem;
   }
 
-  /* Sticky start bar: always in reach while choosing filters. */
-  .start-bar {
-    position: sticky;
-    bottom: 0;
-    z-index: 2;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'info start' 'chips start';
-    gap: 0.4rem 1rem;
-    align-items: center;
-    margin: 0 -1.1rem;
-    padding: 0.75rem 1.1rem;
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 0 0 var(--radius) var(--radius);
-    box-shadow: 0 -6px 16px -10px rgb(0 0 0 / 0.25);
-  }
-  .start-bar:not(:has(.active-chips)) {
-    grid-template-areas: 'info start';
-  }
-  .start-info {
-    grid-area: info;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 0.5rem;
-    align-items: baseline;
-    min-width: 0;
-  }
-  .active-chips {
-    grid-area: chips;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin: 0;
-  }
-  .active-chip {
-    font: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.1rem 0.55rem;
-    border-radius: var(--pill);
-    border: 1px solid transparent;
-    background: var(--accent-soft);
-    color: var(--link);
-    cursor: pointer;
-  }
-  .active-chip:hover {
-    border-color: var(--accent);
-  }
-  .start {
-    grid-area: start;
-    min-width: 10rem;
-  }
-  /* Phones: one short row (count on the left, Start on the right); the picked chips are in the form above. */
-  @media (max-width: 640px) {
-    .start-bar {
-      grid-template-areas: 'info start';
-      padding: 0.45rem 1.1rem;
-      column-gap: 0.75rem;
-    }
-    .start-info {
-      display: grid;
-      line-height: 1.25;
-    }
-    .start-info .sub {
-      font-size: 0.8rem;
-    }
-    .start-info .mode,
-    .active-chips {
-      display: none;
-    }
-    .start {
-      min-width: 0;
-      min-height: 2.75rem;
-      padding-inline: 1.1rem;
-    }
-    .start-bar.none:has(.active-chips) {
-      grid-template-areas: 'info start' 'chips chips';
-      padding-bottom: 0.6rem;
-    }
-    .start-bar.none .active-chips {
-      display: flex;
-    }
-  }
 </style>

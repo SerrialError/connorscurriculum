@@ -4,13 +4,14 @@
   import { isTypingTarget } from '../../lib/keyboard';
   import { DIFFICULTY_LABELS, TYPE_LABELS } from '../../lib/practice/labels';
   import { lessonsFor } from '../../lib/practice/lessons';
-  import { frqTotal, isCorrect, scoreStatus } from '../../lib/practice/score';
+  import { frqTotal, isCorrect } from '../../lib/practice/score';
   import type { FrqQuestion, McqQuestion } from '../../lib/practice/types';
   import { verdictScroll } from '../../lib/practice/verdict-scroll';
   import type { Attempt } from './attempt.svelte';
   import { getCourse } from './context';
   import FrqParts from './FrqParts.svelte';
-  import QuestionDot from './QuestionDot.svelte';
+  import McqChoices from './McqChoices.svelte';
+  import SessionHeader from './SessionHeader.svelte';
 
   interface Props {
     attempt: Attempt;
@@ -29,26 +30,18 @@
   let { attempt, label, note, reviewing, onfilters, onresults, onscore }: Props = $props();
   const { lessons, hrefs, topicTitles, units } = getCourse();
 
-  /** Sets longer than this keep the question grid closed until it's wanted. */
-  const LONG_SET = 24;
-
-  let jumpOpen = $state(false);
   let heading = $state<HTMLElement | null>(null);
   let nextButton = $state<HTMLButtonElement | null>(null);
   let verdictEl = $state<HTMLElement | null>(null);
   let actionsEl = $state<HTMLElement | null>(null);
-  let qnavEl = $state<HTMLElement | null>(null);
 
   const total = $derived(attempt.questions.length);
   const isLast = $derived(attempt.index === total - 1);
 
-  // A new question starts at the top of the page, with focus on its heading. On phones the
-  // question numbers are one scrolling row: bring the current one into the middle of it.
+  // A new question starts at the top of the page, with focus on its heading.
   $effect(() => {
     void attempt.current?.id;
     void tick().then(() => {
-      const dot = qnavEl?.querySelector<HTMLElement>('[aria-current]');
-      if (qnavEl && dot) qnavEl.scrollLeft = dot.offsetLeft - (qnavEl.clientWidth - dot.offsetWidth) / 2;
       window.scrollTo({ top: 0 });
       heading?.focus({ preventScroll: true });
     });
@@ -146,32 +139,7 @@
 {#if attempt.current}
   {@const q = attempt.current}
   <section class="session" aria-label="Practice set">
-    <div class="session-bar">
-      <button class="link-button" type="button" onclick={() => onfilters()}>← Filters</button>
-      <span class="small muted">{attempt.answered} of {total} answered</span>
-      <button class="button secondary small" type="button" onclick={() => onresults()}>
-        {reviewing ? 'Back to results' : attempt.answered === total ? 'See results' : 'End set'}
-      </button>
-    </div>
-    <div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={total} aria-valuenow={attempt.answered}>
-      <span style:width={`${(attempt.answered / total) * 100}%`}></span>
-    </div>
-    <div class="set-line">
-      <p class="set-label small"><strong>{label}</strong>{#if note}<span class="muted">{' · '}{note}</span>{/if}</p>
-      {#if total > LONG_SET}
-        <button type="button" class="link-button small jump-toggle" aria-expanded={jumpOpen} aria-controls="qnav" onclick={() => (jumpOpen = !jumpOpen)}>
-          {jumpOpen ? 'Hide question list' : 'Question list'}
-        </button>
-      {/if}
-    </div>
-
-    {#if total > LONG_SET ? jumpOpen : total > 1}
-      <nav class="qnav" id="qnav" aria-label="Questions in this set" bind:this={qnavEl}>
-        {#each attempt.questions as s, i (s.id)}
-          <QuestionDot n={i + 1} status={scoreStatus(attempt.scores[s.id])} current={i === attempt.index} onclick={() => attempt.go(i)} />
-        {/each}
-      </nav>
-    {/if}
+    <SessionHeader {attempt} {label} {note} {reviewing} {onfilters} {onresults} />
 
     {#key q.id}
       <article class="card question" aria-labelledby="q-heading">
@@ -198,26 +166,7 @@
         {#if q.type === 'mcq'}
           {@const done = !!attempt.checked[q.id]}
           {@const right = done && isCorrect(q, attempt.picks[q.id]!)}
-          <fieldset class="choices" disabled={done}>
-            <legend class="visually-hidden">Choices</legend>
-            {#each q.choices as c (c.id)}
-              {@const isAnswer = done && c.id === q.answer}
-              {@const isWrongPick = done && attempt.picks[q.id] === c.id && c.id !== q.answer}
-              <label class="option-row choice" class:right={isAnswer} class:wrong={isWrongPick}>
-                <input
-                  type="radio"
-                  name={`pick-${q.id}`}
-                  value={c.id}
-                  aria-label={[c.text, isAnswer && 'correct answer', isWrongPick && 'your answer'].filter(Boolean).join(', ')}
-                  bind:group={attempt.picks[q.id]}
-                />
-                <span class="letter" aria-hidden="true">{c.id.toUpperCase()}</span>
-                <span class="choice-text" data-scroll-x={`Choice ${c.id.toUpperCase()}`}>{@html c.html}</span>
-                {#if isAnswer}<span class="mark">✓ Correct answer</span>{/if}
-                {#if isWrongPick}<span class="mark">✗ Your answer</span>{/if}
-              </label>
-            {/each}
-          </fieldset>
+          <McqChoices {q} {attempt} />
           {#if done}
             <p class="verdict" class:ok={right} role="status" bind:this={verdictEl}>
               {right ? '✓ Correct' : `✗ Incorrect. The answer is ${q.answer.toUpperCase()}.`}
@@ -276,64 +225,6 @@
 {/if}
 
 <style>
-  .session-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-  .progress {
-    height: 6px;
-    border-radius: var(--pill);
-    background: var(--surface-2);
-    overflow: hidden;
-    margin-bottom: 0.75rem;
-  }
-  .progress span {
-    display: block;
-    height: 100%;
-    background: var(--accent);
-    transition: width 0.2s;
-  }
-  /* The set's name and "Question list" share one line under the progress bar. */
-  .set-line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.1rem 1rem;
-    margin: -0.35rem 0 0.6rem;
-  }
-  .set-label {
-    margin: 0;
-    color: var(--text-2);
-  }
-  .jump-toggle {
-    margin-left: auto;
-  }
-  .qnav {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-bottom: 1rem;
-  }
-  /* Phones: one row that scrolls sideways, so the question starts high on the screen. The padding
-     keeps the current number's outline inside the scrolling box. */
-  @media (max-width: 520px) {
-    .qnav {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
-      gap: 0.25rem;
-      padding: 3px;
-      margin: -3px -3px calc(0.75rem - 3px);
-    }
-    .qnav :global(.qdot) {
-      flex: none;
-    }
-  }
   .question {
     min-width: 0;
     padding: 1.1rem 1.25rem;
@@ -359,8 +250,7 @@
   /* Wide math scrolls sideways (ScrollCues makes the box focusable). KaTeX pokes a pixel or two
      below the line, which should not make the box scroll up and down. */
   .prompt,
-  .explanation,
-  .choice-text {
+  .explanation {
     min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
@@ -373,86 +263,6 @@
     margin: 0.75rem 0;
     border-radius: 8px;
     background: #fff;
-  }
-  fieldset {
-    border: 0;
-    padding: 0;
-    margin: 0;
-    min-width: 0;
-  }
-  .choices {
-    display: grid;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-  .choice {
-    flex-wrap: wrap;
-  }
-  .choices:disabled .choice {
-    cursor: default;
-  }
-  .choices:disabled .choice:not(.right, .wrong) {
-    opacity: 0.7;
-  }
-  .choice.right,
-  .choice.right:has(input:checked) {
-    border-color: var(--good);
-    background: var(--good-soft);
-    opacity: 1;
-  }
-  .choice.wrong,
-  .choice.wrong:has(input:checked) {
-    border-color: var(--bad);
-    background: var(--bad-soft);
-    opacity: 1;
-  }
-  .choice input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .letter {
-    display: inline-grid;
-    place-items: center;
-    flex: none;
-    width: 1.6rem;
-    height: 1.6rem;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    font-weight: 700;
-    font-size: 0.85rem;
-    background: var(--surface-2);
-  }
-  .choice.right .letter {
-    background: var(--good);
-    border-color: var(--good);
-    color: var(--surface);
-  }
-  .choice.wrong .letter {
-    background: var(--bad);
-    border-color: var(--bad);
-    color: var(--surface);
-  }
-  .choice:not(.right, .wrong):has(input:checked) .letter {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--accent-ink);
-  }
-  /* Takes the row, but drops "✓ Correct answer" to its own line before squeezing the text. */
-  .choice-text {
-    flex: 1 1 12rem;
-    padding-top: 0.05rem;
-  }
-  .mark {
-    font-weight: 700;
-    font-size: 0.875rem;
-    margin-left: auto;
-  }
-  .right .mark {
-    color: var(--good);
-  }
-  .wrong .mark {
-    color: var(--bad);
   }
   .verdict {
     font-weight: 700;

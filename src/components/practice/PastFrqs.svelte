@@ -2,17 +2,10 @@
   // Released AP FRQs on the topics of the current filters (setup) or set (results).
   import { type FrqLink, frqCountLabel, frqName, frqPractices, frqTotal, matchFrqs, readinessLabel, readyPoints } from '../../lib/frqs';
   import { plural } from '../../lib/text';
+  import { getCourse } from './context';
 
-  interface Props {
-    matches: ReturnType<typeof matchFrqs>;
-    /** Topics learned this year or last year, for readiness. */
-    learned: ReadonlySet<string>;
-    frqsHref: string;
-    /** Science practice id ("5") -> name ("Mathematical Routines") */
-    practiceNames: Record<string, string>;
-  }
-
-  let { matches, learned, frqsHref, practiceNames }: Props = $props();
+  let { matches }: { matches: ReturnType<typeof matchFrqs> } = $props();
+  const { learned, hrefs, practiceNames } = getCourse();
   const key = (f: FrqLink) => f.year * 10 + f.number;
 </script>
 
@@ -24,7 +17,7 @@
     </summary>
     <p class="small muted">
       Real exam questions from AP Central. Do the listed parts, then grade yourself with the scoring guidelines.
-      <a href={frqsHref}>All past FRQs</a>
+      <a href={hrefs.frqs}>All past FRQs</a>
     </p>
     <ul class="plain-list">
       {#each matches as m (key(m.frq))}

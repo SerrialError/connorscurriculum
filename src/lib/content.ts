@@ -3,7 +3,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
 import { type FrqLink, flattenFrqs } from './frqs';
-import { DEFAULT_COUNT } from './practice';
+import { DEFAULT_COUNT } from './practice/filters';
 import { isPast, isoDate } from './dates';
 import { plural } from './text';
 import { topicIdFromRef } from './validate';
@@ -235,5 +235,3 @@ export function groupLessons(lessons: Lesson[]) {
     (g) => g.lessons.length > 0,
   );
 }
-
-export { chapterRange } from './practice';

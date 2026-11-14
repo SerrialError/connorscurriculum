@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_SAVED, type SavedSet, answeredIn, readSavedSets, resumable, withSaved } from './practice-saved';
+import { MAX_SAVED, type SavedSet, answeredIn, readSavedSets, resumable, withSaved } from './saved';
 
 const set = (over: Partial<SavedSet> = {}): SavedSet => ({
   id: 'abc123',

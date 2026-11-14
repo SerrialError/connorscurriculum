@@ -2,21 +2,21 @@
   // "Your practice history": how much has been answered on this device, the weakest topics with a
   // one-tap set for each, and clearing it all (with a confirmation).
   import { plural } from '../../lib/text';
+  import { getCourse } from './context';
 
   interface Props {
     /** Questions answered on this device. */
     count: number;
     /** [topic id, recent accuracy 0–1], weakest first. */
     weakSpots: [string, number][];
-    topicsHref: string;
-    topicLabel: (topic: string) => string;
     /** How many questions a set on this topic would have. */
     size: (topic: string) => number;
     onstart: (topic: string) => void;
     onclear: () => void;
   }
 
-  let { count, weakSpots, topicsHref, topicLabel, size, onstart, onclear }: Props = $props();
+  let { count, weakSpots, size, onstart, onclear }: Props = $props();
+  const { hrefs, topicLabel } = getCourse();
   let confirming = $state(false);
 </script>
 
@@ -30,7 +30,7 @@
     <ul class="plain-list weak">
       {#each weakSpots as [topic, acc] (topic)}
         <li>
-          <a class="w-topic" href={`${topicsHref}${topic}/`}>{topicLabel(topic)}</a>
+          <a class="w-topic" href={`${hrefs.topics}${topic}/`}>{topicLabel(topic)}</a>
           <span class="small muted">{Math.round(acc * 100)}% recently</span>
           <button type="button" class="link-button small" onclick={() => onstart(topic)}>
             Start {plural(size(topic), 'question')}<span class="visually-hidden"> on {topicLabel(topic)}</span> →
@@ -42,7 +42,7 @@
   {#if confirming}
     <div class="confirm" role="group" aria-label="Clear history">
       <span class="small">Clear your practice history on this device? This can't be undone.</span>
-      <button type="button" class="button small danger" onclick={onclear}>Clear history</button>
+      <button type="button" class="button small danger" onclick={() => onclear()}>Clear history</button>
       <button type="button" class="button secondary small" onclick={() => (confirming = false)}>Cancel</button>
     </div>
   {:else}

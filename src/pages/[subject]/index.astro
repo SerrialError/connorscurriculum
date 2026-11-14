@@ -3,7 +3,6 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Search from '../../components/Search.astro';
 import Base from '../../layouts/Base.astro';
 import {
-  chapterRange,
   formatDate,
   getLessons,
   getQuestions,
@@ -21,7 +20,7 @@ import {
   url,
 } from '../../lib/content';
 import { frqCountLabel, matchFrqs } from '../../lib/frqs';
-import { plural } from '../../lib/text';
+import { chapterRange, plural } from '../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 

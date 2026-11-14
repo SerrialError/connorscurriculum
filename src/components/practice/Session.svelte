@@ -1,9 +1,13 @@
 <script lang="ts">
   // Answering a set, one question at a time.
   import { tick } from 'svelte';
-  import { type FrqQuestion, type McqQuestion, type PracticeLesson, DIFFICULTY_LABELS, TYPE_LABELS, frqTotal, isCorrect, lessonsFor, scoreStatus } from '../../lib/practice';
+  import { DIFFICULTY_LABELS, TYPE_LABELS } from '../../lib/practice/labels';
+  import { lessonsFor } from '../../lib/practice/lessons';
+  import { frqTotal, isCorrect, scoreStatus } from '../../lib/practice/score';
+  import type { FrqQuestion, McqQuestion } from '../../lib/practice/types';
   import { plural } from '../../lib/text';
   import type { Attempt } from './attempt.svelte';
+  import { getCourse } from './context';
   import QuestionDot from './QuestionDot.svelte';
 
   interface Props {
@@ -13,10 +17,6 @@
     note: string;
     /** Opened from the results screen: the top button goes back there. */
     reviewing: boolean;
-    lessons: PracticeLesson[];
-    /** Base URL of topic pages; the topic id and "/" are appended. */
-    topicsHref: string;
-    topicTitles: ReadonlyMap<string, string>;
     /** "← Filters" */
     onfilters: () => void;
     onresults: () => void;
@@ -24,7 +24,8 @@
     onscore: (id: string, score: number, corrected: boolean) => void;
   }
 
-  let { attempt, label, note, reviewing, lessons, topicsHref, topicTitles, onfilters, onresults, onscore }: Props = $props();
+  let { attempt, label, note, reviewing, onfilters, onresults, onscore }: Props = $props();
+  const { lessons, hrefs, topicTitles } = getCourse();
 
   /** Sets longer than this keep the question grid closed until it's wanted. */
   const LONG_SET = 24;
@@ -53,14 +54,13 @@
   }
 
   async function check(q: McqQuestion) {
-    if (!attempt.picks[q.id] || attempt.checked[q.id]) return;
-    attempt.checked[q.id] = true;
+    if (!attempt.check(q)) return;
     onscore(q.id, isCorrect(q, attempt.picks[q.id]!) ? 1 : 0, false);
     await showVerdict();
   }
 
   async function finish(q: FrqQuestion) {
-    attempt.finished[q.id] = true;
+    attempt.finish(q);
     onscore(q.id, attempt.earned(q) / frqTotal(q), false);
     await showVerdict();
   }
@@ -96,6 +96,16 @@
     }
   }
 
+  /**
+   * ← → move between questions, but only from the page itself, the question, or a button: a
+   * focused wide table or equation scrolls with them, and a radio button moves between choices.
+   */
+  function arrowsMoveQuestions(el: HTMLElement): boolean {
+    if (el === document.body || el.id === 'main') return true;
+    if (!el.closest('.session')) return false;
+    return el.tagName === 'BUTTON' || el.id === 'q-heading' || el.classList.contains('question');
+  }
+
   /** A–D (or 1–4) pick a choice, Enter checks, ← → move between questions. */
   function onKey(e: KeyboardEvent) {
     const q = attempt.current;
@@ -103,7 +113,7 @@
     const el = e.target as HTMLElement;
     if (el.closest('input[type="text"], input[type="number"], textarea, select, [contenteditable]')) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      if (e.shiftKey) return;
+      if (e.shiftKey || !arrowsMoveQuestions(el)) return;
       e.preventDefault();
       attempt.go(attempt.index + (e.key === 'ArrowRight' ? 1 : -1));
       return;
@@ -112,7 +122,7 @@
     const key = e.key.toLowerCase();
     const choice = q.choices.find((c) => c.id === key) ?? (/^[1-9]$/.test(key) ? q.choices[Number(key) - 1] : undefined);
     if (choice) {
-      attempt.picks[q.id] = choice.id;
+      attempt.pick(q, choice.id);
       e.preventDefault();
     } else if (e.key === 'Enter' && attempt.picks[q.id] && !el.closest('button, a')) {
       e.preventDefault();
@@ -137,9 +147,9 @@
   {@const q = attempt.current}
   <section class="session" aria-label="Practice set">
     <div class="session-bar">
-      <button class="link-button" type="button" onclick={onfilters}>← Filters</button>
+      <button class="link-button" type="button" onclick={() => onfilters()}>← Filters</button>
       <span class="small muted">{attempt.answered} of {total} answered</span>
-      <button class="button secondary small" type="button" onclick={onresults}>
+      <button class="button secondary small" type="button" onclick={() => onresults()}>
         {reviewing ? 'Back to results' : attempt.answered === total ? 'See results' : 'End set'}
       </button>
     </div>
@@ -169,7 +179,7 @@
           <h2 id="q-heading" tabindex="-1" bind:this={heading}>Question {attempt.index + 1} <span class="muted">of {total}</span></h2>
           <p class="q-meta small muted">
             {TYPE_LABELS[q.type]} · Ch. {q.chapter} ·
-            {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${topicsHref}${t}/`} title={topicTitles.get(t)}><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
+            {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${hrefs.topics}${t}/`} title={topicTitles.get(t)}><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
             · {DIFFICULTY_LABELS[q.difficulty]}
           </p>
         </header>
@@ -253,10 +263,10 @@
           </button>
           <span class="spacer"></span>
           {#if q.type === 'mcq' && !attempt.checked[q.id]}
-            <button class="button secondary" type="button" onclick={next}>Skip</button>
+            <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
             <button class="button" type="button" disabled={!attempt.picks[q.id]} onclick={() => check(q)}>Check answer</button>
           {:else if q.type === 'frq' && !attempt.finished[q.id]}
-            <button class="button secondary" type="button" onclick={next}>Skip</button>
+            <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
             <!-- One button, so focus stays put when "Show all scoring" turns into "Done marking". -->
             <button class="button" type="button" onclick={() => (attempt.allShown(q) ? finish(q) : q.parts.forEach((_, p) => attempt.reveal(q, p)))}>
               {#if attempt.allShown(q)}
@@ -266,7 +276,7 @@
               {/if}
             </button>
           {:else}
-            <button class="button" type="button" bind:this={nextButton} onclick={next}>
+            <button class="button" type="button" bind:this={nextButton} onclick={() => next()}>
               {isLast ? 'See results →' : 'Next question →'}
             </button>
           {/if}

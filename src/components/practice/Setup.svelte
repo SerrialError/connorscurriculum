@@ -1,93 +1,38 @@
-<script module lang="ts">
-  export interface Preset {
-    label: string;
-    /** Filters as a practice query string, e.g. "?test=ch6-7-test". */
-    query: string;
-    note?: string;
-    /** A second, smaller way to start it, e.g. "All 116 in order". */
-    alt?: { label: string; query: string };
-  }
-
-  export interface Chapter {
-    number: number;
-    title: string;
-    hasQuestions: boolean;
-    current: boolean;
-  }
-</script>
-
 <script lang="ts">
   // Building a set: Quick start, then the filters. Nothing starts until a Quick start button or
   // "Start practice" is pressed (Enter on a chip only toggles it). Every control just shows
   // `filters`, and changing one changes only that one.
-  import type { FrqLink } from '../../lib/frqs';
   import { matchFrqs } from '../../lib/frqs';
   import {
-    type Filters,
-    type PracticeQuestion,
-    type PracticeTest,
-    ALL_QUESTIONS,
     CLASS_ONLY_UNIT,
     COUNT_CHOICES,
     DEFAULT_COUNT,
-    DIFFICULTY_LABELS,
     MAX_COUNT,
-    MODE_LABELS,
-    TYPE_LABELS,
     countWith,
     emptyFilters,
-    filterChips,
     filterQuestions,
     filterTopics,
-    filtersToQuery,
     isCustomCount,
     isDefaultFilters,
-    parseFilters,
     sessionSize,
-  } from '../../lib/practice';
+  } from '../../lib/practice/filters';
+  import { ALL_QUESTIONS, DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
+  import type { Filters, PracticeQuestion } from '../../lib/practice/types';
+  import { filtersToQuery, parseFilters } from '../../lib/practice/url';
   import { plural } from '../../lib/text';
+  import { type PracticeChapter, getCourse } from './context';
   import PastFrqs from './PastFrqs.svelte';
 
   interface Props {
     all: PracticeQuestion[];
     filters: Filters;
-    tests: PracticeTest[];
-    chapters: Chapter[];
-    /** Chapters with sample questions the class hasn't reached (listed under More options). */
-    laterChapters: number[];
-    units: { id: string; title: string; topics: { id: string; title: string }[] }[];
-    presets: Preset[];
     /** Show the "Weakest topics" quick start (there is history with weak topics). */
     weakest: boolean;
-    /** The default pool's name, e.g. "Ch. 6–7". */
-    everything: string;
-    chapterTopics: Record<string, string[]>;
-    frqs: FrqLink[];
-    learned: ReadonlySet<string>;
-    frqsHref: string;
-    chaptersHref: string;
-    practiceNames: Record<string, string>;
     onstart: (f: Filters) => void;
   }
 
-  let {
-    all,
-    filters = $bindable(),
-    tests,
-    chapters,
-    laterChapters,
-    units,
-    presets,
-    weakest,
-    everything,
-    chapterTopics,
-    frqs,
-    learned,
-    frqsHref,
-    chaptersHref,
-    practiceNames,
-    onstart,
-  }: Props = $props();
+  let { all, filters = $bindable(), weakest, onstart }: Props = $props();
+  const { tests, chapters, laterChapters, units, presets, everything, chapterTopics, frqs, hrefs } = getCourse();
 
   /** "Other" in How many is picked (its number box is showing). */
   let customCount = $state(isCustomCount(filters.n));
@@ -188,7 +133,7 @@
   <span class="count" class:zero={n === 0}>{n}</span>
 {/snippet}
 
-{#snippet chapterChip(c: Chapter)}
+{#snippet chapterChip(c: PracticeChapter)}
   <label class="chip" title={c.title}>
     <input type="checkbox" checked={filters.chapters.includes(c.number)} onchange={() => (filters.chapters = toggle(filters.chapters, c.number))} />
     <span>Ch. {c.number} <span class="chip-sub">{c.title}</span></span>
@@ -233,7 +178,7 @@
   <div class="filters-head">
     <h2 id="filters-h" class="section-h">{presets.length > 0 || weakest ? 'Or pick your own set' : 'Pick your own set'}</h2>
     <!-- Always laid out (hidden when there's nothing to reset), so picking a filter doesn't move the chips. -->
-    <button class="link-button reset" class:invisible={isDefaultFilters(filters)} type="button" onclick={resetAll}>Reset all</button>
+    <button class="link-button reset" class:invisible={isDefaultFilters(filters)} type="button" onclick={() => resetAll()}>Reset all</button>
   </div>
 
   <fieldset>
@@ -246,7 +191,7 @@
     {#if emptyCurrent.length > 0}
       <p class="small muted chapter-note">
         No questions yet for
-        {#each emptyCurrent as c, i (c.number)}{i > 0 ? ' or ' : ''}<a href={`${chaptersHref}${c.number}/`}>Ch.&nbsp;{c.number}</a>{/each}
+        {#each emptyCurrent as c, i (c.number)}{i > 0 ? ' or ' : ''}<a href={`${hrefs.chapters}${c.number}/`}>Ch.&nbsp;{c.number}</a>{/each}
         (in class now).
       </p>
     {/if}
@@ -298,7 +243,7 @@
               aria-invalid={countInvalid}
               aria-describedby="count-help"
               oninput={(e) => onCountInput(e.currentTarget.value)}
-              onblur={onCountBlur}
+              onblur={() => onCountBlur()}
             />
           </label>
           <span id="count-help" class="small count-help" class:warn={countInvalid || (filters.n ?? 0) > matching.length}>
@@ -415,7 +360,7 @@
       {/if}
     </div>
     <p class="copy-row">
-      <button class="link-button small" type="button" onclick={copyLink}>{copied ? 'Link copied' : 'Copy a link to these filters'}</button>
+      <button class="link-button small" type="button" onclick={() => copyLink()}>{copied ? 'Link copied' : 'Copy a link to these filters'}</button>
     </p>
   </details>
 
@@ -450,7 +395,7 @@
   </div>
 </form>
 
-<PastFrqs matches={frqMatches} {learned} {frqsHref} {practiceNames} />
+<PastFrqs matches={frqMatches} />
 
 <style>
   /* Quick start */

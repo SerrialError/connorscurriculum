@@ -1,6 +1,6 @@
 // Sets saved in localStorage, so a reload, Back/Forward, or "Resume" returns to the same set with
 // its answers. Pure functions; the practice island does the reading and writing.
-import { parseFilters, setToQuery, wantsStart } from './practice';
+import { isSeed, parseFilters, setToQuery, wantsStart } from './url';
 
 /** The answers given so far in a set, by question id. */
 export interface Answers {
@@ -31,7 +31,6 @@ export interface SavedSet extends Answers {
 /** How many sets are kept: enough for Back from a retry to reach the earlier sets' results. */
 export const MAX_SAVED = 5;
 
-const SEED = /^[a-z0-9]{1,16}$/i;
 
 /**
  * The usable saved sets from storage, newest first: any whose questions no longer all exist are
@@ -44,7 +43,7 @@ export function readSavedSets(raw: unknown, questionIds: ReadonlySet<string>): S
     const s = x as Partial<SavedSet> | null;
     if (!s || !Array.isArray(s.ids) || s.ids.length === 0 || !s.ids.every((id) => questionIds.has(id))) return [];
     const query = typeof s.query === 'string' ? s.query : '';
-    const id = s.id && SEED.test(s.id) ? s.id : `saved${i}`;
+    const id = isSeed(s.id) ? s.id : `saved${i}`;
     return [
       {
         id,

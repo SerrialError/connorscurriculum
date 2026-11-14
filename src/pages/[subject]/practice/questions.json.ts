@@ -5,7 +5,7 @@ import type { APIRoute, GetStaticPaths, ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import { type Question, getQuestions, getSubjectData, isClassContent, subjectPaths, topicIds } from '../../../lib/content';
 import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../../../lib/markdown';
-import type { PracticeQuestion } from '../../../lib/practice';
+import type { PracticeQuestion } from '../../../lib/practice/types';
 
 export const getStaticPaths = subjectPaths satisfies GetStaticPaths;
 

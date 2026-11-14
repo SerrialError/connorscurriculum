@@ -2,32 +2,32 @@
   // The score for a set, what to do next, what to read, and every question with its status.
   import { tick } from 'svelte';
   import type { matchFrqs } from '../../lib/frqs';
-  import { type PracticeLesson, lessonsForMissed, retryWords, scoreStatus, STATUS_TEXT, topicBreakdown } from '../../lib/practice';
+  import { STATUS_TEXT, againLabel, retryWords } from '../../lib/practice/labels';
+  import { lessonsForMissed } from '../../lib/practice/lessons';
+  import { scoreStatus, topicBreakdown } from '../../lib/practice/score';
+  import type { Filters } from '../../lib/practice/types';
   import { plural, truncate } from '../../lib/text';
   import type { Attempt } from './attempt.svelte';
+  import { getCourse } from './context';
   import PastFrqs from './PastFrqs.svelte';
   import QuestionDot from './QuestionDot.svelte';
 
   interface Props {
     attempt: Attempt;
     label: string;
-    lessons: PracticeLesson[];
-    topicsHref: string;
-    chaptersHref: string;
-    topicLabel: (key: string) => string;
+    /** The filters that made the set. */
+    filters: Filters;
     frqMatches: ReturnType<typeof matchFrqs>;
-    learned: ReadonlySet<string>;
-    frqsHref: string;
-    practiceNames: Record<string, string>;
     onretry: (words: string) => void;
     /** Open question `i` from the results (to answer or review it). */
     onreview: (i: number) => void;
-    onnewset: () => void;
+    /** The same filters again: a new set, or the same one from the start when it's in order. */
+    onagain: () => void;
     onfilters: () => void;
   }
 
-  let { attempt, label, lessons, topicsHref, chaptersHref, topicLabel, frqMatches, learned, frqsHref, practiceNames, onretry, onreview, onnewset, onfilters }: Props =
-    $props();
+  let { attempt, label, filters, frqMatches, onretry, onreview, onagain, onfilters }: Props = $props();
+  const { lessons, hrefs, topicLabel } = getCourse();
 
   let heading = $state<HTMLElement | null>(null);
   const summary = $derived(attempt.summary);
@@ -79,8 +79,8 @@
           Answer the {skipped.length} skipped
         </button>
       {/if}
-      <button class="button" class:secondary={missed.length > 0 || skipped.length > 0} type="button" onclick={onnewset}>New set, same filters</button>
-      <button class="button secondary" type="button" onclick={onfilters}>Change filters</button>
+      <button class="button" class:secondary={missed.length > 0 || skipped.length > 0} type="button" onclick={() => onagain()}>{againLabel(filters)}</button>
+      <button class="button secondary" type="button" onclick={() => onfilters()}>Change filters</button>
     </div>
   </div>
 
@@ -96,7 +96,7 @@
         {/each}
         {#each study.chapters as n (n)}
           <li>
-            <a href={`${chaptersHref}${n}/#lessons`}>Chapter {n} lessons and notes</a>
+            <a href={`${hrefs.chapters}${n}/#lessons`}>Chapter {n} lessons and notes</a>
             <span class="small muted">for the other questions you missed</span>
           </li>
         {/each}
@@ -112,7 +112,7 @@
           {@const frac = t.score / t.count}
           <li>
             <span class="b-label">
-              {#if t.key.startsWith('chapter-')}{topicLabel(t.key)}{:else}<a href={`${topicsHref}${t.key}/`}>{topicLabel(t.key)}</a>{/if}
+              {#if t.key.startsWith('chapter-')}{topicLabel(t.key)}{:else}<a href={`${hrefs.topics}${t.key}/`}>{topicLabel(t.key)}</a>{/if}
             </span>
             <span class="bar" aria-hidden="true"><span class:low={frac < 0.5} class:high={frac >= 0.8} style:width={pct(frac)}></span></span>
             <span class="small b-num">{pct(frac)} <span class="muted">({t.count})</span></span>
@@ -141,7 +141,7 @@
     </ol>
   </section>
 
-  <PastFrqs matches={frqMatches} {learned} {frqsHref} {practiceNames} />
+  <PastFrqs matches={frqMatches} />
 </section>
 
 <style>

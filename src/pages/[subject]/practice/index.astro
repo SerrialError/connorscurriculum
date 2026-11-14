@@ -1,8 +1,8 @@
 ---
+import type { PracticeCourse } from '../../../components/practice/context';
 import Practice from '../../../components/practice/Practice.svelte';
 import Base from '../../../layouts/Base.astro';
 import {
-  chapterRange,
   getLessons,
   getQuestions,
   getSubjectData,
@@ -12,11 +12,11 @@ import {
   lessonHref,
   pastFrqLinks,
   subjectPaths,
+  testsByDate,
   topicIds,
   url,
 } from '../../../lib/content';
-import { DEFAULT_COUNT, type PracticeLesson, mixedReview } from '../../../lib/practice';
-import { plural } from '../../../lib/text';
+import { quickStarts } from '../../../lib/practice/presets';
 
 export const getStaticPaths = subjectPaths;
 
@@ -25,84 +25,39 @@ const data = getSubjectData(subject);
 const questions = await getQuestions(subject);
 const chapterNumbers = new Set(questions.map((q) => q.data.chapter));
 const current = new Set(data.progress.current);
-const chapters = data.chapters.map((c) => ({
-  number: c.number,
-  title: c.title,
-  hasQuestions: chapterNumbers.has(c.number),
-  current: current.has(c.number),
-  finished: data.progress.chapters.has(c.number),
-}));
-const units = data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) }));
-const frqs = pastFrqLinks(data);
-const chapterTopics = Object.fromEntries(data.chapters.map((c) => [String(c.number), c.cedTopics]));
 const isLearned = learnedTopic(data);
-const learnedTopics = [...data.topics.keys()].filter(isLearned);
-const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections }));
 
-// Quick start: the latest class test with questions (10 random, or all in order), and a mixed set
-// from the chapters the class has reached when that isn't the same pool as the test.
-const presets: { label: string; query: string; note?: string; alt?: { label: string; query: string } }[] = [];
-const latest = [...data.tests]
-  .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
-  .map((t) => ({ t, n: questions.filter((q) => inTest(t, q)).length }))
-  .find(({ n }) => n > 0);
-if (latest) {
-  const { t, n } = latest;
-  presets.push(
-    n > DEFAULT_COUNT
-      ? { label: t.title, query: `?test=${t.id}`, note: `${DEFAULT_COUNT} random from its ${n} questions`, alt: { label: `All ${n} in order`, query: `?test=${t.id}&mode=all&n=all` } }
-      : { label: t.title, query: `?test=${t.id}&mode=all&n=all`, note: `All ${plural(n, 'question')}, in order` },
-  );
-}
-const mixed = mixedReview(
-  questions.map((q) => q.data),
-  new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
-);
-if (mixed && mixed.count !== latest?.n) {
-  presets.push({ label: 'Mixed review', query: mixed.query, note: `${DEFAULT_COUNT} random from the ${mixed.count} questions in ${chapterRange(mixed.chapters).replace('Ch. ', 'Ch.\u00a0')}` });
-}
-// Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.
-const lessons: PracticeLesson[] = (await getLessons(subject))
-  .filter((l) => l.data.kind === 'lesson')
-  .map((l) => ({ title: l.data.title, href: lessonHref(l), chapter: l.data.chapter, sections: l.data.sections, topics: topicIds(l) }));
+const course: PracticeCourse = {
+  subject,
+  questionsUrl: url(`${subject}/practice/questions.json`),
+  chapters: data.chapters.map((c) => ({
+    number: c.number,
+    title: c.title,
+    hasQuestions: chapterNumbers.has(c.number),
+    current: current.has(c.number),
+    finished: data.progress.chapters.has(c.number),
+  })),
+  units: data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) })),
+  tests: data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections })),
+  frqs: pastFrqLinks(data),
+  chapterTopics: Object.fromEntries(data.chapters.map((c) => [String(c.number), c.cedTopics])),
+  learnedTopics: [...data.topics.keys()].filter(isLearned),
+  practiceNames: Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name])),
+  presets: quickStarts(
+    testsByDate(data).map((t) => ({ id: t.id, title: t.title, count: questions.filter((q) => inTest(t, q)).length })),
+    questions.map((q) => q.data),
+    new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
+  ),
+  // Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.
+  lessons: (await getLessons(subject))
+    .filter((l) => l.data.kind === 'lesson')
+    .map((l) => ({ title: l.data.title, href: lessonHref(l), chapter: l.data.chapter, sections: l.data.sections, topics: topicIds(l) })),
+  hrefs: { topics: url(`${subject}/ap/`), chapters: url(`${subject}/chapters/`), frqs: url(`${subject}/frqs/`) },
+};
 ---
 
 <Base title="Practice" subject={subject} description="Practice questions by chapter, AP topic, class test, and difficulty.">
   <h1 class="practice-title">Practice</h1>
   <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
-  <Practice
-    client:load
-    subject={subject}
-    questionsUrl={url(`${subject}/practice/questions.json`)}
-    chapters={chapters}
-    units={units}
-    tests={tests}
-    frqs={frqs}
-    chapterTopics={chapterTopics}
-    learnedTopics={learnedTopics}
-    frqsHref={url(`${subject}/frqs/`)}
-    topicsHref={url(`${subject}/ap/`)}
-    chaptersHref={url(`${subject}/chapters/`)}
-    practiceNames={Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name]))}
-    presets={presets}
-    lessons={lessons}
-  />
+  <Practice client:load course={course} />
 </Base>
-
-<style>
-  /* During a set and on its results the title is for screen readers only: on phones the question
-     (or score) starts higher, and the two screens look alike. */
-  :global(body[data-practice='session']) .practice-title,
-  :global(body[data-practice='results']) .practice-title {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-  :global(body[data-practice='session'] main),
-  :global(body[data-practice='results'] main) {
-    padding-top: 1rem;
-  }
-</style>

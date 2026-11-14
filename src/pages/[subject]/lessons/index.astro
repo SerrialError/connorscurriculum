@@ -7,7 +7,6 @@ import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
 import {
   LESSON_KINDS,
-  chapterRange,
   getLessons,
   getQuestions,
   getSubjectData,
@@ -18,7 +17,7 @@ import {
   topicIds,
   url,
 } from '../../../lib/content';
-import { plural } from '../../../lib/text';
+import { chapterRange, plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 

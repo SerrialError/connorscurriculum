@@ -1,7 +1,8 @@
 <script lang="ts">
   // A numbered square for one question, coloured (and marked ✓ ✗ ½) by its status. A button in
   // the question grid; a plain label in the results list.
-  import { type ScoreStatus, STATUS_MARK, STATUS_TEXT } from '../../lib/practice';
+  import { STATUS_MARK, STATUS_TEXT } from '../../lib/practice/labels';
+  import type { ScoreStatus } from '../../lib/practice/score';
 
   interface Props {
     n: number;

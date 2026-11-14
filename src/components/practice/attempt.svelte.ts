@@ -1,7 +1,8 @@
 // One attempt at a set: its questions, where the student is, and their answers. Shared by the
 // session and results screens; the practice island saves it after every change.
-import { type FrqQuestion, type PracticeQuestion, frqEarned, frqTotal, questionScore, type QuestionResult, summarize } from '../../lib/practice';
-import type { Answers } from '../../lib/practice-saved';
+import type { Answers } from '../../lib/practice/saved';
+import { type QuestionResult, frqEarned, frqTotal, questionScore, summarize } from '../../lib/practice/score';
+import type { FrqQuestion, McqQuestion, PracticeQuestion } from '../../lib/practice/types';
 
 export class Attempt {
   questions = $state<PracticeQuestion[]>([]);
@@ -60,6 +61,22 @@ export class Attempt {
 
   go(i: number) {
     this.index = Math.max(0, Math.min(this.questions.length - 1, i));
+  }
+
+  pick(q: McqQuestion, choice: string) {
+    if (!this.checked[q.id]) this.picks[q.id] = choice;
+  }
+
+  /** MCQ: check the picked choice. False when there is nothing to check (no pick, or checked already). */
+  check(q: McqQuestion): boolean {
+    if (!this.picks[q.id] || this.checked[q.id]) return false;
+    this.checked[q.id] = true;
+    return true;
+  }
+
+  /** FRQ: "Done marking". */
+  finish(q: FrqQuestion) {
+    this.finished[q.id] = true;
   }
 
   /** FRQ: show the scoring for one part (and start its marks, all unchecked). */

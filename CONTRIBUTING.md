@@ -22,6 +22,7 @@ Every lesson and question has both kinds of tag:
 | `sections` | Optional textbook sections. Checked only once that chapter's `sections` list is filled in. | `["14.3"]` |
 | `cedTopics` | AP CED topic ids from `src/data/<subject>/ced.json`. **Required**, but `[]` means "class only, not on the AP exam". | `["5.2", "5.3"]` |
 | `authors` | At least one name | `["Jordan"]` |
+| `sample` | Optional. `true` only for a page or question written to show the format (see Sample content below). | `true` |
 
 ## Using the editor (CMS)
 
@@ -95,12 +96,12 @@ chapter page. The home page lists the lessons and notes for the latest finished 
 links a question to the `kind: lesson` pages from its chapter that share one of its `sections` (or,
 failing that, an AP topic), so tag `sections` on both lessons and questions.
 
-Sample content: `authors: ["sample"]` marks a page or question written only to show the format. Sample
-pages, and anything in a chapter the class hasn't reached yet (not finished or current in
-`progress.json`), are labelled as not class material, listed in a closed "Sample pages" section at
-the end of the Lessons page, and left off the home page. Practice leaves their questions out unless
-the student picks their chapter (or a class test covering it): with no chapter picked, sets come
-from the chapters the class has reached.
+Sample content: `sample: true` marks a page or question written only to show the format (it needs no
+`authors`). Sample pages, and anything in a chapter the class hasn't reached yet (not finished or
+current in `progress.json`), are labelled as not class material, listed in a closed "Sample pages"
+section at the end of the Lessons page, and left off the home page. Practice leaves their questions
+out unless the student picks their chapter (or a class test covering it): with no chapter picked,
+sets come from the chapters the class has reached.
 
 Practice links: `/<subject>/practice/?chapter=7&difficulty=3` opens the practice page with those
 filters ticked (`section`, `topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=5|all` work

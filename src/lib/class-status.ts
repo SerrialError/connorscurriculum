@@ -5,7 +5,7 @@ import type { SubjectData } from './registry';
 
 /** A lesson or question, as far as these functions look at it. */
 interface Entry {
-  data: { chapter: number; authors: string[] };
+  data: { chapter: number; sample: boolean };
 }
 
 /** The class has reached this chapter: it's finished or being studied now (progress.json). */
@@ -14,12 +14,10 @@ export function isTaught(data: SubjectData, chapter: number): boolean {
 }
 
 /**
- * Sample content: pages written to show the format (authors: ["sample"]), not class material.
+ * Sample content: pages written to show the format (`sample: true`), not class material.
  * They're labelled as samples and kept out of the home page and the lessons list's main part.
  */
-export function isSample(entry: Entry): boolean {
-  return entry.data.authors.length === 1 && entry.data.authors[0]!.trim().toLowerCase() === 'sample';
-}
+export const isSample = (entry: Entry): boolean => entry.data.sample;
 
 /** Class material: not a sample, and from a chapter the class has reached. */
 export function isClassContent(data: SubjectData, entry: Entry): boolean {

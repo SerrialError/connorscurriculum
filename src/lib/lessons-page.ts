@@ -8,10 +8,10 @@ import { practiceStarts } from './practice/links';
 import type { SubjectData } from './registry';
 
 interface PageLesson {
-  data: { chapter: number; authors: string[]; kind: 'lesson' | 'notes' | 'review' };
+  data: { chapter: number; sample: boolean; kind: 'lesson' | 'notes' | 'review' };
 }
 interface PageQuestion {
-  data: { chapter: number; authors: string[] };
+  data: { chapter: number; sample: boolean };
 }
 
 export function lessonsPage<L extends PageLesson>(data: SubjectData, all: L[], questions: PageQuestion[]) {

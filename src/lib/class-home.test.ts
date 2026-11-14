@@ -17,11 +17,11 @@ const data: SubjectData = {
   progress: { ...base.progress, chapters: new Set([1, 2, 3]), current: [4], topics: new Map([['1.1', 'skipped']]) },
   tests: [{ id: 'ch1-test', title: 'Chapter 1 Test', date: '2026-10-01', chapters: [1], sections: [] }],
 };
-const lesson = (chapter: number, kind: 'lesson' | 'notes' | 'review', authors = ['Jaya']) => ({ data: { chapter, kind, authors, sections: [] } });
-const question = (chapter: number) => ({ data: { chapter, sections: [], authors: ['Jaya'] } });
+const lesson = (chapter: number, kind: 'lesson' | 'notes' | 'review', sample = false) => ({ data: { chapter, kind, sample, sections: [] } });
+const question = (chapter: number) => ({ data: { chapter, sections: [], sample: false } });
 
 describe('classHome', () => {
-  const lessons = [lesson(1, 'lesson'), lesson(1, 'notes', ['Ryan']), lesson(1, 'review'), lesson(3, 'lesson'), lesson(4, 'lesson', ['sample'])];
+  const lessons = [lesson(1, 'lesson'), lesson(1, 'notes'), lesson(1, 'review'), lesson(3, 'lesson'), lesson(4, 'lesson', true)];
   const questions = [...Array.from({ length: 12 }, () => question(1)), question(4)];
   const home = classHome(data, classSummary(data, lessons, questions), flattenFrqs(data.pastFrqs));
 

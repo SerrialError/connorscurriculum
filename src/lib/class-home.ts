@@ -9,7 +9,7 @@ import { type PracticeStart, practiceStarts } from './practice/links';
 import type { SubjectData } from './registry';
 
 interface HomeLesson {
-  data: { chapter: number; sections: string[]; authors: string[]; kind: 'lesson' | 'notes' | 'review' };
+  data: { chapter: number; sections: string[]; kind: 'lesson' | 'notes' | 'review' };
 }
 interface HomeQuestion {
   data: { chapter: number; sections: string[] };

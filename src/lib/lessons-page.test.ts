@@ -12,11 +12,11 @@ const data: SubjectData = {
   chapterMap: new Map(chapters.map((c) => [c.number, c])),
   progress: { ...base.progress, chapters: new Set([1, 2, 3]), current: [5, 4] },
 };
-const page = (chapter: number, kind: 'lesson' | 'notes' | 'review' = 'lesson', authors = ['Jaya']) => ({ data: { chapter, kind, authors } });
+const page = (chapter: number, kind: 'lesson' | 'notes' | 'review' = 'lesson', sample = false) => ({ data: { chapter, kind, sample } });
 
 describe('lessonsPage', () => {
-  const all = [page(1), page(1, 'review'), page(3, 'notes'), page(4), page(6), page(2, 'lesson', ['sample'])];
-  const questions = Array.from({ length: 12 }, () => ({ data: { chapter: 1, authors: ['Jaya'] } }));
+  const all = [page(1), page(1, 'review'), page(3, 'notes'), page(4), page(6), page(2, 'lesson', true)];
+  const questions = Array.from({ length: 12 }, () => ({ data: { chapter: 1, sample: false } }));
   const p = lessonsPage(data, all, questions);
 
   it('lists chapters with lessons, the ones in class now first, then the latest finished', () => {

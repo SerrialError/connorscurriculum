@@ -17,14 +17,14 @@ const withProgress = (finished: number[], current: number[]): SubjectData => ({
     { id: 'late', title: 'Chapter 2 Test', date: '2026-11-20', chapters: [2], sections: [] },
   ],
 });
-const entry = (chapter: number, authors = ['Jaya']) => ({ data: { chapter, authors } });
+const entry = (chapter: number, sample = false) => ({ data: { chapter, sample } });
 
 describe('class status', () => {
   const data = withProgress([1], [2]);
 
   it('counts finished and current chapters as class material, never samples', () => {
     expect([1, 2, 3].map((n) => isClassContent(data, entry(n)))).toEqual([true, true, false]);
-    expect(isClassContent(data, entry(1, ['sample']))).toBe(false);
+    expect(isClassContent(data, entry(1, true))).toBe(false);
   });
 
   it('shows the current chapters as "Now in class", else the next one as "Up next"', () => {
@@ -43,7 +43,7 @@ describe('class status', () => {
   });
 
   it('summarizes a class the same way for the dashboard and the class home', () => {
-    const lessons = [entry(1), entry(2), entry(3), entry(2, ['sample'])];
+    const lessons = [entry(1), entry(2), entry(3), entry(2, true)];
     const questions = [entry(2), entry(3)];
     const s = classSummary(data, lessons, questions);
     expect(s.lessons).toEqual([lessons[0], lessons[1]]);

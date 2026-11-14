@@ -56,14 +56,14 @@ describe('lessonPractice', () => {
 
   it("picks the questions on the lesson's sections, in its chapter", () => {
     expect(lessonPractice({ chapter: 7, sections: ['7.2'] }, qs)).toEqual({
-      query: { chapter: [7], section: ['7.2'] },
+      pool: { chapters: [7], sections: ['7.2'] },
       count: 2,
       scope: 'lesson',
     });
     expect(lessonPractice({ chapter: 7, sections: ['7.3', '7.4'] }, qs)?.count).toBe(2);
   });
   it('falls back to the chapter with no sections, or none tagged with them', () => {
-    const chapter = { query: { chapter: [7] }, count: 4, scope: 'chapter' };
+    const chapter = { pool: { chapters: [7] }, count: 4, scope: 'chapter' };
     expect(lessonPractice({ chapter: 7, sections: [] }, qs)).toEqual(chapter);
     expect(lessonPractice({ chapter: 7, sections: ['7.8'] }, qs)).toEqual(chapter);
   });

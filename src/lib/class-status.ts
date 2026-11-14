@@ -51,6 +51,12 @@ export function nowChapters(data: SubjectData) {
   return { label: 'Up next', chapters: next ? [next] : [] };
 }
 
+/** Lessons and questions in a class test (whole chapters, or only the listed sections). */
+export function inTest(test: SubjectData['tests'][number], entry: { data: { chapter: number; sections: string[] } }): boolean {
+  if (!test.chapters.includes(entry.data.chapter)) return false;
+  return test.sections.length === 0 || entry.data.sections.some((s) => test.sections.includes(s));
+}
+
 /** Class tests, latest first (undated tests last, in file order). */
 export function testsByDate(data: SubjectData) {
   return [...data.tests].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));

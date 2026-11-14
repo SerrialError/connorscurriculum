@@ -5,7 +5,7 @@ import ScrollCues from '../components/ScrollCues.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getSubjectData, url } from '../lib/content';
-import { type NavKey, navKeyFor, searchPlaceholder, subjectNav } from '../lib/features';
+import { navKeyFor, searchPlaceholder, subjectNav } from '../lib/features';
 import { CONTRIBUTE_URL, SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 interface Props {
@@ -17,11 +17,9 @@ interface Props {
   searchable?: boolean;
   /** Extra Pagefind metadata shown with search results: the kind of page ("Lesson", "Chapter"…) and its chapter. */
   searchMeta?: { type?: string; chapter?: string };
-  /** Nav item to highlight, when it isn't the one the URL belongs to (a review sheet is a lesson, but belongs to Tests). */
-  section?: NavKey;
 }
 
-const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {}, section } = Astro.props;
+const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {} } = Astro.props;
 const subjectData = subject ? getSubjectData(subject) : undefined;
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
 const path = Astro.url.pathname;
@@ -29,7 +27,7 @@ const path = Astro.url.pathname;
 // under it, e.g. Lessons owns the chapter pages.
 const nav = subjectData ? subjectNav(subjectData) : [];
 const classRoot = subject ? url(`${subject}/`) : '';
-const current = section ?? (subject && path.startsWith(classRoot) ? navKeyFor(nav, path.slice(classRoot.length)) : null);
+const current = subject && path.startsWith(classRoot) ? navKeyFor(nav, path.slice(classRoot.length)) : null;
 const onHome = subject !== undefined && path === classRoot;
 /** The home pages have their own search box, so the header has no Search button there. */
 const hasSearchBox = onHome || path === url();

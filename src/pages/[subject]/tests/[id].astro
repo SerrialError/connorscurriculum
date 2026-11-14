@@ -5,7 +5,7 @@ import TopicBadges from '../../../components/TopicBadges.astro';
 import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
 import { hasTopics } from '../../../lib/features';
-import { DEFAULT_COUNT } from '../../../lib/practice/filters';
+import { pickQuery, practiceStarts, weakestStart } from '../../../lib/practice/links';
 import {
   formatDate,
   getLessons,
@@ -13,8 +13,7 @@ import {
   getSubjectData,
   inTest,
   lessonSlug,
-  practiceHref,
-  testPracticeLinks,
+  practiceUrl,
   subjectIds,
   topicIds,
   url,
@@ -29,7 +28,9 @@ const data = getSubjectData(subject);
 const test = data.tests.find((t) => t.id === id)!;
 const lessons = (await getLessons(subject)).filter((l) => inTest(test, l));
 const questions = (await getQuestions(subject)).filter((q) => inTest(test, q));
-const links = testPracticeLinks(subject, test.id, questions.length);
+const pool = { test: test.id };
+const { start, all } = practiceStarts(pool, questions.length);
+const weakest = weakestStart(pool, questions.length);
 const cedOrder = [...data.topics.keys()];
 const topics = [...new Set([...lessons, ...questions].flatMap(topicIds))].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
 const reviewSheets = lessons.filter((l) => l.data.kind === 'review');
@@ -66,11 +67,18 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
   )}
 
   {questions.length > 0 ? (
-    <div class="actions" data-pagefind-ignore>
-      {links.random && <a class="button" href={links.random.href}>{links.random.label}</a>}
-      <a class:list={['button', { secondary: !!links.random }]} href={links.all.href}>{links.all.label}</a>
-      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'weak', start: '1' })}>Start {DEFAULT_COUNT} on your weakest topics</a>
-      <a class="button secondary" href={practiceHref(subject, { test: test.id })}>Pick your own set</a>
+    <div class="practice" data-pagefind-ignore>
+      <div class="actions">
+        <a class="button" href={practiceUrl(subject, start.query)}>{start.label}</a>
+        {all && <a class="button secondary" href={practiceUrl(subject, all.query)}>{all.label}</a>}
+      </div>
+      <p class="small more-practice">
+        {/* Shown by the script below once any of these questions has been answered on this device. */}
+        <span class="weakest" hidden data-questions={questions.map((q) => q.id).join(' ')} data-subject={subject}>
+          <a href={practiceUrl(subject, weakest.query)}>{weakest.label}</a><span class="muted"> · </span>
+        </span>
+        <a href={practiceUrl(subject, pickQuery(pool))}>Pick your own set</a>
+      </p>
     </div>
   ) : (
     <p class="muted">No practice questions for this test yet.</p>
@@ -98,7 +106,30 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
   ))}
 </Base>
 
+<script>
+  import { weakHasNoHistory } from '../../../lib/practice/score';
+  import type { History } from '../../../lib/practice/types';
+  import { readJson, storageKey } from '../../../lib/storage';
+
+  // "Weakest topics first" needs practice history on the test's questions to mean anything.
+  const weakest = document.querySelector<HTMLElement>('.weakest');
+  if (weakest) {
+    const history = readJson<History>(storageKey(weakest.dataset.subject!, 'practice-history'), {});
+    const questions = weakest.dataset.questions!.split(' ').map((id) => ({ id }));
+    weakest.hidden = weakHasNoHistory(questions, history);
+  }
+</script>
+
 <style>
+  .practice {
+    margin: 1rem 0;
+  }
+  .practice .actions {
+    margin: 0;
+  }
+  .more-practice {
+    margin: 0.5rem 0 0;
+  }
   .review-card {
     margin: 1rem 0;
     border-left: 4px solid var(--tip);

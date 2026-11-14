@@ -1,7 +1,8 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { hasTests } from '../../../lib/features';
-import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, subjectPathsWith, testPracticeLinks, testsByDate, url } from '../../../lib/content';
+import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, practiceUrl, subjectPathsWith, testsByDate, url } from '../../../lib/content';
+import { practiceStarts } from '../../../lib/practice/links';
 import { chapterRange } from '../../../lib/text';
 
 export const getStaticPaths = subjectPathsWith(hasTests);
@@ -12,12 +13,14 @@ const questions = await getQuestions(subject);
 const lessons = await getLessons(subject);
 // Newest first. Upcoming and past are worked out in the browser (see the script below), so the
 // grouping stays right between builds; the build-time split is the no-JavaScript fallback.
-const tests = testsByDate(data).map((t) => ({
-  t,
-  n: questions.filter((q) => inTest(t, q)).length,
-  review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
-  links: testPracticeLinks(subject, t.id, questions.filter((q) => inTest(t, q)).length),
-}));
+const tests = testsByDate(data).map((t) => {
+  const n = questions.filter((q) => inTest(t, q)).length;
+  return {
+    t,
+    review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
+    practice: n > 0 ? practiceStarts({ test: t.id }, n) : null,
+  };
+});
 const isUpcoming = (t: { date?: string }) => !isPastTest(t);
 const now = currentChapters(data);
 ---
@@ -32,7 +35,7 @@ const now = currentChapters(data);
       <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={group === 'past' && !tests.some((x) => !isUpcoming(x.t))}>
         <h2 id={`${group}-h`}>{group === 'upcoming' ? 'Upcoming' : 'Past tests'}</h2>
         <ul class="plain-list stack">
-          {tests.map(({ t, n, review, links }) => (
+          {tests.map(({ t, review, practice }) => (
             <li class="card test" data-date={t.date ?? ''} hidden={(group === 'upcoming') !== isUpcoming(t)}>
               <h3><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h3>
               <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
@@ -43,12 +46,10 @@ const now = currentChapters(data);
                   ))}
                 </ul>
               )}
-              {n > 0 && (
+              {practice && (
                 <div class="actions">
-                  {links.random && (
-                    <a class="button" href={links.random!.href}>{links.random!.label}</a>
-                  )}
-                  <a class:list={['button', { secondary: !!links.random }]} href={links.all.href}>{links.all.label}</a>
+                  <a class="button" href={practiceUrl(subject, practice.start.query)}>{practice.start.label}</a>
+                  {practice.all && <a class="button secondary" href={practiceUrl(subject, practice.all.query)}>{practice.all.label}</a>}
                 </div>
               )}
             </li>

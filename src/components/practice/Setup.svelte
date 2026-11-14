@@ -6,7 +6,7 @@
   import { countWith, emptyFilters, filterQuestions, filterTopics, isDefaultFilters, sessionSize, toggled } from '../../lib/practice/filters';
   import { ALL_QUESTIONS, DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
   import type { Filters, PracticeQuestion } from '../../lib/practice/types';
-  import { filtersToQuery, parseFilters } from '../../lib/practice/url';
+  import { filtersToQuery } from '../../lib/practice/url';
   import { byId, plural } from '../../lib/text';
   import Chip from './Chip.svelte';
   import { type PracticeChapter, getCourse } from './context';
@@ -55,10 +55,8 @@
     .join(', ')
     .replace(/^./, (c) => c.toUpperCase());
 
-  const presetSize = (query: string) => {
-    const f = parseFilters(query);
-    return sessionSize(filterQuestions(all, f, tests).length, f);
-  };
+  const weakestFirst: Filters = { ...emptyFilters(), mode: 'weak' };
+  const weakestSize = $derived(sessionSize(filterQuestions(all, weakestFirst, tests).length, weakestFirst));
 
   /** Enter on a filter chip toggles it, like Space. It never starts the set. */
   function onFilterKey(e: KeyboardEvent) {
@@ -101,15 +99,15 @@
   <section class="presets" aria-labelledby="presets-h">
     <h2 id="presets-h" class="section-h">Quick start</h2>
     <div class="preset-row">
-      {#each presets as p (p.query)}
+      {#each presets as p (p.label)}
         <div class="preset">
-          <button type="button" class="preset-main" onclick={() => onstart(parseFilters(p.query))}>
+          <button type="button" class="preset-main" onclick={() => onstart(p.filters)}>
             <span class="preset-label">{p.label} <span aria-hidden="true">→</span></span>
             {#if p.note}<span class="small muted">{p.note}</span>{/if}
           </button>
           {#if p.alt}
             {@const alt = p.alt}
-            <button type="button" class="link-button small preset-alt" onclick={() => onstart(parseFilters(alt.query))}>
+            <button type="button" class="link-button small preset-alt" onclick={() => onstart(alt.filters)}>
               {alt.label}<span class="visually-hidden"> ({p.label})</span> <span aria-hidden="true">→</span>
             </button>
           {/if}
@@ -117,9 +115,9 @@
       {/each}
       {#if weakest}
         <div class="preset">
-          <button type="button" class="preset-main" onclick={() => onstart(parseFilters('?mode=weak'))}>
+          <button type="button" class="preset-main" onclick={() => onstart(weakestFirst)}>
             <span class="preset-label">Weakest topics <span aria-hidden="true">→</span></span>
-            <span class="small muted">{plural(presetSize('?mode=weak'), 'question')} on what you've missed most</span>
+            <span class="small muted">{plural(weakestSize, 'question')} on what you've missed most</span>
           </button>
         </div>
       {/if}

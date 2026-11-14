@@ -12,11 +12,12 @@ import {
   getSubjectData,
   isClassContent,
   isTaught,
-  practiceStart,
+  practiceUrl,
   subjectPaths,
   topicIds,
   url,
 } from '../../../lib/content';
+import { practiceStarts } from '../../../lib/practice/links';
 import { chapterRange, plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
@@ -34,12 +35,15 @@ const taught = data.chapters
   .filter((c) => isTaught(data, c.number))
   .sort((a, b) => Number(current.has(b.number)) - Number(current.has(a.number)) || b.number - a.number);
 const sections = taught
-  .map((c) => ({
-    chapter: c,
-    now: current.has(c.number),
-    lessons: lessons.filter((l) => l.data.chapter === c.number),
-    questions: questions.filter((q) => q.data.chapter === c.number && isClassContent(data, q)).length,
-  }))
+  .map((c) => {
+    const count = questions.filter((q) => q.data.chapter === c.number && isClassContent(data, q)).length;
+    return {
+      chapter: c,
+      now: current.has(c.number),
+      lessons: lessons.filter((l) => l.data.chapter === c.number),
+      practice: count > 0 ? practiceStarts({ chapters: [c.number] }, count).start : null,
+    };
+  })
   .filter((s) => s.lessons.length > 0);
 const emptyNow = taught
   .filter((c) => current.has(c.number) && !sections.some((s) => s.chapter === c))
@@ -115,12 +119,10 @@ const kindChips = [...LESSON_KINDS]
         </h2>
         {s.now && <span class="badge now">Now in class</span>}
       </div>
-      {s.questions > 0 && (
+      {s.practice && (
         <p class="small links" data-pagefind-ignore>
           <span class="muted">Practice:</span>
-          <a href={practiceStart(subject, { chapter: [s.chapter.number] }, s.questions).href}>
-            {practiceStart(subject, { chapter: [s.chapter.number] }, s.questions).label}
-          </a>
+          <a href={practiceUrl(subject, s.practice.query)}>{s.practice.label}</a>
         </p>
       )}
       <LessonList lessons={s.lessons} grouped legend={false} compact />

@@ -4,7 +4,8 @@ import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
+import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
+import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { FRQ_ORDER_NOTE, frqCountLabel, matchFrqs } from '../../../lib/frqs';
 import { plural } from '../../../lib/text';
 import { CONTRIBUTE_URL } from '../../../site';
@@ -20,6 +21,8 @@ const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(Number(n))!;
 const lessons = (await getLessons(subject)).filter((l) => l.data.chapter === chapter.number);
 const questionCount = (await getQuestions(subject)).filter((q) => q.data.chapter === chapter.number).length;
+const pool = { chapters: [chapter.number] };
+const { start } = practiceStarts(pool, questionCount);
 const tests = data.tests.filter((t) => t.chapters.includes(chapter.number));
 const prev = data.chapters[data.chapters.indexOf(chapter) - 1];
 const next = data.chapters[data.chapters.indexOf(chapter) + 1];
@@ -59,10 +62,8 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
 
   {questionCount > 0 && (
     <div class="actions" data-pagefind-ignore>
-      <a class="button" href={practiceStart(subject, { chapter: [chapter.number] }, questionCount).href}>
-        {practiceStart(subject, { chapter: [chapter.number] }, questionCount).label}
-      </a>
-      <a class="button secondary" href={practiceHref(subject, { chapter: [chapter.number] })}>Pick your own set ({questionCount} questions)</a>
+      <a class="button" href={practiceUrl(subject, start.query)}>{start.label}</a>
+      <a class="button secondary" href={practiceUrl(subject, pickQuery(pool))}>Pick your own set ({plural(questionCount, 'question')})</a>
     </div>
   )}
   {tests.map((t) => (

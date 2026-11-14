@@ -2,6 +2,7 @@
 // in the lesson", "Read up on what you missed"), and the questions a lesson page links to.
 import type { PracticeQuestion } from './types';
 import { inSections } from './filters';
+import type { Pool } from './links';
 
 /** A lesson the practice screens can point to (lessons only, not notes or review sheets). */
 export interface PracticeLesson {
@@ -65,9 +66,9 @@ export function lessonsForMissed(
 export function lessonPractice(
   lesson: Pick<PracticeLesson, 'chapter' | 'sections'>,
   questions: Pick<PracticeQuestion, 'chapter' | 'sections'>[],
-): { query: { chapter: number[]; section?: string[] }; count: number; scope: 'lesson' | 'chapter' } | null {
+): { pool: Pool; count: number; scope: 'lesson' | 'chapter' } | null {
   const chapter = questions.filter((q) => q.chapter === lesson.chapter);
   const own = lesson.sections.length ? chapter.filter((q) => inSections(q, lesson.sections)).length : 0;
-  if (own) return { query: { chapter: [lesson.chapter], section: lesson.sections }, count: own, scope: 'lesson' };
-  return chapter.length ? { query: { chapter: [lesson.chapter] }, count: chapter.length, scope: 'chapter' } : null;
+  if (own) return { pool: { chapters: [lesson.chapter], sections: lesson.sections }, count: own, scope: 'lesson' };
+  return chapter.length ? { pool: { chapters: [lesson.chapter] }, count: chapter.length, scope: 'chapter' } : null;
 }

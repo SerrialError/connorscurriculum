@@ -47,24 +47,22 @@ export function describeScope(f: Filters, tests: PracticeTest[], everything = AL
 }
 
 /**
+ * How a set picks `size` of its `matching` questions: "10 random", "all 8 in order",
+ * "10 on your weakest topics". The end of describeSet, and how practice links say it (links.ts).
+ */
+export function describeHow(f: Pick<Filters, 'mode'>, size: number, matching: number): string {
+  const all = size >= matching;
+  if (f.mode === 'random') return all ? `all ${size}, shuffled` : `${size} random`;
+  if (f.mode === 'weak') return all ? `all ${size}, weakest topics first` : `${size} on your weakest topics`;
+  return all ? `all ${size} in order` : `first ${size} in order`;
+}
+
+/**
  * A one-line name for a set, shown above its questions and results:
  * "Chapters 6–7 Test · 10 random", "Ch. 7 · Hard · 10 on your weakest topics".
  */
 export function describeSet(f: Filters, tests: PracticeTest[], size: number, matching: number, everything?: string): string {
-  const all = size >= matching;
-  const how =
-    f.mode === 'random'
-      ? all
-        ? `all ${size}, shuffled`
-        : `${size} random`
-      : f.mode === 'weak'
-        ? all
-          ? `all ${size}, weakest topics first`
-          : `${size} on your weakest topics`
-        : all
-          ? `all ${size} in order`
-          : `first ${size} in order`;
-  return `${describeScope(f, tests, everything)} · ${how}`;
+  return `${describeScope(f, tests, everything)} · ${describeHow(f, size, matching)}`;
 }
 
 /**

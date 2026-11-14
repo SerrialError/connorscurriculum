@@ -3,70 +3,18 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Search from '../../components/Search.astro';
 import TestWhen from '../../components/TestWhen.astro';
 import Base from '../../layouts/Base.astro';
-import {
-  getClassSummary,
-  getSubjectData,
-  inTest,
-  isPastTest,
-  kindCounts,
-  lessonHref,
-  pastFrqLinks,
-  practiceStart,
-  subjectPaths,
-  testPracticeLinks,
-  url,
-} from '../../lib/content';
-import { hasTopics, searchPlaceholder } from '../../lib/features';
-import { frqCountLabel, matchFrqs } from '../../lib/frqs';
+import { classHome } from '../../lib/class-home';
+import { getClassSummary, getSubjectData, isPastTest, lessonHref, pastFrqLinks, practiceUrl, subjectPaths, url } from '../../lib/content';
+import { searchPlaceholder } from '../../lib/features';
 import { chapterRange, plural } from '../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
-const { progress } = data;
 // Class material only (no samples, nothing from chapters not reached), as on the dashboard card.
-const { lessons, questions, now, test } = await getClassSummary(data);
-const cedOrder = [...data.topics.keys()];
-const inCedOrder = (ids: string[]) => [...ids].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
-const frqs = pastFrqLinks(data);
-
-const topicCounts = { done: 0, review: 0, partial: 0, skipped: 0 };
-for (const s of progress.topics.values()) topicCounts[s] += 1;
-const newCount = data.topics.size - topicCounts.done - topicCounts.review - topicCounts.partial - topicCounts.skipped;
-
-const chapterInfo = (n: number) => {
-  const c = data.chapterMap.get(n)!;
-  const frqMatches = matchFrqs(frqs, new Set(c.cedTopics));
-  const own = lessons.filter((l) => l.data.chapter === n);
-  return {
-    chapter: c,
-    topics: inCedOrder(c.cedTopics),
-    lessons: own.length,
-    pages: kindCounts(own),
-    teaching: own.filter((l) => l.data.kind === 'lesson'),
-    notes: own.filter((l) => l.data.kind === 'notes'),
-    questions: questions.filter((q) => q.data.chapter === n).length,
-    frqs: frqMatches.length ? frqCountLabel(frqMatches) : '',
-  };
-};
-const nowInfo = now.chapters.map((c) => chapterInfo(c.number));
-
-// Latest class test, with its review sheets.
-const testReview = test ? lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)) : [];
-const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
-const testLinks = test ? testPracticeLinks(subject, test.id, testQuestions) : null;
-const testPast = isPastTest(test);
-
-// Lessons for the latest finished chapters with any, most recent first.
-const recent = [...progress.chapters]
-  .sort((a, b) => b - a)
-  .map(chapterInfo)
-  .filter((c) => c.lessons > 0)
-  .slice(0, 3);
-
-const gapCount = data.textbookGaps.topics.size;
-const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skipped').map(([id]) => id));
+const { now, test, recent, topics } = classHome(data, await getClassSummary(data), pastFrqLinks(data));
+const chapterHref = (n: number, hash = '') => url(`${subject}/chapters/${n}/${hash}`);
 ---
 
 <Base title={data.subject.name} subject={subject}>
@@ -75,68 +23,61 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   <Search subject={subject} placeholder={searchPlaceholder(data)} />
 
   <div class="dash">
-    {nowInfo.length > 0 && (
+    {now.chapters.length > 0 && (
       <section class="card now" aria-labelledby="now-h">
         <h2 id="now-h" class="eyebrow">{now.label}</h2>
         {/* Compact: one line per chapter. The topic list lives on the chapter page. */}
-        {nowInfo.map((c) => (
+        {now.chapters.map((c) => (
           <div class="now-chapter">
             <h3>
-              <a href={url(`${subject}/chapters/${c.chapter.number}/`)}>
-                Chapter {c.chapter.number}: {c.chapter.title}
-              </a>
+              <a href={chapterHref(c.chapter.number)}>Chapter {c.chapter.number}: {c.chapter.title}</a>
             </h3>
             <p class="small links">
-              {c.topics.length > 0 && (
-                <a href={url(`${subject}/chapters/${c.chapter.number}/#topics`)}>{plural(c.topics.length, 'AP topic')}</a>
+              {c.topics.length > 0 && <a href={chapterHref(c.chapter.number, '#topics')}>{plural(c.topics.length, 'AP topic')}</a>}
+              {(c.pages || c.questions > 0) && (
+                <span class="muted">{[c.pages, c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
               )}
-              {c.lessons + c.questions > 0 && (
-                <>
-                  <span class="muted">{[c.pages, c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
-                  {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
-                </>
-              )}
-              {c.frqs && <a href={url(`${subject}/chapters/${c.chapter.number}/#frqs`)}>{c.frqs}</a>}
+              {c.practice && <a href={practiceUrl(subject, c.practice.query)}>{c.practice.label}</a>}
+              {c.frqs && <a href={chapterHref(c.chapter.number, '#frqs')}>{c.frqs}</a>}
             </p>
           </div>
         ))}
-        {nowInfo.every((c) => c.lessons + c.questions === 0) && (
+        {now.chapters.every((c) => !c.pages && c.questions === 0) && (
           <p class="small muted empty-note">
             No lessons or practice questions yet.
-            {hasTopics(data) && ` Study from the ${nowInfo.some((c) => c.frqs) ? 'AP topics and past FRQs' : 'AP topics'} above.`}
+            {topics && ` Study from the ${now.chapters.some((c) => c.frqs) ? 'AP topics and past FRQs' : 'AP topics'} above.`}
           </p>
         )}
       </section>
     )}
 
     {test && (
-      <section class="card test" aria-labelledby="test-h" data-test-date={test.date} data-past={testPast ? '' : undefined}>
+      <section class="card test" aria-labelledby="test-h" data-test-date={test.test.date} data-past={isPastTest(test.test) ? '' : undefined}>
         {/* Before the test: what to study, with a big Start button. After it: quieter, for review. */}
         <p class="eyebrow"><span class="if-upcoming">Next class test</span><span class="if-past">Latest class test</span></p>
-        <h2 id="test-h"><a href={url(`${subject}/tests/${test.id}/`)}>{test.title}</a></h2>
+        <h2 id="test-h"><a href={url(`${subject}/tests/${test.test.id}/`)}>{test.test.title}</a></h2>
         <p class="small muted">
-          <TestWhen test={test} /> · {chapterRange(test.chapters)}
+          <TestWhen test={test.test} /> · {chapterRange(test.test.chapters)}
         </p>
-        {testReview.length > 0 && (
+        {test.review.length > 0 && (
           <ul class="plain-list review-links">
-            {testReview.map((l) => (
+            {test.review.map((l) => (
               <li>
                 <a href={lessonHref(l)}>{l.data.title}</a>
               </li>
             ))}
           </ul>
         )}
-        {testLinks && testQuestions > 0 && (
+        {test.practice && (
           <>
             <div class="actions if-upcoming">
-              <a class="button" href={(testLinks.random ?? testLinks.all).href}>{(testLinks.random ?? testLinks.all).label}</a>
-              {testLinks.random && <a class="button secondary" href={testLinks.all.href}>{testLinks.all.label}</a>}
+              <a class="button" href={practiceUrl(subject, test.practice.start.query)}>{test.practice.start.label}</a>
+              {test.practice.all && <a class="button secondary" href={practiceUrl(subject, test.practice.all.query)}>{test.practice.all.label}</a>}
             </div>
             {/* After the test: review practice, as quiet links. */}
             <p class="small if-past review-practice">
-              <span class="muted">Practice:</span>{' '}
-              <a href={(testLinks.random ?? testLinks.all).href}>{testLinks.random ? `${testLinks.random.label.replace('Start ', '').replace(' questions', '')}` : testLinks.all.label}</a>
-              {testLinks.random && <><span class="muted"> · </span><a href={testLinks.all.href}>all {testQuestions}</a></>}
+              <span class="muted">Practice:</span> <a href={practiceUrl(subject, test.practice.start.query)}>{test.practice.start.short}</a>
+              {test.practice.all && <><span class="muted"> · </span><a href={practiceUrl(subject, test.practice.all.query)}>{test.practice.all.short}</a></>}
             </p>
           </>
         )}
@@ -155,13 +96,13 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
         {recent.map((c) => (
           <div class="card chapter-card">
             <h3>
-              <a href={url(`${subject}/chapters/${c.chapter.number}/`)}>
+              <a href={chapterHref(c.chapter.number)}>
                 <span class="muted">Ch. {c.chapter.number}</span> {c.chapter.title}
               </a>
             </h3>
-            {c.teaching.length > 0 && (
+            {c.lessons.length > 0 && (
               <ul class="plain-list lesson-links">
-                {c.teaching.map((l) => (
+                {c.lessons.map((l) => (
                   <li><a href={lessonHref(l)}>{l.data.title}</a></li>
                 ))}
               </ul>
@@ -177,11 +118,9 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
                 ))}
               </p>
             )}
-            {c.questions > 0 && (
+            {c.practice && (
               <p class="small practice-line">
-                <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>
-                  {practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}
-                </a>
+                <a href={practiceUrl(subject, c.practice.query)}>{c.practice.label}</a>
                 <span class="muted"> · {c.questions} in this chapter</span>
               </p>
             )}
@@ -196,44 +135,43 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     <div class="card progress">
       <div class="stats">
         <a class="stat" href={url(`${subject}/chapters/`)}>
-          <span class="big">{progress.chapters.size}<span class="of">/{data.chapters.length}</span></span>
+          <span class="big">{data.progress.chapters.size}<span class="of">/{data.chapters.length}</span></span>
           <span class="small">chapters finished</span>
         </a>
-        {hasTopics(data) && (
+        {topics && (
           <a class="stat" href={url(`${subject}/ap/`)}>
-            <span class="big">{topicCounts.done}<span class="of">/{data.topics.size}</span></span>
-            <span class="small">{data.subject.standardsName} topics covered</span>
+            <span class="big">{topics.done}<span class="of">/{topics.total}</span></span>
+            <span class="small">AP topics covered</span>
           </a>
         )}
       </div>
-      {hasTopics(data) && (
+      {topics && (
         <ul class="plain-list small breakdown">
-          {topicCounts.partial > 0 && <li><span class="mk partial" aria-hidden="true">◐</span><span>{topicCounts.partial} partly covered</span></li>}
-          {topicCounts.review > 0 && <li><span class="mk review" aria-hidden="true">↺</span><span>{topicCounts.review} seen in {progress.lastYearCourse}</span></li>}
-          {topicCounts.skipped > 0 && (
+          {topics.partial > 0 && <li><span class="mk partial" aria-hidden="true">◐</span><span>{topics.partial} partly covered</span></li>}
+          {topics.review > 0 && <li><span class="mk review" aria-hidden="true">↺</span><span>{topics.review} seen in {data.progress.lastYearCourse}</span></li>}
+          {topics.skipped.length > 0 && (
             <li>
               <span class="mk skipped" aria-hidden="true">!</span>
-              <span>{topicCounts.skipped} skipped in class:{' '}
-              {skippedIds.map((id, i) => (
+              <span>{topics.skipped.length} skipped in class:{' '}
+              {topics.skipped.map((t, i) => (
                 <>
                   {i > 0 && ', '}
-                  <a href={url(`${subject}/ap/${id}/`)}>{id} {data.topics.get(id)!.title}</a>
+                  <a href={url(`${subject}/ap/${t.id}/`)}>{t.id} {t.title}</a>
                 </>
               ))}</span>
             </li>
           )}
-          <li><span class="mk" aria-hidden="true"></span><span>{newCount} completely new</span></li>
-          {gapCount > 0 && (
+          <li><span class="mk" aria-hidden="true"></span><span>{topics.untouched} completely new</span></li>
+          {topics.gaps > 0 && (
             <li>
               <span class="mk gap" aria-hidden="true">⚑</span>
-              <a href={url(`${subject}/ap/#textbook-gaps`)}>{gapCount} topics the textbook covers thinly</a>
+              <a href={url(`${subject}/ap/#textbook-gaps`)}>{topics.gaps} topics the textbook covers thinly</a>
             </li>
           )}
         </ul>
       )}
     </div>
   </section>
-
 </Base>
 
 <style>

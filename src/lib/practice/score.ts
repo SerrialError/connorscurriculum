@@ -160,8 +160,9 @@ export function weakTopics(questions: PracticeQuestion[], history: History, max 
 
 /**
  * True when "weakest topics first" has nothing to go on: none of the matching questions has been
- * answered on this device, so the order is effectively random.
+ * answered on this device, so the order is effectively random. (A class test's page offers
+ * "weakest topics" only when this is false.)
  */
-export function weakHasNoHistory(matching: PracticeQuestion[], history: History): boolean {
-  return topicAccuracy(matching, history).size === 0;
+export function weakHasNoHistory(matching: Pick<PracticeQuestion, 'id'>[], history: History): boolean {
+  return !matching.some((q) => history[q.id]?.length);
 }

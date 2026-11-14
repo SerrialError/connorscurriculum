@@ -5,6 +5,8 @@ import Callout from '../../../components/Callout.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
+import { lessonFilterQuery } from '../../../lib/lesson-filter';
+import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { lessonPractice } from '../../../lib/practice/lessons';
 import Base from '../../../layouts/Base.astro';
 import {
@@ -19,9 +21,7 @@ import {
   kindLabel,
   lessonHref,
   lessonSlug,
-  practiceHref,
-  practiceStart,
-  testPracticeLinks,
+  practiceUrl,
   subjectIds,
   topicIds,
   url,
@@ -63,24 +63,23 @@ const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
 const questions = await getQuestions(subject);
 const picked = lessonPractice(lesson.data, questions.map((q) => q.data));
 const practice = picked && {
-  start: practiceStart(
-    subject,
-    picked.query,
+  start: practiceStarts(
+    picked.pool,
     picked.count,
     picked.scope === 'lesson' ? (lesson.data.kind === 'notes' ? 'on these notes' : 'on this lesson') : `from Chapter ${chapter.number}`,
-  ),
-  setup: practiceHref(subject, picked.query),
+  ).start,
+  pick: pickQuery(picked.pool),
 };
-// A test review sheet belongs to its test: link to the test and practice the whole test, not
-// just the sheet's topics, and leave out the chapter's previous/next lessons.
+// A test review sheet is listed with the lessons, but belongs to its test: link to the test and
+// practice the whole test, not just the sheet's topics, and leave out the chapter's previous/next lessons.
 const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;
 const testHref = test && url(`${subject}/tests/${test.id}/`);
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
+const testPractice = test && testQuestions > 0 ? practiceStarts({ test: test.id }, testQuestions) : null;
 // Not class material: a sample page, or one for a chapter the class hasn't reached.
 const sample = isSample(lesson);
 const byLine = sample ? '' : byline(lesson);
 const ahead = !isTaught(data, chapter.number);
-const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id, testQuestions) : null;
 ---
 
 <Base
@@ -89,13 +88,12 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
   subject={subject}
   searchable={!lesson.data.draft}
   searchMeta={{ type: sample || ahead ? 'Sample page' : kindLabel(lesson), chapter: chapterLabel }}
-  section={test ? 'tests' : undefined}
 >
   <div class:list={['lesson-page', { 'has-toc': showToc }]}>
   <article class="prose">
     <Breadcrumbs
       items={test
-        ? [{ href: url(`${subject}/tests/`), label: 'Class tests' }, { href: testHref!, label: test.title }]
+        ? [{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/lessons/${lessonFilterQuery({ kind: 'review', q: '' })}`), label: 'Review sheets' }]
         : [{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/${chapter.number}/`), label: `Chapter ${chapter.number}` }]}
     />
     <h1>
@@ -128,17 +126,17 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
         Review sheet for the <a href={testHref}>{test.title}</a>.
         {testPractice && (
           <>
-            {' '}When you're done, practice:{' '}
-            {testPractice.random && <><a href={testPractice.random.href}>10 random test questions</a> or{' '}</>}
-            <a href={testPractice.all.href}>all {testQuestions}</a>.
+            {' '}When you're done, practice its questions:{' '}
+            <a href={practiceUrl(subject, testPractice.start.query)}>{testPractice.start.short}</a>
+            {testPractice.all && <> or <a href={practiceUrl(subject, testPractice.all.query)}>{testPractice.all.short}</a></>}.
           </>
         )}
       </p>
     )}
     {!test && practice && (
       <p class="practice-top small" data-pagefind-ignore>
-        <span class="muted">Practice:</span> <a href={practice.start.href}>{practice.start.label}</a>
-        <span class="muted"> · </span><a href={practice.setup}>Pick your own set</a>
+        <span class="muted">Practice:</span> <a href={practiceUrl(subject, practice.start.query)}>{practice.start.label}</a>
+        <span class="muted"> · </span><a href={practiceUrl(subject, practice.pick)}>Pick your own set</a>
       </p>
     )}
     {showToc && (
@@ -157,8 +155,8 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
         <>
           {testPractice && (
             <div class="actions">
-              {testPractice.random && <a class="button" href={testPractice.random.href}>{testPractice.random.label}</a>}
-              <a class:list={['button', { secondary: !!testPractice.random }]} href={testPractice.all.href}>{testPractice.all.label}</a>
+              <a class="button" href={practiceUrl(subject, testPractice.start.query)}>{testPractice.start.label}</a>
+              {testPractice.all && <a class="button secondary" href={practiceUrl(subject, testPractice.all.query)}>{testPractice.all.label}</a>}
             </div>
           )}
           <p class="small all-lessons"><a href={testHref}>Back to the {test.title}</a></p>
@@ -167,8 +165,8 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
         <>
           {practice && (
             <div class="actions">
-              <a class="button" href={practice.start.href}>{practice.start.label}</a>
-              <a class="button secondary" href={practice.setup}>Pick your own set</a>
+              <a class="button" href={practiceUrl(subject, practice.start.query)}>{practice.start.label}</a>
+              <a class="button secondary" href={practiceUrl(subject, practice.pick)}>Pick your own set</a>
             </div>
           )}
           <nav class="pager" aria-label="Lessons in this chapter">

@@ -2,7 +2,7 @@
 // so draft handling and sorting stay consistent.
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
-import { classSummary, isSample } from './class-status';
+import { classSummary, isClassContent, isSample } from './class-status';
 import { type FrqLink, flattenFrqs } from './frqs';
 import { isPast, isoDate } from './dates';
 import { topicIdFromRef } from './validate';
@@ -43,6 +43,10 @@ export async function getQuestions(subject: string): Promise<Question[]> {
 
 export interface TopicCoverage {
   lessons: Lesson[];
+  /**
+   * Class-material questions: what a practice set on the topic can pick (sample questions and
+   * ones from chapters the class hasn't reached come in only when their chapter is picked).
+   */
   questions: number;
   chapters: number[];
 }
@@ -60,7 +64,7 @@ export function coverage(data: SubjectData, lessons: Lesson[], questions: Questi
       addChapter(c, lesson.data.chapter);
     }
   }
-  for (const q of questions) {
+  for (const q of questions.filter((x) => isClassContent(data, x))) {
     for (const t of topicIds(q)) {
       const c = map.get(t)!;
       c.questions += 1;

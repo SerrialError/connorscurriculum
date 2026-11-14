@@ -37,6 +37,10 @@ export const isDefaultFilters = (f: Filters): boolean =>
 /** "Other" in How many: a count that isn't one of the COUNT_CHOICES chips. */
 export const isCustomCount = (n: number | null): boolean => n !== null && !COUNT_CHOICES.includes(n);
 
+/** `list` with `value` added, or removed if it was there: a filter chip being toggled. */
+export const toggled = <T>(list: readonly T[], value: T): T[] =>
+  list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
+
 /**
  * Filters combine with AND across kinds and OR within a kind. Units and topics are one
  * "CED" kind: a question matches if it is in any selected unit or has any selected topic.

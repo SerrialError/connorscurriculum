@@ -66,13 +66,19 @@ const kindChips = [...LESSON_KINDS]
     <form class="filter" role="search" aria-label="Filter lessons" data-pagefind-ignore>
       <label class="visually-hidden" for="lesson-filter">Filter lessons</label>
       <input id="lesson-filter" type="search" placeholder="Filter by title, topic, or name…" autocomplete="off" enterkeyhint="done" />
-      <fieldset class="kinds">
+      <fieldset class="chips kinds">
         <legend class="visually-hidden">Show</legend>
         {/* Counts follow the text filter, so each chip says how many it would show. */}
-        <label class="kind-chip"><input type="radio" name="kind" value="" checked /> <span>All <span class="n" data-kind="">{lessons.length}</span></span></label>
+        <label class="chip">
+          <input type="radio" name="kind" value="" checked />
+          <span>All</span>
+          <span class="chip-count" data-kind="">{lessons.length}</span>
+        </label>
         {kindChips.map((k) => (
-          <label class="kind-chip">
-            <input type="radio" name="kind" value={k.kind} /> <span>{k.kind === 'review' ? <>Review<span class="wide-only"> sheets</span></> : k.chip} <span class="n" data-kind={k.kind}>{k.n}</span></span>
+          <label class="chip">
+            <input type="radio" name="kind" value={k.kind} />
+            <span>{k.kind === 'review' ? <>Review<span class="wide-only"> sheets</span></> : k.chip}</span>
+            <span class="chip-count" data-kind={k.kind}>{k.n}</span>
           </label>
         ))}
       </fieldset>
@@ -148,79 +154,87 @@ const kindChips = [...LESSON_KINDS]
 
   {/* Phones show no topic badges here (see LessonList compact), so no key for them either. */}
   <div class="legend">
-    <TopicLegend subject={subject} topics={lessons.flatMap(topicIds)} label="AP topic badges:" />
+    <TopicLegend subject={subject} topics={lessons.flatMap(topicIds)} classOnly={lessons.some((l) => topicIds(l).length === 0)} label="AP topic badges:" />
   </div>
 </Base>
 
+
 <script>
+  // DOM wiring only: the matching rules are in lib/lesson-filter.ts. The filter is kept in the
+  // address, so Back, reload, and shared links show the same list.
+  import { type LessonFilter, filterLessons, isFiltering, lessonFilterQuery, parseLessonFilter, words } from '../../../lib/lesson-filter';
+
   const form = document.querySelector<HTMLFormElement>('form.filter');
   if (form) {
     const input = form.querySelector<HTMLInputElement>('#lesson-filter')!;
+    const kinds = [...form.querySelectorAll<HTMLInputElement>('input[name="kind"]')];
     const status = form.querySelector<HTMLElement>('.status')!;
+    const counts = [...form.querySelectorAll<HTMLElement>('.chip-count[data-kind]')];
     const none = document.querySelector<HTMLElement>('.none')!;
     const samples = document.querySelector<HTMLDetailsElement>('.samples details');
+    const lists = [...document.querySelectorAll<HTMLElement>('section.chapter .lessons')];
+    const sections = [...document.querySelectorAll<HTMLElement>('section.chapter')];
     const items = [...document.querySelectorAll<HTMLLIElement>('section.chapter .lessons > li')];
-    const counts = [...form.querySelectorAll<HTMLElement>('.n[data-kind]')];
     const jumps = [...document.querySelectorAll<HTMLAnchorElement>('.jump-nav a[href^="#"]')];
     const unfiltered = [...document.querySelectorAll<HTMLElement>('[data-unfiltered]')];
-    const words = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').split(/\s+/).filter(Boolean);
-    const text = new Map(items.map((li) => [li, words(li.textContent ?? '').join(' ')]));
+    const entries = items.map((li) => ({ text: words(li.textContent ?? '').join(' '), kind: li.dataset.kind ?? '', sample: !!li.closest('.samples') }));
     let samplesWereOpen = samples?.open ?? false;
 
-    const apply = () => {
-      const kind = form.querySelector<HTMLInputElement>('input[name="kind"]:checked')?.value ?? '';
-      const q = words(input.value);
-      const filtering = kind !== '' || q.length > 0;
-      let shown = 0;
-      let shownClass = 0;
-      const byKind = new Map<string, number>();
-      for (const li of items) {
-        const textOk = q.every((w) => text.get(li)!.includes(w));
-        // Chip counts: class pages matching the text, whichever kind is picked.
-        if (textOk && !li.closest('.samples')) {
-          for (const k of ['', ...li.classList]) byKind.set(k, (byKind.get(k) ?? 0) + 1);
-        }
-        const ok = textOk && (!kind || li.classList.contains(kind));
-        li.hidden = !ok;
-        if (ok) {
-          shown++;
-          if (!li.closest('.samples')) shownClass++;
-        }
+    const show = (f: LessonFilter) => {
+      const r = filterLessons(entries, f);
+      const filtering = isFiltering(f);
+      items.forEach((li, i) => (li.hidden = !r.shown[i]));
+      for (const n of counts) {
+        const c = r.counts.get(n.dataset.kind!) ?? 0;
+        n.textContent = String(c);
+        n.classList.toggle('zero', c === 0);
       }
-      for (const n of counts) n.textContent = String(byKind.get(n.dataset.kind!) ?? 0);
       // Hide group headings, lists, and chapters left empty.
-      for (const ul of document.querySelectorAll<HTMLElement>('section.chapter .lessons')) {
-        const empty = !ul.querySelector('li:not([hidden])');
-        ul.hidden = empty;
+      for (const ul of lists) {
+        ul.hidden = !ul.querySelector('li:not([hidden])');
         const h = ul.previousElementSibling;
-        if (h?.classList.contains('group-h')) (h as HTMLElement).hidden = empty;
+        if (h instanceof HTMLElement && h.classList.contains('group-h')) h.hidden = ul.hidden;
       }
-      for (const sec of document.querySelectorAll<HTMLElement>('section.chapter')) {
-        sec.hidden = !sec.querySelector('.lessons > li:not([hidden])');
-      }
+      for (const sec of sections) sec.hidden = !sec.querySelector('.lessons > li:not([hidden])');
       // Jump links only to what's showing; notes about chapters with no lessons only when not filtering.
       for (const a of jumps) a.hidden = !!document.querySelector<HTMLElement>(a.hash)?.hidden;
       for (const el of unfiltered) el.hidden = filtering;
-      // A text search that only matches sample pages opens them; clearing it restores the old state.
+      // Words that only match sample pages open them; clearing the filter restores the old state.
       if (samples) {
-        if (q.length > 0 && shownClass === 0 && shown > 0) samples.open = true;
+        if (words(f.q).length > 0 && r.shownClass === 0 && r.shownCount > 0) samples.open = true;
         else if (!filtering) samples.open = samplesWereOpen;
       }
-      none.hidden = shown > 0;
-      status.textContent = filtering ? `${shown} ${shown === 1 ? 'match' : 'matches'}` : '';
+      none.hidden = r.shownCount > 0;
+      status.textContent = filtering ? `${r.shownCount} ${r.shownCount === 1 ? 'match' : 'matches'}` : '';
     };
+
+    /** Set the controls and the list from the address (on load, and when Back restores the page). */
+    const fromAddress = () => {
+      const f = parseLessonFilter(location.search, kinds.map((k) => k.value));
+      input.value = f.q;
+      for (const k of kinds) k.checked = k.value === f.kind;
+      show(f);
+    };
+
+    const onChange = () => {
+      const f = { kind: kinds.find((k) => k.checked)?.value ?? '', q: input.value };
+      history.replaceState(history.state, '', location.pathname + lessonFilterQuery(f) + location.hash);
+      show(f);
+    };
+
     samples?.addEventListener('toggle', () => {
-      if (!input.value.trim()) samplesWereOpen = samples.open;
+      if (!isFiltering({ kind: '', q: input.value })) samplesWereOpen = samples.open;
     });
     form.addEventListener('submit', (e) => e.preventDefault());
-    form.addEventListener('input', apply);
-    form.addEventListener('change', apply);
+    form.addEventListener('input', onChange);
     none.querySelector('.clear')!.addEventListener('click', () => {
       input.value = '';
-      form.querySelector<HTMLInputElement>('input[name="kind"][value=""]')!.checked = true;
-      apply();
+      kinds[0]!.checked = true;
+      onChange();
       input.focus();
     });
+    fromAddress();
+    addEventListener('pageshow', fromAddress);
   }
 </script>
 
@@ -248,49 +262,9 @@ const kindChips = [...LESSON_KINDS]
     border-color: var(--accent);
   }
   .kinds {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
     border: 0;
     margin: 0;
     padding: 0;
-  }
-  .kind-chip {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: var(--surface);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-  }
-  .kind-chip input {
-    position: absolute;
-    opacity: 0;
-    width: 1px;
-    height: 1px;
-    pointer-events: none;
-  }
-  .kind-chip:hover {
-    border-color: var(--accent);
-  }
-  .kind-chip:has(input:checked) {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--accent-ink);
-  }
-  .kind-chip:has(input:focus-visible) {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-  }
-  .n {
-    margin-left: 0.25rem;
-    font-size: 0.75rem;
-    font-variant-numeric: tabular-nums;
   }
   .status {
     flex-basis: 100%;
@@ -347,17 +321,6 @@ const kindChips = [...LESSON_KINDS]
   .none {
     margin-top: 1.5rem;
   }
-  .clear {
-    font: inherit;
-    background: none;
-    border: 0;
-    padding: 0;
-    color: var(--link);
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
   .samples {
     margin-top: 2.5rem;
     border-top: 1px solid var(--border);
@@ -371,8 +334,8 @@ const kindChips = [...LESSON_KINDS]
     color: var(--link);
     margin-right: 0.5rem;
   }
-  /* Phones: the heading and the filter say what the page is, and the chips, jump links, and
-     note each fit on one line, so the first lessons show on the first screen. */
+  /* Phones: the heading and the filter say what the page is, and the chips (a little tighter than
+     elsewhere), jump links, and note each fit on one line, so the first lessons show on the first screen. */
   @media (max-width: 520px) {
     .intro,
     .legend,
@@ -382,12 +345,13 @@ const kindChips = [...LESSON_KINDS]
     .kinds {
       gap: 0.3rem;
     }
-    .kind-chip {
-      padding: 0.25rem 0.55rem;
+    .kinds .chip {
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
       font-size: 0.85rem;
     }
     /* "All" needs no count when the other chips have theirs. */
-    .n[data-kind=''] {
+    .chip-count[data-kind=''] {
       display: none;
     }
     .jump-nav {

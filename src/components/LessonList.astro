@@ -31,7 +31,7 @@ const H = `h${headingLevel}` as 'h2' | 'h3';
       {grouped && groups.length > 1 && <H class="group-h" data-pagefind-ignore>{g.heading}</H>}
       <ul class:list={['plain-list lessons card', { compact }]} data-pagefind-ignore>
         {g.lessons.map((l) => (
-          <li class:list={[l.data.kind]}>
+          <li data-kind={l.data.kind}>
             <a class="title" href={lessonHref(l)}>{l.data.title}</a>
             {l.data.draft && <span class="badge">Draft</span>}
             {isSample(l) && <span class="badge sample">Sample</span>}
@@ -49,7 +49,9 @@ const H = `h${headingLevel}` as 'h2' | 'h3';
     </>
   ))
 )}
-{legend && lessons.length > 0 && <TopicLegend subject={lessons[0]!.data.subject.id} topics={lessons.flatMap(topicIds)} />}
+{legend && lessons.length > 0 && (
+  <TopicLegend subject={lessons[0]!.data.subject.id} topics={lessons.flatMap(topicIds)} classOnly={lessons.some((l) => topicIds(l).length === 0)} />
+)}
 
 <style>
   .group-h {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CLASS_ONLY_UNIT, activeFilterCount, countWith, emptyFilters, filterQuestions, filterTopics, isCustomCount, sessionSize } from './filters';
+import { CLASS_ONLY_UNIT, activeFilterCount, countWith, emptyFilters, filterQuestions, filterTopics, isCustomCount, sessionSize, toggled } from './filters';
 import type { PracticeQuestion, PracticeTest } from './types';
 import { parseFilters } from './url';
 import { mcq, questions, tests } from './test-fixtures';
@@ -87,5 +87,14 @@ describe('filterTopics', () => {
   it('combines topics, units, chapters, and the test', () => {
     const f = { ...emptyFilters(), topics: ['9.1'], units: ['5'], chapters: [15], test: 'ch14' };
     expect([...filterTopics(f, units, chapterTopics, tests)].sort()).toEqual(['3.13', '5.1', '5.2', '7.1', '9.1']);
+  });
+});
+
+describe('toggled', () => {
+  it('adds a missing value and removes a present one, leaving the list alone', () => {
+    const list = [1, 2];
+    expect(toggled(list, 3)).toEqual([1, 2, 3]);
+    expect(toggled(list, 1)).toEqual([2]);
+    expect(list).toEqual([1, 2]);
   });
 });

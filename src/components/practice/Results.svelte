@@ -200,7 +200,7 @@
   }
   .bar {
     height: 8px;
-    border-radius: 999px;
+    border-radius: var(--pill);
     background: var(--surface-2);
     overflow: hidden;
   }

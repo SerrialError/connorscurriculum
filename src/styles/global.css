@@ -22,6 +22,7 @@
   --tip: #5b3fa6;
   --tip-soft: #eee8fa;
   --radius: 10px;
+  --pill: 999px;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 2px 8px rgb(0 0 0 / 0.04);
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -239,7 +240,7 @@ table[data-scrolls]::after,
   width: max-content;
   margin-top: 0.3rem;
   padding: 0.05rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--pill);
   background: var(--surface-2);
   color: var(--text-2);
   font: 600 0.75rem/1.5 var(--font);
@@ -379,6 +380,108 @@ a.card:hover {
   margin: 0;
 }
 
+/* Toggle chips: a label around a checkbox or radio that is hidden but still focusable (the
+   practice filters, the Lessons page's kinds). A count can follow the text. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.25rem;
+  max-width: 100%;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  /* Half the height: a pill on one line, a rounded box when a long name wraps. */
+  border-radius: 1.15rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  cursor: pointer;
+  user-select: none;
+}
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.chip:hover {
+  border-color: var(--accent);
+}
+.chip:has(input:checked) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.chip:has(input[type='checkbox']:checked)::before {
+  content: '✓';
+  font-weight: 700;
+}
+.chip:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.chip-sub {
+  color: var(--muted);
+}
+.chip:has(input:checked) .chip-sub {
+  color: inherit;
+  opacity: 0.85;
+}
+.chip-count {
+  padding: 0 0.4rem;
+  border-radius: var(--pill);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.chip:has(input:checked) .chip-count {
+  background: var(--accent-ink);
+  color: var(--accent);
+}
+/* Options that would match nothing stay usable but recede. */
+.chip-count.zero {
+  opacity: 0.6;
+}
+.chip:has(.chip-count.zero):not(:has(input:checked)) {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+/* Practice answer choices and FRQ scoring points: outlined rows you tap, tinted when picked. */
+.option-row {
+  position: relative;
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+}
+.option-row:hover {
+  border-color: var(--accent);
+}
+.option-row:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.option-row:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* Badges */
 .badges {
   display: flex;
@@ -501,7 +604,7 @@ button.button {
   color: var(--text-2);
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--pill);
   padding: 0.3rem 0.75rem;
   cursor: pointer;
   white-space: nowrap;

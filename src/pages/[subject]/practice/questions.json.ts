@@ -50,7 +50,9 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
       ...base,
       type: 'mcq',
       answer: q.data.answer,
-      choices: await Promise.all(q.data.choices.map(async (c) => ({ id: c.id, html: await renderInlineMarkdown(c.text) }))),
+      choices: await Promise.all(
+        q.data.choices.map(async (c) => ({ id: c.id, html: await renderInlineMarkdown(c.text), text: await renderPlainText(c.text) })),
+      ),
     };
   }
   return {

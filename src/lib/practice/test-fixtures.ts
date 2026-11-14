@@ -13,8 +13,8 @@ export const mcq = (id: string, over: Partial<McqQuestion> = {}): McqQuestion =>
   promptText: '',
   explanationHtml: '',
   choices: [
-    { id: 'a', html: 'A' },
-    { id: 'b', html: 'B' },
+    { id: 'a', html: 'A', text: 'A' },
+    { id: 'b', html: 'B', text: 'B' },
   ],
   answer: 'b',
   ...over,

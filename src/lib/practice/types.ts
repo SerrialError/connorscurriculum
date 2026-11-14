@@ -3,6 +3,11 @@
 export interface PracticeChoice {
   id: string;
   html: string;
+  /**
+   * The choice as plain text (math written out), its radio button's name: Chrome names a label
+   * that is only math (MathML) as empty.
+   */
+  text: string;
 }
 
 export interface PracticePart {

@@ -202,7 +202,13 @@
               {@const isAnswer = done && c.id === q.answer}
               {@const isWrongPick = done && attempt.picks[q.id] === c.id && c.id !== q.answer}
               <label class="option-row choice" class:right={isAnswer} class:wrong={isWrongPick}>
-                <input type="radio" name={`pick-${q.id}`} value={c.id} bind:group={attempt.picks[q.id]} />
+                <input
+                  type="radio"
+                  name={`pick-${q.id}`}
+                  value={c.id}
+                  aria-label={[c.text, isAnswer && 'correct answer', isWrongPick && 'your answer'].filter(Boolean).join(', ')}
+                  bind:group={attempt.picks[q.id]}
+                />
                 <span class="letter" aria-hidden="true">{c.id.toUpperCase()}</span>
                 <span class="choice-text" data-scroll-x={`Choice ${c.id.toUpperCase()}`}>{@html c.html}</span>
                 {#if isAnswer}<span class="mark">✓ Correct answer</span>{/if}

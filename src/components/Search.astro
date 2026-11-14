@@ -22,7 +22,7 @@ const showSubject = !subject && subjectIds().length > 1;
   data-show-subject={showSubject ? '' : undefined}
 >
   <label class="visually-hidden" for={id}>Search</label>
-  <input id={id} type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
+  <input id={id} class="search-input" type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
   <p class="status small muted" aria-live="polite"></p>
   <ol class="results plain-list"></ol>
   <button class="more link-button small" type="button" hidden>Show all results</button>
@@ -147,21 +147,6 @@ const showSubject = !subject && subjectIds().length > 1;
 <style>
   .search {
     margin: 1rem 0 1.5rem;
-  }
-  input {
-    width: 100%;
-    font: inherit;
-    font-size: 1.05rem;
-    padding: 0.7rem 0.9rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-  }
-  input:focus {
-    outline: 3px solid var(--accent);
-    outline-offset: 1px;
-    border-color: var(--accent);
   }
   .more {
     padding: 0.5rem 0;

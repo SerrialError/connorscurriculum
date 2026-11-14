@@ -30,7 +30,7 @@ const { lessons, chapters, emptyNow, emptyDone, samples, kinds } = lessonsPage(d
   {lessons.length > 0 && (
     <form class="filter" role="search" aria-label="Filter lessons" data-pagefind-ignore>
       <label class="visually-hidden" for="lesson-filter">Filter lessons</label>
-      <input id="lesson-filter" type="search" placeholder="Filter by title, topic, or name…" autocomplete="off" enterkeyhint="done" />
+      <input id="lesson-filter" class="search-input" type="search" placeholder="Filter by title, topic, or name…" autocomplete="off" enterkeyhint="done" />
       <fieldset class="chips kinds">
         <legend class="visually-hidden">Show</legend>
         {/* Counts follow the text filter, so each chip says how many it would show. "All" has none:
@@ -216,20 +216,10 @@ const { lessons, chapters, emptyNow, emptyDone, samples, kinds } = lessonsPage(d
     align-items: center;
     margin: 1rem 0 0.5rem;
   }
-  .filter input[type='search'] {
+  .filter .search-input {
     flex: 1 1 16rem;
+    width: auto;
     min-width: 0;
-    font: inherit;
-    padding: 0.55rem 0.8rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-  }
-  .filter input[type='search']:focus {
-    outline: 3px solid var(--accent);
-    outline-offset: 1px;
-    border-color: var(--accent);
   }
   .kinds {
     border: 0;

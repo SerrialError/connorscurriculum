@@ -600,6 +600,23 @@ button.button {
   font-size: 0.9rem;
 }
 
+/* Search and filter boxes (site search, the Lessons page filter). */
+.search-input {
+  width: 100%;
+  font: inherit;
+  font-size: 1.05rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.search-input:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
 /* Small pill buttons in the header (Search, theme) and the search dialog. */
 .icon-button {
   display: inline-flex;

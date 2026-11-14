@@ -12,7 +12,7 @@ export const STATUS_TEXT: Record<ScoreStatus, string> = { todo: 'not answered', 
 /** Shown with the colour, so right and wrong don't depend on telling red from green. */
 export const STATUS_MARK: Record<ScoreStatus, string> = { todo: '', right: '✓', wrong: '✗', partial: '½' };
 
-export const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
+const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
 
 /** A topic key from topicKeys: "5.4 Elementary Reactions", or the chapter for class-only questions. */
 export const topicKeyLabel = (key: string, topicTitles: ReadonlyMap<string, string>): string =>

@@ -4,6 +4,8 @@ import LessonList from '../../../components/LessonList.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
+import { hasTopics } from '../../../lib/features';
+import { DEFAULT_COUNT } from '../../../lib/practice/filters';
 import {
   formatDate,
   getLessons,
@@ -67,21 +69,25 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
     <div class="actions" data-pagefind-ignore>
       {links.random && <a class="button" href={links.random.href}>{links.random.label}</a>}
       <a class:list={['button', { secondary: !!links.random }]} href={links.all.href}>{links.all.label}</a>
-      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'weak', start: '1' })}>Start 10 on your weakest topics</a>
+      <a class="button secondary" href={practiceHref(subject, { test: test.id, mode: 'weak', start: '1' })}>Start {DEFAULT_COUNT} on your weakest topics</a>
       <a class="button secondary" href={practiceHref(subject, { test: test.id })}>Pick your own set</a>
     </div>
   ) : (
     <p class="muted">No practice questions for this test yet.</p>
   )}
 
-  <h2>{data.subject.standardsName} topics covered</h2>
-  {topics.length ? (
+  {hasTopics(data) && (
     <>
-      <TopicBadges subject={subject} topics={topics} />
-      <TopicLegend subject={subject} topics={topics} />
+      <h2>{data.subject.standardsName} topics covered</h2>
+      {topics.length ? (
+        <>
+          <TopicBadges subject={subject} topics={topics} />
+          <TopicLegend subject={subject} topics={topics} />
+        </>
+      ) : (
+        <p class="muted">No tagged content yet.</p>
+      )}
     </>
-  ) : (
-    <p class="muted">No tagged content yet.</p>
   )}
 
   {byChapter.map((c) => (

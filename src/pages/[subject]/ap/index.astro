@@ -135,12 +135,9 @@ const gapLabel = { missing: 'Not in textbook', thin: 'Thin in textbook' } as con
       </div>
     </section>
   )}
-  {/* For maintainers: kept at the bottom so it doesn't push the topics down. */}
+  {/* Until ced.json says "verified": true (see README). At the bottom, so it doesn't push the topics down. */}
   {!data.ced.verified && (
-    <p class="small muted unverified">
-      Topic list not yet verified against the current Course and Exam Description. Edit <code>src/data/{subject}/ced.json</code>
-      and set <code>"verified": true</code> once checked.
-    </p>
+    <p class="small muted unverified">This topic list hasn't been checked against the current Course and Exam Description yet.</p>
   )}
 </Base>
 

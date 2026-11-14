@@ -93,7 +93,7 @@ src/
 **`ced.json`** was checked on 2026-10-08 against the *AP Chemistry Course and Exam Description,
 Effective Fall 2024* (AP Central PDF, file revised June 2026). Unit and topic titles come from the
 Course at a Glance, and exam weights from the exam weighting table. `"verified"` is still `false`,
-so the AP topics page shows a notice until you have confirmed the list yourself.
+so the AP topics page says the list hasn't been checked. Set it to `true` once you have confirmed the list.
 
 The current CED differs from the older (2020) topic list in several places:
 

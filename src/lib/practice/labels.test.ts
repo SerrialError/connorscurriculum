@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emptyFilters, CLASS_ONLY_UNIT } from './filters';
-import { againLabel, describeScope, describeSet, filterChips, retryWords, topicKeyLabel } from './labels';
+import { againLabel, answerRestLabel, describeScope, describeSet, filterChips, retryWords, topicKeyLabel } from './labels';
 import type { PracticeTest } from './types';
 import { parseFilters } from './url';
 import { tests as fixtureTests } from './test-fixtures';
@@ -48,6 +48,11 @@ describe('buttons and chips', () => {
     expect(againLabel({ mode: 'all' })).toBe('Start this set again');
     expect(againLabel({ mode: 'random' })).toBe('New set, same filters');
     expect(againLabel({ mode: 'weak' })).toBe('New set, same filters');
+  });
+
+  it('goes back to the unanswered questions, or to the start when none were answered', () => {
+    expect(answerRestLabel(3, 7)).toBe('Answer the remaining 3');
+    expect(answerRestLabel(10, 0)).toBe('Back to question 1');
   });
 
   it('names topic keys, including class-only chapters', () => {

@@ -25,7 +25,7 @@ export class Attempt {
   });
   answered = $derived(Object.keys(this.scores).length);
   missed = $derived(this.questions.filter((q) => this.scores[q.id] !== undefined && this.scores[q.id]! < 1));
-  skipped = $derived(this.questions.filter((q) => this.scores[q.id] === undefined));
+  unanswered = $derived(this.questions.filter((q) => this.scores[q.id] === undefined));
   summary = $derived(
     summarize(
       this.questions.flatMap((q): QuestionResult[] => {

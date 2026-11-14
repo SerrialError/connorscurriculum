@@ -89,6 +89,13 @@ export function retryWords(scores: number[]): { button: string; set: string } {
  */
 export const againLabel = (f: Pick<Filters, 'mode'>): string => (f.mode === 'all' ? 'Start this set again' : 'New set, same filters');
 
+/**
+ * The results screen's button back to the questions not answered yet. With none answered (the set
+ * was ended straight away) nothing was skipped: it goes back to the start.
+ */
+export const answerRestLabel = (unanswered: number, answered: number): string =>
+  answered === 0 ? 'Back to question 1' : `Answer the remaining ${unanswered}`;
+
 export interface FilterChip {
   label: string;
   /** The control is under "More options" (its summary names these chips while it's closed). */

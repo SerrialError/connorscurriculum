@@ -2,7 +2,7 @@
   // The score for a set, what to do next, what to read, and every question with its status.
   import { tick } from 'svelte';
   import type { matchFrqs } from '../../lib/frqs';
-  import { STATUS_TEXT, againLabel, retryWords } from '../../lib/practice/labels';
+  import { STATUS_TEXT, againLabel, answerRestLabel, retryWords } from '../../lib/practice/labels';
   import { lessonsForMissed } from '../../lib/practice/lessons';
   import { scoreStatus, topicBreakdown } from '../../lib/practice/score';
   import type { Filters } from '../../lib/practice/types';
@@ -32,7 +32,7 @@
   let heading = $state<HTMLElement | null>(null);
   const summary = $derived(attempt.summary);
   const missed = $derived(attempt.missed);
-  const skipped = $derived(attempt.skipped);
+  const unanswered = $derived(attempt.unanswered);
   const retry = $derived(retryWords(missed.map((q) => attempt.scores[q.id]!)));
   const breakdown = $derived(topicBreakdown(attempt.questions, attempt.scores));
   const study = $derived(lessonsForMissed(missed, lessons));
@@ -67,19 +67,22 @@
         <p class="muted">You didn’t answer any questions in this set.</p>
       {/if}
     </div>
-    {#if skipped.length > 0 && attempt.answered > 0}
-      <p class="small muted">{plural(skipped.length, 'question')} skipped.</p>
+    {#if unanswered.length > 0 && attempt.answered > 0}
+      <p class="small muted">{plural(unanswered.length, 'question')} not answered.</p>
     {/if}
     <div class="actions">
       {#if missed.length > 0}
         <button class="button" type="button" onclick={() => onretry(retry.set)}>{retry.button}</button>
       {/if}
-      {#if skipped.length > 0}
-        <button class="button" class:secondary={missed.length > 0} type="button" onclick={() => onreview(attempt.questions.indexOf(skipped[0]!))}>
-          Answer the {skipped.length} skipped
+      {#if unanswered.length > 0}
+        <button class="button" class:secondary={missed.length > 0} type="button" onclick={() => onreview(attempt.questions.indexOf(unanswered[0]!))}>
+          {answerRestLabel(unanswered.length, attempt.answered)}
         </button>
       {/if}
-      <button class="button" class:secondary={missed.length > 0 || skipped.length > 0} type="button" onclick={() => onagain()}>{againLabel(filters)}</button>
+      <!-- In order with nothing answered, starting again would be the same set from the same place. -->
+      {#if attempt.answered > 0 || filters.mode !== 'all'}
+        <button class="button" class:secondary={missed.length > 0 || unanswered.length > 0} type="button" onclick={() => onagain()}>{againLabel(filters)}</button>
+      {/if}
       <button class="button secondary" type="button" onclick={() => onfilters()}>Change filters</button>
     </div>
   </div>

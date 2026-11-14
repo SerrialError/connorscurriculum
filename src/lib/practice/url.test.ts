@@ -4,10 +4,10 @@ import { filtersToQuery, isSeed, parseFilters, parseSet, setToQuery, setupQuery,
 
 describe('URL filters', () => {
   it('round-trips through the query string', () => {
-    const f = { ...emptyFilters(), chapters: [14, 15], test: 'ch14', topics: ['5.1', '5.2'], units: ['7'], difficulty: [1, 3], type: 'mcq' as const, mode: 'all' as const, n: 5 };
+    const f = { ...emptyFilters(), chapters: [14, 15], sections: ['14.10', '14.2'], test: 'ch14', topics: ['5.1', '5.2'], units: ['7'], difficulty: [1, 3], type: 'mcq' as const, mode: 'all' as const, n: 5 };
     const q = filtersToQuery(f);
-    expect(q).toBe('?chapter=14,15&test=ch14&unit=7&topic=5.1,5.2&difficulty=1,3&type=mcq&mode=all&n=5');
-    expect(parseFilters(q)).toEqual(f);
+    expect(q).toBe('?chapter=14,15&section=14.2,14.10&test=ch14&unit=7&topic=5.1,5.2&difficulty=1,3&type=mcq&mode=all&n=5');
+    expect(parseFilters(q)).toEqual({ ...f, sections: ['14.2', '14.10'] });
   });
 
   it('ignores junk values', () => {

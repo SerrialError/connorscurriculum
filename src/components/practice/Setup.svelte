@@ -7,7 +7,7 @@
   import { ALL_QUESTIONS, DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
   import type { Filters, PracticeQuestion } from '../../lib/practice/types';
   import { filtersToQuery, parseFilters } from '../../lib/practice/url';
-  import { plural } from '../../lib/text';
+  import { byId, plural } from '../../lib/text';
   import Chip from './Chip.svelte';
   import { type PracticeChapter, getCourse } from './context';
   import CountPicker from './CountPicker.svelte';
@@ -36,6 +36,15 @@
   const mainChapters = $derived(chapters.filter((c) => (c.hasQuestions || filters.chapters.includes(c.number)) && !laterChapters.includes(c.number)));
   const laterChapterList = $derived(chapters.filter((c) => laterChapters.includes(c.number)));
   const emptyCurrent = $derived(chapters.filter((c) => c.current && !c.hasQuestions));
+  /**
+   * Textbook sections come only from links (a lesson page's practice links). Once picked they stay
+   * listed, so unticking one doesn't make its chip vanish.
+   */
+  let sectionChoices = $state<string[]>([]);
+  $effect.pre(() => {
+    const added = filters.sections.filter((s) => !sectionChoices.includes(s));
+    if (added.length) sectionChoices = [...sectionChoices, ...added].sort(byId);
+  });
   const chips = $derived(filterChips(filters, tests, laterChapters));
   const moreChips = $derived(chips.filter((c) => c.more));
   const frqTopics = $derived(filterTopics(filters, units, chapterTopics, tests));
@@ -143,6 +152,19 @@
       </p>
     {/if}
   </fieldset>
+
+  {#if sectionChoices.length > 0}
+    <fieldset>
+      <legend>Textbook section</legend>
+      <div class="chips">
+        {#each sectionChoices as s (s)}
+          <Chip checked={filters.sections.includes(s)} onchange={() => (filters.sections = toggled(filters.sections, s))} count={countWith(all, filters, tests, { sections: [s] })}>
+            §{s}
+          </Chip>
+        {/each}
+      </div>
+    </fieldset>
+  {/if}
 
   <!-- Each group is as wide as its chips, so a whole group moves to the next line instead of one chip dropping under the others. -->
   <div class="groups">

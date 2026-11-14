@@ -25,6 +25,8 @@ describe('naming a set', () => {
     expect(describeScope(parseFilters('?chapter=7&difficulty=3'), tests, 'Ch. 6–7')).toBe('Ch. 7 · Hard');
     expect(describeScope(parseFilters('?test=ch6-7-test'), tests, 'Ch. 6–7')).toBe('Chapters 6–7 Test');
     expect(describeScope(parseFilters('?topic=3.12'), tests, 'Ch. 6–7')).toBe('Topic 3.12');
+    expect(describeScope(parseFilters('?section=7.3,7.2'), tests, 'Ch. 6–7')).toBe('§7.2, §7.3');
+    expect(describeScope(parseFilters('?chapter=7&section=7.2'), tests)).toBe('Ch. 7 · §7.2');
     expect(describeSet(parseFilters('?mode=weak'), tests, 10, 116, 'Ch. 6–7')).toBe('Ch. 6–7 · 10 on your weakest topics');
   });
 });
@@ -54,17 +56,19 @@ describe('buttons and chips', () => {
   });
 
   it('lists the narrowing filters as chips, each removing only itself', () => {
-    const f = { ...emptyFilters(), chapters: [7, 14], test: 'ch14', difficulty: [3], type: 'frq' as const, mode: 'all' as const };
+    const f = { ...emptyFilters(), chapters: [7, 14], sections: ['7.2'], test: 'ch14', difficulty: [3], type: 'frq' as const, mode: 'all' as const };
     const chips = filterChips(f, fixtureTests, [14]);
     expect(chips.map((c) => [c.label, c.more])).toEqual([
       ['Ch. 7', false],
       ['Ch. 14', true],
+      ['§7.2', false],
       ['Ch 14', true],
       ['Hard', false],
       ['Free response', true],
     ]);
     expect(chips[0]!.without).toEqual({ ...f, chapters: [14] });
-    expect(chips[4]!.without).toEqual({ ...f, type: null });
+    expect(chips[2]!.without).toEqual({ ...f, sections: [] });
+    expect(chips[5]!.without).toEqual({ ...f, type: null });
     expect(filterChips(emptyFilters(), fixtureTests, [])).toEqual([]);
   });
 });

@@ -1,6 +1,6 @@
 // Practice addresses: the filters, and a set made from them.
 //
-// Filters: ?chapter=14,15&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&mode=all&n=5
+// Filters: ?chapter=14,15&section=14.2&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&mode=all&n=5
 // `mode` and `n` are written only when they differ from the defaults (shuffled, 10 questions);
 // `n=all` means every matching question. Lists are written sorted, so the same filters always
 // give the same address, whatever order they were picked in.
@@ -15,15 +15,16 @@
 // that produced the set, which is where "← Filters" returns.
 import { DEFAULT_COUNT, DEFAULT_MODE, MAX_COUNT, emptyFilters } from './filters';
 import type { Filters } from './types';
+import { byId } from '../text';
 
 const list = (v: string | null) => [...new Set(v ? v.split(',').map((s) => s.trim()).filter(Boolean) : [])];
 const byNumber = (a: number, b: number) => a - b;
-const byId = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true });
 
 export function parseFilters(search: string): Filters {
   const p = new URLSearchParams(search);
   const f = emptyFilters();
   f.chapters = list(p.get('chapter')).map(Number).filter((n) => Number.isInteger(n));
+  f.sections = list(p.get('section'));
   f.test = p.get('test') || null;
   f.units = list(p.get('unit'));
   f.topics = list(p.get('topic'));
@@ -43,6 +44,7 @@ export function parseFilters(search: string): Filters {
 export function filtersToQuery(f: Filters): string {
   const p = new URLSearchParams();
   if (f.chapters.length) p.set('chapter', [...f.chapters].sort(byNumber).join(','));
+  if (f.sections.length) p.set('section', [...f.sections].sort(byId).join(','));
   if (f.test) p.set('test', f.test);
   if (f.units.length) p.set('unit', [...f.units].sort(byId).join(','));
   if (f.topics.length) p.set('topic', [...f.topics].sort(byId).join(','));

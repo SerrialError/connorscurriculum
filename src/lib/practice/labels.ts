@@ -2,7 +2,7 @@
 import { CLASS_ONLY_UNIT } from './filters';
 import type { ScoreStatus } from './score';
 import type { Filters, Mode, PracticeTest, QuestionType } from './types';
-import { chapterRange } from '../text';
+import { byId, chapterRange } from '../text';
 
 export const DIFFICULTY_LABELS: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
 export const MODE_LABELS: Record<Mode, string> = { all: 'In order', random: 'Shuffled', weak: 'Weakest first' };
@@ -11,6 +11,9 @@ export const TYPE_LABELS: Record<QuestionType, string> = { mcq: 'Multiple choice
 export const STATUS_TEXT: Record<ScoreStatus, string> = { todo: 'not answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' };
 /** Shown with the colour, so right and wrong don't depend on telling red from green. */
 export const STATUS_MARK: Record<ScoreStatus, string> = { todo: '', right: '✓', wrong: '✗', partial: '½' };
+
+/** "§7.2", "§7.3, §7.4" */
+const sectionLabel = (sections: string[]): string => [...sections].sort(byId).map((s) => `§${s}`).join(', ');
 
 const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
 
@@ -30,10 +33,11 @@ export const WEAK_NO_HISTORY_NOTE = 'No practice history on these yet, so the or
  */
 export function describeScope(f: Filters, tests: PracticeTest[], everything = ALL_QUESTIONS): string {
   const parts: string[] = [];
-  // "Ch. 6–7 · Hard": name the default pool unless a chapter, test, unit, or topic already says where from.
-  if (!f.test && !f.chapters.length && !f.units.length && !f.topics.length && everything !== ALL_QUESTIONS) parts.push(everything);
+  // "Ch. 6–7 · Hard": name the default pool unless a chapter, section, test, unit, or topic already says where from.
+  if (!f.test && !f.chapters.length && !f.sections.length && !f.units.length && !f.topics.length && everything !== ALL_QUESTIONS) parts.push(everything);
   if (f.test) parts.push(tests.find((t) => t.id === f.test)?.title ?? f.test);
   if (f.chapters.length) parts.push(chapterRange(f.chapters));
+  if (f.sections.length) parts.push(sectionLabel(f.sections));
   const units = f.units.map(unitLabel);
   if (units.length) parts.push(units.join(', '));
   if (f.topics.length) parts.push(`${f.topics.length === 1 ? 'Topic' : 'Topics'} ${f.topics.join(', ')}`);
@@ -94,6 +98,7 @@ export function filterChips(f: Filters, tests: PracticeTest[], laterChapters: nu
   const out: FilterChip[] = [];
   const add = (label: string, more: boolean, patch: Partial<Filters>) => out.push({ label, more, without: { ...f, ...patch } });
   for (const n of f.chapters) add(`Ch. ${n}`, laterChapters.includes(n), { chapters: f.chapters.filter((x) => x !== n) });
+  for (const s of f.sections) add(sectionLabel([s]), false, { sections: f.sections.filter((x) => x !== s) });
   if (f.test) add(tests.find((t) => t.id === f.test)?.title ?? f.test, true, { test: null });
   for (const u of f.units) add(unitLabel(u), true, { units: f.units.filter((x) => x !== u) });
   for (const t of f.topics) add(`Topic ${t}`, true, { topics: f.topics.filter((x) => x !== t) });

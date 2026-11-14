@@ -1,5 +1,7 @@
-// Lessons the practice screens point to: "Study this in the lesson" and "Read up on what you missed".
+// Lessons and questions, matched both ways: the lessons the practice screens point to ("Study this
+// in the lesson", "Read up on what you missed"), and the questions a lesson page links to.
 import type { PracticeQuestion } from './types';
+import { inSections } from './filters';
 
 /** A lesson the practice screens can point to (lessons only, not notes or review sheets). */
 export interface PracticeLesson {
@@ -52,4 +54,20 @@ export function lessonsForMissed(
       .sort((a, b) => b.missed - a.missed || order(a.lesson) - order(b.lesson)),
     chapters: [...chapters].sort((a, b) => a - b),
   };
+}
+
+/**
+ * What a lesson page's practice links pick: the questions from its chapter on its textbook
+ * sections (the ones whose "Study this in the lesson" can point back to it), or the whole chapter
+ * when the lesson has no sections or no question is tagged with them. Null when the chapter has
+ * no questions.
+ */
+export function lessonPractice(
+  lesson: Pick<PracticeLesson, 'chapter' | 'sections'>,
+  questions: Pick<PracticeQuestion, 'chapter' | 'sections'>[],
+): { query: { chapter: number[]; section?: string[] }; count: number; scope: 'lesson' | 'chapter' } | null {
+  const chapter = questions.filter((q) => q.chapter === lesson.chapter);
+  const own = lesson.sections.length ? chapter.filter((q) => inSections(q, lesson.sections)).length : 0;
+  if (own) return { query: { chapter: [lesson.chapter], section: lesson.sections }, count: own, scope: 'lesson' };
+  return chapter.length ? { query: { chapter: [lesson.chapter] }, count: chapter.length, scope: 'chapter' } : null;
 }

@@ -17,6 +17,13 @@ describe('filterQuestions', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), test: 'missing' }, tests))).toEqual([]);
   });
 
+  it('filters by textbook section', () => {
+    const qs = [mcq('a', { sections: ['14.1'] }), mcq('b', { sections: ['14.2', '14.3'] }), mcq('c')];
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), sections: ['14.3'] }, tests))).toEqual(['b']);
+    expect(ids(filterQuestions(qs, { ...emptyFilters(), sections: ['14.1', '14.2'] }, tests))).toEqual(['a', 'b']);
+    expect(activeFilterCount({ ...emptyFilters(), chapters: [14], sections: ['14.1', '14.2'] })).toBe(3);
+  });
+
   it('treats units and topics as one OR group', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), topics: ['5.2'] }, tests))).toEqual(['q2']);
     expect(ids(filterQuestions(questions, { ...emptyFilters(), topics: ['5.2'], units: ['7'] }, tests))).toEqual(['q2', 'f1']);

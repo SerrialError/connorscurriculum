@@ -22,12 +22,12 @@ export const DEFAULT_MODE: Mode = 'random';
 export const CLASS_ONLY_UNIT = 'class';
 
 export function emptyFilters(): Filters {
-  return { chapters: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: DEFAULT_MODE, n: DEFAULT_COUNT };
+  return { chapters: [], sections: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: DEFAULT_MODE, n: DEFAULT_COUNT };
 }
 
 /** Number of filters that narrow the question pool (order and count are not filters). */
 export function activeFilterCount(f: Filters): number {
-  return f.chapters.length + (f.test ? 1 : 0) + f.units.length + f.topics.length + f.difficulty.length + (f.type ? 1 : 0);
+  return f.chapters.length + f.sections.length + (f.test ? 1 : 0) + f.units.length + f.topics.length + f.difficulty.length + (f.type ? 1 : 0);
 }
 
 /** Every control at its default (nothing for "Reset all" to reset). */
@@ -41,6 +41,10 @@ export const isCustomCount = (n: number | null): boolean => n !== null && !COUNT
 export const toggled = <T>(list: readonly T[], value: T): T[] =>
   list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
+/** In any of these textbook sections (any question, when the list is empty). */
+export const inSections = (q: Pick<PracticeQuestion, 'sections'>, sections: readonly string[]): boolean =>
+  sections.length === 0 || q.sections.some((s) => sections.includes(s));
+
 /**
  * Filters combine with AND across kinds and OR within a kind. Units and topics are one
  * "CED" kind: a question matches if it is in any selected unit or has any selected topic.
@@ -53,11 +57,9 @@ export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests
   const test = f.test ? tests.find((t) => t.id === f.test) : undefined;
   return questions.filter((q) => {
     if (f.chapters.length && !f.chapters.includes(q.chapter)) return false;
+    if (!inSections(q, f.sections)) return false;
     if (q.extra && !f.chapters.includes(q.chapter) && !test?.chapters.includes(q.chapter)) return false;
-    if (f.test) {
-      if (!test || !test.chapters.includes(q.chapter)) return false;
-      if (test.sections.length && !q.sections.some((s) => test.sections.includes(s))) return false;
-    }
+    if (f.test && (!test || !test.chapters.includes(q.chapter) || !inSections(q, test.sections))) return false;
     if (f.units.length || f.topics.length) {
       const inUnit =
         q.units.some((u) => f.units.includes(u)) || (q.cedTopics.length === 0 && f.units.includes(CLASS_ONLY_UNIT));

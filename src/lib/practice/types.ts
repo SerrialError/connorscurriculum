@@ -58,6 +58,8 @@ export type QuestionType = 'mcq' | 'frq';
 
 export interface Filters {
   chapters: number[];
+  /** Textbook sections, e.g. "7.2": the practice links on a lesson page pick its sections. */
+  sections: string[];
   test: string | null;
   units: string[];
   topics: string[];

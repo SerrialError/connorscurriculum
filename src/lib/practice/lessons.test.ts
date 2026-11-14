@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type PracticeLesson, lessonsFor, lessonsForMissed } from './lessons';
+import { type PracticeLesson, lessonPractice, lessonsFor, lessonsForMissed } from './lessons';
 
 describe('lessonsFor', () => {
   const lesson = (title: string, chapter: number, sections: string[], topics: string[]): PracticeLesson => ({
@@ -42,5 +42,32 @@ describe('lessonsFor', () => {
       ],
       chapters: [7],
     });
+  });
+});
+
+describe('lessonPractice', () => {
+  const qs = [
+    { chapter: 7, sections: ['7.2'] },
+    { chapter: 7, sections: ['7.2', '7.3'] },
+    { chapter: 7, sections: ['7.4'] },
+    { chapter: 7, sections: [] },
+    { chapter: 6, sections: ['7.2'] },
+  ];
+
+  it("picks the questions on the lesson's sections, in its chapter", () => {
+    expect(lessonPractice({ chapter: 7, sections: ['7.2'] }, qs)).toEqual({
+      query: { chapter: [7], section: ['7.2'] },
+      count: 2,
+      scope: 'lesson',
+    });
+    expect(lessonPractice({ chapter: 7, sections: ['7.3', '7.4'] }, qs)?.count).toBe(2);
+  });
+  it('falls back to the chapter with no sections, or none tagged with them', () => {
+    const chapter = { query: { chapter: [7] }, count: 4, scope: 'chapter' };
+    expect(lessonPractice({ chapter: 7, sections: [] }, qs)).toEqual(chapter);
+    expect(lessonPractice({ chapter: 7, sections: ['7.8'] }, qs)).toEqual(chapter);
+  });
+  it('is null for a chapter with no questions', () => {
+    expect(lessonPractice({ chapter: 8, sections: ['8.1'] }, qs)).toBeNull();
   });
 });

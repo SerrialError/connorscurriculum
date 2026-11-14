@@ -1,6 +1,7 @@
 // Scoring answers, and the practice history kept on this device (recent scores per question),
 // with what it says about each topic.
 import type { FrqQuestion, McqQuestion, PracticeQuestion, History } from './types';
+import { byId } from '../text';
 
 // ---------------------------------------------------------------------------
 // One question
@@ -96,7 +97,7 @@ export function topicBreakdown(questions: PracticeQuestion[], scores: Record<str
     }
   }
   return [...map.values()].sort(
-    (a, b) => a.score / a.count - b.score / b.count || a.key.localeCompare(b.key, undefined, { numeric: true }),
+    (a, b) => a.score / a.count - b.score / b.count || byId(a.key, b.key),
   );
 }
 

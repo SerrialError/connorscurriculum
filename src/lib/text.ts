@@ -11,6 +11,9 @@ export function truncate(text: string, max: number): string {
   return `${(space >= max / 2 ? cut.slice(0, space) : cut).trimEnd()}…`;
 }
 
+/** Sorts ids like topics and sections in reading order: "5.2" before "5.10". */
+export const byId = (a: string, b: string): number => a.localeCompare(b, undefined, { numeric: true });
+
 /** "Ch. 8–9", "Ch. 6, 8", "Ch. 7" */
 export function chapterRange(ns: number[]): string {
   const sorted = [...ns].sort((a, b) => a - b);

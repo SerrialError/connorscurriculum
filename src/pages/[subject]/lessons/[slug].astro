@@ -5,6 +5,7 @@ import Callout from '../../../components/Callout.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
+import { lessonPractice } from '../../../lib/practice/lessons';
 import Base from '../../../layouts/Base.astro';
 import {
   type Lesson,
@@ -58,23 +59,18 @@ const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(lesson.data.chapter)!;
 const topics = topicIds(lesson);
 const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
-// Practice the lesson's topics; fall back to its chapter when no question has those topics.
+// Practice the questions on the lesson's textbook sections, or else its chapter.
 const questions = await getQuestions(subject);
-const topicQuestions = questions.filter((q) => topicIds(q).some((t) => topics.includes(t))).length;
-const chapterQuestions = questions.filter((q) => q.data.chapter === chapter.number).length;
-const practiceQuery: { topic?: string[]; chapter?: number[] } = topicQuestions ? { topic: topics } : { chapter: [chapter.number] };
-const practiceCount = topicQuestions || chapterQuestions;
-const practice = practiceCount
-  ? {
-      start: practiceStart(
-        subject,
-        practiceQuery,
-        practiceCount,
-        topicQuestions ? (topics.length === 1 ? 'on this topic' : 'on these topics') : `from Chapter ${chapter.number}`,
-      ),
-      setup: practiceHref(subject, practiceQuery),
-    }
-  : null;
+const picked = lessonPractice(lesson.data, questions.map((q) => q.data));
+const practice = picked && {
+  start: practiceStart(
+    subject,
+    picked.query,
+    picked.count,
+    picked.scope === 'lesson' ? (lesson.data.kind === 'notes' ? 'on these notes' : 'on this lesson') : `from Chapter ${chapter.number}`,
+  ),
+  setup: practiceHref(subject, picked.query),
+};
 // A test review sheet belongs to its test: link to the test and practice the whole test, not
 // just the sheet's topics, and leave out the chapter's previous/next lessons.
 const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;

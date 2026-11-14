@@ -103,9 +103,11 @@ the student picks their chapter (or a class test covering it): with no chapter p
 from the chapters the class has reached.
 
 Practice links: `/<subject>/practice/?chapter=7&difficulty=3` opens the practice page with those
-filters ticked (`topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=5|all` work the same
-way; the defaults are 10 questions, shuffled). Add `start=1` to start that set right away. While a
-set is open its address also has a `seed`, so the same link opens the same questions.
+filters ticked (`section`, `topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=5|all` work
+the same way; the defaults are 10 questions, shuffled). A lesson page's practice links use its chapter
+and `sections`, falling back to the whole chapter when no question is tagged with those sections.
+Add `start=1` to start that set right away. While a set is open its address also has a `seed`, so
+the same link opens the same questions.
 
 Lessons links: `/<subject>/lessons/?kind=notes&q=bohr` opens the Lessons page filtered to one kind
 (`lesson`, `notes`, or `review`) and the typed words. The filter stays in the address as it changes.

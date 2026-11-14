@@ -88,7 +88,7 @@ export function inTest(test: SubjectData['tests'][number], entry: Lesson | Quest
  */
 export function practiceStart(
   subject: string,
-  query: { chapter?: number[]; topic?: string[] },
+  query: { chapter?: number[]; section?: string[]; topic?: string[] },
   total: number,
   /** Appended to the label, e.g. "on these topics". */
   about = '',

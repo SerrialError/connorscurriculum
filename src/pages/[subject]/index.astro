@@ -4,20 +4,16 @@ import Search from '../../components/Search.astro';
 import TestWhen from '../../components/TestWhen.astro';
 import Base from '../../layouts/Base.astro';
 import {
-  getLessons,
-  getQuestions,
+  getClassSummary,
   getSubjectData,
   inTest,
-  isClassContent,
+  isPastTest,
   kindCounts,
   lessonHref,
-  nowChapters,
   pastFrqLinks,
   practiceStart,
   subjectPaths,
   testPracticeLinks,
-  testsByDate,
-  isPastTest,
   url,
 } from '../../lib/content';
 import { hasTopics, searchPlaceholder } from '../../lib/features';
@@ -29,9 +25,8 @@ export const getStaticPaths = subjectPaths;
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const { progress } = data;
-// Class material only: sample pages for chapters the class hasn't reached stay off the home page.
-const lessons = (await getLessons(subject)).filter((l) => isClassContent(data, l));
-const questions = (await getQuestions(subject)).filter((q) => isClassContent(data, q));
+// Class material only (no samples, nothing from chapters not reached), as on the dashboard card.
+const { lessons, questions, now, test } = await getClassSummary(data);
 const cedOrder = [...data.topics.keys()];
 const inCedOrder = (ids: string[]) => [...ids].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
 const frqs = pastFrqLinks(data);
@@ -40,7 +35,6 @@ const topicCounts = { done: 0, review: 0, partial: 0, skipped: 0 };
 for (const s of progress.topics.values()) topicCounts[s] += 1;
 const newCount = data.topics.size - topicCounts.done - topicCounts.review - topicCounts.partial - topicCounts.skipped;
 
-const now = nowChapters(data);
 const chapterInfo = (n: number) => {
   const c = data.chapterMap.get(n)!;
   const frqMatches = matchFrqs(frqs, new Set(c.cedTopics));
@@ -59,7 +53,6 @@ const chapterInfo = (n: number) => {
 const nowInfo = now.chapters.map((c) => chapterInfo(c.number));
 
 // Latest class test, with its review sheets.
-const test = testsByDate(data)[0];
 const testReview = test ? lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)) : [];
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 const testLinks = test ? testPracticeLinks(subject, test.id, testQuestions) : null;

@@ -4,7 +4,7 @@
 import Search from '../components/Search.astro';
 import Base from '../layouts/Base.astro';
 import TestWhen from '../components/TestWhen.astro';
-import { getLessons, getQuestions, isClassContent, isPastTest, kindCounts, nowChapters, testsByDate, url } from '../lib/content';
+import { getClassSummary, isPastTest, kindCounts, url } from '../lib/content';
 import { classCardLinks, searchPlaceholder } from '../lib/features';
 import { loadRegistry } from '../lib/registry';
 import { plural } from '../lib/text';
@@ -12,14 +12,12 @@ import { SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 const classes = await Promise.all(
   [...loadRegistry().values()].map(async (data) => {
-    const id = data.subject.id;
-    const lessons = (await getLessons(id)).filter((l) => isClassContent(data, l));
-    const questions = (await getQuestions(id)).filter((q) => isClassContent(data, q));
+    const { lessons, questions, now, test } = await getClassSummary(data);
     return {
       data,
-      href: (path = '') => url(`${id}/${path}`),
-      now: nowChapters(data),
-      test: testsByDate(data)[0],
+      href: (path = '') => url(`${data.subject.id}/${path}`),
+      now,
+      test,
       lessons: kindCounts(lessons),
       questions: questions.length,
     };

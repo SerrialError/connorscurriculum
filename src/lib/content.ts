@@ -2,6 +2,7 @@
 // so draft handling and sorting stay consistent.
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
+import { classSummary, isSample } from './class-status';
 import { type FrqLink, flattenFrqs } from './frqs';
 import { DEFAULT_COUNT } from './practice/filters';
 import { isPast, isoDate } from './dates';
@@ -130,6 +131,12 @@ export function practiceHref(subject: string, query: Record<string, string | str
 }
 
 export { getSubjectData };
+export { currentChapters, isClassContent, isSample, isTaught, nextChapter, nowChapters, testsByDate } from './class-status';
+
+/** A class's dashboard data (see classSummary), loaded from its content. */
+export async function getClassSummary(data: SubjectData) {
+  return classSummary(data, await getLessons(data.subject.id), await getQuestions(data.subject.id));
+}
 
 /** Prefix a site-relative path with the configured base. */
 export function url(path = ''): string {
@@ -162,58 +169,10 @@ export function learnedTopic(data: SubjectData) {
 }
 
 /**
- * The chapter to study next: the first chapter the class is working on now (progress.json "current"),
- * else the first unfinished chapter after the last finished one (else the first unfinished).
- */
-export function nextChapter(data: SubjectData) {
-  const current = data.progress.current.map((n) => data.chapterMap.get(n)).find((c) => c !== undefined);
-  if (current) return current;
-  const lastDone = Math.max(0, ...data.progress.chapters);
-  const unfinished = data.chapters.filter((c) => !data.progress.chapters.has(c.number));
-  return unfinished.find((c) => c.number > lastDone) ?? unfinished[0];
-}
-
-/** Chapters the class is on now (progress.json "current"), in class order. */
-export function currentChapters(data: SubjectData) {
-  return data.progress.current.map((n) => data.chapterMap.get(n)!).filter(Boolean);
-}
-
-/** What to show as "Now in class": the current chapters, or the next unfinished one ("Up next"). */
-export function nowChapters(data: SubjectData) {
-  const now = currentChapters(data);
-  if (now.length) return { label: 'Now in class', chapters: now };
-  const next = nextChapter(data);
-  return { label: 'Up next', chapters: next ? [next] : [] };
-}
-
-/**
  * Has the test happened, as of the build? Pages mark tests with data-test-date and Base.astro's
  * script decides again by the reader's date.
  */
 export const isPastTest = (test: { date?: string } | undefined): boolean => isPast(test?.date, isoDate(new Date()));
-
-/** Class tests, latest first (undated tests last, in file order). */
-export function testsByDate(data: SubjectData) {
-  return [...data.tests].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
-}
-
-/** The class has reached this chapter: it's finished or being studied now (progress.json). */
-export function isTaught(data: SubjectData, chapter: number): boolean {
-  return data.progress.chapters.has(chapter) || data.progress.current.includes(chapter);
-}
-
-/**
- * Sample content: pages written to show the format (authors: ["sample"]), not class material.
- * They're labelled as samples and kept out of the home page and the lessons list's main part.
- */
-export function isSample(entry: Lesson | Question): boolean {
-  return entry.data.authors.length === 1 && entry.data.authors[0]!.trim().toLowerCase() === 'sample';
-}
-
-/** Class material: not a sample, and from a chapter the class has reached. */
-export function isClassContent(data: SubjectData, entry: Lesson | Question): boolean {
-  return !isSample(entry) && isTaught(data, entry.data.chapter);
-}
 
 /** "By Jaya", or "Sample page" for samples. */
 export function byline(lesson: Lesson): string {

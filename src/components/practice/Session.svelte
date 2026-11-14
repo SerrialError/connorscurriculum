@@ -268,7 +268,9 @@
       </article>
     {/key}
     {#if q.type === 'mcq'}
-      <p class="small muted kbd-hint">Keyboard: press A–D to choose, Enter to check, ← → to move between questions.</p>
+      <p class="small muted kbd-hint">
+        Keyboard: press A–{q.choices.at(-1)!.id.toUpperCase()} to choose, Enter to check, ← → to move between questions.
+      </p>
     {/if}
   </section>
 {/if}

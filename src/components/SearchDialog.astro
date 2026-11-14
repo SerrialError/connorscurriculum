@@ -28,21 +28,32 @@ const { title, subject, placeholder } = Astro.props;
   const dialog = document.querySelector<HTMLDialogElement>('.search-dialog')!;
   const input = dialog.querySelector<HTMLInputElement>('input')!;
   const openButton = document.querySelector<HTMLButtonElement>('.search-open')!;
-  // Where focus goes back to when the dialog closes: what had it before, else the Search button.
+  // The last thing focused in the page's content, e.g. a practice question.
+  let lastInMain: HTMLElement | null = null;
+  document.getElementById('main')?.addEventListener('focusin', (e) => (lastInMain = e.target as HTMLElement));
+  /**
+   * Where focus goes back to when the dialog closes: what had it before (the Search button, if it
+   * was reached by keyboard). Clicked or tapped, the button only had focus because of the click,
+   * so focus goes back into the page: what had it last there, else nothing (the page itself).
+   * That way a practice set's keyboard shortcuts still work after a search.
+   */
   let returnTo: HTMLElement | null = null;
-  const open = () => {
+  const open = (clicked = false) => {
     if (dialog.open) return;
     const active = document.activeElement as HTMLElement | null;
-    returnTo = active && active !== document.body && active.id !== 'main' ? active : openButton;
+    if (clicked) returnTo = lastInMain;
+    else returnTo = active && active !== document.body && active.id !== 'main' ? active : openButton;
     dialog.showModal();
     input.focus();
     input.select();
   };
   const close = () => {
     dialog.close();
-    returnTo?.focus();
+    if (returnTo?.isConnected) returnTo.focus();
+    else (document.activeElement as HTMLElement | null)?.blur();
   };
-  openButton.addEventListener('click', open);
+  // detail is the click count: 0 when the button was pressed with Enter or Space.
+  openButton.addEventListener('click', (e) => open(e.detail > 0));
   dialog.querySelector('.search-close')!.addEventListener('click', close);
   // Escape closes right away (a search box would otherwise use the first Escape to clear itself).
   dialog.addEventListener('keydown', (e) => {

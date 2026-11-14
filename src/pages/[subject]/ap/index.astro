@@ -1,11 +1,12 @@
 ---
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
+import { hasTopics } from '../../../lib/features';
+import { coverage, getLessons, kindCounts, getQuestions, getSubjectData, pastFrqLinks, subjectPathsWith, url } from '../../../lib/content';
 import { matchFrqs } from '../../../lib/frqs';
 import { plural } from '../../../lib/text';
 
-export const getStaticPaths = subjectPaths;
+export const getStaticPaths = subjectPathsWith(hasTopics);
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
@@ -16,11 +17,11 @@ const count = (ids: string[], status: ReturnType<typeof statusOf>) => ids.filter
 const allIds = [...data.topics.keys()];
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
-/** "1 lesson · 3 past FRQs", leaving out zero counts. */
+/** "1 lesson · 2 questions · 3 past FRQs", leaving out zero counts. */
 const counts = (id: string) => {
   const c = cov.get(id)!;
   return [
-    c.lessons.length && plural(c.lessons.length, 'lesson'),
+    kindCounts(c.lessons),
     c.questions && plural(c.questions, 'question'),
     frqCount(id) && plural(frqCount(id), 'past FRQ'),
   ]

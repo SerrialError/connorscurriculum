@@ -1,14 +1,15 @@
 ---
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Search from '../../components/Search.astro';
+import TestWhen from '../../components/TestWhen.astro';
 import Base from '../../layouts/Base.astro';
 import {
-  formatDate,
   getLessons,
   getQuestions,
   getSubjectData,
   inTest,
   isClassContent,
+  kindCounts,
   lessonHref,
   nowChapters,
   pastFrqLinks,
@@ -19,6 +20,7 @@ import {
   isPastTest,
   url,
 } from '../../lib/content';
+import { hasTopics, searchPlaceholder } from '../../lib/features';
 import { frqCountLabel, matchFrqs } from '../../lib/frqs';
 import { chapterRange, plural } from '../../lib/text';
 
@@ -47,6 +49,7 @@ const chapterInfo = (n: number) => {
     chapter: c,
     topics: inCedOrder(c.cedTopics),
     lessons: own.length,
+    pages: kindCounts(own),
     teaching: own.filter((l) => l.data.kind === 'lesson'),
     notes: own.filter((l) => l.data.kind === 'notes'),
     questions: questions.filter((q) => q.data.chapter === n).length,
@@ -76,7 +79,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
 <Base title={data.subject.name} subject={subject}>
   <Breadcrumbs items={[{ href: url(), label: 'All classes' }]} />
   <h1>{data.subject.name}</h1>
-  <Search placeholder="Search lessons, notes, topics…" />
+  <Search subject={subject} placeholder={searchPlaceholder(data)} />
 
   <div class="dash">
     {nowInfo.length > 0 && (
@@ -97,7 +100,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
               )}
               {c.lessons + c.questions > 0 && (
                 <>
-                  <span class="muted">{[c.lessons && plural(c.lessons, 'lesson'), c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
+                  <span class="muted">{[c.pages, c.questions && plural(c.questions, 'question')].filter(Boolean).join(' · ')}</span>
                   {c.questions > 0 && <a href={practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).href}>{practiceStart(subject, { chapter: [c.chapter.number] }, c.questions).label}</a>}
                 </>
               )}
@@ -119,7 +122,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
         <p class="eyebrow"><span class="if-upcoming">Next class test</span><span class="if-past">Latest class test</span></p>
         <h2 id="test-h"><a href={url(`${subject}/tests/${test.id}/`)}>{test.title}</a></h2>
         <p class="small muted">
-          {test.date ? <><span class="if-past">Taken </span>{formatDate(test.date)}</> : 'Date TBA'} · {chapterRange(test.chapters)}
+          <TestWhen test={test} /> · {chapterRange(test.chapters)}
         </p>
         {testReview.length > 0 && (
           <ul class="plain-list review-links">
@@ -203,34 +206,38 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
           <span class="big">{progress.chapters.size}<span class="of">/{data.chapters.length}</span></span>
           <span class="small">chapters finished</span>
         </a>
-        <a class="stat" href={url(`${subject}/ap/`)}>
-          <span class="big">{topicCounts.done}<span class="of">/{data.topics.size}</span></span>
-          <span class="small">{data.subject.standardsName} topics covered</span>
-        </a>
+        {hasTopics(data) && (
+          <a class="stat" href={url(`${subject}/ap/`)}>
+            <span class="big">{topicCounts.done}<span class="of">/{data.topics.size}</span></span>
+            <span class="small">{data.subject.standardsName} topics covered</span>
+          </a>
+        )}
       </div>
-      <ul class="plain-list small breakdown">
-        {topicCounts.partial > 0 && <li><span class="mk partial" aria-hidden="true">◐</span><span>{topicCounts.partial} partly covered</span></li>}
-        {topicCounts.review > 0 && <li><span class="mk review" aria-hidden="true">↺</span><span>{topicCounts.review} seen in {progress.lastYearCourse}</span></li>}
-        {topicCounts.skipped > 0 && (
-          <li>
-            <span class="mk skipped" aria-hidden="true">!</span>
-            <span>{topicCounts.skipped} skipped in class:{' '}
-            {skippedIds.map((id, i) => (
-              <>
-                {i > 0 && ', '}
-                <a href={url(`${subject}/ap/${id}/`)}>{id} {data.topics.get(id)!.title}</a>
-              </>
-            ))}</span>
-          </li>
-        )}
-        <li><span class="mk" aria-hidden="true"></span><span>{newCount} completely new</span></li>
-        {gapCount > 0 && (
-          <li>
-            <span class="mk gap" aria-hidden="true">⚑</span>
-            <a href={url(`${subject}/ap/#textbook-gaps`)}>{gapCount} topics the textbook covers thinly</a>
-          </li>
-        )}
-      </ul>
+      {hasTopics(data) && (
+        <ul class="plain-list small breakdown">
+          {topicCounts.partial > 0 && <li><span class="mk partial" aria-hidden="true">◐</span><span>{topicCounts.partial} partly covered</span></li>}
+          {topicCounts.review > 0 && <li><span class="mk review" aria-hidden="true">↺</span><span>{topicCounts.review} seen in {progress.lastYearCourse}</span></li>}
+          {topicCounts.skipped > 0 && (
+            <li>
+              <span class="mk skipped" aria-hidden="true">!</span>
+              <span>{topicCounts.skipped} skipped in class:{' '}
+              {skippedIds.map((id, i) => (
+                <>
+                  {i > 0 && ', '}
+                  <a href={url(`${subject}/ap/${id}/`)}>{id} {data.topics.get(id)!.title}</a>
+                </>
+              ))}</span>
+            </li>
+          )}
+          <li><span class="mk" aria-hidden="true"></span><span>{newCount} completely new</span></li>
+          {gapCount > 0 && (
+            <li>
+              <span class="mk gap" aria-hidden="true">⚑</span>
+              <a href={url(`${subject}/ap/#textbook-gaps`)}>{gapCount} topics the textbook covers thinly</a>
+            </li>
+          )}
+        </ul>
+      )}
     </div>
   </section>
 
@@ -244,11 +251,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     align-items: start;
   }
   .eyebrow {
-    margin: 0 !important;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    margin: 0;
     color: var(--accent);
   }
   .dash h2 {
@@ -272,7 +275,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     color: var(--muted);
   }
   .review-practice {
-    margin: 0.5rem 0 0 !important;
+    margin: 0.5rem 0 0;
   }
   .now-chapter {
     padding: 0.6rem 0;
@@ -287,7 +290,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     font-size: 1.05rem;
   }
   .empty-note {
-    margin: 0.6rem 0 0 !important;
+    margin: 0.6rem 0 0;
     padding-top: 0.6rem;
     border-top: 1px solid var(--border);
   }
@@ -295,7 +298,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem 1rem;
-    margin: 0 !important;
+    margin: 0;
   }
   .review-links {
     margin: 0.5rem 0 0;
@@ -337,7 +340,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   }
   .notes-line,
   .practice-line {
-    margin-top: 0.5rem !important;
+    margin-top: 0.5rem;
   }
   .chapter-card h3 a {
     text-decoration: none;

@@ -290,13 +290,20 @@ table[data-scrolls='seen']::after,
   font-size: 0.875rem;
 }
 
-.visually-hidden {
-  position: absolute !important;
+/* For screen readers only. During a practice set and its results the page title is too, so on
+   phones the question (or score) starts higher and the two screens don't look alike. */
+.visually-hidden,
+body:is([data-practice='session'], [data-practice='results']) .practice-title {
+  position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
+}
+
+body:is([data-practice='session'], [data-practice='results']) main {
+  padding-top: 1rem;
 }
 
 /* Visible on wider screens; on phones only screen readers get it (e.g. "Start practice" -> "Start"). */
@@ -309,6 +316,16 @@ table[data-scrolls='seen']::after,
     clip-path: inset(50%);
     white-space: nowrap;
   }
+}
+
+/* A small label above a card's heading: "Now in class", "Next class test". */
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 /* A small heading inside a card or above a group of cards. */
@@ -336,12 +353,12 @@ a.card:hover {
   border-color: var(--accent);
 }
 
-.card h2,
-.card h3 {
+/* :where() keeps these defaults weak, so a page's own class rules win without !important. */
+:where(.card) :is(h2, h3) {
   margin: 0 0 0.3rem;
 }
 
-.card p {
+:where(.card) p {
   margin: 0.3rem 0 0;
 }
 
@@ -399,6 +416,12 @@ a.badge:hover {
 .badge.not-ap {
   background: var(--warn-soft);
   color: var(--warn);
+  border-color: transparent;
+}
+
+.badge.now {
+  background: var(--accent);
+  color: var(--accent-ink);
   border-color: transparent;
 }
 

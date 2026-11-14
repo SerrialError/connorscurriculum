@@ -38,18 +38,23 @@ export function lessonCollection(data: SubjectData) {
         widget: 'select',
         options: data.chapters.map((c) => ({ label: `${c.number}. ${c.title}`, value: c.number })),
       },
-      {
-        name: 'cedTopics',
-        label: `${subject.standardsName} topics`,
-        widget: 'select',
-        multiple: true,
-        required: false,
-        default: [],
-        hint: `Every ${subject.standardsName} topic this lesson teaches. Leave empty if it is class-only (not on the AP exam). Each topic's page lists this lesson.`,
-        options: data.ced.units.flatMap((u) =>
-          u.topics.map((t) => ({ label: `${t.id} ${t.title} (Unit ${u.id})`, value: t.id })),
-        ),
-      },
+      // A class without standards (no ced.json) has no topics to pick.
+      ...(data.topics.size === 0
+        ? []
+        : [
+            {
+              name: 'cedTopics',
+              label: `${subject.standardsName} topics`,
+              widget: 'select',
+              multiple: true,
+              required: false,
+              default: [],
+              hint: `Every ${subject.standardsName} topic this lesson teaches. Leave empty if it is class-only (not on the exam). Each topic's page lists this lesson.`,
+              options: data.ced.units.flatMap((u) =>
+                u.topics.map((t) => ({ label: `${t.id} ${t.title} (Unit ${u.id})`, value: t.id })),
+              ),
+            },
+          ]),
       {
         name: 'sections',
         label: 'Textbook sections',

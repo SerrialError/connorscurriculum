@@ -3,17 +3,24 @@
 import { subjectIds, url } from '../lib/content';
 
 interface Props {
-  placeholder?: string;
+  placeholder: string;
+  /** Search only this class (subject id); every class when unset. */
+  subject?: string;
   /** Input id; must be unique on the page (the header search uses its own). */
   id?: string;
 }
 
-const { placeholder = 'Search lessons, chapters, topics…', id = 'site-search' } = Astro.props;
-// With one class, every result is from it, so results don't repeat its name.
-const showSubject = subjectIds().length > 1;
+const { placeholder, subject, id = 'site-search' } = Astro.props;
+// Results name their class only when they can come from more than one.
+const showSubject = !subject && subjectIds().length > 1;
 ---
 
-<div class="search" data-pagefind-src={url('pagefind/pagefind.js')} data-show-subject={showSubject ? '' : undefined}>
+<div
+  class="search"
+  data-pagefind-src={url('pagefind/pagefind.js')}
+  data-class={subject}
+  data-show-subject={showSubject ? '' : undefined}
+>
   <label class="visually-hidden" for={id}>Search</label>
   <input id={id} type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
   <p class="status small muted" aria-live="polite"></p>
@@ -29,7 +36,7 @@ const showSubject = subjectIds().length > 1;
     data(): Promise<{ url: string; excerpt: string; meta: Record<string, string>; sub_results?: { title: string; excerpt: string }[] }>;
   }
   interface Pagefind {
-    search(q: string): Promise<{ results: PagefindResult[] }>;
+    search(q: string, options?: { filters?: Record<string, string> }): Promise<{ results: PagefindResult[] } | null>;
     options?(o: Record<string, unknown>): Promise<void>;
   }
 
@@ -67,7 +74,8 @@ const showSubject = subjectIds().length > 1;
       }
       const pf = await load();
       if (!pf) return;
-      const search = await pf.search(q);
+      // Base.astro tags each class page with a "class" filter.
+      const search = await pf.search(q, root.dataset.class ? { filters: { class: root.dataset.class } } : {});
       if (!search) return; // superseded by a newer query
       const { results } = search;
       // Load a few more than are shown, so loose matches can be dropped and the count stays right

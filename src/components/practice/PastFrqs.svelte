@@ -1,6 +1,6 @@
 <script lang="ts">
   // Released AP FRQs on the topics of the current filters (setup) or set (results).
-  import { type FrqLink, frqCountLabel, frqName, frqPractices, frqTotal, matchFrqs, readinessLabel, readyPoints } from '../../lib/frqs';
+  import { type FrqLink, FRQ_ORDER_NOTE, OUR_PRACTICE_LABELS, frqCountLabel, frqName, frqPractices, frqTotal, matchFrqs, readinessLabel, readyPoints } from '../../lib/frqs';
   import { plural } from '../../lib/text';
   import { getCourse } from './context';
 
@@ -16,7 +16,7 @@
       <span class="muted small">{frqCountLabel(matches)}</span>
     </summary>
     <p class="small muted">
-      Real exam questions from AP Central. Do the listed parts, then grade yourself with the scoring guidelines.
+      Real exam questions from AP Central. Do the listed parts, then grade yourself with the scoring guidelines. {FRQ_ORDER_NOTE}
       <a href={hrefs.frqs}>All past FRQs</a>
     </p>
     <ul class="plain-list">
@@ -30,7 +30,7 @@
           </div>
           <div class="small practices">
             {frqPractices({ parts: m.parts }).map((id) => practiceNames[id] ?? id).join(' · ')}
-            {#if !m.frq.officialSkills}<span class="muted" title="College Board hasn’t published science-practice labels for this exam; these are ours.">(our practice labels)</span>{/if}
+            {#if !m.frq.officialSkills}<span class="muted" title={OUR_PRACTICE_LABELS}>(our labels)</span>{/if}
           </div>
           <div class="small muted">
             Part{m.parts.length > 1 ? 's' : ''} {m.parts.map((p) => p.label).join(', ')} ({plural(m.points, 'pt')})

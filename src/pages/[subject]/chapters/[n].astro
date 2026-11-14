@@ -5,7 +5,7 @@ import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
 import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, practiceStart, subjectIds, url } from '../../../lib/content';
-import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { FRQ_ORDER_NOTE, frqCountLabel, matchFrqs } from '../../../lib/frqs';
 import { plural } from '../../../lib/text';
 import { CONTRIBUTE_URL } from '../../../site';
 
@@ -135,6 +135,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
       {/* Open on chapters with no lessons: the FRQs are the main thing to study there. */}
       <details class="frqs" open={lessons.length === 0}>
         <summary>{frqCountLabel(frqMatches)}</summary>
+        <p class="small muted">{FRQ_ORDER_NOTE}</p>
         <div class="stack">
           {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
         </div>
@@ -175,11 +176,6 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
   }
   .test-link a {
     font-weight: 600;
-  }
-  .badge.now {
-    background: var(--accent);
-    color: var(--accent-ink);
-    border-color: transparent;
   }
   .notice ul {
     margin: 0.3rem 0 0;

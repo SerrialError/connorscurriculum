@@ -3,7 +3,9 @@
 // links into it. Each class's own home is /<subject>/.
 import Search from '../components/Search.astro';
 import Base from '../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, isClassContent, isPastTest, nowChapters, testsByDate, url } from '../lib/content';
+import TestWhen from '../components/TestWhen.astro';
+import { getLessons, getQuestions, isClassContent, isPastTest, kindCounts, nowChapters, testsByDate, url } from '../lib/content';
+import { searchPlaceholder } from '../lib/features';
 import { loadRegistry } from '../lib/registry';
 import { plural } from '../lib/text';
 import { SITE_DESCRIPTION, SITE_NAME } from '../site';
@@ -18,7 +20,7 @@ const classes = await Promise.all(
       href: (path = '') => url(`${id}/${path}`),
       now: nowChapters(data),
       test: testsByDate(data)[0],
-      lessons: lessons.length,
+      lessons: kindCounts(lessons),
       questions: questions.length,
     };
   }),
@@ -26,23 +28,23 @@ const classes = await Promise.all(
 ---
 
 <Base title={SITE_NAME}>
-  <h1>{SITE_NAME}</h1>
+  {/* The header already shows the site name, so the page is named for what it lists. */}
+  <h1>{classes.length === 1 ? 'Your class' : 'Your classes'}</h1>
   <p class="muted intro">{SITE_DESCRIPTION}</p>
-  <Search />
+  <Search placeholder={searchPlaceholder()} />
 
-  <h2 class="classes-h">{classes.length === 1 ? 'Class' : 'Classes'}</h2>
-  <ul class="plain-list classes">
+  <ul class="plain-list classes" aria-label="Classes">
     {
       classes.map(({ data, href, now, test, lessons, questions }) => (
         <li class="card class">
-          <h3>
+          <h2>
             <a href={href()}>{data.subject.name}</a>
-          </h3>
+          </h2>
           <p class="small muted">{data.subject.textbook}</p>
           <dl>
             {now.chapters.length > 0 && (
               <div>
-                <dt>{now.label}</dt>
+                <dt class="eyebrow">{now.label}</dt>
                 <dd>
                   {now.chapters.map((c, i) => (
                     <>
@@ -57,7 +59,7 @@ const classes = await Promise.all(
             )}
             {test && (
               <div data-test-date={test.date} data-past={isPastTest(test) ? '' : undefined}>
-                <dt>
+                <dt class="eyebrow">
                   <span class="if-upcoming">Next test</span>
                   <span class="if-past">Latest test</span>
                 </dt>
@@ -65,29 +67,21 @@ const classes = await Promise.all(
                   <a href={href(`tests/${test.id}/`)}>{test.title}</a>
                   <span class="muted">
                     {' · '}
-                    {test.date ? (
-                      <>
-                        <span class="if-past">taken </span>
-                        {formatDate(test.date)}
-                      </>
-                    ) : (
-                      'date TBA'
-                    )}
+                    <TestWhen test={test} />
                   </span>
                 </dd>
               </div>
             )}
             <div>
-              <dt>So far</dt>
+              <dt class="eyebrow">So far</dt>
               <dd>
                 {data.progress.chapters.size} of {plural(data.chapters.length, 'chapter')} finished
-                <span class="muted"> · {plural(lessons, 'lesson')} and notes · {plural(questions, 'practice question')}</span>
+                <span class="muted">{[lessons, questions && plural(questions, 'practice question')].filter(Boolean).map((t) => ` · ${t}`).join('')}</span>
               </dd>
             </div>
           </dl>
           <p class="links">
-            <a class="button" href={href()}>Open {data.subject.name}</a>
-            <a class="button secondary" href={href('lessons/')}>Lessons</a>
+            <a class="button" href={href('lessons/')}>Lessons</a>
             <a class="button secondary" href={href('practice/')}>Practice</a>
             <a class="button secondary" href={href('tests/')}>Tests</a>
           </p>
@@ -101,20 +95,17 @@ const classes = await Promise.all(
   .intro {
     margin-top: -0.5rem;
   }
-  .classes-h {
-    margin-top: 1.75rem;
-  }
   /* One column for one class; side by side as classes are added. */
   .classes {
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
   }
-  .class h3 {
+  .class h2 {
     margin: 0;
     font-size: 1.3rem;
   }
-  .class h3 + p {
+  .class h2 + p {
     margin: 0.15rem 0 0.75rem;
   }
   dl {
@@ -128,12 +119,8 @@ const classes = await Promise.all(
     gap: 0 0.75rem;
   }
   dt {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding-top: 0.15rem;
+    margin: 0;
+    padding-top: 0.2rem;
   }
   dd {
     margin: 0;

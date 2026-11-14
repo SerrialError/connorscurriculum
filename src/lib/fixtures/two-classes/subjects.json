@@ -1,0 +1,4 @@
+[
+  { "id": "bio", "name": "Biology", "textbook": "Biology, 2nd edition", "order": 2 },
+  { "id": "chem", "name": "Chemistry", "textbook": "Chemistry, 1st edition", "standardsName": "AP CED", "topicsLabel": "AP topics", "order": 1 }
+]

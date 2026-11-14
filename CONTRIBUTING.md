@@ -287,12 +287,16 @@ chapter, fill it in:
 
 ## Adding a subject
 
-1. Add an entry to `src/data/subjects.json`.
-2. Create `src/data/<id>/ced.json`, `chapters.json`, and (optionally) `tests.json`.
+1. Add an entry to `src/data/subjects.json` (`id`, `name`, `textbook`; with standards also
+   `standardsName`, e.g. "AP CED", and `topicsLabel`, the nav label for their topic pages).
+2. Create `src/data/<id>/chapters.json`. Optional: `ced.json` (standards and their topics),
+   `tests.json`, `past-frqs.json`, `progress.json`, `textbook-gaps.json`.
 3. Add content under `src/content/lessons/<id>/` and `src/content/questions/<id>/`.
 
 No code changes are needed. The site's home page (`/`) lists every class with what it's on now;
-each class has its own home at `/<id>/`.
+each class has its own home at `/<id>/`. A class gets a Tests, topics, or Past FRQs page (and nav
+item) only when it has that data (`src/lib/features.ts`), and search inside a class finds only its
+pages. `src/lib/features.test.ts` builds a site with a second, minimal class to keep it that way.
 
 ## Before you push
 

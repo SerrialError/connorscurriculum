@@ -60,6 +60,11 @@
   const moreChips = $derived(chips.filter((c) => c.more));
   const frqTopics = $derived(filterTopics(filters, units, chapterTopics, tests));
   const frqMatches = $derived(frqTopics.size ? matchFrqs(frqs, frqTopics) : []);
+  /** What's under More options, while it's closed and nothing in it is set. */
+  const moreSummary = [units.length > 0 && 'AP unit or topic', tests.length > 0 && 'class test', 'question type', laterChapters.length > 0 && 'later chapters']
+    .filter(Boolean)
+    .join(', ')
+    .replace(/^./, (c) => c.toUpperCase());
   const countInvalid = $derived.by(() => {
     if (!customCount) return false;
     const v = Number(countText);
@@ -273,50 +278,52 @@
       {#if !moreOpen && moreChips.length > 0}
         <span class="badge topic">{moreChips.map((c) => c.label).join(' · ')}</span>
       {:else if !moreOpen}
-        <span class="small muted">AP unit or topic{tests.length > 0 ? ', class test' : ''}, question type{laterChapterList.length > 0 ? ', later chapters' : ''}</span>
+        <span class="small muted">{moreSummary}</span>
       {/if}
     </summary>
 
-    <fieldset>
-      <legend>AP unit or topic</legend>
-      {#each visibleUnits as u (u.id)}
-        {@const picked = u.topics.filter((t) => filters.topics.includes(t.id)).length}
-        <details class="unit" open={picked > 0}>
-          <summary>
-            <span>
-              Unit {u.id}: {u.title}
-              {#if filters.units.includes(u.id)}<span class="badge topic">whole unit</span>{:else if picked}<span class="badge topic">{picked} selected</span>{/if}
-            </span>
-            {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
-          </summary>
-          <div class="chips">
-            <label class="chip">
-              <input type="checkbox" checked={filters.units.includes(u.id)} onchange={() => (filters.units = toggle(filters.units, u.id))} />
-              <span>Whole unit</span>
+    {#if units.length > 0}
+      <fieldset>
+        <legend>AP unit or topic</legend>
+        {#each visibleUnits as u (u.id)}
+          {@const picked = u.topics.filter((t) => filters.topics.includes(t.id)).length}
+          <details class="unit" open={picked > 0}>
+            <summary>
+              <span>
+                Unit {u.id}: {u.title}
+                {#if filters.units.includes(u.id)}<span class="badge topic">whole unit</span>{:else if picked}<span class="badge topic">{picked} selected</span>{/if}
+              </span>
               {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
-            </label>
-            {#each u.topics.filter((t) => usedTopics.has(t.id) || filters.topics.includes(t.id)) as t (t.id)}
+            </summary>
+            <div class="chips">
               <label class="chip">
-                <input type="checkbox" checked={filters.topics.includes(t.id)} onchange={() => (filters.topics = toggle(filters.topics, t.id))} />
-                <span>{t.id} <span class="chip-sub">{t.title}</span></span>
-                {@render count(countWith(all, filters, tests, { units: [], topics: [t.id] }))}
+                <input type="checkbox" checked={filters.units.includes(u.id)} onchange={() => (filters.units = toggle(filters.units, u.id))} />
+                <span>Whole unit</span>
+                {@render count(countWith(all, filters, tests, { units: [u.id], topics: [] }))}
               </label>
-            {/each}
+              {#each u.topics.filter((t) => usedTopics.has(t.id) || filters.topics.includes(t.id)) as t (t.id)}
+                <label class="chip">
+                  <input type="checkbox" checked={filters.topics.includes(t.id)} onchange={() => (filters.topics = toggle(filters.topics, t.id))} />
+                  <span>{t.id} <span class="chip-sub">{t.title}</span></span>
+                  {@render count(countWith(all, filters, tests, { units: [], topics: [t.id] }))}
+                </label>
+              {/each}
+            </div>
+          </details>
+        {:else}
+          <p class="small muted">No tagged questions yet.</p>
+        {/each}
+        {#if hasClassOnly || filters.units.includes(CLASS_ONLY_UNIT)}
+          <div class="chips class-only">
+            <label class="chip">
+              <input type="checkbox" checked={filters.units.includes(CLASS_ONLY_UNIT)} onchange={() => (filters.units = toggle(filters.units, CLASS_ONLY_UNIT))} />
+              <span>Not on the AP exam <span class="chip-sub">class tests only</span></span>
+              {@render count(countWith(all, filters, tests, { units: [CLASS_ONLY_UNIT], topics: [] }))}
+            </label>
           </div>
-        </details>
-      {:else}
-        <p class="small muted">No tagged questions yet.</p>
-      {/each}
-      {#if hasClassOnly || filters.units.includes(CLASS_ONLY_UNIT)}
-        <div class="chips class-only">
-          <label class="chip">
-            <input type="checkbox" checked={filters.units.includes(CLASS_ONLY_UNIT)} onchange={() => (filters.units = toggle(filters.units, CLASS_ONLY_UNIT))} />
-            <span>Not on the AP exam <span class="chip-sub">class tests only</span></span>
-            {@render count(countWith(all, filters, tests, { units: [CLASS_ONLY_UNIT], topics: [] }))}
-          </label>
-        </div>
-      {/if}
-    </fieldset>
+        {/if}
+      </fieldset>
+    {/if}
 
     <div class="groups">
       {#if tests.length > 0}

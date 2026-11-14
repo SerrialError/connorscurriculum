@@ -2,6 +2,7 @@
 import Search from '../components/Search.astro';
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/content';
+import { searchPlaceholder } from '../lib/features';
 import { loadRegistry } from '../lib/registry';
 
 const subjects = [...loadRegistry().values()].map((d) => d.subject);
@@ -12,7 +13,7 @@ const only = subjects.length === 1 ? subjects[0] : undefined;
 <Base title="Page not found" subject={only?.id}>
   <h1>Page not found</h1>
   <p class="muted">That page doesn't exist. It may have moved, or the link may have a typo. Try searching:</p>
-  <Search />
+  <Search placeholder={searchPlaceholder()} />
   <p>
     Or go to {only && <>the <a href={url(`${only.id}/`)}>{only.name} home page</a> or </>}the <a href={url()}>list of classes</a>.
   </p>

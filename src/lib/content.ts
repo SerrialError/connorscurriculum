@@ -16,6 +16,10 @@ export const subjectIds = () => [...loadRegistry().keys()];
 /** For getStaticPaths of /[subject]/... pages. */
 export const subjectPaths = () => subjectIds().map((subject) => ({ params: { subject } }));
 
+/** For pages only some classes have, e.g. `subjectPathsWith(hasPastFrqs)` (lib/features.ts). */
+export const subjectPathsWith = (has: (data: SubjectData) => boolean) => () =>
+  [...loadRegistry()].filter(([, data]) => has(data)).map(([subject]) => ({ params: { subject } }));
+
 /** "apchem/14-reaction-rates" -> "14-reaction-rates" */
 export const lessonSlug = (lesson: Lesson) => lesson.id.split('/').slice(1).join('/');
 
@@ -219,10 +223,22 @@ export function byline(lesson: Lesson): string {
 export const lessonHref = (lesson: Lesson) => url(`${lesson.data.subject.id}/lessons/${lessonSlug(lesson)}/`);
 
 export const LESSON_KINDS = [
-  { kind: 'review', heading: 'Test review', label: 'Review sheet' },
-  { kind: 'lesson', heading: 'Lessons', label: 'Lesson' },
-  { kind: 'notes', heading: "Classmates' notes", label: 'Notes' },
+  { kind: 'review', heading: 'Test review', label: 'Review sheet', chip: 'Review sheets', one: 'review sheet' },
+  { kind: 'lesson', heading: 'Lessons', label: 'Lesson', chip: 'Lessons', one: 'lesson' },
+  { kind: 'notes', heading: "Classmates' notes", label: 'Notes', chip: 'Notes', one: 'notes page' },
 ] as const;
+
+/**
+ * "4 lessons · 3 notes pages · 1 review sheet": how many pages of each kind, leaving out kinds
+ * with none. Every count of lessons on the site uses this, so the numbers agree from page to page.
+ */
+export function kindCounts(lessons: Lesson[]): string {
+  return (['lesson', 'notes', 'review'] as const)
+    .map((kind) => [LESSON_KINDS.find((k) => k.kind === kind)!.one, lessons.filter((l) => l.data.kind === kind).length] as const)
+    .filter(([, n]) => n > 0)
+    .map(([word, n]) => plural(n, word))
+    .join(' · ');
+}
 
 /** "Lesson", "Notes", or "Review sheet", for search results and tags. */
 export function kindLabel(lesson: Lesson): string {

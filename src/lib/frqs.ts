@@ -2,6 +2,9 @@
 // Plain TypeScript (no Astro imports) so the practice island and tests can use it.
 import { plural } from './text';
 
+/** Shown (with "our labels") wherever science practices that aren't College Board's are listed. */
+export const OUR_PRACTICE_LABELS = 'College Board hasn’t published science-practice labels for this exam; these are ours.';
+
 export interface FrqPart {
   label: string;
   points: number;
@@ -52,6 +55,9 @@ export interface FrqMatch {
   parts: FrqPart[];
   points: number;
 }
+
+/** How matchFrqs orders its list, said wherever the list is shown. */
+export const FRQ_ORDER_NOTE = 'Most points on these topics first.';
 
 /** Questions with at least one part on the given topics, most matching points first, then newest. */
 export function matchFrqs(frqs: FrqLink[], topics: ReadonlySet<string>): FrqMatch[] {

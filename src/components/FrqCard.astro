@@ -2,7 +2,7 @@
 // One released AP FRQ: links to the official PDFs, readiness, and either all parts with
 // their topics or just the parts that matched a topic.
 import { getSubjectData, learnedTopic, url } from '../lib/content';
-import { type FrqLink, type FrqPart, frqName, frqPractices, frqTotal, readinessLabel, readyPoints } from '../lib/frqs';
+import { type FrqLink, type FrqPart, OUR_PRACTICE_LABELS, frqName, frqPractices, frqTotal, readinessLabel, readyPoints } from '../lib/frqs';
 import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
 import { plural } from '../lib/text';
 
@@ -28,7 +28,7 @@ const popId = (part: number, skill: string) => `skill-${frq.year}-q${frq.number}
 const practices = frqPractices({ parts: matched ?? frq.parts });
 const sourceNote = frq.officialSkills
   ? 'Science practices as labeled by College Board.'
-  : 'College Board has not published practice labels for this exam yet; these are our own.';
+  : OUR_PRACTICE_LABELS;
 ---
 
 <article class="card frq">
@@ -47,7 +47,7 @@ const sourceNote = frq.officialSkills
       </p>
       {practices.length > 0 && (
         <div class="practices-block">
-          <p class="practices-h small muted">Science practices{!frq.officialSkills && ' (our labels; College Board hasn’t published them for this exam)'}</p>
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(our labels)</span></>}</p>
           <p class="practices" title={sourceNote}>
             {practices.map((id) => (
               <span class="practice">
@@ -64,7 +64,7 @@ const sourceNote = frq.officialSkills
       <summary>Show {frq.parts.length} parts and science practices</summary>
       {practices.length > 0 && (
         <div class="practices-block">
-          <p class="practices-h small muted">Science practices{!frq.officialSkills && ' (our labels; College Board hasn’t published them for this exam)'}</p>
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(our labels)</span></>}</p>
           <p class="practices" title={sourceNote}>
             {practices.map((id) => (
               <span class="practice">
@@ -238,11 +238,11 @@ const sourceNote = frq.officialSkills
   .skill-pop p {
     margin: 0;
   }
-  .pop-practice {
+  .skill-pop .pop-practice {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--muted);
-    margin-bottom: 0.3rem !important;
+    margin-bottom: 0.3rem;
   }
   .links {
     display: flex;

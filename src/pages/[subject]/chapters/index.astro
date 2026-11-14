@@ -8,6 +8,7 @@ import {
   getQuestions,
   getSubjectData,
   isClassContent,
+  kindCounts,
   nextChapter,
   subjectPaths,
   testsByDate,
@@ -27,17 +28,17 @@ const current = new Set(progress.current);
 const next = current.size ? undefined : nextChapter(data);
 const tests = testsByDate(data);
 
-/** "AP Units 3, 5 · 1 lesson · 6 questions", leaving out zero counts. Sample pages are counted as such. */
+/** "AP Units 3, 5 · 4 lessons · 3 notes pages · 6 questions", leaving out zero counts. Sample pages are counted as such. */
 const meta = (n: number, apUnits: string[]) => {
   const ls = lessons.filter((x) => x.data.chapter === n);
   const qs = questions.filter((x) => x.data.chapter === n);
-  const l = ls.filter((x) => isClassContent(data, x)).length;
+  const classLessons = ls.filter((x) => isClassContent(data, x));
   const q = qs.filter((x) => isClassContent(data, x)).length;
   return [
     apUnits.length ? `AP Unit${apUnits.length > 1 ? 's' : ''} ${apUnits.join(', ')}` : 'Not on the AP exam',
-    l && plural(l, 'lesson'),
+    kindCounts(classLessons),
     q && plural(q, 'question'),
-    ls.length - l && plural(ls.length - l, 'sample page'),
+    ls.length - classLessons.length && plural(ls.length - classLessons.length, 'sample page'),
     qs.length - q && plural(qs.length - q, 'sample question'),
   ]
     .filter(Boolean)
@@ -148,11 +149,6 @@ const meta = (n: number, apUnits: string[]) => {
   }
   .info .small {
     margin-top: 0.1rem;
-  }
-  .badge.now {
-    background: var(--accent);
-    color: var(--accent-ink);
-    border-color: transparent;
   }
   .info .badge {
     margin-left: 0.4rem;

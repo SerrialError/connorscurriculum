@@ -1,8 +1,11 @@
-// Structural data for every subject: subjects.json plus data/<subject>/{ced,chapters,tests}.json.
+// Structural data for every subject: subjects.json plus data/<subject>/*.json. Only chapters.json
+// is required; a class without ced.json (standards), tests.json, or past-frqs.json simply has no
+// topic pages, tests, or past FRQs (see features.ts).
 // Read synchronously from disk so content schemas can validate tags against it.
 import { existsSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { z } from 'astro/zod';
+import { chapterRange } from './text';
 
 export const DATA_DIR = join(process.cwd(), 'src', 'data');
 
@@ -10,7 +13,10 @@ export const subjectSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/, 'subject id must be lowercase letters, digits, or dashes'),
   name: z.string().min(1),
   textbook: z.string().min(1),
-  standardsName: z.string().min(1),
+  /** What the standards are called, e.g. "AP CED". Required with a ced.json. */
+  standardsName: z.string().min(1).optional(),
+  /** The nav item for the standards' topic pages, e.g. "AP topics". */
+  topicsLabel: z.string().min(1).default('Topics'),
   order: z.number().default(0),
 });
 
@@ -224,13 +230,16 @@ export function formatPath(path: PropertyKey[]): string {
     : path.map((p, i) => (typeof p === 'number' ? `[${p}]` : `${i ? '.' : ''}${String(p)}`)).join('');
 }
 
-function loadSubject(subject: Subject): SubjectData {
-  const dir = join(DATA_DIR, subject.id);
+function loadSubject(subject: Subject, dataDir: string): SubjectData {
+  const dir = join(dataDir, subject.id);
   const cedFile = join(dir, 'ced.json');
   const chaptersFile = join(dir, 'chapters.json');
   const testsFile = join(dir, 'tests.json');
 
-  const ced = readJson(cedFile, cedSchema);
+  const ced: Ced = existsSync(cedFile) ? readJson(cedFile, cedSchema) : { verified: false, units: [], sciencePractices: [] };
+  if (ced.units.length > 0 && !subject.standardsName) {
+    throw new DataError(join(dataDir, 'subjects.json'), `${subject.id}.standardsName`, 'required for a subject with a ced.json');
+  }
   const rawChapters = readJson(chaptersFile, z.array(chapterSchema));
   const tests = existsSync(testsFile) ? readJson(testsFile, z.array(testSchema)) : [];
 
@@ -374,8 +383,6 @@ function loadSubject(subject: Subject): SubjectData {
   return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs, textbookGaps };
 }
 
-const listChapters = (ns: number[]) => `Ch. ${ns.join(', ')}`;
-
 /**
  * Combine this year's finished chapters with last year's course. This year's ✓ wins; otherwise a
  * topic fully covered last year is "review"; otherwise any partial coverage is "partial".
@@ -423,7 +430,7 @@ export function deriveProgress(
     const notes: string[] = [];
     if (thisYear === 'partial') {
       const left = chs.filter((n) => !finished.has(n));
-      notes.push(`Started in ${listChapters(done)}; continues in ${listChapters(left)}.`);
+      notes.push(`Started in ${chapterRange(done)}; continues in ${chapterRange(left)}.`);
     }
     if (before) {
       const detail = lastYear!.notes[id];
@@ -435,16 +442,19 @@ export function deriveProgress(
   return progress;
 }
 
-/** All subjects with their data, sorted by `order`. Re-read on every call so dev picks up edits. */
-export function loadRegistry(): Map<string, SubjectData> {
-  const subjectsFile = join(DATA_DIR, 'subjects.json');
+/**
+ * All subjects with their data, sorted by `order`. Re-read on every call so dev picks up edits.
+ * `dataDir` is for tests, which load fixture subjects.
+ */
+export function loadRegistry(dataDir = DATA_DIR): Map<string, SubjectData> {
+  const subjectsFile = join(dataDir, 'subjects.json');
   const subjects = readJson(subjectsFile, z.array(subjectSchema));
   const registry = new Map<string, SubjectData>();
   [...subjects]
     .sort((a, b) => a.order - b.order)
     .forEach((subject, i) => {
       if (registry.has(subject.id)) throw new DataError(subjectsFile, `[${i}].id`, `duplicate subject "${subject.id}"`);
-      registry.set(subject.id, loadSubject(subject));
+      registry.set(subject.id, loadSubject(subject, dataDir));
     });
   return registry;
 }

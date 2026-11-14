@@ -1,10 +1,11 @@
 ---
 import FrqCard from '../../../components/FrqCard.astro';
 import Base from '../../../layouts/Base.astro';
-import { getSubjectData, learnedTopic, pastFrqLinks, subjectPaths } from '../../../lib/content';
+import { hasPastFrqs } from '../../../lib/features';
+import { getSubjectData, learnedTopic, pastFrqLinks, subjectPathsWith } from '../../../lib/content';
 import { frqName, frqTotal, readyPoints } from '../../../lib/frqs';
 
-export const getStaticPaths = subjectPaths;
+export const getStaticPaths = subjectPathsWith(hasPastFrqs);
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);

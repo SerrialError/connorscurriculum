@@ -1,9 +1,10 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, subjectPaths, testPracticeLinks, testsByDate, url } from '../../../lib/content';
+import { hasTests } from '../../../lib/features';
+import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, subjectPathsWith, testPracticeLinks, testsByDate, url } from '../../../lib/content';
 import { chapterRange } from '../../../lib/text';
 
-export const getStaticPaths = subjectPaths;
+export const getStaticPaths = subjectPathsWith(hasTests);
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);

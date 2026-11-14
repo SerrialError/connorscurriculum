@@ -35,14 +35,18 @@
   let nextButton = $state<HTMLButtonElement | null>(null);
   let verdictEl = $state<HTMLElement | null>(null);
   let actionsEl = $state<HTMLElement | null>(null);
+  let qnavEl = $state<HTMLElement | null>(null);
 
   const total = $derived(attempt.questions.length);
   const isLast = $derived(attempt.index === total - 1);
 
-  // A new question starts at the top of the page, with focus on its heading.
+  // A new question starts at the top of the page, with focus on its heading. On phones the
+  // question numbers are one scrolling row: bring the current one into the middle of it.
   $effect(() => {
     void attempt.current?.id;
     void tick().then(() => {
+      const dot = qnavEl?.querySelector<HTMLElement>('[aria-current]');
+      if (qnavEl && dot) qnavEl.scrollLeft = dot.offsetLeft - (qnavEl.clientWidth - dot.offsetWidth) / 2;
       window.scrollTo({ top: 0 });
       heading?.focus({ preventScroll: true });
     });
@@ -166,7 +170,7 @@
     </div>
 
     {#if total > LONG_SET ? jumpOpen : total > 1}
-      <nav class="qnav" id="qnav" aria-label="Questions in this set">
+      <nav class="qnav" id="qnav" aria-label="Questions in this set" bind:this={qnavEl}>
         {#each attempt.questions as s, i (s.id)}
           <QuestionDot n={i + 1} status={scoreStatus(attempt.scores[s.id])} current={i === attempt.index} onclick={() => attempt.go(i)} />
         {/each}
@@ -327,10 +331,26 @@
     margin-left: auto;
   }
   .qnav {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem;
     margin-bottom: 1rem;
+  }
+  /* Phones: one row that scrolls sideways, so the question starts high on the screen. The padding
+     keeps the current number's outline inside the scrolling box. */
+  @media (max-width: 520px) {
+    .qnav {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      gap: 0.25rem;
+      padding: 3px;
+      margin: -3px -3px calc(0.75rem - 3px);
+    }
+    .qnav :global(.qdot) {
+      flex: none;
+    }
   }
   .question {
     min-width: 0;

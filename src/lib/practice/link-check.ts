@@ -42,8 +42,8 @@ export function knownFilters(f: Filters, known: KnownValues): { filters: Filters
 export type LinkProblem =
   /** Filter values the class doesn't have, left out (their chip names). */
   | { kind: 'unknown'; values: string[] }
-  /** A set of exact questions (?ids=), none of which exist any more. */
-  | { kind: 'gone' }
+  /** A set of exact questions (?ids=), none of which exist any more; `filtered`: it came from narrowing filters. */
+  | { kind: 'gone'; filtered: boolean }
   /** The link's filters match no questions. */
   | { kind: 'empty' };
 
@@ -53,7 +53,7 @@ export function linkNotice(p: LinkProblem): string {
     const one = p.values.length === 1;
     return `That link asked for ${p.values.join(', ')}, which this class doesn't have, so ${one ? 'it was' : 'they were'} left out.`;
   }
-  if (p.kind === 'gone') return "That set's questions aren't on the site any more. Here are the filters it was made from.";
+  if (p.kind === 'gone') return `That set's questions aren't on the site any more.${p.filtered ? ' Here are the filters it was made from.' : ''}`;
   return 'No questions match that link. Remove a filter below to start a set.';
 }
 

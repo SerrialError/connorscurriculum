@@ -4,7 +4,7 @@
   // lib/practice/nav.ts; this component opens sets, keeps them saved, and applies those steps.
   import { onMount } from 'svelte';
   import { matchFrqs } from '../../lib/frqs';
-  import { emptyFilters, filterQuestions, filterTopics } from '../../lib/practice/filters';
+  import { activeFilterCount, emptyFilters, filterQuestions, filterTopics } from '../../lib/practice/filters';
   import { WEAK_NO_HISTORY_NOTE, describeScope, describeSet } from '../../lib/practice/labels';
   import { practiceStarts } from '../../lib/practice/links';
   import { type LinkProblem, RESHUFFLED_NOTE, knownFilters, linkNotice, missingNote } from '../../lib/practice/link-check';
@@ -119,7 +119,7 @@
       reviewing = !!landed.entry.reviewing;
       phase = landed.entry.phase;
     } else {
-      showSetup(spec && fits ? { kind: spec.ids ? 'gone' : 'empty' } : null);
+      showSetup(!spec || !fits ? null : spec.ids ? { kind: 'gone', filtered: activeFilterCount(spec.filters) > 0 } : { kind: 'empty' });
     }
   }
 

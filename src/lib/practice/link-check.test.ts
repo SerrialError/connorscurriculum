@@ -32,7 +32,8 @@ describe('link notices', () => {
   it('says what was left out, and why nothing opened', () => {
     expect(linkNotice({ kind: 'unknown', values: ['Ch. 99'] })).toBe("That link asked for Ch. 99, which this class doesn't have, so it was left out.");
     expect(linkNotice({ kind: 'unknown', values: ['Ch. 99', 'Topic 9.9'] })).toMatch(/Ch\. 99, Topic 9\.9, .* so they were left out\.$/);
-    expect(linkNotice({ kind: 'gone' })).toMatch(/aren't on the site any more/);
+    expect(linkNotice({ kind: 'gone', filtered: true })).toBe("That set's questions aren't on the site any more. Here are the filters it was made from.");
+    expect(linkNotice({ kind: 'gone', filtered: false })).toBe("That set's questions aren't on the site any more.");
     expect(linkNotice({ kind: 'empty' })).toMatch(/^No questions match that link/);
   });
 

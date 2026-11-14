@@ -47,8 +47,8 @@ const course: PracticeCourse = {
   learnedTopics: [...data.topics.keys()].filter(isLearned),
   practiceNames: Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name])),
   presets: quickStarts(
-    testsByDate(data).map((t) => ({ id: t.id, title: t.title, count: questions.filter((q) => inTest(t, q)).length })),
-    questions.map((q) => q.data),
+    testsByDate(data).map((t) => ({ id: t.id, title: t.title, questions: questions.filter((q) => inTest(t, q)).map((q) => q.id) })),
+    questions.map((q) => ({ id: q.id, chapter: q.data.chapter })),
     new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
   ),
   // Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.

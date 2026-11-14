@@ -11,51 +11,64 @@ export interface Preset {
   alt?: { label: string; filters: Filters };
 }
 
+interface PresetQuestion {
+  id: string;
+  chapter: number;
+}
+
 /**
  * "Mixed review": random questions from the chapters the class has reached. Returns its pool, the
- * chapters it draws from, and how many questions it has, or null if none are taught. When every
+ * chapters it draws from, and the ids of its questions, or null if none are taught. When every
  * chapter with questions is taught, the pool has no chapter filter.
  */
 export function mixedReview(
-  questions: { chapter: number }[],
+  questions: PresetQuestion[],
   taught: ReadonlySet<number>,
-): { pool: Pool; chapters: number[]; count: number } | null {
+): { pool: Pool; chapters: number[]; ids: string[] } | null {
   const withQuestions = [...new Set(questions.map((q) => q.chapter))].sort((a, b) => a - b);
   const chapters = withQuestions.filter((n) => taught.has(n));
   if (chapters.length === 0) return null;
-  const count = questions.filter((q) => taught.has(q.chapter)).length;
-  return { pool: chapters.length === withQuestions.length ? {} : { chapters }, chapters, count };
+  const ids = questions.filter((q) => taught.has(q.chapter)).map((q) => q.id);
+  return { pool: chapters.length === withQuestions.length ? {} : { chapters }, chapters, ids };
+}
+
+/** The same questions, in any order. */
+function samePool(a: readonly string[], b: readonly string[]): boolean {
+  const set = new Set(a);
+  return set.size === new Set(b).size && b.every((id) => set.has(id));
 }
 
 /**
  * The quick starts: the latest class test with questions, and a mixed review of the chapters the
- * class has reached when that isn't the same pool. Each starts like a practice link elsewhere on
- * the site (links.ts). `tests` are latest first, each with how many questions it has.
+ * class has reached unless it has exactly the test's questions. Each starts like a practice link
+ * elsewhere on the site (links.ts). `tests` are latest first, each with the ids of its questions.
  */
 export function quickStarts(
-  tests: { id: string; title: string; count: number }[],
-  questions: { chapter: number }[],
+  tests: { id: string; title: string; questions: string[] }[],
+  questions: PresetQuestion[],
   taught: ReadonlySet<number>,
 ): Preset[] {
   const presets: Preset[] = [];
-  const latest = tests.find((t) => t.count > 0);
+  const latest = tests.find((t) => t.questions.length > 0);
   if (latest) {
-    const { start, all } = practiceStarts({ test: latest.id }, latest.count);
+    const count = latest.questions.length;
+    const { start, all } = practiceStarts({ test: latest.id }, count);
     presets.push({
       label: latest.title,
       filters: start.filters,
-      note: all ? `${start.short} from its ${plural(latest.count, 'question')}` : `All ${plural(latest.count, 'question')}, in order`,
+      note: all ? `${start.short} from its ${plural(count, 'question')}` : `All ${plural(count, 'question')}, in order`,
       ...(all && { alt: { label: all.label, filters: all.filters } }),
     });
   }
   const mixed = mixedReview(questions, taught);
-  if (mixed && mixed.count !== latest?.count) {
+  if (mixed && !(latest && samePool(mixed.ids, latest.questions))) {
+    const count = mixed.ids.length;
     const where = chapterRange(mixed.chapters, { nbsp: true });
-    const { start, all } = practiceStarts(mixed.pool, mixed.count);
+    const { start, all } = practiceStarts(mixed.pool, count);
     presets.push({
       label: 'Mixed review',
       filters: start.filters,
-      note: all ? `${start.short} from the ${mixed.count} questions in ${where}` : `All ${plural(mixed.count, 'question')} in ${where}, in order`,
+      note: all ? `${start.short} from the ${count} questions in ${where}` : `All ${plural(count, 'question')} in ${where}, in order`,
     });
   }
   return presets;

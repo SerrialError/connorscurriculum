@@ -2,13 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { mixedReview, quickStarts } from './presets';
 import { filtersToQuery } from './url';
 
+/** Questions with ids q0, q1, … in these chapters. */
+const inChapters = (...chapters: number[]) => chapters.map((chapter, i) => ({ id: `q${i}`, chapter }));
+
 describe('mixedReview', () => {
-  const qs = [{ chapter: 6 }, { chapter: 6 }, { chapter: 7 }, { chapter: 14 }];
+  const qs = inChapters(6, 6, 7, 14);
   it('draws only from taught chapters', () => {
-    expect(mixedReview(qs, new Set([1, 6, 7, 8]))).toEqual({ pool: { chapters: [6, 7] }, chapters: [6, 7], count: 3 });
+    expect(mixedReview(qs, new Set([1, 6, 7, 8]))).toEqual({ pool: { chapters: [6, 7] }, chapters: [6, 7], ids: ['q0', 'q1', 'q2'] });
   });
   it('needs no chapter filter when every chapter with questions is taught', () => {
-    expect(mixedReview(qs, new Set([6, 7, 14]))).toEqual({ pool: {}, chapters: [6, 7, 14], count: 4 });
+    expect(mixedReview(qs, new Set([6, 7, 14]))).toEqual({ pool: {}, chapters: [6, 7, 14], ids: ['q0', 'q1', 'q2', 'q3'] });
   });
   it('is null when nothing with questions is taught', () => {
     expect(mixedReview(qs, new Set([1]))).toBeNull();
@@ -16,8 +19,9 @@ describe('mixedReview', () => {
 });
 
 describe('quickStarts', () => {
-  const qs = [{ chapter: 6 }, { chapter: 7 }, { chapter: 8 }];
-  const many = { id: 'ch6-7-test', title: 'Chapters 6–7 Test', count: 116 };
+  const qs = inChapters(6, 7, 8);
+  /** A test with `n` questions (ids t0, t1, …). */
+  const test = (n: number, ids = Array.from({ length: n }, (_, i) => `t${i}`)) => ({ id: 'ch6-7-test', title: 'Chapters 6–7 Test', questions: ids });
   /** A preset with its filters written as practice queries, for reading. */
   const asQueries = (p: ReturnType<typeof quickStarts>[number]) => ({
     label: p.label,
@@ -27,8 +31,8 @@ describe('quickStarts', () => {
   });
 
   it('offers the latest test with questions, as 10 random or all in order', () => {
-    const [test] = quickStarts([{ id: 'ch8-test', title: 'Ch. 8 Test', count: 0 }, many], qs, new Set([6, 7]));
-    expect(asQueries(test!)).toEqual({
+    const [first] = quickStarts([{ id: 'ch8-test', title: 'Ch. 8 Test', questions: [] }, test(116)], qs, new Set([6, 7]));
+    expect(asQueries(first!)).toEqual({
       label: 'Chapters 6–7 Test',
       query: '?test=ch6-7-test',
       note: '10 random from its 116 questions',
@@ -37,20 +41,23 @@ describe('quickStarts', () => {
   });
 
   it('starts a short test all in order, with no second way', () => {
-    const [test] = quickStarts([{ ...many, count: 8 }], qs, new Set([6, 7]));
-    expect(asQueries(test!)).toEqual({ label: 'Chapters 6–7 Test', query: '?test=ch6-7-test&mode=all&n=all', note: 'All 8 questions, in order' });
+    const [first] = quickStarts([test(8)], qs, new Set([6, 7]));
+    expect(asQueries(first!)).toEqual({ label: 'Chapters 6–7 Test', query: '?test=ch6-7-test&mode=all&n=all', note: 'All 8 questions, in order' });
   });
 
-  it('adds a mixed review only when its pool differs from the test', () => {
-    expect(quickStarts([{ ...many, count: 2 }], qs, new Set([6, 7])).map((p) => p.label)).toEqual(['Chapters 6–7 Test']);
-    const presets = quickStarts([{ ...many, count: 1 }], qs, new Set([6, 7]));
-    expect(asQueries(presets[1]!)).toEqual({ label: 'Mixed review', query: '?chapter=6,7&mode=all&n=all', note: 'All 2 questions in Ch. 6–7, in order' });
+  it('adds a mixed review only when its questions differ from the test', () => {
+    // The test is exactly the taught chapters' questions (in another order): no mixed review.
+    expect(quickStarts([test(2, ['q1', 'q0'])], qs, new Set([6, 7])).map((p) => p.label)).toEqual(['Chapters 6–7 Test']);
+    // Same size, different questions: both.
+    const presets = quickStarts([test(2, ['q0', 'q2'])], qs, new Set([6, 7]));
+    expect(presets.map((p) => p.label)).toEqual(['Chapters 6–7 Test', 'Mixed review']);
+    expect(asQueries(presets[1]!)).toEqual({ label: 'Mixed review', query: '?chapter=6,7&mode=all&n=all', note: 'All 2 questions in Ch.\u00a06–7, in order' });
     expect(quickStarts([], qs, new Set()).length).toBe(0);
   });
 
   it('starts a big mixed review as 10 random', () => {
-    const big = Array.from({ length: 30 }, (_, i) => ({ chapter: 6 + (i % 3) }));
+    const big = inChapters(...Array.from({ length: 30 }, (_, i) => 6 + (i % 3)));
     const [mixed] = quickStarts([], big, new Set([6, 7]));
-    expect(asQueries(mixed!)).toEqual({ label: 'Mixed review', query: '?chapter=6,7', note: '10 random from the 20 questions in Ch. 6–7' });
+    expect(asQueries(mixed!)).toEqual({ label: 'Mixed review', query: '?chapter=6,7', note: '10 random from the 20 questions in Ch.\u00a06–7' });
   });
 });

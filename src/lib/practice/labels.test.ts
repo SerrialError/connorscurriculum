@@ -17,6 +17,8 @@ describe('naming a set', () => {
   it('lists the other filters, and says "All questions" when there are none', () => {
     expect(describeScope(parseFilters('?chapter=7,6&difficulty=3,1&type=mcq'), tests)).toBe('Ch. 6–7 · Easy, Hard · Multiple choice');
     expect(describeScope(parseFilters(`?unit=1,${CLASS_ONLY_UNIT}&topic=1.7`), tests)).toBe('Unit 1, Not on the AP exam · Topic 1.7');
+    // A test the class no longer has is never named by its id.
+    expect(describeScope(parseFilters('?test=old-test-id'), tests)).toBe('Class test');
     expect(describeSet(parseFilters('?mode=random&n=5'), tests, 3, 3)).toBe('All questions · all 3, shuffled');
   });
   it('names the default pool when later chapters are left out', () => {

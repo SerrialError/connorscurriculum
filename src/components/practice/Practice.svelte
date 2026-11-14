@@ -111,7 +111,7 @@
     const spec = parseSet(location.search);
     const isOpen = !!spec?.seed && spec.seed === set.id && attempt.questions.length > 0;
     // A link with filters the class doesn't have opens the setup screen without them (showSetup says so).
-    const fits = !spec || checked(spec.filters).unknown.length === 0;
+    const fits = !spec || checked(spec.filters).unknown === null;
     const opened = isOpen || (spec ? fits && openSet(spec, hasBadSeed(location.search)) : !!current && openSaved(current.set));
     const landed = land(location.search, current, opened ? set : null);
     navigate(landed.steps);
@@ -215,7 +215,7 @@
   function showSetup(problem: LinkProblem | null = null) {
     const { filters: known, unknown } = checked(parseFilters(location.search));
     filters = known;
-    notice = unknown.length ? linkNotice({ kind: 'unknown', values: unknown }) : problem ? linkNotice(problem) : '';
+    notice = unknown ? linkNotice({ kind: 'unknown', ...unknown }) : problem ? linkNotice(problem) : '';
     reviewing = false;
     phase = 'setup';
     resumable = findResumable(savedSets());

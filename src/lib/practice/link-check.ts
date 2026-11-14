@@ -15,11 +15,16 @@ export interface KnownValues {
   questions: Pick<PracticeQuestion, 'sections'>[];
 }
 
-/**
- * The filters with every value the class doesn't have left out, and the names of those values
- * as their filter chips say them ("Ch. 99", "Topic 9.9").
- */
-export function knownFilters(f: Filters, known: KnownValues): { filters: Filters; unknown: string[] } {
+/** Filter values a link asked for that the class doesn't have. */
+export interface UnknownValues {
+  /** As their filter chips say them ("Ch. 99", "Topic 9.9"). */
+  values: string[];
+  /** The link named a class test that isn't on the site (its id is no name to show). */
+  test: boolean;
+}
+
+/** The filters with every value the class doesn't have left out, and what was left out (null: nothing). */
+export function knownFilters(f: Filters, known: KnownValues): { filters: Filters; unknown: UnknownValues | null } {
   const sections = new Set(known.questions.flatMap((q) => q.sections));
   const units = new Set([...known.units.map((u) => u.id), ...(known.units.length ? [CLASS_ONLY_UNIT] : [])]);
   const topics = new Set(known.units.flatMap((u) => u.topics.map((t) => t.id)));
@@ -31,17 +36,18 @@ export function knownFilters(f: Filters, known: KnownValues): { filters: Filters
     units: f.units.filter((u) => units.has(u)),
     topics: f.topics.filter((t) => topics.has(t)),
   };
-  const kept = new Set(filterChips(filters, known.tests, []).map((c) => c.label));
-  const unknown = filterChips(f, known.tests, [])
-    .map((c) => c.label)
-    .filter((l) => !kept.has(l));
-  return { filters, unknown };
+  // Compared without the test: an unknown test's chip would be its id.
+  const labels = (x: Filters) => filterChips({ ...x, test: null }, known.tests, []).map((c) => c.label);
+  const kept = new Set(labels(filters));
+  const values = labels(f).filter((l) => !kept.has(l));
+  const test = f.test !== null && filters.test === null;
+  return { filters, unknown: values.length || test ? { values, test } : null };
 }
 
 /** Why a practice link didn't open the set it names. */
 export type LinkProblem =
-  /** Filter values the class doesn't have, left out (their chip names). */
-  | { kind: 'unknown'; values: string[] }
+  /** Filter values the class doesn't have, left out. */
+  | ({ kind: 'unknown' } & UnknownValues)
   /** A set of exact questions (?ids=), none of which exist any more; `filtered`: it came from narrowing filters. */
   | { kind: 'gone'; filtered: boolean }
   /** The link's filters match no questions. */
@@ -50,8 +56,12 @@ export type LinkProblem =
 /** The line the setup screen shows about a link that didn't open. */
 export function linkNotice(p: LinkProblem): string {
   if (p.kind === 'unknown') {
-    const one = p.values.length === 1;
-    return `That link asked for ${p.values.join(', ')}, which this class doesn't have, so ${one ? 'it was' : 'they were'} left out.`;
+    const asked = [
+      p.values.length > 0 && `${p.values.join(', ')}, which this class doesn't have`,
+      p.test && "a class test that isn't on the site any more",
+    ].filter(Boolean);
+    const one = p.values.length + Number(p.test) === 1;
+    return `That link asked for ${asked.join(', and ')}, so ${one ? 'it was' : 'they were'} left out.`;
   }
   if (p.kind === 'gone') return `That set's questions aren't on the site any more.${p.filtered ? ' Here are the filters it was made from.' : ''}`;
   return 'No questions match that link. Remove a filter below to start a set.';

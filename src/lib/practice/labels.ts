@@ -15,6 +15,9 @@ export const STATUS_MARK: Record<ScoreStatus, string> = { todo: '', right: '✓'
 /** "§7.2", "§7.3, §7.4" */
 const sectionLabel = (sections: string[]): string => [...sections].sort(byId).map((s) => `§${s}`).join(', ');
 
+/** A class test's name, or plain words for one the class doesn't have (never its id). */
+const testLabel = (id: string, tests: PracticeTest[]): string => tests.find((t) => t.id === id)?.title ?? 'Class test';
+
 const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
 
 /**
@@ -41,7 +44,7 @@ export function describeScope(f: Filters, tests: PracticeTest[], everything = AL
   const parts: string[] = [];
   // "Ch. 6–7 · Hard": name the default pool unless a chapter, section, test, unit, or topic already says where from.
   if (!f.test && !f.chapters.length && !f.sections.length && !f.units.length && !f.topics.length && everything !== ALL_QUESTIONS) parts.push(everything);
-  if (f.test) parts.push(tests.find((t) => t.id === f.test)?.title ?? f.test);
+  if (f.test) parts.push(testLabel(f.test, tests));
   if (f.chapters.length) parts.push(chapterRange(f.chapters));
   if (f.sections.length) parts.push(sectionLabel(f.sections));
   const units = f.units.map(unitLabel);
@@ -103,7 +106,7 @@ export function filterChips(f: Filters, tests: PracticeTest[], laterChapters: nu
   const add = (label: string, more: boolean, patch: Partial<Filters>) => out.push({ label, more, without: { ...f, ...patch } });
   for (const n of f.chapters) add(`Ch. ${n}`, laterChapters.includes(n), { chapters: f.chapters.filter((x) => x !== n) });
   for (const s of f.sections) add(sectionLabel([s]), false, { sections: f.sections.filter((x) => x !== s) });
-  if (f.test) add(tests.find((t) => t.id === f.test)?.title ?? f.test, true, { test: null });
+  if (f.test) add(testLabel(f.test, tests), true, { test: null });
   for (const u of f.units) add(unitLabel(u), true, { units: f.units.filter((x) => x !== u) });
   for (const t of f.topics) add(`Topic ${t}`, true, { topics: f.topics.filter((x) => x !== t) });
   for (const d of f.difficulty) add(DIFFICULTY_LABELS[d]!, false, { difficulty: f.difficulty.filter((x) => x !== d) });

@@ -256,9 +256,12 @@
   </details>
 
   <!-- Sticky, so Start is always in reach. On phones it is one short row: the count and Start. -->
-  <div class="start-bar">
+  <!-- With nothing matching, the picked filters show at every width, each with its remove button. -->
+  <div class="start-bar" class:none={matching.length === 0}>
     <div class="start-info" aria-live="polite">
-      {#if matching.length === 0}
+      {#if matching.length === 0 && chips.length === 0}
+        <strong>No practice questions yet.</strong>
+      {:else if matching.length === 0}
         <strong>No questions match.</strong>
         <span class="small muted sub">Remove a filter.</span>
       {:else}
@@ -493,6 +496,13 @@
       min-width: 0;
       min-height: 2.75rem;
       padding-inline: 1.1rem;
+    }
+    .start-bar.none:has(.active-chips) {
+      grid-template-areas: 'info start' 'chips chips';
+      padding-bottom: 0.6rem;
+    }
+    .start-bar.none .active-chips {
+      display: flex;
     }
   }
 </style>

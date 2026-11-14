@@ -72,6 +72,12 @@ export function wantsStart(search: string): boolean {
 /** A set's seed as it may appear in an address or in storage. */
 export const isSeed = (s: unknown): s is string => typeof s === 'string' && /^[a-z0-9]{1,16}$/i.test(s);
 
+/** The address has a seed, but not one isSeed accepts (a link cut short or mistyped). */
+export function hasBadSeed(search: string): boolean {
+  const seed = new URLSearchParams(search).get('seed');
+  return seed !== null && !isSeed(seed);
+}
+
 export interface SetSpec {
   filters: Filters;
   /** Null for a link that asks to start a set (?start=1) but has no seed yet. */

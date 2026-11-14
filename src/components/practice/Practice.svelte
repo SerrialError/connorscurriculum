@@ -6,12 +6,13 @@
   import { matchFrqs } from '../../lib/frqs';
   import { emptyFilters, filterQuestions, filterTopics, sessionSize } from '../../lib/practice/filters';
   import { WEAK_NO_HISTORY_NOTE, describeScope, describeSet } from '../../lib/practice/labels';
+  import { type LinkProblem, RESHUFFLED_NOTE, knownFilters, linkNotice, missingNote } from '../../lib/practice/link-check';
   import { type Entry, type Step, land, readEntry, startSet, syncSetup, toResults, toReview, toSetup } from '../../lib/practice/nav';
   import { type SavedSet, answeredIn, readSavedSets, resumable as findResumable, withSaved } from '../../lib/practice/saved';
   import { amendLastResult, recordResult, weakHasNoHistory, weakTopics } from '../../lib/practice/score';
   import { newSeed, questionsForSet } from '../../lib/practice/select';
   import type { Filters, History, PracticeQuestion } from '../../lib/practice/types';
-  import { type SetSpec, filtersToQuery, parseFilters, parseSet, setToQuery, setupQuery, topicQuery } from '../../lib/practice/url';
+  import { type SetSpec, filtersToQuery, hasBadSeed, parseFilters, parseSet, setToQuery, setupQuery, topicQuery } from '../../lib/practice/url';
   import { readJson, storageKey, writeJson } from '../../lib/storage';
   import { plural } from '../../lib/text';
   import { Attempt } from './attempt.svelte';
@@ -41,12 +42,16 @@
   let set = $state({ query: '', id: '', label: '', note: '' });
   /** Reviewing a question from the results screen: Back (and "Back to results") return there. */
   let reviewing = $state(false);
+  /** Why the practice link this page was opened with didn't open its set (link-check.ts). */
+  let notice = $state('');
 
   const setFilters = $derived(parseFilters(set.query));
   const setFrqTopics = $derived(filterTopics(setFilters, course.units, course.chapterTopics, tests));
   const weakSpots = $derived(all ? weakTopics(filterQuestions(all, emptyFilters(), tests), history) : []);
   /** How many questions a set with filters `f` would have. */
   const sizeOf = (f: Filters) => sessionSize(filterQuestions(all!, f, tests).length, f);
+  /** `f` checked against what this class has. */
+  const checked = (f: Filters) => knownFilters(f, { chapters: course.chapters.map((c) => c.number), tests, units: course.units, questions: all! });
 
   const entry = (): Entry => readEntry(window.history.state);
 
@@ -106,26 +111,32 @@
     const current = entry();
     const spec = parseSet(location.search);
     const isOpen = !!spec?.seed && spec.seed === set.id && attempt.questions.length > 0;
-    const opened = isOpen || (spec ? openSet(spec) : !!current && openSaved(current.set));
+    // A link with filters the class doesn't have opens the setup screen without them (showSetup says so).
+    const fits = !spec || checked(spec.filters).unknown.length === 0;
+    const opened = isOpen || (spec ? fits && openSet(spec, hasBadSeed(location.search)) : !!current && openSaved(current.set));
     const landed = land(location.search, current, opened ? set : null);
     navigate(landed.steps);
     if (landed.entry) {
       reviewing = !!landed.entry.reviewing;
       phase = landed.entry.phase;
     } else {
-      showSetup();
+      showSetup(spec && fits ? { kind: spec.ids ? 'gone' : 'empty' } : null);
     }
   }
 
   const savedSets = () => (all ? readSavedSets(readJson<unknown>(savedKey, null), new Set(all.map((q) => q.id))) : []);
 
-  /** Open a set from its address: the saved attempt with that seed, or a new one built from it. */
-  function openSet(spec: SetSpec): boolean {
+  /**
+   * Open a set from its address: the saved attempt with that seed, or a new one built from it.
+   * `badSeed`: the address's seed was damaged, so a new set's questions aren't the ones shared.
+   */
+  function openSet(spec: SetSpec, badSeed: boolean): boolean {
     if (spec.seed && openSaved(spec.seed, setToQuery(spec))) return true;
     const full = { ...spec, seed: spec.seed ?? newSeed() };
     const questions = questionsForSet(all!, full, tests, history);
     if (questions.length === 0) return false;
     loadSet(full, questions);
+    if (badSeed && !spec.ids) set.note = RESHUFFLED_NOTE;
     return true;
   }
 
@@ -156,10 +167,19 @@
         (spec.ids
           ? `${describeScope(spec.filters, tests, everything)} · ${plural(questions.length, 'chosen question')}`
           : describeSet(spec.filters, tests, questions.length, pool.length, everything)),
-      note: !spec.ids && spec.filters.mode === 'weak' && weakHasNoHistory(pool, history) ? WEAK_NO_HISTORY_NOTE : '',
+      note: setNote(spec, questions.length, pool),
     };
     resumable = null;
     reviewing = false;
+  }
+
+  /** The line shown with a new set: questions missing from a shared set, or why "weakest first" is random. */
+  function setNote(spec: SetSpec, found: number, pool: PracticeQuestion[]): string {
+    if (spec.ids) {
+      const asked = new Set(spec.ids).size;
+      return found < asked ? missingNote(asked, found) : '';
+    }
+    return spec.filters.mode === 'weak' && weakHasNoHistory(pool, history) ? WEAK_NO_HISTORY_NOTE : '';
   }
 
   /** Start a new set from filters `f` (and, for a retry, exact questions). */
@@ -168,6 +188,7 @@
     const questions = questionsForSet(all!, spec, tests, history);
     if (questions.length === 0) return;
     if (phase === 'setup') filters = f;
+    notice = '';
     loadSet(spec, questions, label);
     navigate(startSet(phase, entry(), filtersToQuery(f), set));
     phase = 'session';
@@ -191,8 +212,11 @@
     resumable = null;
   }
 
-  function showSetup() {
-    filters = parseFilters(location.search);
+  /** The setup screen for the address's filters, saying why if the link (`problem`) didn't open its set. */
+  function showSetup(problem: LinkProblem | null = null) {
+    const { filters: known, unknown } = checked(parseFilters(location.search));
+    filters = known;
+    notice = unknown.length ? linkNotice({ kind: 'unknown', values: unknown }) : problem ? linkNotice(problem) : '';
     reviewing = false;
     phase = 'setup';
     resumable = findResumable(savedSets());
@@ -233,6 +257,9 @@
 {:else if !all}
   <p class="muted" aria-live="polite">Loading questions…</p>
 {:else if phase === 'setup'}
+  {#if notice}
+    <p class="notice link-notice" role="status">{notice}</p>
+  {/if}
   {#if resumable}
     {@const r = resumable}
     <section class="card resume" aria-label="Unfinished set">

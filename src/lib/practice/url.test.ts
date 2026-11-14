@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emptyFilters, isDefaultFilters } from './filters';
-import { filtersToQuery, isSeed, parseFilters, parseSet, setToQuery, setupQuery, topicQuery, wantsStart } from './url';
+import { filtersToQuery, hasBadSeed, isSeed, parseFilters, parseSet, setToQuery, setupQuery, topicQuery, wantsStart } from './url';
 
 describe('URL filters', () => {
   it('round-trips through the query string', () => {
@@ -116,5 +116,14 @@ describe('a set in the URL', () => {
 describe('topicQuery', () => {
   it('links a topic to its practice filters', () => {
     expect(topicQuery('1.7')).toBe('?topic=1.7');
+  });
+});
+
+describe('hasBadSeed', () => {
+  it('spots a seed that is there but unusable', () => {
+    expect(hasBadSeed('?start=1&seed=k3x9a0')).toBe(false);
+    expect(hasBadSeed('?start=1')).toBe(false);
+    expect(hasBadSeed('?start=1&seed=')).toBe(true);
+    expect(hasBadSeed('?start=1&seed=not!a-seed')).toBe(true);
   });
 });

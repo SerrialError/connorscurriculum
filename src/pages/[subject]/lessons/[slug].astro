@@ -113,6 +113,13 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
         {[lesson.data.sections.length > 0 && `Textbook §${lesson.data.sections.join(', §')}`, byLine].filter(Boolean).join(' · ')}
       </p>
     )}
+    {/* Said here rather than in every notes file, and kept out of search excerpts. */}
+    {lesson.data.kind === 'notes' && (
+      <p class="small muted notes-note" data-pagefind-ignore>
+        A classmate's notes, with the wording kept as close to the original as possible. Where something needed fixing,
+        there's a <strong>Correction</strong> box right below it.
+      </p>
+    )}
     {(sample || ahead) && (
       <p class="sample-note" data-pagefind-ignore>
         <strong>{sample ? 'Sample page, not class material.' : 'Not taught yet.'}</strong>{' '}
@@ -310,7 +317,8 @@ const testPractice = test && testQuestions ? testPracticeLinks(subject, test.id,
     border-radius: var(--radius);
     background: #fff;
   }
-  .byline {
+  .byline,
+  .notes-note {
     margin: 0.4rem 0 0;
   }
   .sample-note {

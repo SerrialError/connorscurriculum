@@ -85,6 +85,9 @@ Worked solution, hidden until clicked.
 ```
 
 `Callout`, `Reveal`, and `YouTube` are available in every lesson without importing them.
+A `kind: notes` page gets a note at the top saying it's a classmate's notes with the wording kept,
+and that fixes are in **Correction** boxes, so the file doesn't need one. Mark a fix with
+`<Callout type="warning">**Correction:** …</Callout>` right below the line it corrects.
 `\ce{...}` (mhchem) works anywhere math works.
 
 Every lesson shows up on the **Lessons** page (`/<subject>/lessons/`), grouped by chapter, and on its

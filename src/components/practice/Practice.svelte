@@ -4,15 +4,16 @@
   // lib/practice/nav.ts; this component opens sets, keeps them saved, and applies those steps.
   import { onMount } from 'svelte';
   import { matchFrqs } from '../../lib/frqs';
-  import { emptyFilters, filterQuestions, filterTopics, sessionSize } from '../../lib/practice/filters';
+  import { emptyFilters, filterQuestions, filterTopics } from '../../lib/practice/filters';
   import { WEAK_NO_HISTORY_NOTE, describeScope, describeSet } from '../../lib/practice/labels';
+  import { practiceStarts } from '../../lib/practice/links';
   import { type LinkProblem, RESHUFFLED_NOTE, knownFilters, linkNotice, missingNote } from '../../lib/practice/link-check';
   import { type Entry, type Step, land, readEntry, startSet, syncSetup, toResults, toReview, toSetup } from '../../lib/practice/nav';
   import { type SavedSet, answeredIn, readSavedSets, resumable as findResumable, withSaved } from '../../lib/practice/saved';
   import { amendLastResult, recordResult, weakHasNoHistory, weakTopics } from '../../lib/practice/score';
   import { newSeed, questionsForSet } from '../../lib/practice/select';
   import type { Filters, History, PracticeQuestion } from '../../lib/practice/types';
-  import { type SetSpec, filtersToQuery, hasBadSeed, parseFilters, parseSet, setToQuery, setupQuery, topicQuery } from '../../lib/practice/url';
+  import { type SetSpec, filtersToQuery, hasBadSeed, parseFilters, parseSet, setToQuery, setupQuery } from '../../lib/practice/url';
   import { readJson, storageKey, writeJson } from '../../lib/storage';
   import { plural } from '../../lib/text';
   import { Attempt } from './attempt.svelte';
@@ -48,8 +49,6 @@
   const setFilters = $derived(parseFilters(set.query));
   const setFrqTopics = $derived(filterTopics(setFilters, course.units, course.chapterTopics, tests));
   const weakSpots = $derived(all ? weakTopics(filterQuestions(all, emptyFilters(), tests), history) : []);
-  /** How many questions a set with filters `f` would have. */
-  const sizeOf = (f: Filters) => sessionSize(filterQuestions(all!, f, tests).length, f);
   /** `f` checked against what this class has. */
   const checked = (f: Filters) => knownFilters(f, { chapters: course.chapters.map((c) => c.number), tests, units: course.units, questions: all! });
 
@@ -246,6 +245,12 @@
     writeJson(historyKey, history);
   }
 
+  /** A topic's set from "Topics to work on", started like a topic's link elsewhere on the site. */
+  function topicStart(topic: string) {
+    const pool = { topics: [topic] };
+    return practiceStarts(pool, filterQuestions(all!, { ...emptyFilters(), ...pool }, tests).length).start;
+  }
+
   function clearHistory() {
     history = {};
     writeJson(historyKey, {});
@@ -279,8 +284,8 @@
     <PracticeHistory
       count={Object.keys(history).length}
       {weakSpots}
-      size={(topic) => sizeOf(parseFilters(topicQuery(topic)))}
-      onstart={(topic) => begin(parseFilters(topicQuery(topic)))}
+      {topicStart}
+      onstart={(f) => begin(f)}
       onclear={() => clearHistory()}
     />
   {/if}

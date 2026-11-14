@@ -60,9 +60,6 @@ const toSearch = (p: URLSearchParams) => {
   return s ? `?${s}` : '';
 };
 
-/** Practice filters for one AP topic. */
-export const topicQuery = (topic: string): string => filtersToQuery({ ...emptyFilters(), topics: [topic] });
-
 /** `?start=1` on a practice link starts the set right away instead of showing the setup screen. */
 export function wantsStart(search: string): boolean {
   const v = new URLSearchParams(search).get('start');

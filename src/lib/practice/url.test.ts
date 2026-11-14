@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emptyFilters, isDefaultFilters } from './filters';
-import { filtersToQuery, hasBadSeed, isSeed, parseFilters, parseSet, setToQuery, setupQuery, topicQuery, wantsStart } from './url';
+import { filtersToQuery, hasBadSeed, isSeed, parseFilters, parseSet, setToQuery, setupQuery, wantsStart } from './url';
 
 describe('URL filters', () => {
   it('round-trips through the query string', () => {
@@ -110,12 +110,6 @@ describe('a set in the URL', () => {
     expect(isSeed('')).toBe(false);
     expect(isSeed('a'.repeat(17))).toBe(false);
     expect(isSeed(42)).toBe(false);
-  });
-});
-
-describe('topicQuery', () => {
-  it('links a topic to its practice filters', () => {
-    expect(topicQuery('1.7')).toBe('?topic=1.7');
   });
 });
 

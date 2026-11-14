@@ -1,6 +1,8 @@
 <script lang="ts">
   // "Your practice history": how much has been answered on this device, the weakest topics with a
   // one-tap set for each, and clearing it all (with a confirmation).
+  import type { PracticeStart } from '../../lib/practice/links';
+  import type { Filters } from '../../lib/practice/types';
   import { plural } from '../../lib/text';
   import { getCourse } from './context';
 
@@ -9,13 +11,13 @@
     count: number;
     /** [topic id, recent accuracy 0–1], weakest first. */
     weakSpots: [string, number][];
-    /** How many questions a set on this topic would have. */
-    size: (topic: string) => number;
-    onstart: (topic: string) => void;
+    /** The set to start on a topic, as practice links elsewhere start it. */
+    topicStart: (topic: string) => PracticeStart;
+    onstart: (f: Filters) => void;
     onclear: () => void;
   }
 
-  let { count, weakSpots, size, onstart, onclear }: Props = $props();
+  let { count, weakSpots, topicStart, onstart, onclear }: Props = $props();
   const { hrefs, topicLabel } = getCourse();
   let confirming = $state(false);
 </script>
@@ -29,11 +31,12 @@
   {#if weakSpots.length > 0}
     <ul class="plain-list weak">
       {#each weakSpots as [topic, acc] (topic)}
+        {@const start = topicStart(topic)}
         <li>
           <a class="w-topic" href={`${hrefs.topics}${topic}/`}>{topicLabel(topic)}</a>
           <span class="small muted">{Math.round(acc * 100)}% recently</span>
-          <button type="button" class="link-button small" onclick={() => onstart(topic)}>
-            Start {plural(size(topic), 'question')}<span class="visually-hidden"> on {topicLabel(topic)}</span> →
+          <button type="button" class="link-button small" onclick={() => onstart(start.filters)}>
+            {start.label}<span class="visually-hidden"> on {topicLabel(topic)}</span> →
           </button>
         </li>
       {/each}

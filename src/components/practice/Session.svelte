@@ -247,7 +247,10 @@
             <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
             <button class="button" type="button" disabled={!attempt.picks[q.id]} onclick={() => check(q)}>Check answer</button>
           {:else if q.type === 'frq' && !attempt.finished[q.id]}
-            <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
+            <!-- No Skip once any scoring is showing: the answers are in view, so the way on is to mark them. -->
+            {#if !attempt.anyShown(q)}
+              <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
+            {/if}
             <!-- One button, so focus stays put when "Show all scoring" turns into "Done marking". -->
             <button class="button" type="button" onclick={() => (attempt.allShown(q) ? finish(q) : q.parts.forEach((_, p) => attempt.reveal(q, p)))}>
               {#if attempt.allShown(q)}

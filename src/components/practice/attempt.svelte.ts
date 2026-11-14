@@ -91,6 +91,7 @@ export class Attempt {
     this.marks[q.id]![part]![point] = value;
   }
 
+  anyShown = (q: FrqQuestion) => !!this.revealed[q.id]?.some(Boolean);
   allShown = (q: FrqQuestion) => q.parts.every((_, p) => this.revealed[q.id]?.[p]);
   earned = (q: FrqQuestion) => frqEarned(q, this.marks[q.id] ?? []);
 }

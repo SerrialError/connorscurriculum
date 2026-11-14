@@ -68,11 +68,8 @@ export function describeSet(f: Filters, tests: PracticeTest[], size: number, mat
  * them (FRQs), "missed" would be wrong, so they are "without full marks".
  */
 export function retryWords(scores: number[]): { button: string; set: string } {
-  const n = scores.length;
-  if (scores.some((s) => s > 0)) {
-    return { button: `Retry the ${n} without full marks`, set: `retrying the ${n} without full marks` };
-  }
-  return { button: `Retry the ${n} I missed`, set: `retrying the ${n} you missed` };
+  const which = `the ${scores.length} ${scores.some((s) => s > 0) ? 'without full marks' : 'missed'}`;
+  return { button: `Retry ${which}`, set: `retrying ${which}` };
 }
 
 /**

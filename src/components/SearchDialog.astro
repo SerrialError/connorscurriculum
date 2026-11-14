@@ -23,6 +23,8 @@ const { title, subject, placeholder } = Astro.props;
 </dialog>
 
 <script>
+  import { isTypingTarget } from '../lib/keyboard';
+
   const dialog = document.querySelector<HTMLDialogElement>('.search-dialog')!;
   const input = dialog.querySelector<HTMLInputElement>('input')!;
   const openButton = document.querySelector<HTMLButtonElement>('.search-open')!;
@@ -65,8 +67,7 @@ const { title, subject, placeholder } = Astro.props;
   // "/" opens search, unless the user is typing somewhere.
   document.addEventListener('keydown', (e) => {
     if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
-    const t = e.target as HTMLElement;
-    if (t.closest('input, textarea, select, [contenteditable]')) return;
+    if (isTypingTarget(e.target as HTMLElement)) return;
     e.preventDefault();
     // A page with its own search box (home) uses it instead of the dialog.
     const inline = document.querySelector<HTMLInputElement>('main .search input');

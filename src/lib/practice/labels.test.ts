@@ -31,7 +31,7 @@ describe('naming a set', () => {
 
 describe('retryWords', () => {
   it('says "missed" when every question scored zero', () => {
-    expect(retryWords([0, 0, 0])).toEqual({ button: 'Retry the 3 I missed', set: 'retrying the 3 you missed' });
+    expect(retryWords([0, 0, 0])).toEqual({ button: 'Retry the 3 missed', set: 'retrying the 3 missed' });
   });
   it('says "without full marks" when any got partial credit', () => {
     expect(retryWords([0.5, 0.25, 0.8]).button).toBe('Retry the 3 without full marks');

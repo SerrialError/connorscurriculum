@@ -1,13 +1,14 @@
 <script lang="ts">
   // Answering a set, one question at a time.
   import { tick } from 'svelte';
+  import { isTypingTarget } from '../../lib/keyboard';
   import { DIFFICULTY_LABELS, TYPE_LABELS } from '../../lib/practice/labels';
   import { lessonsFor } from '../../lib/practice/lessons';
   import { frqTotal, isCorrect, scoreStatus } from '../../lib/practice/score';
   import type { FrqQuestion, McqQuestion } from '../../lib/practice/types';
-  import { plural } from '../../lib/text';
   import type { Attempt } from './attempt.svelte';
   import { getCourse } from './context';
+  import FrqParts from './FrqParts.svelte';
   import QuestionDot from './QuestionDot.svelte';
 
   interface Props {
@@ -25,7 +26,7 @@
   }
 
   let { attempt, label, note, reviewing, onfilters, onresults, onscore }: Props = $props();
-  const { lessons, hrefs, topicTitles } = getCourse();
+  const { lessons, hrefs, topicTitles, units } = getCourse();
 
   /** Sets longer than this keep the question grid closed until it's wanted. */
   const LONG_SET = 24;
@@ -115,7 +116,7 @@
     const q = attempt.current;
     if (!q || e.altKey || e.ctrlKey || e.metaKey) return;
     const el = e.target as HTMLElement;
-    if (el.closest('input[type="text"], input[type="number"], textarea, select, [contenteditable]')) return;
+    if (isTypingTarget(el)) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       if (e.shiftKey || !arrowsMoveQuestions(el)) return;
       e.preventDefault();
@@ -137,8 +138,9 @@
 
 <svelte:window onkeydown={onKey} />
 
-{#snippet studyThis(q: McqQuestion | FrqQuestion)}
+{#snippet explained(q: McqQuestion | FrqQuestion)}
   {@const found = lessonsFor(q, lessons)}
+  <div class="explanation" data-scroll-x="Explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
   {#if found.length > 0}
     <p class="study small">
       <span class="study-label">Study this in the lesson:</span>
@@ -183,8 +185,11 @@
           <h2 id="q-heading" tabindex="-1" bind:this={heading}>Question {attempt.index + 1} <span class="muted">of {total}</span></h2>
           <p class="q-meta small muted">
             {TYPE_LABELS[q.type]} · Ch. {q.chapter} ·
-            {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${hrefs.topics}${t}/`} title={topicTitles.get(t)}><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
-            · {DIFFICULTY_LABELS[q.difficulty]}
+            {#if units.length > 0}
+              {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${hrefs.topics}${t}/`} title={topicTitles.get(t)}><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
+              ·
+            {/if}
+            {DIFFICULTY_LABELS[q.difficulty]}
           </p>
         </header>
 
@@ -193,7 +198,7 @@
             <strong>Write your answers on paper first.</strong> Then show the scoring for each part and check every point you earned.
           </p>
         {/if}
-        <div class="prompt">{@html q.promptHtml}</div>
+        <div class="prompt" data-scroll-x="Question">{@html q.promptHtml}</div>
         {#if q.image}
           <img src={q.image.src} width={q.image.width} height={q.image.height} alt={q.image.alt} decoding="async" />
         {/if}
@@ -206,10 +211,10 @@
             {#each q.choices as c (c.id)}
               {@const isAnswer = done && c.id === q.answer}
               {@const isWrongPick = done && attempt.picks[q.id] === c.id && c.id !== q.answer}
-              <label class="choice" class:right={isAnswer} class:wrong={isWrongPick}>
+              <label class="option-row choice" class:right={isAnswer} class:wrong={isWrongPick}>
                 <input type="radio" name={`pick-${q.id}`} value={c.id} bind:group={attempt.picks[q.id]} />
                 <span class="letter" aria-hidden="true">{c.id.toUpperCase()}</span>
-                <span class="choice-text">{@html c.html}</span>
+                <span class="choice-text" data-scroll-x={`Choice ${c.id.toUpperCase()}`}>{@html c.html}</span>
                 {#if isAnswer}<span class="mark">✓ Correct answer</span>{/if}
                 {#if isWrongPick}<span class="mark">✗ Your answer</span>{/if}
               </label>
@@ -217,46 +222,18 @@
           </fieldset>
           {#if done}
             <p class="verdict" class:ok={right} role="status" bind:this={verdictEl}>
-              {right ? '✓ Correct' : `✗ Not quite. The answer is ${q.answer.toUpperCase()}.`}
+              {right ? '✓ Correct' : `✗ Incorrect. The answer is ${q.answer.toUpperCase()}.`}
             </p>
-            <div class="explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
-            {@render studyThis(q)}
+            {@render explained(q)}
           {/if}
         {:else}
-          {#each q.parts as part, p (part.label)}
-            <section class="frq-part">
-              <h3>({part.label}) <span class="small muted">{plural(part.points, 'pt')}</span></h3>
-              <div class="prompt">{@html part.promptHtml}</div>
-              {#if attempt.revealed[q.id]?.[p]}
-                <fieldset class="scoring">
-                  <legend class="small">Scoring: check each point you earned</legend>
-                  {#each part.scoringHtml as s, k (k)}
-                    <label class="point">
-                      <input type="checkbox" checked={!!attempt.marks[q.id]?.[p]?.[k]} onchange={(e) => setMark(q, p, k, e.currentTarget.checked)} />
-                      <span>{@html s}</span>
-                    </label>
-                  {/each}
-                </fieldset>
-              {:else}
-                <button class="button secondary small" type="button" onclick={() => attempt.reveal(q, p)}>Show scoring for ({part.label})</button>
-              {/if}
-            </section>
-          {/each}
+          <FrqParts {q} {attempt} onmark={(p, k, earned) => setMark(q, p, k, earned)} />
           {#if attempt.finished[q.id]}
             <p class="verdict ok" role="status" bind:this={verdictEl}>
               You earned {attempt.earned(q)} of {frqTotal(q)} points.
               <span class="small muted">You can still change your marks above.</span>
             </p>
-            <div class="explanation"><p class="explanation-h">Explanation</p>{@html q.explanationHtml}</div>
-            {@render studyThis(q)}
-          {:else}
-            <p class="small muted marking" aria-live="polite">
-              {#if attempt.allShown(q)}
-                Check every point you earned, then press <strong>Done marking</strong>.
-              {:else}
-                Scoring shown for {attempt.shownCount(q)} of {plural(q.parts.length, 'part')}. Show it for every part, then check the points you earned.
-              {/if}
-            </p>
+            {@render explained(q)}
           {/if}
         {/if}
 
@@ -303,7 +280,7 @@
   }
   .progress {
     height: 6px;
-    border-radius: 999px;
+    border-radius: var(--pill);
     background: var(--surface-2);
     overflow: hidden;
     margin-bottom: 0.75rem;
@@ -374,11 +351,14 @@
   .q-meta {
     margin: 0;
   }
+  /* Wide math scrolls sideways (ScrollCues makes the box focusable). KaTeX pokes a pixel or two
+     below the line, which should not make the box scroll up and down. */
   .prompt,
   .explanation,
   .choice-text {
     min-width: 0;
     overflow-x: auto;
+    overflow-y: hidden;
   }
   .prompt {
     font-size: 1.05rem;
@@ -400,35 +380,8 @@
     gap: 0.5rem;
     margin: 1rem 0;
   }
-  /* Answer choices and FRQ scoring points: rows you tap, outlined, tinted when picked. */
-  .choice,
-  .point {
-    position: relative;
-    display: flex;
-    gap: 0.65rem;
-    align-items: flex-start;
-    padding: 0.6rem 0.8rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface);
-    cursor: pointer;
-  }
   .choice {
     flex-wrap: wrap;
-  }
-  .choice:hover,
-  .point:hover {
-    border-color: var(--accent);
-  }
-  .choice:has(input:checked),
-  .point:has(input:checked) {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-  .choice:has(input:focus-visible),
-  .point:has(input:focus-visible) {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
   }
   .choices:disabled .choice {
     cursor: default;
@@ -480,8 +433,9 @@
     border-color: var(--accent);
     color: var(--accent-ink);
   }
+  /* Takes the row, but drops "✓ Correct answer" to its own line before squeezing the text. */
   .choice-text {
-    flex: 1;
+    flex: 1 1 12rem;
     padding-top: 0.05rem;
   }
   .mark {
@@ -539,67 +493,6 @@
     border-radius: 0 8px 8px 0;
     background: var(--tip-soft);
     color: var(--text);
-  }
-  .frq-part {
-    margin: 0.75rem 0 1rem;
-  }
-  .frq-part h3 {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
-  }
-  .scoring {
-    background: var(--surface-2);
-    border-radius: 8px;
-    padding: 0.5rem 0.6rem 0.6rem;
-    margin-top: 0.5rem;
-  }
-  .scoring legend {
-    float: left;
-    width: 100%;
-    margin-bottom: 0.2rem;
-    font-weight: 700;
-    color: var(--text-2);
-  }
-  .point {
-    /* The legend floats (so it sits inside the grey box); each row starts below it. */
-    clear: both;
-    min-height: 2.75rem;
-    margin-top: 0.4rem;
-  }
-  /* A 24px box in place of the small native checkbox. */
-  .point input {
-    appearance: none;
-    flex: none;
-    display: inline-grid;
-    place-items: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    margin: 0;
-    border: 2px solid var(--muted);
-    border-radius: 6px;
-    background: var(--surface);
-    cursor: pointer;
-  }
-  .point input:focus-visible {
-    outline: none;
-  }
-  .point input:checked {
-    border-color: var(--accent);
-    background: var(--accent);
-  }
-  .point input:checked::after {
-    content: '✓';
-    color: var(--accent-ink);
-    font-weight: 800;
-    font-size: 1rem;
-    line-height: 1;
-  }
-  .point > span {
-    min-width: 0;
-    padding-top: 0.1rem;
-  }
-  .marking {
-    margin: 0.5rem 0 0;
   }
   .q-actions {
     display: flex;

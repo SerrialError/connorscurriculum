@@ -82,7 +82,7 @@ const { lessons, chapters, emptyNow, emptyDone, samples, kinds } = lessonsPage(d
       </div>
       {s.practice && (
         <p class="small links" data-pagefind-ignore>
-          <span class="muted">Practice:</span>
+          <span class="muted">Practice:</span>{' '}
           <a href={practiceUrl(subject, s.practice.query)}>{s.practice.label}</a>
         </p>
       )}
@@ -95,7 +95,7 @@ const { lessons, chapters, emptyNow, emptyDone, samples, kinds } = lessonsPage(d
   {emptyDone.length > 0 && (
     <p class="small muted" data-unfiltered data-pagefind-ignore>
       {chapterRange(emptyDone, { long: true })} {emptyDone.length > 1 ? 'have' : 'has'} no lessons on the site yet.
-      {hasTopics(data) && <>See the <a href={url(`${subject}/chapters/`)}>chapter list</a> for their AP topics.</>}
+      {hasTopics(data) && <>{' '}See the <a href={url(`${subject}/chapters/`)}>chapter list</a> for their AP topics.</>}
     </p>
   )}
 

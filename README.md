@@ -17,7 +17,7 @@ Without Nix, any Node 22.12 or newer works: run `npm install` first.
 
 ```sh
 npm run dev       # dev server at http://localhost:4321 (search only works after a build)
-npm run build     # astro build + Pagefind index, output in dist/
+npm run build     # astro build + Pagefind index, output in dist/ (fails if page text runs together, e.g. "yet.See")
 npm run preview   # serve dist/
 npm run check     # astro check + vitest
 ```

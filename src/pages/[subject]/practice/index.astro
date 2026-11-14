@@ -16,6 +16,7 @@ import {
   topicIds,
   url,
 } from '../../../lib/content';
+import { hasTests, hasTopics } from '../../../lib/features';
 import { quickStarts } from '../../../lib/practice/presets';
 
 export const getStaticPaths = subjectPaths;
@@ -26,6 +27,8 @@ const questions = await getQuestions(subject);
 const chapterNumbers = new Set(questions.map((q) => q.data.chapter));
 const current = new Set(data.progress.current);
 const isLearned = learnedTopic(data);
+const by = ['chapter', hasTopics(data) && 'AP topic', hasTests(data) && 'class test'].filter(Boolean);
+const description = `Practice questions by ${by.join(', ')}, and difficulty.`;
 
 const course: PracticeCourse = {
   subject,
@@ -56,7 +59,7 @@ const course: PracticeCourse = {
 };
 ---
 
-<Base title="Practice" subject={subject} description="Practice questions by chapter, AP topic, class test, and difficulty.">
+<Base title="Practice" subject={subject} description={description}>
   <h1 class="practice-title">Practice</h1>
   <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
   <Practice client:load course={course} />

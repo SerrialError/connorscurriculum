@@ -17,7 +17,7 @@ describe('a site with two classes', () => {
     expect(bio.chapters.map((c) => c.title)).toEqual(['Cells']);
     expect([hasTopics(bio), hasTests(bio), hasPastFrqs(bio)]).toEqual([false, false, false]);
     expect([hasTopics(chem), hasTests(chem), hasPastFrqs(chem)]).toEqual([true, true, true]);
-    expect(bio.subject.topicsLabel).toBe('Topics');
+    expect(chem.subject.standardsUrl).toBe('https://example.com/ced.pdf');
   });
 
   it("builds each class's nav from what it has", () => {
@@ -50,7 +50,7 @@ describe('a site with two classes', () => {
     expect(fields('bio')).not.toContain('cedTopics');
   });
 
-  it('asks for standardsName when a class has a ced.json', () => {
-    expect(() => loadRegistry(join(fixtures, 'no-standards-name'))).toThrow(DataError);
+  it('refuses a standardsUrl for a class without a ced.json', () => {
+    expect(() => loadRegistry(join(fixtures, 'stray-standards-url'))).toThrow(DataError);
   });
 });

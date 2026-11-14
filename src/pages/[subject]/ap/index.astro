@@ -31,11 +31,15 @@ const counts = (id: string) => {
 const gapLabel = { missing: 'Not in textbook', thin: 'Thin in textbook' } as const;
 ---
 
-<Base title={`${data.subject.standardsName} units`} subject={subject}>
-  <h1>{data.subject.standardsName} units and topics</h1>
+<Base title="AP units and topics" subject={subject}>
+  <h1>AP units and topics</h1>
   <p class="muted prose">
-    Every topic on the AP exam, in Course and Exam Description order. Open a topic for its lessons, practice questions,
-    and past FRQs.
+    Every topic on the AP exam, in the order of College Board's{' '}
+    {data.subject.standardsUrl ? (
+      <a href={data.subject.standardsUrl} target="_blank" rel="noopener">Course and Exam Description (PDF)</a>
+    ) : (
+      'Course and Exam Description'
+    )}. Open a topic for its lessons, practice questions, and past FRQs.
   </p>
 
   <nav class="unit-nav jump-nav" aria-label="Units">

@@ -13,10 +13,11 @@ export const subjectSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/, 'subject id must be lowercase letters, digits, or dashes'),
   name: z.string().min(1),
   textbook: z.string().min(1),
-  /** What the standards are called, e.g. "AP CED". Required with a ced.json. */
-  standardsName: z.string().min(1).optional(),
-  /** The nav item for the standards' topic pages, e.g. "AP topics". */
-  topicsLabel: z.string().min(1).default('Topics'),
+  /**
+   * The official AP Course and Exam Description (College Board's PDF) that ced.json follows,
+   * linked from the AP topics page. Only for a class with a ced.json.
+   */
+  standardsUrl: z.url({ protocol: /^https$/ }).optional(),
   order: z.number().default(0),
 });
 
@@ -237,8 +238,8 @@ function loadSubject(subject: Subject, dataDir: string): SubjectData {
   const testsFile = join(dir, 'tests.json');
 
   const ced: Ced = existsSync(cedFile) ? readJson(cedFile, cedSchema) : { verified: false, units: [], sciencePractices: [] };
-  if (ced.units.length > 0 && !subject.standardsName) {
-    throw new DataError(join(dataDir, 'subjects.json'), `${subject.id}.standardsName`, 'required for a subject with a ced.json');
+  if (subject.standardsUrl && ced.units.length === 0) {
+    throw new DataError(join(dataDir, 'subjects.json'), `${subject.id}.standardsUrl`, `only for a class with a ced.json (${relative(process.cwd(), cedFile)})`);
   }
   const rawChapters = readJson(chaptersFile, z.array(chapterSchema));
   const tests = existsSync(testsFile) ? readJson(testsFile, z.array(testSchema)) : [];

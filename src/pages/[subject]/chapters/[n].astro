@@ -7,6 +7,7 @@ import Base from '../../../layouts/Base.astro';
 import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { FRQ_ORDER_NOTE, frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { hasTopics } from '../../../lib/features';
 import { plural } from '../../../lib/text';
 import { CONTRIBUTE_URL } from '../../../site';
 
@@ -57,7 +58,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
         AP Unit {u}: {data.ced.units.find((x) => x.id === u)?.title}
       </a>
     ))}
-    {chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+    {hasTopics(data) && chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
   </div>
 
   {questionCount > 0 && (
@@ -87,7 +88,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
       grouped
       empty={[
         questionCount === 0 ? 'No lessons or practice questions yet.' : 'No lessons yet.',
-        current && (frqMatches.length > 0 ? 'Study its AP topics and past FRQs below.' : 'Study its AP topics below.'),
+        current && topics.length > 0 && (frqMatches.length > 0 ? 'Study its AP topics and past FRQs below.' : 'Study its AP topics below.'),
       ]
         .filter(Boolean)
         .join(' ')}

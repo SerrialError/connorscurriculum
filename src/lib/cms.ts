@@ -44,12 +44,12 @@ export function lessonCollection(data: SubjectData) {
         : [
             {
               name: 'cedTopics',
-              label: `${subject.standardsName} topics`,
+              label: 'AP topics',
               widget: 'select',
               multiple: true,
               required: false,
               default: [],
-              hint: `Every ${subject.standardsName} topic this lesson teaches. Leave empty if it is class-only (not on the exam). Each topic's page lists this lesson.`,
+              hint: `Every AP topic this lesson teaches. Leave empty if it is class-only (not on the exam). Each topic's page lists this lesson.`,
               options: data.ced.units.flatMap((u) =>
                 u.topics.map((t) => ({ label: `${t.id} ${t.title} (Unit ${u.id})`, value: t.id })),
               ),

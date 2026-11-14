@@ -14,6 +14,7 @@ import {
   testsByDate,
   url,
 } from '../../../lib/content';
+import { hasTopics } from '../../../lib/features';
 import { plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
@@ -35,7 +36,7 @@ const meta = (n: number, apUnits: string[]) => {
   const classLessons = ls.filter((x) => isClassContent(data, x));
   const q = qs.filter((x) => isClassContent(data, x)).length;
   return [
-    apUnits.length ? `AP Unit${apUnits.length > 1 ? 's' : ''} ${apUnits.join(', ')}` : 'Not on the AP exam',
+    hasTopics(data) && (apUnits.length ? `AP Unit${apUnits.length > 1 ? 's' : ''} ${apUnits.join(', ')}` : 'Not on the AP exam'),
     kindCounts(classLessons),
     q && plural(q, 'question'),
     ls.length - classLessons.length && plural(ls.length - classLessons.length, 'sample page'),

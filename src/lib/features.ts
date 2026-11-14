@@ -1,6 +1,8 @@
 // What each class has, and the navigation and search wording that follow from it. A class
 // without standards (ced.json), class tests, or past FRQs gets no nav item, pages, or search
-// hint for them, so nothing here assumes AP Chemistry.
+// hint for them, so nothing here assumes AP Chemistry. Standards are an AP Course and Exam
+// Description: everything about them (topics, units, past FRQs, "not on the AP exam") says "AP",
+// and only a class with a ced.json ever shows it.
 import type { SubjectData } from './registry';
 
 export const hasTopics = (d: SubjectData): boolean => d.topics.size > 0;
@@ -27,7 +29,7 @@ export function subjectNav(d: SubjectData): NavItem[] {
     { key: 'lessons', path: 'lessons/', label: 'Lessons', also: ['chapters/'] },
     { key: 'practice', path: 'practice/', label: 'Practice' },
     hasTests(d) && { key: 'tests', path: 'tests/', label: 'Tests' },
-    hasTopics(d) && { key: 'topics', path: 'ap/', label: d.subject.topicsLabel },
+    hasTopics(d) && { key: 'topics', path: 'ap/', label: 'AP topics' },
     hasPastFrqs(d) && { key: 'frqs', path: 'frqs/', label: 'Past FRQs', short: 'FRQs' },
   ];
   return items.filter((n) => n !== false);

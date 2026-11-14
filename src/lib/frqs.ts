@@ -2,7 +2,7 @@
 // Plain TypeScript (no Astro imports) so the practice island and tests can use it.
 import { plural } from './text';
 
-/** Shown (with "our labels") wherever science practices that aren't College Board's are listed. */
+/** Shown (as the tooltip of "not official") wherever science practices that aren't College Board's are listed. */
 export const OUR_PRACTICE_LABELS = 'College Board hasn’t published science-practice labels for this exam; these are ours.';
 
 export interface FrqPart {

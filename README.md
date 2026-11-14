@@ -91,7 +91,7 @@ src/
 ## Where the data came from
 
 **`ced.json`** was checked on 2026-10-08 against the *AP Chemistry Course and Exam Description,
-Effective Fall 2024* (AP Central PDF, file revised June 2026). Unit and topic titles come from the
+Effective Fall 2024* ([AP Central PDF](https://apcentral.collegeboard.org/media/pdf/ap-chemistry-course-and-exam-description.pdf), file revised June 2026; the AP topics page links it through `standardsUrl` in `subjects.json`). Unit and topic titles come from the
 Course at a Glance, and exam weights from the exam weighting table. `"verified"` is still `false`,
 so the AP topics page says the list hasn't been checked. Set it to `true` once you have confirmed the list.
 

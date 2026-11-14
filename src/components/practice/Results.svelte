@@ -27,7 +27,7 @@
   }
 
   let { attempt, label, filters, frqMatches, onretry, onreview, onagain, onfilters }: Props = $props();
-  const { lessons, hrefs, topicLabel } = getCourse();
+  const { lessons, hrefs, topicLabel, units } = getCourse();
 
   let heading = $state<HTMLElement | null>(null);
   const summary = $derived(attempt.summary);
@@ -106,7 +106,7 @@
 
   {#if breakdown.length > 0}
     <section class="card" aria-labelledby="topics-h">
-      <h3 id="topics-h" class="section-h">By topic</h3>
+      <h3 id="topics-h" class="section-h">{units.length > 0 ? 'By topic' : 'By chapter'}</h3>
       <ul class="plain-list breakdown">
         {#each breakdown as t (t.key)}
           {@const frac = t.score / t.count}

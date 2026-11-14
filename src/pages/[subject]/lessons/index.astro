@@ -17,6 +17,7 @@ import {
   topicIds,
   url,
 } from '../../../lib/content';
+import { hasTopics } from '../../../lib/features';
 import { practiceStarts } from '../../../lib/practice/links';
 import { chapterRange, plural } from '../../../lib/text';
 
@@ -134,7 +135,7 @@ const kindChips = [...LESSON_KINDS]
   {emptyDone.length > 0 && (
     <p class="small muted" data-unfiltered data-pagefind-ignore>
       {chapterRange(emptyDone, { long: true })} {emptyDone.length > 1 ? 'have' : 'has'} no lessons on the site yet.
-      See the <a href={url(`${subject}/chapters/`)}>chapter list</a> for their AP topics.
+      {hasTopics(data) && <>See the <a href={url(`${subject}/chapters/`)}>chapter list</a> for their AP topics.</>}
     </p>
   )}
 
@@ -178,6 +179,7 @@ const kindChips = [...LESSON_KINDS]
     const sections = [...document.querySelectorAll<HTMLElement>('section.chapter')];
     const items = [...document.querySelectorAll<HTMLLIElement>('section.chapter .lessons > li')];
     const jumpNav = document.querySelector<HTMLElement>('.jump-nav')!;
+    const legend = document.querySelector<HTMLElement>('.legend');
     const jumps = [...jumpNav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
     const unfiltered = [...document.querySelectorAll<HTMLElement>('[data-unfiltered]')];
     const entries = items.map((li) => ({ text: words(li.textContent ?? '').join(' '), kind: li.dataset.kind ?? '', sample: !!li.closest('.samples') }));
@@ -211,6 +213,7 @@ const kindChips = [...LESSON_KINDS]
       // status says it too, for screen readers).
       none.hidden = r.shownCount > 0;
       jumpNav.hidden = r.shownCount === 0;
+      if (legend) legend.hidden = r.shownCount === 0;
       status.textContent = !filtering ? '' : r.shownCount === 0 ? 'No lessons match.' : `${r.shownCount} ${r.shownCount === 1 ? 'match' : 'matches'}`;
       status.classList.toggle('visually-hidden', r.shownCount === 0);
     };

@@ -295,9 +295,11 @@ chapter, fill it in:
 
 ## Adding a subject
 
-1. Add an entry to `src/data/subjects.json` (`id`, `name`, `textbook`; with standards also
-   `standardsName`, e.g. "AP CED", and `topicsLabel`, the nav label for their topic pages).
-2. Create `src/data/<id>/chapters.json`. Optional: `ced.json` (standards and their topics),
+1. Add an entry to `src/data/subjects.json` (`id`, `name`, `textbook`; for an AP class also
+   `standardsUrl`, the College Board PDF of its Course and Exam Description, linked from the AP
+   topics page).
+2. Create `src/data/<id>/chapters.json`. Optional: `ced.json` (the AP CED's units and topics;
+   pages say "AP topics", "AP unit", and "not on the AP exam" only for a class that has one),
    `tests.json`, `past-frqs.json`, `progress.json`, `textbook-gaps.json`.
 3. Add content under `src/content/lessons/<id>/` and `src/content/questions/<id>/`.
 

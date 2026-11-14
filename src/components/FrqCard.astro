@@ -47,7 +47,7 @@ const sourceNote = frq.officialSkills
       </p>
       {practices.length > 0 && (
         <div class="practices-block">
-          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(our labels)</span></>}</p>
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(not official)</span></>}</p>
           <p class="practices" title={sourceNote}>
             {practices.map((id) => (
               <span class="practice">
@@ -64,7 +64,7 @@ const sourceNote = frq.officialSkills
       <summary>Show {frq.parts.length} parts and science practices</summary>
       {practices.length > 0 && (
         <div class="practices-block">
-          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(our labels)</span></>}</p>
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(not official)</span></>}</p>
           <p class="practices" title={sourceNote}>
             {practices.map((id) => (
               <span class="practice">

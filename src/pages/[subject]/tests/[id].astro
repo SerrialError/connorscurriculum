@@ -86,7 +86,7 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 
   {hasTopics(data) && (
     <>
-      <h2>{data.subject.standardsName} topics covered</h2>
+      <h2>AP topics on this test</h2>
       {topics.length ? (
         <>
           <TopicBadges subject={subject} topics={topics} />

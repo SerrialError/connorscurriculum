@@ -17,9 +17,15 @@ const sectionLabel = (sections: string[]): string => [...sections].sort(byId).ma
 
 const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
 
-/** A topic key from topicKeys: "5.4 Elementary Reactions", or the chapter for class-only questions. */
-export const topicKeyLabel = (key: string, topicTitles: ReadonlyMap<string, string>): string =>
-  key.startsWith('chapter-') ? `Ch. ${key.slice(8)} material not on the AP exam` : `${key} ${topicTitles.get(key) ?? ''}`.trim();
+/**
+ * A topic key from topicKeys: "5.4 Elementary Reactions", or the chapter for class-only questions
+ * ("Ch. 7 material not on the AP exam", or just "Ch. 7" in a class with no AP topics).
+ */
+export function topicKeyLabel(key: string, topicTitles: ReadonlyMap<string, string>): string {
+  if (!key.startsWith('chapter-')) return `${key} ${topicTitles.get(key) ?? ''}`.trim();
+  const chapter = `Ch. ${key.slice(8)}`;
+  return topicTitles.size ? `${chapter} material not on the AP exam` : chapter;
+}
 
 /** The name of the whole question pool, when no chapter is left out of it. */
 export const ALL_QUESTIONS = 'All questions';

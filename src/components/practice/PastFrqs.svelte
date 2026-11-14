@@ -30,7 +30,7 @@
           </div>
           <div class="small practices">
             {frqPractices({ parts: m.parts }).map((id) => practiceNames[id] ?? id).join(' · ')}
-            {#if !m.frq.officialSkills}<span class="muted" title={OUR_PRACTICE_LABELS}>(our labels)</span>{/if}
+            {#if !m.frq.officialSkills}<span class="muted" title={OUR_PRACTICE_LABELS}>(not official)</span>{/if}
           </div>
           <div class="small muted">
             Part{m.parts.length > 1 ? 's' : ''} {m.parts.map((p) => p.label).join(', ')} ({plural(m.points, 'pt')})

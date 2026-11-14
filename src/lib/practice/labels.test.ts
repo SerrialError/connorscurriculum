@@ -53,6 +53,7 @@ describe('buttons and chips', () => {
     expect(topicKeyLabel('5.4', titles)).toBe('5.4 Elementary Reactions');
     expect(topicKeyLabel('9.9', titles)).toBe('9.9');
     expect(topicKeyLabel('chapter-7', titles)).toBe('Ch. 7 material not on the AP exam');
+    expect(topicKeyLabel('chapter-7', new Map())).toBe('Ch. 7');
   });
 
   it('lists the narrowing filters as chips, each removing only itself', () => {

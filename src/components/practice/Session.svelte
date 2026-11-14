@@ -93,13 +93,15 @@
     if (top) window.scrollBy({ top });
   }
 
+  /** The set's shortcuts work from inside it, or from the page itself (nothing focused), not from the header or nav. */
+  const pageOrSession = (el: HTMLElement): boolean => el === document.body || el.id === 'main' || !!el.closest('.session');
+
   /**
    * ← → move between questions, but only from the page itself, the question, or a button: a
    * focused wide table or equation scrolls with them, and a radio button moves between choices.
    */
   function arrowsMoveQuestions(el: HTMLElement): boolean {
     if (el === document.body || el.id === 'main') return true;
-    if (!el.closest('.session')) return false;
     return el.tagName === 'BUTTON' || el.id === 'q-heading' || el.classList.contains('question');
   }
 
@@ -108,7 +110,7 @@
     const q = attempt.current;
     if (!q || e.altKey || e.ctrlKey || e.metaKey) return;
     const el = e.target as HTMLElement;
-    if (isTypingTarget(el)) return;
+    if (isTypingTarget(el) || !pageOrSession(el)) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       if (e.shiftKey || !arrowsMoveQuestions(el)) return;
       e.preventDefault();

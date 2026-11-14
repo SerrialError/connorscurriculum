@@ -17,7 +17,7 @@ Without Nix, any Node 22.12 or newer works: run `npm install` first.
 
 ```sh
 npm run dev       # dev server at http://localhost:4321 (search only works after a build)
-npm run build     # astro build + Pagefind index, output in dist/
+npm run build     # astro build + Pagefind index, output in dist/ (fails if page text runs together, e.g. "yet.See")
 npm run preview   # serve dist/
 npm run check     # astro check + vitest
 ```
@@ -77,7 +77,8 @@ src/
     apchem/ced.json        AP CED units and topics
     apchem/chapters.json   textbook chapters, the CED topics each one teaches, "not on AP" notes
     apchem/tests.json      class tests
-    apchem/progress.json   chapters finished and in progress (topic checkmarks follow)
+    apchem/progress.json   chapters finished and in progress (topic checkmarks follow), topics skipped in class
+    apchem/textbook-gaps.json  AP topics the textbook covers thinly, and where to learn them
     apchem/past-frqs.json  released AP FRQs (links only), each part tagged by CED topic
   content/
     lessons/<subject>/<chapter>-<slug>/index.mdx
@@ -90,9 +91,9 @@ src/
 ## Where the data came from
 
 **`ced.json`** was checked on 2026-10-08 against the *AP Chemistry Course and Exam Description,
-Effective Fall 2024* (AP Central PDF, file revised June 2026). Unit and topic titles come from the
+Effective Fall 2024* ([AP Central PDF](https://apcentral.collegeboard.org/media/pdf/ap-chemistry-course-and-exam-description.pdf), file revised June 2026; the AP topics page links it through `standardsUrl` in `subjects.json`). Unit and topic titles come from the
 Course at a Glance, and exam weights from the exam weighting table. `"verified"` is still `false`,
-so the AP topics page shows a notice until you have confirmed the list yourself.
+so the AP topics page says the list hasn't been checked. Set it to `true` once you have confirmed the list.
 
 The current CED differs from the older (2020) topic list in several places:
 
@@ -118,6 +119,9 @@ based on comparing each topic's learning objectives in the CED with the chapter 
 taught across several chapters are listed under each one, for example 1.5 (Ch. 2 and 6), 1.7 (Ch. 7, and Ch. 8 for electronegativity), 1.8
 (Ch. 2, 7, 8), 3.7 (Ch. 4 and 13), 3.9 (Ch. 1 and 13), 4.8 (Ch. 4 and 16), and 4.9 (Ch. 4 and 20). One placement could
 not be confirmed for the 15th edition: photoelectron spectroscopy (1.6) is listed under both Ch. 6 and 7.
+The class skipped it, so `progress.json` lists it under `notCovered` and it shows as "Skipped in class"
+rather than ✓, and `textbook-gaps.json` lists it with the other topics the book covers thinly
+(1.4, 3.9, 3.11, 3.13, 4.4, 6.3, 9.4, 9.7, and lab skills).
 Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure reaction rates.
 
 **`progress.json`** lists finished chapters (1–7 as of 2026-11-12, with 8 and 9 in progress as `current`); topic checkmarks are derived

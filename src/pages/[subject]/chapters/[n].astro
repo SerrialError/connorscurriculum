@@ -1,10 +1,15 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, subjectIds, url } from '../../../lib/content';
-import { matchFrqs } from '../../../lib/frqs';
+import { formatDate, getLessons, inCedOrder, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
+import { pickQuery, practiceStarts } from '../../../lib/practice/links';
+import { FRQ_ORDER_NOTE, frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { hasTopics } from '../../../lib/features';
+import { chapterName, plural } from '../../../lib/text';
+import { CONTRIBUTE_URL } from '../../../site';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -17,98 +22,119 @@ const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(Number(n))!;
 const lessons = (await getLessons(subject)).filter((l) => l.data.chapter === chapter.number);
 const questionCount = (await getQuestions(subject)).filter((q) => q.data.chapter === chapter.number).length;
+const pool = { chapters: [chapter.number] };
+const { start } = practiceStarts(pool, questionCount);
 const tests = data.tests.filter((t) => t.chapters.includes(chapter.number));
 const prev = data.chapters[data.chapters.indexOf(chapter) - 1];
 const next = data.chapters[data.chapters.indexOf(chapter) + 1];
-const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
+const chapterLabel = chapterName(chapter);
+const finished = data.progress.chapters.has(chapter.number);
+const current = data.progress.current.includes(chapter.number);
 
 // CED topics this chapter teaches, in CED order, with where else they are taught.
-const cedOrder = [...data.topics.keys()];
-const topics = [...chapter.cedTopics]
-  .sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b))
-  .map((id) => ({
-    id,
-    title: data.topics.get(id)!.title,
-    status: data.progress.topics.get(id) ?? null,
-    alsoIn: (data.topicChapters.get(id) ?? []).filter((c) => c !== chapter.number),
-  }));
+const topics = inCedOrder(data, chapter.cedTopics).map((id) => ({
+  id,
+  title: data.topics.get(id)!.title,
+  status: data.progress.topics.get(id) ?? null,
+  gap: data.textbookGaps.topics.get(id),
+  alsoIn: (data.topicChapters.get(id) ?? []).filter((c) => c !== chapter.number),
+}));
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
 const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
-const frqParts = frqMatches.reduce((sum, m) => sum + m.parts.length, 0);
 ---
 
-<Base title={chapterLabel} subject={subject} searchable searchMeta={{ chapter: chapterLabel }}>
-  <p class="breadcrumbs"><a href={url(`${subject}/chapters/`)}>Chapters</a> /</p>
+<Base title={chapterLabel} subject={subject} searchable searchMeta={{ type: 'Chapter' }}>
+  <Breadcrumbs items={[{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/`), label: 'Chapters' }]} />
   <h1>{chapterLabel}</h1>
-  {data.progress.chapters.has(chapter.number) && (
-    <p><ProgressMark status="done" doneLabel="Finished in class" /></p>
-  )}
-  <div class="badges">
+  <div class="badges status" data-pagefind-ignore>
+    {finished && <ProgressMark status="done" doneLabel="Finished in class" />}
+    {current && <span class="badge now">● Now in class</span>}
     {chapter.apUnits.map((u) => (
       <a class="badge topic" href={url(`${subject}/ap/#unit-${u}`)}>
         AP Unit {u}: {data.ced.units.find((x) => x.id === u)?.title}
       </a>
     ))}
-    {chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+    {hasTopics(data) && chapter.apUnits.length === 0 && <span class="badge not-ap">⊘ Not on the AP exam</span>}
   </div>
+
+  {questionCount > 0 && (
+    <div class="actions" data-pagefind-ignore>
+      <a class="button" href={practiceUrl(subject, start.query)}>{start.label}</a>
+      <a class="button secondary" href={practiceUrl(subject, pickQuery(pool))}>Pick your own set ({plural(questionCount, 'question')})</a>
+    </div>
+  )}
+  {tests.map((t) => (
+    <p class="test-link" data-pagefind-ignore>
+      <span class="muted">Class test:</span> <a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a>
+      {t.date && <span class="muted"> · {formatDate(t.date)}</span>}
+    </p>
+  ))}
+  {questionCount === 0 && lessons.length > 0 && (
+    <p class="small muted">
+      No practice questions for this chapter yet.
+      {frqMatches.length > 0 && <> Try the <a href="#frqs">past AP FRQs on its topics</a> below.</>}
+    </p>
+  )}
+
+  <section id="lessons" aria-labelledby="lessons-h">
+    <h2 id="lessons-h">Lessons and notes</h2>
+    {/* One line for an empty chapter, covering both lessons and practice questions. */}
+    <LessonList
+      lessons={lessons}
+      grouped
+      empty={[
+        questionCount === 0 ? 'No lessons or practice questions yet.' : 'No lessons yet.',
+        current && topics.length > 0 && (frqMatches.length > 0 ? 'Study its AP topics and past FRQs below.' : 'Study its AP topics below.'),
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    />
+    {lessons.length === 0 && (
+      <p class="small"><a href={CONTRIBUTE_URL}>Share your notes or write a lesson for this chapter</a></p>
+    )}
+  </section>
+
+  {topics.length > 0 && (
+    <section id="topics" aria-labelledby="topics-h">
+      <h2 id="topics-h">AP topics in this chapter</h2>
+      <ol class="plain-list topics">
+        {topics.map((t) => (
+          <li>
+            <ProgressMark status={t.status} compact />
+            <div class="info">
+              <span class="num">{t.id}</span>
+              <a href={url(`${subject}/ap/${t.id}/`)}>{t.title}</a>
+              {t.gap && (
+                <span class="badge gap" title="See the topic page for what to learn elsewhere">
+                  ⚑ {t.gap.coverage === 'missing' ? 'Not in textbook' : 'Thin in textbook'}
+                </span>
+              )}
+              {t.alsoIn.length > 0 && <div class="small muted">Also in Ch. {t.alsoIn.join(', ')}</div>}
+            </div>
+            {frqCount(t.id) > 0 && <span class="small muted count">{plural(frqCount(t.id), 'FRQ')}</span>}
+          </li>
+        ))}
+      </ol>
+    </section>
+  )}
+
   {chapter.notOnAP.length > 0 && (
     <div class="notice small">
-      <strong>Not on the AP exam:</strong>
+      <strong>In this chapter but not on the AP exam:</strong>
       <ul>
         {chapter.notOnAP.map((x) => <li>{x}</li>)}
       </ul>
     </div>
   )}
-  {chapter.sections.length > 0 && (
-    <details>
-      <summary>Sections</summary>
-      <ul>
-        {chapter.sections.map((s) => <li>{s.id} {s.title}</li>)}
-      </ul>
-    </details>
-  )}
-
-  <div class="actions">
-    <a class="button" href={practiceHref(subject, { chapter: [chapter.number] })}>Practice this chapter ({questionCount})</a>
-    {tests.map((t) => (
-      <a class="button secondary" href={url(`${subject}/tests/${t.id}/`)}>
-        {t.title}{t.date && ` · ${formatDate(t.date)}`}
-      </a>
-    ))}
-  </div>
-
-  {topics.length > 0 && (
-    <>
-      <h2>AP topics in this chapter</h2>
-      <ol class="plain-list topics">
-        {topics.map((t) => (
-          <li>
-            <ProgressMark status={t.status} compact />
-            <div>
-              <span class="num">{t.id}</span>
-              <a href={url(`${subject}/ap/${t.id}/`)}>{t.title}</a>
-              {t.alsoIn.length > 0 && (
-                <div class="small muted">Also in Ch. {t.alsoIn.join(', ')}</div>
-              )}
-            </div>
-            {frqCount(t.id) > 0 && <span class="small muted count">{frqCount(t.id)} FRQ</span>}
-          </li>
-        ))}
-      </ol>
-    </>
-  )}
-
-  <h2>Lessons</h2>
-  <LessonList lessons={lessons} />
 
   {frqMatches.length > 0 && (
-    <section id="frqs" data-pagefind-ignore="all">
-      <h2>Past AP FRQs on these topics</h2>
-      <details class="frqs">
-        <summary>
-          {frqMatches.length} released question{frqMatches.length === 1 ? '' : 's'}, {frqParts} part{frqParts === 1 ? '' : 's'}
-        </summary>
+    <section id="frqs" data-pagefind-ignore="all" aria-labelledby="frqs-h">
+      <h2 id="frqs-h">Past AP FRQs on these topics</h2>
+      {/* Open on chapters with no lessons: the FRQs are the main thing to study there. */}
+      <details class="frqs" open={lessons.length === 0}>
+        <summary>{frqCountLabel(frqMatches)}</summary>
+        <p class="small muted">{FRQ_ORDER_NOTE}</p>
         <div class="stack">
           {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
         </div>
@@ -116,36 +142,63 @@ const frqParts = frqMatches.reduce((sum, m) => sum + m.parts.length, 0);
     </section>
   )}
 
-  <nav class="pager small" aria-label="Chapters">
-    {prev ? <a href={url(`${subject}/chapters/${prev.number}/`)}>← Ch. {prev.number}: {prev.title}</a> : <span></span>}
-    {next && <a href={url(`${subject}/chapters/${next.number}/`)}>Ch. {next.number}: {next.title} →</a>}
+  {chapter.sections.length > 0 && (
+    <details class="sections">
+      <summary>Textbook sections</summary>
+      <ul>
+        {chapter.sections.map((s) => <li>{s.id} {s.title}</li>)}
+      </ul>
+    </details>
+  )}
+
+  <nav class="pager" aria-label="Chapters">
+    {prev ? (
+      <a href={url(`${subject}/chapters/${prev.number}/`)}><span class="small muted">← Previous</span>{chapterName(prev)}</a>
+    ) : <span></span>}
+    {next && (
+      <a class="next" href={url(`${subject}/chapters/${next.number}/`)}><span class="small muted">Next →</span>{chapterName(next)}</a>
+    )}
   </nav>
 </Base>
 
 <script>
-  // Arriving via "#frqs" (e.g. from Up next) should show the list, not a closed toggle.
+  // Arriving via "#frqs" (e.g. from the subject page) should show the list, not a closed toggle.
   if (location.hash === '#frqs') document.querySelector<HTMLDetailsElement>('#frqs details')?.setAttribute('open', '');
 </script>
 
 <style>
+  .status {
+    margin-bottom: 0.25rem;
+  }
+  .test-link {
+    margin: 0 0 1rem;
+  }
+  .test-link a {
+    font-weight: 600;
+  }
   .notice ul {
     margin: 0.3rem 0 0;
     padding-left: 1.2rem;
   }
   .topics li {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 0.6rem;
     align-items: start;
-    padding: 0.45rem 0;
+    padding: 0.5rem 0;
     border-bottom: 1px solid var(--border);
   }
   .num {
     display: inline-block;
-    min-width: 2.6rem;
-    margin-right: 0.35rem;
+    min-width: 2.7rem;
+    margin-right: 0.45rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+  }
+  .badge.gap {
+    margin-left: 0.4rem;
+    font-size: 0.72rem;
+    vertical-align: 0.1em;
   }
   .count {
     white-space: nowrap;
@@ -157,11 +210,12 @@ const frqParts = frqMatches.reduce((sum, m) => sum + m.parts.length, 0);
     color: var(--link);
     margin-bottom: 0.75rem;
   }
-  .pager {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+  .sections {
+    margin-top: 1.5rem;
+  }
+  .sections summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--link);
   }
 </style>

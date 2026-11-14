@@ -8,7 +8,7 @@
   --border: #dcdfd7;
   --text: #1d2321;
   --text-2: #4c5652;
-  --muted: #6b746f;
+  --muted: #5f6863;
   --accent: #1f6f8b;
   --accent-ink: #ffffff;
   --accent-soft: #e2f0f4;
@@ -22,6 +22,7 @@
   --tip: #5b3fa6;
   --tip-soft: #eee8fa;
   --radius: 10px;
+  --pill: 999px;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 2px 8px rgb(0 0 0 / 0.04);
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -113,6 +114,17 @@ a {
   text-underline-offset: 0.15em;
 }
 
+/* `hidden` wins over component display rules (cards, flex rows). */
+[hidden] {
+  display: none !important;
+}
+
+/* Checkboxes and radio buttons in the site's colour, not the browser's blue. */
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent);
+}
+
 a:hover {
   text-decoration-thickness: 2px;
 }
@@ -136,7 +148,8 @@ h1 {
 }
 
 h2 {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.005em;
 }
 
 h3 {
@@ -177,9 +190,79 @@ th {
   background: var(--surface-2);
 }
 
+/* Narrow screens: tighter tables, so most fit without scrolling. */
+@media (max-width: 480px) {
+  table {
+    font-size: 0.9rem;
+  }
+  th,
+  td {
+    padding: 0.35rem 0.45rem;
+  }
+}
+
+/* A table that still scrolls sideways fades at the edge(s) with more columns, so it's clear there's more. */
+@supports (animation-timeline: scroll()) {
+  /* The section nav and long display equations too, on screens too narrow for them. */
+  table,
+  .subnav,
+  .katex-display {
+    animation: scroll-fade linear both;
+  }
+  /* A separate rule after the shorthand (which resets the timeline), so minifiers can't fold it in. */
+  html table,
+  html .subnav,
+  html .katex-display {
+    animation-timeline: scroll(self inline);
+  }
+  @keyframes scroll-fade {
+    0% {
+      mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+    }
+    2%,
+    98% {
+      mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+    }
+    100% {
+      mask-image: linear-gradient(to right, transparent, #000 2.5rem);
+    }
+  }
+}
+
+/* Set by a script in Base.astro on tables and equations that are wider than the screen: a caption
+   that stays in view while the box scrolls, so the hidden columns aren't missed. */
+table[data-scrolls]::after,
+.katex-display[data-scrolls]::after {
+  content: 'Scroll sideways for more →';
+  display: block;
+  position: sticky;
+  left: 0;
+  width: max-content;
+  margin-top: 0.3rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: var(--pill);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font: 600 0.75rem/1.5 var(--font);
+}
+/* Once scrolled, the caption has done its job (hidden, not removed, so nothing jumps). */
+table[data-scrolls='seen']::after,
+.katex-display[data-scrolls='seen']::after {
+  visibility: hidden;
+}
+
 /* KaTeX: long display equations scroll instead of widening the page. */
 /* Inline math plus the punctuation after it (see rehypeMathPunctuation). */
 .nowrap {
+  white-space: nowrap;
+}
+/* ...but long math inside can still wrap between terms, as it would without the wrapper. */
+.nowrap .katex {
+  white-space: normal;
+}
+/* Short inline math (see rehypeMathPunctuation) stays on one line: no "n =" / "3 → 2" splits. */
+.katex.katex-short,
+.nowrap .katex.katex-short {
   white-space: nowrap;
 }
 
@@ -208,13 +291,56 @@ th {
   font-size: 0.875rem;
 }
 
-.visually-hidden {
-  position: absolute !important;
+/* For screen readers only. During a practice set and its results the page title is too, so on
+   phones the question (or score) starts higher and the two screens don't look alike. */
+.visually-hidden,
+body:is([data-practice='session'], [data-practice='results']) .practice-title {
+  position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
+}
+
+body:is([data-practice='session'], [data-practice='results']) main {
+  padding-top: 1rem;
+}
+
+/* Phones during a set: no class nav row, so the question starts higher. The class name in the
+   header still leads home, and "← Filters" back to setup. */
+@media (max-width: 640px) {
+  body[data-practice='session'] .subnav {
+    display: none;
+  }
+}
+
+/* Visible on wider screens; on phones only screen readers get it (e.g. "Start practice" -> "Start"). */
+@media (max-width: 640px) {
+  .wide-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* A small label above a card's heading: "Now in class", "Next class test". */
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* A small heading inside a card or above a group of cards. */
+.section-h {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
 }
 
 /* Cards and lists */
@@ -236,12 +362,12 @@ a.card:hover {
   border-color: var(--accent);
 }
 
-.card h2,
-.card h3 {
+/* :where() keeps these defaults weak, so a page's own class rules win without !important. */
+:where(.card) :is(h2, h3) {
   margin: 0 0 0.3rem;
 }
 
-.card p {
+:where(.card) p {
   margin: 0.3rem 0 0;
 }
 
@@ -260,6 +386,108 @@ a.card:hover {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+/* Toggle chips: a label around a checkbox or radio that is hidden but still focusable (the
+   practice filters, the Lessons page's kinds). A count can follow the text. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.25rem;
+  max-width: 100%;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  /* Half the height: a pill on one line, a rounded box when a long name wraps. */
+  border-radius: 1.15rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  cursor: pointer;
+  user-select: none;
+}
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.chip:hover {
+  border-color: var(--accent);
+}
+.chip:has(input:checked) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.chip:has(input[type='checkbox']:checked)::before {
+  content: '✓';
+  font-weight: 700;
+}
+.chip:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.chip-sub {
+  color: var(--muted);
+}
+.chip:has(input:checked) .chip-sub {
+  color: inherit;
+  opacity: 0.85;
+}
+.chip-count {
+  padding: 0 0.4rem;
+  border-radius: var(--pill);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.chip:has(input:checked) .chip-count {
+  background: var(--accent-ink);
+  color: var(--accent);
+}
+/* Options that would match nothing stay usable but recede. */
+.chip-count.zero {
+  opacity: 0.6;
+}
+.chip:has(.chip-count.zero):not(:has(input:checked)) {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+/* Practice answer choices and FRQ scoring points: outlined rows you tap, tinted when picked. */
+.option-row {
+  position: relative;
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+}
+.option-row:hover {
+  border-color: var(--accent);
+}
+.option-row:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.option-row:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Badges */
@@ -302,6 +530,12 @@ a.badge:hover {
   border-color: transparent;
 }
 
+.badge.now {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+}
+
 .badge.good {
   background: var(--good-soft);
   color: var(--good);
@@ -340,12 +574,91 @@ button.button {
 }
 
 .button:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.08);
+}
+
+.button.secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  filter: none;
 }
 
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  filter: none;
+}
+
+.button.secondary:disabled:hover {
+  border-color: var(--border);
+  background: transparent;
+}
+
+.button.small {
+  min-height: 2.25rem;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+/* Search and filter boxes (site search, the Lessons page filter). */
+.search-input {
+  width: 100%;
+  font: inherit;
+  font-size: 1.05rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.search-input:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+/* Small pill buttons in the header (Search, theme) and the search dialog. */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--pill);
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.icon-button:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+/* Phones: 44px tap targets. */
+@media (max-width: 520px) {
+  .icon-button {
+    min-height: 2.75rem;
+  }
+}
+
+/* A button that looks like a link (for actions that don't navigate). */
+.link-button {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  color: var(--link);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.link-button.small {
+  font-size: 0.875rem;
 }
 
 .actions {
@@ -370,8 +683,70 @@ button.button {
   margin: 1.2rem 0 0;
 }
 
+/* Previous / next links at the bottom of chapter, topic, and lesson pages. */
+.pager {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+.pager a {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pager a:hover {
+  border-color: var(--accent);
+}
+
+.pager a.next {
+  text-align: right;
+  grid-column: -2;
+}
+
 .breadcrumbs a {
   color: var(--muted);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumbs li + li::before {
+  content: '/';
+  margin-right: 0.4rem;
+}
+
+/* "Jump to" links within a page (exam years, AP units). Plain links, not pills: pills are
+   filters you toggle on the Practice page. */
+.jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.9rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.jump-nav .jump-label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.jump-nav a {
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Lesson components (Callout, Reveal, YouTube). Global rather than scoped so the CMS
@@ -447,4 +822,18 @@ button.button {
   height: 100%;
   border: 0;
   display: block;
+}
+
+/* Links that open a new tab (official PDFs) say so: an arrow, read out as "opens in a new tab". */
+a[target='_blank']::after {
+  content: '\2009↗' / ' (opens in a new tab)';
+  font-size: 0.85em;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* Class tests: text for before or after the test date (see the script in Base.astro). */
+[data-test-date]:not([data-past]) .if-past,
+[data-test-date][data-past] .if-upcoming {
+  display: none;
 }

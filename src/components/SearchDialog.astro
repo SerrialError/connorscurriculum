@@ -1,0 +1,128 @@
+---
+// The site search in a dialog: opened by the header's Search button or the "/" key. A page
+// with its own search box (the home pages) uses that box for "/" instead.
+import Search from './Search.astro';
+
+interface Props {
+  /** "Search AP Chemistry" */
+  title: string;
+  /** Search only this class (subject id); every class when unset. */
+  subject?: string;
+  placeholder: string;
+}
+
+const { title, subject, placeholder } = Astro.props;
+---
+
+<dialog class="search-dialog" aria-label="Search">
+  <div class="search-dialog-head">
+    <strong>{title}</strong>
+    <button class="icon-button search-close" type="button" aria-keyshortcuts="Escape">Close <kbd>Esc</kbd></button>
+  </div>
+  <Search id="header-search" subject={subject} placeholder={placeholder} />
+</dialog>
+
+<script>
+  import { isTypingTarget } from '../lib/keyboard';
+
+  const dialog = document.querySelector<HTMLDialogElement>('.search-dialog')!;
+  const input = dialog.querySelector<HTMLInputElement>('input')!;
+  const openButton = document.querySelector<HTMLButtonElement>('.search-open')!;
+  // The last thing focused in the page's content, e.g. a practice question.
+  let lastInMain: HTMLElement | null = null;
+  document.getElementById('main')?.addEventListener('focusin', (e) => (lastInMain = e.target as HTMLElement));
+  /**
+   * Where focus goes back to when the dialog closes: what had it before (the Search button, if it
+   * was reached by keyboard). Clicked or tapped, the button only had focus because of the click,
+   * so focus goes back into the page: what had it last there, else nothing (the page itself).
+   * That way a practice set's keyboard shortcuts still work after a search.
+   */
+  let returnTo: HTMLElement | null = null;
+  const open = (clicked = false) => {
+    if (dialog.open) return;
+    const active = document.activeElement as HTMLElement | null;
+    if (clicked) returnTo = lastInMain;
+    else returnTo = active && active !== document.body && active.id !== 'main' ? active : openButton;
+    dialog.showModal();
+    input.focus();
+    input.select();
+  };
+  const close = () => {
+    dialog.close();
+    if (returnTo?.isConnected) returnTo.focus();
+    else (document.activeElement as HTMLElement | null)?.blur();
+  };
+  // detail is the click count: 0 when the button was pressed with Enter or Space.
+  openButton.addEventListener('click', (e) => open(e.detail > 0));
+  dialog.querySelector('.search-close')!.addEventListener('click', close);
+  // Escape closes right away (a search box would otherwise use the first Escape to clear itself).
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+      return;
+    }
+    // ↑ ↓ move between the search box and the results.
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    const stops = [input, ...dialog.querySelectorAll<HTMLElement>('.results a.title, .more:not([hidden])')];
+    const i = stops.indexOf(document.activeElement as HTMLElement);
+    if (i < 0 || stops.length < 2) return;
+    e.preventDefault();
+    stops[Math.max(0, Math.min(stops.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)))]!.focus();
+  });
+  // Click on the backdrop closes the dialog.
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) close();
+  });
+
+  // "/" opens search, unless the user is typing somewhere.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (isTypingTarget(e.target as HTMLElement)) return;
+    e.preventDefault();
+    // A page with its own search box (home) uses it instead of the dialog.
+    const inline = document.querySelector<HTMLInputElement>('main .search input');
+    if (inline) {
+      inline.focus();
+      inline.scrollIntoView({ block: 'nearest' });
+    } else open();
+  });
+</script>
+
+<style>
+  .search-dialog {
+    width: min(40rem, calc(100vw - 1.5rem));
+    max-height: min(80vh, 40rem);
+    margin: 8vh auto auto;
+    padding: 1rem 1.1rem 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 20px 50px rgb(0 0 0 / 0.3);
+  }
+  .search-dialog::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  .search-close kbd {
+    font: inherit;
+    font-size: 0.72rem;
+    padding: 0 0.3rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+  }
+  @media (hover: none), (pointer: coarse) {
+    .search-close kbd {
+      display: none;
+    }
+  }
+  .search-dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .search-dialog :global(.search) {
+    margin: 0.75rem 0 0.5rem;
+  }
+</style>

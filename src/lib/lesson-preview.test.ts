@@ -12,7 +12,7 @@ describe('renderLessonPreview', () => {
       const html = await renderLessonPreview(bodyOf(join(LESSONS, dir, 'index.mdx')));
       expect(html).not.toContain('preview-problem');
       expect(html).not.toContain('katex-error');
-      expect(html).toContain('class="katex"');
+      expect(html).toMatch(/class="katex[ "]/);
       expect(html).toContain('class="callout');
     });
   }

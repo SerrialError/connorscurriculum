@@ -1,9 +1,12 @@
 ---
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
+import ScrollCues from '../components/ScrollCues.astro';
+import SearchDialog from '../components/SearchDialog.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getSubjectData, url } from '../lib/content';
-import { SITE_DESCRIPTION, SITE_NAME } from '../site';
+import { navKeyFor, searchPlaceholder, subjectNav } from '../lib/features';
+import { CONTRIBUTE_URL, SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 interface Props {
   title: string;
@@ -12,22 +15,22 @@ interface Props {
   subject?: string;
   /** Pagefind indexes only pages that set this. */
   searchable?: boolean;
-  /** Extra Pagefind metadata shown with search results. */
-  searchMeta?: { chapter?: string };
+  /** Extra Pagefind metadata shown with search results: the kind of page ("Lesson", "Chapter"…) and its chapter. */
+  searchMeta?: { type?: string; chapter?: string };
 }
 
 const { title, description = SITE_DESCRIPTION, subject, searchable = false, searchMeta = {} } = Astro.props;
 const subjectData = subject ? getSubjectData(subject) : undefined;
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
 const path = Astro.url.pathname;
-const nav = subject
-  ? [
-      { href: url(`${subject}/chapters/`), label: 'Chapters' },
-      { href: url(`${subject}/ap/`), label: 'AP topics' },
-      { href: url(`${subject}/practice/`), label: 'Practice' },
-      { href: url(`${subject}/frqs/`), label: 'Past FRQs' },
-    ]
-  : [];
+// The class nav comes from what the class has (lib/features.ts). Each item also owns the pages
+// under it, e.g. Lessons owns the chapter pages.
+const nav = subjectData ? subjectNav(subjectData) : [];
+const classRoot = subject ? url(`${subject}/`) : '';
+const current = subject && path.startsWith(classRoot) ? navKeyFor(nav, path.slice(classRoot.length)) : null;
+const onHome = subject !== undefined && path === classRoot;
+/** The home pages have their own search box, so the header has no Search button there. */
+const hasSearchBox = onHome || path === url();
 ---
 
 <!doctype html>
@@ -36,6 +39,7 @@ const nav = subject
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
     <title>{pageTitle}</title>
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
     <script is:inline>
@@ -46,33 +50,59 @@ const nav = subject
     </script>
   </head>
   <body>
-    <a class="skip visually-hidden" href="#main">Skip to content</a>
+    <a class="skip" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap bar">
-        <a class="brand" href={url()}>{SITE_NAME}</a>
+        <a class:list={['brand', { 'has-subject': !!subjectData }]} href={url()}>{SITE_NAME}</a>
         {subjectData && (
-          <a class="subject" href={url(`${subject}/`)}>
+          <a class="subject" href={url(`${subject}/`)} aria-current={onHome ? 'page' : undefined}>
+            <svg class="home-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11 12 3l9 8"></path>
+              <path d="M5 9.5V21h14V9.5"></path>
+            </svg>
             {subjectData.subject.name}
           </a>
         )}
         <span class="spacer"></span>
+        <button class="icon-button search-open" type="button" aria-haspopup="dialog" aria-keyshortcuts="/" title="Search (press /)" hidden={hasSearchBox}>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <circle cx="10.5" cy="10.5" r="6.5"></circle>
+            <path d="m15.5 15.5 5 5"></path>
+          </svg>
+          <span class="search-label">Search</span>
+        </button>
         <ThemeToggle />
       </div>
       {nav.length > 0 && (
-        <nav class="wrap subnav" aria-label="Subject">
+        <nav class="wrap subnav" aria-label={subjectData?.subject.name}>
           {nav.map((n) => (
-            <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>
-              {n.label}
+            <a href={url(`${subject}/${n.path}`)} class:list={{ 'nav-home': n.key === 'home' }} aria-current={n.key === current ? 'page' : undefined}>
+              {n.short ? (
+                <>
+                  <span class="long">{n.label}</span>
+                  <span class="short">{n.short}</span>
+                </>
+              ) : (
+                n.label
+              )}
             </a>
           ))}
         </nav>
       )}
     </header>
-    <main id="main" class="wrap" data-pagefind-body={searchable ? '' : undefined}>
+    <SearchDialog
+      title={subjectData ? `Search ${subjectData.subject.name}` : 'Search'}
+      subject={subject}
+      placeholder={searchPlaceholder(subjectData)}
+    />
+    <main id="main" class="wrap" tabindex="-1" data-pagefind-body={searchable ? '' : undefined}>
       {searchable && (
-        <div hidden>
+        <div hidden data-pagefind-ignore>
           <span data-pagefind-meta="title">{title}</span>
           {subjectData && <span data-pagefind-meta="subject">{subjectData.subject.name}</span>}
+          {/* Search inside a class finds only that class's pages. */}
+          {subject && <span data-pagefind-filter="class">{subject}</span>}
+          {searchMeta.type && <span data-pagefind-meta="type">{searchMeta.type}</span>}
           {searchMeta.chapter && <span data-pagefind-meta="chapter">{searchMeta.chapter}</span>}
         </div>
       )}
@@ -80,20 +110,42 @@ const nav = subject
     </main>
     <footer class="site-footer wrap small muted">
       <p>
+        {/* Off the class home, which has its own "All classes" link at the top. */}
+        {subject && !onHome && <><a href={url()}>All classes</a> · </>}
+        <a href={CONTRIBUTE_URL}>Share your notes or write a lesson</a>
+      </p>
+      <p>
         Not affiliated with or endorsed by College Board or Pearson. AP® is a registered trademark of College Board.
       </p>
-      <p><a href={url('admin/')}>Write a lesson</a></p>
     </footer>
+    <ScrollCues />
+    <script is:inline>
+      // Class tests (data-test-date): past or upcoming by the reader's date, since the build can be
+      // weeks old. Shows .if-past or .if-upcoming inside (global.css). Same rule as isPast() in
+      // lib/dates.ts, written out because an inline script runs before the page is first drawn.
+      (() => {
+        const d = new Date();
+        const today = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
+        for (const el of document.querySelectorAll('[data-test-date]')) el.toggleAttribute('data-past', !!el.dataset.testDate && el.dataset.testDate < today);
+      })();
+    </script>
   </body>
 </html>
 
 <style>
+  .skip {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 10;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 700;
+  }
   .skip:focus {
-    position: static !important;
-    width: auto;
-    height: auto;
-    clip: auto;
-    padding: 0.5rem;
+    top: 0.5rem;
   }
   .site-header {
     background: var(--surface);
@@ -102,7 +154,7 @@ const nav = subject
   .bar {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     min-height: 3.25rem;
   }
   .brand {
@@ -116,26 +168,35 @@ const nav = subject
     color: var(--text-2);
     text-decoration: none;
     font-weight: 600;
-    padding-left: 0.75rem;
+    padding-left: 0.6rem;
     border-left: 1px solid var(--border);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .brand:hover,
+  .subject:hover {
+    color: var(--link);
+  }
+  .home-icon,
+  .subnav .short {
+    display: none;
   }
   .spacer {
     flex: 1;
   }
   .subnav {
     display: flex;
-    gap: 0.1rem;
+    gap: 0.15rem;
     /* Line up the first link's text with the content: page padding minus link padding. */
-    padding-left: calc(1rem - 0.55rem);
+    padding-left: calc(1rem - 0.6rem);
     overflow-x: auto;
-    padding-bottom: 0.4rem;
+    scrollbar-width: none;
+    padding-bottom: 0.45rem;
   }
   .subnav a {
-    padding: 0.3rem 0.55rem;
-    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
     color: var(--text-2);
     text-decoration: none;
     font-weight: 600;
@@ -144,6 +205,7 @@ const nav = subject
   }
   .subnav a:hover {
     background: var(--surface-2);
+    color: var(--text);
   }
   .subnav a[aria-current='page'] {
     background: var(--accent-soft);
@@ -152,13 +214,73 @@ const nav = subject
   main {
     padding-bottom: 3rem;
   }
-  @media (max-width: 420px) {
+  main:focus {
+    outline: none;
+  }
+  /* Narrow screens: the subject name stands in for the site name, and the nav links shrink to fit. */
+  @media (max-width: 520px) {
+    .brand.has-subject {
+      display: none;
+    }
+    /* The subject name is the home link here (the nav's Home is hidden), so make it look like one. */
+    .subject {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--text);
+      font-weight: 800;
+      border-left: 0;
+      padding: 0.25rem 0.5rem 0.25rem 0.4rem;
+      margin-left: -0.4rem;
+      border-radius: 8px;
+    }
+    .subject[aria-current='page'] {
+      background: var(--accent-soft);
+      color: var(--link);
+    }
+    .home-icon {
+      display: block;
+      flex: none;
+    }
+    .search-label {
+      display: none;
+    }
+    .icon-button.search-open {
+      padding: 0.3rem 0.55rem;
+    }
     .subnav {
-      padding-left: calc(1rem - 0.45rem);
+      gap: 0;
+      padding-left: calc(1rem - 0.4rem);
+      padding-bottom: 0.15rem;
+    }
+    /* Tap targets at least 44px tall on phones. */
+    .subnav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      font-size: 0.875rem;
+      padding: 0 0.4rem;
+    }
+    .subject {
+      min-height: 2.75rem;
+    }
+    /* The subject name in the bar is the home link here. */
+    .subnav a.nav-home,
+    .subnav .long {
+      display: none;
+    }
+    .subnav .short {
+      display: inline;
+    }
+  }
+  /* The smallest phones: tighter links so all five fit without scrolling. */
+  @media (max-width: 380px) {
+    .subnav {
+      padding-left: calc(1rem - 0.3rem);
     }
     .subnav a {
-      font-size: 0.9rem;
-      padding: 0.3rem 0.45rem;
+      font-size: 0.82rem;
+      padding-inline: 0.28rem;
     }
   }
   .site-footer {
@@ -166,5 +288,8 @@ const nav = subject
     border-top: 1px solid var(--border);
     padding-top: 1rem;
     padding-bottom: 2rem;
+  }
+  .site-footer p {
+    margin: 0.4rem 0;
   }
 </style>

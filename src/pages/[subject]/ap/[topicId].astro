@@ -1,10 +1,13 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceHref, subjectIds, url } from '../../../lib/content';
-import { matchFrqs } from '../../../lib/frqs';
+import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
+import { pickQuery, practiceStarts } from '../../../lib/practice/links';
+import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
+import { chapterName, plural } from '../../../lib/text';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -21,36 +24,71 @@ const c = coverage(data, await getLessons(subject), await getQuestions(subject))
 const teaching = data.topicChapters.get(topicId) ?? [];
 const alsoTagged = c.chapters.filter((n) => !teaching.includes(n));
 const frqMatches = matchFrqs(pastFrqLinks(data), new Set([topicId]));
-const flat = unit.topics.map((t) => t.id);
+const status = data.progress.topics.get(topicId) ?? null;
+const notes = data.progress.notes.get(topicId) ?? [];
+const gap = data.textbookGaps.topics.get(topicId);
+// Previous/next across the whole CED, so the last topic of a unit leads into the next unit.
+const flat = [...data.topics.keys()];
 const i = flat.indexOf(topicId);
 const prev = flat[i - 1];
 const next = flat[i + 1];
+const pool = { topics: [topicId] };
+const { start } = practiceStarts(pool, c.questions);
 ---
 
-<Base title={`${topicId} ${topic.title}`} subject={subject} searchable>
-  <p class="breadcrumbs">
-    <a href={url(`${subject}/ap/`)}>{data.subject.standardsName}</a> / <a href={url(`${subject}/ap/#unit-${unit.id}`)}>Unit {unit.id}: {unit.title}</a>
-  </p>
+<Base title={`${topicId} ${topic.title}`} subject={subject} searchable searchMeta={{ type: 'AP topic' }}>
+  <Breadcrumbs
+    items={[
+      { href: url(`${subject}/ap/`), label: 'AP topics' },
+      { href: url(`${subject}/ap/#unit-${unit.id}`), label: `Unit ${unit.id}: ${unit.title}` },
+    ]}
+  />
   <h1>{topicId} {topic.title}</h1>
-  {data.progress.topics.has(topicId) && (
-    <p class="status">
-      <ProgressMark status={data.progress.topics.get(topicId) ?? null} doneLabel="Covered in class" />
-      {data.progress.notes.get(topicId)?.map((note) => <span class="small muted">{note}</span>)}
-    </p>
+  {(status || notes.length > 0) && (
+    <div class="status">
+      <ProgressMark status={status} />
+      {notes.map((note) => <p class="small muted">{note}</p>)}
+    </div>
   )}
+
+  {gap && (
+    <aside class="callout not-on-ap gap" aria-label="Textbook coverage">
+      <p class="callout-title">⚑ {gap.coverage === 'missing' ? 'The textbook doesn’t teach this' : 'The textbook covers this thinly'}</p>
+      <div class="callout-body">
+        <p><strong>In the book:</strong> {gap.book}</p>
+        <p><strong>Learn elsewhere:</strong> {gap.learn}</p>
+        <p class="small"><a href={url(`${subject}/ap/#textbook-gaps`)}>Other topics the textbook covers thinly</a></p>
+      </div>
+    </aside>
+  )}
+
+  <div class="actions" data-pagefind-ignore>
+    {c.questions > 0 ? (
+      <>
+        <a class="button" href={practiceUrl(subject, start.query)}>{start.label}</a>
+        <a class="button secondary" href={practiceUrl(subject, pickQuery(pool))}>Pick your own set ({plural(c.questions, 'question')})</a>
+      </>
+    ) : (
+      <p class="small muted">No practice questions on this topic yet.{frqMatches.length > 0 && ' Try the past AP FRQs below.'}</p>
+    )}
+  </div>
+
+  <h2>Lessons</h2>
+  <LessonList lessons={c.lessons} showChapter grouped empty="No lessons on this topic yet." />
 
   <h2>Textbook chapters</h2>
   {teaching.length > 0 ? (
     <ul class="plain-list chapters">
       {teaching.map((n) => (
         <li>
-          <ProgressMark status={data.progress.chapters.has(n) ? 'done' : null} compact />
-          <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}: {data.chapterMap.get(n)?.title}</a>
+          <ProgressMark status={data.progress.chapters.has(n) ? 'done' : null} compact doneLabel="Finished in class" />
+          <a href={url(`${subject}/chapters/${n}/`)}>{chapterName(data.chapterMap.get(n)!)}</a>
+          {data.progress.current.includes(n) && <span class="badge now">Now in class</span>}
         </li>
       ))}
     </ul>
   ) : (
-    <p class="muted">No chapter in chapters.json lists this topic yet.</p>
+    <p class="muted">Not in any textbook chapter yet.</p>
   )}
   {alsoTagged.length > 0 && (
     <p class="small muted">
@@ -58,21 +96,14 @@ const next = flat[i + 1];
     </p>
   )}
 
-  <div class="actions">
-    <a class="button" href={practiceHref(subject, { topic: [topicId] })}>Practice this topic ({c.questions})</a>
-  </div>
-
-  <h2>Lessons</h2>
-  <LessonList lessons={c.lessons} showChapter />
-
   {/* FRQ titles mention other topics; keep them out of this page's search entry. */}
   <section data-pagefind-ignore="all">
     <h2>Past AP FRQs</h2>
     {frqMatches.length > 0 ? (
       <>
         <p class="small muted">
-          {frqMatches.length} released question{frqMatches.length === 1 ? ' has' : 's have'} parts on this topic. Grade yourself
-          with the scoring guidelines.
+          {frqCountLabel(frqMatches)} on this topic.
+          Grade yourself with the scoring guidelines.
         </p>
         <div class="stack">
           {frqMatches.map((m) => <FrqCard subject={subject} frq={m.frq} matched={m.parts} />)}
@@ -83,9 +114,13 @@ const next = flat[i + 1];
     )}
   </section>
 
-  <nav class="pager small" aria-label="Topics">
-    {prev ? <a href={url(`${subject}/ap/${prev}/`)}>← {prev}</a> : <span></span>}
-    {next && <a href={url(`${subject}/ap/${next}/`)}>{next} →</a>}
+  <nav class="pager" aria-label="Topics">
+    {prev ? (
+      <a href={url(`${subject}/ap/${prev}/`)}><span class="small muted">← Previous</span>{prev} {data.topics.get(prev)!.title}</a>
+    ) : <span></span>}
+    {next && (
+      <a class="next" href={url(`${subject}/ap/${next}/`)}><span class="small muted">Next →</span>{next} {data.topics.get(next)!.title}</a>
+    )}
   </nav>
 </Base>
 
@@ -93,18 +128,19 @@ const next = flat[i + 1];
   .status {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.25rem 0.75rem;
     align-items: center;
+  }
+  .status p {
+    margin: 0;
+  }
+  .gap p {
+    margin: 0.3rem 0 0;
   }
   .chapters li {
     display: flex;
     gap: 0.5rem;
     align-items: center;
     padding: 0.2rem 0;
-  }
-  .pager {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
   }
 </style>

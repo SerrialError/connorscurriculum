@@ -1,7 +1,23 @@
 ---
-import Practice from '../../../components/Practice.svelte';
+import type { PracticeCourse } from '../../../components/practice/context';
+import Practice from '../../../components/practice/Practice.svelte';
 import Base from '../../../layouts/Base.astro';
-import { getQuestions, getSubjectData, learnedTopic, pastFrqLinks, subjectPaths, url } from '../../../lib/content';
+import {
+  getLessons,
+  getQuestions,
+  getSubjectData,
+  inTest,
+  isTaught,
+  learnedTopic,
+  lessonHref,
+  pastFrqLinks,
+  subjectPaths,
+  testsByDate,
+  topicIds,
+  url,
+} from '../../../lib/content';
+import { hasTests, hasTopics } from '../../../lib/features';
+import { quickStarts } from '../../../lib/practice/presets';
 
 export const getStaticPaths = subjectPaths;
 
@@ -9,29 +25,42 @@ const { subject } = Astro.params;
 const data = getSubjectData(subject);
 const questions = await getQuestions(subject);
 const chapterNumbers = new Set(questions.map((q) => q.data.chapter));
-const chapters = data.chapters.map((c) => ({ number: c.number, title: c.title, hasQuestions: chapterNumbers.has(c.number) }));
-const units = data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) }));
-const frqs = pastFrqLinks(data);
-const chapterTopics = Object.fromEntries(data.chapters.map((c) => [String(c.number), c.cedTopics]));
+const current = new Set(data.progress.current);
 const isLearned = learnedTopic(data);
-const learnedTopics = [...data.topics.keys()].filter(isLearned);
-const tests = data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections }));
+const by = ['chapter', hasTopics(data) && 'AP topic', hasTests(data) && 'class test'].filter(Boolean);
+const description = `Practice questions by ${by.join(', ')}, and difficulty.`;
+
+const course: PracticeCourse = {
+  subject,
+  questionsUrl: url(`${subject}/practice/questions.json`),
+  chapters: data.chapters.map((c) => ({
+    number: c.number,
+    title: c.title,
+    hasQuestions: chapterNumbers.has(c.number),
+    current: current.has(c.number),
+    finished: data.progress.chapters.has(c.number),
+  })),
+  units: data.ced.units.map((u) => ({ id: u.id, title: u.title, topics: u.topics.map((t) => ({ id: t.id, title: t.title })) })),
+  tests: data.tests.map((t) => ({ id: t.id, title: t.title, chapters: t.chapters, sections: t.sections })),
+  frqs: pastFrqLinks(data),
+  chapterTopics: Object.fromEntries(data.chapters.map((c) => [String(c.number), c.cedTopics])),
+  learnedTopics: [...data.topics.keys()].filter(isLearned),
+  practiceNames: Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name])),
+  presets: quickStarts(
+    testsByDate(data).map((t) => ({ id: t.id, title: t.title, questions: questions.filter((q) => inTest(t, q)).map((q) => q.id) })),
+    questions.map((q) => ({ id: q.id, chapter: q.data.chapter })),
+    new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
+  ),
+  // Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.
+  lessons: (await getLessons(subject))
+    .filter((l) => l.data.kind === 'lesson')
+    .map((l) => ({ title: l.data.title, href: lessonHref(l), chapter: l.data.chapter, sections: l.data.sections, topics: topicIds(l) })),
+  hrefs: { topics: url(`${subject}/ap/`), chapters: url(`${subject}/chapters/`), frqs: url(`${subject}/frqs/`) },
+};
 ---
 
-<Base title="Practice" subject={subject}>
-  <h1>Practice</h1>
+<Base title="Practice" subject={subject} description={description}>
+  <h1 class="practice-title">Practice</h1>
   <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
-  <Practice
-    client:load
-    subject={subject}
-    questionsUrl={url(`${subject}/practice/questions.json`)}
-    chapters={chapters}
-    units={units}
-    tests={tests}
-    frqs={frqs}
-    chapterTopics={chapterTopics}
-    learnedTopics={learnedTopics}
-    frqsHref={url(`${subject}/frqs/`)}
-    practiceNames={Object.fromEntries(data.ced.sciencePractices.map((p) => [p.id, p.name]))}
-  />
+  <Practice client:load course={course} />
 </Base>

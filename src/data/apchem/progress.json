@@ -1,6 +1,9 @@
 {
   "chapters": [1, 2, 3, 4, 5, 6, 7],
   "current": [8, 9],
+  "notCovered": {
+    "1.6": "skipped during Ch. 6–7. Learn it on your own before the AP exam."
+  },
   "lastYear": {
     "course": "Scholars Chemistry",
     "covered": ["3.4", "4.8", "8.1", "8.2", "9.1", "9.2", "9.3"],

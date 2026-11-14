@@ -1,5 +1,9 @@
 // Past AP free-response questions: flattening, matching parts to topics, and readiness.
 // Plain TypeScript (no Astro imports) so the practice island and tests can use it.
+import { plural } from './text';
+
+/** Shown (as the tooltip of "not official") wherever science practices that aren't College Board's are listed. */
+export const OUR_PRACTICE_LABELS = 'College Board hasn’t published science-practice labels for this exam; these are ours.';
 
 export interface FrqPart {
   label: string;
@@ -52,6 +56,9 @@ export interface FrqMatch {
   points: number;
 }
 
+/** How matchFrqs orders its list, said wherever the list is shown. */
+export const FRQ_ORDER_NOTE = 'Most points on these topics first.';
+
 /** Questions with at least one part on the given topics, most matching points first, then newest. */
 export function matchFrqs(frqs: FrqLink[], topics: ReadonlySet<string>): FrqMatch[] {
   return frqs
@@ -77,3 +84,29 @@ export function frqPractices(frq: Pick<FrqLink, 'parts'>): string[] {
 }
 
 export const frqName = (frq: Pick<FrqLink, 'year' | 'number'>) => `${frq.year} Q${frq.number}`;
+
+/**
+ * How many past FRQs match, counted the same way everywhere: questions, plus the matching parts
+ * when that's a different number. "10 past FRQs (12 parts)", "1 past FRQ".
+ */
+export function frqCountLabel(matches: Pick<FrqMatch, 'parts'>[], noun = 'past FRQ'): string {
+  const q = matches.length;
+  const parts = matches.reduce((sum, m) => sum + m.parts.length, 0);
+  const label = plural(q, noun);
+  return parts === q ? label : `${label} (${parts} parts)`;
+}
+
+/**
+ * The readiness badge on an FRQ card, in plain words: "✓ Ready" when every part is on topics
+ * already learned, else how many of its points are. `title` explains it on hover.
+ */
+export function readinessLabel(ready: number, total: number): { text: string; title: string; full: boolean } {
+  const full = total > 0 && ready >= total;
+  return {
+    full,
+    text: full ? '✓ Ready' : ready === 0 ? 'Topics not learned yet' : `${ready} of ${total} pts on topics you've learned`,
+    title: full
+      ? 'You have learned every topic in this question (this year or last year).'
+      : 'Points in parts whose topics you have all learned (this year or last year).',
+  };
+}

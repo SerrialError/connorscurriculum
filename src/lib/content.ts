@@ -2,7 +2,9 @@
 // so draft handling and sorting stay consistent.
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { type SubjectData, getSubjectData, loadRegistry } from './registry';
+import { classSummary, isClassContent, isSample } from './class-status';
 import { type FrqLink, flattenFrqs } from './frqs';
+import { isPast, isoDate } from './dates';
 import { topicIdFromRef } from './validate';
 
 export type Lesson = CollectionEntry<'lessons'>;
@@ -12,6 +14,10 @@ export const subjectIds = () => [...loadRegistry().keys()];
 
 /** For getStaticPaths of /[subject]/... pages. */
 export const subjectPaths = () => subjectIds().map((subject) => ({ params: { subject } }));
+
+/** For pages only some classes have, e.g. `subjectPathsWith(hasPastFrqs)` (lib/features.ts). */
+export const subjectPathsWith = (has: (data: SubjectData) => boolean) => () =>
+  [...loadRegistry()].filter(([, data]) => has(data)).map(([subject]) => ({ params: { subject } }));
 
 /** "apchem/14-reaction-rates" -> "14-reaction-rates" */
 export const lessonSlug = (lesson: Lesson) => lesson.id.split('/').slice(1).join('/');
@@ -37,6 +43,10 @@ export async function getQuestions(subject: string): Promise<Question[]> {
 
 export interface TopicCoverage {
   lessons: Lesson[];
+  /**
+   * Class-material questions: what a practice set on the topic can pick (sample questions and
+   * ones from chapters the class hasn't reached come in only when their chapter is picked).
+   */
   questions: number;
   chapters: number[];
 }
@@ -54,7 +64,7 @@ export function coverage(data: SubjectData, lessons: Lesson[], questions: Questi
       addChapter(c, lesson.data.chapter);
     }
   }
-  for (const q of questions) {
+  for (const q of questions.filter((x) => isClassContent(data, x))) {
     for (const t of topicIds(q)) {
       const c = map.get(t)!;
       c.questions += 1;
@@ -67,23 +77,21 @@ export function coverage(data: SubjectData, lessons: Lesson[], questions: Questi
   return map;
 }
 
-/** Lessons and questions in a class test (whole chapters, or only the listed sections). */
-export function inTest(test: SubjectData['tests'][number], entry: Lesson | Question): boolean {
-  if (!test.chapters.includes(entry.data.chapter)) return false;
-  return test.sections.length === 0 || entry.data.sections.some((s) => test.sections.includes(s));
-}
-
-export function practiceHref(subject: string, query: Record<string, string | string[] | number[]>): string {
-  const p = new URLSearchParams();
-  for (const [k, v] of Object.entries(query)) {
-    const s = Array.isArray(v) ? v.join(',') : v;
-    if (s) p.set(k, s);
-  }
-  const qs = p.toString().replaceAll('%2C', ',');
-  return url(`${subject}/practice/${qs ? `?${qs}` : ''}`);
-}
+/**
+ * A class's practice page at a practice query (lib/practice/links.ts builds them): a "Start …"
+ * link begins that set right away, a "Pick your own set" link opens the setup screen with its
+ * filters picked, and nothing starts until the student presses Start.
+ */
+export const practiceUrl = (subject: string, query = '') => url(`${subject}/practice/${query}`);
 
 export { getSubjectData };
+export { currentChapters, inCedOrder, inTest, isClassContent, isSample, isTaught, nextChapter, nowChapters, testsByDate } from './class-status';
+export { LESSON_KINDS, groupLessons, kindCounts, kindLabel } from './lesson-kinds';
+
+/** A class's dashboard data (see classSummary), loaded from its content. */
+export async function getClassSummary(data: SubjectData) {
+  return classSummary(data, await getLessons(data.subject.id), await getQuestions(data.subject.id));
+}
 
 /** Prefix a site-relative path with the configured base. */
 export function url(path = ''): string {
@@ -116,13 +124,14 @@ export function learnedTopic(data: SubjectData) {
 }
 
 /**
- * The chapter to study next: the first chapter the class is working on now (progress.json "current"),
- * else the first unfinished chapter after the last finished one (else the first unfinished).
+ * Has the test happened, as of the build? Pages mark tests with data-test-date and Base.astro's
+ * script decides again by the reader's date.
  */
-export function nextChapter(data: SubjectData) {
-  const current = data.progress.current.map((n) => data.chapterMap.get(n)).find((c) => c !== undefined);
-  if (current) return current;
-  const lastDone = Math.max(0, ...data.progress.chapters);
-  const unfinished = data.chapters.filter((c) => !data.progress.chapters.has(c.number));
-  return unfinished.find((c) => c.number > lastDone) ?? unfinished[0];
+export const isPastTest = (test: { date?: string } | undefined): boolean => isPast(test?.date, isoDate(new Date()));
+
+/** "By Jaya", or "Sample page" for samples. */
+export function byline(lesson: Lesson): string {
+  return isSample(lesson) ? 'Sample page' : `By ${lesson.data.authors.join(', ')}`;
 }
+
+export const lessonHref = (lesson: Lesson) => url(`${lesson.data.subject.id}/lessons/${lessonSlug(lesson)}/`);

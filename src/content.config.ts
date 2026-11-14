@@ -80,7 +80,11 @@ const tagShape = {
   sections: z.array(z.string()).default([]),
   // Required, but may be empty: [] means "class-only content".
   cedTopics: z.array(reference('cedTopics')),
-  authors: z.array(z.string().min(1)).min(1, 'authors needs at least one name'),
+  // Who wrote it: at least one name, except on samples.
+  authors: z.array(z.string().min(1)).default([]),
+  // Written only to show the format, not class material: labelled as a sample, kept off the
+  // class home, and left out of practice unless its chapter is picked.
+  sample: z.boolean().default(false),
 };
 
 // ---------------------------------------------------------------------------
@@ -100,6 +104,9 @@ const lessons = defineCollection({
         title: z.string().min(1),
         ...tagShape,
         order: z.number().default(0),
+        // lesson: a teaching page; notes: a classmate's notes; review: a test review sheet.
+        // Chapter and test pages group lessons by kind, and review sheets are featured.
+        kind: z.enum(['lesson', 'notes', 'review']).default('lesson'),
         draft: z.boolean().default(false),
         summary: z.string().optional(),
       })

@@ -22,11 +22,13 @@ Every lesson and question has both kinds of tag:
 | `sections` | Optional textbook sections. Checked only once that chapter's `sections` list is filled in. | `["14.3"]` |
 | `cedTopics` | AP CED topic ids from `src/data/<subject>/ced.json`. **Required**, but `[]` means "class only, not on the AP exam". | `["5.2", "5.3"]` |
 | `authors` | At least one name | `["Jordan"]` |
+| `sample` | Optional. `true` only for a page or question written to show the format (see Sample content below). | `true` |
 
 ## Using the editor (CMS)
 
-Lessons can be written in a browser editor instead of editing files: use the **Write a lesson** link
-at the bottom of any page, or go to `/admin/`. It shows a live preview with the math, chemistry, and
+Lessons can be written in a browser editor instead of editing files: open
+[the editor](https://serrialerror.github.io/connorscurriculum/admin/) (`/admin/` on the site). The
+**Share your notes or write a lesson** link at the bottom of every page leads to this section. It shows a live preview with the math, chemistry, and
 boxes rendered the way the site will show them, and flags anything that would break the build (an
 unclosed `<Callout>`, a stray `{`, an unknown component). The chapter and AP topic pickers come
 from `chapters.json` and `ced.json`.
@@ -57,6 +59,7 @@ subject: apchem
 chapter: 14
 sections: []
 cedTopics: ["5.1", "5.2"]
+kind: lesson        # lesson, notes (your class notes), or review (a test review sheet)
 order: 1            # position within the chapter (lower first)
 authors: ["Jordan"]
 summary: One sentence shown on cards and in search.
@@ -83,7 +86,32 @@ Worked solution, hidden until clicked.
 ```
 
 `Callout`, `Reveal`, and `YouTube` are available in every lesson without importing them.
+A `kind: notes` page gets a note at the top saying it's a classmate's notes with the wording kept,
+and that fixes are in **Correction** boxes, so the file doesn't need one. Mark a fix with
+`<Callout type="warning">**Correction:** …</Callout>` right below the line it corrects.
 `\ce{...}` (mhchem) works anywhere math works.
+
+Every lesson shows up on the **Lessons** page (`/<subject>/lessons/`), grouped by chapter, and on its
+chapter page. The home page lists the lessons and notes for the latest finished chapters. Practice
+links a question to the `kind: lesson` pages from its chapter that share one of its `sections` (or,
+failing that, an AP topic), so tag `sections` on both lessons and questions.
+
+Sample content: `sample: true` marks a page or question written only to show the format (it needs no
+`authors`). Sample pages, and anything in a chapter the class hasn't reached yet (not finished or
+current in `progress.json`), are labelled as not class material, listed in a closed "Sample pages"
+section at the end of the Lessons page, and left off the home page. Practice leaves their questions
+out unless the student picks their chapter (or a class test covering it): with no chapter picked,
+sets come from the chapters the class has reached.
+
+Practice links: `/<subject>/practice/?chapter=7&difficulty=3` opens the practice page with those
+filters ticked (`section`, `topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=5|all` work
+the same way; the defaults are 10 questions, shuffled). A lesson page's practice links use its chapter
+and `sections`, falling back to the whole chapter when no question is tagged with those sections.
+Add `start=1` to start that set right away. While a set is open its address also has a `seed`, so
+the same link opens the same questions.
+
+Lessons links: `/<subject>/lessons/?kind=notes&q=bohr` opens the Lessons page filtered to one kind
+(`lesson`, `notes`, or `review`) and the typed words. The filter stays in the address as it changes.
 
 Watch out for curly braces `{ }` in ordinary MDX text (outside `$...$`): MDX reads them as code.
 Write `\{` or put the text inside math.
@@ -111,7 +139,8 @@ Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short
     - { id: b, text: "12.5%" }
   answer: b                # must be one of the choice ids
   explanation: |
-    Why b is right, and why the others are wrong.
+    Why (B) is right, and why the others are wrong. Students see the choices
+    labeled A, B, C, D, so refer to them as (A), (B), and so on.
 
 - id: apchem-14-mechanism-frq
   type: frq
@@ -176,7 +205,8 @@ Add an entry to `src/data/<subject>/tests.json`:
 { "id": "ch15-test", "title": "Chapter 15 Test", "date": "2026-12-03", "chapters": [15], "sections": [] }
 ```
 
-Empty `sections` means the whole chapters. `date` is optional.
+Empty `sections` means the whole chapters. `date` is optional. A lesson with `kind: review` in one
+of the test's chapters is featured at the top of the test page and on the subject page.
 
 ## Class progress
 
@@ -187,8 +217,8 @@ the chapters the class is working on now in `current` (optional; a chapter can't
 { "chapters": [1, 2, 3, 4, 5, 6, 7], "current": [8, 9] }
 ```
 
-The first `current` chapter is shown as "Up next" on the subject page. Without `current`, that is the
-first unfinished chapter after the last finished one.
+The `current` chapters are shown as "Now in class" on the subject and chapters pages. Without
+`current`, the first unfinished chapter after the last finished one is shown as "Up next".
 
 That's all. The AP topics fill in by themselves, because each chapter in `chapters.json` lists
 the CED topics it teaches:
@@ -217,10 +247,43 @@ Topics already seen in an earlier course go in an optional `lastYear` block in t
 "Partly covered in Scholars Chemistry: …". Once a topic is finished this year, the ✓ replaces the
 ↺ or ◐. Anything with no mark at all is completely new.
 
+### Topics the class skipped
+
+If the class finished a chapter but skipped one of its AP topics, list it in `notCovered` with a
+short note for students. It then shows "! Skipped in class" instead of a ✓:
+
+```json
+"notCovered": { "1.6": "the class skipped photoelectron spectroscopy in Ch. 6–7, so learn it on your own." }
+```
+
+The build fails if the topic doesn't exist or none of its chapters is finished yet.
+
+### Other mapping fixes
+
 If a topic's mark looks wrong, fix the mapping in `chapters.json` rather than `progress.json`.
 For example, if your teacher covers half-reactions in Ch. 4, remove `"4.9"` from Chapter 20's
 `cedTopics`. The chapter's AP unit badges come from the same list. Every CED topic must be listed
 by at least one chapter (a unit test checks this).
+
+## Topics the textbook covers thinly
+
+`src/data/<subject>/textbook-gaps.json` (optional) lists AP topics the textbook teaches only briefly
+(`"thin"`) or not at all (`"missing"`), so students know to learn them elsewhere. Each entry says
+what the book does and what students need from somewhere else:
+
+```json
+{
+  "topics": [
+    { "id": "3.13", "coverage": "thin", "book": "A short treatment in Ch. 14.", "learn": "A = εbc and calibration curves." }
+  ],
+  "other": [
+    { "title": "Lab skills", "coverage": "thin", "book": "…", "learn": "…" }
+  ]
+}
+```
+
+These show up on the AP topics page, on each listed topic's page, and next to the topic on chapter
+pages. The build fails on an unknown or duplicate topic id.
 
 ## Textbook sections
 
@@ -233,11 +296,18 @@ chapter, fill it in:
 
 ## Adding a subject
 
-1. Add an entry to `src/data/subjects.json`.
-2. Create `src/data/<id>/ced.json`, `chapters.json`, and (optionally) `tests.json`.
+1. Add an entry to `src/data/subjects.json` (`id`, `name`, `textbook`; for an AP class also
+   `standardsUrl`, the College Board PDF of its Course and Exam Description, linked from the AP
+   topics page).
+2. Create `src/data/<id>/chapters.json`. Optional: `ced.json` (the AP CED's units and topics;
+   pages say "AP topics", "AP unit", and "not on the AP exam" only for a class that has one),
+   `tests.json`, `past-frqs.json`, `progress.json`, `textbook-gaps.json`.
 3. Add content under `src/content/lessons/<id>/` and `src/content/questions/<id>/`.
 
-No code changes are needed.
+No code changes are needed. The site's home page (`/`) lists every class with what it's on now;
+each class has its own home at `/<id>/`. A class gets a Tests, topics, or Past FRQs page (and nav
+item, and dashboard button for Tests) only when it has that data (`src/lib/features.ts`), and search inside a class finds only its
+pages. `src/lib/features.test.ts` builds a site with a second, minimal class to keep it that way.
 
 ## Before you push
 

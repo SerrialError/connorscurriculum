@@ -1,27 +1,33 @@
 ---
-// One-line key for the class-progress icons on topic badges, listing only the icons that appear.
+// One-line key for the topic badges: the class-progress icons that appear, and the "Not on the
+// AP exam" badge when some item has it.
 import { getSubjectData } from '../lib/content';
+import { hasTopics } from '../lib/features';
 import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
 
 interface Props {
   subject: string;
   /** Topics shown on the page; the legend lists the states they have. */
   topics: string[];
+  /** Some item on the page has no topics, so it shows the "Not on the AP exam" badge. */
+  classOnly?: boolean;
   /** Shown before the key, e.g. "AP topic badges:". */
   label?: string;
 }
 
-const { subject, topics, label } = Astro.props;
+const { subject, topics, classOnly = false, label } = Astro.props;
 const data = getSubjectData(subject);
 const states = (['done', 'partial', 'review', 'skipped'] as const).filter((s) => topics.some((t) => data.progress.topics.get(t) === s));
+const showClassOnly = classOnly && hasTopics(data);
 ---
 
-{states.length > 0 && (
+{(states.length > 0 || showClassOnly) && (
   <p class="topic-legend small muted" aria-hidden="true" data-pagefind-ignore>
     {label && <span class="label">{label}</span>}
     {states.map((s) => (
       <span><span class="icon">{PROGRESS_ICONS[s]}</span> {PROGRESS_LABELS[s].toLowerCase()}</span>
     ))}
+    {showClassOnly && <span><span class="icon">⊘</span> not on the AP exam</span>}
   </p>
 )}
 

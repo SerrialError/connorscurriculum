@@ -84,8 +84,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
   <div class="dash">
     {nowInfo.length > 0 && (
       <section class="card now" aria-labelledby="now-h">
-        <p class="eyebrow">{now.label}</p>
-        <h2 id="now-h">{chapterRange(nowInfo.map((c) => c.chapter.number))}</h2>
+        <h2 id="now-h" class="eyebrow">{now.label}</h2>
         {/* Compact: one line per chapter. The topic list lives on the chapter page. */}
         {nowInfo.map((c) => (
           <div class="now-chapter">
@@ -110,7 +109,8 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
         ))}
         {nowInfo.every((c) => c.lessons + c.questions === 0) && (
           <p class="small muted empty-note">
-            No lessons or practice questions yet. Use the AP topics and past FRQs above.
+            No lessons or practice questions yet.
+            {hasTopics(data) && ` Study from the ${nowInfo.some((c) => c.frqs) ? 'AP topics and past FRQs' : 'AP topics'} above.`}
           </p>
         )}
       </section>
@@ -254,7 +254,7 @@ const skippedIds = inCedOrder([...progress.topics].filter(([, s]) => s === 'skip
     margin: 0;
     color: var(--accent);
   }
-  .dash h2 {
+  .dash h2:not(.eyebrow) {
     margin: 0.1rem 0 0.4rem;
     font-size: 1.3rem;
   }

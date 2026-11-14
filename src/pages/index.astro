@@ -5,7 +5,7 @@ import Search from '../components/Search.astro';
 import Base from '../layouts/Base.astro';
 import TestWhen from '../components/TestWhen.astro';
 import { getLessons, getQuestions, isClassContent, isPastTest, kindCounts, nowChapters, testsByDate, url } from '../lib/content';
-import { searchPlaceholder } from '../lib/features';
+import { classCardLinks, searchPlaceholder } from '../lib/features';
 import { loadRegistry } from '../lib/registry';
 import { plural } from '../lib/text';
 import { SITE_DESCRIPTION, SITE_NAME } from '../site';
@@ -81,9 +81,9 @@ const classes = await Promise.all(
             </div>
           </dl>
           <p class="links">
-            <a class="button" href={href('lessons/')}>Lessons</a>
-            <a class="button secondary" href={href('practice/')}>Practice</a>
-            <a class="button secondary" href={href('tests/')}>Tests</a>
+            {classCardLinks(data).map((n, i) => (
+              <a class:list={['button', { secondary: i > 0 }]} href={href(n.path)}>{n.label}</a>
+            ))}
           </p>
         </li>
       ))

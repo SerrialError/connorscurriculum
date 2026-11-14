@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { cmsConfig } from './cms';
-import { hasPastFrqs, hasTests, hasTopics, navKeyFor, searchPlaceholder, subjectNav } from './features';
+import { classCardLinks, hasPastFrqs, hasTests, hasTopics, navKeyFor, searchPlaceholder, subjectNav } from './features';
 import { DataError, loadRegistry } from './registry';
 
 // Two made-up classes: "chem" has standards, a test, and past FRQs; "bio" has only chapters.
@@ -25,6 +25,11 @@ describe('a site with two classes', () => {
     expect(subjectNav(bio).map((n) => n.label)).toEqual(['Home', 'Lessons', 'Practice']);
   });
 
+  it('gives each dashboard card only buttons for pages its class has', () => {
+    expect(classCardLinks(chem).map((n) => n.path)).toEqual(['lessons/', 'practice/', 'tests/']);
+    expect(classCardLinks(bio).map((n) => n.path)).toEqual(['lessons/', 'practice/']);
+  });
+
   it('highlights nav items by route, whatever they are labelled', () => {
     const nav = subjectNav(chem);
     expect(navKeyFor(nav, '')).toBe('home');
@@ -34,9 +39,9 @@ describe('a site with two classes', () => {
   });
 
   it('only mentions topics in search when the class has them', () => {
-    expect(searchPlaceholder(chem)).toBe('Search lessons, notes, chapters, AP topics…');
-    expect(searchPlaceholder(bio)).toBe('Search lessons, notes, chapters…');
-    expect(searchPlaceholder()).toBe('Search lessons, notes, chapters…');
+    expect(searchPlaceholder(chem)).toBe('Search lessons, notes, topics…');
+    expect(searchPlaceholder(bio)).toBe('Search lessons and notes…');
+    expect(searchPlaceholder()).toBe('Search lessons and notes…');
   });
 
   it('gives the editor a topic picker only for a class with standards', () => {

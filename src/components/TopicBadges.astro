@@ -1,11 +1,12 @@
 ---
 import { getSubjectData, url } from '../lib/content';
+import { hasTopics } from '../lib/features';
 import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
 
 interface Props {
   subject: string;
   topics: string[];
-  /** Show "Not on the AP exam" when there are no topics. */
+  /** Show "Not on the AP exam" when there are no topics (only for a class with standards). */
   classOnlyBadge?: boolean;
 }
 
@@ -32,5 +33,5 @@ const data = getSubjectData(subject);
       </a>
     );
   })}
-  {topics.length === 0 && classOnlyBadge && <span class="badge not-ap">⊘ Not on the AP exam</span>}
+  {topics.length === 0 && classOnlyBadge && hasTopics(data) && <span class="badge not-ap">⊘ Not on the AP exam</span>}
 </div>

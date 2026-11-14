@@ -104,6 +104,9 @@ filters ticked (`topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=
 way; the defaults are 10 questions, shuffled). Add `start=1` to start that set right away. While a
 set is open its address also has a `seed`, so the same link opens the same questions.
 
+Lessons links: `/<subject>/lessons/?kind=notes&q=bohr` opens the Lessons page filtered to one kind
+(`lesson`, `notes`, or `review`) and the typed words. The filter stays in the address as it changes.
+
 Watch out for curly braces `{ }` in ordinary MDX text (outside `$...$`): MDX reads them as code.
 Write `\{` or put the text inside math.
 
@@ -295,7 +298,7 @@ chapter, fill it in:
 
 No code changes are needed. The site's home page (`/`) lists every class with what it's on now;
 each class has its own home at `/<id>/`. A class gets a Tests, topics, or Past FRQs page (and nav
-item) only when it has that data (`src/lib/features.ts`), and search inside a class finds only its
+item, and dashboard button for Tests) only when it has that data (`src/lib/features.ts`), and search inside a class finds only its
 pages. `src/lib/features.test.ts` builds a site with a second, minimal class to keep it that way.
 
 ## Before you push

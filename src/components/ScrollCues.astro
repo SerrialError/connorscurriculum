@@ -1,24 +1,41 @@
 ---
-// Tables and display equations wider than the screen get a "Scroll sideways for more" caption
-// (styles in global.css) until they're scrolled. Used once, in Base.astro.
+// Tables, display equations, and boxes marked data-scroll-x="(name)" that are wider than the
+// screen can take keyboard focus (so arrow keys scroll them) and get a name saying they scroll.
+// Tables and equations with more than a sliver hidden also get a "Scroll sideways for more"
+// caption (styles in global.css) until they are scrolled. Used once, in Base.astro.
 ---
 
 <script>
-  // Practice renders questions after load, so re-check when the page changes. A box that
-  // scrolls can also take keyboard focus, so arrow keys can scroll it.
+  /** Attributes this script added to a box, so it can undo just those when the box stops scrolling. */
+  const added = new WeakMap<HTMLElement, string[]>();
+
+  const makeScrollable = (el: HTMLElement) => {
+    const attrs: [string, string][] = [['tabindex', '0']];
+    const isTable = el.tagName === 'TABLE';
+    if (!isTable) attrs.push(['role', 'group']);
+    // A table with a caption is already named by it.
+    if (!el.hasAttribute('aria-label') && !(isTable && (el as HTMLTableElement).caption)) {
+      const what = isTable ? 'Table' : (el.dataset.scrollX ?? 'Equation');
+      attrs.push(['aria-label', `${what}, scrolls sideways`]);
+    }
+    const mine = attrs.filter(([name]) => !el.hasAttribute(name));
+    for (const [name, value] of mine) el.setAttribute(name, value);
+    added.set(el, mine.map(([name]) => name));
+  };
+
+  const undo = (el: HTMLElement) => {
+    for (const name of added.get(el) ?? []) el.removeAttribute(name);
+    added.delete(el);
+  };
+
+  // Practice renders questions after load, so re-check when the page changes.
   const markScrollers = () => {
-    for (const el of document.querySelectorAll<HTMLElement>('main table, main .katex-display')) {
-      const over = el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2;
-      if (!over) {
-        // Undo only what this script added: a box that no longer scrolls.
-        if (el.hasAttribute('data-scrolls')) {
-          el.removeAttribute('data-scrolls');
-          el.removeAttribute('tabindex');
-        }
-      } else if (!el.hasAttribute('data-scrolls')) {
-        el.setAttribute('data-scrolls', '');
-        el.tabIndex = 0;
-      }
+    for (const el of document.querySelectorAll<HTMLElement>('main table, main .katex-display, main [data-scroll-x]')) {
+      const hidden = el.clientWidth > 0 ? el.scrollWidth - el.clientWidth : 0;
+      if (hidden > 0 && !added.has(el)) makeScrollable(el);
+      else if (hidden <= 0 && added.has(el)) undo(el);
+      if (hidden <= 2) el.removeAttribute('data-scrolls');
+      else if (!el.hasAttribute('data-scrolls')) el.setAttribute('data-scrolls', '');
     }
   };
   let queued = false;
@@ -31,6 +48,8 @@
     });
   };
   markScrollers();
+  // KaTeX loads each font the first time it's used, which changes how wide the math is.
+  document.fonts.addEventListener('loadingdone', queueMark);
   addEventListener('resize', queueMark);
   document.addEventListener('toggle', queueMark, true);
   new MutationObserver(queueMark).observe(document.getElementById('main')!, { childList: true, subtree: true });

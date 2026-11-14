@@ -39,7 +39,16 @@ export function navKeyFor(items: NavItem[], path: string): NavKey | null {
   return items.find(owns)?.key ?? null;
 }
 
-/** The search box's hint: what can be found (the dialog's title or the page says in which class). */
+/**
+ * The search box's hint: what can be found (the dialog's title or the page says in which class).
+ * Short enough to show whole in a 360px phone's search box.
+ */
 export function searchPlaceholder(d?: SubjectData): string {
-  return `Search lessons, notes, chapters${d && hasTopics(d) ? `, ${d.subject.topicsLabel}` : ''}…`;
+  return d && hasTopics(d) ? 'Search lessons, notes, topics…' : 'Search lessons and notes…';
+}
+
+/** The buttons on a class's card on the dashboard: the everyday nav items this class has. */
+export function classCardLinks(d: SubjectData): NavItem[] {
+  const keys: NavKey[] = ['lessons', 'practice', 'tests'];
+  return subjectNav(d).filter((n) => keys.includes(n.key));
 }

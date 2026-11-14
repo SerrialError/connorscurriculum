@@ -14,10 +14,14 @@ export function truncate(text: string, max: number): string {
 /** Sorts ids like topics and sections in reading order: "5.2" before "5.10". */
 export const byId = (a: string, b: string): number => a.localeCompare(b, undefined, { numeric: true });
 
-/** "Ch. 8–9", "Ch. 6, 8", "Ch. 7" */
-export function chapterRange(ns: number[]): string {
+/**
+ * "Ch. 8–9", "Ch. 6, 8", "Ch. 7". `long` spells it out ("Chapters 8–9", "Chapter 7"); `nbsp`
+ * joins the word and the first number with a no-break space, so a line never ends after "Ch.".
+ */
+export function chapterRange(ns: number[], { long = false, nbsp = false } = {}): string {
   const sorted = [...ns].sort((a, b) => a - b);
   const consecutive = sorted.every((n, i) => i === 0 || n === sorted[i - 1]! + 1);
-  if (sorted.length > 1 && consecutive) return `Ch. ${sorted[0]}–${sorted.at(-1)}`;
-  return `Ch. ${sorted.join(', ')}`;
+  const numbers = sorted.length > 1 && consecutive ? `${sorted[0]}–${sorted.at(-1)}` : sorted.join(', ');
+  const word = long ? (sorted.length > 1 ? 'Chapters' : 'Chapter') : 'Ch.';
+  return `${word}${nbsp ? '\u00a0' : ' '}${numbers}`;
 }

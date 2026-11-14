@@ -28,4 +28,9 @@ describe('chapterRange', () => {
     expect(chapterRange([6, 8])).toBe('Ch. 6, 8');
     expect(chapterRange([7])).toBe('Ch. 7');
   });
+  it('spells the word out, or keeps it with the number', () => {
+    expect(chapterRange([8, 9], { long: true })).toBe('Chapters 8–9');
+    expect(chapterRange([7], { long: true })).toBe('Chapter 7');
+    expect(chapterRange([6, 7], { nbsp: true })).toBe('Ch.\u00a06–7');
+  });
 });

@@ -131,7 +131,7 @@ const kindChips = [...LESSON_KINDS]
 
   {emptyDone.length > 0 && (
     <p class="small muted" data-unfiltered data-pagefind-ignore>
-      {chapterRange(emptyDone).replace('Ch.', emptyDone.length > 1 ? 'Chapters' : 'Chapter')} {emptyDone.length > 1 ? 'have' : 'has'} no lessons on the site yet.
+      {chapterRange(emptyDone, { long: true })} {emptyDone.length > 1 ? 'have' : 'has'} no lessons on the site yet.
       See the <a href={url(`${subject}/chapters/`)}>chapter list</a> for their AP topics.
     </p>
   )}

@@ -53,7 +53,7 @@ export function quickStarts(
   }
   const mixed = mixedReview(questions, taught);
   if (mixed && mixed.count !== latest?.count) {
-    const where = chapterRange(mixed.chapters).replace('Ch. ', 'Ch. ');
+    const where = chapterRange(mixed.chapters, { nbsp: true });
     presets.push({ label: 'Mixed review', query: mixed.query, note: `${DEFAULT_COUNT} random from the ${mixed.count} questions in ${where}` });
   }
   return presets;

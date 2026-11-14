@@ -15,6 +15,13 @@ export function truncate(text: string, max: number): string {
 export const byId = (a: string, b: string): number => a.localeCompare(b, undefined, { numeric: true });
 
 /**
+ * A chapter named with its title: "Chapter 7: Periodic Properties of the Elements". Headings,
+ * links, and cards that name a chapter use this; compact labels (chips, meta lines, set names,
+ * ranges) say "Ch. 7" (chapterRange).
+ */
+export const chapterName = (c: { number: number; title: string }): string => `Chapter ${c.number}: ${c.title}`;
+
+/**
  * "Ch. 8–9", "Ch. 6, 8", "Ch. 7". `long` spells it out ("Chapters 8–9", "Chapter 7"); `nbsp`
  * joins the word and the first number with a no-break space, so a line never ends after "Ch.".
  */

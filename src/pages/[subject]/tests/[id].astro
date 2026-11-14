@@ -6,6 +6,7 @@ import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
 import { hasTopics } from '../../../lib/features';
 import { pickQuery, practiceStarts, weakestStart } from '../../../lib/practice/links';
+import { chapterName } from '../../../lib/text';
 import {
   formatDate,
   getLessons,
@@ -46,7 +47,7 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
     {test.chapters.map((n, i) => (
       <>
         {i > 0 && ', '}
-        <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}: {data.chapterMap.get(n)?.title}</a>
+        <a href={url(`${subject}/chapters/${n}/`)}>{chapterName(data.chapterMap.get(n)!)}</a>
       </>
     ))}
     {test.sections.length > 0 && <> · sections {test.sections.join(', ')}</>}
@@ -100,7 +101,7 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
 
   {byChapter.map((c) => (
     <section aria-labelledby={`ch-${c.n}`}>
-      <h2 id={`ch-${c.n}`}>Chapter {c.n}: {c.chapter.title}</h2>
+      <h2 id={`ch-${c.n}`}>{chapterName(c.chapter)}</h2>
       <LessonList lessons={c.lessons} grouped legend={false} />
     </section>
   ))}

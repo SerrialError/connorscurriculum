@@ -6,7 +6,7 @@ import Base from '../../layouts/Base.astro';
 import { classHome } from '../../lib/class-home';
 import { getClassSummary, getSubjectData, isPastTest, lessonHref, pastFrqLinks, practiceUrl, subjectPaths, url } from '../../lib/content';
 import { searchPlaceholder } from '../../lib/features';
-import { chapterRange, plural } from '../../lib/text';
+import { chapterName, chapterRange, plural } from '../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
@@ -30,7 +30,7 @@ const chapterHref = (n: number, hash = '') => url(`${subject}/chapters/${n}/${ha
         {now.chapters.map((c) => (
           <div class="now-chapter">
             <h3>
-              <a href={chapterHref(c.chapter.number)}>Chapter {c.chapter.number}: {c.chapter.title}</a>
+              <a href={chapterHref(c.chapter.number)}>{chapterName(c.chapter)}</a>
             </h3>
             <p class="small links">
               {c.topics.length > 0 && <a href={chapterHref(c.chapter.number, '#topics')}>{plural(c.topics.length, 'AP topic')}</a>}
@@ -97,7 +97,7 @@ const chapterHref = (n: number, hash = '') => url(`${subject}/chapters/${n}/${ha
           <div class="card chapter-card">
             <h3>
               <a href={chapterHref(c.chapter.number)}>
-                <span class="muted">Ch. {c.chapter.number}</span> {c.chapter.title}
+                <span class="muted">Chapter {c.chapter.number}:</span> {c.chapter.title}
               </a>
             </h3>
             {c.lessons.length > 0 && (

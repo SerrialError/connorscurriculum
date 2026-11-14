@@ -8,6 +8,7 @@ import YouTube from '../../../components/YouTube.astro';
 import { lessonFilterQuery } from '../../../lib/lesson-filter';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { lessonPractice } from '../../../lib/practice/lessons';
+import { chapterName } from '../../../lib/text';
 import Base from '../../../layouts/Base.astro';
 import {
   type Lesson,
@@ -58,7 +59,7 @@ const showToc = toc.length >= 3;
 const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(lesson.data.chapter)!;
 const topics = topicIds(lesson);
-const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
+const chapterLabel = chapterName(chapter);
 // Practice the questions on the lesson's textbook sections, or else its chapter.
 const questions = await getQuestions(subject);
 const picked = lessonPractice(lesson.data, questions.map((q) => q.data));

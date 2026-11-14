@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chapterRange, plural, truncate } from './text';
+import { chapterName, chapterRange, plural, truncate } from './text';
 
 describe('plural', () => {
   it('adds an s except for one', () => {
@@ -19,6 +19,12 @@ describe('truncate', () => {
   });
   it('cuts mid-word when there is no space late enough', () => {
     expect(truncate('abcdefghijklmnop', 8)).toBe('abcdefg…');
+  });
+});
+
+describe('chapterName', () => {
+  it('names a chapter with its title', () => {
+    expect(chapterName({ number: 7, title: 'Periodic Properties of the Elements' })).toBe('Chapter 7: Periodic Properties of the Elements');
   });
 });
 

@@ -16,7 +16,10 @@ export interface NavItem {
   /** Path inside the class, e.g. "lessons/" ("" for the class home). */
   path: string;
   label: string;
-  /** Shorter label for phones. */
+  /**
+   * Shorter label for phones, only where the full one doesn't fit: the phone nav is one row with
+   * no Home link (the class name in the bar is the home link).
+   */
   short?: string;
   /** Other paths whose pages belong to this item (Lessons owns the chapter pages). */
   also?: string[];
@@ -30,6 +33,7 @@ export function subjectNav(d: SubjectData): NavItem[] {
     { key: 'practice', path: 'practice/', label: 'Practice' },
     hasTests(d) && { key: 'tests', path: 'tests/', label: 'Tests' },
     hasTopics(d) && { key: 'topics', path: 'ap/', label: 'AP topics' },
+    // With all five items, "Past FRQs" overflows the phone row (by about 20px at 390px wide).
     hasPastFrqs(d) && { key: 'frqs', path: 'frqs/', label: 'Past FRQs', short: 'FRQs' },
   ];
   return items.filter((n) => n !== false);

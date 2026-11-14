@@ -110,7 +110,8 @@ const hasSearchBox = onHome || path === url();
     </main>
     <footer class="site-footer wrap small muted">
       <p>
-        {subject && <><a href={url()}>All classes</a> · </>}
+        {/* Off the class home, which has its own "All classes" link at the top. */}
+        {subject && !onHome && <><a href={url()}>All classes</a> · </>}
         <a href={CONTRIBUTE_URL}>Share your notes or write a lesson</a>
       </p>
       <p>

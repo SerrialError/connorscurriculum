@@ -7,7 +7,7 @@ import TestWhen from '../components/TestWhen.astro';
 import { getClassSummary, isPastTest, kindCounts, url } from '../lib/content';
 import { classCardLinks, searchPlaceholder } from '../lib/features';
 import { loadRegistry } from '../lib/registry';
-import { plural } from '../lib/text';
+import { chapterName, plural } from '../lib/text';
 import { SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 const classes = await Promise.all(
@@ -48,7 +48,7 @@ const classes = await Promise.all(
                     <>
                       {i > 0 && <br />}
                       <a href={href(`chapters/${c.number}/`)}>
-                        Ch. {c.number}: {c.title}
+                        {chapterName(c)}
                       </a>
                     </>
                   ))}

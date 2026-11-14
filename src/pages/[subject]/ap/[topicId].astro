@@ -7,7 +7,7 @@ import Base from '../../../layouts/Base.astro';
 import { coverage, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { frqCountLabel, matchFrqs } from '../../../lib/frqs';
-import { plural } from '../../../lib/text';
+import { chapterName, plural } from '../../../lib/text';
 
 export function getStaticPaths() {
   return subjectIds().flatMap((subject) =>
@@ -82,7 +82,7 @@ const { start } = practiceStarts(pool, c.questions);
       {teaching.map((n) => (
         <li>
           <ProgressMark status={data.progress.chapters.has(n) ? 'done' : null} compact doneLabel="Finished in class" />
-          <a href={url(`${subject}/chapters/${n}/`)}>Chapter {n}: {data.chapterMap.get(n)?.title}</a>
+          <a href={url(`${subject}/chapters/${n}/`)}>{chapterName(data.chapterMap.get(n)!)}</a>
           {data.progress.current.includes(n) && <span class="badge now">Now in class</span>}
         </li>
       ))}

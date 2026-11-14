@@ -8,7 +8,7 @@ import { formatDate, getLessons, inCedOrder, getQuestions, getSubjectData, pastF
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { FRQ_ORDER_NOTE, frqCountLabel, matchFrqs } from '../../../lib/frqs';
 import { hasTopics } from '../../../lib/features';
-import { plural } from '../../../lib/text';
+import { chapterName, plural } from '../../../lib/text';
 import { CONTRIBUTE_URL } from '../../../site';
 
 export function getStaticPaths() {
@@ -27,7 +27,7 @@ const { start } = practiceStarts(pool, questionCount);
 const tests = data.tests.filter((t) => t.chapters.includes(chapter.number));
 const prev = data.chapters[data.chapters.indexOf(chapter) - 1];
 const next = data.chapters[data.chapters.indexOf(chapter) + 1];
-const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
+const chapterLabel = chapterName(chapter);
 const finished = data.progress.chapters.has(chapter.number);
 const current = data.progress.current.includes(chapter.number);
 
@@ -153,10 +153,10 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
 
   <nav class="pager" aria-label="Chapters">
     {prev ? (
-      <a href={url(`${subject}/chapters/${prev.number}/`)}><span class="small muted">← Previous</span>Ch. {prev.number}: {prev.title}</a>
+      <a href={url(`${subject}/chapters/${prev.number}/`)}><span class="small muted">← Previous</span>{chapterName(prev)}</a>
     ) : <span></span>}
     {next && (
-      <a class="next" href={url(`${subject}/chapters/${next.number}/`)}><span class="small muted">Next →</span>Ch. {next.number}: {next.title}</a>
+      <a class="next" href={url(`${subject}/chapters/${next.number}/`)}><span class="small muted">Next →</span>{chapterName(next)}</a>
     )}
   </nav>
 </Base>

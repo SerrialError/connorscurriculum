@@ -51,6 +51,12 @@ export function nowChapters(data: SubjectData) {
   return { label: 'Up next', chapters: next ? [next] : [] };
 }
 
+/** Topic ids sorted in the order the CED lists them. */
+export function inCedOrder(data: SubjectData, ids: Iterable<string>): string[] {
+  const order = [...data.topics.keys()];
+  return [...ids].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+}
+
 /** Lessons and questions in a class test (whole chapters, or only the listed sections). */
 export function inTest(test: SubjectData['tests'][number], entry: { data: { chapter: number; sections: string[] } }): boolean {
   if (!test.chapters.includes(entry.data.chapter)) return false;

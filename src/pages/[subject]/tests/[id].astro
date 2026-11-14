@@ -11,6 +11,7 @@ import {
   getLessons,
   getQuestions,
   getSubjectData,
+  inCedOrder,
   inTest,
   lessonSlug,
   practiceUrl,
@@ -31,8 +32,7 @@ const questions = (await getQuestions(subject)).filter((q) => inTest(test, q));
 const pool = { test: test.id };
 const { start, all } = practiceStarts(pool, questions.length);
 const weakest = weakestStart(pool, questions.length);
-const cedOrder = [...data.topics.keys()];
-const topics = [...new Set([...lessons, ...questions].flatMap(topicIds))].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
+const topics = inCedOrder(data, new Set([...lessons, ...questions].flatMap(topicIds)));
 const reviewSheets = lessons.filter((l) => l.data.kind === 'review');
 const others = lessons.filter((l) => l.data.kind !== 'review');
 const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)!, lessons: others.filter((l) => l.data.chapter === n) }));

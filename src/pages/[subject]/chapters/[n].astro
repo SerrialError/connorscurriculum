@@ -4,7 +4,7 @@ import FrqCard from '../../../components/FrqCard.astro';
 import LessonList from '../../../components/LessonList.astro';
 import ProgressMark from '../../../components/ProgressMark.astro';
 import Base from '../../../layouts/Base.astro';
-import { formatDate, getLessons, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
+import { formatDate, getLessons, inCedOrder, getQuestions, getSubjectData, pastFrqLinks, practiceUrl, subjectIds, url } from '../../../lib/content';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { FRQ_ORDER_NOTE, frqCountLabel, matchFrqs } from '../../../lib/frqs';
 import { hasTopics } from '../../../lib/features';
@@ -32,16 +32,13 @@ const finished = data.progress.chapters.has(chapter.number);
 const current = data.progress.current.includes(chapter.number);
 
 // CED topics this chapter teaches, in CED order, with where else they are taught.
-const cedOrder = [...data.topics.keys()];
-const topics = [...chapter.cedTopics]
-  .sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b))
-  .map((id) => ({
-    id,
-    title: data.topics.get(id)!.title,
-    status: data.progress.topics.get(id) ?? null,
-    gap: data.textbookGaps.topics.get(id),
-    alsoIn: (data.topicChapters.get(id) ?? []).filter((c) => c !== chapter.number),
-  }));
+const topics = inCedOrder(data, chapter.cedTopics).map((id) => ({
+  id,
+  title: data.topics.get(id)!.title,
+  status: data.progress.topics.get(id) ?? null,
+  gap: data.textbookGaps.topics.get(id),
+  alsoIn: (data.topicChapters.get(id) ?? []).filter((c) => c !== chapter.number),
+}));
 const frqs = pastFrqLinks(data);
 const frqCount = (id: string) => matchFrqs(frqs, new Set([id])).length;
 const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));

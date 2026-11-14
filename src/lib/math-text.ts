@@ -102,7 +102,10 @@ export const hasClass = (n: Element, cls: string) =>
 
 const BLOCK = /^(p|div|li|h[1-6]|tr|td|th|br|ul|ol|table|blockquote|pre|figure|figcaption)$/;
 
-/** Plain text of a rendered HTML tree, with math written out by mathText (for one-line previews). */
+/**
+ * Plain text of a rendered HTML tree, with math written out by mathText (for one-line previews).
+ * A table becomes "(table)": its cells run together on one line would read as a list of numbers.
+ */
 export function plainText(node: Root | ElementContent): string {
   const walk = (n: Root | ElementContent): string => {
     if (n.type === 'text') return n.value;
@@ -113,6 +116,7 @@ export function plainText(node: Root | ElementContent): string {
       return math ? mathText(math) : '';
     }
     if (n.tagName === 'script' || n.tagName === 'style') return '';
+    if (n.tagName === 'table') return ' (table) ';
     const inner = n.children.map(walk).join('');
     return BLOCK.test(n.tagName) ? ` ${inner} ` : inner;
   };

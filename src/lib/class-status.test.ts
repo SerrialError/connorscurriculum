@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { classSummary, isClassContent, nowChapters, testsByDate } from './class-status';
+import { classSummary, inCedOrder, isClassContent, nowChapters, testsByDate } from './class-status';
 import { type SubjectData, loadRegistry } from './registry';
 
 // The fixture "chem" class, given three chapters: 1 finished, 2 in class now, 3 not reached.
@@ -31,6 +31,11 @@ describe('class status', () => {
     expect(nowChapters(data)).toMatchObject({ label: 'Now in class', chapters: [{ number: 2 }] });
     expect(nowChapters(withProgress([1, 2], []))).toMatchObject({ label: 'Up next', chapters: [{ number: 3 }] });
     expect(nowChapters(withProgress([1, 2, 3], [])).chapters).toEqual([]);
+  });
+
+  it('sorts topic ids in CED order', () => {
+    const ced = { ...data, topics: new Map(['1.2', '1.10', '1.1'].map((id) => [id, base.topics.get('1.1')!])) };
+    expect(inCedOrder(ced, new Set(['1.1', '1.10', '1.2']))).toEqual(['1.2', '1.10', '1.1']);
   });
 
   it('orders tests latest first, undated last', () => {

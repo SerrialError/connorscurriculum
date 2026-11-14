@@ -1,7 +1,7 @@
 // What a class home page shows, worked out from the class's data so the page only renders it:
 // the chapters it's on now, its latest test, the lessons of its latest chapters, and its progress
 // through the AP topics.
-import { inTest, type nowChapters } from './class-status';
+import { inCedOrder, inTest, type nowChapters } from './class-status';
 import { hasTopics } from './features';
 import { type FrqLink, frqCountLabel, matchFrqs } from './frqs';
 import { kindCounts } from './lesson-kinds';
@@ -56,8 +56,6 @@ export function classHome<L extends HomeLesson, Q extends HomeQuestion>(
   frqs: FrqLink[],
 ) {
   const { lessons, questions, now, test } = summary;
-  const cedOrder = [...data.topics.keys()];
-  const inCedOrder = (ids: string[]) => [...ids].sort((a, b) => cedOrder.indexOf(a) - cedOrder.indexOf(b));
 
   const chapter = (n: number): HomeChapter<L> => {
     const c = data.chapterMap.get(n)!;
@@ -66,7 +64,7 @@ export function classHome<L extends HomeLesson, Q extends HomeQuestion>(
     const frqMatches = matchFrqs(frqs, new Set(c.cedTopics));
     return {
       chapter: c,
-      topics: inCedOrder(c.cedTopics),
+      topics: inCedOrder(data, c.cedTopics),
       pages: kindCounts(own),
       lessons: own.filter((l) => l.data.kind === 'lesson'),
       notes: own.filter((l) => l.data.kind === 'notes'),
@@ -79,7 +77,7 @@ export function classHome<L extends HomeLesson, Q extends HomeQuestion>(
   const testCount = test ? questions.filter((q) => inTest(test, q)).length : 0;
   const counts = { done: 0, review: 0, partial: 0, skipped: 0 };
   for (const s of data.progress.topics.values()) counts[s] += 1;
-  const skipped = inCedOrder([...data.progress.topics].filter(([, s]) => s === 'skipped').map(([id]) => id));
+  const skipped = inCedOrder(data, [...data.progress.topics].filter(([, s]) => s === 'skipped').map(([id]) => id));
 
   return {
     now: { label: now.label, chapters: now.chapters.map((c) => chapter(c.number)) },

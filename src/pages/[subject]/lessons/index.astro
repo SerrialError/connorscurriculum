@@ -5,56 +5,16 @@
 import LessonList from '../../../components/LessonList.astro';
 import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
-import {
-  LESSON_KINDS,
-  getLessons,
-  getQuestions,
-  getSubjectData,
-  isClassContent,
-  isTaught,
-  practiceUrl,
-  subjectPaths,
-  topicIds,
-  url,
-} from '../../../lib/content';
+import { getLessons, getQuestions, getSubjectData, practiceUrl, subjectPaths, topicIds, url } from '../../../lib/content';
 import { hasTopics } from '../../../lib/features';
-import { practiceStarts } from '../../../lib/practice/links';
+import { lessonsPage } from '../../../lib/lessons-page';
 import { chapterRange, plural } from '../../../lib/text';
 
 export const getStaticPaths = subjectPaths;
 
 const { subject } = Astro.params;
 const data = getSubjectData(subject);
-const all = await getLessons(subject);
-const questions = await getQuestions(subject);
-const lessons = all.filter((l) => isClassContent(data, l));
-const samples = all.filter((l) => !isClassContent(data, l));
-const current = new Set(data.progress.current);
-
-// Chapters in study order: the ones in class now, then finished chapters, latest first.
-const taught = data.chapters
-  .filter((c) => isTaught(data, c.number))
-  .sort((a, b) => Number(current.has(b.number)) - Number(current.has(a.number)) || b.number - a.number);
-const sections = taught
-  .map((c) => {
-    const count = questions.filter((q) => q.data.chapter === c.number && isClassContent(data, q)).length;
-    return {
-      chapter: c,
-      now: current.has(c.number),
-      lessons: lessons.filter((l) => l.data.chapter === c.number),
-      practice: count > 0 ? practiceStarts({ chapters: [c.number] }, count).start : null,
-    };
-  })
-  .filter((s) => s.lessons.length > 0);
-const emptyNow = taught
-  .filter((c) => current.has(c.number) && !sections.some((s) => s.chapter === c))
-  .sort((a, b) => a.number - b.number);
-const emptyDone = taught.filter((c) => !current.has(c.number) && !sections.some((s) => s.chapter === c)).map((c) => c.number);
-// Filter chips: the everyday kinds first.
-const kindChips = [...LESSON_KINDS]
-  .sort((a, b) => Number(a.kind === 'review') - Number(b.kind === 'review'))
-  .map((k) => ({ ...k, n: lessons.filter((l) => l.data.kind === k.kind).length }))
-  .filter((k) => k.n > 0);
+const { lessons, chapters, emptyNow, emptyDone, samples, kinds } = lessonsPage(data, await getLessons(subject), await getQuestions(subject));
 ---
 
 <Base
@@ -79,7 +39,7 @@ const kindChips = [...LESSON_KINDS]
           <input type="radio" name="kind" value="" checked />
           <span>All</span>
         </label>
-        {kindChips.map((k) => (
+        {kinds.map((k) => (
           <label class="chip">
             <input type="radio" name="kind" value={k.kind} />
             <span>{k.kind === 'review' ? <>Review<span class="wide-only"> sheets</span></> : k.chip}</span>
@@ -92,9 +52,9 @@ const kindChips = [...LESSON_KINDS]
   )}
 
   <nav class="jump-nav" aria-label="Chapters" data-pagefind-ignore>
-    {sections.length > 1 && <span class="jump-label" aria-hidden="true">Jump to</span>}
-    {sections.length > 1 && sections.map((s) => <a href={`#ch-${s.chapter.number}`}>Ch. {s.chapter.number}</a>)}
-    {sections.length > 1 && samples.length > 0 && <a href="#samples">Sample pages</a>}
+    {chapters.length > 1 && <span class="jump-label" aria-hidden="true">Jump to</span>}
+    {chapters.length > 1 && chapters.map((s) => <a href={`#ch-${s.chapter.number}`}>Ch. {s.chapter.number}</a>)}
+    {chapters.length > 1 && samples.length > 0 && <a href="#samples">Sample pages</a>}
     <a href={url(`${subject}/chapters/`)}>All chapters</a>
   </nav>
 
@@ -112,7 +72,7 @@ const kindChips = [...LESSON_KINDS]
     </p>
   )}
 
-  {sections.map((s) => (
+  {chapters.map((s) => (
     <section class="chapter" id={`ch-${s.chapter.number}`} aria-labelledby={`ch-${s.chapter.number}-h`} data-chapter>
       <div class="chapter-head">
         <h2 id={`ch-${s.chapter.number}-h`}>

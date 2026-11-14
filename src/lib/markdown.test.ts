@@ -36,6 +36,7 @@ describe('renderPlainText', () => {
     ['from $n = 2$ to $n=5$', 'from n = 2 to n = 5'],
     ['$e^{-E_a/RT}$', 'e^(−E_a/RT)'],
     ['$$E = h\\nu$$\n\nThen **bold**.', 'E = hν Then bold.'],
+    ['These energies:\n\n| IE₁ | IE₂ |\n|---|---|\n| 496 | 4562 |\n\nWhich element?', 'These energies: (table) Which element?'],
   ];
   it.each(cases)('%s', async (source, text) => {
     expect(await renderPlainText(source)).toBe(text);

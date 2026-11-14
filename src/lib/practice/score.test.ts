@@ -35,6 +35,9 @@ describe('topicBreakdown', () => {
     ]);
     expect(topicBreakdown(questions, { q3: 0 })).toEqual([{ key: 'chapter-13', score: 0, count: 1 }]);
   });
+  it('lists class-only chapters after the AP topics', () => {
+    expect(topicBreakdown(questions, { q1: 1, q3: 0 }).map((t) => t.key)).toEqual(['5.1', 'chapter-13']);
+  });
 });
 
 describe('amendLastResult', () => {

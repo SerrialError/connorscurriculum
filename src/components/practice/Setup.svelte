@@ -99,10 +99,7 @@
 
 {#if presets.length > 0 || weakest}
   <section class="presets" aria-labelledby="presets-h">
-    <div class="presets-head">
-      <h2 id="presets-h" class="section-h">Quick start</h2>
-      <span class="small muted">One tap starts the set.</span>
-    </div>
+    <h2 id="presets-h" class="section-h">Quick start</h2>
     <div class="preset-row">
       {#each presets as p (p.query)}
         <div class="preset">
@@ -298,20 +295,16 @@
   .presets {
     margin-bottom: 1.25rem;
   }
-  .presets-head,
   .filters-head {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    justify-content: space-between;
     gap: 0.1rem 0.75rem;
     margin-bottom: 0.5rem;
   }
-  .presets-head .section-h,
   .filters-head .section-h {
     margin: 0;
-  }
-  .filters-head {
-    justify-content: space-between;
   }
   .reset.invisible {
     visibility: hidden;

@@ -68,11 +68,11 @@ const kindChips = [...LESSON_KINDS]
       <input id="lesson-filter" type="search" placeholder="Filter by title, topic, or name…" autocomplete="off" enterkeyhint="done" />
       <fieldset class="chips kinds">
         <legend class="visually-hidden">Show</legend>
-        {/* Counts follow the text filter, so each chip says how many it would show. */}
+        {/* Counts follow the text filter, so each chip says how many it would show. "All" has none:
+            the status line says how many match. */}
         <label class="chip">
           <input type="radio" name="kind" value="" checked />
           <span>All</span>
-          <span class="chip-count" data-kind="">{lessons.length}</span>
         </label>
         {kindChips.map((k) => (
           <label class="chip">
@@ -127,7 +127,7 @@ const kindChips = [...LESSON_KINDS]
     </section>
   ))}
 
-  <p class="small muted none" hidden data-pagefind-ignore>No lessons match. <button type="button" class="link-button clear">Clear the filter</button></p>
+  <p class="none" hidden data-pagefind-ignore>No lessons match. <button type="button" class="link-button clear">Clear filter</button></p>
 
   {emptyDone.length > 0 && (
     <p class="small muted" data-unfiltered data-pagefind-ignore>
@@ -175,7 +175,8 @@ const kindChips = [...LESSON_KINDS]
     const lists = [...document.querySelectorAll<HTMLElement>('section.chapter .lessons')];
     const sections = [...document.querySelectorAll<HTMLElement>('section.chapter')];
     const items = [...document.querySelectorAll<HTMLLIElement>('section.chapter .lessons > li')];
-    const jumps = [...document.querySelectorAll<HTMLAnchorElement>('.jump-nav a[href^="#"]')];
+    const jumpNav = document.querySelector<HTMLElement>('.jump-nav')!;
+    const jumps = [...jumpNav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
     const unfiltered = [...document.querySelectorAll<HTMLElement>('[data-unfiltered]')];
     const entries = items.map((li) => ({ text: words(li.textContent ?? '').join(' '), kind: li.dataset.kind ?? '', sample: !!li.closest('.samples') }));
     let samplesWereOpen = samples?.open ?? false;
@@ -204,8 +205,12 @@ const kindChips = [...LESSON_KINDS]
         if (words(f.q).length > 0 && r.shownClass === 0 && r.shownCount > 0) samples.open = true;
         else if (!filtering) samples.open = samplesWereOpen;
       }
+      // Nothing matches: only the "No lessons match" line and its Clear filter button show (the
+      // status says it too, for screen readers).
       none.hidden = r.shownCount > 0;
-      status.textContent = filtering ? `${r.shownCount} ${r.shownCount === 1 ? 'match' : 'matches'}` : '';
+      jumpNav.hidden = r.shownCount === 0;
+      status.textContent = !filtering ? '' : r.shownCount === 0 ? 'No lessons match.' : `${r.shownCount} ${r.shownCount === 1 ? 'match' : 'matches'}`;
+      status.classList.toggle('visually-hidden', r.shownCount === 0);
     };
 
     /** Set the controls and the list from the address (on load, and when Back restores the page). */
@@ -349,10 +354,6 @@ const kindChips = [...LESSON_KINDS]
       gap: 0.25rem;
       padding: 0.25rem 0.5rem;
       font-size: 0.85rem;
-    }
-    /* "All" needs no count when the other chips have theirs. */
-    .chip-count[data-kind=''] {
-      display: none;
     }
     .jump-nav {
       gap: 0.15rem 0.7rem;

@@ -23,7 +23,7 @@ describe('filterLessons', () => {
     const r = filterLessons(items, { kind: '', q: '' });
     expect(r.shown).toEqual([true, true, true, true, true]);
     expect([r.shownCount, r.shownClass]).toEqual([5, 4]);
-    expect(Object.fromEntries(r.counts)).toEqual({ '': 4, lesson: 2, notes: 1, review: 1 });
+    expect(Object.fromEntries(r.counts)).toEqual({ lesson: 2, notes: 1, review: 1 });
   });
 
   it('needs every word, in any order and case', () => {
@@ -34,7 +34,7 @@ describe('filterLessons', () => {
   it('counts each kind by the words alone, so a chip says what it would show', () => {
     const r = filterLessons(items, { kind: 'notes', q: 'bohr' });
     expect(r.shown).toEqual([false, true, false, false, false]);
-    expect(Object.fromEntries(r.counts)).toEqual({ '': 2, lesson: 1, notes: 1 });
+    expect(Object.fromEntries(r.counts)).toEqual({ lesson: 1, notes: 1 });
   });
 
   it('shows sample pages but leaves them out of the counts', () => {

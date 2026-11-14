@@ -115,7 +115,7 @@
               {#if t.key.startsWith('chapter-')}{topicLabel(t.key)}{:else}<a href={`${hrefs.topics}${t.key}/`}>{topicLabel(t.key)}</a>{/if}
             </span>
             <span class="bar" aria-hidden="true"><span class:low={frac < 0.5} class:high={frac >= 0.8} style:width={pct(frac)}></span></span>
-            <span class="small b-num">{pct(frac)} <span class="muted">({t.count})</span></span>
+            <span class="small b-num">{pct(frac)} <span class="muted">of {plural(t.count, 'question')}</span></span>
           </li>
         {/each}
       </ul>
@@ -192,7 +192,7 @@
   }
   .breakdown li {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(4rem, 8rem) 4.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(4rem, 8rem) 10rem;
     gap: 0.75rem;
     align-items: center;
     padding: 0.35rem 0;
@@ -218,6 +218,7 @@
   .b-num {
     text-align: right;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
   /* Phones: the topic name gets the whole line; its bar and score go underneath. */
   @media (max-width: 520px) {

@@ -20,7 +20,7 @@ export interface FilterItem {
 export interface FilterResult {
   /** Whether each item shows, in the same order as the items. */
   shown: boolean[];
-  /** How many class pages match the words, by kind ("" is every kind): the chip counts. */
+  /** How many class pages of each kind match the words: the chip counts. */
   counts: Map<string, number>;
   shownCount: number;
   /** Shown items that are not sample pages. */
@@ -64,7 +64,7 @@ export function filterLessons(items: FilterItem[], f: LessonFilter): FilterResul
   for (const item of items) {
     const textOk = q.every((w) => item.text.includes(w));
     if (textOk && !item.sample) {
-      for (const k of ['', item.kind]) counts.set(k, (counts.get(k) ?? 0) + 1);
+      counts.set(item.kind, (counts.get(item.kind) ?? 0) + 1);
     }
     const ok = textOk && (!f.kind || item.kind === f.kind);
     shown.push(ok);

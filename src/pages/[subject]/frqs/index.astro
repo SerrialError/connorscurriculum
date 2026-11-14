@@ -21,10 +21,7 @@ const exams = data.pastFrqs;
 
 <Base title="Past AP FRQs" subject={subject} searchable searchMeta={{ type: 'Past FRQs' }}>
   <h1>Past AP free-response questions</h1>
-  <p class="muted prose">
-    Real AP exam questions from AP Central. Each one links to the question and its scoring guidelines, and shows how many
-    points are on topics you've already learned. To find FRQs on one chapter or topic, use its chapter or topic page.
-  </p>
+  <p class="muted prose">Released AP exam questions and their scoring guidelines, with how many points are on topics you've learned.</p>
 
   {frqs.length === 0 ? (
     <p class="muted">No past FRQs listed yet.</p>

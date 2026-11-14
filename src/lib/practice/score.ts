@@ -81,7 +81,8 @@ export interface TopicScore {
 }
 
 /**
- * Per-topic scores for one set, weakest first (ties by key in CED order).
+ * Per-topic scores for one set: AP topics, then class-only chapters ("chapter-N"), each weakest
+ * first (ties by key in CED order).
  * `scores` maps question id to its 0–1 score; unanswered questions are left out.
  */
 export function topicBreakdown(questions: PracticeQuestion[], scores: Record<string, number>): TopicScore[] {
@@ -96,8 +97,9 @@ export function topicBreakdown(questions: PracticeQuestion[], scores: Record<str
       map.set(key, t);
     }
   }
+  const classOnly = (t: TopicScore) => Number(t.key.startsWith('chapter-'));
   return [...map.values()].sort(
-    (a, b) => a.score / a.count - b.score / b.count || byId(a.key, b.key),
+    (a, b) => classOnly(a) - classOnly(b) || a.score / a.count - b.score / b.count || byId(a.key, b.key),
   );
 }
 

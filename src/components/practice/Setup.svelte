@@ -310,10 +310,11 @@
   .reset.invisible {
     visibility: hidden;
   }
+  /* The cards share the row's width, however many there are. */
   .preset-row {
     display: grid;
     gap: 0.6rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   }
   /* A card: the main button fills it; an optional second way to start sits under it. */
   .preset {
@@ -346,6 +347,24 @@
   .preset-alt {
     justify-self: start;
     margin: -0.35rem 0.85rem 0.45rem;
+  }
+  /* A single card is a strip across the row, its second way to start on the right. */
+  .preset:only-child {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 1rem;
+  }
+  .preset:only-child .preset-main {
+    flex: 1 1 16rem;
+  }
+  .preset:only-child .preset-alt {
+    margin: -0.35rem 0.85rem 0.6rem;
+  }
+  @media (min-width: 641px) {
+    .preset:only-child .preset-alt {
+      margin: 0 1rem 0 0;
+    }
   }
 
   /* Filters */

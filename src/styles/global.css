@@ -307,6 +307,14 @@ body:is([data-practice='session'], [data-practice='results']) main {
   padding-top: 1rem;
 }
 
+/* Phones during a set: no class nav row, so the question starts higher. The class name in the
+   header still leads home, and "← Filters" back to setup. */
+@media (max-width: 640px) {
+  body[data-practice='session'] .subnav {
+    display: none;
+  }
+}
+
 /* Visible on wider screens; on phones only screen readers get it (e.g. "Start practice" -> "Start"). */
 @media (max-width: 640px) {
   .wide-only {

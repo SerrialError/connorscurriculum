@@ -34,15 +34,6 @@
     {/if}
   </section>
 {/each}
-{#if !attempt.finished[q.id]}
-  <p class="small muted marking" aria-live="polite">
-    {#if attempt.allShown(q)}
-      Check every point you earned, then press <strong>Done marking</strong>.
-    {:else}
-      Scoring shown for {attempt.shownCount(q)} of {plural(q.parts.length, 'part')}. Show it for every part, then check the points you earned.
-    {/if}
-  </p>
-{/if}
 
 <style>
   .frq-part {
@@ -111,8 +102,5 @@
   .point > span {
     min-width: 0;
     padding-top: 0.1rem;
-  }
-  .marking {
-    margin: 0.5rem 0 0;
   }
 </style>

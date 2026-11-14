@@ -92,6 +92,5 @@ export class Attempt {
   }
 
   allShown = (q: FrqQuestion) => q.parts.every((_, p) => this.revealed[q.id]?.[p]);
-  shownCount = (q: FrqQuestion) => q.parts.filter((_, p) => this.revealed[q.id]?.[p]).length;
   earned = (q: FrqQuestion) => frqEarned(q, this.marks[q.id] ?? []);
 }

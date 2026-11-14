@@ -6,6 +6,7 @@
   import { lessonsFor } from '../../lib/practice/lessons';
   import { frqTotal, isCorrect, scoreStatus } from '../../lib/practice/score';
   import type { FrqQuestion, McqQuestion } from '../../lib/practice/types';
+  import { verdictScroll } from '../../lib/practice/verdict-scroll';
   import type { Attempt } from './attempt.svelte';
   import { getCourse } from './context';
   import FrqParts from './FrqParts.svelte';
@@ -76,29 +77,20 @@
     if (attempt.finished[q.id]) onscore(q.id, attempt.earned(q) / frqTotal(q), true);
   }
 
-  /**
-   * After Check or Done marking: bring the verdict into view and put focus on Next. On phones Next
-   * is in a bar stuck to the bottom of the screen, so the verdict (and as much of the explanation
-   * as fits) goes near the top. Elsewhere, scroll as little as possible to show the verdict through
-   * Next, or put the verdict at the top if they don't all fit.
-   */
+  /** After Check or Done marking: focus Next and scroll the verdict into view (see verdictScroll). */
   async function showVerdict() {
     await tick();
     nextButton?.focus({ preventScroll: true });
-    const v = verdictEl?.getBoundingClientRect();
-    const bar = actionsEl?.getBoundingClientRect();
-    if (!v || !bar || !actionsEl) return;
-    const margin = 12;
-    const sticky = getComputedStyle(actionsEl).position === 'sticky';
-    const bottom = sticky ? Math.min(bar.top, window.innerHeight) : window.innerHeight;
-    if (sticky) {
-      if (v.top < margin || v.top > bottom / 2) window.scrollBy({ top: v.top - margin });
-    } else if (bar.bottom - v.top + 2 * margin <= bottom) {
-      if (bar.bottom + margin > bottom) window.scrollBy({ top: bar.bottom + margin - bottom });
-      else if (v.top < margin) window.scrollBy({ top: v.top - margin });
-    } else if (v.top < margin || v.top > bottom / 3) {
-      window.scrollBy({ top: v.top - margin });
-    }
+    if (!verdictEl || !actionsEl) return;
+    const bar = actionsEl.getBoundingClientRect();
+    const top = verdictScroll({
+      verdictTop: verdictEl.getBoundingClientRect().top,
+      barTop: bar.top,
+      barBottom: bar.bottom,
+      viewportHeight: window.innerHeight,
+      sticky: getComputedStyle(actionsEl).position === 'sticky',
+    });
+    if (top) window.scrollBy({ top });
   }
 
   /**
@@ -194,9 +186,7 @@
         </header>
 
         {#if q.type === 'frq' && !attempt.finished[q.id]}
-          <p class="frq-hint small">
-            <strong>Write your answers on paper first.</strong> Then show the scoring for each part and check every point you earned.
-          </p>
+          <p class="frq-hint small">Write your answers on paper first.</p>
         {/if}
         <div class="prompt" data-scroll-x="Question">{@html q.promptHtml}</div>
         {#if q.image}
@@ -239,9 +229,11 @@
 
         <!-- On phones this is a bar stuck to the bottom of the screen, so Check / Next never needs a scroll. -->
         <div class="q-actions" bind:this={actionsEl}>
-          <button class="button secondary prev" type="button" disabled={attempt.index === 0} onclick={() => attempt.go(attempt.index - 1)}>
-            <span aria-hidden="true">←</span><span class="wide-only"> Previous</span>
-          </button>
+          {#if attempt.index > 0}
+            <button class="button secondary prev" type="button" onclick={() => attempt.go(attempt.index - 1)}>
+              <span aria-hidden="true">←</span><span class="wide-only"> Previous</span>
+            </button>
+          {/if}
           <span class="spacer"></span>
           {#if q.type === 'mcq' && !attempt.checked[q.id]}
             <button class="button secondary" type="button" onclick={() => next()}>Skip</button>

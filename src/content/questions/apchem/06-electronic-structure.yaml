@@ -1,8 +1,11 @@
 # Practice questions for Chapter 6 (Electronic Structure of Atoms), written for the
 # Chapters 6–7 class test. Original; not taken from the textbook or College Board materials.
 # Questions with cedTopics: [] cover class-test material that is not on the AP exam.
-# Constants are not given on the class test: h = 6.626e-34 J·s, c = 2.998e8 m/s,
-# 2.18e-18 J (Bohr), 6.022e23 /mol.
+# The class test comes with the AP equation sheet, which gives h = 6.626e-34 J·s, c = 2.998e8 m/s,
+# 6.022e23 /mol, E = hν, and c = λν. It does not give the Bohr constant 2.18e-18 J, 1 Å = 1e-10 m,
+# or λ = h/mv, so students memorize those.
+# calculation: true marks questions that need a numeric calculation (the practice exam limits how
+# many of those it draws).
 
 - id: apchem-06-wavelength-energy-order
   type: mcq
@@ -113,9 +116,9 @@
   choices:
     - { id: a, text: "three times the energy and three times the wavelength" }
     - { id: b, text: "one-third the energy and three times the wavelength" }
-    - { id: c, text: "three times the energy and one-third the wavelength" }
-    - { id: d, text: "the same energy, because all light travels at the same speed" }
-  answer: c
+    - { id: c, text: "the same energy, because all light travels at the same speed" }
+    - { id: d, text: "three times the energy and one-third the wavelength" }
+  answer: d
   explanation: |
     $E = h\nu$, so energy is directly proportional to frequency: three times the frequency means three times the energy.
     $c = \lambda\nu$ with $c$ fixed, so wavelength is inversely proportional to frequency: three times the frequency means one-third the wavelength.
@@ -153,10 +156,10 @@
     When a molecule absorbs **infrared** radiation, what usually happens?
   choices:
     - { id: a, text: "An electron moves to a higher energy level" }
-    - { id: b, text: "The bonds in the molecule vibrate more" }
+    - { id: b, text: "The nucleus changes" }
     - { id: c, text: "The molecule rotates faster" }
-    - { id: d, text: "The nucleus changes" }
-  answer: b
+    - { id: d, text: "The bonds in the molecule vibrate more" }
+  answer: d
   explanation: |
     Infrared photons carry the right amount of energy to change bond **vibrations**. Microwaves change **rotation** (C), and UV or visible light moves **electrons** to higher levels (A).
 
@@ -171,11 +174,11 @@
   prompt: |
     Excited hydrogen gas gives off light at only a few specific wavelengths instead of a continuous range. Which statement best explains this?
   choices:
-    - { id: a, text: "Hydrogen atoms absorb all other wavelengths of light" }
-    - { id: b, text: "The electron in hydrogen can only have certain energies, so only certain energy differences exist" }
-    - { id: c, text: "Hydrogen has only one electron, so it can only emit one photon" }
-    - { id: d, text: "Light from a gas always travels slower than light from a solid" }
-  answer: b
+    - { id: a, text: "Hydrogen atoms absorb every other wavelength before the light can leave the gas" }
+    - { id: b, text: "Light from a gas always travels more slowly than light from a hot solid" }
+    - { id: c, text: "Hydrogen has only one electron, so each atom can give off only one photon" }
+    - { id: d, text: "The electron can have only certain energies, so only certain energy gaps exist" }
+  answer: d
   explanation: |
     The electron's energy is **quantized**. A photon is emitted when the electron drops from one allowed level to a lower one, and the photon's energy equals that difference.
     Only a fixed set of differences exists, so only a fixed set of wavelengths comes out: a line spectrum.
@@ -212,10 +215,10 @@
     An electron in a hydrogen atom moves from $n = 2$ to $n = 5$. Which is true?
   choices:
     - { id: a, text: '$\Delta E$ is negative and a photon is emitted' }
-    - { id: b, text: '$\Delta E$ is positive and a photon is absorbed' }
+    - { id: b, text: '$\Delta E$ is zero, because energy is conserved' }
     - { id: c, text: '$\Delta E$ is positive and a photon is emitted' }
-    - { id: d, text: '$\Delta E$ is zero, because energy is conserved' }
-  answer: b
+    - { id: d, text: '$\Delta E$ is positive and a photon is absorbed' }
+  answer: d
   explanation: |
     Moving to a higher level ($n_f > n_i$) needs energy, so the atom absorbs a photon and $\Delta E$ is positive. In
     $\Delta E = -2.18 \times 10^{-18}(1/n_f^2 - 1/n_i^2)$, the bracket is $1/25 - 1/4$, which is negative, so $\Delta E$ comes out positive.
@@ -376,11 +379,11 @@
   prompt: |
     Why does the modern model describe electrons with orbitals instead of fixed circular orbits?
   choices:
-    - { id: a, text: "Electrons are too small to have any energy" }
-    - { id: b, text: "The exact position and momentum of an electron can't both be known at once" }
-    - { id: c, text: "Electrons only move in straight lines" }
-    - { id: d, text: "Orbits only exist in atoms with more than one electron" }
-  answer: b
+    - { id: a, text: "Electrons are too small and too light to have any measurable energy" }
+    - { id: b, text: "Fixed orbits are only possible in atoms with more than one electron" }
+    - { id: c, text: "Electrons always travel in straight lines, never in curved paths" }
+    - { id: d, text: "An electron's exact position and momentum can't both be known at once" }
+  answer: d
   explanation: |
     The Heisenberg **uncertainty principle** means we can't track an exact path, so quantum mechanics gives an orbital instead: a region where the electron is likely to be found.
 
@@ -396,13 +399,13 @@
     Which is the ground-state electron configuration of selenium (Se, $Z = 34$)?
   choices:
     - { id: a, text: '$[\ce{Ar}]\,4s^2\,4p^4$' }
-    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^4$' }
+    - { id: b, text: '$[\ce{Kr}]\,4p^4$' }
     - { id: c, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^6$' }
-    - { id: d, text: '$[\ce{Kr}]\,4p^4$' }
-  answer: b
+    - { id: d, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^4$' }
+  answer: d
   explanation: |
     Ar accounts for 18 electrons. Then 4s holds 2, 3d holds 10, and 4p gets the last 4: $18 + 2 + 10 + 4 = 34$.
-    (A) skips the 3d subshell (only 24 electrons), (C) has 36 electrons (that's Kr), and (D) uses the wrong noble-gas core.
+    (A) skips the 3d subshell (only 24 electrons), (C) has 36 electrons (that's Kr), and (B) uses the wrong noble-gas core.
 
 - id: apchem-06-unpaired-p
   type: mcq
@@ -435,17 +438,17 @@
   prompt: |
     A student draws the orbital diagram for oxygen as
 
-    | 1s | 2s | 2p | | |
+    | 1s | 2s | 2p | 2p | 2p |
     |---|---|---|---|---|
-    | ↑↓ | ↑↓ | ↑↓ | ↑↓ | |
+    | ↑↓ | ↑↓ | ↑↓ | ↑↓ | \_\_ |
 
     Which rule does this diagram break?
   choices:
-    - { id: a, text: "The aufbau principle only" }
+    - { id: a, text: "Hund's rule only" }
     - { id: b, text: "The Pauli exclusion principle only" }
-    - { id: c, text: "Hund's rule only" }
+    - { id: c, text: "The aufbau principle only" }
     - { id: d, text: "None; it is correct" }
-  answer: c
+  answer: a
   explanation: |
     Each orbital holds two electrons with opposite spins, so Pauli is satisfied, and the lowest subshells are filled first, so aufbau is satisfied.
     But the four 2p electrons should be spread as ↑↓ ↑ ↑ before a second orbital is paired. Leaving a 2p orbital empty while pairing two others breaks **Hund's rule**.
@@ -462,13 +465,13 @@
     Which is the electron configuration of $\ce{Fe^3+}$?
   choices:
     - { id: a, text: '$[\ce{Ar}]\,4s^2\,3d^3$' }
-    - { id: b, text: '$[\ce{Ar}]\,3d^5$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^6$' }
     - { id: c, text: '$[\ce{Ar}]\,4s^1\,3d^4$' }
-    - { id: d, text: '$[\ce{Ar}]\,4s^2\,3d^6$' }
-  answer: b
+    - { id: d, text: '$[\ce{Ar}]\,3d^5$' }
+  answer: d
   explanation: |
     Fe is $[\ce{Ar}]\,4s^2\,3d^6$ (26 electrons). Transition metals lose their **4s** electrons first, then 3d. Removing 3 electrons takes both 4s electrons and one 3d electron, which leaves $[\ce{Ar}]\,3d^5$.
-    (A) removes the 3d electrons first, which is the common mistake. (D) is neutral Fe.
+    (A) removes the 3d electrons first, which is the common mistake. (B) is neutral Fe.
 
 - id: apchem-06-copper-exception
   type: mcq
@@ -482,13 +485,13 @@
     The actual ground-state configuration of copper ($Z = 29$) is
   choices:
     - { id: a, text: '$[\ce{Ar}]\,4s^2\,3d^9$' }
-    - { id: b, text: '$[\ce{Ar}]\,4s^1\,3d^{10}$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^8\,4p^1$' }
     - { id: c, text: '$[\ce{Ar}]\,3d^{11}$' }
-    - { id: d, text: '$[\ce{Ar}]\,4s^2\,4p^9$' }
-  answer: b
+    - { id: d, text: '$[\ce{Ar}]\,4s^1\,3d^{10}$' }
+  answer: d
   explanation: |
     Copper is an exception to the aufbau order. One 4s electron moves into 3d to make a completely filled $3d^{10}$ subshell, which is extra stable. Chromium does the same to reach a half-filled $3d^5$: $[\ce{Ar}]\,4s^1\,3d^5$.
-    (A) is the predicted configuration, and (C) and (D) are impossible because d holds at most 10 electrons and p at most 6.
+    (A) is the predicted configuration. (C) is impossible because a d subshell holds at most 10 electrons, and (B) puts an electron in 4p while 3d still has room.
 
 - id: apchem-06-hydrogen-line-frq
   type: frq
@@ -647,14 +650,14 @@
   prompt: |
     Which statement matches Planck's idea of a **quantum**?
   choices:
-    - { id: a, text: "Atoms can absorb or emit any amount of energy, as long as it's small" }
-    - { id: b, text: "Atoms absorb or emit energy only in whole-number multiples of a smallest amount, hν" }
-    - { id: c, text: "Light always travels slower in a vacuum than in air" }
-    - { id: d, text: "Electrons move in circular orbits around the nucleus" }
-  answer: b
+    - { id: a, text: "Atoms can absorb or give off any amount of energy, as long as the amount is small enough" }
+    - { id: b, text: "Electrons move only in fixed circular orbits around the nucleus" }
+    - { id: c, text: "Light always travels more slowly in a vacuum than it does in air" }
+    - { id: d, text: "Atoms absorb or emit energy only in whole-number multiples of a smallest amount, hν" }
+  answer: d
   explanation: |
     A quantum is a fixed, smallest packet of energy. Matter can only gain or lose energy in whole numbers of these packets ($h\nu$, $2h\nu$, $3h\nu$, …), never in between.
-    (D) is Bohr's model, not Planck's quantum idea.
+    (B) is Bohr's model, not Planck's quantum idea.
 
 - id: apchem-06-monochromatic
   type: mcq
@@ -669,9 +672,9 @@
   choices:
     - { id: a, text: "Sunlight" }
     - { id: b, text: "A white light bulb" }
-    - { id: c, text: "A red laser pointer" }
-    - { id: d, text: "A glowing hot stovetop" }
-  answer: c
+    - { id: c, text: "A glowing hot stovetop" }
+    - { id: d, text: "A red laser pointer" }
+  answer: d
   explanation: |
     Monochromatic radiation has a single wavelength, and a laser gives off essentially one wavelength.
     Sunlight, a white bulb, and a hot object all give off many wavelengths, so they are **polychromatic**.
@@ -687,14 +690,14 @@
   prompt: |
     In a gas discharge tube, what has to happen for an atom to give off a line in its emission spectrum?
   choices:
-    - { id: a, text: "An electron moves from a lower energy level to a higher one" }
-    - { id: b, text: "An electron that was excited falls back to a lower energy level" }
-    - { id: c, text: "The nucleus absorbs a photon" }
-    - { id: d, text: "The atom loses a proton" }
-  answer: b
+    - { id: a, text: "An electron that was excited falls back to a lower energy level" }
+    - { id: b, text: "An electron moves from a lower energy level to a higher one" }
+    - { id: c, text: "The nucleus absorbs a photon and moves to a higher state" }
+    - { id: d, text: "The atom loses a proton, which carries the energy away" }
+  answer: a
   explanation: |
     Energy added to the gas first excites electrons to higher levels. A line is **emitted** when an excited electron drops back down, releasing a photon whose energy equals the gap between the levels.
-    (A) is absorption, which takes energy in.
+    (B) is absorption, which takes energy in. The nucleus and its protons don't take part, so (C) and (D) are wrong.
 
 - id: apchem-06-bohr-limitation
   type: mcq
@@ -709,12 +712,12 @@
   choices:
     - { id: a, text: "Electrons exist only in certain energy levels" }
     - { id: b, text: "Energy is absorbed or emitted in fixed amounts when an electron changes levels" }
-    - { id: c, text: "It only works for hydrogen and other one-electron species" }
-    - { id: d, text: "The ground state is the lowest-energy, most stable state" }
-  answer: c
+    - { id: c, text: "The ground state is the lowest-energy, most stable state" }
+    - { id: d, text: "It only works for hydrogen and other one-electron species" }
+  answer: d
   explanation: |
     Bohr's model can't predict the spectra of atoms with two or more electrons, and it pictures electrons in fixed circular orbits, which they don't really follow.
-    (A), (B), and (D) are all still true in the modern model. They're what Bohr got **right**.
+    (A), (B), and (C) are all still true in the modern model. They're what Bohr got **right**.
 
 - id: apchem-06-joule-units
   type: mcq
@@ -730,10 +733,10 @@
     - { id: a, text: '$\text{kg·m/s}^2$' }
     - { id: b, text: '$\text{kg·m}^2/\text{s}^2$' }
     - { id: c, text: '$\text{kg·m}^2/\text{s}$' }
-    - { id: d, text: '$\text{m/s}$' }
+    - { id: d, text: '$\text{kg·m}^2/\text{s}^3$' }
   answer: b
   explanation: |
-    $1\ \text{J} = 1\ \text{kg·m}^2/\text{s}^2$. (A) is a newton, the unit of force. (C) equals J·s, the unit of Planck's constant $h$. (D) is a speed.
+    $1\ \text{J} = 1\ \text{kg·m}^2/\text{s}^2$. (A) is a newton, the unit of force. (C) equals J·s, the unit of Planck's constant $h$. (D) is a watt, one joule per second.
 
 - id: apchem-06-orbitals-per-subshell
   type: mcq
@@ -806,14 +809,14 @@
   prompt: |
     Which is the condensed (noble-gas) electron configuration of gallium (Ga, $Z = 31$)?
   choices:
-    - { id: a, text: '$[\ce{Ar}]\,4s^2\,4p^1$' }
-    - { id: b, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^1$' }
-    - { id: c, text: '$[\ce{Kr}]\,4p^1$' }
+    - { id: a, text: '$[\ce{Ar}]\,4s^2\,3d^{10}\,4p^1$' }
+    - { id: b, text: '$[\ce{Ar}]\,4s^2\,4p^1$' }
+    - { id: c, text: '$[\ce{Ar}]\,4s^2\,4d^{10}\,4p^1$' }
     - { id: d, text: '$[\ce{Ne}]\,3s^2\,3p^1$' }
-  answer: b
+  answer: a
   explanation: |
     Start from the noble gas before Ga, which is Ar (18 electrons). Then fill 4s (2), 3d (10), and 4p (1): $18 + 2 + 10 + 1 = 31$.
-    (A) skips the 3d subshell, (C) uses the noble gas **after** Ga, and (D) is aluminum.
+    (B) skips the 3d subshell, (C) uses 4d, but period 4 fills 3d (the d block is one shell behind the period), and (D) is aluminum.
 
 # ---------------------------------------------------------------------------
 # Theory questions (the teacher's Exam 3 note says to focus on concepts, not just the equations)
@@ -830,10 +833,10 @@
   prompt: |
     Why couldn't the wave model of light explain the photoelectric effect?
   choices:
-    - { id: a, text: "The wave model predicts that bright enough light of any frequency should eject electrons, but low-frequency light never does" }
-    - { id: b, text: "The wave model predicts that light can't travel through a vacuum" }
-    - { id: c, text: "The wave model says light has no energy" }
-    - { id: d, text: "The wave model predicts that only X-rays can eject electrons" }
+    - { id: a, text: "It predicts any frequency works if the light is bright enough, but low frequencies never do" }
+    - { id: b, text: "It predicts that light carries no energy, so light could never move an electron at all" }
+    - { id: c, text: "It predicts that only X-rays and gamma rays carry enough energy to free an electron" }
+    - { id: d, text: "It predicts dim light should free faster electrons than bright light of the same color" }
   answer: a
   explanation: |
     If light were only a wave, a brighter (more intense) beam should deliver more energy and eventually free electrons at any frequency. In experiments, below a threshold frequency nothing happens no matter how bright the light is.
@@ -852,9 +855,9 @@
   choices:
     - { id: a, text: "A white-hot tungsten filament" }
     - { id: b, text: "Sunlight passed through a prism" }
-    - { id: c, text: "Neon gas glowing in an electric sign" }
-    - { id: d, text: "A glowing piece of hot iron" }
-  answer: c
+    - { id: c, text: "A piece of iron glowing red-hot in a forge" }
+    - { id: d, text: "Neon gas glowing in an electric sign" }
+  answer: d
   explanation: |
     Excited **gas atoms** give off only the wavelengths that match the gaps between their electron energy levels, which shows up as separate lines.
     Hot solids and the sun give off a continuous range of wavelengths.
@@ -870,13 +873,13 @@
   prompt: |
     According to de Broglie, all moving matter has a wavelength. Why do we notice wave behavior for electrons but not for a thrown baseball?
   choices:
-    - { id: a, text: "Baseballs don't move fast enough to have a wavelength" }
-    - { id: b, text: "The wavelength is inversely related to mass, and a baseball's mass is so large that its wavelength is far too small to detect" }
-    - { id: c, text: "Only charged particles can have wavelengths" }
-    - { id: d, text: "Electrons travel at the speed of light" }
+    - { id: a, text: "Baseballs move too slowly to have a wavelength; only fast particles have one" }
+    - { id: b, text: '$\lambda = h/mv$ is far too small to detect, because the mass of a baseball is so large' }
+    - { id: c, text: "Only charged particles such as electrons have wavelengths; neutral objects do not" }
+    - { id: d, text: "Electrons travel at the speed of light, and only things that fast behave like waves" }
   answer: b
   explanation: |
-    $\lambda = h/mv$, and Planck's constant is tiny. For a tiny mass like an electron's, the wavelength is about the size of an atom, so electrons diffract like waves. For a baseball, the wavelength is unimaginably small.
+    $\lambda = h/mv$, and Planck's constant is tiny. For a tiny mass like an electron's, the wavelength is about the size of an atom, so electrons diffract like waves. For a baseball, the wavelength is many times smaller than an atomic nucleus. (A) is false because anything that moves has a wavelength.
     (C) is false because neutral particles have wavelengths too, and (D) is false because electrons in atoms move much slower than light.
 
 - id: apchem-06-theory-orbital-meaning
@@ -891,7 +894,7 @@
     In the quantum-mechanical model, what does an orbital represent?
   choices:
     - { id: a, text: "The exact circular path an electron follows around the nucleus" }
-    - { id: b, text: "A region of space where there is a high probability of finding the electron" }
+    - { id: b, text: "A region of space where the electron is likely to be found" }
     - { id: c, text: "The amount of energy needed to remove an electron" }
     - { id: d, text: "A group of elements with similar properties" }
   answer: b
@@ -911,12 +914,12 @@
     As the principal quantum number $n$ increases, what happens to an orbital?
   choices:
     - { id: a, text: "It gets smaller and lower in energy" }
-    - { id: b, text: "It gets larger and higher in energy, with the electron farther from the nucleus on average" }
-    - { id: c, text: "It changes shape from s to p to d" }
-    - { id: d, text: "Its orientation in space changes" }
+    - { id: b, text: "It gets larger and higher in energy" }
+    - { id: c, text: "It changes shape, from s to p to d" }
+    - { id: d, text: "It points in a different direction in space" }
   answer: b
   explanation: |
-    $n$ sets the **size and energy** of an orbital: a 3s orbital is bigger and higher in energy than a 2s orbital.
+    $n$ sets the **size and energy** of an orbital: a 3s orbital is bigger and higher in energy than a 2s orbital, and its electron is farther from the nucleus on average.
     Shape is set by $l$ (C), and orientation by $m_l$ (D).
 
 - id: apchem-06-theory-4s-before-3d
@@ -930,14 +933,14 @@
   prompt: |
     In potassium, the 19th electron goes into 4s instead of 3d. Which is the best explanation?
   choices:
-    - { id: a, text: "4s has a smaller n than 3d" }
-    - { id: b, text: "A 4s electron penetrates closer to the nucleus than a 3d electron, feels a larger Zeff, and so is lower in energy" }
-    - { id: c, text: "The 3d subshell can only hold electrons after it is half-filled" }
-    - { id: d, text: "Hund's rule forbids putting one electron in a d subshell" }
+    - { id: a, text: "4s has a smaller n than 3d, so it is closer to the nucleus and fills first" }
+    - { id: b, text: "4s penetrates closer to the nucleus than 3d, so it feels a larger Zeff and is lower in energy" }
+    - { id: c, text: "The 3d subshell can't take any electrons until the 4s and the 4p subshells are both full" }
+    - { id: d, text: "Hund's rule says a lone electron has to go into an s orbital before a d orbital" }
   answer: b
   explanation: |
     In a many-electron atom, energy depends on $l$ as well as $n$. An s electron spends part of its time very close to the nucleus, inside the inner electrons, so it's less shielded. That lowers 4s below 3d for potassium and calcium.
-    (A) is false because 4s has the **larger** $n$. (C) and (D) aren't real rules.
+    (A) is false because 4s has the **larger** $n$. (C) is false because 3d fills before 4p (scandium through zinc), and (D) isn't what Hund's rule says.
 
 - id: apchem-06-theory-hund-reason
   type: mcq
@@ -950,14 +953,14 @@
   prompt: |
     Why do electrons spread out one per orbital in a set of equal-energy orbitals (Hund's rule) before pairing?
   choices:
-    - { id: a, text: "Electrons in separate orbitals are farther apart, so there is less electron–electron repulsion" }
-    - { id: b, text: "Paired electrons are attracted to the nucleus more strongly" }
-    - { id: c, text: "Each orbital must be filled before the next shell can start" }
-    - { id: d, text: "The Pauli principle forbids two electrons in one orbital" }
+    - { id: a, text: "Separate orbitals keep the electrons farther apart, so they repel each other less" }
+    - { id: b, text: "An orbital can't hold a second electron until every orbital in its shell has one" }
+    - { id: c, text: "Each orbital has to be filled before electrons start the next shell" }
+    - { id: d, text: "The Pauli principle forbids two electrons from ever sharing one orbital" }
   answer: a
   explanation: |
     Electrons repel each other. Putting them in different orbitals of the same energy keeps them apart and lowers the energy of the atom, so that's the ground state.
-    (D) is false because Pauli **allows** two electrons in one orbital, as long as their spins are opposite.
+    (B) is false: 2s holds two electrons before any 2p orbital gets one. (C) is about the filling order, not about spreading out. (D) is false because Pauli **allows** two electrons in one orbital, as long as their spins are opposite.
 
 - id: apchem-06-theory-excited-state
   type: mcq
@@ -1013,11 +1016,11 @@
     - { id: a, text: '$\ce{Na+}$' }
     - { id: b, text: '$\ce{Ca^2+}$' }
     - { id: c, text: '$\ce{Br-}$' }
-    - { id: d, text: '$\ce{O^2-}$' }
+    - { id: d, text: '$\ce{Mg^2+}$' }
   answer: b
   explanation: |
     Ar has 18 electrons. $\ce{Ca^2+}$ has $20 - 2 = 18$, so it is isoelectronic with Ar.
-    $\ce{Na+}$ and $\ce{O^2-}$ have 10 electrons (like Ne), and $\ce{Br-}$ has 36 (like Kr).
+    $\ce{Na+}$ and $\ce{Mg^2+}$ have 10 electrons (like Ne), and $\ce{Br-}$ has 36 (like Kr).
 
 # ---------------------------------------------------------------------------
 # Harder multi-step questions (added after the Ch. 6–7 test)
@@ -1198,3 +1201,406 @@
 
     **(d)** $E_{300} = \dfrac{1.986 \times 10^{-25}}{300. \times 10^{-9}} = 6.62 \times 10^{-19}$ J. The extra energy beyond what's needed to free the electron becomes kinetic energy:
     $KE = 6.62 \times 10^{-19} - 5.45 \times 10^{-19} = 1.17 \times 10^{-19}$ J.
+
+# ---------------------------------------------------------------------------
+# Concept questions for the practice exam's Chapter 6 groups (added after the Ch. 6–7 test)
+# ---------------------------------------------------------------------------
+
+- id: apchem-06-light-speed-same
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1"]
+  cedTopics: ["3.12"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a vacuum, how does the speed of X-rays compare with the speed of radio waves?
+  choices:
+    - { id: a, text: "X-rays are faster, because each X-ray photon carries more energy" }
+    - { id: b, text: "Radio waves are faster, because their wavelengths are much longer" }
+    - { id: c, text: "They travel at the same speed, $c$" }
+    - { id: d, text: "It depends on how bright each source is" }
+  answer: c
+  explanation: |
+    Every kind of electromagnetic radiation travels through a vacuum at the same speed, $c = 2.998 \times 10^{8}$ m/s. X-rays and radio waves differ in wavelength and frequency, and $c = \lambda\nu$ says that when one goes up the other goes down, with the product staying the same.
+    A photon's energy depends on its frequency, not on its speed, so (A) is wrong. Brightness (D) is the number of photons, which doesn't change the speed either.
+
+- id: apchem-06-photoelectric-raise-frequency
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Light above the threshold frequency shines on a metal and ejects electrons. The frequency is then raised, while the number of photons hitting the metal each second stays the same. What happens?
+  choices:
+    - { id: a, text: "The same number of electrons leave, each with more kinetic energy" }
+    - { id: b, text: "More electrons leave, but each has the same kinetic energy as before" }
+    - { id: c, text: "No electrons leave, because the light is now above the threshold" }
+    - { id: d, text: "The electrons leave more slowly, because each photon now has a shorter wavelength" }
+  answer: a
+  explanation: |
+    Each photon ejects at most one electron, so the same number of photons per second ejects the same number of electrons. A higher frequency means each photon has more energy ($E = h\nu$), and the energy left over after freeing the electron becomes its kinetic energy: $KE = E_{\text{photon}} - E_{\text{minimum}}$.
+    (B) is what happens when the light gets brighter (more photons) at the same frequency. (C) has the threshold backward. (D) is backward too: a shorter wavelength means more energy per photon, so faster electrons.
+
+- id: apchem-06-dim-violet-bright-red
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A dim violet light and a very bright red light shine on the same metal. Only the violet light ejects electrons. What does this show?
+  choices:
+    - { id: a, text: "Red light carries no energy, so it can never affect a metal" }
+    - { id: b, text: "Whether an electron leaves depends on each photon's energy, not on how many photons arrive" }
+    - { id: c, text: "A bright light gives off fewer photons each second than a dim light does" }
+    - { id: d, text: "The metal reflects every violet photon and absorbs every red one instead" }
+  answer: b
+  explanation: |
+    One photon frees one electron, so a single photon has to carry at least the minimum energy. Violet light has a higher frequency than red, so each violet photon has more energy ($E = h\nu$). Brightness only changes how many photons arrive, and no number of low-energy red photons adds up to free an electron.
+    (A) is false: red photons have energy, just not enough each. (C) is backward, and (D) would mean violet light couldn't eject anything.
+
+- id: apchem-06-light-as-particle-evidence
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which observation is evidence that light behaves as a stream of particles (photons)?
+  choices:
+    - { id: a, text: "Light spreads out after it passes through a very narrow slit" }
+    - { id: b, text: "Two beams of light overlap to make a pattern of bright and dark bands" }
+    - { id: c, text: "Light ejects electrons from a metal only above a certain frequency" }
+    - { id: d, text: "A glass prism bends each color of white light by a different amount" }
+  answer: c
+  explanation: |
+    The photoelectric effect is explained only if light arrives in packets whose energy depends on frequency ($E = h\nu$). That is the particle picture.
+    Spreading through a slit (diffraction, A), bright and dark bands (interference, B), and a prism separating colors (D) are all wave behavior.
+
+- id: apchem-06-negative-energy-levels
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In the Bohr model, every energy level of the hydrogen atom has a negative value. Why?
+  choices:
+    - { id: a, text: "The electron has a negative charge, so its energy is negative too" }
+    - { id: b, text: "The bound electron has less energy than a free one, which is set to zero" }
+    - { id: c, text: "The electron loses a little energy every time it goes around the nucleus" }
+    - { id: d, text: "The electron moves around the nucleus in the opposite direction from a proton" }
+  answer: b
+  explanation: |
+    Zero energy is defined as the electron completely removed ($n = \infty$). An electron held by the nucleus has less energy than that, so every bound level is below zero, and energy has to be added to pull it free.
+    (A) mixes up charge and energy. (C) contradicts Bohr's idea that an electron in an allowed orbit doesn't give off energy. (D) isn't part of the model.
+
+- id: apchem-06-absorption-emission-lines-match
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    White light passed through cool hydrogen gas shows dark lines at exactly the wavelengths where glowing hydrogen gives off bright lines. Why do the two spectra match?
+  choices:
+    - { id: a, text: "Absorbing and emitting use the same gaps between energy levels, in opposite directions" }
+    - { id: b, text: "Hydrogen gas reflects those wavelengths back toward the light source" }
+    - { id: c, text: "Every element absorbs light at the same few wavelengths" }
+    - { id: d, text: "The dark lines are where the gas gives off too much light for the detector to show" }
+  answer: a
+  explanation: |
+    An electron can absorb a photon only if the photon's energy equals the gap between two allowed levels, and it emits a photon of the same energy when it drops back across that gap. The same set of gaps means the same set of wavelengths, whether the light is taken in (dark lines) or given off (bright lines).
+    (C) is false: each element's lines are different, which is why spectra identify elements.
+
+- id: apchem-06-electron-diffraction
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.4"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A beam of electrons passed through a thin crystal makes a diffraction pattern, the same kind of pattern light makes. What does this show?
+  choices:
+    - { id: a, text: "Electrons are a form of light" }
+    - { id: b, text: "Electrons have no mass while they are moving" }
+    - { id: c, text: "Moving electrons have wave properties" }
+    - { id: d, text: "The crystal gives off light when electrons hit it" }
+  answer: c
+  explanation: |
+    Diffraction is wave behavior. Electrons diffracting confirmed de Broglie's idea that moving matter has a wavelength ($\lambda = h/mv$). It matters for electrons because their mass is so small.
+    Electrons still have mass and charge (B), and they are not light (A); they are particles that also act like waves.
+
+- id: apchem-06-pauli-consequence
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement follows directly from the Pauli exclusion principle?
+  choices:
+    - { id: a, text: "Electrons fill the lowest-energy orbitals before higher ones" }
+    - { id: b, text: "An orbital holds at most two electrons, and they have opposite spins" }
+    - { id: c, text: "Electrons go one per orbital, all with the same spin, before any pair up" }
+    - { id: d, text: "An electron's exact position and momentum can't both be known at once" }
+  answer: b
+  explanation: |
+    Pauli says no two electrons in an atom have the same four quantum numbers. Two electrons in one orbital already share $n$, $l$, and $m_l$, so they must differ in $m_s$: one $+\tfrac{1}{2}$ and one $-\tfrac{1}{2}$. A third electron would have to repeat one of those, so an orbital holds at most two.
+    (A) is the aufbau principle, (C) is Hund's rule, and (D) is the uncertainty principle.
+
+- id: apchem-06-node-at-nucleus
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.6"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For which orbital is the probability of finding the electron **at the nucleus** zero?
+  choices:
+    - { id: a, text: "1s" }
+    - { id: b, text: "2s" }
+    - { id: c, text: "3s" }
+    - { id: d, text: "2p" }
+  answer: d
+  explanation: |
+    A p orbital has two lobes on opposite sides of the nucleus with a node between them, right at the nucleus. Every s orbital has some electron density at the nucleus; the nodes of 2s and 3s are spheres around it, not at its center.
+    This is also why s electrons penetrate the inner electrons better than p electrons in the same shell.
+
+- id: apchem-06-shape-from-l
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.6"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    An electron is in an orbital with $l = 1$. What shape is the orbital?
+  choices:
+    - { id: a, text: "A sphere centered on the nucleus" }
+    - { id: b, text: "Two lobes on opposite sides of the nucleus" }
+    - { id: c, text: "Four lobes in a cloverleaf pattern" }
+    - { id: d, text: "A flat ring that circles the nucleus at one distance" }
+  answer: b
+  explanation: |
+    $l = 1$ is a p orbital: two lobes with the nucleus between them, like a dumbbell. $l = 0$ is an s orbital (a sphere, A), and $l = 2$ is a d orbital (mostly four lobes, C).
+    Orbitals aren't flat paths (D); that's closer to Bohr's orbits.
+
+- id: apchem-06-ml-meaning
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What does the magnetic quantum number, $m_l$, describe?
+  choices:
+    - { id: a, text: "The size of the orbital and its energy level" }
+    - { id: b, text: "The shape of the orbital" }
+    - { id: c, text: "Which way the orbital points in space" }
+    - { id: d, text: "The direction of the electron's spin" }
+  answer: c
+  explanation: |
+    $m_l$ tells the orientation of an orbital. For $l = 1$ it can be $-1$, $0$, or $+1$, which are the three p orbitals pointing along different axes.
+    Size and energy come from $n$ (A), shape from $l$ (B), and spin from $m_s$ (D).
+
+- id: apchem-06-ms-same-orbital
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5", "6.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Two electrons are in the same orbital, so they have the same $n$, $l$, and $m_l$. What must be true of their spin quantum numbers, $m_s$?
+  choices:
+    - { id: a, text: 'Both are $+\tfrac{1}{2}$' }
+    - { id: b, text: 'One is $+\tfrac{1}{2}$ and the other is $-\tfrac{1}{2}$' }
+    - { id: c, text: "Both are 0, because the spins cancel" }
+    - { id: d, text: "They can be any two values, as long as both are whole numbers" }
+  answer: b
+  explanation: |
+    $m_s$ can only be $+\tfrac{1}{2}$ or $-\tfrac{1}{2}$. By the Pauli principle the two electrons can't have all four quantum numbers the same, and the first three already match, so their spins must be opposite.
+    (A) breaks the Pauli principle, and (C) and (D) give values $m_s$ can't have.
+
+- id: apchem-06-paramagnetic-atom
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    An atom with unpaired electrons is **paramagnetic** (pulled into a magnetic field). Which ground-state atom is paramagnetic?
+  choices:
+    - { id: a, text: "He" }
+    - { id: b, text: "Be" }
+    - { id: c, text: "O" }
+    - { id: d, text: "Ne" }
+  answer: c
+  explanation: |
+    O is $1s^2\,2s^2\,2p^4$, and its 2p orbitals are ↑↓ ↑ ↑, so it has **2 unpaired** electrons.
+    He ($1s^2$), Be ($1s^2\,2s^2$), and Ne ($1s^2\,2s^2\,2p^6$) have only filled subshells, so every electron is paired and they are diamagnetic.
+
+- id: apchem-06-sulfide-config
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the electron configuration of the sulfide ion, $\ce{S^2-}$?
+  choices:
+    - { id: a, text: '$[\ce{Ne}]\,3s^2\,3p^4$' }
+    - { id: b, text: '$[\ce{Ne}]\,3s^2\,3p^2$' }
+    - { id: c, text: '$[\ce{Ar}]\,4s^2$' }
+    - { id: d, text: '$[\ce{Ne}]\,3s^2\,3p^6$' }
+  answer: d
+  explanation: |
+    S has 16 electrons, $[\ce{Ne}]\,3s^2\,3p^4$. The 2− charge means two more electrons, 18 in all, and they fill the 3p subshell: $[\ce{Ne}]\,3s^2\,3p^6$, the same as argon.
+    (A) is the neutral atom, (B) removes two electrons instead of adding them, and (C) has 20 electrons.
+
+- id: apchem-06-hund-carbon-diagram
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Carbon is $1s^2\,2s^2\,2p^2$. Which diagram of its three 2p orbitals is correct for the ground state?
+  choices:
+    - { id: a, text: '↑↓ \_\_ \_\_' }
+    - { id: b, text: '↑ ↓ \_\_' }
+    - { id: c, text: '↑ ↑ \_\_' }
+    - { id: d, text: '↑↑ \_\_ \_\_' }
+  answer: c
+  explanation: |
+    Hund's rule: in equal-energy orbitals, put one electron in each, **with the same spin**, before pairing. So carbon's two 2p electrons go in separate orbitals, both up.
+    (A) pairs them too early. (B) has them in separate orbitals but with opposite spins, which is higher in energy. (D) puts two electrons with the same spin in one orbital, which the Pauli principle forbids.
+
+- id: apchem-06-valence-count-p-block
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many valence electrons does an atom with the configuration $[\ce{Ar}]\,4s^2\,3d^{10}\,4p^3$ have?
+  choices:
+    - { id: a, text: "3" }
+    - { id: b, text: "5" }
+    - { id: c, text: "13" }
+    - { id: d, text: "15" }
+  answer: b
+  explanation: |
+    Valence electrons are the ones in the outermost shell, here $n = 4$: $4s^2\,4p^3$, which is 5. The filled $3d^{10}$ subshell is in a lower shell and doesn't count. The element is arsenic, in group 15, and main-group elements have as many valence electrons as the last digit of their group number.
+    (A) counts only the 4p electrons, (C) adds the 3d electrons, and (D) is the group number.
+
+- id: apchem-06-cobalt-ion-electrons-lost
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.9"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Cobalt is $[\ce{Ar}]\,4s^2\,3d^7$. When it forms $\ce{Co^2+}$, which electrons does it lose?
+  choices:
+    - { id: a, text: "Two of its 3d electrons" }
+    - { id: b, text: "One 4s electron and one 3d electron" }
+    - { id: c, text: "Both 4s electrons" }
+    - { id: d, text: "The last two electrons added, which are in the 3d subshell" }
+  answer: c
+  explanation: |
+    Transition metals lose their **4s** electrons first, even though 4s filled before 3d. Once the 3d orbitals hold electrons, the 4s electrons are the outermost ($n = 4$) and the easiest to remove. So $\ce{Co^2+}$ is $[\ce{Ar}]\,3d^7$.
+    (A) and (D) follow the filling order backward, which is the common mistake.
+
+- id: apchem-06-degenerate-in-carbon
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.7"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In a carbon atom, which orbitals are **degenerate** (have exactly the same energy)?
+  choices:
+    - { id: a, text: "The 2s orbital and the three 2p orbitals" }
+    - { id: b, text: "The 1s orbital and the 2s orbital" }
+    - { id: c, text: "The three 2p orbitals" }
+    - { id: d, text: "The three 2p orbitals and the 3s orbital" }
+  answer: c
+  explanation: |
+    Orbitals in the same subshell have the same energy, so the three 2p orbitals are degenerate. In an atom with more than one electron, 2s is lower than 2p because a 2s electron penetrates closer to the nucleus, so (A) is only true for one-electron species like H. (B) and (D) mix different shells.
+
+- id: apchem-06-quantum-numbers-4d
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which set of quantum numbers $(n, l, m_l, m_s)$ could describe an electron in a **4d** orbital?
+  choices:
+    - { id: a, text: '$(4, 3, -1, +\tfrac{1}{2})$' }
+    - { id: b, text: '$(4, 1, 0, -\tfrac{1}{2})$' }
+    - { id: c, text: '$(3, 2, 0, +\tfrac{1}{2})$' }
+    - { id: d, text: '$(4, 2, -1, +\tfrac{1}{2})$' }
+  answer: d
+  explanation: |
+    4d means $n = 4$ and $l = 2$ (d). With $l = 2$, $m_l$ can be $-2$ to $+2$, so $-1$ is allowed, and $m_s = +\tfrac{1}{2}$ is fine.
+    (A) has $l = 3$, a 4f electron. (B) has $l = 1$, a 4p electron. (C) is a 3d electron.
+
+- id: apchem-06-chromium-exception-reason
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Chromium's ground-state configuration is $[\ce{Ar}]\,4s^1\,3d^5$, not the predicted $[\ce{Ar}]\,4s^2\,3d^4$. What is the usual explanation?
+  choices:
+    - { id: a, text: "A half-filled 3d subshell, one electron in each d orbital, is extra stable" }
+    - { id: b, text: "The 4s orbital is always higher in energy than every 3d orbital" }
+    - { id: c, text: "The Pauli principle forbids two electrons from sharing the 4s orbital" }
+    - { id: d, text: "Hund's rule says every orbital in an atom must hold exactly one electron" }
+  answer: a
+  explanation: |
+    Moving one 4s electron into 3d gives five 3d electrons, one in each orbital with parallel spins. A half-filled (or completely filled) d subshell is extra stable, so the atom ends up lower in energy this way. Copper does the same to reach $3d^{10}$.
+    (B) is false because 4s fills first in K and Ca. (C) is false: an orbital can hold two electrons with opposite spins. (D) misstates Hund's rule, which is about equal-energy orbitals in one subshell.

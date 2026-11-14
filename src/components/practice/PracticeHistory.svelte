@@ -18,7 +18,7 @@
   }
 
   let { count, weakSpots, topicStart, onstart, onclear }: Props = $props();
-  const { hrefs, topicLabel } = getCourse();
+  const { hrefs, areaLabel } = getCourse();
   let confirming = $state(false);
 </script>
 
@@ -32,11 +32,12 @@
     <ul class="plain-list weak">
       {#each weakSpots as [topic, acc] (topic)}
         {@const start = topicStart(topic)}
+        {@const label = areaLabel({ kind: 'topic', topic })}
         <li>
-          <a class="w-topic" href={`${hrefs.topics}${topic}/`}>{topicLabel(topic)}</a>
+          <a class="w-topic" href={`${hrefs.topics}${topic}/`}>{label}</a>
           <span class="small muted">{Math.round(acc * 100)}% recently</span>
           <button type="button" class="link-button small" onclick={() => onstart(start.filters)}>
-            {start.label}<span class="visually-hidden"> on {topicLabel(topic)}</span> →
+            {start.label}<span class="visually-hidden"> on {label}</span> →
           </button>
         </li>
       {/each}

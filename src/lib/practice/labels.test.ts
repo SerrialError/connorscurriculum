@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emptyFilters, CLASS_ONLY_UNIT } from './filters';
-import { againLabel, answerRestLabel, describeScope, describeSet, filterChips, retryWords, topicKeyLabel } from './labels';
+import { againLabel, answerRestLabel, areaLabel, describeScope, describeSet, filterChips, retryWords } from './labels';
 import type { PracticeTest } from './types';
 import { parseFilters } from './url';
 import { tests as fixtureTests } from './test-fixtures';
@@ -55,12 +55,12 @@ describe('buttons and chips', () => {
     expect(answerRestLabel(10, 0)).toBe('Back to question 1');
   });
 
-  it('names topic keys, including class-only chapters', () => {
+  it('names score areas: AP topics, and chapters for class-only questions', () => {
     const titles = new Map([['5.4', 'Elementary Reactions']]);
-    expect(topicKeyLabel('5.4', titles)).toBe('5.4 Elementary Reactions');
-    expect(topicKeyLabel('9.9', titles)).toBe('9.9');
-    expect(topicKeyLabel('chapter-7', titles)).toBe('Ch. 7 material not on the AP exam');
-    expect(topicKeyLabel('chapter-7', new Map())).toBe('Ch. 7');
+    expect(areaLabel({ kind: 'topic', topic: '5.4' }, titles)).toBe('5.4 Elementary Reactions');
+    expect(areaLabel({ kind: 'topic', topic: '9.9' }, titles)).toBe('9.9');
+    expect(areaLabel({ kind: 'chapter', chapter: 7 }, titles)).toBe('Ch. 7 material not on the AP exam');
+    expect(areaLabel({ kind: 'chapter', chapter: 7 }, new Map())).toBe('Ch. 7');
   });
 
   it('lists the narrowing filters as chips, each removing only itself', () => {

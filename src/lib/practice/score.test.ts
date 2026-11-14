@@ -29,11 +29,11 @@ describe('topicBreakdown', () => {
   it('scores each topic in a session, weakest first, skipping unanswered questions', () => {
     const b = topicBreakdown(questions, { q1: 1, q2: 0, f1: 0.5 });
     expect(b).toEqual([
-      { key: '5.2', score: 0, count: 1 },
-      { key: '7.3', score: 0.5, count: 1 },
-      { key: '5.1', score: 1, count: 1 },
+      { area: { kind: 'topic', topic: '5.2' }, key: '5.2', score: 0, count: 1 },
+      { area: { kind: 'topic', topic: '7.3' }, key: '7.3', score: 0.5, count: 1 },
+      { area: { kind: 'topic', topic: '5.1' }, key: '5.1', score: 1, count: 1 },
     ]);
-    expect(topicBreakdown(questions, { q3: 0 })).toEqual([{ key: 'chapter-13', score: 0, count: 1 }]);
+    expect(topicBreakdown(questions, { q3: 0 })).toEqual([{ area: { kind: 'chapter', chapter: 13 }, key: 'chapter-13', score: 0, count: 1 }]);
   });
   it('lists class-only chapters after the AP topics', () => {
     expect(topicBreakdown(questions, { q1: 1, q3: 0 }).map((t) => t.key)).toEqual(['5.1', 'chapter-13']);

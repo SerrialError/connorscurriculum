@@ -2,9 +2,10 @@
 // with every practice component through context, so it isn't passed down prop by prop.
 import { createContext } from 'svelte';
 import type { FrqLink } from '../../lib/frqs';
-import { ALL_QUESTIONS, topicKeyLabel } from '../../lib/practice/labels';
+import { ALL_QUESTIONS, areaLabel } from '../../lib/practice/labels';
 import type { PracticeLesson } from '../../lib/practice/lessons';
 import type { Preset } from '../../lib/practice/presets';
+import type { ScoreArea } from '../../lib/practice/score';
 import type { PracticeTest } from '../../lib/practice/types';
 import { chapterRange } from '../../lib/text';
 
@@ -55,7 +56,7 @@ export interface Course extends PracticeCourse {
   /** The default pool's name: "Ch. 6–7" when later chapters are left out, else "All questions". */
   everything: string;
   /** "5.4 Elementary Reactions", or the chapter for class-only questions. */
-  topicLabel: (key: string) => string;
+  areaLabel: (area: ScoreArea) => string;
 }
 
 export function withDerived(c: PracticeCourse): Course {
@@ -70,7 +71,7 @@ export function withDerived(c: PracticeCourse): Course {
     learned: new Set(c.learnedTopics),
     laterChapters,
     everything: laterChapters.length && taught.length ? chapterRange(taught) : ALL_QUESTIONS,
-    topicLabel: (key) => topicKeyLabel(key, topicTitles),
+    areaLabel: (area) => areaLabel(area, topicTitles),
   };
 }
 

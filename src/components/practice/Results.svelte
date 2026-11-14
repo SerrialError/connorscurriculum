@@ -27,7 +27,7 @@
   }
 
   let { attempt, label, filters, frqMatches, onretry, onreview, onagain, onfilters }: Props = $props();
-  const { lessons, hrefs, topicLabel, units } = getCourse();
+  const { lessons, hrefs, areaLabel, units } = getCourse();
 
   let heading = $state<HTMLElement | null>(null);
   const summary = $derived(attempt.summary);
@@ -115,7 +115,7 @@
           {@const frac = t.score / t.count}
           <li>
             <span class="b-label">
-              {#if t.key.startsWith('chapter-')}{topicLabel(t.key)}{:else}<a href={`${hrefs.topics}${t.key}/`}>{topicLabel(t.key)}</a>{/if}
+              {#if t.area.kind === 'topic'}<a href={`${hrefs.topics}${t.area.topic}/`}>{areaLabel(t.area)}</a>{:else}{areaLabel(t.area)}{/if}
             </span>
             <span class="bar" aria-hidden="true"><span class:low={frac < 0.5} class:high={frac >= 0.8} style:width={pct(frac)}></span></span>
             <span class="small b-num">{pct(frac)} <span class="muted">of {plural(t.count, 'question')}</span></span>

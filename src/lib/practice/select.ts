@@ -1,6 +1,6 @@
 // Picking a set's questions: in order, shuffled with the set's seed, or weakest topics first.
 import { filterQuestions } from './filters';
-import { UNSEEN_ACCURACY, topicAccuracy, topicKeys } from './score';
+import { UNSEEN_ACCURACY, areaKey, scoreAreas, topicAccuracy } from './score';
 import type { Filters, History, PracticeQuestion, PracticeTest } from './types';
 
 export type Rng = () => number;
@@ -46,7 +46,7 @@ export function selectQuestions(
   if (f.mode === 'random') return shuffle(matching, rng).slice(0, n);
 
   const accuracy = topicAccuracy(matching, history);
-  const weakness = (q: PracticeQuestion) => Math.min(...topicKeys(q).map((k) => accuracy.get(k) ?? UNSEEN_ACCURACY));
+  const weakness = (q: PracticeQuestion) => Math.min(...scoreAreas(q).map((a) => accuracy.get(areaKey(a)) ?? UNSEEN_ACCURACY));
   // Shuffle first so ties are broken randomly; sort is stable.
   return shuffle(matching, rng)
     .map((q) => ({ q, w: weakness(q) }))

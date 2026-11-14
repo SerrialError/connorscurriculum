@@ -67,38 +67,53 @@ export function summarize(results: QuestionResult[]): Summary {
   return s;
 }
 
-/** Keys used for topic scores: CED topics, or the chapter for class-only questions. */
-export function topicKeys(q: PracticeQuestion): string[] {
-  return q.cedTopics.length ? q.cedTopics : [`chapter-${q.chapter}`];
+/** What a question's score counts towards: an AP topic, or (with no AP topic) its chapter. */
+export type ScoreArea = { kind: 'topic'; topic: string } | { kind: 'chapter'; chapter: number };
+
+/** The areas a question counts towards: its AP topics, or its chapter. */
+export function scoreAreas(q: PracticeQuestion): ScoreArea[] {
+  return q.cedTopics.length ? q.cedTopics.map((topic) => ({ kind: 'topic', topic })) : [{ kind: 'chapter', chapter: q.chapter }];
 }
 
+/** An area as a map key and sort key: the topic id ("5.4"), or "chapter-7". */
+export const areaKey = (a: ScoreArea): string => (a.kind === 'topic' ? a.topic : `chapter-${a.chapter}`);
+
 export interface TopicScore {
-  /** CED topic id, or "chapter-N" for class-only questions (see topicKeys). */
+  area: ScoreArea;
+  /** areaKey(area) */
   key: string;
-  /** Sum of question scores (0–1 each). */
+  /** Sum of the scores (0–1 each). */
   score: number;
   count: number;
 }
 
-/**
- * Per-topic scores for one set: AP topics, then class-only chapters ("chapter-N"), each weakest
- * first (ties by key in CED order).
- * `scores` maps question id to its 0–1 score; unanswered questions are left out.
- */
-export function topicBreakdown(questions: PracticeQuestion[], scores: Record<string, number>): TopicScore[] {
+/** Every area the questions count towards, with the sum and number of their `scoresOf` scores. */
+function scoresByArea(questions: PracticeQuestion[], scoresOf: (q: PracticeQuestion) => number[]): TopicScore[] {
   const map = new Map<string, TopicScore>();
   for (const q of questions) {
-    const s = scores[q.id];
-    if (s === undefined) continue;
-    for (const key of topicKeys(q)) {
-      const t = map.get(key) ?? { key, score: 0, count: 0 };
-      t.score += s;
-      t.count += 1;
+    const scores = scoresOf(q);
+    if (scores.length === 0) continue;
+    for (const area of scoreAreas(q)) {
+      const key = areaKey(area);
+      const t = map.get(key) ?? { area, key, score: 0, count: 0 };
+      for (const s of scores) {
+        t.score += s;
+        t.count += 1;
+      }
       map.set(key, t);
     }
   }
-  const classOnly = (t: TopicScore) => Number(t.key.startsWith('chapter-'));
-  return [...map.values()].sort(
+  return [...map.values()];
+}
+
+/**
+ * Per-topic scores for one set: AP topics, then class-only chapters, each weakest first (ties by
+ * key in CED order).
+ * `scores` maps question id to its 0–1 score; unanswered questions are left out.
+ */
+export function topicBreakdown(questions: PracticeQuestion[], scores: Record<string, number>): TopicScore[] {
+  const classOnly = (t: TopicScore) => Number(t.area.kind === 'chapter');
+  return scoresByArea(questions, (q) => (scores[q.id] === undefined ? [] : [scores[q.id]!])).sort(
     (a, b) => classOnly(a) - classOnly(b) || a.score / a.count - b.score / b.count || byId(a.key, b.key),
   );
 }
@@ -123,22 +138,9 @@ export function amendLastResult(history: History, questionId: string, score: num
   return { ...history, [questionId]: [...prev.slice(0, -1), clamp01(score)] };
 }
 
-/** Mean recent score per topic key, across all questions with history. */
+/** Mean recent score per area (by areaKey), across all questions with history. */
 export function topicAccuracy(questions: PracticeQuestion[], history: History): Map<string, number> {
-  const sums = new Map<string, { total: number; count: number }>();
-  for (const q of questions) {
-    const scores = history[q.id];
-    if (!scores?.length) continue;
-    for (const key of topicKeys(q)) {
-      const s = sums.get(key) ?? { total: 0, count: 0 };
-      for (const score of scores) {
-        s.total += score;
-        s.count += 1;
-      }
-      sums.set(key, s);
-    }
-  }
-  return new Map([...sums].map(([k, s]) => [k, s.total / s.count]));
+  return new Map(scoresByArea(questions, (q) => history[q.id] ?? []).map((t) => [t.key, t.score / t.count]));
 }
 
 /** Topics never attempted rank between weak (<0.5) and strong topics. */
@@ -152,8 +154,9 @@ export const WEAK_THRESHOLD = 0.75;
  * chapter keys have no topic page or practice link of their own).
  */
 export function weakTopics(questions: PracticeQuestion[], history: History, max = 4): [string, number][] {
-  return [...topicAccuracy(questions, history)]
-    .filter(([k, acc]) => !k.startsWith('chapter-') && acc < WEAK_THRESHOLD)
+  return scoresByArea(questions, (q) => history[q.id] ?? [])
+    .flatMap((t): [string, number][] => (t.area.kind === 'topic' ? [[t.area.topic, t.score / t.count]] : []))
+    .filter(([, acc]) => acc < WEAK_THRESHOLD)
     .sort((a, b) => a[1] - b[1])
     .slice(0, max);
 }

@@ -86,8 +86,20 @@
     "number": 8,
     "title": "Basic Concepts of Chemical Bonding",
     "cedTopics": ["1.7", "1.8", "2.1", "2.2", "2.3", "2.5", "2.6"],
-    "notOnAP": [],
-    "sections": []
+    "notOnAP": [
+      "Born–Haber cycle calculations of lattice energy (the AP exam compares lattice energies with Coulomb's law)",
+      "Calculating dipole moments and partial charges with μ = Qr"
+    ],
+    "sections": [
+      { "id": "8.1", "title": "Lewis Symbols and the Octet Rule" },
+      { "id": "8.2", "title": "Ionic Bonding" },
+      { "id": "8.3", "title": "Covalent Bonding" },
+      { "id": "8.4", "title": "Bond Polarity and Electronegativity" },
+      { "id": "8.5", "title": "Drawing Lewis Structures" },
+      { "id": "8.6", "title": "Resonance Structures" },
+      { "id": "8.7", "title": "Exceptions to the Octet Rule" },
+      { "id": "8.8", "title": "Strengths and Lengths of Covalent Bonds" }
+    ]
   },
   {
     "number": 9,
@@ -98,7 +110,16 @@
       "Derivation and depiction of hybrid orbitals (the sp, sp², sp³ labels are on the exam)",
       "Hybridization involving d orbitals"
     ],
-    "sections": []
+    "sections": [
+      { "id": "9.1", "title": "Molecular Shapes" },
+      { "id": "9.2", "title": "The VSEPR Model" },
+      { "id": "9.3", "title": "Molecular Shape and Molecular Polarity" },
+      { "id": "9.4", "title": "Covalent Bonding and Orbital Overlap" },
+      { "id": "9.5", "title": "Hybrid Orbitals" },
+      { "id": "9.6", "title": "Multiple Bonds" },
+      { "id": "9.7", "title": "Molecular Orbitals" },
+      { "id": "9.8", "title": "Bonding in Period 2 Diatomic Molecules" }
+    ]
   },
   {
     "number": 10,

@@ -48,7 +48,7 @@
 
 <div class="session-bar">
   <button class="link-button" type="button" onclick={() => onfilters()}>{attempt.exam ? '← Practice' : '← Filters'}</button>
-  <span class="small muted">{done} of {counted}{#if attempt.taking && counted < total}<span class="wide-only"> multiple choice</span>{/if} answered</span>
+  <span class="small muted">{done} of {counted}{#if attempt.taking && counted < total}<span class="wide-only">{' multiple choice'}</span>{/if} answered</span>
   <button class="button secondary small" type="button" onclick={() => onresults()}>{endLabel}</button>
 </div>
 <div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={counted} aria-valuenow={done}>

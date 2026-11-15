@@ -350,12 +350,12 @@
   choices:
     - { id: a, text: "Their valence electrons are paired, so they repel an incoming electron too strongly" }
     - { id: b, text: "Noble gases have the lowest effective nuclear charge in their period" }
-    - { id: c, text: "Noble gases have no protons left over to attract an extra electron" }
+    - { id: c, text: "Noble gas atoms have more electrons than protons, so they repel an added electron" }
     - { id: d, text: "An added electron would have to start a new shell, farther out and well shielded" }
   answer: d
   explanation: |
     Ne's $n = 2$ shell is full ($2s^2\,2p^6$), so an extra electron would have to go into 3s. That electron is far away and shielded by all ten electrons, so it feels almost no attraction, and energy has to be put in to add it.
-    (A) is false because paired electrons in other orbitals are not what blocks the new one. (C) is false: the full shell cancels most of the nuclear charge, but every atom has its protons. (B) is backward: noble gases have the **highest** $Z_{\text{eff}}$ in their period.
+    (A) is false because paired electrons in other orbitals are not what blocks the new one. (C) is false: a neutral atom has as many electrons as protons. (B) is backward: noble gases have the **highest** $Z_{\text{eff}}$ in their period.
 
 - id: apchem-07-electronegativity
   type: mcq

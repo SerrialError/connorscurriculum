@@ -3,9 +3,8 @@
   // scoring: the student picks, moves around, and submits (confirming if any are unanswered).
   import { tick } from 'svelte';
   import { isTypingTarget } from '../../lib/keyboard';
-  import { DIFFICULTY_LABELS, TYPE_LABELS } from '../../lib/practice/labels';
+  import { DIFFICULTY_LABELS, TYPE_LABELS, listNumbers } from '../../lib/practice/labels';
   import { lessonsFor } from '../../lib/practice/lessons';
-  import { listNumbers } from '../../lib/practice/labels';
   import { frqTotal, isCorrect } from '../../lib/practice/score';
   import type { FrqQuestion, McqQuestion } from '../../lib/practice/types';
   import { verdictScroll } from '../../lib/practice/verdict-scroll';

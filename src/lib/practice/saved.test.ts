@@ -41,6 +41,11 @@ describe('readSavedSets', () => {
     expect(t!.query).toContain('seed=saved0');
   });
 
+  it('keeps a practice exam a practice exam when it gives it a new address', () => {
+    const [s] = readSavedSets([{ ...set({ query: '?test=ch6-7-test&exam=1&start=1&seed=abc123' }), id: undefined }], ids);
+    expect(s!.query).toBe('?test=ch6-7-test&exam=1&start=1&seed=saved0&ids=q1,q2,q3');
+  });
+
   it('keeps the index in range', () => {
     expect(readSavedSets([set({ index: 99 })], ids)[0]!.index).toBe(2);
   });

@@ -49,7 +49,7 @@ export function readSavedSets(raw: unknown, questionIds: ReadonlySet<string>): S
         id,
         label: s.label ?? '',
         note: s.note ?? '',
-        query: wantsStart(query) && s.id === id ? query : setToQuery({ filters: parseFilters(query), exam: false, seed: id, ids: s.ids }),
+        query: wantsStart(query) && s.id === id ? query : setToQuery({ filters: parseFilters(query), exam: parseSet(query)?.exam ?? false, seed: id, ids: s.ids }),
         ids: s.ids,
         index: Math.min(Math.max(0, Number(s.index) || 0), s.ids.length - 1),
         phase: s.phase === 'results' ? 'results' : 'session',

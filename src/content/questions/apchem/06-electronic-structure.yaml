@@ -883,7 +883,7 @@
     According to de Broglie, all moving matter has a wavelength. Why do we notice wave behavior for electrons but not for a thrown baseball?
   choices:
     - { id: a, text: "Baseballs move too slowly to have a wavelength; only fast particles have one" }
-    - { id: b, text: '$\lambda = h/mv$ is far too small to detect, because the mass of a baseball is so large' }
+    - { id: b, text: 'A baseball''s large mass makes its wavelength, $\lambda = h/mv$, far too small to detect' }
     - { id: c, text: "Only charged particles such as electrons have wavelengths; neutral objects do not" }
     - { id: d, text: "Electrons travel at the speed of light, and only things that fast behave like waves" }
   answer: b

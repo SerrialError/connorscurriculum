@@ -3,7 +3,7 @@ title: Lewis Symbols and Ionic Bonding
 subject: apchem
 chapter: 8
 sections: ["8.1", "8.2"]
-cedTopics: ["1.8", "2.1", "2.2", "2.3"]
+cedTopics: ["1.5", "1.8", "2.1", "2.2", "2.3"]
 order: 1
 authors: ["Claude"]
 summary: The three kinds of chemical bonds, Lewis symbols and the octet rule, why ionic compounds form, lattice energy and Coulomb's law, the Born–Haber cycle, and the electron configurations of ions.
@@ -26,10 +26,9 @@ This lesson covers ionic bonds. The next one covers covalent bonds.
 Only valence electrons take part in bonding. A **Lewis symbol** is the element's symbol with one dot for
 each valence electron. Put the dots on the four sides of the symbol, one per side, before pairing any up.
 
-| Group | 1 | 2 | 13 | 14 | 15 | 16 | 17 | 18 |
-|---|---|---|---|---|---|---|---|---|
-| Valence electrons | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
-| Period 2 example | Li· | ·Be· | B, 3 single dots | C, 4 single dots | N, 1 pair + 3 single | O, 2 pairs + 2 single | F, 3 pairs + 1 single | Ne, 4 pairs |
+![Lewis symbols for the period 2 elements: Li with 1 dot, Be 2, B 3, C 4 single dots, N one pair and three single dots, O two pairs and two single dots, F three pairs and one single dot, Ne four pairs.](./lewis-symbols.svg)
+
+The number of dots equals the group number for groups 1–2 and the group number minus 10 for groups 13–18.
 
 The number of **unpaired** dots tells you how many bonds a nonmetal usually makes: C makes 4, N makes 3,
 O makes 2, and F makes 1.
@@ -102,7 +101,8 @@ takes $d$ from about 2.8 Å to 3.2 Å).
 | $\ce{MgO}$ | +2, −2 | 3795 |
 
 Among the +1/−1 salts, the smaller ions give the larger lattice energy (LiF > NaCl > KCl). Every compound
-with a +2 ion is far above all of them.
+with a +2 ion is far above all of them. Comparing different formula types is less direct: MgCl₂ is about
+three times NaCl, not twice, partly because each formula unit has three ions instead of two.
 
 <Reveal label="Worked example: rank by lattice energy">
 
@@ -121,6 +121,8 @@ Smallest to largest: $\ce{NaBr} < \ce{NaF} < \ce{CaO}$.
 
 The ions sit in a repeating three-dimensional **lattice**, each cation surrounded by anions and each
 anion by cations. That structure explains how ionic solids behave:
+
+![Left: a layer of an NaCl crystal, small cations alternating with larger anions so each ion touches only opposite charges. Right: after a blow shifts the top two rows by one ion, cations sit over cations and anions over anions across the slip line, so the layers repel and the crystal splits.](./nacl-lattice.svg)
 
 - **High melting points**, because many strong attractions have to be overcome. Higher lattice energy
   generally means a higher melting point (MgO melts near 2800 °C, NaCl at 801 °C).
@@ -158,6 +160,8 @@ $$
 \Delta H^\circ_f = \Delta H_{\text{sub}} + \tfrac{1}{2}D + \text{IE}_1 + \text{EA} - \Delta H_{\text{lattice}}
 $$
 
+![Energy ladder for KBr. From K(s) and Br₂(l) at 0, energy rises by 89 to K(g), by 112 to K(g) + Br(g), and by 419 to K⁺(g) + Br(g) + e⁻; it falls by 325 to K⁺(g) + Br⁻(g), then by 689 to KBr(s) at −394 kJ/mol.](./born-haber-kbr.svg)
+
 Rearranged, $\Delta H_{\text{lattice}} = \Delta H_{\text{sub}} + \tfrac{1}{2}D + \text{IE}_1 + \text{EA} - \Delta H^\circ_f$.
 
 <Reveal label="Worked example: lattice energy of KBr">
@@ -180,13 +184,13 @@ put into it, so use the numbers the question gives.
 </Reveal>
 
 <Callout type="not-on-ap">
-The AP exam treats lattice energy qualitatively, with Coulomb's law. It doesn't ask for Born–Haber
-calculations, but the class may.
+Born–Haber calculations aren't in the AP course framework; the AP exam compares lattice energies
+with Coulomb's law. The class may still ask for them.
 </Callout>
 
 ## 6. Electron configurations of ions
 
-**Main-group ions** reach a noble-gas configuration:
+Ions of the **group 1 and 2 metals, aluminum, and the nonmetals** reach a noble-gas configuration:
 
 - Metals lose their valence electrons: $\ce{Mg}$ $[\ce{Ne}]\,3s^2 \to \ce{Mg^2+}$ $[\ce{Ne}]$.
 - Nonmetals gain electrons to fill their p subshell: $\ce{N}$ $[\ce{He}]\,2s^2 2p^3 \to \ce{N^3-}$
@@ -194,6 +198,9 @@ calculations, but the class may.
 
 Ions don't go past a noble-gas configuration, because removing a core electron costs far more energy
 than the lattice can pay back. That's why sodium forms $\ce{Na+}$ and never $\ce{Na^2+}$.
+
+Heavier main-group metals past the transition metals don't all reach a noble-gas configuration.
+$\ce{Ga^3+}$ is $[\ce{Ar}]\,3d^{10}$, a filled d subshell instead.
 
 **Transition-metal ions** lose their **ns electrons first**, then (n − 1)d electrons, even though 4s
 filled before 3d:

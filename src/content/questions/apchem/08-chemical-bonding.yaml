@@ -153,11 +153,11 @@
   choices:
     - { id: a, text: "Li⁺ has a larger charge than K⁺, so it attracts F⁻ more strongly" }
     - { id: b, text: "Li⁺ is smaller than K⁺, so the ions in LiF are closer together and attract more strongly" }
-    - { id: c, text: "Li has a larger first ionization energy than K, so Li gives up its electron more easily" }
+    - { id: c, text: "K has a lower ionization energy than Li, so the ions in KF form more easily and attract less" }
     - { id: d, text: "Li⁺ is larger than K⁺, so it has more room to surround itself with F⁻ ions" }
   answer: b
   explanation: |
-    Both compounds have +1 and −1 ions, so by Coulomb's law ($E \propto Q_1Q_2/d$) the difference must come from $d$. $\ce{Li+}$ (period 2) is much smaller than $\ce{K+}$ (period 4), so the distance between ion centers is smaller in LiF. (A) is false: both cations are +1. (D) has the sizes backward. (C) is true about ionization energy but contradicts itself and isn't what lattice energy measures.
+    Both compounds have +1 and −1 ions, so by Coulomb's law ($E \propto Q_1Q_2/d$) the difference must come from $d$. $\ce{Li+}$ (period 2) is much smaller than $\ce{K+}$ (period 4), so the distance between ion centers is smaller in LiF. (A) is false: both cations are +1. (D) has the sizes backward. (C) mixes up two different energies: ionization energy is about making the ion, while lattice energy is about how strongly the finished ions attract each other in the solid.
 
 - id: apchem-08-coulomb-double-charge
   type: mcq
@@ -176,7 +176,7 @@
     - { id: d, text: "becomes four times as large" }
   answer: d
   explanation: |
-    $E$ is proportional to the **product** $Q_1Q_2$. Doubling each charge multiplies the product by $2 \times 2 = 4$. This is why +2/−2 compounds like MgO have lattice energies about four times those of +1/−1 compounds like NaCl.
+    $E$ is proportional to the **product** $Q_1Q_2$. Doubling each charge multiplies the product by $2 \times 2 = 4$. This is why +2/−2 compounds like MgO have lattice energies roughly five times those of +1/−1 compounds like NaCl: the charge product gives a factor of 4, and MgO's smaller ions add the rest.
 
 - id: apchem-08-why-nacl-forms
   type: mcq
@@ -195,7 +195,7 @@
     - { id: d, text: "The electron affinity of chlorine is larger than the ionization energy of sodium when both are in the solid" }
   answer: c
   explanation: |
-    Making separated $\ce{Na+}$ and $\ce{Cl-}$ ions from the atoms is uphill by about 147 kJ/mol. The payoff is the **lattice energy**: 788 kJ/mol is released when the gaseous ions come together into the crystal. (A) is the common misconception; reaching an octet doesn't make losing an electron release energy. (B) is backward: breaking a bond always absorbs energy. (D) is made up.
+    Making separated $\ce{Na+}$ and $\ce{Cl-}$ ions from the atoms is uphill by about 147 kJ/mol. The payoff is the **lattice energy**: 788 kJ/mol is released when the gaseous ions come together into the crystal. (A) is the common misconception; reaching an octet doesn't make losing an electron release energy. (B) is backward: breaking a bond always absorbs energy. (D) is wrong because ionization energy and electron affinity are measured for isolated gaseous atoms, and 349 kJ/mol is less than 496 kJ/mol either way.
 
 - id: apchem-08-ionic-solid-properties
   type: mcq
@@ -357,7 +357,6 @@
     - { id: a, text: '$\ce{N2}$' }
     - { id: b, text: '$\ce{N2H2}$' }
     - { id: c, text: '$\ce{N2H4}$' }
-    - { id: d, text: "They are all the same length" }
   answer: a
   explanation: |
     Draw the Lewis structures: $\ce{N2H4}$ (H₂N–NH₂) has an N–N single bond, $\ce{N2H2}$ (HN=NH) a double bond, and $\ce{N2}$ a triple bond. More shared pairs pull the nuclei closer, so N≡N is the shortest (about 1.10 Å vs. 1.24 Å and 1.47 Å).
@@ -457,7 +456,7 @@
     - { id: d, text: "Neither atom, because P and Cl are both nonmetals and share equally" }
   answer: c
   explanation: |
-    Cl (3.0) is more electronegative than P (2.1), so the shared electrons spend more time near Cl, making it δ− and P δ+. Two nonmetals (D) can still have a polar bond; equal sharing needs equal electronegativities. (A) is false: P (15 electrons) has fewer than Cl (17).
+    Cl (3.0) is more electronegative than P (2.1), so the shared electrons spend more time near Cl, making it δ− and P δ+. Two nonmetals (D) can still have a polar bond; equal sharing needs equal electronegativities. (A) is false: P (15 electrons) has fewer than Cl (17). (B) is backward: having fewer valence electrons doesn't make an atom pull harder on shared electrons; a higher effective nuclear charge does, and Cl's is higher.
 
 - id: apchem-08-en-order
   type: mcq
@@ -533,7 +532,7 @@
     - { id: a, text: "0.82" }
     - { id: b, text: "0.58" }
     - { id: c, text: "0.12" }
-    - { id: d, text: "0.35" }
+    - { id: d, text: "0.17" }
   answer: c
   explanation: |
     If the charges were a full $\pm 1.60 \times 10^{-19}$ C:
@@ -542,7 +541,7 @@
     \mu = (1.60 \times 10^{-19}\ \text{C})(1.41 \times 10^{-10}\ \text{m}) = 2.26 \times 10^{-29}\ \text{C·m} = 6.75\ \text{D}
     $$
 
-    The real value is 0.82 D, so the partial charges are $0.82 / 6.75 = 0.12$ of an electron's charge. (A) is the dipole moment itself. (B) is $0.82/1.41$, dividing by the bond length without converting to a full-charge dipole.
+    The real value is 0.82 D, so the partial charges are $0.82 / 6.75 = 0.12$ of an electron's charge. (A) is the dipole moment itself. (B) is $0.82/1.41$, dividing by the bond length without converting to a full-charge dipole. (D) divides by 4.79 D, the value for charges 1.00 Å apart, without using HBr's 1.41 Å bond length.
 
 - id: apchem-08-molecular-metal-compound
   type: mcq
@@ -615,12 +614,12 @@
     Hypochlorous acid has the formula HOCl. Which skeleton is correct?
   choices:
     - { id: a, text: "H–Cl–O, with Cl in the center because it is the least electronegative atom" }
-    - { id: b, text: "H–O–Cl, with O in the center" }
+    - { id: b, text: "H–O–Cl, with O in the center because then every atom has a formal charge of zero" }
     - { id: c, text: "O–H–Cl, with H in the center because it is written first" }
-    - { id: d, text: "O–Cl–H, with Cl in the center because it has the most valence electrons" }
+    - { id: d, text: "H–O–Cl and H–Cl–O are equally good, because both give every atom an octet" }
   answer: b
   explanation: |
-    H can form only one bond, so it can't be central, which rules out (C) and (D). In an oxyacid, the acidic H is bonded to an O, so the skeleton is H–O–Cl. With 14 electrons this gives every atom an octet (H gets 2) and all formal charges zero. In (A), the Cl in the middle would have two bonds and two lone pairs, which gives Cl a +1 formal charge and O a −1.
+    H can form only one bond, so it can't be central, which rules out (C). Cl is less electronegative than O, so the "least electronegative atom in the middle" rule points to (A), but two other rules win here: in an oxyacid the acidic H is bonded to an O, and formal charge breaks the tie. H–O–Cl has all formal charges zero. In H–Cl–O, Cl has two bonds and two lone pairs (+1) and O has one bond and three lone pairs (−1). Both skeletons give octets, so octets alone can't decide, which is why (D) is wrong.
 
 - id: apchem-08-fc-ammonium
   type: mcq
@@ -806,13 +805,13 @@
   prompt: |
     The nitrite ion, $\ce{NO2-}$, is drawn with two resonance structures. Which statement about the real ion is true?
   choices:
-    - { id: a, text: "It switches back and forth between the two drawn structures many times every second" }
+    - { id: a, text: "It has a negative charge on one O and none on the other, so its two N–O bonds differ" }
     - { id: b, text: "One N–O bond is a double bond and the other is a single bond, but the two bonds keep trading places" }
     - { id: c, text: "Both N–O bonds are identical, with a length between an N–O single and an N=O double bond" }
     - { id: d, text: "The oxygen atoms move between the two structures, so the ion's shape changes" }
   answer: c
   explanation: |
-    The real ion is a **resonance hybrid**: a single structure with the extra bonding spread over both N–O bonds, each of bond order 3/2. It doesn't flip between the drawn structures, as (A) and (B) suggest. In resonance structures only electrons move; atoms stay put, so (D) is wrong.
+    The real ion is a **resonance hybrid**: a single structure with the extra bonding spread over both N–O bonds, each of bond order 3/2. It doesn't flip between the drawn structures, as (B) suggests, and the negative charge is shared equally by both O atoms, not stuck on one (A). In resonance structures only electrons move; atoms stay put, so (D) is wrong.
 
 - id: apchem-08-co-bond-length-order
   type: mcq
@@ -851,6 +850,101 @@
   answer: d
   explanation: |
     Resonance structures differ only in where the **electrons** are. The atoms stay in the same places and the total number of electrons stays the same. (A) and (C) move atoms, which gives a different compound (an isomer), not a resonance structure. (B) changes the electron count.
+
+- id: apchem-08-formate-resonance
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The formate ion, $\ce{HCO2-}$, has C as the central atom bonded to H and to both O atoms. How many equivalent resonance structures does it have, and what is the bond order of each C–O bond?
+  choices:
+    - { id: a, text: "One structure; one C–O bond order 1 and one bond order 2" }
+    - { id: b, text: "Two structures; each C–O bond has bond order 3/2" }
+    - { id: c, text: "Three structures; each C–O bond has bond order 4/3" }
+    - { id: d, text: "Two structures; one C–O bond has order 2 and the other has order 1" }
+  answer: b
+  explanation: |
+    18 valence electrons. C makes one C–H bond, one C=O, and one C–O⁻, and the double bond can go to either O: two equivalent structures. Each C–O bond is double in one and single in the other, so the bond order is $(2 + 1)/2 = 3/2$, and both bonds are the same length. (D) describes a single resonance structure, not the real ion. (C) is carbonate's pattern, which has three O atoms.
+
+- id: apchem-08-no-bond-length-rank
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6", "8.8"]
+  cedTopics: ["2.2", "2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Rank the N–O bond length in $\ce{NO+}$, $\ce{NO2-}$, and $\ce{NO3-}$ from **shortest to longest**.
+  choices:
+    - { id: a, text: '$\ce{NO3-} < \ce{NO2-} < \ce{NO+}$' }
+    - { id: b, text: '$\ce{NO2-} < \ce{NO+} < \ce{NO3-}$' }
+    - { id: c, text: '$\ce{NO+} < \ce{NO2-} < \ce{NO3-}$' }
+    - { id: d, text: '$\ce{NO+} < \ce{NO3-} < \ce{NO2-}$' }
+  answer: c
+  explanation: |
+    $\ce{NO+}$ has 10 valence electrons and a triple bond (bond order 3). $\ce{NO2-}$ has two resonance structures (bond order 3/2). $\ce{NO3-}$ has three (bond order 4/3). Higher bond order means a shorter bond, so $\ce{NO+} < \ce{NO2-} < \ce{NO3-}$. (D) ranks 4/3 above 3/2.
+
+- id: apchem-08-ozone-vs-o2
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6", "8.8"]
+  cedTopics: ["2.2", "2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How does each O–O bond in ozone, $\ce{O3}$, compare with the bond in $\ce{O2}$?
+  choices:
+    - { id: a, text: "Shorter and stronger, because ozone has more oxygen atoms sharing electrons" }
+    - { id: b, text: "The same, because both molecules contain an O=O double bond" }
+    - { id: c, text: "One O–O bond in ozone matches O₂ and the other is a longer single bond" }
+    - { id: d, text: "Longer and weaker, because each bond in ozone has a bond order of 3/2" }
+  answer: d
+  explanation: |
+    $\ce{O2}$ has a double bond (bond order 2). Ozone has two resonance structures, so both of its O–O bonds have bond order 3/2: between a single and a double bond. A lower bond order means a longer, weaker bond. (B) and (C) treat one resonance structure as the real molecule.
+
+- id: apchem-08-sulfate-formal-charge
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.7"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Sulfate, $\ce{SO4^2-}$, is often drawn two ways: with four S–O single bonds (an octet on S), or with two S=O double bonds and two S–O single bonds (12 electrons around S). What is the formal charge on S in each?
+  choices:
+    - { id: a, text: "+2 with all single bonds; 0 with two double bonds" }
+    - { id: b, text: "0 with all single bonds; +2 with two double bonds" }
+    - { id: c, text: "−2 with all single bonds; 0 with two double bonds" }
+    - { id: d, text: "+2 with all single bonds; +2 with two double bonds" }
+  answer: a
+  explanation: |
+    All single bonds: S has 4 bonds and no lone pairs, $6 - 0 - 4 = +2$, and each O is $6 - 6 - 1 = -1$ (sum −2). Two double bonds: S has 6 bonds, $6 - 0 - 6 = 0$; the two double-bonded O atoms are 0 and the two single-bonded O atoms are −1 (sum −2). The expanded structure has smaller formal charges, which is why some books draw it, while the octet structure keeps the octet rule. (C) puts the ion's overall charge on S.
+
+- id: apchem-08-so3-resonance
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Drawn with an octet on sulfur (one S=O double bond and two S–O single bonds), how many equivalent resonance structures does sulfur trioxide, $\ce{SO3}$, have?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "2" }
+    - { id: c, text: "3" }
+    - { id: d, text: "4" }
+  answer: c
+  explanation: |
+    The double bond can go to any of the three O atoms, giving three equivalent structures, the same pattern as nitrate and carbonate. All three S–O bonds in the real molecule are identical.
 
 # --- 8.7 Exceptions to the octet rule ---
 
@@ -1038,7 +1132,7 @@
     - { id: d, text: "−415 kJ/mol" }
   answer: a
   explanation: |
-    The reaction breaks all four C–H bonds, so each one averages $1660 / 4 = 415$ kJ/mol. Bond enthalpies are always positive, which rules out (D).
+    The reaction breaks all four C–H bonds, so each one averages $1660 / 4 = 415$ kJ/mol. Bond enthalpies are always positive, which rules out (D). (C) divides by 2 instead of by the four bonds broken.
 
 - id: apchem-08-shortest-cc
   type: mcq
@@ -1183,3 +1277,333 @@
     **(c)** Removing Li's electron costs 520 kJ/mol and adding it to Cl releases 349, for a net +171 kJ/mol. The ions then come together into the lattice and release 861 kJ/mol, which more than makes up for it.
 
     **(d)** By Coulomb's law, attraction is proportional to $Q_1Q_2/d$. MgS has +2 and −2 ions, so $Q_1Q_2$ is four times that of LiCl. $\ce{S^2-}$ is larger than $\ce{Cl-}$, which increases $d$ a little, but the charge effect is much bigger. MgS has the larger lattice energy.
+
+# --- More practice, mostly hard ---
+
+- id: apchem-08-lattice-rank-na2o
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["2.2", "2.3"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Rank NaF, $\ce{Na2O}$, and MgO in order of **increasing** lattice energy.
+  choices:
+    - { id: a, text: '$\ce{NaF} < \ce{Na2O} < \ce{MgO}$' }
+    - { id: b, text: '$\ce{Na2O} < \ce{NaF} < \ce{MgO}$' }
+    - { id: c, text: '$\ce{MgO} < \ce{Na2O} < \ce{NaF}$' }
+    - { id: d, text: '$\ce{NaF} < \ce{MgO} < \ce{Na2O}$' }
+  answer: a
+  explanation: |
+    Compare the charge products. NaF is +1/−1 (product 1). $\ce{Na2O}$ is +1/−2 (product 2). MgO is +2/−2 (product 4). The ions are all similar in size, so the charges decide: NaF (910 kJ/mol) < $\ce{Na2O}$ (about 2500) < MgO (3795). (B) ignores the −2 charge on oxide. (D) assumes having more ions per formula unit matters more than charge.
+
+- id: apchem-08-mgo-second-ea
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["2.2", "2.3"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Adding a second electron to $\ce{O-(g)}$ to make $\ce{O^2-(g)}$ **absorbs** about 800 kJ/mol, and removing two electrons from Mg costs about 2200 kJ/mol. Why does MgO still form, with a very negative $\Delta H^\circ_f$?
+  choices:
+    - { id: a, text: "The two electrons added to O come from Mg, so the energies of the two steps cancel" }
+    - { id: b, text: "The +2 and −2 ions attract so strongly that the lattice energy (about 3800 kJ/mol) pays for every uphill step" }
+    - { id: c, text: "Breaking the O=O bond in O₂ releases enough energy to cover the ionization of Mg" }
+    - { id: d, text: "O²⁻ has a noble-gas configuration, and reaching it releases the energy needed" }
+  answer: b
+  explanation: |
+    By Coulomb's law, doubling both charges makes the attraction about four times as large, so MgO's lattice energy is huge. That release outweighs the endothermic steps. (A) is false: the steps don't cancel; ionizing Mg and forming $\ce{O^2-}$ both cost energy. (C) is backward: breaking a bond absorbs energy. (D) is the octet misconception; making $\ce{O^2-}$ from $\ce{O-}$ costs energy.
+
+- id: apchem-08-born-haber-formation
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Use these values (kJ/mol) to calculate $\Delta H^\circ_f$ of NaCl(s).
+
+    | $\ce{Na(s) -> Na(g)}$ | $\ce{1/2Cl2(g) -> Cl(g)}$ | First IE of Na | Electron affinity of Cl | Lattice energy of NaCl |
+    |---|---|---|---|---|
+    | +108 | +122 | +496 | −349 | +788 |
+  choices:
+    - { id: a, text: "−411 kJ/mol" }
+    - { id: b, text: "+1165 kJ/mol" }
+    - { id: c, text: "+287 kJ/mol" }
+    - { id: d, text: "−1213 kJ/mol" }
+  answer: a
+  explanation: |
+    The last step of the cycle, ions coming together into the solid, releases the lattice energy, so it enters as −788:
+
+    $$
+    \Delta H^\circ_f = 108 + 122 + 496 + (-349) - 788 = -411\ \text{kJ/mol}
+    $$
+
+    (B) adds the lattice energy instead of subtracting it. (C) uses +349 for the electron affinity. (D) leaves out sublimation, atomization, and ionization.
+
+- id: apchem-08-cu2-config
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Copper's ground-state configuration is $[\ce{Ar}]\,3d^{10}4s^1$. What is the configuration of $\ce{Cu^2+}$?
+  choices:
+    - { id: a, text: '$[\ce{Ar}]\,3d^8 4s^1$' }
+    - { id: b, text: '$[\ce{Ar}]\,3d^9$' }
+    - { id: c, text: '$[\ce{Ar}]\,3d^7 4s^2$' }
+    - { id: d, text: '$[\ce{Ar}]\,3d^{10}$' }
+  answer: b
+  explanation: |
+    The 4s electron leaves first, then one 3d electron: $[\ce{Ar}]\,3d^9$. (D) is $\ce{Cu+}$, which lost only the 4s electron. (A) removes two 3d electrons and keeps 4s, which is backward. (C) has the right count (27 electrons) but puts electrons back into 4s.
+
+- id: apchem-08-not-isoelectronic-ar
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.5", "1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which ion does **not** have the same electron configuration as argon?
+  choices:
+    - { id: a, text: '$\ce{Ti^2+}$' }
+    - { id: b, text: '$\ce{S^2-}$' }
+    - { id: c, text: '$\ce{K+}$' }
+    - { id: d, text: '$\ce{Sc^3+}$' }
+  answer: a
+  explanation: |
+    Ti is $[\ce{Ar}]\,3d^2 4s^2$. Losing the two 4s electrons leaves $[\ce{Ar}]\,3d^2$, which still has two d electrons. $\ce{S^2-}$, $\ce{K+}$, and $\ce{Sc^3+}$ all have 18 electrons arranged as $[\ce{Ar}]$.
+
+- id: apchem-08-fc-nitric-acid
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In the best Lewis structure of nitric acid, $\ce{HNO3}$, N is bonded to three O atoms, and the H is on one of them. N has one N=O double bond and two N–O single bonds. What are the formal charges on N and on the O that has no H and only a single bond?
+  choices:
+    - { id: a, text: "N 0, that O 0" }
+    - { id: b, text: "N +1, that O −1" }
+    - { id: c, text: "N −1, that O +1" }
+    - { id: d, text: "N +2, that O −2" }
+  answer: b
+  explanation: |
+    N has 4 bonds and no lone pairs: $5 - 0 - 4 = +1$. The single-bonded O without H has 3 lone pairs and 1 bond: $6 - 6 - 1 = -1$. The double-bonded O ($6 - 4 - 2 = 0$) and the O–H oxygen ($6 - 4 - 2 = 0$) are neutral, so the total is 0 for the neutral molecule.
+
+- id: apchem-08-thiocyanate-best
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The thiocyanate ion, $\ce{SCN-}$, has C in the center. Which Lewis structure is best? (Electronegativities: S 2.5, C 2.5, N 3.0)
+  choices:
+    - { id: a, text: "S≡C–N, with −2 on N and +1 on S" }
+    - { id: b, text: "S–C≡N, with −1 on S and no other formal charges" }
+    - { id: c, text: "S=C=N, with −1 on N and no other formal charges" }
+    - { id: d, text: "All are equal, because every one has 16 valence electrons" }
+  answer: c
+  explanation: |
+    (B) and (C) each have only one formal charge (−1). The tiebreaker is electronegativity: N (3.0) is more electronegative than S (2.5), so the −1 belongs on N. (A) has larger formal charges. Having the same electron count (D) doesn't make structures equally good.
+
+- id: apchem-08-longest-co
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6", "8.8"]
+  cedTopics: ["2.2", "2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which species has the **longest** carbon–oxygen bond?
+  choices:
+    - { id: a, text: '$\ce{CH3OH}$' }
+    - { id: b, text: '$\ce{HCO2-}$' }
+    - { id: c, text: '$\ce{CO3^2-}$' }
+    - { id: d, text: '$\ce{CO2}$' }
+  answer: a
+  explanation: |
+    Bond orders: methanol has a C–O single bond (1), formate has two resonance structures (3/2), carbonate has three (4/3), and $\ce{CO2}$ has double bonds (2). The lowest bond order gives the longest bond, so $\ce{CH3OH}$. Carbonate (C) is the longest of the resonance species, but still shorter than a true single bond.
+
+- id: apchem-08-lone-pairs-if5
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    How many lone pairs are on the iodine atom in $\ce{IF5}$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "0" }
+    - { id: c, text: "2" }
+    - { id: d, text: "3" }
+  answer: a
+  explanation: |
+    $7 + 5(7) = 42$ electrons. Five I–F bonds use 10, and three lone pairs on each F use 30, for 40. The last 2 go on I as **one** lone pair, so I has 12 electrons around it. (B) forgets to place the leftover electrons on the central atom.
+
+- id: apchem-08-bond-enthalpy-ethylene
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.8"]
+  cedTopics: ["6.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Estimate $\Delta H$ for $\ce{H2C=CH2(g) + H2(g) -> H3C-CH3(g)}$.
+
+    | Bond | C=C | H–H | C–C | C–H |
+    |---|---|---|---|---|
+    | kJ/mol | 614 | 436 | 348 | 413 |
+  choices:
+    - { id: a, text: "+124 kJ" }
+    - { id: b, text: "+702 kJ" }
+    - { id: c, text: "−124 kJ" }
+    - { id: d, text: "−1174 kJ" }
+  answer: c
+  explanation: |
+    Only the bonds that change count; the four original C–H bonds survive. Broken: C=C and H–H, $614 + 436 = 1050$ kJ. Formed: one C–C and two new C–H, $348 + 2(413) = 1174$ kJ. $\Delta H \approx 1050 - 1174 = -124$ kJ. (B) forgets the two new C–H bonds. (A) subtracts in the wrong order. (D) leaves out the bonds broken.
+
+- id: apchem-08-find-hbr-bond
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.8"]
+  cedTopics: ["6.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    For $\ce{H2(g) + Br2(g) -> 2HBr(g)}$, $\Delta H = -103$ kJ. The H–H bond enthalpy is 436 kJ/mol and the Br–Br bond enthalpy is 193 kJ/mol. What is the H–Br bond enthalpy?
+  choices:
+    - { id: a, text: "263 kJ/mol" }
+    - { id: b, text: "366 kJ/mol" }
+    - { id: c, text: "732 kJ/mol" }
+    - { id: d, text: "314 kJ/mol" }
+  answer: b
+  explanation: |
+    $\Delta H = (436 + 193) - 2D(\ce{H-Br})$, so $-103 = 629 - 2D$ and $2D = 732$, giving $D = 366$ kJ/mol. (C) forgets that two H–Br bonds form. (D) uses +103 for $\Delta H$. (A) comes from $(629 - 103)/2$, which also has the sign of $\Delta H$ wrong.
+
+- id: apchem-08-why-estimate
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.8"]
+  cedTopics: ["6.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A $\Delta H$ calculated from a table of bond enthalpies usually differs a little from the measured value. What's the main reason?
+  choices:
+    - { id: a, text: "Table values are averages over many compounds, not the exact bond strengths in these molecules" }
+    - { id: b, text: "Bond enthalpies are measured in the solid state, but reactions happen in the gas phase" }
+    - { id: c, text: "Breaking a bond releases a slightly different amount of energy than forming it absorbs" }
+    - { id: d, text: "Bond enthalpies ignore the energy of the lone pairs, which change during every reaction" }
+  answer: a
+  explanation: |
+    A C–H bond in methane isn't exactly as strong as a C–H bond in ethanol. The table lists averages, so the estimate is close but not exact. (B) is backward: bond enthalpies are defined for gases. (C) is false: breaking and forming the same bond involve the same energy with opposite signs. (D) isn't how the method works.
+
+- id: apchem-08-delta-minus-first
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.4"]
+  cedTopics: ["2.1"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In which bond is the partial negative charge (δ−) on the atom written **first**? (Electronegativities: H 2.1, C 2.5, P 2.1, O 3.5, S 2.5, Cl 3.0)
+  choices:
+    - { id: a, text: "C–H" }
+    - { id: b, text: "H–O" }
+    - { id: c, text: "S–O" }
+    - { id: d, text: "P–Cl" }
+  answer: a
+  explanation: |
+    The more electronegative atom is δ−. C (2.5) beats H (2.1), so in C–H the δ− is on C, the first atom. In the other three, the second atom is more electronegative: O in H–O and S–O, and Cl in P–Cl.
+
+- id: apchem-08-cl-vs-n-polar
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.4"]
+  cedTopics: ["2.1"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    On the Pauling scale used in the textbook, N and Cl both have an electronegativity of 3.0. What does that predict about the N–Cl bond in $\ce{NCl3}$?
+  choices:
+    - { id: a, text: "It is ionic, because both atoms are very electronegative" }
+    - { id: b, text: "It is essentially nonpolar, because the electrons are shared about equally" }
+    - { id: c, text: "It is polar, with N δ− because N is in period 2" }
+    - { id: d, text: "It can't form, because two atoms with high electronegativity both keep their electrons" }
+  answer: b
+  explanation: |
+    Polarity depends on the **difference** in electronegativity, not on how high the values are. ΔEN = 0, so the electrons are shared about equally. (A) confuses high electronegativity with a large difference. (D) is false: $\ce{NCl3}$ exists, and two electronegative atoms can share a pair.
+
+- id: apchem-08-hydrazine-frq
+  type: frq
+  subject: apchem
+  chapter: 8
+  sections: ["8.3", "8.5", "8.8"]
+  cedTopics: ["2.2", "2.5", "6.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Hydrazine burns in oxygen: $\ce{N2H4(g) + O2(g) -> N2(g) + 2H2O(g)}$.
+
+    | Bond | N–N | N–H | O=O | N≡N | O–H |
+    |---|---|---|---|---|---|
+    | kJ/mol | 163 | 391 | 495 | 941 | 463 |
+  parts:
+    - label: a
+      points: 1
+      prompt: Draw the complete Lewis structure of $\ce{N2H4}$ (the two N atoms are bonded to each other).
+      scoring:
+        - "H₂N–NH₂: an N–N single bond, two N–H bonds on each N, and one lone pair on each N (14 electrons)."
+    - label: b
+      points: 1
+      prompt: Use the bond enthalpies to estimate $\Delta H$ for the reaction.
+      scoring:
+        - "Broken: $163 + 4(391) + 495 = 2222$ kJ; formed: $941 + 4(463) = 2793$ kJ; $\\Delta H \\approx -571$ kJ."
+    - label: c
+      points: 1
+      prompt: Is the N-to-N distance longer in $\ce{N2H4}$ or in $\ce{N2}$? Explain.
+      scoring:
+        - "Longer in N₂H₄: it has a single bond (bond order 1), while N₂ has a triple bond (bond order 3); more shared pairs pull the nuclei closer."
+    - label: d
+      points: 1
+      prompt: Explain in terms of bonds why the reaction is exothermic.
+      scoring:
+        - "More energy is released forming the bonds in the products (especially the very strong N≡N) than is absorbed breaking the bonds in the reactants."
+  explanation: |
+    **(a)** $2(5) + 4(1) = 14$ electrons. N–N plus four N–H bonds use 10; the last 4 go as one lone pair on each N, giving both N atoms an octet.
+
+    **(b)** Broken: one N–N (163), four N–H ($4 \times 391 = 1564$), one O=O (495), total 2222 kJ. Formed: one N≡N (941) and four O–H, two in each water ($4 \times 463 = 1852$), total 2793 kJ. $\Delta H \approx 2222 - 2793 = -571$ kJ.
+
+    **(c)** $\ce{N2H4}$ has an N–N single bond and $\ce{N2}$ has a triple bond. A higher bond order means a shorter, stronger bond, so the N–N distance is longer in hydrazine.
+
+    **(d)** Forming bonds releases energy, and breaking them absorbs it. The products' bonds total 2793 kJ, more than the 2222 kJ needed to break the reactants' bonds, so energy is released overall.

@@ -60,7 +60,7 @@
     - { id: d, text: "Tetrahedral electron domains; trigonal pyramidal molecule" }
   answer: a
   explanation: |
-    $6 + 2(7) = 20$ electrons. O has two bonds and two lone pairs: 4 domains (tetrahedral), with two of them bonds, so the molecule is bent, like water. (B) is the bent shape that comes from 3 domains, as in $\ce{SO2}$. (C) ignores the lone pairs.
+    $6 + 2(7) = 20$ electrons. O has two bonds and two lone pairs: 4 domains (tetrahedral), with two of them bonds, so the molecule is bent, like water. (B) is the bent shape that comes from 3 domains, as in $\ce{SO2}$. (C) ignores the lone pairs. (D) is the shape for three bonds and one lone pair, as in $\ce{NH3}$.
 
 - id: apchem-09-shape-sf4
   type: mcq
@@ -830,7 +830,7 @@
   explanation: |
     Only one bond between two atoms can lie along the axis between them (σ). The other two pairs come from side-by-side overlap of two sets of p orbitals at right angles to each other (two π bonds).
 
-- id: apchem-09-acrylonitrile-hybrids
+- id: apchem-09-allene-hybrids
   type: mcq
   subject: apchem
   chapter: 9
@@ -839,15 +839,15 @@
   difficulty: 3
   authors: ["Claude"]
   prompt: |
-    In $\ce{H2C=CH-C#N}$, what are the hybridizations of the three carbon atoms, from left to right?
+    Allene is $\ce{H2C=C=CH2}$. What are the hybridizations of its three carbon atoms, from left to right?
   choices:
-    - { id: a, text: "sp², sp², sp" }
-    - { id: b, text: "sp², sp, sp" }
-    - { id: c, text: "sp³, sp², sp" }
-    - { id: d, text: "sp, sp², sp²" }
+    - { id: a, text: "sp², sp, sp²" }
+    - { id: b, text: "sp², sp², sp²" }
+    - { id: c, text: "sp³, sp, sp³" }
+    - { id: d, text: "sp, sp², sp" }
   answer: a
   explanation: |
-    The first carbon has two C–H bonds and the C=C: 3 domains, sp². The second has C–H, C=C, and C–C: 3 domains, sp². The third has C–C and C≡N: 2 domains, sp.
+    Each end carbon has two C–H bonds and one C=C: 3 domains, sp². The middle carbon has two C=C double bonds and nothing else: 2 domains, sp, like the C in CO₂. (B) treats every carbon in a double bond as sp². (C) counts the end carbons' bonds as four domains.
 
 # --- 9.7–9.8 Molecular orbitals ---
 
@@ -979,7 +979,7 @@
     - { id: a, text: '$\ce{O2^2-} < \ce{O2} < \ce{O2+}$' }
     - { id: b, text: '$\ce{O2} < \ce{O2+} < \ce{O2^2-}$' }
     - { id: c, text: '$\ce{O2+} < \ce{O2} < \ce{O2^2-}$' }
-    - { id: d, text: "All three are the same length" }
+    - { id: d, text: '$\ce{O2} < \ce{O2^2-} < \ce{O2+}$' }
   answer: c
   explanation: |
     Each extra electron goes into a π\*₂ₚ (antibonding) orbital. Bond orders: $\ce{O2+}$ 5/2, $\ce{O2}$ 2, $\ce{O2^2-}$ 1. Higher bond order means a shorter bond, so $\ce{O2+}$ is shortest and $\ce{O2^2-}$ is longest. (A) is the reverse.
@@ -1001,7 +1001,7 @@
     - { id: d, text: "It would have unpaired electrons, and molecules with unpaired electrons can't exist" }
   answer: a
   explanation: |
-    Each Be brings 2 valence electrons (4 total). They fill σ₂ₛ (bonding) and σ\*₂ₛ (antibonding), so bond order $= \tfrac12(2 - 2) = 0$. (B) is false: Be has two valence electrons. (D) is false: O₂ and B₂ have unpaired electrons and exist.
+    Each Be brings 2 valence electrons (4 total). They fill σ₂ₛ (bonding) and σ\*₂ₛ (antibonding), so bond order $= \tfrac12(2 - 2) = 0$. (B) is false: Be has two valence electrons. (C) is false: the four electrons fill the two 2s-based orbitals before any π₂ₚ orbital. (D) is false: O₂ and B₂ have unpaired electrons and exist.
 
 - id: apchem-09-mo-c2
   type: mcq
@@ -1050,7 +1050,7 @@
   difficulty: 2
   authors: ["Claude"]
   prompt: |
-    Which species has the same number of valence electrons as $\ce{N2}$, and therefore the same bond order of 3?
+    Which **pair** of species has the same number of valence electrons as $\ce{N2}$, and therefore the same bond order of 3?
   choices:
     - { id: a, text: '$\ce{O2^2+}$ and $\ce{NO}$' }
     - { id: b, text: '$\ce{CN}$ and $\ce{N2+}$' }
@@ -1148,3 +1148,311 @@
     **(c)** The two π\*₂ₚ orbitals have the same energy. By Hund's rule, the two electrons go into separate orbitals with parallel spins, so O₂ has two unpaired electrons and is attracted to a magnetic field. The Lewis structure can't show this.
 
     **(d)** $\ce{O2^2-}$ has 14 valence electrons; the two extra ones fill the π\*₂ₚ orbitals. Antibonding becomes 6: bond order $= \tfrac12(8 - 6) = 1$. A single bond is longer than the double bond in O₂.
+
+# --- More practice, mostly hard ---
+
+- id: apchem-09-shape-icl2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of $\ce{ICl2-}$?
+  choices:
+    - { id: a, text: "Linear" }
+    - { id: b, text: "Bent, with an angle near 109.5°" }
+    - { id: c, text: "Bent, with an angle near 120°" }
+    - { id: d, text: "T-shaped" }
+  answer: a
+  explanation: |
+    $7 + 2(7) + 1 = 22$ electrons. Two I–Cl bonds and the Cl lone pairs use 16, leaving 6 on I: three lone pairs. Five domains with all three lone pairs equatorial leave the two Cl atoms 180° apart, the same shape as $\ce{XeF2}$. (B) and (C) assume too few domains on I.
+
+- id: apchem-09-shape-if4plus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of the $\ce{IF4+}$ ion?
+  choices:
+    - { id: a, text: "Square planar" }
+    - { id: b, text: "Seesaw" }
+    - { id: c, text: "Tetrahedral" }
+    - { id: d, text: "Square pyramidal" }
+  answer: b
+  explanation: |
+    $7 + 4(7) - 1 = 34$ electrons. Four I–F bonds and the F lone pairs use 32, leaving 2 on I: one lone pair. Four bonds + one lone pair is 5 domains, so the ion is a seesaw, like $\ce{SF4}$. (A) is $\ce{IF4-}$, which has two more electrons and two lone pairs on I. (C) ignores the lone pair.
+
+- id: apchem-09-no2-angles
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Rank the O–N–O bond angle in $\ce{NO2+}$, $\ce{NO2}$, and $\ce{NO2-}$ from **largest to smallest**.
+  choices:
+    - { id: a, text: '$\ce{NO2-} > \ce{NO2} > \ce{NO2+}$' }
+    - { id: b, text: '$\ce{NO2} > \ce{NO2+} > \ce{NO2-}$' }
+    - { id: c, text: '$\ce{NO2+} > \ce{NO2} > \ce{NO2-}$' }
+    - { id: d, text: "All three are 120°, because N has three domains in each" }
+  answer: c
+  explanation: |
+    $\ce{NO2+}$ (16 electrons) has no nonbonding electrons on N, so it's linear (180°). $\ce{NO2}$ (17) has one unpaired electron on N, which pushes the bonds less than a full pair does (about 134°). $\ce{NO2-}$ (18) has a lone pair on N (about 115°). (D) is wrong because $\ce{NO2+}$ has only two domains.
+
+- id: apchem-09-dichloroethene
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3", "9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    $\ce{C2H2Cl2}$ has three forms: 1,1-dichloroethene (both Cl on one carbon), *cis*-1,2-dichloroethene (one Cl on each carbon, same side), and *trans*-1,2-dichloroethene (one Cl on each carbon, opposite sides). The molecule is flat. Which form is **nonpolar**?
+  choices:
+    - { id: a, text: "1,1-dichloroethene" }
+    - { id: b, text: "*trans*-1,2-dichloroethene" }
+    - { id: c, text: "*cis*-1,2-dichloroethene" }
+    - { id: d, text: "None of them, because C–Cl bonds are polar" }
+  answer: b
+  explanation: |
+    In the *trans* form, the two C–Cl dipoles point in opposite directions and cancel, and so do the two C–H dipoles. In the *cis* and 1,1 forms, both Cl atoms are on the same side, so the dipoles add. The C=C bond can't rotate (the π bond would break), so the *cis* and *trans* forms are different molecules. (D) forgets that polar bonds can cancel.
+
+- id: apchem-09-sf5cl-polar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    $\ce{SF6}$ is nonpolar. If one F is replaced with Cl to make $\ce{SF5Cl}$, the molecule
+  choices:
+    - { id: a, text: "becomes polar, because the S–Cl dipole no longer matches the S–F dipole opposite it" }
+    - { id: b, text: "stays nonpolar, because it is still octahedral" }
+    - { id: c, text: "stays nonpolar, because S–Cl and S–F bonds have the same polarity" }
+    - { id: d, text: "becomes polar, because S gains a lone pair when Cl replaces F" }
+  answer: a
+  explanation: |
+    The shape is still octahedral, but the S–Cl dipole (ΔEN 0.5) is much smaller than the S–F dipole (ΔEN 1.5) opposite it, so they don't cancel. A symmetric shape alone isn't enough (B); the outer atoms must be identical too. (D) is false: S still has six bonds and no lone pairs.
+
+- id: apchem-09-acetic-acid-oh-hybrid
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In acetic acid, $\ce{CH3C(=O)OH}$, what is the hybridization of the oxygen in the O–H group?
+  choices:
+    - { id: a, text: "sp" }
+    - { id: b, text: "sp²" }
+    - { id: c, text: "sp³" }
+    - { id: d, text: "sp³d" }
+  answer: c
+  explanation: |
+    That O is bonded to C and H and has two lone pairs: 4 domains, sp³, like the O in water. (B) describes the carbonyl carbon (or the double-bonded O, if outer atoms are counted). (A) would need only two domains.
+
+- id: apchem-09-sigma-pi-acetic-acid
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    How many σ and π bonds are in acetic acid, $\ce{CH3C(=O)OH}$?
+  choices:
+    - { id: a, text: "8 σ and 0 π" }
+    - { id: b, text: "6 σ and 2 π" }
+    - { id: c, text: "7 σ and 2 π" }
+    - { id: d, text: "7 σ and 1 π" }
+  answer: d
+  explanation: |
+    Bonds: three C–H, one C–C, one C=O, one C–O, one O–H. Every bond has one σ: 7 σ. Only the C=O has a π bond: 1 π. (A) counts 8 shared pairs as σ bonds. (C) gives the C–O single bond a π bond too.
+
+- id: apchem-09-sigma-pi-benzene
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    How many σ bonds and π bonds does benzene, $\ce{C6H6}$, have?
+  choices:
+    - { id: a, text: "12 σ and 3 π" }
+    - { id: b, text: "6 σ and 6 π" }
+    - { id: c, text: "9 σ and 3 π" }
+    - { id: d, text: "15 σ and 0 π" }
+  answer: a
+  explanation: |
+    Six C–H bonds and six C–C bonds give 12 σ. Each resonance structure has three C=C double bonds, so there are 3 π bonds' worth of electrons (6 π electrons), spread around the ring. (D) counts all 15 shared pairs as σ bonds. (B) leaves out the C–H bonds.
+
+- id: apchem-09-propene-angle
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In propene, $\ce{H2C=CH-CH3}$, what is the approximate C–C–C bond angle around the middle carbon?
+  choices:
+    - { id: a, text: "109.5°" }
+    - { id: b, text: "120°" }
+    - { id: c, text: "180°" }
+    - { id: d, text: "90°" }
+  answer: b
+  explanation: |
+    The middle carbon has three domains (C=C, C–H, C–C), so it's sp² and trigonal planar: about 120°. (A) is the angle at the CH₃ carbon, which is sp³.
+
+- id: apchem-09-pe-f2-cl2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.4"]
+  cedTopics: ["2.2"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    $\ce{F2}$ has a bond length of 1.42 Å and a bond enthalpy of 155 kJ/mol. $\ce{Cl2}$ has 1.99 Å and 242 kJ/mol. Compared with the potential-energy curve for $\ce{F2}$, the curve for $\ce{Cl2}$ has its minimum
+  choices:
+    - { id: a, text: "at a shorter distance and deeper" }
+    - { id: b, text: "at a longer distance and deeper" }
+    - { id: c, text: "at a longer distance and shallower" }
+    - { id: d, text: "at the same distance, but deeper" }
+  answer: b
+  explanation: |
+    Read it from the data: the minimum sits at the bond length (longer for Cl₂, since Cl is a larger atom) and its depth is the bond energy (larger for Cl₂). F₂ is an unusual case: its small atoms put their lone pairs close together, and their repulsion weakens the bond. (C) assumes a longer bond must be weaker, which is usually true but not here.
+
+- id: apchem-09-mo-paramagnetic-ion
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which species is **paramagnetic**?
+  choices:
+    - { id: a, text: '$\ce{O2^2-}$' }
+    - { id: b, text: '$\ce{N2}$' }
+    - { id: c, text: '$\ce{O2-}$' }
+    - { id: d, text: '$\ce{C2^2-}$' }
+  answer: c
+  explanation: |
+    $\ce{O2-}$ has 13 valence electrons, an odd number, so one is unpaired (three electrons in the two π\*₂ₚ orbitals). $\ce{O2^2-}$ (14) fills both π\*₂ₚ orbitals. $\ce{N2}$ and $\ce{C2^2-}$ (10 each) have every orbital through σ₂ₚ full.
+
+- id: apchem-09-mo-c2-2minus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    What is the bond order of the acetylide ion, $\ce{C2^2-}$?
+  choices:
+    - { id: a, text: "2" }
+    - { id: b, text: "2.5" }
+    - { id: c, text: "1" }
+    - { id: d, text: "3" }
+  answer: d
+  explanation: |
+    $\ce{C2^2-}$ has $2(4) + 2 = 10$ valence electrons, the same as $\ce{N2}$. The two extra electrons go into the bonding σ₂ₚ orbital: 8 bonding, 2 antibonding, bond order $\tfrac12(8 - 2) = 3$. (A) is neutral $\ce{C2}$.
+
+- id: apchem-09-mo-b2plus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Removing one electron from $\ce{B2}$ gives $\ce{B2+}$. What happens to the bond?
+  choices:
+    - { id: a, text: "Bond order drops from 1 to ½, so the bond gets weaker and longer" }
+    - { id: b, text: "Bond order rises from 1 to 1½, because an antibonding electron was removed" }
+    - { id: c, text: "Bond order stays at 1, because the electron came from a nonbonding orbital" }
+    - { id: d, text: "Bond order drops from 1 to 0, so B₂⁺ falls apart" }
+  answer: a
+  explanation: |
+    $\ce{B2}$ has 6 valence electrons, with the last two in the bonding π₂ₚ orbitals (bond order 1). $\ce{B2+}$ loses one of those **bonding** electrons: 3 bonding and 2 antibonding, bond order $\tfrac12(3 - 2) = \tfrac12$. (B) would be right only if the electron came from an antibonding orbital, as when $\ce{O2}$ becomes $\ce{O2+}$.
+
+- id: apchem-09-valence-bond-he2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.4"]
+  cedTopics: ["2.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Using the valence-bond (orbital overlap) model, why don't two He atoms form a bond?
+  choices:
+    - { id: a, text: "He atoms are too small for their orbitals to overlap" }
+    - { id: b, text: "He's 1s orbital is already full, so there is no half-filled orbital to share a pair" }
+    - { id: c, text: "He has too high an electronegativity to share electrons" }
+    - { id: d, text: "The two He nuclei have no charge, so nothing attracts the electrons" }
+  answer: b
+  explanation: |
+    In valence-bond theory a bond forms when two half-filled orbitals overlap and their two electrons pair up. He's only orbital, 1s, already holds two electrons, so there's nothing to pair. (The MO picture gives the same answer: bond order 0.) (D) is false: each He nucleus has a +2 charge.
+
+- id: apchem-09-xenon-fluorides-frq
+  type: frq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.3"]
+  cedTopics: ["2.5", "2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Xenon forms the fluorides $\ce{XeF2}$ and $\ce{XeF4}$.
+  parts:
+    - label: a
+      points: 1
+      prompt: How many lone pairs are on the Xe atom in each molecule?
+      scoring:
+        - "Three in XeF₂ and two in XeF₄ (both needed)."
+    - label: b
+      points: 1
+      prompt: Give the electron-domain geometry and molecular geometry of each molecule.
+      scoring:
+        - "XeF₂: trigonal bipyramidal domains, linear molecule; XeF₄: octahedral domains, square planar molecule."
+    - label: c
+      points: 1
+      prompt: Explain why the lone pairs in $\ce{XeF2}$ are placed where they are.
+      scoring:
+        - "They occupy the three equatorial positions, which have only two neighbors at 90° (axial positions have three), so the larger lone pairs have the most room."
+    - label: d
+      points: 1
+      prompt: Xe–F bonds are polar. Are the molecules polar or nonpolar? Justify your answer.
+      scoring:
+        - "Both are nonpolar: in each, every Xe–F dipole has an equal one pointing the opposite way, and the lone pairs are arranged symmetrically, so the dipoles cancel."
+  explanation: |
+    **(a)** $\ce{XeF2}$: $8 + 14 = 22$ electrons; 16 go into the bonds and F lone pairs, leaving 6 on Xe (3 pairs). $\ce{XeF4}$: $8 + 28 = 36$; 32 go to bonds and F lone pairs, leaving 4 on Xe (2 pairs).
+
+    **(b)** $\ce{XeF2}$ has 5 domains (trigonal bipyramidal); with three lone pairs it's linear. $\ce{XeF4}$ has 6 domains (octahedral); with two lone pairs opposite each other it's square planar.
+
+    **(c)** In a trigonal bipyramid, an equatorial position has two 90° neighbors and an axial one has three. Lone pairs take up more room, so all three go equatorial, which puts the two F atoms on the axis, 180° apart.
+
+    **(d)** In both, the F atoms are arranged in opposite pairs (180° apart), so the bond dipoles cancel, and the lone pairs are symmetric too. Both molecules are nonpolar.

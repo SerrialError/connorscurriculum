@@ -1,0 +1,1150 @@
+# Practice questions for Chapter 9 (Molecular Geometry and Bonding Theories). Original; not taken from
+# the textbook or College Board materials. Questions with cedTopics: [] cover class material that is not
+# on the AP exam (molecular orbital theory). calculation: true marks questions that need a numeric
+# calculation.
+
+# --- 9.1–9.2 Molecular shapes and VSEPR ---
+
+- id: apchem-09-domains-so2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many electron domains are around the sulfur atom in $\ce{SO2}$?
+  choices:
+    - { id: a, text: "2" }
+    - { id: b, text: "3" }
+    - { id: c, text: "4" }
+    - { id: d, text: "5" }
+  answer: b
+  explanation: |
+    S is bonded to two O atoms and has one lone pair. A double bond counts as **one** domain, so S has 2 bonding domains + 1 lone pair = **3**, whether you draw an S=O double bond or not. (C) counts the double bond as two domains.
+
+- id: apchem-09-shape-nh3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of $\ce{NH3}$?
+  choices:
+    - { id: a, text: "Trigonal planar" }
+    - { id: b, text: "Tetrahedral" }
+    - { id: c, text: "Trigonal pyramidal" }
+    - { id: d, text: "T-shaped" }
+  answer: c
+  explanation: |
+    N has three bonds and one lone pair: 4 domains, a tetrahedral electron-domain geometry. The molecular geometry names only the atoms, so with one corner taken by the lone pair the shape is trigonal pyramidal. (B) is the electron-domain geometry, not the molecular geometry. (A) would need no lone pair on N.
+
+- id: apchem-09-of2-geometries
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What are the electron-domain geometry and the molecular geometry of $\ce{OF2}$?
+  choices:
+    - { id: a, text: "Tetrahedral electron domains; bent molecule" }
+    - { id: b, text: "Trigonal planar electron domains; bent molecule" }
+    - { id: c, text: "Linear electron domains; linear molecule" }
+    - { id: d, text: "Tetrahedral electron domains; trigonal pyramidal molecule" }
+  answer: a
+  explanation: |
+    $6 + 2(7) = 20$ electrons. O has two bonds and two lone pairs: 4 domains (tetrahedral), with two of them bonds, so the molecule is bent, like water. (B) is the bent shape that comes from 3 domains, as in $\ce{SO2}$. (C) ignores the lone pairs.
+
+- id: apchem-09-shape-sf4
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of $\ce{SF4}$?
+  choices:
+    - { id: a, text: "Tetrahedral" }
+    - { id: b, text: "Square planar" }
+    - { id: c, text: "Trigonal pyramidal" }
+    - { id: d, text: "Seesaw" }
+  answer: d
+  explanation: |
+    S has 4 bonds and 1 lone pair: 5 domains, trigonal bipyramidal. The lone pair takes an equatorial position, leaving a seesaw. (A) would be right only without the lone pair. (B) needs 6 domains with 2 lone pairs, as in $\ce{XeF4}$.
+
+- id: apchem-09-shape-clf3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of $\ce{ClF3}$?
+  choices:
+    - { id: a, text: "Trigonal planar" }
+    - { id: b, text: "T-shaped" }
+    - { id: c, text: "Trigonal pyramidal" }
+    - { id: d, text: "Seesaw" }
+  answer: b
+  explanation: |
+    $7 + 3(7) = 28$ electrons. Cl has 3 bonds and 2 lone pairs: 5 domains. Both lone pairs go equatorial, leaving the three F atoms in a T shape. (A) and (C) both assume fewer domains around Cl. A seesaw (D) has four atoms bonded to the center.
+
+- id: apchem-09-shape-xef4
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of $\ce{XeF4}$?
+  choices:
+    - { id: a, text: "Square planar" }
+    - { id: b, text: "Tetrahedral" }
+    - { id: c, text: "Seesaw" }
+    - { id: d, text: "Square pyramidal" }
+  answer: a
+  explanation: |
+    Xe has 4 bonds and 2 lone pairs: 6 domains, octahedral. The two lone pairs sit opposite each other, so the four F atoms lie in a square plane. (B) treats the molecule as if Xe had no lone pairs. (C) has one lone pair in 5 domains. (D) has one lone pair in 6 domains.
+
+- id: apchem-09-shape-i3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The triiodide ion, $\ce{I3-}$, has one I atom bonded to the other two. What are the electron-domain geometry and molecular geometry around the central I?
+  choices:
+    - { id: a, text: "Tetrahedral electron domains; bent ion, like water" }
+    - { id: b, text: "Trigonal planar electron domains; bent ion" }
+    - { id: c, text: "Trigonal bipyramidal electron domains; linear ion" }
+    - { id: d, text: "Linear electron domains; linear ion" }
+  answer: c
+  explanation: |
+    $3(7) + 1 = 22$ electrons. Two I–I bonds and three lone pairs on each outer I use 16, leaving 6 for the central I as three lone pairs. That's 2 bonds + 3 lone pairs = 5 domains, trigonal bipyramidal. The three lone pairs take all three equatorial spots, leaving the outer atoms 180° apart: linear. (D) gets the right shape but the wrong electron-domain geometry.
+
+- id: apchem-09-shape-brf5
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    $\ce{BrF5}$ has five Br–F bonds and one lone pair on Br. What is its molecular geometry?
+  choices:
+    - { id: a, text: "Trigonal bipyramidal" }
+    - { id: b, text: "Octahedral" }
+    - { id: c, text: "Seesaw" }
+    - { id: d, text: "Square pyramidal" }
+  answer: d
+  explanation: |
+    Six domains are octahedral. With one corner taken by the lone pair, the five F atoms form a square base with one more F on top: square pyramidal. (A) is five domains with no lone pairs. (B) names the electron-domain geometry.
+
+- id: apchem-09-angle-order
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Rank the H–X–H bond angles in $\ce{CH4}$, $\ce{NH3}$, and $\ce{H2O}$ from **largest to smallest**.
+  choices:
+    - { id: a, text: '$\ce{H2O} > \ce{NH3} > \ce{CH4}$' }
+    - { id: b, text: '$\ce{CH4} > \ce{NH3} > \ce{H2O}$' }
+    - { id: c, text: "All three are 109.5°, because each has four electron domains" }
+    - { id: d, text: '$\ce{NH3} > \ce{CH4} > \ce{H2O}$' }
+  answer: b
+  explanation: |
+    All three have four electron domains, but lone pairs repel more strongly than bonding pairs and squeeze the bonds together. $\ce{CH4}$ has none (109.5°), $\ce{NH3}$ has one (107°), and $\ce{H2O}$ has two (104.5°). (C) ignores the difference between lone pairs and bonds.
+
+- id: apchem-09-why-lone-pairs-squeeze
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why is the H–O–H angle in water smaller than the 109.5° angle of a perfect tetrahedron?
+  choices:
+    - { id: a, text: "Its lone pairs take up more room than bonding pairs and push the O–H bonds together" }
+    - { id: b, text: "The two hydrogen atoms attract each other, which pulls the O–H bonds toward each other" }
+    - { id: c, text: "Oxygen is more electronegative than carbon, so it pulls the hydrogen atoms in closer" }
+    - { id: d, text: "Water has only two electron domains, so the angle must be less than in methane" }
+  answer: a
+  explanation: |
+    A lone pair isn't shared with a second nucleus, so its electron cloud spreads out and takes more room around O than a bonding pair does. The two lone pairs push the O–H bonds together. (B) is wrong: the δ+ H atoms repel each other. (D) is wrong: water has four domains. (C) describes bond polarity, not bond angle.
+
+- id: apchem-09-trigonal-planar-which
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species is **trigonal planar**?
+  choices:
+    - { id: a, text: '$\ce{ClO3-}$' }
+    - { id: b, text: '$\ce{SO3^2-}$' }
+    - { id: c, text: '$\ce{NO3-}$' }
+    - { id: d, text: '$\ce{PF3}$' }
+  answer: c
+  explanation: |
+    In $\ce{NO3-}$, N has three bonding domains and no lone pair, so it's trigonal planar. $\ce{ClO3-}$, $\ce{SO3^2-}$, and $\ce{PF3}$ each have a lone pair on the central atom (count the electrons: 26 in each), which makes them trigonal pyramidal.
+
+- id: apchem-09-equatorial-lone-pairs
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In a molecule with five electron domains, why do lone pairs go in **equatorial** positions instead of axial ones?
+  choices:
+    - { id: a, text: "Equatorial positions are farther from the nucleus, so lone pairs are held more weakly there" }
+    - { id: b, text: "An equatorial position has only two neighbors at 90°, while an axial position has three" }
+    - { id: c, text: "Axial positions are reserved for the most electronegative atoms in the molecule" }
+    - { id: d, text: "Lone pairs are smaller than bonding pairs, so they fit in the tighter equatorial spaces" }
+  answer: b
+  explanation: |
+    90° repulsions are the strongest ones in a trigonal bipyramid. An axial position has three equatorial neighbors at 90°; an equatorial position has only the two axial ones. Lone pairs take up more room, so they go where they have the fewest close neighbors. (D) is backward: lone pairs are larger. (A) and (C) aren't how VSEPR works.
+
+- id: apchem-09-same-shape-pair
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which pair of molecules has the **same** molecular geometry?
+  choices:
+    - { id: a, text: '$\ce{H2O}$ and $\ce{BeCl2}$' }
+    - { id: b, text: '$\ce{BF3}$ and $\ce{NF3}$' }
+    - { id: c, text: '$\ce{CH4}$ and $\ce{XeF4}$' }
+    - { id: d, text: '$\ce{CO2}$ and $\ce{XeF2}$' }
+  answer: d
+  explanation: |
+    $\ce{CO2}$ has 2 domains (linear). $\ce{XeF2}$ has 5 domains, but its three lone pairs are all equatorial, so its two F atoms are 180° apart: also linear. In (A), water is bent while $\ce{BeCl2}$ is linear. In (B), $\ce{BF3}$ is trigonal planar and $\ce{NF3}$ is trigonal pyramidal. In (C), $\ce{CH4}$ is tetrahedral and $\ce{XeF4}$ square planar.
+
+- id: apchem-09-acetic-acid-carbon
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In acetic acid, $\ce{CH3COOH}$, what is the geometry around the carbon atom that is double-bonded to oxygen?
+  choices:
+    - { id: a, text: "Tetrahedral, with angles near 109.5°" }
+    - { id: b, text: "Linear, with an angle of 180°" }
+    - { id: c, text: "Trigonal planar, with angles near 120°" }
+    - { id: d, text: "Bent, with an angle near 104.5°" }
+  answer: c
+  explanation: |
+    That carbon is bonded to three atoms (the CH₃ carbon, the =O, and the –OH oxygen) with no lone pairs. The double bond counts as one domain, so there are 3 domains: trigonal planar. (A) describes the CH₃ carbon. (D) describes the O in the O–H group.
+
+- id: apchem-09-h2co-angle
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Formaldehyde, $\ce{H2C=O}$, is trigonal planar around carbon. What is the best prediction for its H–C–H bond angle?
+  choices:
+    - { id: a, text: "Exactly 120°, since all three domains are bonds to atoms" }
+    - { id: b, text: "Slightly less than 120°, because the C=O double bond takes up more room" }
+    - { id: c, text: "Slightly more than 120°, because the H atoms are small and need less room" }
+    - { id: d, text: "About 109.5°, because carbon makes four bonds" }
+  answer: b
+  explanation: |
+    A double bond holds four electrons, so it takes up more room than a single bond. It pushes the two C–H bonds together, making H–C–H a little under 120° and each H–C=O a little over. (D) counts the double bond as two domains. (A) ignores the difference between the domains.
+
+- id: apchem-09-shape-pcl5
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.1", "9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which set of bond angles is found in $\ce{PCl5}$?
+  choices:
+    - { id: a, text: "90° and 180° only" }
+    - { id: b, text: "109.5° only" }
+    - { id: c, text: "120° only" }
+    - { id: d, text: "90°, 120°, and 180°" }
+  answer: d
+  explanation: |
+    $\ce{PCl5}$ is trigonal bipyramidal. The three equatorial Cl atoms are 120° apart, each axial Cl is 90° from the equatorial ones, and the two axial Cl atoms are 180° apart. (A) is an octahedron, (B) a tetrahedron, and (C) a trigonal plane.
+
+# --- 9.3 Molecular shape and polarity ---
+
+- id: apchem-09-nonpolar-which
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which molecule is **nonpolar**?
+  choices:
+    - { id: a, text: '$\ce{SO2}$' }
+    - { id: b, text: '$\ce{CO2}$' }
+    - { id: c, text: '$\ce{H2O}$' }
+    - { id: d, text: '$\ce{NH3}$' }
+  answer: b
+  explanation: |
+    $\ce{CO2}$ is linear, so its two equal C=O bond dipoles point in opposite directions and cancel. $\ce{SO2}$ and $\ce{H2O}$ are bent and $\ce{NH3}$ is trigonal pyramidal; in each, a lone pair on the central atom keeps the bond dipoles from cancelling.
+
+- id: apchem-09-polar-which
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which molecule is **polar**?
+  choices:
+    - { id: a, text: '$\ce{CCl4}$' }
+    - { id: b, text: '$\ce{BF3}$' }
+    - { id: c, text: '$\ce{SF6}$' }
+    - { id: d, text: '$\ce{CH2Cl2}$' }
+  answer: d
+  explanation: |
+    $\ce{CH2Cl2}$ is tetrahedral, but it has two different kinds of outer atoms. The C–Cl and C–H bond dipoles are different, so they don't cancel. $\ce{CCl4}$, $\ce{BF3}$, and $\ce{SF6}$ each have identical outer atoms in a symmetric shape with no lone pairs on the center, so their bond dipoles cancel.
+
+- id: apchem-09-xef4-nonpolar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    $\ce{XeF4}$ has two lone pairs on xenon and four polar Xe–F bonds. Is it polar?
+  choices:
+    - { id: a, text: "Yes, because any molecule with lone pairs on its central atom has a dipole that can't cancel out" }
+    - { id: b, text: "Yes, because the Xe–F bonds are polar, and a molecule with polar bonds is always polar" }
+    - { id: c, text: "No, because in its square planar shape the bond dipoles cancel and the lone pairs are opposite" }
+    - { id: d, text: "No, because xenon is a noble gas and noble gases don't form polar bonds" }
+  answer: c
+  explanation: |
+    In a square planar molecule each Xe–F bond has a partner pointing the opposite way, so the bond dipoles cancel, and the two lone pairs sit on opposite sides of the plane. The molecule is nonpolar. (A) is a common shortcut that fails for $\ce{XeF2}$ and $\ce{XeF4}$. (B) ignores shape. (D) is false: the Xe–F bonds are polar.
+
+- id: apchem-09-sf4-polar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement about $\ce{SF4}$ is correct?
+  choices:
+    - { id: a, text: "It is nonpolar, because it has four identical S–F bonds arranged around S" }
+    - { id: b, text: "It is polar, because its seesaw shape keeps the S–F bond dipoles from cancelling" }
+    - { id: c, text: "It is nonpolar, because S and F have the same electronegativity" }
+    - { id: d, text: "It is polar, because it is tetrahedral with one bond longer than the others" }
+  answer: b
+  explanation: |
+    S has 4 bonds and 1 lone pair (5 domains), so $\ce{SF4}$ is a seesaw. The lone pair breaks the symmetry, and the bond dipoles add up to a net dipole. (A) would be true only for a symmetric shape like tetrahedral. (C) is false: F (4.0) is much more electronegative than S (2.5). (D) has the wrong shape.
+
+- id: apchem-09-h2o-vs-co2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Both $\ce{H2O}$ and $\ce{CO2}$ have two polar bonds. Why is water polar while carbon dioxide is not?
+  choices:
+    - { id: a, text: "O–H bonds are polar, but C=O bonds are nonpolar" }
+    - { id: b, text: "Water is a liquid at room temperature, and carbon dioxide is a gas" }
+    - { id: c, text: "Carbon dioxide has double bonds, and double bonds can't have bond dipoles" }
+    - { id: d, text: "Water is bent, so its dipoles add; CO₂ is linear, so its dipoles cancel" }
+  answer: d
+  explanation: |
+    Polarity depends on shape. Water's two lone pairs make it bent, so both O–H dipoles point partly toward O and add up. CO₂ is linear, so its two equal C=O dipoles point opposite ways. (A) and (C) are false: C=O bonds are polar (ΔEN = 1.0). (B) is a result of polarity (stronger attractions between water molecules), not the cause.
+
+- id: apchem-09-polar-bonds-nonpolar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which molecule has polar bonds but is a **nonpolar** molecule?
+  choices:
+    - { id: a, text: '$\ce{BCl3}$' }
+    - { id: b, text: '$\ce{Cl2}$' }
+    - { id: c, text: '$\ce{PCl3}$' }
+    - { id: d, text: '$\ce{HCl}$' }
+  answer: a
+  explanation: |
+    $\ce{BCl3}$ has three polar B–Cl bonds, but it's trigonal planar with no lone pair on B, so the dipoles cancel. $\ce{Cl2}$ has a nonpolar bond. $\ce{PCl3}$ is trigonal pyramidal and polar. $\ce{HCl}$ has one polar bond and nothing to cancel it.
+
+- id: apchem-09-pf3-pf5
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which statement about $\ce{PF3}$ and $\ce{PF5}$ is correct?
+  choices:
+    - { id: a, text: "Both are polar, because P–F bonds are polar" }
+    - { id: b, text: "Both are nonpolar, because each has only one kind of outer atom" }
+    - { id: c, text: "PF₃ is polar and PF₅ is nonpolar" }
+    - { id: d, text: "PF₃ is nonpolar and PF₅ is polar" }
+  answer: c
+  explanation: |
+    $\ce{PF3}$ has a lone pair on P, which makes it trigonal pyramidal: the three P–F dipoles all tilt the same way and add. $\ce{PF5}$ has no lone pair and is trigonal bipyramidal, a symmetric shape, so its dipoles cancel. Identical outer atoms (B) aren't enough when there's a lone pair.
+
+- id: apchem-09-chcl3-polar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Chloroform, $\ce{CHCl3}$, is tetrahedral. Is it polar?
+  choices:
+    - { id: a, text: "No, because every molecule with a tetrahedral shape is nonpolar" }
+    - { id: b, text: "No, because C–Cl and C–H bonds are both nonpolar" }
+    - { id: c, text: "Yes, because it has a lone pair on carbon" }
+    - { id: d, text: "Yes, because its four outer atoms aren't all the same" }
+  answer: d
+  explanation: |
+    A tetrahedron is symmetric only when all four outer atoms are the same, as in $\ce{CCl4}$. In $\ce{CHCl3}$, the three C–Cl dipoles don't cancel against the much weaker C–H dipole. (B) is false for C–Cl (ΔEN = 0.5). (C) is false: carbon has no lone pairs here.
+
+# --- 9.4 Covalent bonding and orbital overlap ---
+
+- id: apchem-09-pe-curve-minimum
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.4"]
+  cedTopics: ["2.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    On a graph of potential energy vs. distance between two bonded nuclei, what does the distance at the **lowest point** of the curve represent?
+  choices:
+    - { id: a, text: "The bond length" }
+    - { id: b, text: "The bond energy" }
+    - { id: c, text: "The radius of one atom" }
+    - { id: d, text: "The distance where the atoms stop attracting each other" }
+  answer: a
+  explanation: |
+    The minimum is the most stable separation, which is the bond length. The **depth** of the minimum below zero is the bond energy (B). Half the bond length between two identical atoms would be one atom's bonding radius (C). Attraction fades only at large distances, where the curve flattens toward zero (D).
+
+- id: apchem-09-pe-curve-repel
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.4"]
+  cedTopics: ["2.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    On the potential-energy curve for $\ce{H2}$, why does the energy rise steeply when the nuclei are pushed closer than the bond length?
+  choices:
+    - { id: a, text: "The orbitals stop overlapping, so the shared electrons leave" }
+    - { id: b, text: "The electrons are attracted too strongly and fall into the nuclei" }
+    - { id: c, text: "The two positively charged nuclei repel each other more and more strongly" }
+    - { id: d, text: "The bond becomes ionic, and ionic bonds have higher energy" }
+  answer: c
+  explanation: |
+    At short distances the repulsion between the two nuclei (and between the electrons) grows faster than the attraction, so the energy shoots up. (A) is backward: the orbitals overlap **more** at short distances. (B) and (D) don't happen.
+
+- id: apchem-09-pe-curve-compare
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.4"]
+  cedTopics: ["2.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Potential-energy curves are drawn for $\ce{O2}$ (bond order 2) and $\ce{N2}$ (bond order 3). Compared with the curve for $\ce{O2}$, the curve for $\ce{N2}$ has its minimum
+  choices:
+    - { id: a, text: "deeper and at a longer distance" }
+    - { id: b, text: "deeper and at a shorter distance" }
+    - { id: c, text: "shallower and at a shorter distance" }
+    - { id: d, text: "shallower and at a longer distance" }
+  answer: b
+  explanation: |
+    A higher bond order means a stronger bond (a **deeper** well, 941 vs. 495 kJ/mol) and a shorter bond (the minimum at a **shorter** distance, about 1.10 Å vs. 1.21 Å). N and O atoms are also close in size, so bond order controls the difference.
+
+- id: apchem-09-valence-bond-overlap
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.4"]
+  cedTopics: ["2.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    According to valence-bond theory, how does the H–Cl bond in HCl form?
+  choices:
+    - { id: a, text: "A half-filled Cl 3p orbital overlaps the H 1s orbital, and the two electrons pair up" }
+    - { id: b, text: "The H atom transfers its electron to Cl, and the ions attract" }
+    - { id: c, text: "The H 1s orbital overlaps a filled Cl 3s orbital, sharing four electrons" }
+    - { id: d, text: "The electrons of both atoms move into new orbitals that spread over the whole molecule at once" }
+  answer: a
+  explanation: |
+    In valence-bond theory a bond forms when two orbitals, each holding one electron, overlap and share the pair. Cl ($[\ce{Ne}]\,3s^2 3p^5$) has one half-filled 3p orbital, which overlaps H's 1s. (B) is ionic bonding. (C) is impossible: an overlap region holds at most two electrons. (D) describes molecular orbital theory.
+
+# --- 9.5 Hybrid orbitals ---
+
+- id: apchem-09-hybrid-co2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of carbon in $\ce{CO2}$?
+  choices:
+    - { id: a, text: "sp³" }
+    - { id: b, text: "sp²" }
+    - { id: c, text: "sp" }
+    - { id: d, text: "Unhybridized" }
+  answer: c
+  explanation: |
+    C has two electron domains (two double bonds, each counted once), so it uses two sp hybrid orbitals, which are 180° apart. (B) would need three domains. Counting each double bond as two domains gives (A).
+
+- id: apchem-09-hybrid-nh3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of nitrogen in $\ce{NH3}$?
+  choices:
+    - { id: a, text: "sp" }
+    - { id: b, text: "sp²" }
+    - { id: c, text: "sp³d" }
+    - { id: d, text: "sp³" }
+  answer: d
+  explanation: |
+    N has three bonds and one lone pair: 4 domains, so sp³. The lone pair occupies the fourth sp³ orbital. (B) forgets to count the lone pair.
+
+- id: apchem-09-hybrid-bf3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of boron in $\ce{BF3}$, and how many unhybridized p orbitals does boron have left?
+  choices:
+    - { id: a, text: "sp², with one unhybridized p orbital" }
+    - { id: b, text: "sp³, with no unhybridized p orbitals" }
+    - { id: c, text: "sp², with two unhybridized p orbitals" }
+    - { id: d, text: "sp, with two unhybridized p orbitals" }
+  answer: a
+  explanation: |
+    B has three bonding domains and no lone pairs, so it mixes one s and two p orbitals into three sp² orbitals at 120°. Of its three 2p orbitals, one is left over, perpendicular to the plane of the molecule. (C) miscounts the leftover p orbitals.
+
+- id: apchem-09-hybrid-so2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of sulfur in $\ce{SO2}$?
+  choices:
+    - { id: a, text: "sp" }
+    - { id: b, text: "sp²" }
+    - { id: c, text: "sp³" }
+    - { id: d, text: "sp³d" }
+  answer: b
+  explanation: |
+    S has two bonding domains and one lone pair: 3 domains, so sp². It doesn't matter how many of the S–O bonds you draw as double, since a double bond is still one domain. (A) leaves out the lone pair.
+
+- id: apchem-09-hybrid-count
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When one s orbital and three p orbitals mix, how many hybrid orbitals form, and at what angle do they point?
+  choices:
+    - { id: a, text: "Three, at 120°" }
+    - { id: b, text: "One, along the bond axis" }
+    - { id: c, text: "Four, at 109.5°" }
+    - { id: d, text: "Two, at 180°" }
+  answer: c
+  explanation: |
+    The number of hybrid orbitals always equals the number of atomic orbitals mixed: 1 + 3 = 4 sp³ orbitals, pointing to the corners of a tetrahedron (109.5°). (A) is sp² and (D) is sp.
+
+- id: apchem-09-which-sp
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5", "9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In propyne, $\ce{CH3-C#CH}$, which carbon atoms are **sp** hybridized?
+  choices:
+    - { id: a, text: "Only the CH₃ carbon" }
+    - { id: b, text: "Only the carbon at the right end" }
+    - { id: c, text: "All three carbons" }
+    - { id: d, text: "The two carbons in the triple bond" }
+  answer: d
+  explanation: |
+    Each carbon in the C≡C triple bond has two domains (the triple bond and one other bond), so both are sp. The CH₃ carbon has four single bonds, so it's sp³.
+
+- id: apchem-09-hybrid-methylamine-n
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of the **nitrogen** atom in methylamine, $\ce{CH3NH2}$?
+  choices:
+    - { id: a, text: "sp², because N forms three bonds" }
+    - { id: b, text: "sp, because N bonds to only one carbon" }
+    - { id: c, text: "sp³, because N has three bonds and a lone pair" }
+    - { id: d, text: "sp³d, because N has five valence electrons" }
+  answer: c
+  explanation: |
+    N is bonded to C and two H atoms and keeps one lone pair (8 electrons around it): 4 domains, so sp³, like the N in $\ce{NH3}$. (A) forgets to count the lone pair. (B) counts only the bond to carbon. (D) confuses valence electrons with domains; a period 2 atom never has five domains.
+
+- id: apchem-09-hybrid-h2o
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The oxygen in water has two bonds and two lone pairs. What is its hybridization?
+  choices:
+    - { id: a, text: "sp³" }
+    - { id: b, text: "sp" }
+    - { id: c, text: "sp²" }
+    - { id: d, text: "sp³d²" }
+  answer: a
+  explanation: |
+    Two bonds plus two lone pairs is 4 domains, so O is sp³. The lone pairs sit in two of the four sp³ orbitals. (B) counts only the two bonds.
+
+# --- 9.6 Multiple bonds ---
+
+- id: apchem-09-sigma-pi-ethylene
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many σ and π bonds are in ethylene, $\ce{H2C=CH2}$?
+  choices:
+    - { id: a, text: "4 σ and 2 π" }
+    - { id: b, text: "5 σ and 1 π" }
+    - { id: c, text: "6 σ and 0 π" }
+    - { id: d, text: "4 σ and 1 π" }
+  answer: b
+  explanation: |
+    Four C–H single bonds are 4 σ. The C=C double bond is 1 σ + 1 π. Total: 5 σ and 1 π. (D) forgets the σ part of the double bond.
+
+- id: apchem-09-sigma-pi-hcn
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many σ and π bonds are in HCN?
+  choices:
+    - { id: a, text: "1 σ and 3 π" }
+    - { id: b, text: "4 σ and 0 π" }
+    - { id: c, text: "3 σ and 1 π" }
+    - { id: d, text: "2 σ and 2 π" }
+  answer: d
+  explanation: |
+    H–C is 1 σ. C≡N is 1 σ + 2 π. Total: 2 σ and 2 π. Every bond between two atoms has exactly one σ bond, which rules out (A).
+
+- id: apchem-09-sigma-pi-acetonitrile
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many σ and π bonds are in acetonitrile, $\ce{CH3-C#N}$?
+  choices:
+    - { id: a, text: "5 σ and 2 π" }
+    - { id: b, text: "4 σ and 3 π" }
+    - { id: c, text: "6 σ and 1 π" }
+    - { id: d, text: "7 σ and 0 π" }
+  answer: a
+  explanation: |
+    Three C–H (3 σ), one C–C (1 σ), and C≡N (1 σ + 2 π): 5 σ and 2 π. (D) counts all seven shared pairs as σ bonds.
+
+- id: apchem-09-no-rotation
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why can't the two ends of a C=C double bond rotate freely relative to each other, while the ends of a C–C single bond can?
+  choices:
+    - { id: a, text: "The double bond is shorter, so the hydrogen atoms on the two carbons would bump into each other" }
+    - { id: b, text: "Twisting would turn the p orbitals of the π bond away from each other and break the π bond" }
+    - { id: c, text: "Rotation would break the σ bond, which lies above and below the bond axis" }
+    - { id: d, text: "The sp³ orbitals on each carbon lock the molecule into a tetrahedral shape" }
+  answer: b
+  explanation: |
+    The π bond comes from side-by-side overlap of two parallel p orbitals. Rotating one carbon turns its p orbital out of line, so the overlap is lost. A σ bond lies **along** the axis and doesn't care about rotation, which is why (C) is wrong. Each carbon in C=C is sp², not sp³ (D).
+
+- id: apchem-09-pi-location
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Where is the electron density of a **π** bond?
+  choices:
+    - { id: a, text: "Directly on the line between the two nuclei" }
+    - { id: b, text: "Above and below the line between the nuclei, with none on the line itself" }
+    - { id: c, text: "Spread evenly in a sphere around one of the two atoms" }
+    - { id: d, text: "On the far side of each atom, pointing away from the other atom" }
+  answer: b
+  explanation: |
+    A π bond forms from side-by-side overlap of two parallel p orbitals, so its density is in two lobes above and below the internuclear axis, with a node on the axis. (A) describes a σ bond.
+
+- id: apchem-09-delocalized
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.6", "2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species has **delocalized** π electrons?
+  choices:
+    - { id: a, text: '$\ce{C2H4}$' }
+    - { id: b, text: '$\ce{N2}$' }
+    - { id: c, text: '$\ce{CH4}$' }
+    - { id: d, text: '$\ce{NO3-}$' }
+  answer: d
+  explanation: |
+    Nitrate has three resonance structures with the N=O double bond in different places. In the orbital picture, the p orbitals on N and all three O atoms overlap, and the π electrons spread over the whole ion. $\ce{C2H4}$ and $\ce{N2}$ have π bonds fixed between two atoms. $\ce{CH4}$ has no π bonds.
+
+- id: apchem-09-triple-composition
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A triple bond consists of
+  choices:
+    - { id: a, text: "three σ bonds" }
+    - { id: b, text: "two σ bonds and one π bond" }
+    - { id: c, text: "three π bonds" }
+    - { id: d, text: "one σ bond and two π bonds" }
+  answer: d
+  explanation: |
+    Only one bond between two atoms can lie along the axis between them (σ). The other two pairs come from side-by-side overlap of two sets of p orbitals at right angles to each other (two π bonds).
+
+- id: apchem-09-acrylonitrile-hybrids
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5", "9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In $\ce{H2C=CH-C#N}$, what are the hybridizations of the three carbon atoms, from left to right?
+  choices:
+    - { id: a, text: "sp², sp², sp" }
+    - { id: b, text: "sp², sp, sp" }
+    - { id: c, text: "sp³, sp², sp" }
+    - { id: d, text: "sp, sp², sp²" }
+  answer: a
+  explanation: |
+    The first carbon has two C–H bonds and the C=C: 3 domains, sp². The second has C–H, C=C, and C–C: 3 domains, sp². The third has C–C and C≡N: 2 domains, sp.
+
+# --- 9.7–9.8 Molecular orbitals ---
+
+- id: apchem-09-mo-he2plus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.7"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the bond order of $\ce{He2+}$?
+  choices:
+    - { id: a, text: "0" }
+    - { id: b, text: "1/2" }
+    - { id: c, text: "1" }
+    - { id: d, text: "3/2" }
+  answer: b
+  explanation: |
+    $\ce{He2+}$ has 3 electrons: $(\sigma_{1s})^2(\sigma^*_{1s})^1$. Bond order $= \tfrac12(2 - 1) = \tfrac12$, so it can exist with a weak bond. (A) is neutral $\ce{He2}$, with 2 bonding and 2 antibonding electrons.
+
+- id: apchem-09-mo-antibonding
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.7"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Compared with the atomic orbitals that form it, an **antibonding** molecular orbital
+  choices:
+    - { id: a, text: "is lower in energy and has its electron density between the nuclei" }
+    - { id: b, text: "is lower in energy and has a node between the nuclei" }
+    - { id: c, text: "has the same energy as the atomic orbitals and no effect on bonding" }
+    - { id: d, text: "is higher in energy and has a node between the nuclei" }
+  answer: d
+  explanation: |
+    An antibonding orbital is higher in energy than the atomic orbitals, and its electron density is pushed away from the region between the nuclei (a node). Electrons in it weaken the bond. (A) describes a bonding orbital.
+
+- id: apchem-09-mo-o2-paramagnetic
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Liquid oxygen is attracted to a magnet. How does molecular orbital theory explain this?
+  choices:
+    - { id: a, text: "O₂ has a double bond, and the π electrons of any double bond are attracted to a magnet" }
+    - { id: b, text: "The two π*₂ₚ orbitals each hold one electron, so O₂ has two unpaired electrons" }
+    - { id: c, text: "O₂ has an odd number of valence electrons, so one is unpaired" }
+    - { id: d, text: "Every electron in O₂ is paired, and paired electrons are attracted to a magnet" }
+  answer: b
+  explanation: |
+    O₂ has 12 valence electrons. After σ₂ₛ, σ\*₂ₛ, σ₂ₚ, and π₂ₚ fill, two electrons remain for the two π\*₂ₚ orbitals, and by Hund's rule they go in separately with parallel spins. Unpaired electrons make O₂ **paramagnetic**. (C) is false: 12 is even. (A) is false: $\ce{N2}$ and $\ce{C2H4}$ have π electrons too, but all paired, and they are not attracted to a magnet. (D) describes a diamagnetic substance, which is weakly repelled.
+
+- id: apchem-09-mo-n2plus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the bond order of $\ce{N2+}$?
+  choices:
+    - { id: a, text: "2" }
+    - { id: b, text: "3" }
+    - { id: c, text: "5/2" }
+    - { id: d, text: "7/2" }
+  answer: c
+  explanation: |
+    $\ce{N2}$ has 10 valence electrons: 8 bonding and 2 antibonding (σ\*₂ₛ), bond order 3. $\ce{N2+}$ loses one electron from the highest filled orbital, σ₂ₚ, which is **bonding**: $\tfrac12(7 - 2) = 5/2$. (B) is neutral N₂.
+
+- id: apchem-09-mo-paramagnetic-which
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which molecule is **paramagnetic**?
+  choices:
+    - { id: a, text: '$\ce{B2}$' }
+    - { id: b, text: '$\ce{C2}$' }
+    - { id: c, text: '$\ce{N2}$' }
+    - { id: d, text: '$\ce{F2}$' }
+  answer: a
+  explanation: |
+    $\ce{B2}$ has 6 valence electrons. For B₂ through N₂ the π₂ₚ orbitals are below σ₂ₚ, so after σ₂ₛ and σ\*₂ₛ fill, the last two electrons go one each into the two π₂ₚ orbitals: two unpaired electrons. $\ce{C2}$ fills both π₂ₚ orbitals, $\ce{N2}$ fills σ₂ₚ too, and $\ce{F2}$ fills both π\*₂ₚ orbitals, so all three are diamagnetic.
+
+- id: apchem-09-mo-o2-minus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the bond order of the superoxide ion, $\ce{O2-}$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "2" }
+    - { id: c, text: "5/2" }
+    - { id: d, text: "3/2" }
+  answer: d
+  explanation: |
+    $\ce{O2-}$ has 13 valence electrons: 8 bonding and 5 antibonding (2 in σ\*₂ₛ, 3 in π\*₂ₚ). Bond order $= \tfrac12(8 - 5) = 3/2$. (B) is O₂, and (C) is O₂⁺.
+
+- id: apchem-09-mo-o2-lengths
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Rank the O–O bond length in $\ce{O2+}$, $\ce{O2}$, and $\ce{O2^2-}$ from **shortest to longest**.
+  choices:
+    - { id: a, text: '$\ce{O2^2-} < \ce{O2} < \ce{O2+}$' }
+    - { id: b, text: '$\ce{O2} < \ce{O2+} < \ce{O2^2-}$' }
+    - { id: c, text: '$\ce{O2+} < \ce{O2} < \ce{O2^2-}$' }
+    - { id: d, text: "All three are the same length" }
+  answer: c
+  explanation: |
+    Each extra electron goes into a π\*₂ₚ (antibonding) orbital. Bond orders: $\ce{O2+}$ 5/2, $\ce{O2}$ 2, $\ce{O2^2-}$ 1. Higher bond order means a shorter bond, so $\ce{O2+}$ is shortest and $\ce{O2^2-}$ is longest. (A) is the reverse.
+
+- id: apchem-09-mo-be2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Molecular orbital theory predicts that $\ce{Be2}$ is not a stable molecule. Why?
+  choices:
+    - { id: a, text: "It has two electrons in σ₂ₛ and two in σ*₂ₛ, so its bond order is 0" }
+    - { id: b, text: "Be has no valence electrons, so there is nothing to share" }
+    - { id: c, text: "Its electrons would all go into π₂ₚ orbitals, which can't form bonds" }
+    - { id: d, text: "It would have unpaired electrons, and molecules with unpaired electrons can't exist" }
+  answer: a
+  explanation: |
+    Each Be brings 2 valence electrons (4 total). They fill σ₂ₛ (bonding) and σ\*₂ₛ (antibonding), so bond order $= \tfrac12(2 - 2) = 0$. (B) is false: Be has two valence electrons. (D) is false: O₂ and B₂ have unpaired electrons and exist.
+
+- id: apchem-09-mo-c2
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Using the MO energy order for B₂ through N₂ (π₂ₚ below σ₂ₚ), what are the bond order and magnetic behavior of $\ce{C2}$?
+  choices:
+    - { id: a, text: "Bond order 1, paramagnetic" }
+    - { id: b, text: "Bond order 3, diamagnetic" }
+    - { id: c, text: "Bond order 2, paramagnetic" }
+    - { id: d, text: "Bond order 2, diamagnetic" }
+  answer: d
+  explanation: |
+    $\ce{C2}$ has 8 valence electrons: $(\sigma_{2s})^2(\sigma^*_{2s})^2(\pi_{2p})^4$. All are paired, and bond order $= \tfrac12(6 - 2) = 2$. (C) is what you get if you wrongly use the O₂ ordering, where σ₂ₚ fills before the π₂ₚ pair: then the last two electrons would be split between the two π₂ₚ orbitals.
+
+- id: apchem-09-mo-no
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Nitric oxide, NO, is described with the same kind of MO diagram as $\ce{N2}$ and $\ce{O2}$. What are its bond order and magnetic behavior?
+  choices:
+    - { id: a, text: "Bond order 2.5, paramagnetic" }
+    - { id: b, text: "Bond order 2, diamagnetic" }
+    - { id: c, text: "Bond order 3, diamagnetic" }
+    - { id: d, text: "Bond order 2.5, diamagnetic" }
+  answer: a
+  explanation: |
+    NO has $5 + 6 = 11$ valence electrons, one more than $\ce{N2}$. The extra electron goes alone into a π\*₂ₚ orbital: 8 bonding and 3 antibonding, so bond order $= \tfrac12(8 - 3) = 2.5$. An odd number of electrons always leaves one unpaired, so NO is paramagnetic, which rules out (D).
+
+- id: apchem-09-mo-cn-minus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species has the same number of valence electrons as $\ce{N2}$, and therefore the same bond order of 3?
+  choices:
+    - { id: a, text: '$\ce{O2^2+}$ and $\ce{NO}$' }
+    - { id: b, text: '$\ce{CN}$ and $\ce{N2+}$' }
+    - { id: c, text: '$\ce{CN-}$ and $\ce{CO}$' }
+    - { id: d, text: '$\ce{C2}$ and $\ce{BN}$' }
+  answer: c
+  explanation: |
+    $\ce{N2}$ has 10 valence electrons. $\ce{CN-}$ has $4 + 5 + 1 = 10$ and CO has $4 + 6 = 10$, so they fill the same orbitals and have bond order 3. In (A), $\ce{O2^2+}$ also has 10, but NO has 11. In (B), both have 9 (bond order 2.5). In (D), both have 8 (bond order 2).
+
+# --- Free response ---
+
+- id: apchem-09-bf3-pf3-frq
+  type: frq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.3", "9.5"]
+  cedTopics: ["2.5", "2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Boron trifluoride, $\ce{BF3}$, and phosphorus trifluoride, $\ce{PF3}$, both have three F atoms bonded to a central atom.
+  parts:
+    - label: a
+      points: 1
+      prompt: Draw the complete Lewis structure of $\ce{PF3}$.
+      scoring:
+        - "Three P–F single bonds, three lone pairs on each F, and one lone pair on P (26 electrons)."
+    - label: b
+      points: 1
+      prompt: Name the molecular geometry of each molecule.
+      scoring:
+        - "$\\ce{BF3}$ is trigonal planar; $\\ce{PF3}$ is trigonal pyramidal (both needed)."
+    - label: c
+      points: 1
+      prompt: Which molecule has the smaller F–X–F bond angle? Justify your answer.
+      scoring:
+        - "$\\ce{PF3}$: it has four electron domains (tetrahedral, under 109.5°, squeezed further by the lone pair), while $\\ce{BF3}$ has three domains at 120°."
+    - label: d
+      points: 1
+      prompt: One of the molecules is polar and one is nonpolar. Identify the polar one and explain.
+      scoring:
+        - "$\\ce{PF3}$ is polar: its lone pair makes it pyramidal, so the polar P–F bond dipoles don't cancel; $\\ce{BF3}$ is symmetric (trigonal planar), so its B–F dipoles cancel."
+    - label: e
+      points: 1
+      prompt: Give the hybridization of the central atom in each molecule.
+      scoring:
+        - "B in $\\ce{BF3}$ is sp²; P in $\\ce{PF3}$ is sp³ (both needed)."
+  explanation: |
+    **(a)** $5 + 3(7) = 26$ electrons. Three P–F bonds (6) and three lone pairs on each F (18) make 24; the last 2 go on P as a lone pair. P has an octet.
+
+    **(b)** B has three bonding domains and no lone pairs: trigonal planar. P has three bonds and a lone pair (4 domains), so it's trigonal pyramidal.
+
+    **(c)** In $\ce{BF3}$ the angles are 120°. $\ce{PF3}$ has a tetrahedral arrangement of domains, whose ideal angle is already only 109.5°, and its lone pair pushes the bonds even closer (the real angle is about 97°). So $\ce{PF3}$ has the smaller angle.
+
+    **(d)** Both have polar bonds (F is far more electronegative than B or P). In trigonal planar $\ce{BF3}$, three equal dipoles 120° apart cancel. In pyramidal $\ce{PF3}$, all three dipoles tilt the same way, so the molecule is polar.
+
+    **(e)** Three domains: sp². Four domains: sp³.
+
+- id: apchem-09-oxygen-mo-frq
+  type: frq
+  subject: apchem
+  chapter: 9
+  sections: ["9.7", "9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Use molecular orbital theory for the period 2 diatomic molecules to answer the following about oxygen. For O₂, the order of the valence MOs from lowest to highest energy is σ₂ₛ, σ\*₂ₛ, σ₂ₚ, π₂ₚ, π\*₂ₚ, σ\*₂ₚ.
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the valence MO electron configuration of $\ce{O2}$.
+      scoring:
+        - "$(\\sigma_{2s})^2(\\sigma^*_{2s})^2(\\sigma_{2p})^2(\\pi_{2p})^4(\\pi^*_{2p})^2$ (12 valence electrons)."
+    - label: b
+      points: 1
+      prompt: Calculate the bond order of $\ce{O2}$.
+      scoring:
+        - "$\\tfrac12(8 - 4) = 2$."
+    - label: c
+      points: 1
+      prompt: The Lewis structure of $\ce{O2}$ shows all electrons paired. Explain how the MO description accounts for the fact that $\ce{O2}$ is paramagnetic.
+      scoring:
+        - "The last two electrons occupy the two π*₂ₚ orbitals singly (Hund's rule), so O₂ has two unpaired electrons, which makes it paramagnetic."
+    - label: d
+      points: 1
+      prompt: Calculate the bond order of the peroxide ion, $\ce{O2^2-}$, and predict whether its O–O bond is longer or shorter than the bond in $\ce{O2}$.
+      scoring:
+        - "14 valence electrons with 4 in π*₂ₚ: bond order $\\tfrac12(8 - 6) = 1$; lower bond order than O₂, so the bond is longer."
+  explanation: |
+    **(a)** Each O brings 6 valence electrons, 12 in all. Filling from the bottom: σ₂ₛ², σ\*₂ₛ², σ₂ₚ², π₂ₚ⁴, then 2 left for π\*₂ₚ.
+
+    **(b)** Bonding: σ₂ₛ (2) + σ₂ₚ (2) + π₂ₚ (4) = 8. Antibonding: σ\*₂ₛ (2) + π\*₂ₚ (2) = 4. Bond order $= \tfrac12(8 - 4) = 2$, matching the double bond in the Lewis structure.
+
+    **(c)** The two π\*₂ₚ orbitals have the same energy. By Hund's rule, the two electrons go into separate orbitals with parallel spins, so O₂ has two unpaired electrons and is attracted to a magnetic field. The Lewis structure can't show this.
+
+    **(d)** $\ce{O2^2-}$ has 14 valence electrons; the two extra ones fill the π\*₂ₚ orbitals. Antibonding becomes 6: bond order $= \tfrac12(8 - 6) = 1$. A single bond is longer than the double bond in O₂.

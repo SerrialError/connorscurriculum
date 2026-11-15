@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getSubjectData } from './registry';
-import { type FrqLink, flattenFrqs, frqPractices, frqTotal, matchFrqs, readyPoints } from './frqs';
+import { type FrqLink, flattenFrqs, frqCountLabel, frqPractices, frqTotal, matchFrqs, readinessLabel, readyPoints } from './frqs';
 
 const frq = (year: number, number: number, parts: FrqLink['parts']): FrqLink => ({
   year,
@@ -66,5 +66,29 @@ describe('apchem past-frqs.json', () => {
 
   it('jumps to the question page in the PDF', () => {
     expect(frqs.every((f) => /#page=\d+$/.test(f.questionUrl))).toBe(true);
+  });
+});
+
+describe('frqCountLabel', () => {
+  const part = { label: 'a', points: 1, cedTopics: [], skills: [] };
+  it('counts questions, adding parts when they differ', () => {
+    expect(frqCountLabel([{ parts: [part, part] }, { parts: [part] }])).toBe('2 past FRQs (3 parts)');
+    expect(frqCountLabel([{ parts: [part] }])).toBe('1 past FRQ');
+    expect(frqCountLabel([{ parts: [part] }, { parts: [part] }], 'FRQ')).toBe('2 FRQs');
+    expect(frqCountLabel([])).toBe('0 past FRQs');
+  });
+});
+
+describe('readinessLabel', () => {
+  it('says Ready when every point is on learned topics', () => {
+    expect(readinessLabel(10, 10)).toMatchObject({ text: '✓ Ready', full: true });
+  });
+  it('says how many points are on learned topics, in words', () => {
+    expect(readinessLabel(3, 10)).toMatchObject({ text: "3 of 10 pts on topics you've learned", full: false });
+    expect(readinessLabel(0, 4).text).toBe('Topics not learned yet');
+  });
+  it('always explains itself on hover', () => {
+    expect(readinessLabel(3, 10).title).toMatch(/learned/);
+    expect(readinessLabel(10, 10).title).toMatch(/learned/);
   });
 });

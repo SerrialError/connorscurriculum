@@ -1,34 +1,108 @@
 ---
-import { type Lesson, lessonSlug, topicIds, url } from '../lib/content';
+import { type Lesson, groupLessons, isSample, lessonHref, topicIds } from '../lib/content';
 import TopicBadges from './TopicBadges.astro';
+import TopicLegend from './TopicLegend.astro';
 
 interface Props {
   lessons: Lesson[];
   showChapter?: boolean;
+  /** Split into "Test review", "Lessons", and "Classmates' notes" with subheadings. */
+  grouped?: boolean;
+  /** Heading level for group headings. */
+  headingLevel?: 2 | 3;
+  /** Shown when there are no lessons. */
+  empty?: string;
+  /** Show the key for the progress icons on topic badges. */
+  legend?: boolean;
+  /** Phones: summaries clamped to two lines and no topic badges (long browse lists). */
+  compact?: boolean;
 }
 
-const { lessons, showChapter = false } = Astro.props;
+const { lessons, showChapter = false, grouped = false, headingLevel = 3, empty = 'No lessons yet.', legend = true, compact = false } = Astro.props;
+const groups = grouped ? groupLessons(lessons) : [{ kind: 'all', heading: '', lessons }];
+const H = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 {lessons.length === 0 ? (
-  <p class="muted">No lessons yet.</p>
+  <p class="muted">{empty}</p>
 ) : (
-  <ul class="plain-list stack">
-    {lessons.map((l) => (
-      <li class="card">
-        <h3>
-          <a href={url(`${l.data.subject.id}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
-          {l.data.draft && <span class="badge">Draft</span>}
-        </h3>
-        <p class="small muted">
-          {showChapter && <>Chapter {l.data.chapter}{l.data.sections.length > 0 && <> · §{l.data.sections.join(', ')}</>} · </>}
-          by {l.data.authors.join(', ')}
-        </p>
-        {l.data.summary && <p>{l.data.summary}</p>}
-        <div style="margin-top:.5rem">
-          <TopicBadges subject={l.data.subject.id} topics={topicIds(l)} />
-        </div>
-      </li>
-    ))}
-  </ul>
+  groups.map((g) => (
+    <>
+      {grouped && groups.length > 1 && <H class="group-h" data-pagefind-ignore>{g.heading}</H>}
+      <ul class:list={['plain-list lessons card', { compact }]} data-pagefind-ignore>
+        {g.lessons.map((l) => (
+          <li data-kind={l.data.kind}>
+            <a class="title" href={lessonHref(l)}>{l.data.title}</a>
+            {l.data.draft && <span class="badge">Draft</span>}
+            {isSample(l) && <span class="badge sample">Sample</span>}
+            {l.data.summary && <p class="summary">{l.data.summary}</p>}
+            <div class="meta">
+              <span class="small muted">
+                {showChapter && <>Ch. {l.data.chapter}{l.data.sections.length > 0 && <> · §{l.data.sections.join(', ')}</>} · </>}
+                {isSample(l) ? 'sample page, not class material' : <>by {l.data.authors.join(', ')}</>}
+              </span>
+              <TopicBadges subject={l.data.subject.id} topics={topicIds(l)} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
+  ))
 )}
+{legend && lessons.length > 0 && (
+  <TopicLegend subject={lessons[0]!.data.subject.id} topics={lessons.flatMap(topicIds)} classOnly={lessons.some((l) => topicIds(l).length === 0)} />
+)}
+
+<style>
+  .group-h {
+    font-size: 1rem;
+    margin: 1.25rem 0 0.5rem;
+    color: var(--text-2);
+  }
+  .lessons {
+    padding: 0 1.1rem;
+  }
+  .lessons li {
+    padding: 0.8rem 0;
+  }
+  /* A rule between visible items only, so a filtered list has no stray divider. */
+  .lessons li:not([hidden]) ~ li:not([hidden]) {
+    border-top: 1px solid var(--border);
+  }
+  .title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .badge.sample {
+    margin-left: 0.4rem;
+    font-size: 0.72rem;
+    vertical-align: 0.15em;
+  }
+  .summary {
+    margin: 0.2rem 0 0.35rem;
+    color: var(--text-2);
+    font-size: 0.95rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    align-items: center;
+    margin-top: 0.3rem;
+  }
+  .meta :global(.badge) {
+    font-size: 0.75rem;
+  }
+  @media (max-width: 520px) {
+    .compact .summary {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .compact .meta :global(.badges) {
+      display: none;
+    }
+  }
+</style>

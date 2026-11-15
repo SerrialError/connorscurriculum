@@ -1,0 +1,324 @@
+---
+// Every lesson, classmates' notes page, and review sheet, grouped by chapter with the chapters the
+// class is on (or just finished) first. Sample pages for chapters the class hasn't reached sit in
+// a closed section at the end. A small filter (kind + text) narrows the list in place.
+import LessonList from '../../../components/LessonList.astro';
+import TopicLegend from '../../../components/TopicLegend.astro';
+import Base from '../../../layouts/Base.astro';
+import { getLessons, getQuestions, getSubjectData, practiceUrl, subjectPaths, topicIds, url } from '../../../lib/content';
+import { hasTopics } from '../../../lib/features';
+import { lessonsPage } from '../../../lib/lessons-page';
+import { chapterRange, plural } from '../../../lib/text';
+
+export const getStaticPaths = subjectPaths;
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const { lessons, chapters, emptyNow, emptyDone, samples, kinds } = lessonsPage(data, await getLessons(subject), await getQuestions(subject));
+---
+
+<Base
+  title="Lessons"
+  subject={subject}
+  searchable
+  searchMeta={{ type: 'All lessons' }}
+  description={`Every ${data.subject.name} lesson, classmates' notes page, and test review sheet, by chapter.`}
+>
+  <h1>Lessons</h1>
+  <p class="muted intro">Lessons, classmates' notes, and test review sheets, newest chapter first.</p>
+
+  {lessons.length > 0 && (
+    <form class="filter" role="search" aria-label="Filter lessons" data-pagefind-ignore>
+      <label class="visually-hidden" for="lesson-filter">Filter lessons</label>
+      <input id="lesson-filter" class="search-input" type="search" placeholder="Filter by title, topic, or name…" autocomplete="off" enterkeyhint="done" />
+      <fieldset class="chips kinds">
+        <legend class="visually-hidden">Show</legend>
+        {/* Counts follow the text filter, so each chip says how many it would show. "All" has none:
+            the status line says how many match. */}
+        <label class="chip">
+          <input type="radio" name="kind" value="" checked />
+          <span>All</span>
+        </label>
+        {kinds.map((k) => (
+          <label class="chip">
+            <input type="radio" name="kind" value={k.kind} />
+            <span>{k.kind === 'review' ? <>Review<span class="wide-only"> sheets</span></> : k.chip}</span>
+            <span class="chip-count" data-kind={k.kind}>{k.n}</span>
+          </label>
+        ))}
+      </fieldset>
+      <p class="small muted status" aria-live="polite"></p>
+    </form>
+  )}
+
+  <nav class="jump-nav" aria-label="Chapters" data-pagefind-ignore>
+    {chapters.length > 1 && <span class="jump-label" aria-hidden="true">Jump to</span>}
+    {chapters.length > 1 && chapters.map((s) => <a href={`#ch-${s.chapter.number}`}>Ch. {s.chapter.number}</a>)}
+    {chapters.length > 1 && samples.length > 0 && <a href="#samples">Sample pages</a>}
+    <a href={url(`${subject}/chapters/`)}>All chapters</a>
+  </nav>
+
+  {/* One line: the chapters on the class home's "Now in class" card that have nothing here yet. */}
+  {emptyNow.length > 0 && (
+    <p class="small muted now-note" data-unfiltered data-pagefind-ignore>
+      <span class="badge now">Now in class</span>{' '}
+      {emptyNow.map((c, i) => (
+        <>
+          {i > 0 && ', '}
+          <a href={url(`${subject}/chapters/${c.number}/`)} title={c.title}>Ch.&nbsp;{c.number}</a>
+        </>
+      ))}
+      {': no lessons yet.'}
+    </p>
+  )}
+
+  {chapters.map((s) => (
+    <section class="chapter" id={`ch-${s.chapter.number}`} aria-labelledby={`ch-${s.chapter.number}-h`} data-chapter>
+      <div class="chapter-head">
+        <h2 id={`ch-${s.chapter.number}-h`}>
+          <a href={url(`${subject}/chapters/${s.chapter.number}/`)}><span class="muted">Chapter {s.chapter.number}:</span> {s.chapter.title}</a>
+        </h2>
+        {s.now && <span class="badge now">Now in class</span>}
+      </div>
+      {s.practice && (
+        <p class="small links" data-pagefind-ignore>
+          <span class="muted">Practice:</span>{' '}
+          <a href={practiceUrl(subject, s.practice.query)}>{s.practice.label}</a>
+        </p>
+      )}
+      <LessonList lessons={s.lessons} grouped legend={false} compact />
+    </section>
+  ))}
+
+  <p class="none" hidden data-pagefind-ignore>No lessons match. <button type="button" class="link-button clear">Clear filter</button></p>
+
+  {emptyDone.length > 0 && (
+    <p class="small muted" data-unfiltered data-pagefind-ignore>
+      {chapterRange(emptyDone, { long: true })} {emptyDone.length > 1 ? 'have' : 'has'} no lessons on the site yet.
+      {hasTopics(data) && <>{' '}See the <a href={url(`${subject}/chapters/`)}>chapter list</a> for their AP topics.</>}
+    </p>
+  )}
+
+  {samples.length > 0 && (
+    <section id="samples" class="chapter samples" aria-labelledby="samples-h" data-pagefind-ignore>
+      <details>
+        <summary>
+          <span id="samples-h" class="samples-title">Sample pages for later chapters</span>
+          <span class="small muted">{plural(samples.length, 'page')}, not class material</span>
+        </summary>
+        <p class="small muted">
+          Written to show what a lesson looks like, before the class reached {samples.length === 1 ? 'this chapter' : 'these chapters'}
+          ({chapterRange([...new Set(samples.map((l) => l.data.chapter))])}). Use them as a preview at most; your class notes come first.
+        </p>
+        <LessonList lessons={samples} showChapter legend={false} compact />
+      </details>
+    </section>
+  )}
+
+  {/* Phones show no topic badges here (see LessonList compact), so no key for them either. */}
+  <div class="legend">
+    <TopicLegend subject={subject} topics={lessons.flatMap(topicIds)} classOnly={lessons.some((l) => topicIds(l).length === 0)} label="AP topic badges:" />
+  </div>
+</Base>
+
+
+<script>
+  // DOM wiring only: the matching rules are in lib/lesson-filter.ts. The filter is kept in the
+  // address, so Back, reload, and shared links show the same list.
+  import { type LessonFilter, filterLessons, isFiltering, lessonFilterQuery, parseLessonFilter, words } from '../../../lib/lesson-filter';
+
+  const form = document.querySelector<HTMLFormElement>('form.filter');
+  if (form) {
+    const input = form.querySelector<HTMLInputElement>('#lesson-filter')!;
+    const kinds = [...form.querySelectorAll<HTMLInputElement>('input[name="kind"]')];
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const counts = [...form.querySelectorAll<HTMLElement>('.chip-count[data-kind]')];
+    const none = document.querySelector<HTMLElement>('.none')!;
+    const samples = document.querySelector<HTMLDetailsElement>('.samples details');
+    const lists = [...document.querySelectorAll<HTMLElement>('section.chapter .lessons')];
+    const sections = [...document.querySelectorAll<HTMLElement>('section.chapter')];
+    const items = [...document.querySelectorAll<HTMLLIElement>('section.chapter .lessons > li')];
+    const jumpNav = document.querySelector<HTMLElement>('.jump-nav')!;
+    const legend = document.querySelector<HTMLElement>('.legend');
+    const jumps = [...jumpNav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+    const unfiltered = [...document.querySelectorAll<HTMLElement>('[data-unfiltered]')];
+    const entries = items.map((li) => ({ text: words(li.textContent ?? '').join(' '), kind: li.dataset.kind ?? '', sample: !!li.closest('.samples') }));
+    let samplesWereOpen = samples?.open ?? false;
+
+    const show = (f: LessonFilter) => {
+      const r = filterLessons(entries, f);
+      const filtering = isFiltering(f);
+      items.forEach((li, i) => (li.hidden = !r.shown[i]));
+      for (const n of counts) {
+        const c = r.counts.get(n.dataset.kind!) ?? 0;
+        n.textContent = String(c);
+        n.classList.toggle('zero', c === 0);
+      }
+      // Hide group headings, lists, and chapters left empty.
+      for (const ul of lists) {
+        ul.hidden = !ul.querySelector('li:not([hidden])');
+        const h = ul.previousElementSibling;
+        if (h instanceof HTMLElement && h.classList.contains('group-h')) h.hidden = ul.hidden;
+      }
+      for (const sec of sections) sec.hidden = !sec.querySelector('.lessons > li:not([hidden])');
+      // Jump links only to what's showing; notes about chapters with no lessons only when not filtering.
+      for (const a of jumps) a.hidden = !!document.querySelector<HTMLElement>(a.hash)?.hidden;
+      for (const el of unfiltered) el.hidden = filtering;
+      // Words that only match sample pages open them; clearing the filter restores the old state.
+      if (samples) {
+        if (words(f.q).length > 0 && r.shownClass === 0 && r.shownCount > 0) samples.open = true;
+        else if (!filtering) samples.open = samplesWereOpen;
+      }
+      // Nothing matches: only the "No lessons match" line and its Clear filter button show (the
+      // status says it too, for screen readers).
+      none.hidden = r.shownCount > 0;
+      jumpNav.hidden = r.shownCount === 0;
+      if (legend) legend.hidden = r.shownCount === 0;
+      status.textContent = !filtering ? '' : r.shownCount === 0 ? 'No lessons match.' : `${r.shownCount} ${r.shownCount === 1 ? 'match' : 'matches'}`;
+      status.classList.toggle('visually-hidden', r.shownCount === 0);
+    };
+
+    /** Set the controls and the list from the address (on load, and when Back restores the page). */
+    const fromAddress = () => {
+      const f = parseLessonFilter(location.search, kinds.map((k) => k.value));
+      input.value = f.q;
+      for (const k of kinds) k.checked = k.value === f.kind;
+      show(f);
+    };
+
+    const onChange = () => {
+      const f = { kind: kinds.find((k) => k.checked)?.value ?? '', q: input.value };
+      history.replaceState(history.state, '', location.pathname + lessonFilterQuery(f) + location.hash);
+      show(f);
+    };
+
+    samples?.addEventListener('toggle', () => {
+      if (!isFiltering({ kind: '', q: input.value })) samplesWereOpen = samples.open;
+    });
+    form.addEventListener('submit', (e) => e.preventDefault());
+    form.addEventListener('input', onChange);
+    none.querySelector('.clear')!.addEventListener('click', () => {
+      input.value = '';
+      kinds[0]!.checked = true;
+      onChange();
+      input.focus();
+    });
+    fromAddress();
+    addEventListener('pageshow', fromAddress);
+  }
+</script>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    align-items: center;
+    margin: 1rem 0 0.5rem;
+  }
+  .filter .search-input {
+    flex: 1 1 16rem;
+    width: auto;
+    min-width: 0;
+  }
+  .kinds {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .status {
+    flex-basis: 100%;
+    margin: 0;
+    min-height: 0;
+  }
+  .status:empty {
+    display: none;
+  }
+  .intro {
+    margin: -0.25rem 0 0;
+  }
+  .jump-nav {
+    margin: 0.5rem 0 0;
+  }
+  .now-note {
+    margin: 0.5rem 0 0;
+  }
+  .now-note .badge {
+    margin-right: 0.15rem;
+  }
+  .legend {
+    margin-top: 1.5rem;
+  }
+  .chapter {
+    scroll-margin-top: 1rem;
+  }
+  .chapter-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.75rem;
+  }
+  .chapter-head h2 {
+    margin-bottom: 0.2rem;
+  }
+  .chapter-head h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .chapter-head h2 a:hover {
+    color: var(--link);
+    text-decoration: underline;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.4rem;
+    margin: 0 0 0.25rem;
+  }
+  .chapter :global(.group-h:first-of-type) {
+    margin-top: 0.75rem;
+  }
+  .none {
+    margin-top: 1.5rem;
+  }
+  .samples {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .samples summary {
+    cursor: pointer;
+  }
+  .samples-title {
+    font-weight: 700;
+    color: var(--link);
+    margin-right: 0.5rem;
+  }
+  /* Phones: the heading and the filter say what the page is, and the chips (a little tighter than
+     elsewhere), jump links, and note each fit on one line, so the first lessons show on the first screen. */
+  @media (max-width: 520px) {
+    .intro,
+    .legend,
+    .jump-label {
+      display: none;
+    }
+    .kinds {
+      gap: 0.3rem;
+    }
+    .kinds .chip {
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.85rem;
+    }
+    .jump-nav {
+      gap: 0.15rem 0.7rem;
+      font-size: 0.85rem;
+    }
+    .now-note .badge {
+      font-size: 0.72rem;
+    }
+  }
+  .samples :global(.lessons) {
+    opacity: 0.9;
+  }
+</style>

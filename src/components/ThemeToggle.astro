@@ -2,8 +2,13 @@
 // Cycles system -> light -> dark. "System" follows prefers-color-scheme.
 ---
 
-<button class="theme-toggle" type="button" aria-label="Color theme: system" title="Color theme">
-  <span aria-hidden="true">◐</span> <span class="label">Auto</span>
+<!-- Shows the current theme: an icon (sun, moon, or half-and-half for "follows your device") and,
+     on wider screens, "Theme: Auto". -->
+<button class="icon-button theme-toggle" type="button" aria-label="Color theme: Auto. Switch to Light" title="Color theme: Auto (click for Light)">
+  <svg class="icon i-system" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" /></svg>
+  <svg class="icon i-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+  <svg class="icon i-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+  <span class="text" aria-hidden="true">Theme: <span class="label">Auto</span></span>
 </button>
 
 <script>
@@ -23,9 +28,13 @@
       if (theme === 'system') localStorage.removeItem('theme');
       else localStorage.setItem('theme', theme);
     } catch {}
+    // Shows the current theme; the label and tooltip say what a click switches to.
+    const next = labels[order[(order.indexOf(theme) + 1) % order.length]!];
     for (const btn of document.querySelectorAll<HTMLButtonElement>('.theme-toggle')) {
-      btn.setAttribute('aria-label', `Color theme: ${labels[theme]}`);
+      btn.setAttribute('aria-label', `Color theme: ${labels[theme]}. Switch to ${next}`);
+      btn.title = `Color theme: ${labels[theme]} (click for ${next})`;
       btn.querySelector('.label')!.textContent = labels[theme];
+      btn.dataset.theme = theme;
     }
   }
 
@@ -36,19 +45,32 @@
 </script>
 
 <style>
-  .theme-toggle {
-    font: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-2);
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    cursor: pointer;
-    white-space: nowrap;
+  /* One icon at a time: the current theme's (Auto until the script sets data-theme). */
+  .icon {
+    display: none;
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: none;
   }
-  .theme-toggle:hover {
-    border-color: var(--accent);
+  .theme-toggle:not([data-theme="light"], [data-theme="dark"]) .i-system,
+  [data-theme="light"] .i-light,
+  [data-theme="dark"] .i-dark {
+    display: block;
+  }
+  /* Phones: a 44px square, icon only. */
+  @media (max-width: 520px) {
+    .theme-toggle {
+      min-width: 2.75rem;
+      justify-content: center;
+      padding: 0;
+    }
+    /* Icon only; the accessible name and tooltip still say "Color theme: Auto". */
+    .text {
+      display: none;
+    }
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
   }
 </style>

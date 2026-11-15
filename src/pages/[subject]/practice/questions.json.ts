@@ -3,9 +3,9 @@
 import { dirname, join } from 'node:path';
 import type { APIRoute, GetStaticPaths, ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
-import { type Question, getQuestions, getSubjectData, subjectPaths, topicIds } from '../../../lib/content';
-import { renderInlineMarkdown, renderMarkdown } from '../../../lib/markdown';
-import type { PracticeQuestion } from '../../../lib/practice';
+import { type Question, getQuestions, getSubjectData, isClassContent, subjectPaths, topicIds } from '../../../lib/content';
+import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../../../lib/markdown';
+import type { PracticeQuestion } from '../../../lib/practice/types';
 
 export const getStaticPaths = subjectPaths satisfies GetStaticPaths;
 
@@ -38,16 +38,22 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
     cedTopics,
     units: [...new Set(cedTopics.map((t) => data.topics.get(t)!.unitId))],
     difficulty: q.data.difficulty,
+    ...(q.data.calculation ? { calculation: true as const } : {}),
     promptHtml: await renderMarkdown(q.data.prompt),
+    promptText: await renderPlainText(q.data.prompt),
     image: await questionImage(q),
     explanationHtml: await renderMarkdown(q.data.explanation),
+    // Samples and later chapters stay out of practice unless their chapter is picked.
+    ...(isClassContent(data, q) ? {} : { extra: true }),
   };
   if (q.data.type === 'mcq') {
     return {
       ...base,
       type: 'mcq',
       answer: q.data.answer,
-      choices: await Promise.all(q.data.choices.map(async (c) => ({ id: c.id, html: await renderInlineMarkdown(c.text) }))),
+      choices: await Promise.all(
+        q.data.choices.map(async (c) => ({ id: c.id, html: await renderInlineMarkdown(c.text), text: await renderPlainText(c.text) })),
+      ),
     };
   }
   return {

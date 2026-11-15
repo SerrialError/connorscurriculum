@@ -1,0 +1,114 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { hasTests } from '../../../lib/features';
+import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, practiceUrl, subjectPathsWith, testsByDate, url } from '../../../lib/content';
+import { practiceStarts } from '../../../lib/practice/links';
+import { chapterRange } from '../../../lib/text';
+
+export const getStaticPaths = subjectPathsWith(hasTests);
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const questions = await getQuestions(subject);
+const lessons = await getLessons(subject);
+// Newest first. Upcoming and past are worked out in the browser (see the script below), so the
+// grouping stays right between builds; the build-time split is the no-JavaScript fallback.
+const tests = testsByDate(data).map((t) => {
+  const n = questions.filter((q) => inTest(t, q)).length;
+  return {
+    t,
+    review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
+    practice: n > 0 ? practiceStarts({ test: t.id }, n) : null,
+  };
+});
+const isUpcoming = (t: { date?: string }) => !isPastTest(t);
+const now = currentChapters(data);
+---
+
+<Base title="Class tests" subject={subject}>
+  <h1>Class tests</h1>
+  <p class="muted prose">Each test has its review sheet, the lessons it covers, and practice questions for it.</p>
+  {tests.length === 0 ? (
+    <p class="muted">No class tests listed yet.</p>
+  ) : (
+    ['upcoming', 'past'].map((group) => (
+      <section class="test-group" data-group={group} aria-labelledby={`${group}-h`} hidden={group === 'past' && !tests.some((x) => !isUpcoming(x.t))}>
+        <h2 id={`${group}-h`}>{group === 'upcoming' ? 'Upcoming' : 'Past tests'}</h2>
+        <ul class="plain-list stack">
+          {tests.map(({ t, review, practice }) => (
+            <li class="card test" data-date={t.date ?? ''} hidden={(group === 'upcoming') !== isUpcoming(t)}>
+              <h3><a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a></h3>
+              <p class="small muted">{t.date ? formatDate(t.date) : 'Date TBA'} · {chapterRange(t.chapters)}</p>
+              {review.length > 0 && (
+                <ul class="plain-list review-links">
+                  {review.map((l) => (
+                    <li><a href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a></li>
+                  ))}
+                </ul>
+              )}
+              {practice && (
+                <div class="actions">
+                  <a class="button" href={practiceUrl(subject, practice.start.query)}>{practice.start.label}</a>
+                  {practice.all && <a class="button secondary" href={practiceUrl(subject, practice.all.query)}>{practice.all.label}</a>}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+        {group === 'upcoming' && (
+          <p class="muted none-upcoming" hidden={tests.some((x) => isUpcoming(x.t))}>
+            No test date announced yet.
+            {now.length > 0 && (
+              <>
+                {' '}The class is on{' '}
+                {now.map((c, i) => (
+                  <>
+                    {i > 0 && ' and '}
+                    <a href={url(`${subject}/chapters/${c.number}/`)}>Chapter {c.number}</a>
+                  </>
+                ))}{' '}
+                now.
+              </>
+            )}
+          </p>
+        )}
+      </section>
+    ))
+  )}
+</Base>
+
+<script>
+  import { isPast, isoDate } from '../../../lib/dates';
+
+  // Put each test under Upcoming or Past using today's date, hide Past when empty, and say so when nothing is upcoming.
+  const today = isoDate(new Date());
+  for (const group of document.querySelectorAll<HTMLElement>('.test-group')) {
+    const upcoming = group.dataset.group === 'upcoming';
+    let shown = 0;
+    for (const li of group.querySelectorAll<HTMLElement>('li.test')) {
+      li.hidden = upcoming === isPast(li.dataset.date, today);
+      if (!li.hidden) shown++;
+    }
+    if (upcoming) group.querySelector<HTMLElement>('.none-upcoming')!.hidden = shown > 0;
+    else group.hidden = shown === 0;
+  }
+</script>
+
+<style>
+  h3 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+  .test p {
+    margin: 0.2rem 0 0;
+  }
+  .review-links {
+    margin: 0.5rem 0 0;
+  }
+  .review-links a {
+    font-weight: 600;
+  }
+  .test .actions {
+    margin: 0.75rem 0 0;
+  }
+</style>

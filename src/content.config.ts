@@ -80,7 +80,11 @@ const tagShape = {
   sections: z.array(z.string()).default([]),
   // Required, but may be empty: [] means "class-only content".
   cedTopics: z.array(reference('cedTopics')),
-  authors: z.array(z.string().min(1)).min(1, 'authors needs at least one name'),
+  // Who wrote it: at least one name, except on samples.
+  authors: z.array(z.string().min(1)).default([]),
+  // Written only to show the format, not class material: labelled as a sample, kept off the
+  // class home, and left out of practice unless its chapter is picked.
+  sample: z.boolean().default(false),
 };
 
 // ---------------------------------------------------------------------------
@@ -100,6 +104,9 @@ const lessons = defineCollection({
         title: z.string().min(1),
         ...tagShape,
         order: z.number().default(0),
+        // lesson: a teaching page; notes: a classmate's notes; review: a test review sheet.
+        // Chapter and test pages group lessons by kind, and review sheets are featured.
+        kind: z.enum(['lesson', 'notes', 'review']).default('lesson'),
         draft: z.boolean().default(false),
         summary: z.string().optional(),
       })
@@ -115,6 +122,9 @@ const questionBase = {
   id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, 'id must be lowercase letters, digits, or dashes'),
   ...tagShape,
   difficulty: z.number().int().min(1).max(3),
+  // Needs a numeric calculation (plugging numbers into an equation), not just reasoning. A class
+  // test's practice exam can limit how many of these it draws (tests.json exam maxCalculations).
+  calculation: z.boolean().default(false),
   prompt: z.string().min(1),
   image: z.string().optional(),
   imageAlt: z.string().optional(),

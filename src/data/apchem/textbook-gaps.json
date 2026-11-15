@@ -1,0 +1,66 @@
+{
+  "topics": [
+    {
+      "id": "1.4",
+      "coverage": "thin",
+      "book": "Ch. 3 covers percent composition of compounds and combustion analysis. Mixtures get much less attention.",
+      "learn": "Mass percent of one component in a mixture, and how an impurity changes a measured mass percent (higher or lower, and why)."
+    },
+    {
+      "id": "1.6",
+      "coverage": "missing",
+      "book": "Little or nothing: at most a short aside or a few end-of-chapter exercises in Ch. 6–7.",
+      "learn": "Reading a PES spectrum: peak position is binding energy, peak height is the number of electrons, assigning peaks to subshells (1s, 2s, 2p, …), and identifying an element from its spectrum. AP Classroom's Topic 1.6 videos and practice cover this."
+    },
+    {
+      "id": "3.9",
+      "coverage": "thin",
+      "book": "Ch. 1 names filtration, distillation, and chromatography. Ch. 13 says little about separations.",
+      "learn": "Paper and column chromatography explained with intermolecular forces (Rf values, a polar vs. nonpolar solvent and stationary phase), and distillation explained by differences in IMFs and boiling points."
+    },
+    {
+      "id": "3.11",
+      "coverage": "thin",
+      "book": "Ch. 6 covers the electromagnetic spectrum itself, but not much on what each region does to molecules.",
+      "learn": "Which region causes which change: microwaves → molecular rotation, infrared → bond vibration, UV/visible → electronic transitions. The “Light, Photons, and the Photoelectric Effect” lesson on this site includes that table."
+    },
+    {
+      "id": "3.13",
+      "coverage": "thin",
+      "book": "A short treatment in Ch. 14, where absorbance is used to follow a reaction rate.",
+      "learn": "A = εbc, making and using a calibration curve, and lab error analysis (wrong wavelength, fingerprints or bubbles in the cuvette, a solution that is too concentrated)."
+    },
+    {
+      "id": "4.4",
+      "coverage": "thin",
+      "book": "Defined in Ch. 1, with little particle-level discussion.",
+      "learn": "Classifying a change as physical or chemical by whether bonds break and form, including dissolving an ionic solid as a borderline case."
+    },
+    {
+      "id": "6.3",
+      "coverage": "thin",
+      "book": "A short section in Ch. 5.",
+      "learn": "The particle-level picture of heat transfer between objects at different temperatures (faster particles collide with slower ones until the average kinetic energies match), and final-temperature problems."
+    },
+    {
+      "id": "9.4",
+      "coverage": "thin",
+      "book": "Ch. 19 notes that “spontaneous” doesn't mean “fast”.",
+      "learn": "Thermodynamically favored reactions that don't happen at a noticeable rate because the activation energy is high (diamond → graphite), tied to the energy profiles from Unit 5."
+    },
+    {
+      "id": "9.7",
+      "coverage": "thin",
+      "book": "Mostly a boxed biochemistry aside in Ch. 19 (ATP).",
+      "learn": "Adding ΔG° of two reactions that share an intermediate, and driving an unfavorable reaction with a favorable one, with light, or with electricity."
+    }
+  ],
+  "other": [
+    {
+      "title": "Lab skills and science practices",
+      "coverage": "thin",
+      "book": "The textbook isn't organized around the AP science practices or the AP labs.",
+      "learn": "Gravimetric analysis, titration technique and error analysis, spectrophotometry, and reading and designing experiments. AP Classroom and the AP Chemistry lab manual cover these; past FRQs test them often."
+    }
+  ]
+}

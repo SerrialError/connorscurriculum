@@ -7,7 +7,8 @@
   chapter: 14
   cedTopics: ["5.1"]
   difficulty: 1
-  authors: ["sample"]
+  calculation: true
+  sample: true
   prompt: |
     For the reaction $\ce{2H2 + O2 -> 2H2O}$, water is being formed at a rate of $0.060\ \text{M/s}$.
     At what rate is $\ce{O2}$ being consumed?
@@ -30,7 +31,7 @@
   chapter: 14
   cedTopics: ["5.2"]
   difficulty: 2
-  authors: ["sample"]
+  sample: true
   prompt: |
     The initial rate of the reaction $\mathrm{X} + \mathrm{Z} \rightarrow \text{products}$ was measured in three trials.
 
@@ -59,7 +60,8 @@
   chapter: 14
   cedTopics: ["5.3"]
   difficulty: 2
-  authors: ["sample"]
+  calculation: true
+  sample: true
   prompt: |
     A first-order reaction has a rate constant $k = 0.0231\ \text{min}^{-1}$.
     About what percentage of the reactant is left after 90 minutes?
@@ -82,7 +84,7 @@
   chapter: 14
   cedTopics: ["5.3"]
   difficulty: 1
-  authors: ["sample"]
+  sample: true
   prompt: |
     A reaction is second order in reactant A and has no other reactants. Which plot of the data will be a straight line?
   choices:
@@ -105,7 +107,8 @@
   chapter: 14
   cedTopics: ["5.2", "5.3"]
   difficulty: 2
-  authors: ["sample"]
+  calculation: true
+  sample: true
   prompt: |
     Compound Q decomposes in solution: $\mathrm{Q}(aq) \rightarrow \text{products}$. The concentration of Q was measured over time at constant temperature.
 
@@ -151,7 +154,7 @@
   chapter: 14
   cedTopics: ["5.7", "5.8", "5.10"]
   difficulty: 3
-  authors: ["sample"]
+  sample: true
   prompt: |
     A proposed mechanism for a gas-phase reaction has two elementary steps:
 

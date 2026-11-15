@@ -8,6 +8,8 @@ export interface TagFields {
   chapter: number;
   sections: string[];
   cedTopics: Array<{ id: string } | string>;
+  authors: string[];
+  sample: boolean;
 }
 
 const idOf = (ref: { id: string } | string) => (typeof ref === 'string' ? ref : ref.id);
@@ -83,4 +85,10 @@ export function checkTags(data: TagFields, ctx: z.RefinementCtx): void {
     }
     seen.add(topicId);
   });
+
+  if (data.authors.some((a) => a.trim().toLowerCase() === 'sample')) {
+    ctx.addIssue({ code: 'custom', path: ['authors'], message: 'mark a sample with "sample: true" instead of listing "sample" as an author' });
+  } else if (data.authors.length === 0 && !data.sample) {
+    ctx.addIssue({ code: 'custom', path: ['authors'], message: 'authors needs at least one name' });
+  }
 }

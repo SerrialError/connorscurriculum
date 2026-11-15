@@ -1,27 +1,42 @@
 ---
 // Site search backed by Pagefind's JS API. The index only exists after `npm run build`.
-import { url } from '../lib/content';
+import { subjectIds, url } from '../lib/content';
 
 interface Props {
-  placeholder?: string;
+  placeholder: string;
+  /** Search only this class (subject id); every class when unset. */
+  subject?: string;
+  /** Input id; must be unique on the page (the header search uses its own). */
+  id?: string;
 }
 
-const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
+const { placeholder, subject, id = 'site-search' } = Astro.props;
+// Results name their class only when they can come from more than one.
+const showSubject = !subject && subjectIds().length > 1;
 ---
 
-<div class="search" data-pagefind-src={url('pagefind/pagefind.js')}>
-  <label class="visually-hidden" for="site-search">Search</label>
-  <input id="site-search" type="search" placeholder={placeholder} autocomplete="off" />
+<div
+  class="search"
+  data-pagefind-src={url('pagefind/pagefind.js')}
+  data-class={subject}
+  data-show-subject={showSubject ? '' : undefined}
+>
+  <label class="visually-hidden" for={id}>Search</label>
+  <input id={id} class="search-input" type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search" />
   <p class="status small muted" aria-live="polite"></p>
   <ol class="results plain-list"></ol>
+  <button class="more link-button small" type="button" hidden>Show all results</button>
 </div>
 
 <script>
+  import { isRealMatch, pickExcerpt } from '../lib/search-excerpt';
+  import { plural } from '../lib/text';
+
   interface PagefindResult {
-    data(): Promise<{ url: string; excerpt: string; meta: Record<string, string> }>;
+    data(): Promise<{ url: string; excerpt: string; meta: Record<string, string>; sub_results?: { title: string; excerpt: string }[] }>;
   }
   interface Pagefind {
-    search(q: string): Promise<{ results: PagefindResult[] }>;
+    search(q: string, options?: { filters?: Record<string, string> }): Promise<{ results: PagefindResult[] } | null>;
     options?(o: Record<string, unknown>): Promise<void>;
   }
 
@@ -29,6 +44,9 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
     const input = root.querySelector('input')!;
     const status = root.querySelector<HTMLElement>('.status')!;
     const list = root.querySelector<HTMLOListElement>('.results')!;
+    const more = root.querySelector<HTMLButtonElement>('.more')!;
+    const PAGE = 8;
+    let limit = PAGE;
     let pagefind: Pagefind | null = null;
     let failed = false;
     let timer: number | undefined;
@@ -51,14 +69,28 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
       if (!q) {
         list.replaceChildren();
         status.textContent = '';
+        more.hidden = true;
         return;
       }
       const pf = await load();
       if (!pf) return;
-      const { results } = await pf.search(q);
-      const top = await Promise.all(results.slice(0, 8).map((r) => r.data()));
+      // Base.astro tags each class page with a "class" filter.
+      const search = await pf.search(q, root.dataset.class ? { filters: { class: root.dataset.class } } : {});
+      if (!search) return; // superseded by a newer query
+      const { results } = search;
+      // Load a few more than are shown, so loose matches can be dropped and the count stays right
+      // for small result sets (where loose matches show up).
+      const loaded = await Promise.all(results.slice(0, Math.max(limit, 30)).map((r) => r.data()));
       if (mine !== seq) return;
-      status.textContent = results.length === 0 ? 'No results.' : `${results.length} result${results.length === 1 ? '' : 's'}`;
+      const kept = loaded.filter((r) => isRealMatch(q, r.excerpt));
+      const total = results.length - (loaded.length - kept.length);
+      const top = kept.slice(0, limit);
+      status.textContent =
+        total === 0
+          ? 'No results. Try fewer or different words.'
+          : total > top.length
+            ? `Top ${top.length} of ${total} results`
+            : plural(total, 'result');
       list.replaceChildren(
         ...top.map((r) => {
           const li = document.createElement('li');
@@ -66,20 +98,46 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
           a.href = r.url;
           a.className = 'title';
           a.textContent = r.meta.title ?? r.url;
+          // "Lesson · Chapter 6: …": what kind of page it is, and where it lives.
           const meta = document.createElement('div');
-          meta.className = 'small muted';
-          meta.textContent = [r.meta.subject, r.meta.chapter].filter(Boolean).join(' · ');
+          meta.className = 'small muted result-meta';
+          if (r.meta.type) {
+            const tag = document.createElement('span');
+            tag.className = 'type';
+            tag.textContent = r.meta.type;
+            meta.append(tag);
+          }
+          const where = [root.hasAttribute('data-show-subject') ? r.meta.subject : '', r.meta.chapter].filter(Boolean).join(' · ');
+          if (where) meta.append(where);
           const excerpt = document.createElement('p');
           excerpt.className = 'small';
-          excerpt.innerHTML = r.excerpt; // Pagefind escapes page text and adds <mark>
+          // Pagefind escapes page text and adds <mark>. The title is shown above, so don't repeat it,
+          // and if the match was only in the title, show a section that has it.
+          excerpt.innerHTML = pickExcerpt(r.excerpt, r.meta.title ?? '', r.sub_results);
           li.append(a, meta, excerpt);
           return li;
         }),
       );
+      more.hidden = total <= top.length;
+      more.textContent = `Show all ${total} results`;
     }
 
+    more.addEventListener('click', () => {
+      limit = Infinity;
+      // Keep focus in the list: the first newly shown result.
+      const before = list.children.length;
+      void run().then(() => list.children[before]?.querySelector('a')?.focus());
+    });
+
+    // Enter opens the first result.
+    input.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const first = list.querySelector<HTMLAnchorElement>('a');
+      if (first) location.href = first.href;
+    });
     input.addEventListener('focus', () => void load(), { once: true });
     input.addEventListener('input', () => {
+      limit = PAGE;
       clearTimeout(timer);
       timer = window.setTimeout(run, 150);
     });
@@ -90,23 +148,17 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
   .search {
     margin: 1rem 0 1.5rem;
   }
-  input {
-    width: 100%;
-    font: inherit;
-    font-size: 1.05rem;
-    padding: 0.7rem 0.9rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-  }
-  input:focus {
-    outline: 3px solid var(--accent-soft);
-    border-color: var(--accent);
+  .more {
+    padding: 0.5rem 0;
   }
   .status {
     margin: 0.4rem 0;
     min-height: 1.2em;
+  }
+  /* Nothing typed yet: no empty line under the box. */
+  .status:empty {
+    margin: 0;
+    min-height: 0;
   }
   .results :global(li) {
     padding: 0.6rem 0;
@@ -114,6 +166,19 @@ const { placeholder = 'Search lessons, chapters, topics…' } = Astro.props;
   }
   .results :global(.title) {
     font-weight: 700;
+  }
+  .results :global(.result-meta) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.1rem 0.5rem;
+  }
+  .results :global(.type) {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-2);
   }
   .results :global(p) {
     margin: 0.2rem 0 0;

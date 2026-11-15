@@ -2,7 +2,9 @@
 // One released AP FRQ: links to the official PDFs, readiness, and either all parts with
 // their topics or just the parts that matched a topic.
 import { getSubjectData, learnedTopic, url } from '../lib/content';
-import { type FrqLink, type FrqPart, frqName, frqPractices, frqTotal, readyPoints } from '../lib/frqs';
+import { type FrqLink, type FrqPart, OUR_PRACTICE_LABELS, frqName, frqPractices, frqTotal, readinessLabel, readyPoints } from '../lib/frqs';
+import { PROGRESS_ICONS, PROGRESS_LABELS } from '../lib/progress-marks';
+import { plural } from '../lib/text';
 
 interface Props {
   subject: string;
@@ -15,10 +17,9 @@ const { subject, frq, matched } = Astro.props;
 const data = getSubjectData(subject);
 const learned = learnedTopic(data);
 const total = frqTotal(frq);
-const ready = readyPoints(frq, learned);
+const ready = readinessLabel(readyPoints(frq, learned), total);
 const matchedPoints = matched?.reduce((sum, p) => sum + p.points, 0) ?? 0;
 const kind = frq.number <= 3 ? 'Long' : 'Short';
-const marks = { done: '✓', review: '↺', partial: '◐' } as const;
 const practiceName = (id: string) => data.ced.sciencePractices.find((p) => p.id === id)?.name ?? `Practice ${id}`;
 const skillOf = (id: string) => data.skills.get(id);
 // Unique per page: each question appears at most once on a page.
@@ -27,7 +28,7 @@ const popId = (part: number, skill: string) => `skill-${frq.year}-q${frq.number}
 const practices = frqPractices({ parts: matched ?? frq.parts });
 const sourceNote = frq.officialSkills
   ? 'Science practices as labeled by College Board.'
-  : 'College Board has not published practice labels for this exam yet; these are our own.';
+  : OUR_PRACTICE_LABELS;
 ---
 
 <article class="card frq">
@@ -36,38 +37,49 @@ const sourceNote = frq.officialSkills
       <a href={frq.questionUrl} target="_blank" rel="noopener">{frqName(frq)}</a>
       <span class="title">{frq.title}</span>
     </h3>
-    <span
-      class:list={['badge', { good: ready === total }]}
-      title="Points in parts whose topics you have all learned (this year or last year)"
-    >
-      {ready === total ? '✓ Ready' : `${ready}/${total} pts ready`}
-    </span>
+    <span class:list={['badge', { good: ready.full }]} title={ready.title}>{ready.text}</span>
   </header>
   <p class="small muted meta">{kind} answer · {total} points</p>
-  {practices.length > 0 && (
-    <p class="practices" title={sourceNote}>
-      {practices.map((id) => (
-        <span class="practice">
-          <span class="pnum">{id}</span>
-          {practiceName(id)}
-        </span>
-      ))}
-      {!frq.officialSkills && <span class="small muted">(our labels)</span>}
-    </p>
-  )}
-
   {matched ? (
-    <p class="small">
-      Part{matched.length > 1 ? 's' : ''} {matched.map((p) => p.label).join(', ')} ({matchedPoints} pt{matchedPoints === 1 ? '' : 's'})
-    </p>
+    <>
+      <p class="small">
+        Part{matched.length > 1 ? 's' : ''} {matched.map((p) => p.label).join(', ')} ({plural(matchedPoints, 'pt')})
+      </p>
+      {practices.length > 0 && (
+        <div class="practices-block">
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(not official)</span></>}</p>
+          <p class="practices" title={sourceNote}>
+            {practices.map((id) => (
+              <span class="practice">
+                <span class="pnum">{id}</span>
+                {practiceName(id)}
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
+    </>
   ) : (
     <details class="parts-toggle">
-      <summary>Show {frq.parts.length} parts</summary>
+      <summary>Show {frq.parts.length} parts and science practices</summary>
+      {practices.length > 0 && (
+        <div class="practices-block">
+          <p class="practices-h small muted">Science practices{!frq.officialSkills && <> <span title={OUR_PRACTICE_LABELS}>(not official)</span></>}</p>
+          <p class="practices" title={sourceNote}>
+            {practices.map((id) => (
+              <span class="practice">
+                <span class="pnum">{id}</span>
+                {practiceName(id)}
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
       <ul class="plain-list parts">
         {frq.parts.map((p, i) => (
           <li>
             <span class="label">{p.label}</span>
-            <span class="small muted pts">{p.points} pt{p.points === 1 ? '' : 's'}</span>
+            <span class="small muted pts">{plural(p.points, 'pt')}</span>
             <span class="badges">
               {p.skills.map((id) => {
                 const skill = skillOf(id);
@@ -99,9 +111,9 @@ const sourceNote = frq.officialSkills
                     class="badge topic"
                     href={url(`${subject}/ap/${t}/`)}
                     title={data.topics.get(t)?.title}
-                    aria-label={`Topic ${t}: ${data.topics.get(t)?.title}`}
+                    aria-label={`Topic ${t}: ${data.topics.get(t)?.title}${s ? ` (${PROGRESS_LABELS[s]})` : ''}`}
                   >
-                    {s && <span aria-hidden="true">{marks[s]}</span>}
+                    {s && <span aria-hidden="true">{PROGRESS_ICONS[s]}</span>}
                     {t}
                   </a>
                 );
@@ -123,14 +135,20 @@ const sourceNote = frq.officialSkills
 </article>
 
 <style>
+  /* The readiness badge sits top right, or under the title when the card is too narrow for both. */
   .frq header {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem 0.75rem;
-    align-items: baseline;
+    align-items: start;
     justify-content: space-between;
   }
+  .frq header > :global(.badge) {
+    flex: none;
+    margin-top: 0.15rem;
+  }
   h3 {
+    flex: 1 1 14rem;
     margin: 0;
     font-size: 1.05rem;
   }
@@ -163,6 +181,9 @@ const sourceNote = frq.officialSkills
   .label {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+  }
+  .practices-h {
+    margin: 0.25rem 0 0.3rem;
   }
   .practices {
     display: flex;
@@ -217,11 +238,11 @@ const sourceNote = frq.officialSkills
   .skill-pop p {
     margin: 0;
   }
-  .pop-practice {
+  .skill-pop .pop-practice {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--muted);
-    margin-bottom: 0.3rem !important;
+    margin-bottom: 0.3rem;
   }
   .links {
     display: flex;

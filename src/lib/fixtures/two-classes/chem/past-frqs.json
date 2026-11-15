@@ -1,0 +1,10 @@
+{
+  "exams": [
+    {
+      "year": 2024,
+      "questionsUrl": "https://example.com/q.pdf",
+      "scoringUrl": "https://example.com/s.pdf",
+      "questions": [{ "number": 1, "title": "Moles", "parts": [{ "label": "a", "points": 1, "cedTopics": ["1.1"] }] }]
+    }
+  ]
+}

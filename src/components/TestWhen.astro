@@ -1,0 +1,13 @@
+---
+// When a class test is or was: "Wed, Nov 4, 2026", with "Taken" once it's past (shown by the
+// reader's date, inside an element with data-test-date; see Base.astro), or "Date TBA".
+import { formatDate } from '../lib/content';
+
+interface Props {
+  test: { date?: string };
+}
+
+const { test } = Astro.props;
+---
+
+{test.date ? <><span class="if-past">Taken </span>{formatDate(test.date)}</> : 'Date TBA'}

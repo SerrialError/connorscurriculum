@@ -1,0 +1,15 @@
+---
+// The pages above this one, as links: "Lessons / Chapter 7: …". The page's own title (the h1)
+// follows, so there is no trailing separator or "current page" crumb. Same pattern on every page.
+interface Props {
+  items: { href: string; label: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb" data-pagefind-ignore>
+  <ol>
+    {items.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+  </ol>
+</nav>

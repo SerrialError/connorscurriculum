@@ -1,16 +1,28 @@
 ---
 import { render } from 'astro:content';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Callout from '../../../components/Callout.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
+import { lessonFilterQuery } from '../../../lib/lesson-filter';
+import { pickQuery, practiceStarts } from '../../../lib/practice/links';
+import { lessonPractice } from '../../../lib/practice/lessons';
+import { chapterName } from '../../../lib/text';
 import Base from '../../../layouts/Base.astro';
 import {
   type Lesson,
+  byline,
   getLessons,
+  getQuestions,
   getSubjectData,
+  inTest,
+  isSample,
+  isTaught,
+  kindLabel,
+  lessonHref,
   lessonSlug,
-  practiceHref,
+  practiceUrl,
   subjectIds,
   topicIds,
   url,
@@ -40,15 +52,35 @@ interface Props {
 
 const { subject } = Astro.params;
 const { lesson, prev, next } = Astro.props;
-const { Content } = await render(lesson);
+const { Content, headings } = await render(lesson);
+// "On this page": the lesson's sections, for pages long enough to need it.
+const toc = headings.filter((h) => h.depth === 2);
+const showToc = toc.length >= 3;
 const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(lesson.data.chapter)!;
 const topics = topicIds(lesson);
-const chapterLabel = `Chapter ${chapter.number}: ${chapter.title}`;
-const practice = topics.length
-  ? practiceHref(subject, { topic: topics })
-  : practiceHref(subject, { chapter: [chapter.number] });
-const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
+const chapterLabel = chapterName(chapter);
+// Practice the questions on the lesson's textbook sections, or else its chapter.
+const questions = await getQuestions(subject);
+const picked = lessonPractice(lesson.data, questions.map((q) => q.data));
+const practice = picked && {
+  start: practiceStarts(
+    picked.pool,
+    picked.count,
+    picked.scope === 'lesson' ? (lesson.data.kind === 'notes' ? 'on these notes' : 'on this lesson') : `from Chapter ${chapter.number}`,
+  ).start,
+  pick: pickQuery(picked.pool),
+};
+// A test review sheet is listed with the lessons, but belongs to its test: link to the test and
+// practice the whole test, not just the sheet's topics, and leave out the chapter's previous/next lessons.
+const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;
+const testHref = test && url(`${subject}/tests/${test.id}/`);
+const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
+const testPractice = test && testQuestions > 0 ? practiceStarts({ test: test.id }, testQuestions) : null;
+// Not class material: a sample page, or one for a chapter the class hasn't reached.
+const sample = isSample(lesson);
+const byLine = sample ? '' : byline(lesson);
+const ahead = !isTaught(data, chapter.number);
 ---
 
 <Base
@@ -56,49 +88,255 @@ const lessonHref = (l: Lesson) => url(`${subject}/lessons/${lessonSlug(l)}/`);
   description={lesson.data.summary}
   subject={subject}
   searchable={!lesson.data.draft}
-  searchMeta={{ chapter: chapterLabel }}
+  searchMeta={{ type: sample || ahead ? 'Sample page' : kindLabel(lesson), chapter: chapterLabel }}
 >
+  <div class:list={['lesson-page', { 'has-toc': showToc }]}>
   <article class="prose">
-    <p class="breadcrumbs">
-      <a href={url(`${subject}/chapters/`)}>Chapters</a> / <a href={url(`${subject}/chapters/${chapter.number}/`)}>{chapterLabel}</a>
-      {lesson.data.sections.length > 0 && <> · §{lesson.data.sections.join(', ')}</>}
-    </p>
+    <Breadcrumbs
+      items={test
+        ? [{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/lessons/${lessonFilterQuery({ kind: 'review', q: '' })}`), label: 'Review sheets' }]
+        : [{ href: url(`${subject}/lessons/`), label: 'Lessons' }, { href: url(`${subject}/chapters/${chapter.number}/`), label: `Chapter ${chapter.number}` }]}
+    />
     <h1>
       {lesson.data.title}
       {lesson.data.draft && <span class="badge">Draft</span>}
     </h1>
     <TopicBadges subject={subject} topics={topics} />
-    <p class="small muted">By {lesson.data.authors.join(', ')}</p>
+    {/* "Textbook §7.2 · By Jaya": where it is in the book, and who wrote it. */}
+    {(byLine || lesson.data.sections.length > 0) && (
+      <p class="small muted byline" data-pagefind-ignore>
+        {[lesson.data.sections.length > 0 && `Textbook §${lesson.data.sections.join(', §')}`, byLine].filter(Boolean).join(' · ')}
+      </p>
+    )}
+    {/* Said here rather than in every notes file, and kept out of search excerpts. */}
+    {lesson.data.kind === 'notes' && (
+      <p class="small muted notes-note" data-pagefind-ignore>
+        A classmate's notes, with the wording kept as close to the original as possible. Where something needed fixing,
+        there's a <strong>Correction</strong> box right below it.
+      </p>
+    )}
+    {(sample || ahead) && (
+      <p class="sample-note" data-pagefind-ignore>
+        <strong>{sample ? 'Sample page, not class material.' : 'Not taught yet.'}</strong>{' '}
+        {sample ? 'It was written to show what a lesson looks like' : 'It was written'} before the class reached Chapter {chapter.number}, so
+        it may not match how your teacher covers it. Use it as a preview at most.
+      </p>
+    )}
+    {test && (
+      <p class="test-note">
+        Review sheet for the <a href={testHref}>{test.title}</a>.
+        {testPractice && (
+          <>
+            {' '}When you're done, practice its questions:{' '}
+            <a href={practiceUrl(subject, testPractice.start.query)}>{testPractice.start.short}</a>
+            {testPractice.all && <> or <a href={practiceUrl(subject, testPractice.all.query)}>{testPractice.all.short}</a></>}.
+          </>
+        )}
+      </p>
+    )}
+    {!test && practice && (
+      <p class="practice-top small" data-pagefind-ignore>
+        <span class="muted">Practice:</span> <a href={practiceUrl(subject, practice.start.query)}>{practice.start.label}</a>
+        <span class="muted"> · </span><a href={practiceUrl(subject, practice.pick)}>Pick your own set</a>
+      </p>
+    )}
+    {showToc && (
+      <details class="toc toc-inline" data-pagefind-ignore>
+        <summary>On this page <span class="muted small">{toc.length} sections</span></summary>
+        <ol>
+          {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ol>
+      </details>
+    )}
 
     <Content components={{ YouTube, Callout, Reveal }} />
 
-    <footer class="lesson-footer">
-      <a class="button" href={practice}>
-        {topics.length ? `Practice these topics (${topics.join(', ')})` : `Practice Chapter ${chapter.number}`}
-      </a>
-      <nav class="pager small" aria-label="Lessons in this chapter">
-        {prev ? <a href={lessonHref(prev)}>← {prev.data.title}</a> : <span></span>}
-        {next && <a href={lessonHref(next)}>{next.data.title} →</a>}
-      </nav>
+    <footer class="lesson-footer" data-pagefind-ignore>
+      {test ? (
+        <>
+          {testPractice && (
+            <div class="actions">
+              <a class="button" href={practiceUrl(subject, testPractice.start.query)}>{testPractice.start.label}</a>
+              {testPractice.all && <a class="button secondary" href={practiceUrl(subject, testPractice.all.query)}>{testPractice.all.label}</a>}
+            </div>
+          )}
+          <p class="small all-lessons"><a href={testHref}>Back to the {test.title}</a></p>
+        </>
+      ) : (
+        <>
+          {practice && (
+            <div class="actions">
+              <a class="button" href={practiceUrl(subject, practice.start.query)}>{practice.start.label}</a>
+              <a class="button secondary" href={practiceUrl(subject, practice.pick)}>Pick your own set</a>
+            </div>
+          )}
+          <nav class="pager" aria-label="Lessons in this chapter">
+            {prev ? <a href={lessonHref(prev)}><span class="small muted">← Previous</span>{prev.data.title}</a> : <span></span>}
+            {next && <a class="next" href={lessonHref(next)}><span class="small muted">Next →</span>{next.data.title}</a>}
+          </nav>
+          <p class="small all-lessons"><a href={url(`${subject}/chapters/${chapter.number}/#lessons`)}>All Chapter {chapter.number} lessons</a></p>
+        </>
+      )}
     </footer>
   </article>
+  {showToc && (
+    <aside class="toc-side" data-pagefind-ignore>
+      <nav class="toc" aria-label="On this page">
+        <p class="toc-h">On this page</p>
+        <ol>
+          {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ol>
+        <a class="small to-top" href="#main">↑ Back to top</a>
+      </nav>
+    </aside>
+  )}
+  </div>
 </Base>
 
+<script>
+  // Following a link in the phone "On this page" list closes it, so it isn't in the way later.
+  for (const d of document.querySelectorAll<HTMLDetailsElement>('.toc-inline')) {
+    d.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) d.open = false;
+    });
+  }
+  // Highlight the section being read in the side list (wide screens).
+  const side = [...document.querySelectorAll<HTMLAnchorElement>('.toc-side li a')];
+  if (side.length) {
+    const targets = side.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter((el) => el !== null);
+    const update = () => {
+      let current = 0;
+      targets.forEach((el, i) => {
+        if (el.getBoundingClientRect().top < 120) current = i;
+      });
+      side.forEach((a, i) => (i === current ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    };
+    addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>
+
 <style>
+  /* Sections are scrolled to with a little room above. */
+  article :global(h2[id]) {
+    scroll-margin-top: 1rem;
+  }
+  .practice-top {
+    margin: 0.5rem 0 0;
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 1.4rem;
+  }
+  .toc li {
+    padding: 0.15rem 0;
+  }
+  .toc-inline {
+    margin: 0.9rem 0 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .toc-inline > summary {
+    cursor: pointer;
+    padding: 0.5rem 0.9rem;
+    font-weight: 600;
+    color: var(--link);
+  }
+  .toc-inline[open] > summary {
+    border-bottom: 1px solid var(--border);
+  }
+  /* No list numbers: many section titles are numbered already ("1. Atomic radius"). */
+  .toc-inline ol {
+    list-style: none;
+    padding: 0.5rem 0.9rem 0.6rem;
+  }
+  .toc-side {
+    display: none;
+  }
+  /* Wide screens: the list sits beside the lesson and stays in view. */
+  @media (min-width: 66rem) {
+    .lesson-page.has-toc {
+      display: grid;
+      grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+    .toc-inline {
+      display: none;
+    }
+    .toc-side {
+      display: block;
+    }
+    .toc-side .toc {
+      position: sticky;
+      top: 1rem;
+      margin-top: 4.5rem;
+      font-size: 0.875rem;
+      border-left: 1px solid var(--border);
+      padding-left: 1rem;
+    }
+    .toc-h {
+      margin: 0 0 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .toc-side ol {
+      list-style: none;
+      padding: 0;
+    }
+    .toc-side li a {
+      display: block;
+      color: var(--text-2);
+      text-decoration: none;
+      line-height: 1.35;
+      padding: 0.1rem 0;
+    }
+    .toc-side li a:hover {
+      color: var(--link);
+      text-decoration: underline;
+    }
+    .toc-side li a[aria-current='true'] {
+      color: var(--link);
+      font-weight: 700;
+    }
+    .to-top {
+      display: inline-block;
+      margin-top: 0.75rem;
+      color: var(--muted);
+    }
+  }
   article :global(img) {
     border-radius: var(--radius);
     background: #fff;
+  }
+  .byline,
+  .notes-note {
+    margin: 0.4rem 0 0;
+  }
+  .sample-note {
+    padding: 0.6rem 0.9rem;
+    border-left: 4px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    background: var(--warn-soft);
+  }
+  .test-note {
+    padding: 0.6rem 0.9rem;
+    border-left: 4px solid var(--tip);
+    border-radius: 0 8px 8px 0;
+    background: var(--tip-soft);
   }
   .lesson-footer {
     margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--border);
   }
-  .pager {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.25rem;
-    flex-wrap: wrap;
+  .all-lessons {
+    margin: 0.75rem 0 0;
+  }
+  .all-lessons a {
+    font-weight: 600;
   }
 </style>

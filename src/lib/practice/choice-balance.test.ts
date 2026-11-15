@@ -1,9 +1,8 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { parse } from 'yaml';
 import { renderPlainText } from '../markdown';
 import { type ChoiceLengths, balanceProblems, choiceBalance, longestChoice } from './choice-balance';
+import { QUESTIONS_DIR, type QuestionFileEntry, readQuestionFiles } from './question-files';
 
 const q = (lengths: number[], answer: string): ChoiceLengths => ({
   lengths: lengths.map((length, i) => ({ id: 'abcd'[i]!, length })),
@@ -47,25 +46,13 @@ describe('choiceBalance', () => {
 // Every chapter's real questions: the answer shouldn't be guessable from choice length or letter.
 // Small chapters (a few sample questions) are left out, since chance alone can skew them.
 const MIN_QUESTIONS = 20;
-const QUESTIONS_DIR = join(process.cwd(), 'src', 'content', 'questions');
 
-interface YamlMcq {
-  type: string;
-  subject: string;
-  chapter: number;
-  choices: { id: string; text: string }[];
-  answer: string;
-}
-
-function chapters(): Map<string, YamlMcq[]> {
-  const files = readdirSync(QUESTIONS_DIR, { recursive: true, encoding: 'utf8' }).filter((f) => /\.ya?ml$/.test(f));
-  const out = new Map<string, YamlMcq[]>();
-  for (const f of files) {
-    for (const item of parse(readFileSync(join(QUESTIONS_DIR, f), 'utf8')) as YamlMcq[]) {
-      if (item.type !== 'mcq') continue;
-      const key = `${item.subject} chapter ${item.chapter}`;
-      out.set(key, [...(out.get(key) ?? []), item]);
-    }
+function chapters(): Map<string, QuestionFileEntry[]> {
+  const out = new Map<string, QuestionFileEntry[]>();
+  for (const item of readQuestionFiles()) {
+    if (item.type !== 'mcq') continue;
+    const key = `${item.subject} chapter ${item.chapter}`;
+    out.set(key, [...(out.get(key) ?? []), item]);
   }
   return out;
 }
@@ -76,8 +63,8 @@ describe(`MCQ choices in ${relative(process.cwd(), QUESTIONS_DIR)}`, () => {
     it(`${chapter}: the answer isn't given away by length or letter`, async () => {
       const measured = await Promise.all(
         mcqs.map(async (m) => ({
-          answer: m.answer,
-          lengths: await Promise.all(m.choices.map(async (c) => ({ id: c.id, length: (await renderPlainText(c.text)).length }))),
+          answer: m.answer!,
+          lengths: await Promise.all(m.choices!.map(async (c) => ({ id: c.id, length: (await renderPlainText(c.text)).length }))),
         })),
       );
       expect(balanceProblems(choiceBalance(measured))).toEqual([]);

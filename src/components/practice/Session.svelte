@@ -1,9 +1,11 @@
 <script lang="ts">
-  // Answering a set, one question at a time.
+  // Answering a set, one question at a time. A practice exam being taken shows no checking or
+  // scoring: the student picks, moves around, and submits (confirming if any are unanswered).
   import { tick } from 'svelte';
   import { isTypingTarget } from '../../lib/keyboard';
   import { DIFFICULTY_LABELS, TYPE_LABELS } from '../../lib/practice/labels';
   import { lessonsFor } from '../../lib/practice/lessons';
+  import { listNumbers } from '../../lib/practice/labels';
   import { frqTotal, isCorrect } from '../../lib/practice/score';
   import type { FrqQuestion, McqQuestion } from '../../lib/practice/types';
   import { verdictScroll } from '../../lib/practice/verdict-scroll';
@@ -25,15 +27,18 @@
     onresults: () => void;
     /** An answer was checked (MCQ) or marked done (FRQ), or its marks changed afterwards. */
     onscore: (id: string, score: number, corrected: boolean) => void;
+    /** Submit the practice exam being taken (after confirming, if anything is unanswered). */
+    onsubmit: () => void;
   }
 
-  let { attempt, label, note, reviewing, onfilters, onresults, onscore }: Props = $props();
+  let { attempt, label, note, reviewing, onfilters, onresults, onscore, onsubmit }: Props = $props();
   const { lessons, hrefs, topicTitles, units } = getCourse();
 
   let heading = $state<HTMLElement | null>(null);
   let nextButton = $state<HTMLButtonElement | null>(null);
   let verdictEl = $state<HTMLElement | null>(null);
   let actionsEl = $state<HTMLElement | null>(null);
+  let confirmEl = $state<HTMLDialogElement | null>(null);
 
   const total = $derived(attempt.questions.length);
   const isLast = $derived(attempt.index === total - 1);
@@ -48,9 +53,24 @@
   });
 
   function next() {
-    if (isLast) onresults();
-    else attempt.go(attempt.index + 1);
+    if (!isLast) attempt.go(attempt.index + 1);
+    else if (attempt.taking) requestSubmit();
+    else onresults();
   }
+
+  /** Submit exam: straight away when every multiple-choice question has an answer, else ask first. */
+  function requestSubmit() {
+    if (attempt.unpicked.length === 0) onsubmit();
+    else confirmEl?.showModal();
+  }
+
+  /** From the confirm dialog: to the first unanswered question. */
+  function goToUnanswered() {
+    confirmEl?.close();
+    attempt.go(attempt.questions.indexOf(attempt.unpicked[0]!));
+  }
+
+  const unpickedNumbers = $derived(attempt.unpicked.map((q) => attempt.questions.indexOf(q) + 1));
 
   async function check(q: McqQuestion) {
     if (!attempt.check(q)) return;
@@ -116,7 +136,7 @@
     if (choice) {
       attempt.pick(q, choice.id);
       e.preventDefault();
-    } else if (e.key === 'Enter' && attempt.picks[q.id] && !el.closest('button, a')) {
+    } else if (e.key === 'Enter' && !attempt.taking && attempt.picks[q.id] && !el.closest('button, a')) {
       e.preventDefault();
       void check(q);
     }
@@ -138,8 +158,8 @@
 
 {#if attempt.current}
   {@const q = attempt.current}
-  <section class="session" aria-label="Practice set">
-    <SessionHeader {attempt} {label} {note} {reviewing} {onfilters} {onresults} />
+  <section class="session" aria-label={attempt.exam ? 'Practice exam' : 'Practice set'}>
+    <SessionHeader {attempt} {label} {note} {reviewing} {onfilters} onresults={() => (attempt.taking ? requestSubmit() : onresults())} />
 
     {#key q.id}
       <article class="card question" aria-labelledby="q-heading">
@@ -155,7 +175,9 @@
           </p>
         </header>
 
-        {#if q.type === 'frq' && !attempt.finished[q.id]}
+        {#if q.type === 'frq' && attempt.taking}
+          <p class="frq-hint small">Write your answers on paper. You score them yourself after you submit the exam.</p>
+        {:else if q.type === 'frq' && !attempt.finished[q.id]}
           <p class="frq-hint small">Write your answers on paper first.</p>
         {/if}
         <div class="prompt" data-scroll-x="Question">{@html q.promptHtml}</div>
@@ -169,12 +191,12 @@
           <McqChoices {q} {attempt} />
           {#if done}
             <p class="verdict" class:ok={right} role="status" bind:this={verdictEl}>
-              {right ? '✓ Correct' : `✗ Incorrect. The answer is ${q.answer.toUpperCase()}.`}
+              {right ? '✓ Correct' : `✗ ${attempt.picks[q.id] ? 'Incorrect' : 'Not answered'}. The answer is ${q.answer.toUpperCase()}.`}
             </p>
             {@render explained(q)}
           {/if}
         {:else}
-          <FrqParts {q} {attempt} onmark={(p, k, earned) => setMark(q, p, k, earned)} />
+          <FrqParts {q} {attempt} scoring={!attempt.taking} onmark={(p, k, earned) => setMark(q, p, k, earned)} />
           {#if attempt.finished[q.id]}
             <p class="verdict ok" role="status" bind:this={verdictEl}>
               You earned {attempt.earned(q)} of {frqTotal(q)} points.
@@ -192,7 +214,9 @@
             </button>
           {/if}
           <span class="spacer"></span>
-          {#if q.type === 'mcq' && !attempt.checked[q.id]}
+          {#if attempt.taking}
+            <button class="button" type="button" onclick={() => next()}>{isLast ? 'Submit exam' : 'Next question →'}</button>
+          {:else if q.type === 'mcq' && !attempt.checked[q.id]}
             <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
             <button class="button" type="button" disabled={!attempt.picks[q.id]} onclick={() => check(q)}>Check answer</button>
           {:else if q.type === 'frq' && !attempt.finished[q.id]}
@@ -218,11 +242,28 @@
     {/key}
     {#if q.type === 'mcq'}
       <p class="small muted kbd-hint">
-        Keyboard: press A–{q.choices.at(-1)!.id.toUpperCase()} to choose, Enter to check, ← → to move between questions.
+        Keyboard: press A–{q.choices.at(-1)!.id.toUpperCase()} to choose{attempt.taking ? '' : ', Enter to check'}, ← → to move between questions.
       </p>
     {/if}
   </section>
 {/if}
+
+<!-- Submit exam with questions left: say which, and offer the first of them. -->
+<dialog class="confirm" bind:this={confirmEl} aria-labelledby="confirm-h">
+  <h2 id="confirm-h">Submit with {attempt.unpicked.length} unanswered?</h2>
+  <p>
+    {#if unpickedNumbers.length <= 8}
+      {unpickedNumbers.length === 1 ? 'Question' : 'Questions'} {listNumbers(unpickedNumbers)} {unpickedNumbers.length === 1 ? 'has' : 'have'} no answer
+    {:else}
+      {unpickedNumbers.length} multiple-choice questions have no answer
+    {/if}
+    and will score 0. You can't change answers after you submit.
+  </p>
+  <div class="actions">
+    <button class="button secondary" type="button" onclick={() => goToUnanswered()}>Go to question {unpickedNumbers[0]}</button>
+    <button class="button" type="button" onclick={() => { confirmEl?.close(); onsubmit(); }}>Submit anyway</button>
+  </div>
+</dialog>
 
 <style>
   .question {
@@ -308,6 +349,26 @@
     border-radius: 0 8px 8px 0;
     background: var(--tip-soft);
     color: var(--text);
+  }
+  .confirm {
+    max-width: min(28rem, calc(100vw - 2rem));
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+  .confirm::backdrop {
+    background: rgb(0 0 0 / 0.45);
+  }
+  .confirm h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.15rem;
+  }
+  .confirm .actions {
+    margin: 1rem 0 0;
+    justify-content: flex-end;
   }
   .q-actions {
     display: flex;

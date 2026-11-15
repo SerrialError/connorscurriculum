@@ -43,6 +43,7 @@
   sections: ["6.1"]
   cedTopics: ["3.12"]
   difficulty: 1
+  calculation: true
   authors: ["Claude"]
   prompt: |
     What is the frequency of light with a wavelength of 500. nm?
@@ -66,6 +67,7 @@
   sections: ["6.2"]
   cedTopics: ["3.12"]
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     What is the energy of **one** photon of blue light with a wavelength of 450. nm?
@@ -87,6 +89,7 @@
   sections: ["6.1"]
   cedTopics: ["3.12"]
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     A radio station broadcasts at 101.1 MHz. What is the wavelength of its signal?
@@ -230,6 +233,7 @@
   sections: ["6.3"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     What is the **magnitude** of the energy of the electron in a hydrogen atom in the $n = 3$ level?
@@ -253,6 +257,7 @@
   sections: ["6.3"]
   cedTopics: []
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     An electron in a hydrogen atom falls from $n = 4$ to $n = 2$. What is the wavelength of the light, and is it emitted or absorbed?
@@ -500,6 +505,7 @@
   sections: ["6.2", "6.3"]
   cedTopics: ["3.12"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     The emission spectrum of hydrogen contains a violet line at 410. nm. The electron ends in the $n = 2$ level.
@@ -550,6 +556,7 @@
   sections: ["6.2"]
   cedTopics: ["3.12"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     A metal surface needs a minimum of $3.20 \times 10^{-19}$ J to remove one electron.
@@ -595,6 +602,7 @@
   sections: ["6.3"]
   cedTopics: []
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use $\dfrac{1}{\lambda} = R_H\left(\dfrac{1}{n_1^2} - \dfrac{1}{n_2^2}\right)$ with $R_H = 1.096776 \times 10^{7}\ \text{m}^{-1}$
@@ -622,6 +630,7 @@
   sections: ["6.2"]
   cedTopics: ["3.12"]
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     A metal needs at least $6.40 \times 10^{-19}$ J to remove one electron from its surface.
@@ -1033,6 +1042,7 @@
   sections: ["6.2"]
   cedTopics: ["3.12"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Light with a wavelength of 250. nm shines on a metal, and each ejected electron has a kinetic energy of $3.50 \times 10^{-19}$ J.
@@ -1062,6 +1072,7 @@
   sections: ["6.2"]
   cedTopics: ["3.12"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     A green laser with a wavelength of 532 nm delivers 0.250 J of light energy. How many **moles** of photons is that?
@@ -1088,6 +1099,7 @@
   sections: ["6.2"]
   cedTopics: ["3.12"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     It takes 495 kJ to break one mole of O=O bonds. What is the **longest** wavelength of light whose photons each have enough energy to break one O=O bond?
@@ -1164,6 +1176,7 @@
   sections: ["6.2", "6.3"]
   cedTopics: []
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     A hydrogen atom has its electron in the $n = 2$ level. Use $E_n = -2.18 \times 10^{-18}\ \text{J}\,(1/n^2)$.

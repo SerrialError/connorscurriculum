@@ -30,6 +30,7 @@
   sections: ["7.2"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use Slater's rules to find $Z_{\text{eff}}$ for a 3s electron in magnesium ($Z = 12$).
@@ -56,6 +57,7 @@
   sections: ["7.2"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use Slater's rules to find $Z_{\text{eff}}$ for the 4s electron in potassium ($Z = 19$).
@@ -178,6 +180,7 @@
   sections: ["7.3"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     The H–H bond length is 0.74 Å and the Cl–Cl bond length is 1.98 Å. Using bonding atomic radii, estimate the H–Cl bond length.
@@ -418,6 +421,7 @@
   sections: ["7.2", "7.3", "7.4"]
   cedTopics: ["1.5", "1.7"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Answer the following about sodium, magnesium, and aluminum, which are next to each other in period 3.
@@ -469,6 +473,7 @@
   sections: ["7.2"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use Slater's rules to find $Z_{\text{eff}}$ for a 2p electron in oxygen ($Z = 8$).
@@ -612,6 +617,7 @@
   sections: ["7.2", "7.3"]
   cedTopics: []
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     $\ce{Na+}$ and $\ce{F-}$ both have the configuration $1s^2\,2s^2\,2p^6$. Using Slater's rules, what is $Z_{\text{eff}}$ on a 2p electron in each, and which ion is smaller?

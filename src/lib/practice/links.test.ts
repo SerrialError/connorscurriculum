@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_COUNT } from './filters';
-import { pickQuery, practiceStarts, weakestStart } from './links';
+import { examStart, pickQuery, practiceStarts, weakestStart } from './links';
 import { parseFilters, parseSet } from './url';
 
 describe('practiceStarts', () => {
@@ -47,5 +47,13 @@ describe('pickQuery', () => {
     expect(pickQuery({ chapters: [7], sections: ['7.3', '7.2'] })).toBe('?chapter=7&section=7.2,7.3');
     expect(parseFilters(pickQuery({ test: 't' })).test).toBe('t');
     expect(parseSet(pickQuery({ test: 't' }))).toBeNull();
+  });
+});
+
+describe('examStart', () => {
+  it("starts a practice exam of the test, with a new seed each time it's opened", () => {
+    const start = examStart('ch6-7-test');
+    expect(start.query).toBe('?test=ch6-7-test&exam=1&start=1');
+    expect(parseSet(start.query)).toMatchObject({ exam: true, seed: null, filters: { test: 'ch6-7-test' } });
   });
 });

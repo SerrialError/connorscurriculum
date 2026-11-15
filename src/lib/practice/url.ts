@@ -9,6 +9,7 @@
 // link reopens the same set:
 //   ?chapter=7&difficulty=3&start=1&seed=k3x9a0          the filters that made it, plus a seed
 //   ?chapter=7&start=1&seed=k3x9a0&ids=q1,q7,q9          exact questions (retrying the missed ones)
+//   ?test=ch6-7-test&exam=1&start=1&seed=k3x9a0          a practice exam in the test's format (exam.ts)
 // The seed fixes the shuffle, so the same link gives the same questions (except "weakest first",
 // which depends on the student's own answers). It also names this attempt, so a reload finds the
 // answers saved for it. The setup screen's address is the same minus start/seed/ids: the filters
@@ -77,6 +78,8 @@ export function hasBadSeed(search: string): boolean {
 
 export interface SetSpec {
   filters: Filters;
+  /** A practice exam for the filters' class test: drawn by its blueprint, answered without feedback until submitted. */
+  exam: boolean;
   /** Null for a link that asks to start a set (?start=1) but has no seed yet. */
   seed: string | null;
   /** The exact questions, in order, or null to pick them from the filters with the seed. */
@@ -89,8 +92,10 @@ export function parseSet(search: string): SetSpec | null {
   const p = new URLSearchParams(search);
   const ids = list(p.get('ids'));
   const seed = p.get('seed');
+  const filters = parseFilters(search);
   return {
-    filters: parseFilters(search),
+    filters,
+    exam: p.get('exam') === '1' && filters.test !== null,
     seed: isSeed(seed) ? seed : null,
     ids: ids.length ? ids : null,
   };
@@ -98,6 +103,7 @@ export function parseSet(search: string): SetSpec | null {
 
 export function setToQuery(spec: SetSpec): string {
   const p = new URLSearchParams(filtersToQuery(spec.filters));
+  if (spec.exam) p.set('exam', '1');
   p.set('start', '1');
   if (spec.seed) p.set('seed', spec.seed);
   if (spec.ids) p.set('ids', spec.ids.join(','));

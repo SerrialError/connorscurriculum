@@ -1,6 +1,6 @@
 // Words shown on the practice screens: filter names, a set's one-line name, and button labels.
 import { CLASS_ONLY_UNIT } from './filters';
-import type { ScoreArea, ScoreStatus } from './score';
+import type { DotStatus, ScoreArea } from './score';
 import type { Filters, Mode, PracticeTest, QuestionType } from './types';
 import { byId, chapterRange } from '../text';
 
@@ -8,9 +8,9 @@ export const DIFFICULTY_LABELS: Record<number, string> = { 1: 'Easy', 2: 'Medium
 export const MODE_LABELS: Record<Mode, string> = { all: 'In order', random: 'Shuffled', weak: 'Weakest first' };
 export const TYPE_LABELS: Record<QuestionType, string> = { mcq: 'Multiple choice', frq: 'Free response' };
 
-export const STATUS_TEXT: Record<ScoreStatus, string> = { todo: 'not answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' };
+export const STATUS_TEXT: Record<DotStatus, string> = { todo: 'not answered', picked: 'answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' };
 /** Shown with the colour, so right and wrong don't depend on telling red from green. */
-export const STATUS_MARK: Record<ScoreStatus, string> = { todo: '', right: '✓', wrong: '✗', partial: '½' };
+export const STATUS_MARK: Record<DotStatus, string> = { todo: '', picked: '', right: '✓', wrong: '✗', partial: '½' };
 
 /** "§7.2", "§7.3, §7.4" */
 const sectionLabel = (sections: string[]): string => [...sections].sort(byId).map((s) => `§${s}`).join(', ');
@@ -32,6 +32,18 @@ export function areaLabel(area: ScoreArea, topicTitles: ReadonlyMap<string, stri
 
 /** The name of the whole question pool, when no chapter is left out of it. */
 export const ALL_QUESTIONS = 'All questions';
+
+/** "4", "4 and 17", "4, 17, and 30" */
+export function listNumbers(ns: number[]): string {
+  if (ns.length <= 2) return ns.join(' and ');
+  return `${ns.slice(0, -1).join(', ')}, and ${ns.at(-1)}`;
+}
+
+/** A practice exam's name: "Chapters 6–7 Test · Practice exam". */
+export const examLabel = (testId: string, tests: PracticeTest[]): string => `${testLabel(testId, tests)} · Practice exam`;
+
+/** Shown with a practice exam while it's being taken. */
+export const EXAM_NOTE = 'No answers are shown until you submit.';
 
 /** Shown with a "weakest first" set when none of its questions has been answered (weakHasNoHistory). */
 export const WEAK_NO_HISTORY_NOTE = 'No practice history on these yet, so the order is random.';

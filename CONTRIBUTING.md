@@ -124,6 +124,10 @@ relative to it.
 
 Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short-name>`.
 
+Don't let the answer give itself away: a unit test fails if, across a chapter's MCQs, the correct
+choice is the longest one, or one letter is the answer, much more often than chance. Write wrong
+choices as long and as specific as the right one, and spread answers over A–D.
+
 ```yaml
 - id: apchem-14-half-life
   type: mcq
@@ -131,6 +135,7 @@ Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short
   chapter: 14
   cedTopics: ["5.3"]
   difficulty: 2            # 1 easy, 2 medium, 3 hard
+  calculation: true        # optional: the question needs a numeric calculation
   authors: ["Jordan"]
   prompt: |
     Markdown with $math$ and \ce{...}.
@@ -207,6 +212,37 @@ Add an entry to `src/data/<subject>/tests.json`:
 
 Empty `sections` means the whole chapters. `date` is optional. A lesson with `kind: review` in one
 of the test's chapters is featured at the top of the test page and on the subject page.
+
+`handouts` (optional) lists what comes with the test, such as an equation sheet. The test page links them:
+
+```json
+"handouts": [{ "title": "AP Chemistry equation sheet", "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf" }]
+```
+
+`exam` (optional) describes the test's format, so students can take a practice exam drawn fresh
+from the practice questions. The test page, the class home, and Practice's Quick start then offer
+"Take a practice exam":
+
+```json
+"exam": {
+  "mcqPoints": 2.8,
+  "sections": [
+    { "id": "light", "label": "Energy, wavelength, and frequency", "count": 8,
+      "match": { "chapters": [6], "sections": ["6.1", "6.2", "6.3", "6.4"] }, "maxCalculations": 3 },
+    { "id": "trends", "label": "Periodic trends", "count": 14, "match": { "chapters": [7] } }
+  ],
+  "extra": 1,
+  "frq": { "count": 1, "points": 7.2 }
+}
+```
+
+Each section draws `count` multiple-choice questions that `match`: from one of `chapters` and, if
+`sections` is given, tagged with one of those textbook sections. A question counts in the first
+section it matches. `maxCalculations` caps how many of a section's questions can be calculations
+(questions with `calculation: true`). `extra` adds that many more multiple-choice questions from any
+section. Then come `frq.count` free-response questions from the test's chapters, self-scored and
+scaled to `frq.points`. The build stops if a section has fewer matching questions than it draws, and
+for the Chapters 6–7 exam, a unit test also expects at least twice as many, so two exams don't repeat each other.
 
 ## Class progress
 

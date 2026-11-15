@@ -26,6 +26,8 @@ interface PracticeQuestionBase {
   /** Unit ids derived from cedTopics. */
   units: string[];
   difficulty: number;
+  /** Needs a numeric calculation (a practice exam can limit how many it draws). */
+  calculation?: true;
   promptHtml: string;
   /** The prompt as one line of plain text (math written out), for the results list. */
   promptText: string;
@@ -51,11 +53,30 @@ export interface FrqQuestion extends PracticeQuestionBase {
 
 export type PracticeQuestion = McqQuestion | FrqQuestion;
 
+/** One section of a practice exam's multiple choice (tests.json; see registry.ts examSchema). */
+export interface ExamSection {
+  id: string;
+  label: string;
+  count: number;
+  match: { chapters: number[]; sections: string[] };
+  maxCalculations?: number;
+}
+
+/** A practice exam in a class test's format: its multiple-choice sections, extras, and FRQs. */
+export interface PracticeExam {
+  mcqPoints: number;
+  sections: ExamSection[];
+  /** Multiple-choice questions beyond the sections' counts, drawn from all of them together. */
+  extra: number;
+  frq: { count: number; points: number };
+}
+
 export interface PracticeTest {
   id: string;
   title: string;
   chapters: number[];
   sections: string[];
+  exam?: PracticeExam;
 }
 
 export type Mode = 'all' | 'random' | 'weak';

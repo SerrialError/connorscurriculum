@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emptyFilters, CLASS_ONLY_UNIT } from './filters';
-import { againLabel, answerRestLabel, areaLabel, describeScope, describeSet, filterChips, retryWords } from './labels';
+import { againLabel, answerRestLabel, areaLabel, describeScope, describeSet, filterChips, listNumbers, retryWords } from './labels';
 import type { PracticeTest } from './types';
 import { parseFilters } from './url';
 import { tests as fixtureTests } from './test-fixtures';
@@ -78,5 +78,13 @@ describe('buttons and chips', () => {
     expect(chips[2]!.without).toEqual({ ...f, sections: [] });
     expect(chips[5]!.without).toEqual({ ...f, type: null });
     expect(filterChips(emptyFilters(), fixtureTests, [])).toEqual([]);
+  });
+});
+
+describe('listNumbers', () => {
+  it('lists question numbers in a sentence', () => {
+    expect(listNumbers([4])).toBe('4');
+    expect(listNumbers([4, 17])).toBe('4 and 17');
+    expect(listNumbers([4, 17, 30])).toBe('4, 17, and 30');
   });
 });

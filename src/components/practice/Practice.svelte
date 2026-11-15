@@ -5,14 +5,15 @@
   import { onMount } from 'svelte';
   import { matchFrqs } from '../../lib/frqs';
   import { activeFilterCount, emptyFilters, filterQuestions, filterTopics } from '../../lib/practice/filters';
-  import { WEAK_NO_HISTORY_NOTE, describeScope, describeSet } from '../../lib/practice/labels';
+  import { EXAM_NOTE, WEAK_NO_HISTORY_NOTE, describeScope, describeSet, examLabel } from '../../lib/practice/labels';
   import { practiceStarts } from '../../lib/practice/links';
   import { type LinkProblem, RESHUFFLED_NOTE, knownFilters, linkNotice, missingNote } from '../../lib/practice/link-check';
   import { type Entry, type Step, land, readEntry, startSet, syncSetup, toResults, toReview, toSetup } from '../../lib/practice/nav';
   import { type SavedSet, answeredIn, readSavedSets, resumable as findResumable, withSaved } from '../../lib/practice/saved';
   import { amendLastResult, recordResult, weakHasNoHistory, weakTopics } from '../../lib/practice/score';
-  import { newSeed, questionsForSet } from '../../lib/practice/select';
-  import type { Filters, History, PracticeQuestion } from '../../lib/practice/types';
+  import { newSeed } from '../../lib/practice/random';
+  import { questionsForSet } from '../../lib/practice/select';
+  import type { Filters, History, PracticeExam, PracticeQuestion } from '../../lib/practice/types';
   import { type SetSpec, filtersToQuery, hasBadSeed, parseFilters, parseSet, setToQuery, setupQuery } from '../../lib/practice/url';
   import { readJson, storageKey, writeJson } from '../../lib/storage';
   import { plural } from '../../lib/text';
@@ -47,6 +48,13 @@
   let notice = $state('');
 
   const setFilters = $derived(parseFilters(set.query));
+  const setIsExam = $derived(!!parseSet(set.query)?.exam);
+
+  /** The blueprint of the practice exam a set's address names, or null for any other set. */
+  function examFor(query: string): PracticeExam | null {
+    const spec = parseSet(query);
+    return (spec?.exam && tests.find((t) => t.id === spec.filters.test)?.exam) || null;
+  }
   const setFrqTopics = $derived(filterTopics(setFilters, course.units, course.chapterTopics, tests));
   const weakSpots = $derived(all ? weakTopics(filterQuestions(all, emptyFilters(), tests), history) : []);
   /** `f` checked against what this class has. */
@@ -148,6 +156,7 @@
       s.ids.map((i) => byId.get(i)!),
       s,
       s.index,
+      examFor(s.query),
     );
     set = { query: s.query, id: s.id, label: s.label || describeScope(parseFilters(s.query), tests, everything), note: s.note };
     resumable = null;
@@ -157,15 +166,18 @@
   /** Make `questions` the current set, unanswered. */
   function loadSet(spec: SetSpec & { seed: string }, questions: PracticeQuestion[], label?: string) {
     const pool = filterQuestions(all!, spec.filters, tests);
-    attempt.load(questions);
+    const query = setToQuery(spec);
+    attempt.load(questions, undefined, 0, examFor(query));
     set = {
-      query: setToQuery(spec),
+      query,
       id: spec.seed,
       label:
         label ??
-        (spec.ids
-          ? `${describeScope(spec.filters, tests, everything)} · ${plural(questions.length, 'chosen question')}`
-          : describeSet(spec.filters, tests, questions.length, pool.length, everything)),
+        (spec.exam && spec.filters.test
+          ? examLabel(spec.filters.test, tests)
+          : spec.ids
+            ? `${describeScope(spec.filters, tests, everything)} · ${plural(questions.length, 'chosen question')}`
+            : describeSet(spec.filters, tests, questions.length, pool.length, everything)),
       note: setNote(spec, questions.length, pool),
     };
     resumable = null;
@@ -174,6 +186,7 @@
 
   /** The line shown with a new set: questions missing from a shared set, or why "weakest first" is random. */
   function setNote(spec: SetSpec, found: number, pool: PracticeQuestion[]): string {
+    if (spec.exam) return EXAM_NOTE;
     if (spec.ids) {
       const asked = new Set(spec.ids).size;
       return found < asked ? missingNote(asked, found) : '';
@@ -181,9 +194,9 @@
     return spec.filters.mode === 'weak' && weakHasNoHistory(pool, history) ? WEAK_NO_HISTORY_NOTE : '';
   }
 
-  /** Start a new set from filters `f` (and, for a retry, exact questions). */
-  function begin(f: Filters, ids: string[] | null = null, label?: string) {
-    const spec = { filters: f, seed: newSeed(), ids };
+  /** Start a new set from filters `f`: exact questions for a retry, or a practice exam of the filters' test. */
+  function begin(f: Filters, { ids = null, label, exam = false }: { ids?: string[] | null; label?: string; exam?: boolean } = {}) {
+    const spec = { filters: f, exam, seed: newSeed(), ids };
     const questions = questionsForSet(all!, spec, tests, history);
     if (questions.length === 0) return;
     if (phase === 'setup') filters = f;
@@ -240,6 +253,15 @@
     phase = 'session';
   }
 
+  /** Submit the practice exam: check every answer, keep the scores in practice history, and show the results. */
+  function submitExam() {
+    let next = history;
+    for (const [id, value] of Object.entries(attempt.submit())) next = recordResult(next, id, value);
+    history = next;
+    writeJson(historyKey, history);
+    showResults();
+  }
+
   function score(id: string, value: number, corrected: boolean) {
     history = corrected ? amendLastResult(history, id, value) : recordResult(history, id, value);
     writeJson(historyKey, history);
@@ -279,7 +301,7 @@
       </div>
     </section>
   {/if}
-  <Setup {all} bind:filters weakest={weakSpots.length > 0} onstart={(f) => begin(f)} />
+  <Setup {all} bind:filters weakest={weakSpots.length > 0} onstart={(f, exam) => begin(f, { exam })} />
   {#if Object.keys(history).length > 0}
     <PracticeHistory
       count={Object.keys(history).length}
@@ -293,11 +315,12 @@
   <Session
     {attempt}
     label={set.label}
-    note={set.note}
+    note={attempt.submitted ? '' : set.note}
     {reviewing}
     onfilters={() => backToSetup()}
     onresults={() => showResults()}
     onscore={score}
+    onsubmit={() => submitExam()}
   />
 {:else}
   <Results
@@ -306,13 +329,12 @@
     filters={setFilters}
     frqMatches={setFrqTopics.size ? matchFrqs(course.frqs, setFrqTopics) : []}
     onretry={(words) =>
-      begin(
-        setFilters,
-        attempt.missed.map((q) => q.id),
-        `${describeScope(setFilters, tests, everything)} · ${words}`,
-      )}
+      begin(setFilters, {
+        ids: attempt.missed.map((q) => q.id),
+        label: `${describeScope(setFilters, tests, everything)} · ${words}`,
+      })}
     onreview={review}
-    onagain={() => begin(setFilters)}
+    onagain={() => begin(setFilters, { exam: setIsExam })}
     onfilters={() => backToSetup()}
   />
 {/if}

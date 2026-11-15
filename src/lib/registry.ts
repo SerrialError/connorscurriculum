@@ -58,12 +58,45 @@ export const chapterSchema = z.object({
   sections: z.array(sectionSchema).default([]),
 });
 
+/**
+ * One section of a practice exam's multiple choice: `count` questions that `match` (a chapter in
+ * `chapters` and, when `sections` lists textbook sections, tagged with one of them).
+ */
+const examSectionSchema = z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/, 'section id must be lowercase letters, digits, or dashes'),
+  /** Shown in the exam's results, e.g. "Energy, wavelength, and frequency". */
+  label: z.string().min(1),
+  count: z.number().int().positive(),
+  match: z.object({
+    chapters: z.array(z.number().int()).min(1, 'list at least one chapter'),
+    sections: z.array(z.string()).default([]),
+  }),
+  /** At most this many of the group's questions may be calculations (questions with calculation: true). */
+  maxCalculations: z.number().int().nonnegative().optional(),
+});
+
+/**
+ * A practice exam in the class test's format. The multiple-choice questions come from `sections`
+ * (a question counts in the first group it fits), plus `extra` more from any of them, then
+ * `frq.count` free-response questions from the test's chapters.
+ */
+export const examSchema = z.object({
+  mcqPoints: z.number().positive(),
+  sections: z.array(examSectionSchema).min(1),
+  /** Multiple-choice questions beyond the groups' counts, drawn from all the groups together. */
+  extra: z.number().int().nonnegative().default(0),
+  frq: z.object({ count: z.number().int().nonnegative(), points: z.number().nonnegative() }),
+});
+
 export const testSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/, 'test id must be lowercase letters, digits, or dashes'),
   title: z.string().min(1),
   date: z.iso.date().optional(),
   chapters: z.array(z.number().int()).min(1),
   sections: z.array(z.string()).default([]),
+  /** Handed out with the test, e.g. an equation sheet: linked from the test page. */
+  handouts: z.array(z.object({ title: z.string().min(1), url: z.url({ protocol: /^https$/ }) })).default([]),
+  exam: examSchema.optional(),
 });
 
 export const progressSchema = z.object({
@@ -157,6 +190,7 @@ export type Chapter = z.infer<typeof chapterSchema> & {
   apUnits: string[];
 };
 export type ClassTest = z.infer<typeof testSchema>;
+export type ExamBlueprint = z.infer<typeof examSchema>;
 /**
  * done:    every chapter that teaches it is finished this year
  * review:  not done this year, but fully covered in last year's course
@@ -288,20 +322,7 @@ function loadSubject(subject: Subject, dataDir: string): SubjectData {
   chapters.sort((a, b) => a.number - b.number);
   for (const list of topicChapters.values()) list.sort((a, b) => a - b);
 
-  const testIds = new Set<string>();
-  tests.forEach((test, i) => {
-    if (testIds.has(test.id)) throw new DataError(testsFile, `[${i}].id`, `duplicate test id "${test.id}"`);
-    testIds.add(test.id);
-    test.chapters.forEach((n, j) => {
-      if (!chapterMap.has(n)) throw new DataError(testsFile, `[${i}].chapters[${j}]`, `chapter ${n} is not in chapters.json`);
-    });
-    const known = test.chapters.flatMap((n) => chapterMap.get(n)!.sections.map((s) => s.id));
-    test.sections.forEach((s, j) => {
-      if (known.length > 0 && !known.includes(s)) {
-        throw new DataError(testsFile, `[${i}].sections[${j}]`, `section "${s}" is not in the test's chapters`);
-      }
-    });
-  });
+  checkTests(tests, chapterMap, testsFile);
 
   const progressFile = join(dir, 'progress.json');
   const rawProgress = existsSync(progressFile) ? readJson(progressFile, progressSchema) : progressSchema.parse({});
@@ -382,6 +403,50 @@ function loadSubject(subject: Subject, dataDir: string): SubjectData {
   pastFrqs.sort((a, b) => b.year - a.year);
 
   return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs, textbookGaps };
+}
+
+/** Cross-checks for tests.json: unique ids, and chapters and sections the class has. */
+export function checkTests(tests: ClassTest[], chapterMap: ReadonlyMap<number, Pick<Chapter, 'sections'>>, file: string): void {
+  const testIds = new Set<string>();
+  tests.forEach((test, i) => {
+    if (testIds.has(test.id)) throw new DataError(file, `[${i}].id`, `duplicate test id "${test.id}"`);
+    testIds.add(test.id);
+    test.chapters.forEach((n, j) => {
+      if (!chapterMap.has(n)) throw new DataError(file, `[${i}].chapters[${j}]`, `chapter ${n} is not in chapters.json`);
+    });
+    const known = test.chapters.flatMap((n) => chapterMap.get(n)!.sections.map((s) => s.id));
+    test.sections.forEach((s, j) => {
+      if (known.length > 0 && !known.includes(s)) {
+        throw new DataError(file, `[${i}].sections[${j}]`, `section "${s}" is not in the test's chapters`);
+      }
+    });
+    if (test.exam) checkExam(test, `[${i}].exam`, chapterMap, file);
+  });
+}
+
+function checkExam(test: ClassTest, at: string, chapterMap: ReadonlyMap<number, Pick<Chapter, 'sections'>>, file: string): void {
+  const exam = test.exam!;
+  const ids = new Set<string>();
+  exam.sections.forEach((group, g) => {
+    const field = `${at}.sections[${g}]`;
+    if (ids.has(group.id)) throw new DataError(file, `${field}.id`, `duplicate section id "${group.id}"`);
+    ids.add(group.id);
+    group.match.chapters.forEach((n, j) => {
+      if (!test.chapters.includes(n)) throw new DataError(file, `${field}.match.chapters[${j}]`, `chapter ${n} is not one of the test's chapters (${test.chapters.join(', ')})`);
+    });
+    const known = group.match.chapters.flatMap((n) => chapterMap.get(n)!.sections.map((s) => s.id));
+    group.match.sections.forEach((s, j) => {
+      if (known.length > 0 && !known.includes(s)) {
+        throw new DataError(file, `${field}.match.sections[${j}]`, `section "${s}" is not in chapter ${group.match.chapters.join(' or ')} in chapters.json`);
+      }
+      if (test.sections.length > 0 && !test.sections.includes(s)) {
+        throw new DataError(file, `${field}.match.sections[${j}]`, `section "${s}" is not one of the test's sections`);
+      }
+    });
+    if (group.maxCalculations !== undefined && group.maxCalculations > group.count) {
+      throw new DataError(file, `${field}.maxCalculations`, `is ${group.maxCalculations}, more than the section's count (${group.count})`);
+    }
+  });
 }
 
 /**

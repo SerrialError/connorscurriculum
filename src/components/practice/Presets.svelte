@@ -10,7 +10,7 @@
     all: PracticeQuestion[];
     /** Show "Weakest topics". */
     weakest: boolean;
-    onstart: (f: Filters) => void;
+    onstart: (f: Filters, exam?: boolean) => void;
   }
 
   let { all, weakest, onstart }: Props = $props();
@@ -25,7 +25,7 @@
   <div class="preset-row">
     {#each presets as p (p.label)}
       <div class="preset">
-        <button type="button" class="preset-main" onclick={() => onstart(p.filters)}>
+        <button type="button" class="preset-main" onclick={() => onstart(p.filters, p.exam)}>
           <span class="preset-label">{p.label} <span aria-hidden="true">→</span></span>
           {#if p.note}<span class="small muted">{p.note}</span>{/if}
         </button>

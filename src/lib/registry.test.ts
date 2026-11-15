@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { deriveProgress, getSubjectData } from './registry';
+import { checkTests, deriveProgress, getSubjectData } from './registry';
 
 describe('deriveProgress', () => {
   const topicChapters = new Map([
@@ -121,5 +121,36 @@ describe('textbook gaps', () => {
     const order = [...data.topics.keys()];
     expect([...ids].sort((a, b) => order.indexOf(a) - order.indexOf(b))).toEqual(ids);
     expect(data.textbookGaps.topics.get('1.6')?.coverage).toBe('missing');
+  });
+});
+
+describe('checkTests: practice exams', () => {
+  const chapterMap = new Map([
+    [6, { sections: [{ id: '6.1', title: 'Light' }, { id: '6.8', title: 'Configurations' }] }],
+    [7, { sections: [] }],
+    [8, { sections: [] }],
+  ]);
+  const section = { id: 'light', label: 'Light', count: 2, match: { chapters: [6], sections: ['6.1'] } };
+  const test = (exam: object) => [
+    { id: 'ch6-7', title: 'Test', chapters: [6, 7], sections: [], handouts: [], exam: { mcqPoints: 2.8, extra: 0, frq: { count: 1, points: 7.2 }, ...exam } },
+  ];
+  const check = (exam: object) => () => checkTests(test(exam) as never, chapterMap, 'tests.json');
+
+  it('accepts sections in the test chapters', () => {
+    expect(check({ sections: [section, { ...section, id: 'trends', match: { chapters: [7], sections: [] } }] })).not.toThrow();
+  });
+
+  it('names the field of a section outside the test, an unknown textbook section, a repeated id, or too many calculations', () => {
+    expect(check({ sections: [{ ...section, match: { chapters: [8], sections: [] } }] })).toThrow('[0].exam.sections[0].match.chapters[0]: chapter 8 is not one of the test');
+    expect(check({ sections: [{ ...section, match: { chapters: [6], sections: ['6.4'] } }] })).toThrow('[0].exam.sections[0].match.sections[0]: section "6.4" is not in chapter 6');
+    expect(check({ sections: [section, section] })).toThrow('[0].exam.sections[1].id: duplicate section id "light"');
+    expect(check({ sections: [{ ...section, maxCalculations: 3 }] })).toThrow('maxCalculations: is 3, more than the section');
+  });
+});
+
+describe('apchem tests.json', () => {
+  it('links the equation sheet handed out with the Chapters 6–7 test', () => {
+    const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch6-7-test')!;
+    expect(test.handouts.map((h) => h.url)).toContain('https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf');
   });
 });

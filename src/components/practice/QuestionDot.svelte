@@ -2,11 +2,11 @@
   // A numbered square for one question, coloured (and marked ✓ ✗ ½) by its status. A button in
   // the question grid; a plain label in the results list.
   import { STATUS_MARK, STATUS_TEXT } from '../../lib/practice/labels';
-  import type { ScoreStatus } from '../../lib/practice/score';
+  import type { DotStatus } from '../../lib/practice/score';
 
   interface Props {
     n: number;
-    status: ScoreStatus;
+    status: DotStatus;
     current?: boolean;
     /** Makes it a button. */
     onclick?: () => void;
@@ -58,6 +58,12 @@
     background: var(--bad-soft);
     border-color: var(--bad);
     color: var(--bad);
+  }
+  /* Picked in a practice exam that isn't submitted yet: filled, but not marked right or wrong. */
+  .picked {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--text);
   }
   .partial {
     background: var(--warn-soft);

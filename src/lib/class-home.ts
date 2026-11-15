@@ -5,7 +5,7 @@ import { inCedOrder, inTest, type nowChapters } from './class-status';
 import { hasTopics } from './features';
 import { type FrqLink, frqCountLabel, matchFrqs } from './frqs';
 import { kindCounts } from './lesson-kinds';
-import { type PracticeStart, practiceStarts } from './practice/links';
+import { type PracticeStart, examStart, practiceStarts } from './practice/links';
 import type { SubjectData } from './registry';
 
 interface HomeLesson {
@@ -85,6 +85,8 @@ export function classHome<L extends HomeLesson, Q extends HomeQuestion>(
       test,
       review: lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)),
       practice: testCount > 0 ? practiceStarts({ test: test.id }, testCount) : null,
+      /** The test's practice exam (tests.json "exam"), or null without one or with no questions. */
+      exam: testCount > 0 && test.exam ? examStart(test.id) : null,
     },
     /** The latest finished chapters with lessons, most recent first. */
     recent: [...data.progress.chapters]

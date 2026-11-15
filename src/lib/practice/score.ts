@@ -33,6 +33,8 @@ export function questionScore(
 }
 
 export type ScoreStatus = 'todo' | 'right' | 'wrong' | 'partial';
+/** A question's square in the question list: its score, or (in a practice exam before it's submitted) just picked. */
+export type DotStatus = ScoreStatus | 'picked';
 
 /** A question's status from its 0–1 score (undefined: not answered). */
 export const scoreStatus = (score: number | undefined): ScoreStatus =>

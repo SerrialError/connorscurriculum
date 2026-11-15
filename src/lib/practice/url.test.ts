@@ -85,23 +85,23 @@ describe('a set in the URL', () => {
   });
 
   it('round-trips filters, seed, and ids', () => {
-    const spec = { filters: { ...emptyFilters(), chapters: [7], difficulty: [3], mode: 'all' as const, n: 5 }, seed: 'k3x9a0', ids: null };
+    const spec = { filters: { ...emptyFilters(), chapters: [7], difficulty: [3], mode: 'all' as const, n: 5 }, exam: false, seed: 'k3x9a0', ids: null };
     const q = setToQuery(spec);
     expect(q).toBe('?chapter=7&difficulty=3&mode=all&n=5&start=1&seed=k3x9a0');
     expect(parseSet(q)).toEqual(spec);
-    const picked = { filters: emptyFilters(), seed: 'abc123', ids: ['q2', 'q1'] };
+    const picked = { filters: emptyFilters(), exam: false, seed: 'abc123', ids: ['q2', 'q1'] };
     expect(setToQuery(picked)).toBe('?start=1&seed=abc123&ids=q2,q1');
     expect(parseSet(setToQuery(picked))).toEqual(picked);
   });
 
   it('accepts a link with no seed yet, and rejects junk seeds', () => {
-    expect(parseSet('?chapter=7&start=1')).toEqual({ filters: { ...emptyFilters(), chapters: [7] }, seed: null, ids: null });
+    expect(parseSet('?chapter=7&start=1')).toEqual({ filters: { ...emptyFilters(), chapters: [7] }, exam: false, seed: null, ids: null });
     expect(parseSet('?start=1&seed=<script>')?.seed).toBeNull();
   });
 
   it('returns to exactly the filters that made the set', () => {
     const f = { ...emptyFilters(), test: 'ch14', type: 'frq' as const, mode: 'all' as const, n: null };
-    expect(setupQuery(setToQuery({ filters: f, seed: 'abc', ids: ['q1'] }))).toBe(filtersToQuery(f));
+    expect(setupQuery(setToQuery({ filters: f, exam: false, seed: 'abc', ids: ['q1'] }))).toBe(filtersToQuery(f));
     expect(setupQuery('?chapter=7&start=1')).toBe('?chapter=7');
   });
 
@@ -119,5 +119,19 @@ describe('hasBadSeed', () => {
     expect(hasBadSeed('?start=1')).toBe(false);
     expect(hasBadSeed('?start=1&seed=')).toBe(true);
     expect(hasBadSeed('?start=1&seed=not!a-seed')).toBe(true);
+  });
+});
+
+describe('a practice exam in the URL', () => {
+  it('round-trips with its class test and seed', () => {
+    const spec = { filters: { ...emptyFilters(), test: 'ch6-7-test' }, exam: true, seed: 'k3x9a0', ids: null };
+    const query = setToQuery(spec);
+    expect(query).toBe('?test=ch6-7-test&exam=1&start=1&seed=k3x9a0');
+    expect(parseSet(query)).toEqual(spec);
+  });
+
+  it('needs a class test, and the setup screen keeps only the filters', () => {
+    expect(parseSet('?exam=1&start=1&seed=abc')?.exam).toBe(false);
+    expect(setupQuery('?test=ch6-7-test&exam=1&start=1&seed=abc')).toBe('?test=ch6-7-test');
   });
 });

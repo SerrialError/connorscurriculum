@@ -28,7 +28,7 @@ export interface PracticeStart {
 function link(pool: Pool, how: Pick<Filters, 'mode' | 'n'>, total: number, label: string): PracticeStart {
   const filters: Filters = { ...emptyFilters(), ...pool, ...how };
   return {
-    query: setToQuery({ filters, seed: null, ids: null }),
+    query: setToQuery({ filters, exam: false, seed: null, ids: null }),
     filters,
     label,
     short: describeHow(filters, Math.min(filters.n ?? total, total), total),
@@ -48,6 +48,12 @@ export function practiceStarts(pool: Pool, total: number, about = ''): { start: 
     start: link(pool, { mode: 'random', n: DEFAULT_COUNT }, total, `Start ${DEFAULT_COUNT} random questions${end}`),
     all: link(pool, inOrder, total, `All ${total} in order`),
   };
+}
+
+/** A practice exam for a class test (exam.ts): drawn fresh each time, in the test's format. */
+export function examStart(testId: string): Pick<PracticeStart, 'query' | 'filters' | 'label'> {
+  const filters: Filters = { ...emptyFilters(), test: testId };
+  return { query: setToQuery({ filters, exam: true, seed: null, ids: null }), filters, label: 'Take a practice exam' };
 }
 
 /** "Weakest topics first" on a pool of `total` questions, for a student with practice history. */

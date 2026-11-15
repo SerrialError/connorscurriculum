@@ -12,9 +12,9 @@ const withProgress = (finished: number[], current: number[]): SubjectData => ({
   chapterMap: new Map(chapters.map((c) => [c.number, c])),
   progress: { ...base.progress, chapters: new Set(finished), current },
   tests: [
-    { id: 'undated', title: 'Quiz', chapters: [1], sections: [] },
-    { id: 'early', title: 'Chapter 1 Test', date: '2026-10-01', chapters: [1], sections: [] },
-    { id: 'late', title: 'Chapter 2 Test', date: '2026-11-20', chapters: [2], sections: [] },
+    { id: 'undated', title: 'Quiz', chapters: [1], sections: [], handouts: [] },
+    { id: 'early', title: 'Chapter 1 Test', date: '2026-10-01', chapters: [1], sections: [], handouts: [] },
+    { id: 'late', title: 'Chapter 2 Test', date: '2026-11-20', chapters: [2], sections: [], handouts: [] },
   ],
 });
 const entry = (chapter: number, sample = false) => ({ data: { chapter, sample } });

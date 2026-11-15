@@ -1,6 +1,6 @@
 <script lang="ts">
   // A free-response question's parts. Each part's scoring stays hidden until asked for; then the
-  // student checks every point they earned.
+  // student checks every point they earned. In a practice exam being taken there is no scoring yet.
   import type { FrqQuestion } from '../../lib/practice/types';
   import { plural } from '../../lib/text';
   import type { Attempt } from './attempt.svelte';
@@ -8,11 +8,13 @@
   interface Props {
     q: FrqQuestion;
     attempt: Attempt;
+    /** Offer each part's scoring (false while a practice exam is being taken). */
+    scoring?: boolean;
     /** A point was checked or unchecked. */
     onmark: (part: number, point: number, earned: boolean) => void;
   }
 
-  let { q, attempt, onmark }: Props = $props();
+  let { q, attempt, scoring = true, onmark }: Props = $props();
 </script>
 
 {#each q.parts as part, p (part.label)}
@@ -29,7 +31,7 @@
           </label>
         {/each}
       </fieldset>
-    {:else}
+    {:else if scoring}
       <button class="button secondary small" type="button" onclick={() => attempt.reveal(q, p)}>Show scoring for ({part.label})</button>
     {/if}
   </section>

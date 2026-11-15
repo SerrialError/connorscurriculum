@@ -1,39 +1,10 @@
-// Picking a set's questions: in order, shuffled with the set's seed, or weakest topics first.
-import { filterQuestions } from './filters';
+// Picking a set's questions: in order, shuffled with the set's seed, weakest topics first, or a
+// practice exam drawn by its class test's blueprint.
+import { drawExam } from './exam';
+import { emptyFilters, filterQuestions } from './filters';
+import { type Rng, seededRng, shuffle } from './random';
 import { UNSEEN_ACCURACY, areaKey, scoreAreas, topicAccuracy } from './score';
 import type { Filters, History, PracticeQuestion, PracticeTest } from './types';
-
-export type Rng = () => number;
-
-/** A repeatable random number generator for a seed (FNV-1a hash of the seed, then mulberry32). */
-export function seededRng(seed: string): Rng {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < seed.length; i++) h = Math.imul(h ^ seed.charCodeAt(i), 0x01000193);
-  let a = h >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-/** A new set's seed: six URL-safe characters. */
-export function newSeed(rng: Rng = Math.random): string {
-  return Math.floor(rng() * 36 ** 6)
-    .toString(36)
-    .padStart(6, '0');
-}
-
-export function shuffle<T>(items: T[], rng: Rng): T[] {
-  const a = [...items];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [a[i], a[j]] = [a[j]!, a[i]!];
-  }
-  return a;
-}
 
 export function selectQuestions(
   matching: PracticeQuestion[],
@@ -56,18 +27,23 @@ export function selectQuestions(
 }
 
 /**
- * The questions of the set a URL names: its ids (skipping any that no longer exist), or the
- * questions its filters match, picked with its seed.
+ * The questions of the set a URL names: its ids (skipping any that no longer exist), a practice
+ * exam for its class test (none if the test has no exam), or the questions its filters match,
+ * picked with its seed.
  */
 export function questionsForSet(
   all: PracticeQuestion[],
-  spec: { filters: Filters; seed: string; ids: string[] | null },
+  spec: { filters: Filters; exam: boolean; seed: string; ids: string[] | null },
   tests: PracticeTest[],
   history: History,
 ): PracticeQuestion[] {
   if (spec.ids) {
     const byId = new Map(all.map((q) => [q.id, q]));
     return [...new Set(spec.ids)].flatMap((id) => byId.get(id) ?? []);
+  }
+  if (spec.exam) {
+    const exam = tests.find((t) => t.id === spec.filters.test)?.exam;
+    return exam ? drawExam(filterQuestions(all, { ...emptyFilters(), test: spec.filters.test }, tests), exam, seededRng(spec.seed)) : [];
   }
   return selectQuestions(filterQuestions(all, spec.filters, tests), spec.filters, history, seededRng(spec.seed));
 }

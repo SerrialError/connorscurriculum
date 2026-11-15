@@ -41,6 +41,11 @@ describe('readSavedSets', () => {
     expect(t!.query).toContain('seed=saved0');
   });
 
+  it('keeps a practice exam a practice exam when it gives it a new address', () => {
+    const [s] = readSavedSets([{ ...set({ query: '?test=ch6-7-test&exam=1&start=1&seed=abc123' }), id: undefined }], ids);
+    expect(s!.query).toBe('?test=ch6-7-test&exam=1&start=1&seed=saved0&ids=q1,q2,q3');
+  });
+
   it('keeps the index in range', () => {
     expect(readSavedSets([set({ index: 99 })], ids)[0]!.index).toBe(2);
   });
@@ -67,5 +72,18 @@ describe('resumable', () => {
 
   it('counts MCQs checked and FRQs marked as answered', () => {
     expect(answeredIn(set({ checked: { q1: true }, finished: { q2: true } }))).toBe(2);
+  });
+});
+
+describe('answeredIn a practice exam', () => {
+  const exam = (over: Partial<SavedSet> = {}) => set({ query: '?test=ch6-7-test&exam=1&start=1&seed=abc123', ...over });
+
+  it('counts picked choices while the exam is being taken, so it can be resumed', () => {
+    expect(answeredIn(exam({ picks: { q1: 'a', q2: 'c' } }))).toBe(2);
+    expect(resumable([exam({ picks: { q1: 'a' } })])?.id).toBe('abc123');
+  });
+
+  it('counts checked answers once it is submitted, as in any set', () => {
+    expect(answeredIn(exam({ picks: { q1: 'a' }, checked: { q1: true, q2: true } }))).toBe(2);
   });
 });

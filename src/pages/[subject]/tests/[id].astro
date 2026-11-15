@@ -5,7 +5,8 @@ import TopicBadges from '../../../components/TopicBadges.astro';
 import TopicLegend from '../../../components/TopicLegend.astro';
 import Base from '../../../layouts/Base.astro';
 import { hasTopics } from '../../../lib/features';
-import { pickQuery, practiceStarts, weakestStart } from '../../../lib/practice/links';
+import { examFormat, examParts, examPointsNote, examShortfalls } from '../../../lib/practice/exam';
+import { examStart, pickQuery, practiceStarts, weakestStart } from '../../../lib/practice/links';
 import { chapterName } from '../../../lib/text';
 import {
   formatDate,
@@ -37,6 +38,11 @@ const topics = inCedOrder(data, new Set([...lessons, ...questions].flatMap(topic
 const reviewSheets = lessons.filter((l) => l.data.kind === 'review');
 const others = lessons.filter((l) => l.data.kind !== 'review');
 const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)!, lessons: others.filter((l) => l.data.chapter === n) }));
+const exam = test.exam;
+if (exam) {
+  const problems = examShortfalls(questions.map((q) => ({ ...q.data, id: q.id })), exam);
+  if (problems.length) throw new Error(`src/data/${subject}/tests.json → ${test.id}.exam: ${problems.join('; ')}. Add questions or lower the counts.`);
+}
 ---
 
 <Base title={test.title} subject={subject} searchable searchMeta={{ type: 'Class test' }}>
@@ -52,6 +58,17 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
     ))}
     {test.sections.length > 0 && <> · sections {test.sections.join(', ')}</>}
   </p>
+  {test.handouts.length > 0 && (
+    <p class="handouts">
+      Comes with the test:{' '}
+      {test.handouts.map((h, i) => (
+        <>
+          {i > 0 && ', '}
+          <a href={h.url}>{h.title}{/\.pdf$/i.test(h.url) && ' (PDF)'}</a>
+        </>
+      ))}
+    </p>
+  )}
 
   {reviewSheets.length > 0 && (
     <section class="card review-card" aria-labelledby="review-h">
@@ -83,6 +100,20 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
     </div>
   ) : (
     <p class="muted">No practice questions for this test yet.</p>
+  )}
+
+  {exam && questions.length > 0 && (
+    <section class="card exam-card" aria-labelledby="exam-h" data-pagefind-ignore>
+      <h2 id="exam-h">Practice exam</h2>
+      <p>
+        The test's format: {examFormat(exam)} ({examPointsNote(exam)}). Nothing is marked until you submit, and each exam
+        is drawn fresh from the practice questions:
+      </p>
+      <ul>
+        {examParts(exam).map((p) => <li>{p}</li>)}
+      </ul>
+      <a class="button" href={practiceUrl(subject, examStart(test.id).query)}>{examStart(test.id).label}</a>
+    </section>
   )}
 
   {hasTopics(data) && (
@@ -130,6 +161,22 @@ const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)
   }
   .more-practice {
     margin: 0.5rem 0 0;
+  }
+  .handouts {
+    margin: -0.5rem 0 1rem;
+  }
+  .exam-card {
+    margin: 1rem 0;
+  }
+  .exam-card h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.2rem;
+  }
+  .exam-card p {
+    margin: 0 0 0.4rem;
+  }
+  .exam-card ul {
+    margin: 0 0 0.9rem;
   }
   .review-card {
     margin: 1rem 0;

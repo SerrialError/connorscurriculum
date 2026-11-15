@@ -1,7 +1,7 @@
 # Practice questions for Chapter 7 (Periodic Properties of the Elements), written for the
 # Chapters 6–7 class test. Original; not taken from the textbook or College Board materials.
 # Questions with cedTopics: [] cover class-test material that is not on the AP exam (Slater's rules,
-# bonding vs nonbonding radius).
+# bonding vs nonbonding radius). calculation: true marks questions that need a numeric calculation.
 
 - id: apchem-07-zeff-quick
   type: mcq
@@ -30,6 +30,7 @@
   sections: ["7.2"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use Slater's rules to find $Z_{\text{eff}}$ for a 3s electron in magnesium ($Z = 12$).
@@ -56,6 +57,7 @@
   sections: ["7.2"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use Slater's rules to find $Z_{\text{eff}}$ for the 4s electron in potassium ($Z = 19$).
@@ -85,14 +87,14 @@
   prompt: |
     Slater's rules give about the same $Z_{\text{eff}}$ (2.20) for the valence electron of Na and of K. Which statement best explains why K has the **lower** first ionization energy?
   choices:
-    - { id: a, text: "K has more protons, so its valence electron is attracted more strongly" }
-    - { id: b, text: "K's valence electron is in a higher shell (n = 4), farther from the nucleus, so it is held less strongly" }
-    - { id: c, text: "K's valence electron is paired, so it repels its partner" }
-    - { id: d, text: "K has fewer core electrons than Na" }
-  answer: b
+    - { id: a, text: "K has more protons, so its valence electron is attracted more strongly to the nucleus" }
+    - { id: b, text: "K has fewer core electrons than Na, so its valence electron is less shielded" }
+    - { id: c, text: "K's valence electron is paired, so repulsion from its partner makes it easier to remove" }
+    - { id: d, text: "K's valence electron is in n = 4, farther from the nucleus, so it is held less strongly" }
+  answer: d
   explanation: |
     With about the same effective nuclear charge, the difference is **distance**. By Coulomb's law, attraction falls off with distance, and K's 4s electron is a whole shell farther out than Na's 3s electron.
-    (A) would make the IE higher, not lower. (C) is wrong because a single s electron is unpaired. (D) is backward: K has 18 core electrons and Na has 10.
+    (A) would make the IE higher, not lower. (C) is wrong because a single s electron is unpaired. (B) is backward: K has 18 core electrons and Na has 10.
 
 - id: apchem-07-zeff-across-period
   type: mcq
@@ -105,13 +107,13 @@
   prompt: |
     Why does the effective nuclear charge on the valence electrons increase from Na to Cl?
   choices:
-    - { id: a, text: "Each element adds a new electron shell" }
-    - { id: b, text: "Each element adds a proton, while the added electron goes into the same shell and shields poorly" }
-    - { id: c, text: "The number of core electrons increases across the period" }
-    - { id: d, text: "Atoms get larger across a period" }
-  answer: b
+    - { id: a, text: "Each element adds a new electron shell farther from the nucleus" }
+    - { id: b, text: "Atoms get larger across a period, so the nucleus holds more charge" }
+    - { id: c, text: "The number of core electrons goes up by one with each step across the period" }
+    - { id: d, text: "Each step adds a proton, but the new electron joins the same shell and shields poorly" }
+  answer: d
   explanation: |
-    Across period 3 the core stays the same ($[\ce{Ne}]$), and each step adds one proton and one electron in the $n = 3$ shell. Electrons in the same shell shield each other only a little, so most of each added proton's charge is felt. (A), (C), and (D) are all false across a period.
+    Across period 3 the core stays the same ($[\ce{Ne}]$), and each step adds one proton and one electron in the $n = 3$ shell. Electrons in the same shell shield each other only a little, so most of each added proton's charge is felt. (A), (C), and (B) are all false across a period.
 
 - id: apchem-07-largest-radius
   type: mcq
@@ -163,10 +165,10 @@
     Which comparison is correct?
   choices:
     - { id: a, text: '$\ce{Na+}$ is larger than $\ce{Na}$' }
-    - { id: b, text: '$\ce{Cl-}$ is larger than $\ce{Cl}$' }
+    - { id: b, text: '$\ce{Mg^2+}$ is the same size as $\ce{Mg}$' }
     - { id: c, text: '$\ce{O^2-}$ is smaller than $\ce{O}$' }
-    - { id: d, text: '$\ce{Mg^2+}$ is the same size as $\ce{Mg}$' }
-  answer: b
+    - { id: d, text: '$\ce{Cl-}$ is larger than $\ce{Cl}$' }
+  answer: d
   explanation: |
     An anion has extra electrons but the same number of protons. The added electron–electron repulsion spreads the cloud out, so $\ce{Cl-}$ is larger than $\ce{Cl}$ (and $\ce{O^2-}$ is larger than $\ce{O}$).
     A cation loses electrons, often its whole outer shell, so $\ce{Na+}$ and $\ce{Mg^2+}$ are **smaller** than their atoms.
@@ -178,6 +180,7 @@
   sections: ["7.3"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     The H–H bond length is 0.74 Å and the Cl–Cl bond length is 1.98 Å. Using bonding atomic radii, estimate the H–Cl bond length.
@@ -202,11 +205,11 @@
   prompt: |
     How does an atom's bonding atomic radius compare with its nonbonding (van der Waals) radius?
   choices:
-    - { id: a, text: "The bonding radius is smaller, because the electron clouds of bonded atoms overlap" }
-    - { id: b, text: "The bonding radius is larger, because bonding adds electrons" }
-    - { id: c, text: "They are always equal" }
-    - { id: d, text: "The bonding radius is smaller, because bonding removes protons" }
-  answer: a
+    - { id: a, text: "The bonding radius is smaller, because bonding removes protons from the nuclei" }
+    - { id: b, text: "The bonding radius is larger, because bonding adds electrons to each atom" }
+    - { id: c, text: "The two radii are always equal, because the atom itself doesn't change" }
+    - { id: d, text: "The bonding radius is smaller, because bonded atoms' electron clouds overlap" }
+  answer: d
   explanation: |
     In a bond the electron clouds overlap, so the nuclei sit closer together than two atoms that just touch without bonding. Half of a shorter distance gives a smaller radius.
 
@@ -285,14 +288,14 @@
   prompt: |
     Oxygen has a **lower** first ionization energy than nitrogen, even though oxygen has more protons. Which explanation is best?
   choices:
-    - { id: a, text: "Oxygen's valence electrons are in a higher shell than nitrogen's" }
-    - { id: b, text: "The electron removed from oxygen is in a 2p orbital with another electron, and the repulsion between them makes it easier to remove" }
-    - { id: c, text: "Oxygen's electron is removed from a 2s orbital, which is higher in energy than 2p" }
-    - { id: d, text: "Nitrogen has a smaller effective nuclear charge than oxygen" }
-  answer: b
+    - { id: a, text: "Oxygen's valence electrons are in a higher shell than nitrogen's, farther from the nucleus" }
+    - { id: b, text: "Nitrogen has a smaller effective nuclear charge than oxygen does" }
+    - { id: c, text: "Oxygen's electron comes from a 2s orbital, which is higher in energy than 2p" }
+    - { id: d, text: "O loses a paired 2p electron, and repulsion from its partner makes it easier to remove" }
+  answer: d
   explanation: |
     N is $2p^3$ (↑ ↑ ↑, one electron per orbital). O is $2p^4$ (↑↓ ↑ ↑), with one orbital holding a pair. Repulsion between the two paired electrons raises the energy of one of them, so it takes less energy to remove.
-    (A) is false because both are in $n = 2$. (C) is false because 2s is lower than 2p. (D) is true, but it would make O's IE **higher**, so it can't explain the dip.
+    (A) is false because both are in $n = 2$. (C) is false because 2s is lower than 2p. (B) is true, but it would make O's IE **higher**, so it can't explain the dip.
 
 - id: apchem-07-ie-dip-mg-al
   type: mcq
@@ -305,14 +308,14 @@
   prompt: |
     Aluminum has a **lower** first ionization energy than magnesium. Which explanation is best?
   choices:
-    - { id: a, text: "Al's first electron is removed from a 3p orbital, which is higher in energy than Mg's 3s and partly shielded by the 3s electrons" }
-    - { id: b, text: "Al has fewer protons than Mg" }
-    - { id: c, text: "Al's valence electrons are in the n = 4 shell" }
-    - { id: d, text: "Al's 3p electron is paired" }
-  answer: a
+    - { id: a, text: "Al's 3p electron is paired, so repulsion from its partner makes it easier to remove" }
+    - { id: b, text: "Al has fewer protons than Mg, so it holds its valence electrons less tightly" }
+    - { id: c, text: "Al's valence electrons are in the n = 4 shell, which is farther from the nucleus than Mg's" }
+    - { id: d, text: "Al loses a 3p electron, which is higher in energy than Mg's 3s and partly shielded by it" }
+  answer: d
   explanation: |
     Mg is $[\ce{Ne}]\,3s^2$ and Al is $[\ce{Ne}]\,3s^2\,3p^1$. A 3p electron is higher in energy than a 3s electron, and the filled 3s subshell partly shields it, so less energy is needed to remove it.
-    (B) and (C) are false. (D) is false because a single 3p electron is unpaired.
+    (B) and (C) are false. (A) is false because a single 3p electron is unpaired.
 
 - id: apchem-07-electron-affinity-equation
   type: mcq
@@ -345,14 +348,14 @@
   prompt: |
     Why do noble gases such as Ne have **positive** electron affinities (energy must be added)?
   choices:
-    - { id: a, text: "Their valence electrons are paired, so they repel the incoming electron" }
-    - { id: b, text: "The added electron would have to go into a new, higher shell, farther from the nucleus and well shielded" }
-    - { id: c, text: "Noble gases have no protons" }
-    - { id: d, text: "Noble gases have the lowest effective nuclear charge in their period" }
-  answer: b
+    - { id: a, text: "Their valence electrons are paired, so they repel an incoming electron too strongly" }
+    - { id: b, text: "Noble gases have the lowest effective nuclear charge in their period" }
+    - { id: c, text: "Noble gas atoms have more electrons than protons, so they repel an added electron" }
+    - { id: d, text: "An added electron would have to start a new shell, farther out and well shielded" }
+  answer: d
   explanation: |
     Ne's $n = 2$ shell is full ($2s^2\,2p^6$), so an extra electron would have to go into 3s. That electron is far away and shielded by all ten electrons, so it feels almost no attraction, and energy has to be put in to add it.
-    (D) is backward: noble gases have the **highest** $Z_{\text{eff}}$ in their period.
+    (A) is false because paired electrons in other orbitals are not what blocks the new one. (C) is false: a neutral atom has as many electrons as protons. (B) is backward: noble gases have the **highest** $Z_{\text{eff}}$ in their period.
 
 - id: apchem-07-electronegativity
   type: mcq
@@ -418,6 +421,7 @@
   sections: ["7.2", "7.3", "7.4"]
   cedTopics: ["1.5", "1.7"]
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Answer the following about sodium, magnesium, and aluminum, which are next to each other in period 3.
@@ -469,6 +473,7 @@
   sections: ["7.2"]
   cedTopics: []
   difficulty: 2
+  calculation: true
   authors: ["Claude"]
   prompt: |
     Use Slater's rules to find $Z_{\text{eff}}$ for a 2p electron in oxygen ($Z = 8$).
@@ -498,11 +503,11 @@
   prompt: |
     Which electron in a sodium atom feels the **largest** effective nuclear charge?
   choices:
-    - { id: a, text: "A 1s electron" }
+    - { id: a, text: "The 3s electron" }
     - { id: b, text: "A 2s electron" }
     - { id: c, text: "A 2p electron" }
-    - { id: d, text: "The 3s electron" }
-  answer: a
+    - { id: d, text: "A 1s electron" }
+  answer: d
   explanation: |
     Zeff is the nuclear charge minus the shielding from electrons between that electron and the nucleus. A 1s electron has almost nothing between it and the 11 protons, so it feels nearly the full charge.
     The 3s valence electron is shielded by all 10 core electrons and feels the **smallest** Zeff. That's also why core electrons take far more energy to remove.
@@ -518,14 +523,14 @@
   prompt: |
     For magnesium, the second ionization energy is larger than the first. Which is the best explanation?
   choices:
-    - { id: a, text: "There is more electron–electron repulsion in $\\ce{Mg+}$ than in Mg" }
-    - { id: b, text: "In $\\ce{Mg+}$, the same 12 protons pull on fewer electrons, so the remaining electrons are held more tightly" }
-    - { id: c, text: "The second electron is removed from the n = 2 shell" }
-    - { id: d, text: "$\\ce{Mg+}$ has more protons than Mg" }
-  answer: b
+    - { id: a, text: '$\ce{Mg+}$ has more electron–electron repulsion than Mg, so its next electron is harder to remove' }
+    - { id: b, text: "The second electron is removed from the n = 2 shell, which is closer to the nucleus" }
+    - { id: c, text: 'In $\ce{Mg+}$ the same 12 protons pull on fewer electrons, so each is held more tightly' }
+    - { id: d, text: '$\ce{Mg+}$ has more protons than Mg, so it attracts its electrons more strongly' }
+  answer: c
   explanation: |
     Removing one electron leaves $\ce{Mg+}$ with 12 protons and 11 electrons. With **less** electron–electron repulsion and a positive charge, the ion holds its remaining electrons more tightly, so the next one takes more energy.
-    (A) is backward. (C) is false because Mg's second electron is still a 3s electron; the big jump comes at the **third** IE. (D) is false because ionization never changes the number of protons.
+    (A) is backward. (B) is false because Mg's second electron is still a 3s electron; the big jump comes at the **third** IE. (D) is false because ionization never changes the number of protons.
 
 - id: apchem-07-ie-down-group
   type: mcq
@@ -578,12 +583,12 @@
     Why do metals tend to form cations?
   choices:
     - { id: a, text: "They have high ionization energies" }
-    - { id: b, text: "They have low ionization energies, so their valence electrons are easy to remove" }
+    - { id: b, text: "They have more protons than nonmetals" }
     - { id: c, text: "They have very negative electron affinities" }
-    - { id: d, text: "They have more protons than nonmetals" }
-  answer: b
+    - { id: d, text: "They have low ionization energies" }
+  answer: d
   explanation: |
-    Metals sit on the left and bottom of the table, where Zeff is low and atoms are large. Their few valence electrons are loosely held (low IE), so they lose them and become positive ions.
+    Metals sit on the left and bottom of the table, where Zeff is low and atoms are large. Their few valence electrons are loosely held (low IE), so they lose them and become positive ions. (A) is backward, (C) describes nonmetals, and the number of protons (B) is not what decides it.
 
 - id: apchem-07-valence-selenium
   type: mcq
@@ -612,13 +617,14 @@
   sections: ["7.2", "7.3"]
   cedTopics: []
   difficulty: 3
+  calculation: true
   authors: ["Claude"]
   prompt: |
     $\ce{Na+}$ and $\ce{F-}$ both have the configuration $1s^2\,2s^2\,2p^6$. Using Slater's rules, what is $Z_{\text{eff}}$ on a 2p electron in each, and which ion is smaller?
   choices:
     - { id: a, text: '$\ce{Na+}$: 6.85, $\ce{F-}$: 4.85; $\ce{Na+}$ is smaller' }
     - { id: b, text: '$\ce{Na+}$: 4.85, $\ce{F-}$: 6.85; $\ce{F-}$ is smaller' }
-    - { id: c, text: 'Both 5.85; they are the same size' }
+    - { id: c, text: "Both are 5.85, so the two ions are the same size" }
     - { id: d, text: '$\ce{Na+}$: 6.85, $\ce{F-}$: 4.85; $\ce{F-}$ is smaller' }
   answer: a
   explanation: |
@@ -663,11 +669,11 @@
   prompt: |
     Atomic radius **decreases** from Na to Cl, even though each element has more electrons. Why?
   choices:
-    - { id: a, text: "Electrons get smaller as more are added" }
-    - { id: b, text: "The valence electrons stay in the same shell while Zeff increases, so they are pulled closer to the nucleus" }
-    - { id: c, text: "Each element across the period adds a new shell" }
-    - { id: d, text: "Atoms on the right have fewer protons" }
-  answer: b
+    - { id: a, text: "Electrons get smaller as more of them are added to the same shell" }
+    - { id: b, text: "Each element across the period adds a new shell that sits closer to the nucleus" }
+    - { id: c, text: "Zeff rises while the electrons stay in the same shell, so they're pulled closer" }
+    - { id: d, text: "Atoms on the right side of a period have fewer protons than atoms on the left" }
+  answer: c
   explanation: |
     Across period 3, every valence electron is in $n = 3$, and the core stays the same. Each step adds a proton that the same-shell electrons barely shield, so Zeff rises and pulls the whole $n = 3$ shell in tighter.
 
@@ -682,13 +688,14 @@
   prompt: |
     In a carbon atom, why does a 2s electron feel a slightly **larger** effective nuclear charge than a 2p electron?
   choices:
-    - { id: a, text: "The 2s electron is in a higher shell" }
-    - { id: b, text: "The 2s orbital has more electrons" }
+    - { id: a, text: "The 2s electron is in a higher shell, so it is farther out and less shielded" }
+    - { id: b, text: "The 2p electrons shield the 2s electron more than the 1s electrons do" }
     - { id: c, text: "The 2s electron penetrates closer to the nucleus, so the 1s electrons shield it less" }
-    - { id: d, text: "p electrons are not attracted to the nucleus" }
+    - { id: d, text: "p electrons are not attracted to the nucleus at all, because of the node there" }
   answer: c
   explanation: |
     An s orbital has some electron density very close to the nucleus, inside the 1s core, while a p orbital has a node at the nucleus. Spending time close in means less shielding and a larger Zeff, which is also why 2s is lower in energy than 2p.
+    (A) is false because 2s and 2p are in the same shell. (B) is backward: the inner 1s electrons do most of the shielding. (D) is false: the node only means a p electron is never found right at the nucleus.
 
 - id: apchem-07-theory-alkali-water
   type: mcq
@@ -702,10 +709,10 @@
     What are the products when potassium metal reacts with water?
   choices:
     - { id: a, text: '$\ce{K2O}$ and $\ce{H2}$' }
-    - { id: b, text: '$\ce{KOH}$ and $\ce{H2}$' }
-    - { id: c, text: '$\ce{KH}$ and $\ce{O2}$' }
+    - { id: b, text: '$\ce{KH}$ and $\ce{O2}$' }
+    - { id: c, text: '$\ce{KOH}$ and $\ce{H2}$' }
     - { id: d, text: "No reaction occurs" }
-  answer: b
+  answer: c
   explanation: |
     Alkali metals react with water to make a metal hydroxide and hydrogen gas: $\ce{2K(s) + 2H2O(l) -> 2KOH(aq) + H2(g)}$.
     The reaction is vigorous for potassium, more so than for sodium, because K's ionization energy is lower.
@@ -721,10 +728,10 @@
   prompt: |
     Which alkali metal reacts **most** vigorously with water, and why?
   choices:
-    - { id: a, text: "Li, because it is the smallest" }
-    - { id: b, text: "Na, because it is the most common" }
-    - { id: c, text: "Cs, because its valence electron is farthest from the nucleus and easiest to remove" }
-    - { id: d, text: "They all react equally, because all have one valence electron" }
+    - { id: a, text: "Li, because its small size lets it react with water most quickly" }
+    - { id: b, text: "Na, because it is the most common alkali metal in nature" }
+    - { id: c, text: "Cs, because its valence electron is farthest out and easiest to remove" }
+    - { id: d, text: "They all react equally, because every alkali metal has one valence electron" }
   answer: c
   explanation: |
     Metal reactivity is about giving up electrons. Going down group 1, the valence electron is in a higher shell, farther from the nucleus, so the ionization energy drops and the metal reacts more readily. Cs is the most reactive of these.
@@ -740,10 +747,10 @@
   prompt: |
     Why is magnesium less reactive than sodium?
   choices:
-    - { id: a, text: "Mg has a higher Zeff and must lose two electrons, which takes more energy than Na losing one" }
-    - { id: b, text: "Mg is in a higher period than Na" }
-    - { id: c, text: "Mg has fewer protons than Na" }
-    - { id: d, text: "Mg is a nonmetal" }
+    - { id: a, text: "Mg has a higher Zeff and must lose two electrons, not one" }
+    - { id: b, text: "Mg is in a higher period than Na, so its electrons are farther out" }
+    - { id: c, text: "Mg has fewer protons than Na does" }
+    - { id: d, text: "Mg is a nonmetal, and nonmetals rarely lose electrons" }
   answer: a
   explanation: |
     Mg is one step to the right of Na in period 3, so its valence electrons feel a higher Zeff, and its first IE is higher. It also has to lose two electrons to form $\ce{Mg^2+}$. Both make it react less readily than Na.
@@ -818,14 +825,14 @@
   prompt: |
     Of the noble gases, xenon forms the most compounds (such as $\ce{XeF4}$). Which explanation fits the Chapter 7 trends?
   choices:
-    - { id: a, text: "Xe has the highest ionization energy of the noble gases" }
-    - { id: b, text: "Xe has a lower ionization energy than the lighter noble gases, so a very electronegative element like F can pull electron density from it" }
-    - { id: c, text: "Xe has an incomplete valence shell" }
-    - { id: d, text: "Xe is a metal" }
-  answer: b
+    - { id: a, text: "Xe has the highest ionization energy of the noble gases, so its bonds are strongest" }
+    - { id: b, text: "Xe is a metal, so it gives up electrons to fluorine easily" }
+    - { id: c, text: "Xe has an incomplete valence shell, so it needs electrons to fill it" }
+    - { id: d, text: "Xe has a lower IE than the lighter noble gases, so F can pull electron density from it" }
+  answer: d
   explanation: |
     Ionization energy drops going down group 18, because the valence electrons are farther from the nucleus. Xe's electrons are held loosely enough that fluorine and oxygen can form bonds with it. He, Ne, and Ar have much higher IEs and form no stable compounds under normal conditions.
-    (C) is false because Xe's $5s^2\,5p^6$ shell is full.
+    (A) is backward: He has the highest IE. (B) is false because Xe is a nonmetal. (C) is false because Xe's $5s^2\,5p^6$ shell is full.
 
 - id: apchem-07-theory-halogen-states
   type: mcq
@@ -916,10 +923,10 @@
     What is the most likely formula of the compound X forms with chlorine?
   choices:
     - { id: a, text: '$\ce{XCl}$' }
-    - { id: b, text: '$\ce{XCl2}$' }
+    - { id: b, text: '$\ce{X2Cl}$' }
     - { id: c, text: '$\ce{XCl3}$' }
-    - { id: d, text: '$\ce{X2Cl}$' }
-  answer: b
+    - { id: d, text: '$\ce{XCl2}$' }
+  answer: d
   explanation: |
     The jump comes between IE₂ (1064) and IE₃ (4138), about 4×, so X has two valence electrons and forms $\ce{X^2+}$. Chlorine forms $\ce{Cl-}$, so the neutral compound is $\ce{XCl2}$.
     (These values fit strontium, a group 2 metal.)
@@ -936,13 +943,13 @@
     Boron (801 kJ/mol) has a lower first ionization energy than beryllium (899 kJ/mol). Which other pair shows a dip for the **same reason**?
   choices:
     - { id: a, text: "O is lower than N" }
-    - { id: b, text: "Al is lower than Mg" }
-    - { id: c, text: "Na is lower than Ne" }
+    - { id: b, text: "Na is lower than Ne" }
+    - { id: c, text: "Al is lower than Mg" }
     - { id: d, text: "K is lower than Na" }
-  answer: b
+  answer: c
   explanation: |
     Be ($2s^2$) → B ($2s^2\,2p^1$): B's first electron comes from a **p** subshell, which is higher in energy than 2s and partly shielded by the filled 2s pair. Mg ($3s^2$) → Al ($3s^2\,3p^1$) is the same group 2 → group 13 situation one period down.
-    (A) is a dip too, but for a different reason: O's removed electron is **paired** in a 2p orbital, and the pair repels. (C) is the start of a new shell, and (D) is the normal trend down a group, not an exception.
+    (A) is a dip too, but for a different reason: O's removed electron is **paired** in a 2p orbital, and the pair repels. (B) is the start of a new shell, and (D) is the normal trend down a group, not an exception.
 
 - id: apchem-07-ie-rank-mg-al-p-s
   type: mcq
@@ -1059,13 +1066,13 @@
     The electron affinity of chlorine (−349 kJ/mol) is **more negative** than that of fluorine (−328 kJ/mol), even though F is higher in the group. Which explanation is best?
   choices:
     - { id: a, text: "Cl has more valence electrons than F, so it attracts an extra electron more strongly" }
-    - { id: b, text: "F is so small that an added electron enters a crowded 2p subshell, where repulsion from the other electrons cancels part of the attraction" }
-    - { id: c, text: "The added electron in Cl goes into a 4s orbital, which is lower in energy" }
-    - { id: d, text: "F is less electronegative than Cl" }
-  answer: b
+    - { id: b, text: "F is less electronegative than Cl, so it attracts an added electron less" }
+    - { id: c, text: "The electron added to Cl goes into a 4s orbital, which is lower in energy than 3p" }
+    - { id: d, text: "F's compact 2p subshell is crowded, so repulsion cancels part of its pull on the electron" }
+  answer: d
   explanation: |
     The usual trend says the smaller atom should attract an extra electron more strongly. But F's $n = 2$ shell is very compact, so the incoming electron is squeezed close to seven other valence electrons and the repulsion is large. Cl's $n = 3$ shell is bigger, so the electrons are more spread out, and the net energy released is a little larger.
-    (A) is false: both have seven valence electrons ($ns^2\,np^5$). (C) is false: the electron goes into 3p. (D) is backward: F is the most electronegative element.
+    (A) is false: both have seven valence electrons ($ns^2\,np^5$). (C) is false: the electron goes into 3p. (B) is backward: F is the most electronegative element.
 
 - id: apchem-07-ea-near-zero-pair
   type: mcq
@@ -1141,14 +1148,14 @@
   prompt: |
     Carbon has a much more negative electron affinity than nitrogen, even though nitrogen has more protons. Why?
   choices:
-    - { id: a, text: "An electron added to C goes into an empty 2p orbital, but an electron added to N must pair with another electron" }
-    - { id: b, text: "Carbon has a larger atomic radius, so it has more room for the electron" }
-    - { id: c, text: "Nitrogen's added electron goes into the n = 3 shell" }
-    - { id: d, text: "Carbon has a higher effective nuclear charge than nitrogen" }
+    - { id: a, text: "An electron added to C fills an empty 2p orbital; one added to N has to pair" }
+    - { id: b, text: "Carbon has a larger atomic radius, so there is more room for the added electron" }
+    - { id: c, text: "Nitrogen's added electron has to go into the n = 3 shell" }
+    - { id: d, text: "Carbon has a higher effective nuclear charge than nitrogen does" }
   answer: a
   explanation: |
     C is $2p^2$ (↑ ↑ _), so the extra electron takes the empty orbital: $2p^3$, no pairing. N is $2p^3$ (↑ ↑ ↑), so the extra electron must share an orbital, and the added repulsion cancels most of the attraction.
-    (C) is false because N's 2p subshell still has room. (D) is backward: Zeff increases from C to N.
+    (B) is wrong because "room" isn't what matters; a bigger atom would hold the electron less tightly, not more. (C) is false because N's 2p subshell still has room. (D) is backward: Zeff increases from C to N.
 
 - id: apchem-07-ea-second-oxygen
   type: mcq
@@ -1161,10 +1168,10 @@
   prompt: |
     Oxygen's first electron affinity is −141 kJ/mol. The energy change for $\ce{O-(g) + e- -> O^2-(g)}$ is **positive**, roughly +750 kJ/mol. Which statement best explains the positive value?
   choices:
-    - { id: a, text: "The second electron must go into the n = 3 shell" }
-    - { id: b, text: "The second electron is being added to an ion that is already negative, so it is repelled by the ion's overall negative charge" }
-    - { id: c, text: "Oxygen has a lower Zeff after gaining the first electron, because a proton is lost" }
-    - { id: d, text: "The value is positive because it measures energy released" }
+    - { id: a, text: "The second electron must go into the n = 3 shell, far from the nucleus" }
+    - { id: b, text: '$\ce{O-}$ is already negative, so it repels a second incoming electron' }
+    - { id: c, text: '$\ce{O-}$ has a lower Zeff than O, because a proton is lost when it gains an electron' }
+    - { id: d, text: "The value is positive because it measures the energy released" }
   answer: b
   explanation: |
     $\ce{O-}$ already has one more electron than protons, so a second incoming electron is pushed away by that net negative charge. Energy has to be **added** to force it on, so the value is positive.
@@ -1246,14 +1253,14 @@
   prompt: |
     Why is $\ce{Fe^3+}$ smaller than $\ce{Fe^2+}$?
   choices:
-    - { id: a, text: '$\ce{Fe^3+}$ has more protons' }
-    - { id: b, text: 'Both have 26 protons, but $\ce{Fe^3+}$ has one fewer electron, so there is less electron–electron repulsion and each electron is pulled in more tightly' }
-    - { id: c, text: '$\ce{Fe^3+}$ has lost its entire n = 3 shell' }
-    - { id: d, text: '$\ce{Fe^3+}$ has more unpaired electrons, and unpaired electrons are closer to the nucleus' }
+    - { id: a, text: '$\ce{Fe^3+}$ has more protons than $\ce{Fe^2+}$, so it pulls its electrons in harder' }
+    - { id: b, text: "Same 26 protons but one fewer electron, so less repulsion and a tighter pull on each" }
+    - { id: c, text: '$\ce{Fe^3+}$ has lost its entire n = 3 shell, leaving only n = 1 and n = 2' }
+    - { id: d, text: '$\ce{Fe^3+}$ has more unpaired electrons, and unpaired electrons sit closer to the nucleus' }
   answer: b
   explanation: |
     $\ce{Fe^2+}$ is $[\ce{Ar}]\,3d^6$ and $\ce{Fe^3+}$ is $[\ce{Ar}]\,3d^5$. The nucleus is the same, so removing an electron leaves fewer electrons to repel each other and share the same 26+ charge. The rest contract.
-    The rule of thumb: for ions of the same element, **the more positive the charge, the smaller the ion**. (C) is false because 3d and 3s/3p electrons remain.
+    The rule of thumb: for ions of the same element, **the more positive the charge, the smaller the ion**. (A) is false because both ions have 26 protons. (C) is false because 3d and 3s/3p electrons remain. (D) is false: being unpaired doesn't put an electron closer to the nucleus.
 
 - id: apchem-07-transition-radius-flat
   type: mcq
@@ -1266,14 +1273,15 @@
   prompt: |
     Across period 3 from Na to Cl, atomic radius drops a lot. Across the transition metals of period 4 (Sc to Zn), it changes much less. Which explanation is best?
   choices:
-    - { id: a, text: "The transition metals add electrons to a new shell" }
-    - { id: b, text: "In the transition metals the added electrons go into the inner 3d subshell, which shields the outer 4s electrons fairly well, so the Zeff on the 4s electrons rises only slowly" }
-    - { id: c, text: "The transition metals don't gain protons from one element to the next" }
-    - { id: d, text: "d electrons don't repel s electrons" }
+    - { id: a, text: "Each transition metal adds its new electron to a new shell, which offsets the added proton" }
+    - { id: b, text: "The new electrons go into inner 3d orbitals, which shield the outer 4s electrons well" }
+    - { id: c, text: "The transition metals don't gain a proton from one element to the next, so Zeff is flat" }
+    - { id: d, text: "d electrons don't repel s electrons, so adding them has no effect on the 4s electrons" }
   answer: b
   explanation: |
     Radius is set by the outermost electrons, which are 4s for these metals. From Sc to Zn each step adds a proton, but the new electron goes into **3d**, which is closer to the nucleus than 4s. An inner electron shields the 4s electrons much better than a same-shell electron would, so most of each new proton's charge is canceled and Zeff on 4s barely changes.
     Across period 3, the new electron is in the same shell ($n = 3$) as the others and shields poorly, so Zeff climbs steeply.
+    (A) is false because Sc through Zn all have 4s as the outer shell. (C) is false: each element has one more proton than the last. (D) is false: all electrons repel each other.
 
 - id: apchem-07-radius-rank-f-o-s-si
   type: mcq
@@ -1306,10 +1314,10 @@
   prompt: |
     Which statement about shielding is correct?
   choices:
-    - { id: a, text: "Valence electrons shield each other just as well as core electrons shield valence electrons" }
-    - { id: b, text: "Core electrons shield valence electrons much more effectively than valence electrons in the same shell shield each other" }
-    - { id: c, text: "Shielding increases sharply across a period, which is why atoms get smaller" }
-    - { id: d, text: "Electrons farther from the nucleus shield the inner electrons" }
+    - { id: a, text: "Valence electrons shield each other just as well as core electrons shield them" }
+    - { id: b, text: "Core electrons shield valence electrons better than same-shell electrons shield each other" }
+    - { id: c, text: "Shielding increases sharply across a period, which is why atoms get smaller to the right" }
+    - { id: d, text: "Electrons farther from the nucleus shield the inner electrons more than the reverse" }
   answer: b
   explanation: |
     Core electrons sit between the nucleus and the valence shell, so they cancel almost one proton each. Electrons in the same shell are spread around the nucleus at about the same distance and block very little of its charge.
@@ -1346,9 +1354,9 @@
   prompt: |
     Why does electronegativity decrease from F to I?
   choices:
-    - { id: a, text: "I has fewer protons than F" }
-    - { id: b, text: "The valence shell is farther from the nucleus and more shielded, so bonding electrons are attracted less strongly" }
-    - { id: c, text: "I has more valence electrons than F" }
+    - { id: a, text: "I has fewer protons than F, so its nucleus pulls bonding electrons less" }
+    - { id: b, text: "Bonding electrons sit farther from the nucleus, so they are attracted less strongly" }
+    - { id: c, text: "I has more valence electrons than F, so they repel bonding electrons more" }
     - { id: d, text: "The effective nuclear charge on the valence electrons drops sharply down the group" }
   answer: b
   explanation: |
@@ -1366,7 +1374,7 @@
   prompt: |
     Elements X and Y are both in **period 3**. Their successive ionization energies (kJ/mol) are:
 
-    | | IE₁ | IE₂ | IE₃ | IE₄ | IE₅ | IE₆ | IE₇ |
+    | Element | IE₁ | IE₂ | IE₃ | IE₄ | IE₅ | IE₆ | IE₇ |
     |---|---|---|---|---|---|---|---|
     | X | 738 | 1451 | 7733 | 10543 | | | |
     | Y | 1000 | 2252 | 3357 | 4556 | 7004 | 8496 | 27107 |

@@ -1,6 +1,6 @@
 // Sets saved in localStorage, so a reload, Back/Forward, or "Resume" returns to the same set with
 // its answers. Pure functions; the practice island does the reading and writing.
-import { isSeed, parseFilters, setToQuery, wantsStart } from './url';
+import { isSeed, parseFilters, parseSet, setToQuery, wantsStart } from './url';
 
 /** The answers given so far in a set, by question id. */
 export interface Answers {
@@ -49,7 +49,7 @@ export function readSavedSets(raw: unknown, questionIds: ReadonlySet<string>): S
         id,
         label: s.label ?? '',
         note: s.note ?? '',
-        query: wantsStart(query) && s.id === id ? query : setToQuery({ filters: parseFilters(query), seed: id, ids: s.ids }),
+        query: wantsStart(query) && s.id === id ? query : setToQuery({ filters: parseFilters(query), exam: parseSet(query)?.exam ?? false, seed: id, ids: s.ids }),
         ids: s.ids,
         index: Math.min(Math.max(0, Number(s.index) || 0), s.ids.length - 1),
         phase: s.phase === 'results' ? 'results' : 'session',
@@ -67,7 +67,11 @@ export function readSavedSets(raw: unknown, questionIds: ReadonlySet<string>): S
 export const withSaved = (sets: SavedSet[], saved: SavedSet): SavedSet[] =>
   [saved, ...sets.filter((s) => s.id !== saved.id)].slice(0, MAX_SAVED);
 
-export const answeredIn = (s: Answers & { ids: string[] }): number => s.ids.filter((id) => s.checked[id] || s.finished[id]).length;
+/** Questions answered so far: checked or marked, or in a practice exam not yet submitted, picked. */
+export function answeredIn(s: Answers & { ids: string[]; query: string }): number {
+  const taking = parseSet(s.query)?.exam && !Object.values(s.checked).some(Boolean);
+  return s.ids.filter((id) => s.checked[id] || s.finished[id] || (taking && s.picks[id])).length;
+}
 
 /**
  * The set to offer under "Unfinished set": the newest one, if it was started (something

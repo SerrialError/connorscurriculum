@@ -1,8 +1,8 @@
 <script lang="ts">
   // Above the question: ← Filters, how many are answered, End set; the progress bar; the set's
-  // name; and the question numbers to jump between.
+  // name; and the question numbers to jump between. In a practice exam being taken, "answered"
+  // counts the multiple-choice questions with a choice picked, and End set is Submit exam.
   import { tick } from 'svelte';
-  import { scoreStatus } from '../../lib/practice/score';
   import type { Attempt } from './attempt.svelte';
   import QuestionDot from './QuestionDot.svelte';
 
@@ -14,17 +14,27 @@
     /** Opened from the results screen: the top button goes back there. */
     reviewing: boolean;
     onfilters: () => void;
+    /** End set / See results / Back to results, or Submit exam. */
     onresults: () => void;
   }
 
   let { attempt, label, note, reviewing, onfilters, onresults }: Props = $props();
 
-  /** Sets longer than this keep the question grid closed until it's wanted. */
+  /**
+   * Sets longer than this keep the question grid closed until it's wanted. A practice exam always
+   * shows it: moving around and seeing what's left is how an exam is taken.
+   */
   const LONG_SET = 24;
 
   let jumpOpen = $state(false);
   let qnavEl = $state<HTMLElement | null>(null);
   const total = $derived(attempt.questions.length);
+  const collapsible = $derived(total > LONG_SET && !attempt.exam);
+  const counted = $derived(attempt.taking ? attempt.mcqs.length : total);
+  const done = $derived(attempt.taking ? attempt.mcqs.length - attempt.unpicked.length : attempt.answered);
+  const endLabel = $derived(
+    reviewing ? 'Back to results' : attempt.taking ? 'Submit exam' : attempt.answered === total ? 'See results' : 'End set',
+  );
 
   // On phones the question numbers are one scrolling row: bring the current one into the middle of it.
   $effect(() => {
@@ -37,28 +47,26 @@
 </script>
 
 <div class="session-bar">
-  <button class="link-button" type="button" onclick={() => onfilters()}>← Filters</button>
-  <span class="small muted">{attempt.answered} of {total} answered</span>
-  <button class="button secondary small" type="button" onclick={() => onresults()}>
-    {reviewing ? 'Back to results' : attempt.answered === total ? 'See results' : 'End set'}
-  </button>
+  <button class="link-button" type="button" onclick={() => onfilters()}>{attempt.exam ? '← Practice' : '← Filters'}</button>
+  <span class="small muted">{done} of {counted}{#if attempt.taking && counted < total}<span class="wide-only">{' multiple choice'}</span>{/if} answered</span>
+  <button class="button secondary small" type="button" onclick={() => onresults()}>{endLabel}</button>
 </div>
-<div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={total} aria-valuenow={attempt.answered}>
-  <span style:width={`${(attempt.answered / total) * 100}%`}></span>
+<div class="progress" role="progressbar" aria-label="Answered" aria-valuemin="0" aria-valuemax={counted} aria-valuenow={done}>
+  <span style:width={`${(done / counted) * 100}%`}></span>
 </div>
 <div class="set-line">
   <p class="set-label small"><strong>{label}</strong>{#if note}<span class="muted">{' · '}{note}</span>{/if}</p>
-  {#if total > LONG_SET}
+  {#if collapsible}
     <button type="button" class="link-button small jump-toggle" aria-expanded={jumpOpen} aria-controls="qnav" onclick={() => (jumpOpen = !jumpOpen)}>
       {jumpOpen ? 'Hide question list' : 'Question list'}
     </button>
   {/if}
 </div>
 
-{#if total > LONG_SET ? jumpOpen : total > 1}
+{#if collapsible ? jumpOpen : total > 1}
   <nav class="qnav" id="qnav" aria-label="Questions in this set" bind:this={qnavEl}>
     {#each attempt.questions as s, i (s.id)}
-      <QuestionDot n={i + 1} status={scoreStatus(attempt.scores[s.id])} current={i === attempt.index} onclick={() => attempt.go(i)} />
+      <QuestionDot n={i + 1} status={attempt.dot(s)} current={i === attempt.index} onclick={() => attempt.go(i)} />
     {/each}
   </nav>
 {/if}
@@ -70,6 +78,13 @@
     gap: 0.75rem;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+  }
+  .session-bar > :global(button) {
+    flex: none;
+    white-space: nowrap;
+  }
+  .session-bar > span {
+    text-align: center;
   }
   .progress {
     height: 6px;

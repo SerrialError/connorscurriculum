@@ -60,4 +60,12 @@ describe('quickStarts', () => {
     const [mixed] = quickStarts([], big, new Set([6, 7]));
     expect(asQueries(mixed!)).toEqual({ label: 'Mixed review', query: '?chapter=6,7', note: '10 random from the 20 questions in Ch.\u00a06–7' });
   });
+
+  it("offers the latest test's practice exam right after the test", () => {
+    const exam = { mcqPoints: 2.8, sections: [{ id: 's', label: 'All', count: 36, match: { chapters: [6], sections: [] } }], extra: 0, frq: { count: 1, points: 7.2 } };
+    const presets = quickStarts([{ ...test(116), exam }], qs, new Set([6, 7]));
+    expect(presets.map((p) => p.label)).toEqual(['Chapters 6–7 Test', 'Practice exam: Chapters 6–7 Test', 'Mixed review']);
+    expect(presets[1]).toMatchObject({ exam: true, note: '36 multiple choice and 1 free response, 108 points in all' });
+    expect(filtersToQuery(presets[1]!.filters)).toBe('?test=ch6-7-test');
+  });
 });

@@ -73,11 +73,13 @@ const chapterHref = (n: number, hash = '') => url(`${subject}/chapters/${n}/${ha
             <div class="actions if-upcoming">
               <a class="button" href={practiceUrl(subject, test.practice.start.query)}>{test.practice.start.label}</a>
               {test.practice.all && <a class="button secondary" href={practiceUrl(subject, test.practice.all.query)}>{test.practice.all.label}</a>}
+              {test.exam && <a class="button secondary" href={practiceUrl(subject, test.exam.query)}>{test.exam.label}</a>}
             </div>
             {/* After the test: review practice, as quiet links. */}
             <p class="small if-past review-practice">
               <span class="muted">Practice:</span> <a href={practiceUrl(subject, test.practice.start.query)}>{test.practice.start.short}</a>
               {test.practice.all && <><span class="muted"> · </span><a href={practiceUrl(subject, test.practice.all.query)}>{test.practice.all.short}</a></>}
+              {test.exam && <><span class="muted"> · </span><a href={practiceUrl(subject, test.exam.query)}>practice exam</a></>}
             </p>
           </>
         )}

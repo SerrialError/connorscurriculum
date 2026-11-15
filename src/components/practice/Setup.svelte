@@ -21,7 +21,8 @@
     filters: Filters;
     /** Show the "Weakest topics" quick start (there is history with weak topics). */
     weakest: boolean;
-    onstart: (f: Filters) => void;
+    /** Start a set from these filters; `exam`: a practice exam of their class test. */
+    onstart: (f: Filters, exam?: boolean) => void;
   }
 
   let { all, filters = $bindable(), weakest, onstart }: Props = $props();

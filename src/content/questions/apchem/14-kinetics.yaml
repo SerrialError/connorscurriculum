@@ -7,6 +7,7 @@
   chapter: 14
   cedTopics: ["5.1"]
   difficulty: 1
+  calculation: true
   sample: true
   prompt: |
     For the reaction $\ce{2H2 + O2 -> 2H2O}$, water is being formed at a rate of $0.060\ \text{M/s}$.
@@ -59,6 +60,7 @@
   chapter: 14
   cedTopics: ["5.3"]
   difficulty: 2
+  calculation: true
   sample: true
   prompt: |
     A first-order reaction has a rate constant $k = 0.0231\ \text{min}^{-1}$.
@@ -105,6 +107,7 @@
   chapter: 14
   cedTopics: ["5.2", "5.3"]
   difficulty: 2
+  calculation: true
   sample: true
   prompt: |
     Compound Q decomposes in solution: $\mathrm{Q}(aq) \rightarrow \text{products}$. The concentration of Q was measured over time at constant temperature.

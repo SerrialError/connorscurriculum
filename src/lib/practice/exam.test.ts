@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getSubjectData } from '../registry';
-import { drawExam, examFormat, examMax, examParts, examPools, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
+import { compareSections, drawExam, examFormat, examMax, examParts, examPools, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
 import { seededRng } from './random';
 import { readQuestionFiles } from './question-files';
 import { frq, mcq } from './test-fixtures';
@@ -65,15 +65,28 @@ describe('drawExam', () => {
     }
   });
 
-  it('keeps the multiple choice in section order and in the questions’ own order within one', () => {
-    const drawn = drawExam(bank, exam, seededRng('xyz')).filter((q) => q.type === 'mcq');
-    const order = drawn.map((q) => bank.indexOf(q));
-    expect([...order].sort((a, b) => a - b)).toEqual(order);
+  it('keeps the multiple choice in exam-section order, and by textbook section within one', () => {
+    for (const seed of ['xyz', 'q1', 'q2']) {
+      const drawn = drawExam(bank, exam, seededRng(seed)).filter((q) => q.type === 'mcq');
+      const sectionIndex = drawn.map((q) => exam.sections.indexOf(sectionOf(q, exam)!));
+      expect([...sectionIndex].sort((a, b) => a - b)).toEqual(sectionIndex);
+      for (let i = 1; i < drawn.length; i++) {
+        if (sectionIndex[i] === sectionIndex[i - 1]) {
+          expect(compareSections(drawn[i - 1]!.sections[0], drawn[i]!.sections[0])).toBeLessThanOrEqual(0);
+        }
+      }
+    }
   });
 
   it('draws the same exam for the same seed and a different one for another', () => {
     expect(ids('k3x9a0')).toEqual(ids('k3x9a0'));
     expect(['s1', 's2', 's3', 's4'].map(ids).some((x) => x.join() !== ids('k3x9a0').join())).toBe(true);
+  });
+});
+
+describe('compareSections', () => {
+  it('orders section ids numerically and puts missing ones last', () => {
+    expect(['6.10', '6.9', undefined, '6.2'].sort(compareSections)).toEqual(['6.2', '6.9', '6.10', undefined]);
   });
 });
 

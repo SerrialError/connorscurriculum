@@ -21,6 +21,17 @@ export function sectionOf(q: ExamCandidate, exam: PracticeExam): ExamSection | u
   return q.type === 'mcq' ? exam.sections.find((s) => fits(q, s)) : undefined;
 }
 
+/** Orders textbook section ids numerically ("6.9" before "6.10"); questions without one go last. */
+export function compareSections(a: string | undefined, b: string | undefined): number {
+  if (a === undefined || b === undefined) return a === b ? 0 : a === undefined ? 1 : -1;
+  const [x, y] = [a.split('.').map(Number), b.split('.').map(Number)];
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    const d = (x[i] ?? 0) - (y[i] ?? 0);
+    if (d !== 0) return d;
+  }
+  return 0;
+}
+
 export interface ExamPool<Q> {
   section: ExamSection;
   questions: Q[];
@@ -71,8 +82,8 @@ export function examShortfalls(questions: ExamCandidate[], exam: PracticeExam): 
 /**
  * One exam drawn from the test's questions with `rng`: each section's count (with no more than its
  * maxCalculations), the extras from what's left of every section, then the FRQs. Multiple choice
- * comes in section order and, within a section, in the questions' own order (the textbook's), so the
- * exam reads like the test; the FRQs come last.
+ * comes in section order and, within a section, by textbook section, so the exam reads like the test;
+ * questions from the same textbook section come in random order. The FRQs come last.
  */
 export function drawExam<Q extends ExamCandidate>(questions: Q[], exam: PracticeExam, rng: Rng): Q[] {
   const pools = examPools(questions, exam);
@@ -103,7 +114,9 @@ export function drawExam<Q extends ExamCandidate>(questions: Q[], exam: Practice
     take(q, s);
     extra -= 1;
   }
-  const mcqs = pools.flatMap((p) => p.questions.filter((q) => picked.has(q.id)));
+  const mcqs = pools.flatMap((p) =>
+    shuffle(p.questions.filter((q) => picked.has(q.id)), rng).sort((a, b) => compareSections(a.sections[0], b.sections[0])),
+  );
   return [...mcqs, ...shuffle(examFrqs(questions), rng).slice(0, exam.frq.count)];
 }
 

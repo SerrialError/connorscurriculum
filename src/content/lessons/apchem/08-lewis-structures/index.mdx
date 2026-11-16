@@ -49,6 +49,13 @@ Result: H–C≡N with one lone pair on N.
 
 ![Lewis structures of H₂O, NH₃, CO₂, HCN, and H₂CO with lone pairs shown as pairs of dots](./lewis-examples.svg)
 
+<Callout type="warning">
+Don't bond two O atoms together unless the problem says the compound is a **peroxide** (like
+$\ce{H2O2}$). O–O bonds are weak and rare. Chlorous acid, $\ce{HClO2}$, is H–O–Cl–O with both O atoms
+on Cl. You can draw H–O–O–Cl with 20 electrons and every formal charge 0, but it's a different molecule.
+Formal charge only compares structures that have the **same atoms connected** to each other.
+</Callout>
+
 ## 2. Formal charge
 
 Sometimes more than one structure follows every rule. **Formal charge** helps pick the best one. It's
@@ -99,7 +106,43 @@ Both are bookkeeping, and they make opposite assumptions:
 - **Oxidation number** pretends they belong entirely to the **more electronegative** atom.
 
 In CO₂, carbon's formal charge is 0, but its oxidation number is +4. Neither is the atom's real charge,
-which is somewhere in between.
+which is somewhere in between. Formal charge also isn't used to find a dipole moment, which depends on
+the real partial charges (δ+ and δ−).
+
+### "Obey the octet rule" vs. "minimize formal charge"
+
+For molecules with a period 3 central atom, these two instructions can give different structures.
+Thionyl chloride, $\ce{SOCl2}$ (S central, 26 valence electrons), is the standard example:
+
+![Two Lewis structures of SOCl₂. Left: S single-bonded to O and both Cl atoms with one lone pair on S; every atom has an octet; formal charges S +1, O −1, Cl 0. Right: the same but with an S=O double bond; S has 10 electrons and every formal charge is 0.](./socl2-structures.svg)
+
+- If the question says **obey the octet rule**, draw the single-bond structure on the left.
+- If it says **minimize formal charge**, draw the S=O structure on the right. S can hold 10 electrons
+  because it's in period 3.
+
+<Reveal label="Worked example: octet structures with formal charges and oxidation numbers">
+
+Each structure below obeys the octet rule. The formal charges and the oxidation numbers each add up to
+the overall charge.
+
+| Species | Octet structure | Formal charges | Oxidation numbers |
+|---|---|---|---|
+| OCS | O=C=S | all 0 | O −2, C +4, S −2 |
+| $\ce{SOCl2}$ | S bonded to O and 2 Cl, one lone pair on S | S +1, O −1, Cl 0 | S +4, O −2, Cl −1 |
+| $\ce{BrO3-}$ | Br bonded to 3 O, one lone pair on Br | Br +2, each O −1 | Br +5, O −2 |
+| $\ce{HClO2}$ | H–O–Cl–O, all single bonds | H 0, O(H) 0, Cl +1, end O −1 | H +1, Cl +3, O −2 |
+
+The formal charge on Cl in $\ce{HClO2}$, step by step (2 lone pairs, 2 bonds):
+
+$$
+\text{FC} = 7 - 4 - \tfrac{1}{2}(4) = +1
+$$
+
+</Reveal>
+
+Sulfuric acid, $\ce{H2SO4}$ (32 valence electrons, each H on an O), works the same way. The octet
+structure has four S–O single bonds, with S at +2 and the two O atoms without H at −1. Changing those two
+bonds to S=O makes every formal charge 0 and puts **12 electrons** around S.
 
 ## 3. Resonance (8.6)
 
@@ -132,6 +175,17 @@ Each C–O bond is a double bond in one structure and a single bond in two, so i
 $(2 + 1 + 1)/3 = 4/3$. Nitrate, $\ce{NO3-}$, also has three resonance structures and the same 4/3 bond
 order. In nitrite and ozone, each bond has order $(2 + 1)/2 = 3/2$.
 
+**Sulfur dioxide**, $\ce{SO2}$, has 18 valence electrons, the same as ozone, because S and O are both in
+group 16. Species with the same number of electrons are **isoelectronic**. Ozone is an **allotrope** of
+oxygen: one of the forms an element can take in the same physical state ($\ce{O2}$ and $\ce{O3}$ are both
+oxygen gases; diamond and graphite are both solid carbon). Like ozone, $\ce{SO2}$ has two equivalent
+resonance structures (O=S–O and O–S=O, lone pair on S), so both S–O bonds have order 3/2. They are the
+same length, shorter than an S–O single bond and longer than an S=O double bond.
+
+**Sulfur trioxide**, $\ce{SO3}$, drawn with an octet on S, has one S=O and two S–O bonds, so it has three
+equivalent resonance structures. All three real bonds are the same (order 4/3). The S atom has four
+bonds and no lone pairs, so its formal charge is $6 - 0 - 4 = +2$.
+
 ### Benzene
 
 Benzene, $\ce{C6H6}$, is a ring of six carbons with alternating single and double bonds, and the double
@@ -146,8 +200,10 @@ with a circle inside to show the electrons spread around the ring.
 ### Odd number of electrons
 
 If the total number of valence electrons is **odd**, one electron has to be unpaired. Examples are
-$\ce{NO}$ (11), $\ce{NO2}$ (17), and $\ce{ClO2}$ (19). These molecules are called **radicals**, and
-they're usually very reactive.
+$\ce{NO}$ (11), $\ce{NO2}$ (17), $\ce{ClO}$ (13), and $\ce{ClO2}$ (19). These molecules are called
+**radicals**, and they're usually very reactive. Compare the chlorine–oxygen ions $\ce{ClO-}$ (14),
+$\ce{ClO2-}$ (20), $\ce{ClO3-}$ (26), and $\ce{ClO4-}$ (32): each has an even count, and each can be drawn
+with an octet on every atom.
 
 ### Fewer than an octet
 

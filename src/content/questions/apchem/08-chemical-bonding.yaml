@@ -513,35 +513,26 @@
     - { id: d, text: "All four are equal, because each has one polar bond" }
   answer: a
   explanation: |
-    $\mu = Qr$. A longer bond raises $\mu$, but the partial charges matter much more here: ΔEN falls from 1.9 (HF) to 0.4 (HI), so HF's partial charges are far larger. The measured values drop from about 1.8 D for HF to about 0.4 D for HI. (C) mixes up electron affinity with electronegativity.
+    $\mu = Qr$. A longer bond raises $\mu$, but the partial charges matter much more here: ΔEN falls from 1.9 (HF) to 0.4 (HI), so HF's partial charges are far larger. (C) mixes up electron affinity with electronegativity.
 
-- id: apchem-08-dipole-hbr
+- id: apchem-08-dipole-factors
   type: mcq
   subject: apchem
   chapter: 8
   sections: ["8.4"]
-  cedTopics: []
-  difficulty: 3
-  calculation: true
+  cedTopics: ["2.1"]
+  difficulty: 2
   authors: ["Claude"]
   prompt: |
-    HBr has a bond length of 1.41 Å and a dipole moment of 0.82 D. About what fraction of an electron's charge is the partial charge on each atom?
-
-    ($1\ \text{D} = 3.34 \times 10^{-30}$ C·m; electron charge $= 1.60 \times 10^{-19}$ C)
+    A bond's dipole moment is $\mu = Qr$. Which pair of changes would **both** make a bond's dipole moment larger?
   choices:
-    - { id: a, text: "0.82" }
-    - { id: b, text: "0.58" }
-    - { id: c, text: "0.12" }
-    - { id: d, text: "0.17" }
-  answer: c
+    - { id: a, text: "Larger ΔEN; shorter bond" }
+    - { id: b, text: "Larger ΔEN; longer bond" }
+    - { id: c, text: "Smaller ΔEN; longer bond" }
+    - { id: d, text: "Smaller ΔEN; shorter bond" }
+  answer: b
   explanation: |
-    If the charges were a full $\pm 1.60 \times 10^{-19}$ C:
-
-    $$
-    \mu = (1.60 \times 10^{-19}\ \text{C})(1.41 \times 10^{-10}\ \text{m}) = 2.26 \times 10^{-29}\ \text{C·m} = 6.75\ \text{D}
-    $$
-
-    The real value is 0.82 D, so the partial charges are $0.82 / 6.75 = 0.12$ of an electron's charge. (A) is the dipole moment itself. (B) is $0.82/1.41$, dividing by the bond length without converting to a full-charge dipole. (D) divides by 4.79 D, the value for charges 1.00 Å apart, without using HBr's 1.41 Å bond length.
+    A larger ΔEN pulls the shared electrons further toward one atom, so the partial charges $Q$ get bigger. A longer bond increases the distance $r$ between those charges. Both raise $\mu$. (A) has the bond length going the wrong way, and (C) and (D) shrink the partial charges.
 
 - id: apchem-08-molecular-metal-compound
   type: mcq
@@ -1607,3 +1598,480 @@
     **(c)** $\ce{N2H4}$ has an N–N single bond and $\ce{N2}$ has a triple bond. A higher bond order means a shorter, stronger bond, so the N–N distance is longer in hydrazine.
 
     **(d)** Forming bonds releases energy, and breaking them absorbs it. The products' bonds total 2793 kJ, more than the 2222 kJ needed to break the reactants' bonds, so energy is released overall.
+
+- id: apchem-08-mgo-lewis
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.1", "8.2"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Magnesium and oxygen atoms react to form MgO. In the Lewis-symbol equation, how is the product drawn?
+  choices:
+    - { id: a, text: 'Mg sharing its 2 dots with O, drawn as Mg=O' }
+    - { id: b, text: '$\ce{Mg+}$ with 1 dot, and $[\ce{O}]^-$ with 7 dots' }
+    - { id: c, text: '$\ce{Mg^2+}$ with no dots, and $[\ce{O}]^{2-}$ with 8 dots' }
+    - { id: d, text: '$\ce{Mg^2+}$ with 8 dots, and $\ce{O^2-}$ with no dots' }
+  answer: c
+  explanation: |
+    Mg (group 2) has 2 valence electrons and O (group 16) has 6. Mg gives both electrons to O, so $\ce{Mg^2+}$ has no valence dots left and $\ce{O^2-}$ has a full octet, drawn in brackets with the charge outside. Both ions end up with neon's configuration. (A) describes sharing, which is covalent, not ionic. (B) transfers only one electron. (D) moves the electrons the wrong way.
+
+- id: apchem-08-formula-mg3n2
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the formula of the ionic compound formed from magnesium and nitrogen?
+  choices:
+    - { id: a, text: '$\ce{MgN}$' }
+    - { id: b, text: '$\ce{Mg2N3}$' }
+    - { id: c, text: '$\ce{MgN2}$' }
+    - { id: d, text: '$\ce{Mg3N2}$' }
+  answer: d
+  explanation: |
+    Mg is in group 2 and forms $\ce{Mg^2+}$. N is in group 15 and forms $\ce{N^3-}$. Three $\ce{Mg^2+}$ give +6 and two $\ce{N^3-}$ give −6, so the formula is $\ce{Mg3N2}$. (B) swaps the subscripts. (A) and (C) don't balance the charges.
+
+- id: apchem-08-formula-y2o3
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Yttrium is $[\ce{Kr}]\,4d^1 5s^2$. What is the formula of the ionic compound it forms with oxygen?
+  choices:
+    - { id: a, text: '$\ce{Y2O3}$' }
+    - { id: b, text: '$\ce{YO}$' }
+    - { id: c, text: '$\ce{Y3O2}$' }
+    - { id: d, text: '$\ce{YO2}$' }
+  answer: a
+  explanation: |
+    The 4d electron is in a lower shell than the 5s electrons, but 4d and 5s are close in energy, so all three are valence electrons. Losing all three leaves $\ce{Y^3+}$ as $[\ce{Kr}]$. With $\ce{O^2-}$: $2(+3) = +6$ balances $3(-2) = -6$, giving $\ce{Y2O3}$. (B) assumes only the two 5s electrons are lost. (C) swaps the subscripts. (D) would need $\ce{Y^4+}$.
+
+- id: apchem-08-formula-wrong
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which formula is **incorrect** for the ionic compound formed by the two elements?
+  choices:
+    - { id: a, text: 'Al and F: $\ce{AlF3}$' }
+    - { id: b, text: 'Sr and Cl: $\ce{SrCl}$' }
+    - { id: c, text: 'K and S: $\ce{K2S}$' }
+    - { id: d, text: 'Li and N: $\ce{Li3N}$' }
+  answer: b
+  explanation: |
+    Sr is in group 2 and forms $\ce{Sr^2+}$, so it needs two $\ce{Cl-}$: $\ce{SrCl2}$. The others balance: $\ce{Al^3+}$ with three $\ce{F-}$, two $\ce{K+}$ with $\ce{S^2-}$, and three $\ce{Li+}$ with $\ce{N^3-}$.
+
+- id: apchem-08-rh3-noble-gas
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.8"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The configuration of $\ce{Rh^3+}$ can be written $[\ce{Kr}]\,4d^6$. Does $\ce{Rh^3+}$ have a noble-gas configuration?
+  choices:
+    - { id: a, text: "Yes, because it can be written starting from [Kr]" }
+    - { id: b, text: "Yes, because its 5s subshell is empty" }
+    - { id: c, text: "No, because six electrons remain after the [Kr] core" }
+    - { id: d, text: "No, because Rh is an exception to the filling order" }
+  answer: c
+  explanation: |
+    Noble-gas **shorthand** is only notation, and almost any ion can be written that way. An ion **has** a noble-gas configuration only when nothing is left after the bracket, as in $\ce{Rb+}$ = [Kr]. $\ce{Rh^3+}$ has six 4d electrons beyond the krypton core, so it doesn't match any noble gas. (D) is true about Rh ($[\ce{Kr}]\,4d^8 5s^1$), but that isn't the reason: either starting configuration ends at $[\ce{Kr}]\,4d^6$.
+
+- id: apchem-08-noble-gas-ions-set
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which of these ions have a noble-gas configuration: $\ce{Rb+}$, $\ce{Sc^3+}$, $\ce{V^2+}$, $\ce{S^2-}$?
+  choices:
+    - { id: a, text: '$\ce{Rb+}$ and $\ce{S^2-}$ only' }
+    - { id: b, text: 'All four' }
+    - { id: c, text: '$\ce{Rb+}$, $\ce{Sc^3+}$, and $\ce{S^2-}$' }
+    - { id: d, text: '$\ce{Sc^3+}$ and $\ce{V^2+}$ only' }
+  answer: c
+  explanation: |
+    $\ce{Rb+}$ is [Kr]. $\ce{Sc^3+}$ loses all three valence electrons ($4s^2 3d^1$) and is [Ar]. $\ce{S^2-}$ fills its 3p subshell and is [Ar]. $\ce{V^2+}$ loses only its two 4s electrons and keeps $3d^3$, so it doesn't match a noble gas. (A) misses that Sc, like Y, loses its d electron too.
+
+- id: apchem-08-bond-type-substances
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.1", "8.3"]
+  cedTopics: ["2.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which list contains **only** substances whose atoms are held together by covalent bonds?
+  choices:
+    - { id: a, text: 'water, oxygen ($\ce{O2}$), silicon tetrachloride' }
+    - { id: b, text: 'water, oxygen ($\ce{O2}$), argon' }
+    - { id: c, text: 'iron, water, oxygen ($\ce{O2}$)' }
+    - { id: d, text: 'sodium chloride, water, oxygen ($\ce{O2}$)' }
+  answer: a
+  explanation: |
+    Water, $\ce{O2}$, and $\ce{SiCl4}$ are all nonmetals sharing electrons. Argon is a noble gas made of single atoms, so it has no bonds at all. Iron is held together by metallic bonding. Sodium chloride is ionic.
+
+- id: apchem-08-low-bp-xy
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2", "8.3"]
+  cedTopics: ["2.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A substance XY, made of two different elements, boils at −33 °C. What kind of substance is it most likely to be?
+  choices:
+    - { id: a, text: "Ionic, because any compound of two different elements is made of ions" }
+    - { id: b, text: "Covalent, because only weak forces between molecules are overcome" }
+    - { id: c, text: "Ionic, because ions with only +1 and −1 charges boil below 0 °C" }
+    - { id: d, text: "Metallic, because metals boil at low temperatures" }
+  answer: b
+  explanation: |
+    Boiling an ionic compound means pulling ions apart against strong electrostatic attractions, so ionic compounds boil at hundreds or thousands of degrees (NaCl at 1413 °C), even with +1 and −1 ions. A boiling point of −33 °C means XY is made of separate molecules, so it's covalent. Ammonia, $\ce{NH3}$, boils at −33 °C.
+
+- id: apchem-08-sicl4-count
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.3"]
+  cedTopics: ["2.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In the Lewis structure of $\ce{SiCl4}$, how many bonding pairs and how many lone pairs are there in the whole molecule?
+  choices:
+    - { id: a, text: "4 bonding pairs, 8 lone pairs" }
+    - { id: b, text: "4 bonding pairs, 12 lone pairs" }
+    - { id: c, text: "8 bonding pairs, 12 lone pairs" }
+    - { id: d, text: "4 bonding pairs, 16 lone pairs" }
+  answer: b
+  explanation: |
+    Si has 4 valence electrons and each Cl has 7: $4 + 4(7) = 32$. Each of Si's four unpaired electrons pairs with one Cl, making 4 Si–Cl bonds. Each Cl keeps 3 lone pairs ($4 \times 3 = 12$), and Si has none. Check: $4(2) + 12(2) = 32$. Si and every Cl end up with 8 electrons.
+
+- id: apchem-08-en-statements
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.4"]
+  cedTopics: ["2.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statements about electronegativity are true?
+
+    I. The alkali metals are the family with the largest electronegativity values.
+    II. Electronegativity values have no units.
+    III. Electronegativity is the ability of an atom in a molecule to attract electron density toward itself.
+  choices:
+    - { id: a, text: "I only" }
+    - { id: b, text: "I and III" }
+    - { id: c, text: "II only" }
+    - { id: d, text: "II and III" }
+  answer: d
+  explanation: |
+    I is false: the alkali metals have some of the **smallest** values. Electronegativity increases toward the upper right, so the halogens are the highest family and F (4.0) is the highest element. II is true: the Pauling scale is relative and unitless. III is the definition.
+
+- id: apchem-08-hbr-pressure-dipole
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.4"]
+  cedTopics: ["2.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Suppose HBr were put under very high pressure so that its bond got much shorter, while the partial charges on H and Br stayed the same. What would happen to its dipole moment?
+  choices:
+    - { id: a, text: "It would increase, because the atoms are closer together" }
+    - { id: b, text: "It would stay the same, because the charges don't change" }
+    - { id: c, text: "It would decrease, because the charges are closer together" }
+    - { id: d, text: "It would drop to zero, because the bond is no longer polar" }
+  answer: c
+  explanation: |
+    $\mu = Qr$. With the same partial charges $Q$ and a shorter distance $r$ between them, $\mu$ gets smaller. (B) forgets that distance is part of the dipole moment. (D) is wrong because the bond is still between atoms of different electronegativity.
+
+- id: apchem-08-fc-statements
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement about formal charge is true?
+  choices:
+    - { id: a, text: "Formal charge is the same as oxidation number." }
+    - { id: b, text: "Formal charge accounts for the electronegativities of the bonded atoms." }
+    - { id: c, text: "Formal charge is used to calculate the dipole moment of a molecule." }
+    - { id: d, text: "The dominant Lewis structure usually has formal charges closest to zero." }
+  answer: d
+  explanation: |
+    (A) Formal charge splits every bonding pair equally; oxidation number gives each pair to the more electronegative atom. (B) Formal charge ignores electronegativity on purpose, which is why it splits pairs equally. (C) A dipole moment depends on the real partial charges, not on bookkeeping numbers.
+
+- id: apchem-08-socl2-octet
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.7"]
+  cedTopics: ["2.5", "2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Thionyl chloride, $\ce{SOCl2}$, has S as the central atom. In the Lewis structure that **obeys the octet rule**, what are the formal charges on S and O?
+  choices:
+    - { id: a, text: "S 0, O 0" }
+    - { id: b, text: "S +1, O −1" }
+    - { id: c, text: "S −1, O +1" }
+    - { id: d, text: "S +2, O −2" }
+  answer: b
+  explanation: |
+    $6 + 6 + 2(7) = 26$ electrons. S is single-bonded to O and both Cl, with one lone pair on S. S: $6 - 2 - 3 = +1$. O (three lone pairs, one bond): $6 - 6 - 1 = -1$. Each Cl: $7 - 6 - 1 = 0$. (A) is the structure with an S=O double bond, which minimizes formal charge but puts 10 electrons around S, so it doesn't obey the octet rule.
+
+- id: apchem-08-socl2-oxidation
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In $\ce{SOCl2}$, what is the oxidation number of S, and what is its formal charge in the octet-rule Lewis structure?
+  choices:
+    - { id: a, text: "Oxidation number +4; formal charge +1" }
+    - { id: b, text: "Oxidation number +1; formal charge +1" }
+    - { id: c, text: "Oxidation number +4; formal charge +4" }
+    - { id: d, text: "Oxidation number +2; formal charge 0" }
+  answer: a
+  explanation: |
+    Oxidation numbers: O is −2 and each Cl is −1, so S is $0 - (-2) - 2(-1) = +4$. Formal charge in the octet structure (one lone pair, three single bonds): $6 - 2 - 3 = +1$. They differ because oxidation number gives every bonding pair to the more electronegative atom, while formal charge splits each pair equally.
+
+- id: apchem-08-bro3-fc
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The octet-rule Lewis structure of the bromate ion, $\ce{BrO3-}$, has Br single-bonded to three O atoms and one lone pair on Br. What is the formal charge on Br?
+  choices:
+    - { id: a, text: "−1" }
+    - { id: b, text: "0" }
+    - { id: c, text: "+2" }
+    - { id: d, text: "+5" }
+  answer: c
+  explanation: |
+    $7 + 3(6) + 1 = 26$ electrons. Br: $7 - 2 - 3 = +2$. Each O (three lone pairs, one bond): $6 - 6 - 1 = -1$. Check: $+2 + 3(-1) = -1$, the ion's charge. (D) is bromine's oxidation number. (A) puts the ion's whole charge on Br.
+
+- id: apchem-08-hclo2-skeleton
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    For chlorous acid, $\ce{HClO2}$, the structure H–O–O–Cl has 20 electrons, an octet on every atom, and a formal charge of 0 on every atom. Why is H–O–Cl–O the correct structure instead?
+  choices:
+    - { id: a, text: "H–O–Cl–O has formal charges closer to zero, so it is the better structure" }
+    - { id: b, text: "Real HClO₂ has both O atoms on Cl, and formal charge can't change that" }
+    - { id: c, text: "Cl is more electronegative than O, so Cl has to be the central atom in the molecule" }
+    - { id: d, text: "H–O–O–Cl has the wrong number of valence electrons for this formula" }
+  answer: b
+  explanation: |
+    Formal charge only compares structures that have the same atoms connected. H–O–O–Cl is a different molecule (a peroxide). In oxyacids the O atoms bond to the central atom, and the less electronegative atom is central: Cl (3.0) is less electronegative than O (3.5). (A) is backward: H–O–Cl–O has Cl +1 and the end O −1. (C) has the electronegativity order backward. (D) contradicts the prompt: both structures have 20 electrons.
+
+- id: apchem-08-so2-isoelectronic
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Sulfur dioxide, $\ce{SO2}$, is isoelectronic with an allotrope of oxygen. Which allotrope is it, and how do the S–O bonds in $\ce{SO2}$ compare with an S–O single bond?
+  choices:
+    - { id: a, text: '$\ce{O2}$; both S–O bonds are double bonds' }
+    - { id: b, text: '$\ce{O3}$; one S–O bond is single and one is double' }
+    - { id: c, text: '$\ce{O2}$; both S–O bonds are longer than an S–O single bond' }
+    - { id: d, text: '$\ce{O3}$; both bonds are equal and shorter than a single bond' }
+  answer: d
+  explanation: |
+    S and O are both in group 16, so $\ce{SO2}$ and ozone each have $3 \times 6 = 18$ valence electrons. $\ce{O2}$ has only 12. Like ozone, $\ce{SO2}$ has two equivalent resonance structures, so each S–O bond has order 3/2: shorter than a single bond, longer than a double bond. (B) treats one resonance structure as the real molecule.
+
+- id: apchem-08-so3-statements
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.5", "2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Consider the Lewis structure of $\ce{SO3}$ that obeys the octet rule. Which statements are true?
+
+    I. $\ce{SO3}$ has three equivalent resonance structures.
+    II. $\ce{SO3}$ has one shorter S–O bond and two longer S–O bonds.
+    III. The S atom has a nonzero formal charge.
+  choices:
+    - { id: a, text: "I and III" }
+    - { id: b, text: "I only" }
+    - { id: c, text: "II and III" }
+    - { id: d, text: "I, II, and III" }
+  answer: a
+  explanation: |
+    The octet structure has one S=O and two S–O, and the double bond can be on any of the three O atoms, so I is true. II describes one drawing, not the real molecule: all three bonds are the same, with order $(2 + 1 + 1)/3 = 4/3$. III is true: S has four bonds and no lone pairs, $6 - 0 - 4 = +2$.
+
+- id: apchem-08-clo-octet
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which chlorine–oxygen species **cannot** be drawn with an octet on every atom?
+  choices:
+    - { id: a, text: '$\ce{ClO-}$' }
+    - { id: b, text: '$\ce{ClO2-}$' }
+    - { id: c, text: '$\ce{ClO4-}$' }
+    - { id: d, text: '$\ce{ClO}$' }
+  answer: d
+  explanation: |
+    ClO has $7 + 6 = 13$ valence electrons. With an odd total, one electron is unpaired, so one atom has only 7. The ions have even counts ($\ce{ClO-}$ 14, $\ce{ClO2-}$ 20, $\ce{ClO4-}$ 32), and each can be drawn with single bonds and an octet on every atom.
+
+- id: apchem-08-h2so4-min-fc
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.7"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In sulfuric acid, $\ce{H2SO4}$, each H is bonded to an O. In the Lewis structure that **minimizes formal charge**, how many electrons surround the S atom?
+  choices:
+    - { id: a, text: "6" }
+    - { id: b, text: "8" }
+    - { id: c, text: "10" }
+    - { id: d, text: "12" }
+  answer: d
+  explanation: |
+    32 valence electrons. The octet structure has four S–O single bonds, with S at +2 and the two O atoms without H at −1. Changing those two bonds to S=O makes every formal charge 0. S then has two double bonds and two single bonds, $2(4) + 2(2) = 12$ electrons, which is allowed because S is in period 3. (B) is the octet-rule structure.
+
+- id: apchem-08-bond-enthalpy-glycol
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.8"]
+  cedTopics: ["6.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Estimate $\Delta H$ for $\ce{H2C=CH2(g) + H2O2(g) -> HOCH2CH2OH(g)}$. In $\ce{H2O2}$ the atoms are connected H–O–O–H.
+
+    | Bond | C–H | O–H | C=C | O–O | C–C | C–O |
+    |---|---|---|---|---|---|---|
+    | kJ/mol | 413 | 463 | 614 | 146 | 348 | 358 |
+  choices:
+    - { id: a, text: "+304 kJ" }
+    - { id: b, text: "−304 kJ" }
+    - { id: c, text: "+54 kJ" }
+    - { id: d, text: "−1064 kJ" }
+  answer: b
+  explanation: |
+    The four C–H and two O–H bonds are on both sides, so they cancel. Broken: C=C + O–O $= 614 + 146 = 760$ kJ. Formed: one C–C and two C–O $= 348 + 2(358) = 1064$ kJ.
+
+    $$
+    \Delta H \approx 760 - 1064 = -304\ \text{kJ}
+    $$
+
+    (A) subtracts in the wrong order. (C) counts only one C–O bond. (D) leaves out the bonds broken.
+
+- id: apchem-08-bond-true-statement
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.8"]
+  cedTopics: ["2.2", "6.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement about chemical bonds is true?
+  choices:
+    - { id: a, text: "Energy is released when a chemical bond forms." }
+    - { id: b, text: "Energy is released when a chemical bond is broken." }
+    - { id: c, text: "A typical single bond is 5–10 Å long." }
+    - { id: d, text: "Burning a fuel releases energy stored in its bonds." }
+  answer: a
+  explanation: |
+    Forming a bond releases energy, and breaking it takes the same amount, which is why bond enthalpies are positive. (B) has it backward. (C) Single bonds are about 1–2 Å; C–C is 1.54 Å. (D) A fuel releases energy because the bonds formed in the products are stronger than the bonds broken, not because breaking bonds gives off energy.
+
+- id: apchem-08-so2-frq
+  type: frq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.6"]
+  cedTopics: ["2.5", "2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Answer the following about sulfur dioxide, $\ce{SO2}$, in which S is the central atom.
+  parts:
+    - label: a
+      points: 1
+      prompt: Draw one Lewis structure of $\ce{SO2}$ that obeys the octet rule, and give the formal charge on each atom.
+      scoring:
+        - "O=S–O with one lone pair on S, two on the double-bonded O, and three on the single-bonded O (18 electrons). Formal charges: S +1, single-bonded O −1, double-bonded O 0."
+    - label: b
+      points: 1
+      prompt: With which allotrope of oxygen is $\ce{SO2}$ isoelectronic? Explain.
+      scoring:
+        - "Ozone, O₃. S and O are both in group 16, so each molecule has 18 valence electrons."
+    - label: c
+      points: 1
+      prompt: Does $\ce{SO2}$ have equivalent resonance structures? If so, how many?
+      scoring:
+        - "Yes, two: O=S–O and O–S=O. They differ only in which O has the double bond."
+    - label: d
+      points: 1
+      prompt: How does the length of each S–O bond in $\ce{SO2}$ compare with an S–O single bond and an S=O double bond? Explain.
+      scoring:
+        - "Both bonds are the same length, between a single and a double bond (shorter than S–O, longer than S=O), because each has bond order 3/2 in the resonance hybrid."
+  explanation: |
+    **(a)** $3 \times 6 = 18$ electrons. Two S–O bonds and octets on both O use 16; the last 2 go on S as a lone pair. S then has only 6, so one O lone pair becomes a second bond. S: $6 - 2 - 3 = +1$. Single-bonded O: $6 - 6 - 1 = -1$. Double-bonded O: $6 - 4 - 2 = 0$.
+
+    **(b)** Isoelectronic species have the same number of electrons. Ozone is $\ce{O3}$, three group 16 atoms, 18 valence electrons. ($\ce{O2}$, the other allotrope, has 12.)
+
+    **(c)** The double bond can be drawn to either O, and the two drawings are mirror images, so they're equivalent.
+
+    **(d)** The real molecule is the average of the two structures. Each S–O bond is double in one and single in the other, so its bond order is $(2 + 1)/2 = 3/2$.

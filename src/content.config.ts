@@ -109,6 +109,9 @@ const lessons = defineCollection({
         kind: z.enum(['lesson', 'notes', 'review']).default('lesson'),
         draft: z.boolean().default(false),
         summary: z.string().optional(),
+        // The photos or documents (images or PDFs) the page was typed up from, relative to its
+        // folder, e.g. originals/page-1.jpg. Shown at the end of the page.
+        originals: z.array(z.object({ file: z.string().min(1), caption: z.string().min(1).optional() })).default([]),
       })
       .superRefine(checkTags),
   ),

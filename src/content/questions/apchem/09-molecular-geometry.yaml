@@ -49,7 +49,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What are the electron-domain geometry and the molecular geometry of $\ce{OF2}$?
@@ -164,7 +164,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Rank the H–X–H bond angles in $\ce{CH4}$, $\ce{NH3}$, and $\ce{H2O}$ from **largest to smallest**.
@@ -183,7 +183,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Why is the H–O–H angle in water smaller than the 109.5° angle of a perfect tetrahedron?
@@ -396,7 +396,7 @@
   chapter: 9
   sections: ["9.3"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Both $\ce{H2O}$ and $\ce{CO2}$ have two polar bonds. Why is water polar while carbon dioxide is not?
@@ -435,6 +435,7 @@
   sections: ["9.3"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: pf3
   authors: ["Claude"]
   prompt: |
     Which statement about $\ce{PF3}$ and $\ce{PF5}$ is correct?
@@ -647,7 +648,7 @@
   chapter: 9
   sections: ["9.5", "9.6"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     In propyne, $\ce{CH3-C#CH}$, which carbon atoms are **sp** hybridized?
@@ -666,7 +667,7 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the hybridization of the **nitrogen** atom in methylamine, $\ce{CH3NH2}$?
@@ -841,6 +842,7 @@
   sections: ["9.5", "9.6"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: cumulene
   authors: ["Claude"]
   prompt: |
     Allene is $\ce{H2C=C=CH2}$. What are the hybridizations of its three carbon atoms, from left to right?
@@ -1073,6 +1075,7 @@
   sections: ["9.2", "9.3", "9.5"]
   cedTopics: ["2.5", "2.7"]
   difficulty: 2
+  group: pf3
   authors: ["Claude"]
   prompt: |
     Boron trifluoride, $\ce{BF3}$, and phosphorus trifluoride, $\ce{PF3}$, both have three F atoms bonded to a central atom.
@@ -1429,6 +1432,7 @@
   sections: ["9.2", "9.3"]
   cedTopics: ["2.5", "2.7"]
   difficulty: 3
+  group: [xef4, same-shape]
   authors: ["Claude"]
   prompt: |
     Xenon forms the fluorides $\ce{XeF2}$ and $\ce{XeF4}$.
@@ -1491,7 +1495,7 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: []
-  difficulty: 2
+  difficulty: 1
   group: xef4
   authors: ["Claude"]
   prompt: |
@@ -1511,7 +1515,8 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: []
-  difficulty: 2
+  difficulty: 1
+  group: brf3
   authors: ["Claude"]
   prompt: |
     What is the hybridization of bromine in $\ce{BrF3}$?
@@ -1531,6 +1536,7 @@
   sections: ["9.5"]
   cedTopics: []
   difficulty: 2
+  group: icl4
   authors: ["Claude"]
   prompt: |
     What are the hybridization of I and the molecular geometry of $\ce{ICl4-}$?
@@ -1664,6 +1670,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: nitric-acid
   authors: ["Claude"]
   prompt: |
     In nitric acid, $\ce{HNO3}$, N is bonded to three O atoms and the H is bonded to one of the O atoms. What is the geometry around N?
@@ -1702,6 +1709,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: brf3
   authors: ["Claude"]
   prompt: |
     $\ce{BrF3}$ is T-shaped. What is the best description of its F–Br–F bond angles between the axial F atoms and the equatorial F atom?
@@ -1759,6 +1767,7 @@
   sections: ["9.3"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: icl4
   authors: ["Claude"]
   prompt: |
     Each species has a central atom with an expanded octet. Which one is **nonpolar**?
@@ -1956,12 +1965,12 @@
     How many σ bonds and π bonds are in formic acid, $\ce{HCOOH}$ (H–C(=O)–O–H)?
   choices:
     - { id: a, text: "5 σ and 0 π" }
-    - { id: b, text: "3 σ and 2 π" }
+    - { id: b, text: "4 σ and 2 π" }
     - { id: c, text: "5 σ and 1 π" }
     - { id: d, text: "4 σ and 1 π" }
   answer: d
   explanation: |
-    The bonds are C–H, C=O, C–O, and O–H. Each bond between two atoms has one σ bond (4 σ), and the double bond adds one π. (C) counts the C=O's π bond as a σ bond as well; (A) counts all five shared pairs as σ bonds; (B) treats both C–O bonds as double.
+    The bonds are C–H, C=O, C–O, and O–H. Each bond between two atoms has one σ bond (4 σ), and the double bond adds one π. (C) counts the C=O's π bond as a σ bond as well; (A) counts all five shared pairs as σ bonds; (B) treats the C–OH bond as double too.
 
 - id: apchem-09-quiz-ketene
   type: mcq
@@ -1970,6 +1979,7 @@
   sections: ["9.5"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: cumulene
   authors: ["Claude"]
   prompt: |
     Ketene is $\ce{H2C=C=O}$. What are the hybridizations of the CH₂ carbon and the middle carbon?

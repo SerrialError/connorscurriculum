@@ -12,7 +12,7 @@ export interface ExamCandidate {
   sections: string[];
   calculation?: boolean;
   difficulty: number;
-  group?: string;
+  groups?: string[];
 }
 
 /**
@@ -61,6 +61,23 @@ export function examPools<Q extends ExamCandidate>(questions: Q[], exam: Practic
   });
 }
 
+/**
+ * How many of `questions` one exam can use: questions that share a group count once (a rough upper
+ * bound when groups overlap).
+ */
+export function drawable(questions: ExamCandidate[]): number {
+  const seen = new Set<string>();
+  let n = 0;
+  for (const q of questions) {
+    if (q.groups?.length) {
+      if (q.groups.some((g) => seen.has(g))) continue;
+      q.groups.forEach((g) => seen.add(g));
+    }
+    n += 1;
+  }
+  return n;
+}
+
 export const examFrqs = <Q extends ExamCandidate>(questions: Q[]): Q[] => questions.filter((q) => q.type === 'frq');
 
 /** The exam's multiple-choice count: the sections' counts plus the extras. */
@@ -81,7 +98,8 @@ export function examShortfalls(all: ExamCandidate[], exam: PracticeExam): string
   const questions = examQuestions(all, exam);
   const pools = examPools(questions, exam);
   for (const { section: s, questions: qs, concepts } of pools) {
-    if (qs.length < s.count) out.push(`section "${s.id}" needs ${plural(s.count, 'multiple-choice question')} but only ${qs.length} match`);
+    const usable = drawable(qs);
+    if (usable < s.count) out.push(`section "${s.id}" needs ${plural(s.count, 'multiple-choice question')} but only ${usable} match (counting each group once)`);
     const needed = s.count - (s.maxCalculations ?? s.count);
     if (concepts < needed) {
       out.push(`section "${s.id}" allows ${plural(s.maxCalculations!, 'calculation')}, so it needs ${needed} other questions, but only ${concepts} aren't calculations`);
@@ -108,11 +126,11 @@ export function drawExam<Q extends ExamCandidate>(all: Q[], exam: PracticeExam, 
   const calcs = new Map<string, number>();
   // At most one question per group, so one question can't give away another's answer.
   const groups = new Set<string>();
-  const free = (q: Q) => !q.group || !groups.has(q.group);
+  const free = (q: Q) => !q.groups?.some((g) => groups.has(g));
   const room = (q: Q, s: ExamSection) => free(q) && (!q.calculation || (calcs.get(s.id) ?? 0) < (s.maxCalculations ?? Infinity));
   const take = (q: Q, s: ExamSection) => {
     picked.add(q.id);
-    if (q.group) groups.add(q.group);
+    for (const g of q.groups ?? []) groups.add(g);
     if (q.calculation) calcs.set(s.id, (calcs.get(s.id) ?? 0) + 1);
   };
   // The FRQs first (they're worth the most), so a group can't leave the exam without one.
@@ -121,7 +139,7 @@ export function drawExam<Q extends ExamCandidate>(all: Q[], exam: PracticeExam, 
     if (frqs.length === exam.frq.count) break;
     if (!free(q)) continue;
     frqs.push(q);
-    if (q.group) groups.add(q.group);
+    for (const g of q.groups ?? []) groups.add(g);
   }
   for (const { section, questions: qs } of pools) {
     let left = section.count;

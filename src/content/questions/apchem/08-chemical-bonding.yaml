@@ -774,6 +774,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: nitrate
   authors: ["Claude"]
   prompt: |
     The nitrate ion, $\ce{NO3-}$, has three resonance structures, each with one N=O and two N–O bonds. What is the bond order of each N–O bond in the real ion?
@@ -907,6 +908,7 @@
   sections: ["8.5", "8.7"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: oxyanion-fc
   authors: ["Claude"]
   prompt: |
     Sulfate, $\ce{SO4^2-}$, is often drawn two ways: with four S–O single bonds (an octet on S), or with two S=O double bonds and two S–O single bonds (12 electrons around S). What is the formal charge on S in each?
@@ -926,6 +928,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: so3
   authors: ["Claude"]
   prompt: |
     Drawn with an octet on sulfur (one S=O double bond and two S–O single bonds), how many equivalent resonance structures does sulfur trioxide, $\ce{SO3}$, have?
@@ -985,6 +988,7 @@
   sections: ["8.7"]
   cedTopics: ["2.5"]
   difficulty: 2
+  group: hypervalent-n
   authors: ["Claude"]
   prompt: |
     Which of these molecules does **not** exist?
@@ -1192,6 +1196,7 @@
   sections: ["8.5", "8.6"]
   cedTopics: ["2.5", "2.6"]
   difficulty: 2
+  group: nitrate
   authors: ["Claude"]
   prompt: |
     Answer the following about the nitrate ion, $\ce{NO3-}$, in which N is the central atom.
@@ -1385,6 +1390,7 @@
   sections: ["8.5"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: nitric-acid
   authors: ["Claude"]
   prompt: |
     In the best Lewis structure of nitric acid, $\ce{HNO3}$, N is bonded to three O atoms, and the H is on one of them. N has one N=O double bond and two N–O single bonds. What are the formal charges on N and on the O that has no H and only a single bond?
@@ -1819,7 +1825,7 @@
   chapter: 8
   sections: ["8.5"]
   cedTopics: ["2.6"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Which statement about formal charge is true?
@@ -1915,6 +1921,7 @@
   sections: ["8.6"]
   cedTopics: ["2.5"]
   difficulty: 2
+  group: so2
   authors: ["Claude"]
   prompt: |
     Sulfur dioxide, $\ce{SO2}$, is isoelectronic with an allotrope of oxygen. Which allotrope is it, and how do the S–O bonds in $\ce{SO2}$ compare with an S–O single bond?
@@ -1934,6 +1941,7 @@
   sections: ["8.6"]
   cedTopics: ["2.5", "2.6"]
   difficulty: 3
+  group: so3
   authors: ["Claude"]
   prompt: |
     Consider the Lewis structure of $\ce{SO3}$ that obeys the octet rule. Which statements are true?
@@ -2044,6 +2052,7 @@
   sections: ["8.5", "8.6"]
   cedTopics: ["2.5", "2.6"]
   difficulty: 2
+  group: so2
   authors: ["Claude"]
   prompt: |
     Answer the following about sulfur dioxide, $\ce{SO2}$, in which S is the central atom.
@@ -2162,6 +2171,7 @@
   sections: ["8.7"]
   cedTopics: ["2.5"]
   difficulty: 2
+  group: hypervalent-n
   authors: ["Claude"]
   prompt: |
     Which of these could **not** exist, because its central atom can't hold more than an octet?
@@ -2183,6 +2193,7 @@
   sections: ["8.5", "8.7"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: oxyanion-fc
   authors: ["Claude"]
   prompt: |
     Draw $\ce{ClO4-}$ with four Cl–O single bonds and an octet on every atom. What is the formal charge on Cl, and what does it become if one Cl–O bond is redrawn as a double bond?
@@ -2300,6 +2311,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: nitrate
   authors: ["Claude"]
   prompt: |
     In each resonance structure of the nitrate ion, $\ce{NO3-}$, N has formal charge +1. Averaged over the three structures (the resonance hybrid), what is the formal charge on each O?

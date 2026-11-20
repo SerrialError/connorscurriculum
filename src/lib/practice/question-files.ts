@@ -13,7 +13,8 @@ export interface QuestionFileEntry {
   sections?: string[];
   calculation?: boolean;
   difficulty: number;
-  group?: string;
+  /** As written in the YAML: one group or a list. */
+  group?: string | string[];
   choices?: { id: string; text: string }[];
   answer?: string;
 }

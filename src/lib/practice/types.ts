@@ -29,7 +29,7 @@ interface PracticeQuestionBase {
   /** Needs a numeric calculation (a practice exam can limit how many it draws). */
   calculation?: true;
   /** Related questions that give each other away; a practice exam draws at most one per group. */
-  group?: string;
+  groups?: string[];
   promptHtml: string;
   /** The prompt as one line of plain text (math written out), for the results list. */
   promptText: string;

@@ -1,6 +1,15 @@
 ---
 // <ShapeExplorer />: choose electron domains and lone pairs to see each VSEPR shape in 3D.
+// The "Turn in 3D" links on <ShapeGrid> cards jump here (#shape-explorer) and pick their shape.
 import ShapeExplorer from './molecule/ShapeExplorer.svelte';
 ---
 
-<ShapeExplorer client:visible />
+<div id="shape-explorer" class="explorer-anchor">
+  <ShapeExplorer client:visible />
+</div>
+
+<style>
+  .explorer-anchor {
+    scroll-margin-top: 1rem;
+  }
+</style>

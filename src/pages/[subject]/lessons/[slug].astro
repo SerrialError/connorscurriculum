@@ -7,6 +7,9 @@ import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
 import Molecule from '../../../components/Molecule.astro';
 import ShapeExplorer from '../../../components/ShapeExplorer.astro';
+import OrbitalViewer from '../../../components/OrbitalViewer.astro';
+import ShapeGrid from '../../../components/ShapeGrid.astro';
+import HybridCards from '../../../components/HybridCards.astro';
 import { lessonFilterQuery } from '../../../lib/lesson-filter';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { lessonPractice } from '../../../lib/practice/lessons';
@@ -151,7 +154,7 @@ const ahead = !isTaught(data, chapter.number);
       </details>
     )}
 
-    <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer }} />
+    <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer, OrbitalViewer, ShapeGrid, HybridCards }} />
 
     <footer class="lesson-footer" data-pagefind-ignore>
       {test ? (

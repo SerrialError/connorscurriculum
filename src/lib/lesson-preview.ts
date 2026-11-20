@@ -19,6 +19,7 @@ import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { CALLOUT_TYPES, type CalloutType } from './callouts';
 import { MOLECULES } from './molecules';
+import { ORBITAL_SCENES } from './orbitals';
 import { rehypeMathPunctuation } from './markdown';
 
 type JsxNode = MdxJsxFlowElement | MdxJsxTextElement;
@@ -99,9 +100,19 @@ function component(node: JsxNode): RootContent {
     }
     case 'ShapeExplorer':
       return box('div', ['preview-model'], [para([], [text('VSEPR shape explorer (3D) goes here.')])]);
+    case 'ShapeGrid':
+      return box('div', ['preview-model'], [para([], [text(`Chart of ${a.kind === 'domains' ? 'electron-domain geometries' : 'molecular geometries'} (drawings) goes here.`)])]);
+    case 'HybridCards':
+      return box('div', ['preview-model'], [para([], [text('Hybridization cards (sp to sp³d²) go here.')])]);
+    case 'OrbitalViewer': {
+      const ids = String(a.ids ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+      const bad = ids.find((id) => !ORBITAL_SCENES[id]);
+      if (!ids.length || bad) return problem(`<OrbitalViewer ids="${a.ids ?? ''}">: ${bad ? `no orbital scene "${bad}"` : 'list at least one id'} (see src/lib/orbitals.ts)`, inline);
+      return box('div', ['preview-model'], [para([], [text(`3D orbital steps for ${ids.map((id) => ORBITAL_SCENES[id]!.formula).join(', ')} go here.`)])]);
+    }
     default:
       return problem(
-        node.name ? `<${node.name}> is not a lesson component (use Callout, Reveal, YouTube, Molecule, or ShapeExplorer)` : 'Empty <> fragment',
+        node.name ? `<${node.name}> is not a lesson component (use Callout, Reveal, YouTube, Molecule, ShapeExplorer, ShapeGrid, HybridCards, or OrbitalViewer)` : 'Empty <> fragment',
         inline,
       );
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getSubjectData } from '../registry';
-import { compareSections, drawExam, examFormat, examMax, examParts, examPools, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
+import { compareSections, drawExam, drawable, examFormat, examFrqs, examMax, examParts, examPools, examQuestions, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
 import { seededRng } from './random';
 import { readQuestionFiles } from './question-files';
 import { frq, mcq } from './test-fixtures';
@@ -101,7 +101,7 @@ describe('examShortfalls', () => {
       'section "light" allows 1 calculation, so it needs 2 other questions, but only 0 aren\'t calculations',
       'needs 1 free-response question but only 0 match',
     ]);
-    expect(examShortfalls(bank.slice(0, 3), { ...exam, extra: 1 })).toContain('section "configs" needs 2 multiple-choice questions but only 0 match');
+    expect(examShortfalls(bank.slice(0, 3), { ...exam, extra: 1 })).toContain('section "configs" needs 2 multiple-choice questions but only 0 match (counting each group once)');
   });
 });
 
@@ -158,6 +158,53 @@ describe('apchem: the Chapters 6–7 practice exam', () => {
     for (const p of examPools(questions, test.exam!)) {
       expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
       expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
+    }
+  });
+});
+
+describe('apchem: the Chapters 8–9 practice quiz', () => {
+  const quiz = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-quiz')!;
+  const inQuiz = readQuestionFiles()
+    .filter((q) => q.subject === 'apchem' && quiz.chapters.includes(q.chapter))
+    .map((q) => ({ ...q, sections: q.sections ?? [], groups: q.group ? [q.group].flat() : undefined }))
+    .filter((q) => q.sections.some((s) => quiz.sections.includes(s)));
+
+  it('is a quiz, not a class test: 16 multiple choice at 2 points and an 8-point FRQ', () => {
+    expect(quiz.kind).toBe('quiz');
+    expect(mcqCount(quiz.exam!)).toBe(16);
+    expect(examMax(quiz.exam!)).toBe(40);
+  });
+
+  it('draws only medium and hard questions, with at least twice what each section needs', () => {
+    const pool = examQuestions(inQuiz, quiz.exam!);
+    expect(pool.every((q) => q.difficulty >= 2)).toBe(true);
+    expect(examShortfalls(inQuiz, quiz.exam!)).toEqual([]);
+    // Counting related questions (a group) once, so quizzes don't keep repeating the same ones.
+    for (const p of examPools(pool, quiz.exam!)) expect(drawable(p.questions), p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
+    expect(examFrqs(pool).length).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe('drawing the Chapters 8–9 quiz', () => {
+  const quiz = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-quiz')!;
+  const inQuiz = readQuestionFiles()
+    .filter((q) => q.subject === 'apchem' && quiz.chapters.includes(q.chapter))
+    .map((q) => ({ ...q, sections: q.sections ?? [], groups: q.group ? [q.group].flat() : undefined }))
+    .filter((q) => q.sections.some((s) => quiz.sections.includes(s)));
+
+  it('never draws two questions from one group, an excluded question, or a calculation FRQ', () => {
+    for (let i = 0; i < 200; i++) {
+      const drawn = drawExam(inQuiz, quiz.exam!, seededRng(`seed${i}`));
+      expect(drawn.filter((q) => q.type === 'mcq')).toHaveLength(16);
+      const frqs = drawn.filter((q) => q.type === 'frq');
+      expect(frqs).toHaveLength(1);
+      expect(frqs[0]!.calculation).toBeFalsy();
+      const groups = drawn.flatMap((q) => q.groups ?? []);
+      expect(new Set(groups).size, groups.join(', ')).toBe(groups.length);
+      for (const q of drawn) {
+        expect(quiz.exam!.exclude).not.toContain(q.id);
+        expect(q.difficulty).toBeGreaterThanOrEqual(2);
+      }
     }
   });
 });

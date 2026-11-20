@@ -40,7 +40,8 @@ export function listNumbers(ns: number[]): string {
 }
 
 /** A practice exam's name: "Chapters 6–7 Test · Practice exam". */
-export const examLabel = (testId: string, tests: PracticeTest[]): string => `${testLabel(testId, tests)} · Practice exam`;
+export const examLabel = (testId: string, tests: PracticeTest[]): string =>
+  tests.find((t) => t.id === testId)?.kind === 'quiz' ? testLabel(testId, tests) : `${testLabel(testId, tests)} · Practice exam`;
 
 /** Shown with a practice exam while it's being taken. */
 export const EXAM_NOTE = 'No answers are shown until you submit.';

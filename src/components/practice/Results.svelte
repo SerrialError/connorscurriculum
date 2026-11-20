@@ -108,7 +108,7 @@
         </button>
       {/if}
       {#if exam}
-        <button class="button" class:secondary={missed.length > 0} type="button" onclick={() => onagain()}>New practice exam</button>
+        <button class="button" class:secondary={missed.length > 0} type="button" onclick={() => onagain()}>{attempt.exam?.noun === 'quiz' ? 'Take a new quiz' : 'New practice exam'}</button>
       {:else if attempt.answered > 0 || filters.mode !== 'all'}
         <!-- In order with nothing answered, starting again would be the same set from the same place. -->
         <button class="button" class:secondary={missed.length > 0 || unanswered.length > 0} type="button" onclick={() => onagain()}>{againLabel(filters)}</button>

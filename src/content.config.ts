@@ -118,6 +118,8 @@ const lessons = defineCollection({
 // Questions: src/content/questions/<subject>/<chapter>-<slug>.yaml (a list per file)
 // ---------------------------------------------------------------------------
 
+const groupId = z.string().regex(/^[a-z0-9-]+$/, 'group must be lowercase letters, digits, or dashes');
+
 const questionBase = {
   id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, 'id must be lowercase letters, digits, or dashes'),
   ...tagShape,
@@ -125,6 +127,10 @@ const questionBase = {
   // Needs a numeric calculation (plugging numbers into an equation), not just reasoning. A class
   // test's practice exam can limit how many of these it draws (tests.json exam maxCalculations).
   calculation: z.boolean().default(false),
+  // Questions about the same molecule or fact, where one gives away another's answer (e.g. an MCQ
+  // and an FRQ on N₂O). A practice exam or quiz draws at most one question from each group. A
+  // question that overlaps two groups lists both.
+  group: z.union([groupId, z.array(groupId).min(1)]).optional(),
   prompt: z.string().min(1),
   image: z.string().optional(),
   imageAlt: z.string().optional(),

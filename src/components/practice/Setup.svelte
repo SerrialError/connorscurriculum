@@ -27,6 +27,8 @@
 
   let { all, filters = $bindable(), weakest, onstart }: Props = $props();
   const { tests, chapters, laterChapters, units, presets, chapterTopics, frqs, hrefs } = getCourse();
+  /** The teacher's tests; practice quizzes start from Quick start, not as a filter. */
+  const classTests = tests.filter((t) => t.kind !== 'quiz');
 
   let moreOpen = $state(false);
   let copied = $state(false);
@@ -52,7 +54,7 @@
   const frqTopics = $derived(filterTopics(filters, units, chapterTopics, tests));
   const frqMatches = $derived(frqTopics.size ? matchFrqs(frqs, frqTopics) : []);
   /** What's under More options, while it's closed and nothing in it is set. */
-  const moreSummary = [units.length > 0 && 'AP unit or topic', tests.length > 0 && 'class test', 'question type', laterChapters.length > 0 && 'later chapters']
+  const moreSummary = [units.length > 0 && 'AP unit or topic', classTests.length > 0 && 'class test', 'question type', laterChapters.length > 0 && 'later chapters']
     .filter(Boolean)
     .join(', ')
     .replace(/^./, (c) => c.toUpperCase());
@@ -188,11 +190,11 @@
     {/if}
 
     <div class="groups">
-      {#if tests.length > 0}
+      {#if classTests.length > 0}
         <fieldset>
           <legend>Class test</legend>
           <div class="chips">
-            {#each tests as t (t.id)}
+            {#each classTests as t (t.id)}
               <Chip checked={filters.test === t.id} onchange={(on) => (filters.test = on ? t.id : null)} count={countWith(all, filters, tests, { test: t.id })}>
                 {t.title}
               </Chip>

@@ -657,6 +657,7 @@
   sections: ["8.5"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: n2o
   authors: ["Claude"]
   prompt: |
     Nitrous oxide, $\ce{N2O}$, has the skeleton N–N–O. Three Lewis structures give every atom an octet. Which one contributes the **most** to the real molecule?
@@ -773,6 +774,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: nitrate
   authors: ["Claude"]
   prompt: |
     The nitrate ion, $\ce{NO3-}$, has three resonance structures, each with one N=O and two N–O bonds. What is the bond order of each N–O bond in the real ion?
@@ -906,6 +908,7 @@
   sections: ["8.5", "8.7"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: oxyanion-fc
   authors: ["Claude"]
   prompt: |
     Sulfate, $\ce{SO4^2-}$, is often drawn two ways: with four S–O single bonds (an octet on S), or with two S=O double bonds and two S–O single bonds (12 electrons around S). What is the formal charge on S in each?
@@ -925,6 +928,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: so3
   authors: ["Claude"]
   prompt: |
     Drawn with an octet on sulfur (one S=O double bond and two S–O single bonds), how many equivalent resonance structures does sulfur trioxide, $\ce{SO3}$, have?
@@ -984,6 +988,7 @@
   sections: ["8.7"]
   cedTopics: ["2.5"]
   difficulty: 2
+  group: hypervalent-n
   authors: ["Claude"]
   prompt: |
     Which of these molecules does **not** exist?
@@ -1002,7 +1007,7 @@
   chapter: 8
   sections: ["8.7"]
   cedTopics: ["2.5"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     How many lone pairs are on the xenon atom in $\ce{XeF2}$?
@@ -1191,6 +1196,7 @@
   sections: ["8.5", "8.6"]
   cedTopics: ["2.5", "2.6"]
   difficulty: 2
+  group: nitrate
   authors: ["Claude"]
   prompt: |
     Answer the following about the nitrate ion, $\ce{NO3-}$, in which N is the central atom.
@@ -1384,6 +1390,7 @@
   sections: ["8.5"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: nitric-acid
   authors: ["Claude"]
   prompt: |
     In the best Lewis structure of nitric acid, $\ce{HNO3}$, N is bonded to three O atoms, and the H is on one of them. N has one N=O double bond and two N–O single bonds. What are the formal charges on N and on the O that has no H and only a single bond?
@@ -1818,7 +1825,7 @@
   chapter: 8
   sections: ["8.5"]
   cedTopics: ["2.6"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Which statement about formal charge is true?
@@ -1914,6 +1921,7 @@
   sections: ["8.6"]
   cedTopics: ["2.5"]
   difficulty: 2
+  group: so2
   authors: ["Claude"]
   prompt: |
     Sulfur dioxide, $\ce{SO2}$, is isoelectronic with an allotrope of oxygen. Which allotrope is it, and how do the S–O bonds in $\ce{SO2}$ compare with an S–O single bond?
@@ -1933,6 +1941,7 @@
   sections: ["8.6"]
   cedTopics: ["2.5", "2.6"]
   difficulty: 3
+  group: so3
   authors: ["Claude"]
   prompt: |
     Consider the Lewis structure of $\ce{SO3}$ that obeys the octet rule. Which statements are true?
@@ -2043,6 +2052,7 @@
   sections: ["8.5", "8.6"]
   cedTopics: ["2.5", "2.6"]
   difficulty: 2
+  group: so2
   authors: ["Claude"]
   prompt: |
     Answer the following about sulfur dioxide, $\ce{SO2}$, in which S is the central atom.
@@ -2161,6 +2171,7 @@
   sections: ["8.7"]
   cedTopics: ["2.5"]
   difficulty: 2
+  group: hypervalent-n
   authors: ["Claude"]
   prompt: |
     Which of these could **not** exist, because its central atom can't hold more than an octet?
@@ -2172,3 +2183,185 @@
   answer: c
   explanation: |
     Five bonds need 10 electrons around the central atom. Only central atoms from period 3 and below can be hypervalent; N is in period 2, with no 2d subshell and too little room for five atoms. P (period 3) forms $\ce{PCl5}$, and S and Xe expand their octets in $\ce{SF4}$ and $\ce{XeF2}$.
+
+# --- Written for the Chapters 8–9 quiz (all medium or hard) ---
+
+- id: apchem-08-quiz-clo4-fc
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.7"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  group: oxyanion-fc
+  authors: ["Claude"]
+  prompt: |
+    Draw $\ce{ClO4-}$ with four Cl–O single bonds and an octet on every atom. What is the formal charge on Cl, and what does it become if one Cl–O bond is redrawn as a double bond?
+  choices:
+    - { id: a, text: "+1, and it becomes 0" }
+    - { id: b, text: "−1, and it becomes 0" }
+    - { id: c, text: "+3, and it becomes +4" }
+    - { id: d, text: "+3, and it becomes +2" }
+  answer: d
+  explanation: |
+    $7 + 4(6) + 1 = 32$ electrons: four bonds (8) and three lone pairs on each O (24). Cl owns no lone pairs and half of 8 bonding electrons: $7 - (0 + 4) = +3$, and each O is $6 - (6 + 1) = -1$ (sum $+3 - 4 = -1$ ✓). Making one bond double moves a lone pair from O into the bond: Cl now owns 5 electrons, so $7 - 5 = +2$. (C) has the direction backwards. Structures with more Cl=O bonds keep lowering Cl's formal charge, which is why some books draw them; both describe the same tetrahedral ion.
+
+- id: apchem-08-quiz-hnco-skeleton
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.5", "2.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    One H, C, N, and O atom are bonded in a chain. Every atom gets an octet (H gets 2). Which order of atoms allows a Lewis structure with a formal charge of **zero on every atom**?
+  choices:
+    - { id: a, text: "H–C–N–O" }
+    - { id: b, text: "H–N–C–O" }
+    - { id: c, text: "H–O–N–C" }
+    - { id: d, text: "H–C–O–N" }
+  answer: b
+  explanation: |
+    16 valence electrons. H–N=C=O works: N has 3 bonds and 1 lone pair, C has 4 bonds, O has 2 bonds and 2 lone pairs, so all formal charges are 0 (this is isocyanic acid). In (A) the best you can do is H–C≡N–O with N at +1 and O at −1. In (C) the end C can only bond to N: the best is H–O–N≡C, with N at +1 and C at −1. In (D) an O in the middle would need 3 or 4 bonds, giving it a positive charge.
+
+- id: apchem-08-quiz-no2plus
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.5", "2.7"]
+  difficulty: 2
+  group: nitrogen-dioxide-ions
+  authors: ["Claude"]
+  prompt: |
+    In the best Lewis structure of the nitronium ion, $\ce{NO2+}$, how many lone pairs are on N, and what is the O–N–O bond angle?
+  choices:
+    - { id: a, text: "0 lone pairs; 180°" }
+    - { id: b, text: "1 lone pair; about 120°" }
+    - { id: c, text: "1 lone pair; 180°" }
+    - { id: d, text: "2 lone pairs; about 109°" }
+  answer: a
+  explanation: |
+    $5 + 2(6) - 1 = 16$ electrons, the same as $\ce{CO2}$: O=N=O with two lone pairs on each O and none on N (N has formal charge +1). Two domains on N, so the ion is linear, 180°. (B) is nitrite, $\ce{NO2-}$, which has two more electrons and a lone pair on N.
+
+- id: apchem-08-quiz-acetate-bonds
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  group: acetate
+  authors: ["Claude"]
+  prompt: |
+    Which statement correctly compares the carbon–oxygen bonds in the acetate ion, $\ce{CH3COO-}$, and in acetic acid, $\ce{CH3COOH}$?
+  choices:
+    - { id: a, text: "Both have one C=O and one C–O, with the same two bond lengths in each" }
+    - { id: b, text: "Acetate's C–O bonds are equal (order 1½); acid has a shorter C=O and a longer C–OH" }
+    - { id: c, text: "Acetate has one C=O and one C–O⁻ that trade places back and forth very quickly" }
+    - { id: d, text: "Acetic acid's two C–O bonds are equal, because it also has two resonance structures" }
+  answer: b
+  explanation: |
+    Acetate has two equivalent resonance structures (the double bond to either O), so its real C–O bonds are identical, each between a single and a double bond (order 3/2). In acetic acid one O carries the H; moving the double bond to that O would leave formal charges, so the structures aren't equivalent and the C=O stays shorter than the C–OH. (C) describes resonance as flipping, which it isn't: the ion is the hybrid all the time.
+
+- id: apchem-08-quiz-n2o-least
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 3
+  group: n2o
+  authors: ["Claude"]
+  prompt: |
+    Nitrous oxide has the skeleton N–N–O (16 valence electrons). Which resonance structure contributes **least** to the real molecule?
+  choices:
+    - { id: a, text: "N=N=O" }
+    - { id: b, text: "N≡N–O" }
+    - { id: c, text: "N–N≡O" }
+    - { id: d, text: "They all contribute equally" }
+  answer: c
+  explanation: |
+    Formal charges (end N, middle N, O): N=N=O is −1, +1, 0; N≡N–O is 0, +1, −1; N–N≡O is −2, +1, +1. The last has the largest charges and puts a **positive** charge on O, the most electronegative atom, so it matters least. N≡N–O is often judged the best, with the negative charge on O. (D) would need all three to have the same formal charges.
+
+- id: apchem-08-quiz-no-resonance
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species has **no** equivalent resonance structures?
+  choices:
+    - { id: a, text: "$\\ce{HCO3-}$" }
+    - { id: b, text: "$\\ce{CH3NO2}$ (nitromethane, C bonded to N)" }
+    - { id: c, text: "$\\ce{H2CO}$" }
+    - { id: d, text: "$\\ce{O3}$" }
+  answer: c
+  explanation: |
+    In formaldehyde, H₂C=O, the only place for the double bond is between C and O; there's no second, equivalent spot. Bicarbonate has two equivalent O atoms without the H, nitromethane's NO₂ group has two equivalent O atoms, and ozone can put its double bond on either side, so (A), (B), and (D) all have two equivalent structures.
+
+- id: apchem-08-quiz-nitrate-average-charge
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  group: nitrate
+  authors: ["Claude"]
+  prompt: |
+    In each resonance structure of the nitrate ion, $\ce{NO3-}$, N has formal charge +1. Averaged over the three structures (the resonance hybrid), what is the formal charge on each O?
+  choices:
+    - { id: a, text: "−1/3" }
+    - { id: b, text: "−1" }
+    - { id: c, text: "−2/3" }
+    - { id: d, text: "0" }
+  answer: c
+  explanation: |
+    In each structure the double-bonded O is 0 and the two single-bonded O atoms are −1, so the O atoms share −2 in total. Each O is double-bonded in one structure out of three: $(0 - 1 - 1)/3 = -2/3$. Check: $+1 + 3(-2/3) = -1$, the ion's charge. (A) spreads only the ion's −1 over the O atoms and forgets N's +1.
+
+- id: apchem-08-quiz-frq-n2o
+  type: frq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.6"]
+  cedTopics: ["2.5", "2.6", "2.7"]
+  difficulty: 3
+  group: n2o
+  authors: ["Claude"]
+  prompt: |
+    Nitrous oxide, $\ce{N2O}$, has the skeleton N–N–O, with the central N bonded to both other atoms.
+  explanation: |
+    16 valence electrons. Two important resonance structures are N=N=O (two lone pairs on the end N, two on O) and N≡N–O (one lone pair on the end N, three on O); in both the central N has no lone pairs. Formal charges are −1, +1, 0 and 0, +1, −1. The second puts the negative charge on O, the more electronegative atom, so it's the better structure. Either way the central N has two electron domains, so the molecule is linear (180°) and the central N is sp. N≡N–O has a triple bond (1 σ + 2 π) and a single bond (1 σ): 2 σ and 2 π.
+  parts:
+    - label: a
+      points: 2
+      prompt: Draw two valid resonance structures for $\ce{N2O}$, showing all bonds and lone pairs.
+      scoring:
+        - "N=N=O with two lone pairs on the end N, two on O, none on the central N (16 electrons)."
+        - "N≡N–O with one lone pair on the end N, three on O, none on the central N (16 electrons)."
+    - label: b
+      points: 1
+      prompt: Give the formal charge on each atom in both structures.
+      scoring:
+        - "N=N=O: −1, +1, 0; N≡N–O: 0, +1, −1 (both sets needed)."
+    - label: c
+      points: 1
+      prompt: Which of your two structures better describes $\ce{N2O}$? Justify your answer using formal charge.
+      scoring:
+        - "N≡N–O, because the negative formal charge is on O, the more electronegative atom (the magnitudes are the same in both)."
+    - label: d
+      points: 1
+      prompt: Give the molecular geometry and the N–N–O bond angle.
+      scoring:
+        - "Linear, 180°: the central N has two electron domains and no lone pairs."
+    - label: e
+      points: 2
+      prompt: Give the hybridization of the central N, and the number of σ and π bonds in N≡N–O.
+      scoring:
+        - "sp (two electron domains)."
+        - "2 σ and 2 π."

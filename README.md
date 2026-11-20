@@ -31,9 +31,15 @@ The site name lives in `src/site.ts`.
 `.github/workflows/build.yml` runs `npm run check` and `npm run build` on every pull request and
 every push to `main`, so a bad tag or a broken lesson shows up as a failed check. `main` requires
 that `build` check to pass before anything is merged. Pushes to `main` also deploy
-`dist/` to GitHub Pages at https://serrialerror.github.io/connorscurriculum/. The workflow sets
-`BASE_PATH` and `SITE_URL` itself. Pages must be set to deploy from GitHub Actions (repo Settings →
-Pages → Source: GitHub Actions).
+`dist/` to GitHub Pages at https://connorscurriculum.com/. The workflow reads `BASE_PATH` and
+`SITE_URL` from the repo's Pages settings. Pages must be set to deploy from GitHub Actions (repo
+Settings → Pages → Source: GitHub Actions), with `connorscurriculum.com` as the custom domain.
+
+The domain's DNS is on Cloudflare: four `A` and four `AAAA` records on `@` pointing at GitHub Pages
+(185.199.108–111.153 and 2606:50c0:8000–8003::153), a `CNAME` from `www` to `serrialerror.github.io`,
+and the `_github-pages-challenge-SerrialError` TXT record that verifies the domain. Keep them all on
+DNS only (grey cloud), because GitHub can't issue the HTTPS certificate behind Cloudflare's proxy.
+The old address, https://serrialerror.github.io/connorscurriculum/, redirects to the domain.
 
 ## Editor sign-in
 
@@ -51,7 +57,7 @@ service, because GitHub Pages can't complete GitHub's sign-in on its own. Set it
    URL, which looks like `https://sveltia-cms-auth.<you>.workers.dev`.
 2. **Register a GitHub OAuth app** at https://github.com/settings/applications/new:
    - Application name: `connorscurriculum editor`
-   - Homepage URL: `https://serrialerror.github.io/connorscurriculum/`
+   - Homepage URL: `https://connorscurriculum.com/`
    - Authorization callback URL: `<Worker URL>/callback`
 
    Then click **Generate a new client secret**.
@@ -59,7 +65,7 @@ service, because GitHub Pages can't complete GitHub's sign-in on its own. Set it
    Settings → Variables and Secrets, and add:
    - `GITHUB_CLIENT_ID`: the app's Client ID
    - `GITHUB_CLIENT_SECRET`: the client secret (type **Secret**)
-   - `ALLOWED_DOMAINS`: `serrialerror.github.io, localhost`
+   - `ALLOWED_DOMAINS`: `connorscurriculum.com, serrialerror.github.io, localhost`
 4. **Point the editor at it.** Set `CMS_AUTH_URL` in `src/lib/cms.ts` to the Worker URL.
 
 `main` requires the `build` check from GitHub Actions, so a lesson that doesn't build can't be

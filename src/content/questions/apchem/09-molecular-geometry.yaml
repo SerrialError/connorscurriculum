@@ -1458,7 +1458,8 @@
     **(d)** In both, the F atoms are arranged in opposite pairs (180° apart), so the bond dipoles cancel, and the lone pairs are symmetric too. Both molecules are nonpolar.
 
 # --- Added with Jaya's Chapter 9 notes, the online hybridization sheets, and the Lewis structures lab ---
-# Hybridization with d orbitals (sp³d, sp³d²) is in the class chart but not on the AP exam: cedTopics: [].
+# Hybridization with d orbitals (sp³d, sp³d²) is in the class chart but not on the AP exam, and neither is how hybrid
+# orbitals are derived (promotion, counting leftover p orbitals): those questions have cedTopics: [].
 
 - id: apchem-09-hybrid-pcl5
   type: mcq
@@ -1566,10 +1567,10 @@
   prompt: |
     Ground-state Be is $1s^2 2s^2$. Why does the hybridization picture of $\ce{BeF2}$ start by promoting one 2s electron to a 2p orbital?
   choices:
-    - { id: a, text: "Ground-state Be has no unpaired electrons, so it has nothing to pair with the F electrons" }
-    - { id: b, text: "Promotion releases energy, which is what makes the Be–F bonds stable" }
-    - { id: c, text: "The 2p orbital is lower in energy than the 2s orbital" }
-    - { id: d, text: "Be needs an octet, and promotion gives it eight electrons" }
+    - { id: a, text: "Ground-state Be has no unpaired electrons to share with F" }
+    - { id: b, text: "Promotion releases energy, and that energy is what holds the two Be–F bonds together" }
+    - { id: c, text: "The 2p orbital is lower in energy than the 2s orbital, so the electron drops into it" }
+    - { id: d, text: "Be needs an octet, and moving an electron into 2p gives it eight valence electrons" }
   answer: a
   explanation: |
     A covalent bond pairs one electron from each atom. Be's two valence electrons are paired in 2s, so promoting one gives two unpaired electrons (2s¹ 2p¹), which then mix into two sp orbitals. Promotion **costs** energy (B is backwards); forming two bonds pays it back. 2p is higher than 2s (C), and Be ends up with only 4 electrons (D).
@@ -1623,7 +1624,7 @@
   prompt: |
     What is the best estimate of the H–O–H bond angle in the hydronium ion, $\ce{H3O+}$?
   choices:
-    - { id: a, text: "120°" }
+    - { id: a, text: "Exactly 120°, since there are three H atoms" }
     - { id: b, text: "Slightly less than 109.5°" }
     - { id: c, text: "Exactly 109.5°" }
     - { id: d, text: "90°" }
@@ -1762,7 +1763,7 @@
     - { id: d, text: "$\\ce{BrF3}$" }
   answer: a
   explanation: |
-    $\ce{ICl4-}$ is square planar: its two lone pairs are opposite each other and every I–Cl bond has a partner pointing the opposite way, so the dipoles cancel. BrF₅ (square pyramidal), SeF₄ (seesaw), and BrF₃ (T-shaped) each have lone pairs with nothing opposite them, so they're polar.
+    $\ce{ICl4-}$ is square planar: its two lone pairs are opposite each other and every I–Cl bond has a partner pointing the opposite way, so the dipoles cancel. In BrF₅ (square pyramidal) the top F has only a lone pair opposite it, so its dipole isn't cancelled. In SeF₄ (seesaw) and BrF₃ (T-shaped) the equatorial lone pairs leave the F atoms bunched on one side. All three are polar.
 
 - id: apchem-09-square-pyramidal-abn
   type: mcq

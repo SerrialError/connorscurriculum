@@ -4,6 +4,8 @@
   import { MOLECULES, SHAPES } from '../../lib/molecules';
   import MoleculeViewer from './MoleculeViewer.svelte';
 
+  // Unique radio-group names, in case a page ever has two explorers.
+  const uid = $props.id();
   let domains = $state(4);
   let lonePairs = $state(1);
 
@@ -23,7 +25,7 @@
       <legend>Electron domains on the central atom</legend>
       <div class="chips">
         {#each domainCounts as n (n)}
-          <label class="chip"><input type="radio" name="vsepr-domains" checked={domains === n} onchange={() => pickDomains(n)} /><span>{n}</span></label>
+          <label class="chip"><input type="radio" name="{uid}-domains" checked={domains === n} onchange={() => pickDomains(n)} /><span>{n}</span></label>
         {/each}
       </div>
     </fieldset>
@@ -31,7 +33,7 @@
       <legend>How many are lone pairs</legend>
       <div class="chips">
         {#each lonePairCounts as n (n)}
-          <label class="chip"><input type="radio" name="vsepr-lone-pairs" checked={shape.lonePairs === n} onchange={() => (lonePairs = n)} /><span>{n}</span></label>
+          <label class="chip"><input type="radio" name="{uid}-lone-pairs" checked={shape.lonePairs === n} onchange={() => (lonePairs = n)} /><span>{n}</span></label>
         {/each}
       </div>
     </fieldset>

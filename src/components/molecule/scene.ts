@@ -31,26 +31,39 @@ const v = (p: Vec) => new Vector3(...p);
 const START = { polar: (72 * Math.PI) / 180, azimuth: (20 * Math.PI) / 180 };
 const FOV = 32;
 
-const sphere = new SphereGeometry(1, 40, 28);
-const cylinder = new CylinderGeometry(1, 1, 1, 20);
-const bondMaterial = new MeshStandardMaterial({ color: '#a3a9ad', roughness: 0.5 });
-const lobeMaterial = new MeshStandardMaterial({
-  color: '#8a74e8',
-  roughness: 0.6,
-  transparent: true,
-  opacity: 0.38,
-  depthWrite: false,
-});
-const dotMaterial = new MeshStandardMaterial({ color: '#5b3fa6', roughness: 0.5 });
-const atomMaterials = new Map<string, MeshStandardMaterial>();
-function atomMaterial(el: string) {
-  let m = atomMaterials.get(el);
-  if (!m) atomMaterials.set(el, (m = new MeshStandardMaterial({ color: ELEMENT_COLORS[el] ?? '#c0c0c0', roughness: 0.42, metalness: 0.05 })));
-  return m;
+/** Shapes and materials for one view. Each view owns its own, so freeing them can't affect another. */
+class Kit {
+  sphere = new SphereGeometry(1, 40, 28);
+  cylinder = new CylinderGeometry(1, 1, 1, 20);
+  bond = new MeshStandardMaterial({ color: '#a3a9ad', roughness: 0.5 });
+  lobe = new MeshStandardMaterial({ color: '#8a74e8', roughness: 0.6, transparent: true, opacity: 0.38, depthWrite: false });
+  dot = new MeshStandardMaterial({ color: '#5b3fa6', roughness: 0.5 });
+  arc = new LineBasicMaterial({ color: '#2f8fb3' });
+  private atoms = new Map<string, MeshStandardMaterial>();
+
+  atom(el: string) {
+    let m = this.atoms.get(el);
+    if (!m) this.atoms.set(el, (m = new MeshStandardMaterial({ color: ELEMENT_COLORS[el] ?? '#c0c0c0', roughness: 0.42, metalness: 0.05 })));
+    return m;
+  }
 }
 
-function stick(from: Vector3, to: Vector3, radius: number): Mesh {
-  const mesh = new Mesh(cylinder, bondMaterial);
+/**
+ * Frees the GPU copies of everything under `root`. The objects stay usable: a renderer uploads them
+ * again when it next draws them. Disposing also drops the old renderer's listeners on them, which
+ * would otherwise keep each closed renderer in memory.
+ */
+function release(root: Object3D) {
+  root.traverse((o) => {
+    if (o instanceof Mesh || o instanceof Line) {
+      o.geometry.dispose();
+      (o.material as MeshStandardMaterial | LineBasicMaterial).dispose();
+    }
+  });
+}
+
+function stick(kit: Kit, from: Vector3, to: Vector3, radius: number): Mesh {
+  const mesh = new Mesh(kit.cylinder, kit.bond);
   const dir = to.clone().sub(from);
   mesh.scale.set(radius, dir.length(), radius);
   mesh.position.copy(from).add(to).multiplyScalar(0.5);
@@ -71,21 +84,21 @@ function label(text: string, className: string): CSS2DObject {
   return new CSS2DObject(el);
 }
 
-export interface Parts {
+interface Parts {
   model: Group;
   lonePairs: Group;
   angles: Group;
   radius: number;
 }
 
-export function buildModel(m: Molecule): Parts {
+function buildModel(m: Molecule, kit: Kit): Parts {
   const model = new Group();
   const lonePairs = new Group();
   const angles = new Group();
   const pos = m.atoms.map((a) => v(a.pos));
 
   m.atoms.forEach((a, i) => {
-    const mesh = new Mesh(sphere, atomMaterial(a.el));
+    const mesh = new Mesh(kit.sphere, kit.atom(a.el));
     mesh.scale.setScalar(atomRadius(a.el));
     mesh.position.copy(pos[i]!);
     model.add(mesh);
@@ -95,21 +108,21 @@ export function buildModel(m: Molecule): Parts {
     const from = pos[b.a]!;
     const to = pos[b.b]!;
     if (b.order === 1) {
-      model.add(stick(from, to, 0.075));
+      model.add(stick(kit, from, to, 0.075));
       continue;
     }
     const off = across(to.clone().sub(from).normalize()).multiplyScalar(0.11);
     const shifts = b.order === 2 ? [-0.5, 0.5] : [-1, 0, 1];
     for (const s of shifts) {
       const o = off.clone().multiplyScalar(s * (b.order === 2 ? 1 : 1.05));
-      model.add(stick(from.clone().add(o), to.clone().add(o), 0.052));
+      model.add(stick(kit, from.clone().add(o), to.clone().add(o), 0.052));
     }
   }
 
   for (const lp of m.lonePairs) {
     const dir = v(lp.dir).normalize();
     const at = pos[lp.atom]!;
-    const lobe = new Mesh(sphere, lobeMaterial);
+    const lobe = new Mesh(kit.sphere, kit.lobe);
     lobe.scale.set(0.27, 0.5, 0.27);
     lobe.quaternion.copy(new Quaternion().setFromUnitVectors(Y, dir));
     lobe.position.copy(at).addScaledVector(dir, 0.58);
@@ -117,14 +130,13 @@ export function buildModel(m: Molecule): Parts {
     lonePairs.add(lobe);
     const side = across(dir).multiplyScalar(0.085);
     for (const s of [-1, 1]) {
-      const dot = new Mesh(sphere, dotMaterial);
+      const dot = new Mesh(kit.sphere, kit.dot);
       dot.scale.setScalar(0.045);
       dot.position.copy(at).addScaledVector(dir, 0.72).addScaledVector(side, s);
       lonePairs.add(dot);
     }
   }
 
-  const arcMaterial = new LineBasicMaterial({ color: '#2f8fb3' });
   for (const a of m.angles) {
     const at = pos[a.at]!;
     const u = pos[a.from]!.clone().sub(at).normalize();
@@ -141,7 +153,7 @@ export function buildModel(m: Molecule): Parts {
       else q.identity().slerp(full, i / 32);
       points.push(u.clone().applyQuaternion(q).multiplyScalar(r).add(at));
     }
-    angles.add(new Line(new BufferGeometry().setFromPoints(points), arcMaterial));
+    angles.add(new Line(new BufferGeometry().setFromPoints(points), kit.arc));
     const mid = points[16]!.clone().sub(at).normalize();
     const tag = label(a.label, 'mol-angle');
     tag.position.copy(at).addScaledVector(mid, r + 0.22);
@@ -162,6 +174,7 @@ export interface ViewOptions {
 export class MoleculeView {
   private scene = new Scene();
   private camera = new PerspectiveCamera(FOV, 4 / 3, 0.1, 100);
+  private kit = new Kit();
   private parts: Parts | null = null;
   private renderer: WebGLRenderer | null = null;
   private labels: CSS2DRenderer | null = null;
@@ -189,9 +202,15 @@ export class MoleculeView {
   }
 
   setMolecule(m: Molecule) {
-    if (this.parts) this.scene.remove(this.parts.model, this.parts.lonePairs, this.parts.angles);
-    this.disposeLabels(this.parts?.angles);
-    this.parts = buildModel(m);
+    if (this.parts) {
+      this.scene.remove(this.parts.model, this.parts.lonePairs, this.parts.angles);
+      this.disposeLabels(this.parts.angles);
+      // The arcs' geometries belong to this molecule alone; everything else comes from the kit.
+      this.parts.angles.traverse((o) => {
+        if (o instanceof Line) o.geometry.dispose();
+      });
+    }
+    this.parts = buildModel(m, this.kit);
     this.scene.add(this.parts.model, this.parts.lonePairs, this.parts.angles);
     this.apply();
     this.resetView();
@@ -284,6 +303,7 @@ export class MoleculeView {
   }
 
   private stop() {
+    release(this.scene);
     this.controls?.dispose();
     this.renderer?.dispose();
     this.renderer?.forceContextLoss();

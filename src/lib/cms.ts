@@ -87,6 +87,18 @@ export function lessonCollection(data: SubjectData) {
       { name: 'authors', label: 'Authors', widget: 'list', min: 1, hint: 'Your name (first name is fine).' },
       { name: 'summary', label: 'Summary', widget: 'text', required: false, hint: 'One sentence shown on cards and in search.' },
       {
+        name: 'originals',
+        label: 'Original pages',
+        widget: 'list',
+        required: false,
+        default: [],
+        hint: 'Photos or PDFs of the notes this was typed up from. Readers can open them from the end of the page.',
+        fields: [
+          { name: 'file', label: 'Photo or PDF', widget: 'file', media_folder: 'originals', public_folder: 'originals' },
+          { name: 'caption', label: 'Caption', widget: 'string', required: false, hint: 'e.g. 8.1–8.4' },
+        ],
+      },
+      {
         name: 'draft',
         label: 'Draft',
         widget: 'boolean',

@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Callout from '../../../components/Callout.astro';
+import Originals from '../../../components/Originals.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
@@ -118,6 +119,7 @@ const ahead = !isTaught(data, chapter.number);
       <p class="small muted notes-note" data-pagefind-ignore>
         A classmate's notes, with the wording kept as close to the original as possible. Where something needed fixing,
         there's a <strong>Correction</strong> box right below it.
+        {lesson.data.originals.length > 0 && <> <a href="#originals">See the original pages</a>.</>}
       </p>
     )}
     {(sample || ahead) && (
@@ -155,6 +157,10 @@ const ahead = !isTaught(data, chapter.number);
     )}
 
     <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer, OrbitalViewer, ShapeGrid, HybridCards }} />
+
+    {lesson.data.originals.length > 0 && (
+      <Originals lessonId={lesson.id} authors={lesson.data.authors} kind={lesson.data.kind} items={lesson.data.originals} />
+    )}
 
     <footer class="lesson-footer" data-pagefind-ignore>
       {test ? (

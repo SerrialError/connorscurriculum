@@ -27,7 +27,7 @@ Every lesson and question has both kinds of tag:
 ## Using the editor (CMS)
 
 Lessons can be written in a browser editor instead of editing files: open
-[the editor](https://serrialerror.github.io/connorscurriculum/admin/) (`/admin/` on the site). The
+[the editor](https://connorscurriculum.com/admin/) (`/admin/` on the site). The
 **Share your notes or write a lesson** link at the bottom of every page leads to this section. It shows a live preview with the math, chemistry, and
 boxes rendered the way the site will show them, and flags anything that would break the build (an
 unclosed `<Callout>`, a stray `{`, an unknown component). The chapter and AP topic pickers come

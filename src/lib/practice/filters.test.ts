@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { CLASS_ONLY_UNIT, activeFilterCount, countWith, emptyFilters, filterQuestions, filterTopics, isCustomCount, sessionSize, toggled } from './filters';
+import { activeFilterCount, countWith, emptyFilters, filterQuestions, filterTopics, isCustomCount, sessionSize, toggled } from './filters';
 import type { PracticeQuestion, PracticeTest } from './types';
-import { parseFilters } from './url';
+import { filtersToQuery, parseFilters } from './url';
 import { mcq, questions, tests } from './test-fixtures';
 
 describe('filterQuestions', () => {
@@ -29,13 +29,23 @@ describe('filterQuestions', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), topics: ['5.2'], units: ['7'] }, tests))).toEqual(['q2', 'f1']);
   });
 
-  it('selects class-only questions (no CED topic) with the class-only unit', () => {
-    expect(ids(filterQuestions(questions, { ...emptyFilters(), units: [CLASS_ONLY_UNIT] }, tests))).toEqual(['q3']);
-    expect(ids(filterQuestions(questions, { ...emptyFilters(), units: [CLASS_ONLY_UNIT, '7'] }, tests))).toEqual(['q3', 'f1']);
-    // With the class-only entry, unit counts add up to the total.
-    const total = ['5', '7', CLASS_ONLY_UNIT].reduce((n, u) => n + countWith(questions, emptyFilters(), tests, { units: [u] }), 0);
-    expect(total).toBe(questions.length);
-    expect(parseFilters('?unit=class').units).toEqual([CLASS_ONLY_UNIT]);
+  it('splits questions into AP-exam ones (with a CED topic) and class-only ones', () => {
+    const ap = ids(filterQuestions(questions, { ...emptyFilters(), ap: 'ap' }, tests));
+    const cls = ids(filterQuestions(questions, { ...emptyFilters(), ap: 'class' }, tests));
+    expect(cls).toEqual(['q3']);
+    expect(ap).not.toContain('q3');
+    // Every question is one or the other.
+    expect(ap.length + cls.length).toBe(filterQuestions(questions, emptyFilters(), tests).length);
+    // AND with the other filters.
+    expect(ids(filterQuestions(questions, { ...emptyFilters(), ap: 'class', units: ['7'] }, tests))).toEqual([]);
+    expect(activeFilterCount({ ...emptyFilters(), ap: 'ap' })).toBe(1);
+  });
+
+  it('reads ap=1 and ap=0, and the older unit=class links', () => {
+    expect(parseFilters('?ap=1').ap).toBe('ap');
+    expect(parseFilters('?ap=0').ap).toBe('class');
+    expect(parseFilters('?unit=5,class')).toMatchObject({ ap: 'class', units: ['5'] });
+    expect(filtersToQuery({ ...emptyFilters(), ap: 'ap' })).toBe('?ap=1');
   });
 
   it('counts matches for a changed filter without changing the others', () => {

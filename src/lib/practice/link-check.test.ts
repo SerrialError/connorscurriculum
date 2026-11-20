@@ -12,7 +12,7 @@ const known: KnownValues = {
 
 describe('knownFilters', () => {
   it('keeps every value the class has', () => {
-    const f = { ...emptyFilters(), chapters: [14], sections: ['15.2'], test: 'ch14', units: ['5', 'class'], topics: ['5.2'] };
+    const f = { ...emptyFilters(), chapters: [14], sections: ['15.2'], test: 'ch14', units: ['5'], topics: ['5.2'], ap: 'class' as const };
     expect(knownFilters(f, known)).toEqual({ filters: f, unknown: null });
   });
 
@@ -27,8 +27,8 @@ describe('knownFilters', () => {
     expect(knownFilters({ ...emptyFilters(), test: 'ch6-7-test-old' }, known).unknown).toEqual({ values: [], test: true });
   });
 
-  it('has no class-only unit in a class without units', () => {
-    expect(knownFilters({ ...emptyFilters(), units: ['class'] }, { ...known, units: [] }).unknown).toEqual({ values: ['Not on the AP exam'], test: false });
+  it('drops the AP-exam filter in a class without AP topics', () => {
+    expect(knownFilters({ ...emptyFilters(), ap: 'class' }, { ...known, units: [] }).unknown).toEqual({ values: ['Class only'], test: false });
   });
 });
 

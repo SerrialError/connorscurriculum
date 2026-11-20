@@ -624,7 +624,7 @@
   subject: apchem
   chapter: 9
   sections: ["9.5"]
-  cedTopics: ["2.7"]
+  cedTopics: []  # how hybrid orbitals are made isn't assessed (CED 2.7 exclusion)
   difficulty: 1
   authors: ["Claude"]
   prompt: |

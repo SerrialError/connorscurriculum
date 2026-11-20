@@ -2,7 +2,6 @@
 // whose questions were renamed or removed, filters nothing matches, or a damaged seed. The
 // practice page says what happened in one line and shows the filters, so Start (or removing a
 // filter) is one click away.
-import { CLASS_ONLY_UNIT } from './filters';
 import { filterChips } from './labels';
 import type { Filters, PracticeQuestion, PracticeTest } from './types';
 import { plural } from '../text';
@@ -26,7 +25,7 @@ export interface UnknownValues {
 /** The filters with every value the class doesn't have left out, and what was left out (null: nothing). */
 export function knownFilters(f: Filters, known: KnownValues): { filters: Filters; unknown: UnknownValues | null } {
   const sections = new Set(known.questions.flatMap((q) => q.sections));
-  const units = new Set([...known.units.map((u) => u.id), ...(known.units.length ? [CLASS_ONLY_UNIT] : [])]);
+  const units = new Set(known.units.map((u) => u.id));
   const topics = new Set(known.units.flatMap((u) => u.topics.map((t) => t.id)));
   const filters: Filters = {
     ...f,
@@ -35,6 +34,8 @@ export function knownFilters(f: Filters, known: KnownValues): { filters: Filters
     test: f.test && known.tests.some((t) => t.id === f.test) ? f.test : null,
     units: f.units.filter((u) => units.has(u)),
     topics: f.topics.filter((t) => topics.has(t)),
+    // A class with no AP topics has nothing to split on.
+    ap: known.units.length ? f.ap : null,
   };
   // Compared without the test: an unknown test's chip would be its id.
   const labels = (x: Filters) => filterChips({ ...x, test: null }, known.tests, []).map((c) => c.label);

@@ -131,8 +131,7 @@ export const isPastTest = (test: { date?: string } | undefined): boolean => isPa
 
 /** "By Jaya", or "Sample page" for samples. */
 export function byline(lesson: Lesson): string {
-  if (isSample(lesson)) return 'Sample page';
-  return lesson.data.source ? `From ${lesson.data.source}` : `By ${lesson.data.authors.join(', ')}`;
+  return isSample(lesson) ? 'Sample page' : `By ${lesson.data.authors.join(', ')}`;
 }
 
 export const lessonHref = (lesson: Lesson) => url(`${lesson.data.subject.id}/lessons/${lessonSlug(lesson)}/`);

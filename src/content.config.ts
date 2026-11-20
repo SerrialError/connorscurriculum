@@ -109,9 +109,6 @@ const lessons = defineCollection({
         kind: z.enum(['lesson', 'notes', 'review']).default('lesson'),
         draft: z.boolean().default(false),
         summary: z.string().optional(),
-        // Material found elsewhere (a site, a sheet online) rather than written by the authors:
-        // shown as "From <source>" in place of "By <authors>".
-        source: z.string().min(1).optional(),
       })
       .superRefine(checkTags),
   ),

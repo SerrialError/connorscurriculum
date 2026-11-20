@@ -1507,7 +1507,7 @@
     - { id: d, text: "sp³d²" }
   answer: d
   explanation: |
-    Xe has four bonds and two lone pairs: 6 domains, so it's **sp³d²**. Hybridization follows the electron domains, not the molecular shape. The square-planar shape comes from the two lone pairs sitting opposite each other in an octahedron. (A) is what one of the online sheets says; that's an error. (B) counts only the four bonds.
+    Xe has four bonds and two lone pairs: 6 domains, so it's **sp³d²**. Hybridization follows the electron domains, not the molecular shape. The square-planar shape comes from the two lone pairs sitting opposite each other in an octahedron. (A), dsp², is a label used for some square-planar transition-metal complexes, not for XeF₄. (B) counts only the four bonds.
 
 - id: apchem-09-hybrid-brf3
   type: mcq

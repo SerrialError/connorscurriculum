@@ -61,9 +61,14 @@ export function inTest(test: SubjectData['tests'][number], entry: { data: { chap
   return test.sections.length === 0 || entry.data.sections.some((s) => test.sections.includes(s));
 }
 
-/** Class tests, latest first (undated tests last, in file order). */
+/** Class tests, latest first (undated tests last, in file order). Practice quizzes aren't class tests. */
 export function testsByDate(data: SubjectData) {
-  return [...data.tests].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+  return data.tests.filter((t) => t.kind === 'test').sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+}
+
+/** Practice quizzes written for the site (tests.json kind "quiz"), in file order. */
+export function quizzes(data: SubjectData) {
+  return data.tests.filter((t) => t.kind === 'quiz');
 }
 
 /**

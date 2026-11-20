@@ -33,7 +33,7 @@
   const counted = $derived(attempt.taking ? attempt.mcqs.length : total);
   const done = $derived(attempt.taking ? attempt.mcqs.length - attempt.unpicked.length : attempt.answered);
   const endLabel = $derived(
-    reviewing ? 'Back to results' : attempt.taking ? 'Submit exam' : attempt.answered === total ? 'See results' : 'End set',
+    reviewing ? 'Back to results' : attempt.taking ? `Submit ${attempt.exam?.noun ?? 'exam'}` : attempt.answered === total ? 'See results' : 'End set',
   );
 
   // On phones the question numbers are one scrolling row: bring the current one into the middle of it.

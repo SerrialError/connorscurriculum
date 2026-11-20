@@ -49,7 +49,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What are the electron-domain geometry and the molecular geometry of $\ce{OF2}$?
@@ -68,7 +68,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{SF4}$?
@@ -87,7 +87,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{ClF3}$?
@@ -106,7 +106,8 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
+  group: xef4
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{XeF4}$?
@@ -144,7 +145,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     $\ce{BrF5}$ has five Br–F bonds and one lone pair on Br. What is its molecular geometry?
@@ -163,7 +164,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Rank the H–X–H bond angles in $\ce{CH4}$, $\ce{NH3}$, and $\ce{H2O}$ from **largest to smallest**.
@@ -182,7 +183,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Why is the H–O–H angle in water smaller than the 109.5° angle of a perfect tetrahedron?
@@ -240,6 +241,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: same-shape
   authors: ["Claude"]
   prompt: |
     Which pair of molecules has the **same** molecular geometry?
@@ -356,6 +358,7 @@
   sections: ["9.3"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: xef4
   authors: ["Claude"]
   prompt: |
     $\ce{XeF4}$ has two lone pairs on xenon and four polar Xe–F bonds. Is it polar?
@@ -393,7 +396,7 @@
   chapter: 9
   sections: ["9.3"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Both $\ce{H2O}$ and $\ce{CO2}$ have two polar bonds. Why is water polar while carbon dioxide is not?
@@ -432,6 +435,7 @@
   sections: ["9.3"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: pf3
   authors: ["Claude"]
   prompt: |
     Which statement about $\ce{PF3}$ and $\ce{PF5}$ is correct?
@@ -606,7 +610,7 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the hybridization of sulfur in $\ce{SO2}$?
@@ -624,7 +628,7 @@
   subject: apchem
   chapter: 9
   sections: ["9.5"]
-  cedTopics: []  # how hybrid orbitals are made isn't assessed (CED 2.7 exclusion)
+  cedTopics: ["2.7"]
   difficulty: 1
   authors: ["Claude"]
   prompt: |
@@ -644,7 +648,7 @@
   chapter: 9
   sections: ["9.5", "9.6"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     In propyne, $\ce{CH3-C#CH}$, which carbon atoms are **sp** hybridized?
@@ -663,7 +667,7 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the hybridization of the **nitrogen** atom in methylamine, $\ce{CH3NH2}$?
@@ -742,6 +746,7 @@
   sections: ["9.6"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: acetonitrile
   authors: ["Claude"]
   prompt: |
     How many σ and π bonds are in acetonitrile, $\ce{CH3-C#N}$?
@@ -779,7 +784,7 @@
   chapter: 9
   sections: ["9.6"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Where is the electron density of a **π** bond?
@@ -837,6 +842,7 @@
   sections: ["9.5", "9.6"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: cumulene
   authors: ["Claude"]
   prompt: |
     Allene is $\ce{H2C=C=CH2}$. What are the hybridizations of its three carbon atoms, from left to right?
@@ -1069,6 +1075,7 @@
   sections: ["9.2", "9.3", "9.5"]
   cedTopics: ["2.5", "2.7"]
   difficulty: 2
+  group: pf3
   authors: ["Claude"]
   prompt: |
     Boron trifluoride, $\ce{BF3}$, and phosphorus trifluoride, $\ce{PF3}$, both have three F atoms bonded to a central atom.
@@ -1196,6 +1203,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: nitrogen-dioxide-ions
   authors: ["Claude"]
   prompt: |
     Rank the O–N–O bond angle in $\ce{NO2+}$, $\ce{NO2}$, and $\ce{NO2-}$ from **largest to smallest**.
@@ -1424,6 +1432,7 @@
   sections: ["9.2", "9.3"]
   cedTopics: ["2.5", "2.7"]
   difficulty: 3
+  group: [xef4, same-shape]
   authors: ["Claude"]
   prompt: |
     Xenon forms the fluorides $\ce{XeF2}$ and $\ce{XeF4}$.
@@ -1486,7 +1495,8 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: []
-  difficulty: 2
+  difficulty: 1
+  group: xef4
   authors: ["Claude"]
   prompt: |
     $\ce{XeF4}$ is square planar. What is the hybridization of Xe?
@@ -1505,7 +1515,8 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: []
-  difficulty: 2
+  difficulty: 1
+  group: brf3
   authors: ["Claude"]
   prompt: |
     What is the hybridization of bromine in $\ce{BrF3}$?
@@ -1525,6 +1536,7 @@
   sections: ["9.5"]
   cedTopics: []
   difficulty: 2
+  group: icl4
   authors: ["Claude"]
   prompt: |
     What are the hybridization of I and the molecular geometry of $\ce{ICl4-}$?
@@ -1658,6 +1670,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: nitric-acid
   authors: ["Claude"]
   prompt: |
     In nitric acid, $\ce{HNO3}$, N is bonded to three O atoms and the H is bonded to one of the O atoms. What is the geometry around N?
@@ -1696,6 +1709,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: brf3
   authors: ["Claude"]
   prompt: |
     $\ce{BrF3}$ is T-shaped. What is the best description of its F–Br–F bond angles between the axial F atoms and the equatorial F atom?
@@ -1753,6 +1767,7 @@
   sections: ["9.3"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: icl4
   authors: ["Claude"]
   prompt: |
     Each species has a central atom with an expanded octet. Which one is **nonpolar**?
@@ -1837,3 +1852,202 @@
       prompt: Is $\ce{SeF4}$ polar or nonpolar? Justify your answer.
       scoring:
         - "Polar: the Se–F bonds are polar and the seesaw shape (with the lone pair on one side) is not symmetric, so the bond dipoles don't cancel."
+
+# --- Written for the Chapters 8–9 quiz (all medium or hard) ---
+
+- id: apchem-09-quiz-xeo3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Xenon forms an oxide, xenon trioxide ($\ce{XeO3}$), with three O atoms on Xe. What is its molecular geometry?
+  choices:
+    - { id: a, text: "Trigonal planar" }
+    - { id: b, text: "T-shaped" }
+    - { id: c, text: "Trigonal pyramidal" }
+    - { id: d, text: "Tetrahedral" }
+  answer: c
+  explanation: |
+    Xe has 8 valence electrons: $8 + 3(6) = 26$. Three Xe–O bonds and the O lone pairs use 24, leaving one lone pair on Xe (drawing Xe=O double bonds to lower formal charges doesn't change that). 3 bonds + 1 lone pair = 4 domains, so the molecule is **trigonal pyramidal**, like NH₃. (A) is what SO₃ looks like, but Xe has two more valence electrons than S, and they stay on Xe as a lone pair. (D) is the electron-domain geometry.
+
+- id: apchem-09-quiz-same-shape
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  group: same-shape
+  authors: ["Claude"]
+  prompt: |
+    Which pair has the **same molecular geometry**?
+  choices:
+    - { id: a, text: "$\\ce{SO3}$ and $\\ce{SO3^2-}$" }
+    - { id: b, text: "$\\ce{NO3-}$ and $\\ce{ClO3-}$" }
+    - { id: c, text: "$\\ce{XeF2}$ and $\\ce{H2O}$" }
+    - { id: d, text: "$\\ce{CO3^2-}$ and $\\ce{BF3}$" }
+  answer: d
+  explanation: |
+    Carbonate (3 bonding domains on C, no lone pair) and BF₃ (3 bonds on B) are both trigonal planar. In (A) and (B) the second ion has a lone pair on the central atom, so it's trigonal pyramidal while the first is planar. In (C) XeF₂ is linear (5 domains, 3 lone pairs) and H₂O is bent.
+
+- id: apchem-09-quiz-acetonitrile-angles
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  group: acetonitrile
+  authors: ["Claude"]
+  prompt: |
+    In acetonitrile, $\ce{CH3CN}$ (H₃C–C≡N), what are the H–C–H angle at the first carbon and the C–C≡N angle at the second carbon?
+  choices:
+    - { id: a, text: "About 120° and 180°" }
+    - { id: b, text: "About 109.5° and 180°" }
+    - { id: c, text: "About 109.5° and 120°" }
+    - { id: d, text: "About 120° and 120°" }
+  answer: b
+  explanation: |
+    The CH₃ carbon has four single bonds: tetrahedral, about 109.5°. The nitrile carbon has a single bond to C and a triple bond to N: two domains, linear, 180°. (A) treats the CH₃ carbon as trigonal planar; (C) counts the triple bond as two domains on the nitrile carbon.
+
+- id: apchem-09-quiz-exact-90
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  group: xef4
+  authors: ["Claude"]
+  prompt: |
+    In which molecule are **all** the F–X–F bond angles exactly 90° or 180°?
+  choices:
+    - { id: a, text: "$\\ce{SF4}$" }
+    - { id: b, text: "$\\ce{XeF4}$" }
+    - { id: c, text: "$\\ce{BrF5}$" }
+    - { id: d, text: "$\\ce{PF5}$" }
+  answer: b
+  explanation: |
+    XeF₄ is square planar: its two lone pairs sit opposite each other and push equally on every bond, so neighboring F atoms stay at exactly 90° and opposite ones at 180°. SF₄ (seesaw) and BrF₅ (square pyramidal) have a lone pair with nothing opposite it, which squeezes their angles below 90°. PF₅ has no lone pairs, but its equatorial F atoms are 120° apart.
+
+- id: apchem-09-quiz-nitrogen-series
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of each N atom in hydrazine ($\ce{H2N-NH2}$), diazene ($\ce{HN=NH}$), and nitrogen ($\ce{N#N}$), in that order?
+  choices:
+    - { id: a, text: "sp³, sp², sp" }
+    - { id: b, text: "sp³, sp³, sp³" }
+    - { id: c, text: "sp, sp², sp³" }
+    - { id: d, text: "sp², sp², sp" }
+  answer: a
+  explanation: |
+    Count domains on each N, lone pairs included. Hydrazine: 3 single bonds + 1 lone pair = 4, sp³. Diazene: N–H, N=N, and 1 lone pair = 3, sp². N₂: the triple bond + 1 lone pair = 2, sp. (B) counts electron pairs instead of domains; a multiple bond is one domain.
+
+- id: apchem-09-quiz-formic-acid
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many σ bonds and π bonds are in formic acid, $\ce{HCOOH}$ (H–C(=O)–O–H)?
+  choices:
+    - { id: a, text: "5 σ and 0 π" }
+    - { id: b, text: "4 σ and 2 π" }
+    - { id: c, text: "5 σ and 1 π" }
+    - { id: d, text: "4 σ and 1 π" }
+  answer: d
+  explanation: |
+    The bonds are C–H, C=O, C–O, and O–H. Each bond between two atoms has one σ bond (4 σ), and the double bond adds one π. (C) counts the C=O's π bond as a σ bond as well; (A) counts all five shared pairs as σ bonds; (B) treats the C–OH bond as double too.
+
+- id: apchem-09-quiz-ketene
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  group: cumulene
+  authors: ["Claude"]
+  prompt: |
+    Ketene is $\ce{H2C=C=O}$. What are the hybridizations of the CH₂ carbon and the middle carbon?
+  choices:
+    - { id: a, text: "sp² and sp²" }
+    - { id: b, text: "sp² and sp" }
+    - { id: c, text: "sp³ and sp" }
+    - { id: d, text: "sp and sp²" }
+  answer: b
+  explanation: |
+    The CH₂ carbon has two C–H bonds and one C=C: 3 domains, sp². The middle carbon has two double bonds and no lone pairs: 2 domains, sp (linear, like the C in CO₂). Its two leftover p orbitals are at right angles, so the C=C π bond and the C=O π bond lie in perpendicular planes.
+
+- id: apchem-09-quiz-sp-to-sp3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  group: acetonitrile
+  authors: ["Claude"]
+  prompt: |
+    In which molecule is an **sp**-hybridized carbon bonded to an **sp³**-hybridized carbon?
+  choices:
+    - { id: a, text: "$\\ce{CH2=CH-CH3}$" }
+    - { id: b, text: "$\\ce{HC#C-CH=CH2}$" }
+    - { id: c, text: "$\\ce{CH3-C#N}$" }
+    - { id: d, text: "$\\ce{CH3-CH=O}$" }
+  answer: c
+  explanation: |
+    Name each carbon by its domains. In acetonitrile the CH₃ carbon has four single bonds (sp³) and the C≡N carbon has two domains (sp), and they're bonded to each other. Propene (A) bonds an sp² carbon to an sp³ carbon. In (B) the sp carbon of C≡C is bonded to an sp² carbon, and there's no sp³ carbon at all. Acetaldehyde (D) bonds sp³ to sp².
+
+- id: apchem-09-quiz-frq-acetate
+  type: frq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.5", "9.6"]
+  cedTopics: ["2.6", "2.7"]
+  difficulty: 2
+  group: acetate
+  authors: ["Claude"]
+  prompt: |
+    The acetate ion is $\ce{CH3COO-}$: a CH₃ group bonded to a carbon that is bonded to both oxygens.
+  explanation: |
+    $4 + 4 + 3 + 2(6) + 1 = 24$ valence electrons. The two resonance structures put the double bond on one O or the other, with three lone pairs (and the −1 charge) on the single-bonded O. The real C–O bonds are identical, order 3/2. The CH₃ carbon has four single bonds (sp³, 109.5°); the COO carbon has three domains (sp², about 120°). Bonds: 3 C–H, C–C, and two C–O, so 6 σ, plus one π.
+  parts:
+    - label: a
+      points: 1
+      prompt: Draw both resonance structures of acetate, with all lone pairs.
+      scoring:
+        - "Both structures, each with one C=O (2 lone pairs on that O) and one C–O⁻ (3 lone pairs on that O), joined by ↔; 24 electrons."
+    - label: b
+      points: 1
+      prompt: How do the lengths of the two C–O bonds compare? Justify your answer.
+      scoring:
+        - "They're equal, between a C–O single and a C=O double bond, because the real ion is an average of the two equivalent resonance structures (bond order 3/2 each)."
+    - label: c
+      points: 1
+      prompt: Give the hybridization of the CH₃ carbon and of the carbon bonded to the oxygens.
+      scoring:
+        - "CH₃ carbon sp³; COO carbon sp² (both needed)."
+    - label: d
+      points: 1
+      prompt: Estimate the H–C–H angle in the CH₃ group and the O–C–O angle.
+      scoring:
+        - "About 109.5° and about 120° (both needed)."
+    - label: e
+      points: 1
+      prompt: How many σ bonds and how many π bonds does one resonance structure of acetate have?
+      scoring:
+        - "6 σ and 1 π."

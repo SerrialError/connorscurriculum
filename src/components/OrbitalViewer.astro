@@ -1,0 +1,17 @@
+---
+// <OrbitalViewer ids="ch4,nh3" boxes />: step through orbitals → hybrids → bonds in 3D, for one
+// or more scenes from src/lib/orbitals.ts. `boxes` adds the orbital box diagram.
+import { getOrbitalScene } from '../lib/orbitals';
+import OrbitalViewer from './molecule/OrbitalViewer.svelte';
+
+interface Props {
+  ids: string;
+  boxes?: boolean;
+}
+
+const { ids, boxes = false } = Astro.props;
+const list = ids.split(',').map((s) => s.trim()).filter(Boolean);
+list.forEach(getOrbitalScene); // fails the build on an unknown id
+---
+
+<OrbitalViewer client:visible ids={list} {boxes} />

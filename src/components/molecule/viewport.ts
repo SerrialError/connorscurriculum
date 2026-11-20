@@ -42,7 +42,8 @@ export class Viewport {
     if (this.content) {
       this.scene.remove(this.content);
       removeLabels(this.content);
-      release(this.content);
+      // Shapes made for this content go; the kit's shared shapes and materials stay for the next.
+      release(this.content, this.kit);
     }
     this.content = content;
     this.scene.add(content);

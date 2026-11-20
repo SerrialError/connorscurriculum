@@ -110,7 +110,7 @@
       {/each}
     </ul>
     {#if boxes && scene.boxes}
-      <BoxDiagram el={scene.boxes.el} hybrid={scene.boxes.hybrid} current={step === 0 ? 'ground' : 'hybrid'} />
+      <BoxDiagram el={scene.boxes.el} hybrid={scene.boxes.hybrid} current={current.column} />
     {/if}
   </figcaption>
 </figure>

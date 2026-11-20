@@ -46,10 +46,11 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
                 <li class="shape-card">
                   <Fragment set:html={moleculeSvg(MOLECULES[s.example]!, `shape${s.domains}${s.lonePairs}`, { title: `${s.molecularGeometry}, for example ${s.examples[0]}` })} />
                   <p class="shape-name">{s.molecularGeometry}</p>
-                  <p class="pips" aria-label={`${plural(bonds, 'bonded atom')}, ${plural(s.lonePairs, 'lone pair')}`}>
-                    {Array.from({ length: bonds }, () => <span class="pip bond" />)}
-                    {Array.from({ length: s.lonePairs }, () => <span class="pip lone" />)}
-                    <span class="pip-text">
+                  <p class="pips">
+                    <span class="visually-hidden">{plural(bonds, 'bonded atom')}, {plural(s.lonePairs, 'lone pair')}</span>
+                    {Array.from({ length: bonds }, () => <span class="pip bond" aria-hidden="true" />)}
+                    {Array.from({ length: s.lonePairs }, () => <span class="pip lone" aria-hidden="true" />)}
+                    <span class="pip-text" aria-hidden="true">
                       {bonds} bonded{s.lonePairs > 0 && `, ${s.lonePairs} lone`}
                     </span>
                   </p>
@@ -80,8 +81,11 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 <script>
   import { pickShape } from './molecule/pick';
 
+  // The links open the shape in the page's <ShapeExplorer>; without one there's nowhere to go.
+  const explorer = document.getElementById('shape-explorer');
   for (const a of document.querySelectorAll<HTMLAnchorElement>('a.turn[data-domains]')) {
-    a.addEventListener('click', () => pickShape({ domains: Number(a.dataset.domains), lonePairs: Number(a.dataset.lonePairs) }));
+    if (!explorer) a.hidden = true;
+    else a.addEventListener('click', () => pickShape({ domains: Number(a.dataset.domains), lonePairs: Number(a.dataset.lonePairs) }));
   }
 </script>
 

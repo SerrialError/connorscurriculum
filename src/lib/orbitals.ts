@@ -60,6 +60,8 @@ export type Shape = OrbitalShape | AtomShape | SigmaShape | CloudShape | LabelSh
 export interface Stage {
   /** Short name for the step button. */
   title: string;
+  /** The orbital box diagram column this stage matches (scenes with a box diagram). */
+  column?: 'ground' | 'hybrid';
   /** One or two sentences under the model saying what changed. */
   caption: string;
   shapes: Shape[];
@@ -118,7 +120,7 @@ const hydrogen = (p: Vec, label?: string): Shape[] => [atom('H', p), { ...orb(p,
 // ---------------------------------------------------------------------------
 
 const P_LABELS: [Vec, string][] = [
-  [X, '2pₓ'],
+  [X, '2p_x'],
   [Y, '2p_y'],
   [Z, '2p_z'],
 ];
@@ -170,9 +172,9 @@ function hybridScene(
     formula,
     boxes: { el, hybrid },
     stages: [
-      { title: 'Atomic orbitals', caption: captions[0], shapes: valenceOrbitals(...ground) },
-      { title: `Mix into ${name}`, caption: captions[1], shapes: [atom(el, O), ...hybrids, ...leftover] },
-      { title: 'Form σ bonds', caption: captions[2], shapes: [atom(el, O), ...hybrids, ...leftover, ...bonded] },
+      { title: 'Atomic orbitals', column: 'ground', caption: captions[0], shapes: valenceOrbitals(...ground) },
+      { title: `Mix into ${name}`, column: 'hybrid', caption: captions[1], shapes: [atom(el, O), ...hybrids, ...leftover] },
+      { title: 'Form σ bonds', column: 'hybrid', caption: captions[2], shapes: [atom(el, O), ...hybrids, ...leftover, ...bonded] },
     ],
   };
 }
@@ -188,7 +190,7 @@ const methane = hybridScene(
   tetra(0).map((dir) => ({ dir, electrons: 1 })),
   'H',
   [
-    "Carbon's valence orbitals: one 2s (holding 2 electrons) and three 2p at 90° to each other, only two of them with an electron. As they are, they can't make four identical bonds 109.5° apart.",
+    "Carbon's valence orbitals: one 2s (holding 2 electrons) and three 2p at 90° to each other, only two of them with an electron. Orbitals at 90° can't give four identical bonds at 109.5°.",
     'The 2s and all three 2p orbitals mix into four identical sp³ hybrids, each with one big lobe pointing to a corner of a tetrahedron and one electron in it.',
     "Each sp³ lobe overlaps an H 1s orbital head-on: four σ bonds, 109.5° apart. That's methane's tetrahedral shape.",
   ],
@@ -278,6 +280,7 @@ function ethylene(): OrbitalScene {
     stages: [
       {
         title: 'sp² + p',
+        column: 'hybrid',
         caption:
           'Each carbon is sp²: three hybrids in the plane (toward the other C and two H atoms), plus one unhybridized p orbital standing straight up and down, with one electron.',
         shapes: [
@@ -290,12 +293,14 @@ function ethylene(): OrbitalScene {
       },
       {
         title: 'σ bonds',
+        column: 'hybrid',
         caption:
           'Head-on overlap along the line between the nuclei makes the σ bonds: one C–C and four C–H. The two p orbitals are still separate, side by side.',
         shapes: [...frame, ...sigmas, ...pOrbitals],
       },
       {
         title: 'π bond',
+        column: 'hybrid',
         caption:
           'The parallel p orbitals overlap side by side, above and below the C–C line: one π bond. C=C is 1 σ + 1 π, so ethylene has 5 σ and 1 π. Twisting one end would pull the p orbitals apart and break the π bond, which is why there is no rotation around a double bond.',
         shapes: [...frame, ...sigmas, pi(c1, c2, Z)],
@@ -319,17 +324,20 @@ function acetylene(): OrbitalScene {
     stages: [
       {
         title: 'sp + 2 p',
+        column: 'hybrid',
         caption:
           'Each carbon is sp: two hybrids pointing opposite ways along the axis, and two leftover p orbitals at right angles to the axis and to each other.',
         shapes: [...frame, ...hybridsToward(c1, [c2, h1], 1), ...hybridsToward(c2, [c1, h2], 1), ...ps],
       },
       {
         title: 'σ bonds',
+        column: 'hybrid',
         caption: 'Head-on overlap makes three σ bonds along one straight line: H–C, C–C, and C–H.',
         shapes: [...frame, ...sigmas, ...ps],
       },
       {
         title: 'Two π bonds',
+        column: 'hybrid',
         caption:
           'Each pair of parallel p orbitals overlaps side by side: one π bond above and below the axis, and a second in front and behind. C≡C is 1 σ + 2 π.',
         shapes: [...frame, ...sigmas, pi(c1, c2, Y), pi(c1, c2, Z)],
@@ -400,7 +408,7 @@ function carbonDioxide(): OrbitalScene {
       {
         title: 'π bonds',
         caption:
-          "Two π bonds, one to each O, in planes at right angles to each other (turn the model to see it). Each C=O is 1 σ + 1 π, so CO₂ has 2 σ and 2 π. The two π bonds use different p orbitals on C, which is why carbon's p orbitals have to be at 90°.",
+          "Two π bonds, one to each O, in planes at right angles to each other (turn the model to see it). Each C=O is 1 σ + 1 π, so CO₂ has 2 σ and 2 π. The two π bonds use carbon's two leftover p orbitals, which are at 90° to each other, so the π bonds are too.",
         shapes: [...frame, ...sigmas, ...leftLp, ...rightLp, pi(oL, O, Z), pi(O, oR, Y)],
       },
     ],
@@ -581,7 +589,7 @@ function fill(n: number, count: number): (0 | 1 | 2)[] {
 export function boxDiagram(el: BoxElement, hybrid: 1 | 2 | 3): BoxColumn[] {
   const n = VALENCE[el];
   const name = HYBRID_NAME[hybrid];
-  const pNames = ['2pₓ', '2p_y', '2p_z'];
+  const pNames = ['2p_x', '2p_y', '2p_z'];
   const ground: BoxColumn = {
     title: 'Ground state',
     levels: [

@@ -17,6 +17,8 @@
   const row = (name: string) => (name === '2p' ? 1 : name === '2s' ? 3 : 2);
   const arrows = (e: number) => (e === 2 ? '↑↓' : e === 1 ? '↑' : '');
   const describe = (e: number) => (e === 2 ? 'two electrons' : e === 1 ? 'one electron' : 'empty');
+  /** "2p_y" as plain text ("2py"), for tooltips and screen readers. */
+  const plain = (name: string) => name.replace('_', '');
 </script>
 
 <figure class="boxes" aria-label={`Orbital box diagram for ${el}`}>
@@ -31,9 +33,9 @@
               <span class="level-name">{level.name}</span>
               <span class="row">
                 {#each level.boxes as box, j (j)}
-                  <span class="box" title={`${box.name}: ${describe(box.electrons)}`}>
+                  <span class="box" title={`${plain(box.name)}: ${describe(box.electrons)}`}>
                     <span aria-hidden="true">{arrows(box.electrons)}</span>
-                    <span class="visually-hidden">{box.name}, {describe(box.electrons)}</span>
+                    <span class="visually-hidden">{plain(box.name)}, {describe(box.electrons)}</span>
                   </span>
                 {/each}
               </span>

@@ -9,7 +9,7 @@ export const CMS_AUTH_URL = 'https://sveltia-cms-auth.serrialerror.workers.dev';
 
 const BODY_HINT = [
   'Markdown. Math: `$k = 0.693/t_{1/2}$` inline, `$$ ... $$` on their own lines for display. Chemistry: `$\\ce{2H2 + O2 -> 2H2O}$`.',
-  'Boxes: `<Callout type="note">...</Callout>` (note, warning, ap-tip, not-on-ap), `<Reveal label="Show answer">...</Reveal>`, `<YouTube id="wYqQCojggyM" />`. 3D models: `<Molecule id="sf4" />` (ids in src/lib/molecules.ts), `<ShapeExplorer />`, `<OrbitalViewer ids="ch4,nh3" boxes />` (ids in src/lib/orbitals.ts). Charts: `<ShapeGrid />`, `<ShapeGrid kind="domains" />`, `<HybridCards />`.',
+  'Boxes: `<Callout type="note">...</Callout>` (note, warning, ap-tip, not-on-ap), `<Reveal label="Show answer">...</Reveal>`, `<YouTube id="wYqQCojggyM" />`. 3D models: `<Molecule id="sf4" />` (ids in src/lib/molecules.ts), `<ShapeExplorer />`, `<OrbitalViewer ids="ch4,nh3" boxes />` (ids in src/lib/orbitals.ts). Charts: `<ShapeGrid />` (its "Turn it in 3D" links need a `<ShapeExplorer />` on the page), `<ShapeGrid kind="domains" />`, `<HybridCards />`.',
   'Curly braces outside math are read as code: write `\\{` and `\\}`. The preview flags anything that would break the site.',
 ].join(' ');
 

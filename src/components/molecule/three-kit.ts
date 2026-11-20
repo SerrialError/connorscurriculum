@@ -35,6 +35,12 @@ export class Kit {
     return m;
   }
 
+  /** Whether `x` (a geometry or material) is one of the kit's shared pieces. */
+  owns(x: object): boolean {
+    const fixed: object[] = [this.sphere, this.cylinder, this.bond, this.lobe, this.dot, this.arc];
+    return fixed.includes(x) || [...this.atoms.values(), ...this.tints.values()].includes(x as MeshStandardMaterial);
+  }
+
   /** A see-through material for orbital lobes and electron clouds. */
   tint(color: string, opacity = 0.5) {
     const key = `${color}/${opacity}`;
@@ -45,15 +51,17 @@ export class Kit {
 }
 
 /**
- * Frees the GPU copies of everything under `root`. The objects stay usable: a renderer uploads them
- * again when it next draws them. Disposing also drops the old renderer's listeners on them, which
- * would otherwise keep each closed renderer in memory.
+ * Frees the GPU copies of everything under `root`, except the shared pieces of `keep` (still in use
+ * by what's shown next). The objects stay usable: a renderer uploads them again when it next draws
+ * them. Disposing also drops the old renderer's listeners on them, which would otherwise keep each
+ * closed renderer in memory.
  */
-export function release(root: Object3D) {
+export function release(root: Object3D, keep?: Kit) {
   root.traverse((o) => {
     if (o instanceof Mesh || o instanceof Line) {
-      o.geometry.dispose();
-      (o.material as Material).dispose();
+      if (!keep?.owns(o.geometry)) o.geometry.dispose();
+      const material = o.material as Material;
+      if (!keep?.owns(material)) material.dispose();
     }
   });
 }
@@ -81,10 +89,17 @@ export function across(dir: Vector3): Vector3 {
   return dir.clone().cross(ref).normalize();
 }
 
-/** An HTML label that follows a point in the scene. */
+/** An HTML label that follows a point in the scene. "2p_y" shows the y as a subscript. */
 export function label(text: string, className: string): CSS2DObject {
   const el = document.createElement('span');
   el.className = className;
-  el.textContent = text;
+  const sub = /^(.*)_([a-z])(.*)$/.exec(text);
+  if (sub) {
+    const s = document.createElement('sub');
+    s.textContent = sub[2]!;
+    el.append(sub[1]!, s, sub[3]!);
+  } else {
+    el.textContent = text;
+  }
   return new CSS2DObject(el);
 }

@@ -45,14 +45,21 @@ function samePool(a: readonly string[], b: readonly string[]): boolean {
  * The quick starts: the latest class test with questions, its practice exam if it has one, and a
  * mixed review of the chapters the class has reached unless it has exactly the test's questions.
  * Each starts like a practice link elsewhere on the site (links.ts). `tests` are latest first,
- * each with the ids of its questions.
+ * each with the ids of its questions. Practice quizzes (`quizzes`) come first: they're written for
+ * the chapters the class is on now.
  */
 export function quickStarts(
   tests: { id: string; title: string; questions: string[]; exam?: PracticeExam }[],
   questions: PresetQuestion[],
   taught: ReadonlySet<number>,
+  quizzes: { id: string; title: string; exam: PracticeExam; minutes?: number }[] = [],
 ): Preset[] {
-  const presets: Preset[] = [];
+  const presets: Preset[] = quizzes.map((q) => ({
+    label: q.title,
+    filters: examStart(q.id).filters,
+    exam: true,
+    note: `${examFormat(q.exam)}${q.minutes ? `, about ${q.minutes} minutes` : ''}`,
+  }));
   const latest = tests.find((t) => t.questions.length > 0);
   if (latest) {
     const count = latest.questions.length;

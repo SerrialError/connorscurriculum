@@ -1,8 +1,9 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { hasTests } from '../../../lib/features';
-import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, practiceUrl, subjectPathsWith, testsByDate, url } from '../../../lib/content';
-import { practiceStarts } from '../../../lib/practice/links';
+import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, practiceUrl, quizzes, subjectPathsWith, testsByDate, url } from '../../../lib/content';
+import { examFormat } from '../../../lib/practice/exam';
+import { examStart, practiceStarts } from '../../../lib/practice/links';
 import { chapterRange } from '../../../lib/text';
 
 export const getStaticPaths = subjectPathsWith(hasTests);
@@ -22,12 +23,34 @@ const tests = testsByDate(data).map((t) => {
   };
 });
 const isUpcoming = (t: { date?: string }) => !isPastTest(t);
+// Practice quizzes written for the site: listed on their own, never as upcoming or past tests.
+const practiceQuizzes = quizzes(data).filter((q) => q.exam);
 const now = currentChapters(data);
 ---
 
 <Base title="Class tests" subject={subject}>
   <h1>Class tests</h1>
   <p class="muted prose">Each test has its review sheet, the lessons it covers, and practice questions for it.</p>
+  {practiceQuizzes.length > 0 && (
+    <section class="test-group" aria-labelledby="quizzes-h">
+      <h2 id="quizzes-h">Practice quizzes</h2>
+      <p class="small muted">Written for this site to check yourself, not given by your teacher.</p>
+      <ul class="plain-list stack">
+        {practiceQuizzes.map((q) => (
+          <li class="card test">
+            <h3><a href={url(`${subject}/tests/${q.id}/`)}>{q.title}</a></h3>
+            <p class="small muted">
+              {examFormat(q.exam!)}{q.minutes && <>, about {q.minutes} minutes</>} · {chapterRange(q.chapters)}
+            </p>
+            {q.summary && <p class="small">{q.summary}</p>}
+            <div class="actions">
+              <a class="button" href={practiceUrl(subject, examStart(q.id).query)}>Take the quiz</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
   {tests.length === 0 ? (
     <p class="muted">No class tests listed yet.</p>
   ) : (

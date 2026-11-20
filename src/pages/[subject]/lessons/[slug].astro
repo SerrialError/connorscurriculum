@@ -75,7 +75,7 @@ const practice = picked && {
 };
 // A test review sheet is listed with the lessons, but belongs to its test: link to the test and
 // practice the whole test, not just the sheet's topics, and leave out the chapter's previous/next lessons.
-const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;
+const test = lesson.data.kind === 'review' ? data.tests.find((t) => t.kind === 'test' && inTest(t, lesson)) : undefined;
 const testHref = test && url(`${subject}/tests/${test.id}/`);
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 const testPractice = test && testQuestions > 0 ? practiceStarts({ test: test.id }, testQuestions) : null;

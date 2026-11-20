@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getSubjectData } from '../registry';
-import { compareSections, drawExam, examFormat, examMax, examParts, examPools, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
+import { compareSections, drawExam, examFormat, examFrqs, examMax, examParts, examPools, examQuestions, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
 import { seededRng } from './random';
 import { readQuestionFiles } from './question-files';
 import { frq, mcq } from './test-fixtures';
@@ -159,5 +159,27 @@ describe('apchem: the Chapters 6–7 practice exam', () => {
       expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
       expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
     }
+  });
+});
+
+describe('apchem: the Chapters 8–9 practice quiz', () => {
+  const quiz = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-quiz')!;
+  const inQuiz = readQuestionFiles()
+    .filter((q) => q.subject === 'apchem' && quiz.chapters.includes(q.chapter))
+    .map((q) => ({ ...q, sections: q.sections ?? [] }))
+    .filter((q) => q.sections.some((s) => quiz.sections.includes(s)));
+
+  it('is a quiz, not a class test: 16 multiple choice at 2 points and an 8-point FRQ', () => {
+    expect(quiz.kind).toBe('quiz');
+    expect(mcqCount(quiz.exam!)).toBe(16);
+    expect(examMax(quiz.exam!)).toBe(40);
+  });
+
+  it('draws only medium and hard questions, with at least twice what each section needs', () => {
+    const pool = examQuestions(inQuiz, quiz.exam!);
+    expect(pool.every((q) => q.difficulty >= 2)).toBe(true);
+    expect(examShortfalls(inQuiz, quiz.exam!)).toEqual([]);
+    for (const p of examPools(pool, quiz.exam!)) expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
+    expect(examFrqs(pool).length).toBeGreaterThanOrEqual(3);
   });
 });

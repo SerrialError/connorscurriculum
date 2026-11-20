@@ -12,6 +12,7 @@ export interface QuestionFileEntry {
   chapter: number;
   sections?: string[];
   calculation?: boolean;
+  difficulty: number;
   choices?: { id: string; text: string }[];
   answer?: string;
 }

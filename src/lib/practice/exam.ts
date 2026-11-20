@@ -11,7 +11,12 @@ export interface ExamCandidate {
   chapter: number;
   sections: string[];
   calculation?: boolean;
+  difficulty: number;
 }
+
+/** The questions an exam can draw from `questions` (its test's): those at least as hard as minDifficulty. */
+export const examQuestions = <Q extends ExamCandidate>(questions: Q[], exam: PracticeExam): Q[] =>
+  questions.filter((q) => q.difficulty >= (exam.minDifficulty ?? 1));
 
 const fits = (q: ExamCandidate, s: ExamSection) =>
   s.match.chapters.includes(q.chapter) && (s.match.sections.length === 0 || q.sections.some((x) => s.match.sections.includes(x)));
@@ -62,8 +67,9 @@ const round1 = (x: number) => Math.round(x * 10) / 10;
  * its count, or fewer non-calculation questions than its count needs, too few for the extras, or
  * too few FRQs. The build stops on these.
  */
-export function examShortfalls(questions: ExamCandidate[], exam: PracticeExam): string[] {
+export function examShortfalls(all: ExamCandidate[], exam: PracticeExam): string[] {
   const out: string[] = [];
+  const questions = examQuestions(all, exam);
   const pools = examPools(questions, exam);
   for (const { section: s, questions: qs, concepts } of pools) {
     if (qs.length < s.count) out.push(`section "${s.id}" needs ${plural(s.count, 'multiple-choice question')} but only ${qs.length} match`);
@@ -85,7 +91,8 @@ export function examShortfalls(questions: ExamCandidate[], exam: PracticeExam): 
  * comes in section order and, within a section, by textbook section, so the exam reads like the test;
  * questions from the same textbook section come in random order. The FRQs come last.
  */
-export function drawExam<Q extends ExamCandidate>(questions: Q[], exam: PracticeExam, rng: Rng): Q[] {
+export function drawExam<Q extends ExamCandidate>(all: Q[], exam: PracticeExam, rng: Rng): Q[] {
+  const questions = examQuestions(all, exam);
   const pools = examPools(questions, exam);
   const picked = new Set<string>();
   const calcs = new Map<string, number>();
@@ -200,5 +207,7 @@ export function examParts(exam: PracticeExam): string[] {
   });
   if (exam.extra) parts.push(`${exam.extra} more from any of ${exam.sections.length > 1 ? 'these' : 'that'}`);
   if (exam.frq.count) parts.push(`${exam.frq.count} free-response ${exam.frq.count === 1 ? 'question' : 'questions'}`);
+  if ((exam.minDifficulty ?? 1) === 2) parts.push('medium and hard questions only');
+  if (exam.minDifficulty === 3) parts.push('hard questions only');
   return parts;
 }

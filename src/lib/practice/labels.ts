@@ -1,12 +1,12 @@
 // Words shown on the practice screens: filter names, a set's one-line name, and button labels.
-import { CLASS_ONLY_UNIT } from './filters';
 import type { DotStatus, ScoreArea } from './score';
-import type { Filters, Mode, PracticeTest, QuestionType } from './types';
+import type { ApScope, Filters, Mode, PracticeTest, QuestionType } from './types';
 import { byId, chapterRange } from '../text';
 
 export const DIFFICULTY_LABELS: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
 export const MODE_LABELS: Record<Mode, string> = { all: 'In order', random: 'Shuffled', weak: 'Weakest first' };
 export const TYPE_LABELS: Record<QuestionType, string> = { mcq: 'Multiple choice', frq: 'Free response' };
+export const AP_LABELS: Record<ApScope, string> = { ap: 'Could be on the AP exam', class: 'Class only (not on the AP exam)' };
 
 export const STATUS_TEXT: Record<DotStatus, string> = { todo: 'not answered', picked: 'answered', right: 'correct', wrong: 'incorrect', partial: 'partial credit' };
 /** Shown with the colour, so right and wrong don't depend on telling red from green. */
@@ -18,7 +18,7 @@ const sectionLabel = (sections: string[]): string => [...sections].sort(byId).ma
 /** A class test's name, or plain words for one the class doesn't have (never its id). */
 const testLabel = (id: string, tests: PracticeTest[]): string => tests.find((t) => t.id === id)?.title ?? 'Class test';
 
-const unitLabel = (u: string): string => (u === CLASS_ONLY_UNIT ? 'Not on the AP exam' : `Unit ${u}`);
+const unitLabel = (u: string): string => `Unit ${u}`;
 
 /**
  * What a score counts towards: "5.4 Elementary Reactions", or the chapter for class-only questions
@@ -64,6 +64,7 @@ export function describeScope(f: Filters, tests: PracticeTest[], everything = AL
   if (f.topics.length) parts.push(`${f.topics.length === 1 ? 'Topic' : 'Topics'} ${f.topics.join(', ')}`);
   if (f.difficulty.length) parts.push([...f.difficulty].sort((a, b) => a - b).map((d) => DIFFICULTY_LABELS[d]).join(', '));
   if (f.type) parts.push(TYPE_LABELS[f.type]);
+  if (f.ap) parts.push(f.ap === 'ap' ? 'AP exam only' : 'Class only');
   return parts.length ? parts.join(' · ') : everything;
 }
 
@@ -130,5 +131,6 @@ export function filterChips(f: Filters, tests: PracticeTest[], laterChapters: nu
   for (const t of f.topics) add(`Topic ${t}`, true, { topics: f.topics.filter((x) => x !== t) });
   for (const d of f.difficulty) add(DIFFICULTY_LABELS[d]!, false, { difficulty: f.difficulty.filter((x) => x !== d) });
   if (f.type) add(TYPE_LABELS[f.type], true, { type: null });
+  if (f.ap) add(f.ap === 'ap' ? 'AP exam only' : 'Class only', false, { ap: null });
   return out;
 }

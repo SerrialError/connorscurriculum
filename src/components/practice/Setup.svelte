@@ -4,7 +4,7 @@
   // `filters`, and changing one changes only that one.
   import { matchFrqs } from '../../lib/frqs';
   import { countWith, emptyFilters, filterQuestions, filterTopics, isDefaultFilters, toggled } from '../../lib/practice/filters';
-  import { DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
+  import { AP_LABELS, DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
   import type { Filters, PracticeQuestion } from '../../lib/practice/types';
   import { filtersToQuery } from '../../lib/practice/url';
   import { byId } from '../../lib/text';
@@ -137,6 +137,24 @@
 
   <!-- Each group is as wide as its chips, so a whole group moves to the next line instead of one chip dropping under the others. -->
   <div class="groups">
+    {#if units.length > 0}
+      <!-- Every question is either tagged with an AP topic (could be on the AP exam) or class-only. -->
+      <fieldset>
+        <legend>AP exam</legend>
+        <div class="chips">
+          {#each ['ap', 'class'] as const as value (value)}
+            <Chip
+              title={AP_LABELS[value]}
+              checked={filters.ap === value}
+              onchange={(on) => (filters.ap = on ? value : null)}
+              count={countWith(all, filters, tests, { ap: value })}
+            >
+              {value === 'ap' ? 'On the AP exam' : 'Class only'}
+            </Chip>
+          {/each}
+        </div>
+      </fieldset>
+    {/if}
     <fieldset>
       <legend>Difficulty</legend>
       <div class="chips">

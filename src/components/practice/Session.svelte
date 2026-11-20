@@ -164,14 +164,17 @@
       <article class="card question" aria-labelledby="q-heading">
         <header class="q-head">
           <h2 id="q-heading" tabindex="-1" bind:this={heading}>Question {attempt.index + 1} <span class="muted">of {total}</span></h2>
-          <p class="q-meta small muted">
-            {TYPE_LABELS[q.type]} · Ch. {q.chapter} ·
-            {#if units.length > 0}
-              {#each q.cedTopics as t, i (t)}{i > 0 ? ', ' : ''}<a href={`${hrefs.topics}${t}/`} title={topicTitles.get(t)}><span class="visually-hidden">AP topic </span>{t}</a>{:else}Not on the AP exam{/each}
-              ·
-            {/if}
-            {DIFFICULTY_LABELS[q.difficulty]}
-          </p>
+          <p class="q-meta small muted">{TYPE_LABELS[q.type]} · Ch. {q.chapter} · {DIFFICULTY_LABELS[q.difficulty]}</p>
+          {#if units.length > 0}
+            <!-- Every question says whether it could be on the AP exam (it has an AP topic) or is class-only. -->
+            <p class="badges ap-line">
+              {#each q.cedTopics as t (t)}
+                <a class="badge topic" href={`${hrefs.topics}${t}/`}>AP exam · {t} {topicTitles.get(t)}</a>
+              {:else}
+                <span class="badge not-ap">Class only · not on the AP exam</span>
+              {/each}
+            </p>
+          {/if}
         </header>
 
         {#if q.type === 'frq' && attempt.taking}
@@ -286,6 +289,9 @@
   }
   .q-meta {
     margin: 0;
+  }
+  .ap-line {
+    margin: 0.4rem 0 0;
   }
   /* Wide math scrolls sideways (ScrollCues makes the box focusable). KaTeX pokes a pixel or two
      below the line, which should not make the box scroll up and down. */

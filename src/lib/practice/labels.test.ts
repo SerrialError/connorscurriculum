@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emptyFilters, CLASS_ONLY_UNIT } from './filters';
+import { emptyFilters } from './filters';
 import { againLabel, answerRestLabel, areaLabel, describeScope, describeSet, filterChips, listNumbers, retryWords } from './labels';
 import type { PracticeTest } from './types';
 import { parseFilters } from './url';
@@ -16,7 +16,8 @@ describe('naming a set', () => {
   });
   it('lists the other filters, and says "All questions" when there are none', () => {
     expect(describeScope(parseFilters('?chapter=7,6&difficulty=3,1&type=mcq'), tests)).toBe('Ch. 6–7 · Easy, Hard · Multiple choice');
-    expect(describeScope(parseFilters(`?unit=1,${CLASS_ONLY_UNIT}&topic=1.7`), tests)).toBe('Unit 1, Not on the AP exam · Topic 1.7');
+    expect(describeScope(parseFilters('?unit=1&topic=1.7&ap=1'), tests)).toBe('Unit 1 · Topic 1.7 · AP exam only');
+    expect(describeScope(parseFilters('?ap=0'), tests)).toBe('Class only');
     // A test the class no longer has is never named by its id.
     expect(describeScope(parseFilters('?test=old-test-id'), tests)).toBe('Class test');
     expect(describeSet(parseFilters('?mode=random&n=5'), tests, 3, 3)).toBe('All questions · all 3, shuffled');

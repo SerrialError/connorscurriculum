@@ -15,19 +15,16 @@ export const MAX_COUNT = 200;
  */
 export const DEFAULT_MODE: Mode = 'random';
 
-/**
- * Pseudo unit for questions with no CED topic (class-test material that is not on the AP exam),
- * so the unit filter can select them and the unit counts add up to the total. URL: ?unit=class.
- */
-export const CLASS_ONLY_UNIT = 'class';
+/** Could be on the AP exam: tagged with at least one AP topic. Untagged questions are class-only. */
+export const onApExam = (q: Pick<PracticeQuestion, 'cedTopics'>): boolean => q.cedTopics.length > 0;
 
 export function emptyFilters(): Filters {
-  return { chapters: [], sections: [], test: null, units: [], topics: [], difficulty: [], type: null, mode: DEFAULT_MODE, n: DEFAULT_COUNT };
+  return { chapters: [], sections: [], test: null, units: [], topics: [], difficulty: [], type: null, ap: null, mode: DEFAULT_MODE, n: DEFAULT_COUNT };
 }
 
 /** Number of filters that narrow the question pool (order and count are not filters). */
 export function activeFilterCount(f: Filters): number {
-  return f.chapters.length + f.sections.length + (f.test ? 1 : 0) + f.units.length + f.topics.length + f.difficulty.length + (f.type ? 1 : 0);
+  return f.chapters.length + f.sections.length + (f.test ? 1 : 0) + f.units.length + f.topics.length + f.difficulty.length + (f.type ? 1 : 0) + (f.ap ? 1 : 0);
 }
 
 /** Every control at its default (nothing for "Reset all" to reset). */
@@ -48,7 +45,7 @@ export const inSections = (q: Pick<PracticeQuestion, 'sections'>, sections: read
 /**
  * Filters combine with AND across kinds and OR within a kind. Units and topics are one
  * "CED" kind: a question matches if it is in any selected unit or has any selected topic.
- * The CLASS_ONLY_UNIT unit matches questions with no CED topic.
+ * `ap` keeps only questions that could be on the AP exam, or only class-only ones.
  * `extra` questions (samples, chapters not taught yet) only match when their chapter is picked,
  * by the chapter filter or by the class test's chapters: no chapter picked means the class's
  * chapters, not everything.
@@ -61,13 +58,13 @@ export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests
     if (q.extra && !f.chapters.includes(q.chapter) && !test?.chapters.includes(q.chapter)) return false;
     if (f.test && (!test || !test.chapters.includes(q.chapter) || !inSections(q, test.sections))) return false;
     if (f.units.length || f.topics.length) {
-      const inUnit =
-        q.units.some((u) => f.units.includes(u)) || (q.cedTopics.length === 0 && f.units.includes(CLASS_ONLY_UNIT));
+      const inUnit = q.units.some((u) => f.units.includes(u));
       const hasTopic = q.cedTopics.some((t) => f.topics.includes(t));
       if (!inUnit && !hasTopic) return false;
     }
     if (f.difficulty.length && !f.difficulty.includes(q.difficulty)) return false;
     if (f.type && q.type !== f.type) return false;
+    if (f.ap && onApExam(q) !== (f.ap === 'ap')) return false;
     return true;
   });
 }

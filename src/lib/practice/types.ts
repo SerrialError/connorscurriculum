@@ -82,6 +82,8 @@ export interface PracticeTest {
 export type Mode = 'all' | 'random' | 'weak';
 export type QuestionType = 'mcq' | 'frq';
 
+export type ApScope = 'ap' | 'class';
+
 export interface Filters {
   chapters: number[];
   /** Textbook sections, e.g. "7.2": the practice links on a lesson page pick its sections. */
@@ -91,6 +93,8 @@ export interface Filters {
   topics: string[];
   difficulty: number[];
   type: QuestionType | null;
+  /** On the AP exam or not: 'ap' keeps questions tagged with an AP topic, 'class' keeps class-only ones. */
+  ap: ApScope | null;
   /** Question order: as listed (chapter order), shuffled, or weakest topics first. */
   mode: Mode;
   /** How many questions to practice; null means every matching question. */

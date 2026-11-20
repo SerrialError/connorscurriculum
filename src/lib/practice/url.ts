@@ -1,6 +1,8 @@
 // Practice addresses: the filters, and a set made from them.
 //
-// Filters: ?chapter=14,15&section=14.2&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&mode=all&n=5
+// Filters: ?chapter=14,15&section=14.2&test=ch14-test&unit=5&topic=5.1,5.2&difficulty=1,2&type=mcq&ap=1&mode=all&n=5
+// `ap=1`: only questions that could be on the AP exam; `ap=0`: only class-only ones. Older links
+// said `unit=class` for class-only; that still works.
 // `mode` and `n` are written only when they differ from the defaults (shuffled, 10 questions);
 // `n=all` means every matching question. Lists are written sorted, so the same filters always
 // give the same address, whatever order they were picked in.
@@ -27,7 +29,10 @@ export function parseFilters(search: string): Filters {
   f.chapters = list(p.get('chapter')).map(Number).filter((n) => Number.isInteger(n));
   f.sections = list(p.get('section'));
   f.test = p.get('test') || null;
-  f.units = list(p.get('unit'));
+  const units = list(p.get('unit'));
+  f.units = units.filter((u) => u !== 'class');
+  const ap = p.get('ap');
+  f.ap = ap === '1' ? 'ap' : ap === '0' || units.includes('class') ? 'class' : null;
   f.topics = list(p.get('topic'));
   f.difficulty = list(p.get('difficulty')).map(Number).filter((d) => d >= 1 && d <= 3);
   const type = p.get('type');
@@ -51,6 +56,7 @@ export function filtersToQuery(f: Filters): string {
   if (f.topics.length) p.set('topic', [...f.topics].sort(byId).join(','));
   if (f.difficulty.length) p.set('difficulty', [...f.difficulty].sort(byNumber).join(','));
   if (f.type) p.set('type', f.type);
+  if (f.ap) p.set('ap', f.ap === 'ap' ? '1' : '0');
   if (f.mode !== DEFAULT_MODE) p.set('mode', f.mode);
   if (f.n !== DEFAULT_COUNT) p.set('n', f.n === null ? 'all' : String(f.n));
   return toSearch(p);

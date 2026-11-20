@@ -2,7 +2,7 @@
   // "AP unit or topic" under More options: one closed box per unit (open when a topic in it is
   // picked), with a "Whole unit" chip and a chip for each topic that has questions. Only units and
   // topics with questions in the picked chapters show, plus any already picked (from a link).
-  import { CLASS_ONLY_UNIT, countWith, emptyFilters, filterQuestions, toggled } from '../../lib/practice/filters';
+  import { countWith, emptyFilters, filterQuestions, toggled } from '../../lib/practice/filters';
   import type { Filters, PracticeQuestion } from '../../lib/practice/types';
   import Chip from './Chip.svelte';
   import { getCourse } from './context';
@@ -19,7 +19,6 @@
   const inChapters = $derived(filterQuestions(all, { ...emptyFilters(), chapters: filters.chapters }, tests));
   const usedTopics = $derived(new Set(inChapters.flatMap((q) => q.cedTopics)));
   const usedUnits = $derived(new Set(inChapters.flatMap((q) => q.units)));
-  const hasClassOnly = $derived(inChapters.some((q) => q.cedTopics.length === 0));
   const visibleUnits = $derived(
     units.filter((u) => usedUnits.has(u.id) || filters.units.includes(u.id) || u.topics.some((t) => filters.topics.includes(t.id))),
   );
@@ -53,17 +52,6 @@
 {:else}
   <p class="small muted">No tagged questions yet.</p>
 {/each}
-{#if hasClassOnly || filters.units.includes(CLASS_ONLY_UNIT)}
-  <div class="chips class-only">
-    <Chip
-      checked={filters.units.includes(CLASS_ONLY_UNIT)}
-      onchange={() => (filters.units = toggled(filters.units, CLASS_ONLY_UNIT))}
-      count={unitCount(CLASS_ONLY_UNIT)}
-    >
-      Not on the AP exam <span class="chip-sub">class tests only</span>
-    </Chip>
-  </div>
-{/if}
 
 <style>
   .unit {
@@ -95,8 +83,5 @@
   }
   .unit .chips {
     padding: 0 0.75rem 0.65rem;
-  }
-  .class-only {
-    margin-top: 0.4rem;
   }
 </style>

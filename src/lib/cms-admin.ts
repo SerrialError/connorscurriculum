@@ -35,6 +35,8 @@ CMS.registerPreviewStyle(
   `body { padding: 1rem 1.25rem 3rem; }
    .preview-problem { display: block; border: 1px solid var(--bad); background: var(--bad-soft); color: var(--text);
      border-radius: 6px; padding: 0.4rem 0.7rem; margin: 0.75rem 0; }
+   .preview-model { border: 1px dashed var(--border); border-radius: var(--radius); padding: 1.5rem 1rem; color: var(--muted); text-align: center; margin: 1rem 0; }
+   .preview-model p { margin: 0; }
    mark.preview-problem { display: inline; padding: 0 0.25rem; margin: 0; }
    .preview-problem p { margin: 0; }
    .preview-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.25rem 0 0.5rem; }`,

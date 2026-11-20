@@ -1,6 +1,6 @@
 // Renders a lesson body (MDX) to HTML in the browser for the CMS preview pane.
 // Uses the same parser and math plugins as the site build, and turns the lesson
-// components (Callout, Reveal, YouTube) into the same markup the .astro components emit.
+// components (Callout, Reveal, YouTube, and placeholders for the 3D models) into the same markup the .astro components emit.
 // Anything the real build would reject (bad MDX, unknown components, stray { }) is shown
 // inline as a problem box instead, so writers can fix it before saving.
 import 'katex/contrib/mhchem';
@@ -18,6 +18,7 @@ import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { CALLOUT_TYPES, type CalloutType } from './callouts';
+import { MOLECULES } from './molecules';
 import { rehypeMathPunctuation } from './markdown';
 
 type JsxNode = MdxJsxFlowElement | MdxJsxTextElement;
@@ -89,9 +90,18 @@ function component(node: JsxNode): RootContent {
       });
       return box('figure', ['youtube'], [iframe]);
     }
+    // The 3D viewers need WebGL and the site's scripts, so the preview shows where they go.
+    case 'Molecule': {
+      const id = String(a.id ?? '');
+      const m = MOLECULES[id];
+      if (!m) return problem(`<Molecule id="${id}">: no model with that id (see src/lib/molecules.ts)`, inline);
+      return box('div', ['preview-model'], [para([], [text(`3D model of ${m.formula} (${m.molecularGeometry}) goes here.`)])]);
+    }
+    case 'ShapeExplorer':
+      return box('div', ['preview-model'], [para([], [text('VSEPR shape explorer (3D) goes here.')])]);
     default:
       return problem(
-        node.name ? `<${node.name}> is not a lesson component (use Callout, Reveal, or YouTube)` : 'Empty <> fragment',
+        node.name ? `<${node.name}> is not a lesson component (use Callout, Reveal, YouTube, Molecule, or ShapeExplorer)` : 'Empty <> fragment',
         inline,
       );
   }

@@ -1456,3 +1456,384 @@
     **(c)** In a trigonal bipyramid, an equatorial position has two 90° neighbors and an axial one has three. Lone pairs take up more room, so all three go equatorial, which puts the two F atoms on the axis, 180° apart.
 
     **(d)** In both, the F atoms are arranged in opposite pairs (180° apart), so the bond dipoles cancel, and the lone pairs are symmetric too. Both molecules are nonpolar.
+
+# --- Added with Jaya's Chapter 9 notes, the online hybridization sheets, and the Lewis structures lab ---
+# Hybridization with d orbitals (sp³d, sp³d²) is in the class chart but not on the AP exam, and neither is how hybrid
+# orbitals are derived (promotion, counting leftover p orbitals): those questions have cedTopics: [].
+
+- id: apchem-09-hybrid-pcl5
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of phosphorus in $\ce{PCl5}$?
+  choices:
+    - { id: a, text: "sp³" }
+    - { id: b, text: "sp³d" }
+    - { id: c, text: "sp³d²" }
+    - { id: d, text: "sp²" }
+  answer: b
+  explanation: |
+    P has five bonds and no lone pairs: 5 electron domains. Five domains need five hybrid orbitals, one s + three p + one d = **sp³d**, pointing to the corners of a trigonal bipyramid.
+
+- id: apchem-09-hybrid-xef4
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    $\ce{XeF4}$ is square planar. What is the hybridization of Xe?
+  choices:
+    - { id: a, text: "dsp²" }
+    - { id: b, text: "sp³" }
+    - { id: c, text: "sp³d" }
+    - { id: d, text: "sp³d²" }
+  answer: d
+  explanation: |
+    Xe has four bonds and two lone pairs: 6 domains, so it's **sp³d²**. Hybridization follows the electron domains, not the molecular shape. The square-planar shape comes from the two lone pairs sitting opposite each other in an octahedron. (A), dsp², is a label used for some square-planar transition-metal complexes, not for XeF₄. (B) counts only the four bonds.
+
+- id: apchem-09-hybrid-brf3
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the hybridization of bromine in $\ce{BrF3}$?
+  choices:
+    - { id: a, text: "sp²" }
+    - { id: b, text: "sp³" }
+    - { id: c, text: "sp³d" }
+    - { id: d, text: "sp³d²" }
+  answer: c
+  explanation: |
+    $7 + 3(7) = 28$ electrons. Three Br–F bonds and the F lone pairs use 24, leaving two lone pairs on Br. That's 3 + 2 = 5 domains: **sp³d**. (A) counts only the three bonds, as if BrF₃ were trigonal planar like BF₃.
+
+- id: apchem-09-hybrid-icl4
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What are the hybridization of I and the molecular geometry of $\ce{ICl4-}$?
+  choices:
+    - { id: a, text: "sp³d², square planar" }
+    - { id: b, text: "sp³, tetrahedral" }
+    - { id: c, text: "sp³d, seesaw" }
+    - { id: d, text: "sp³d², octahedral" }
+  answer: a
+  explanation: |
+    $7 + 4(7) + 1 = 36$ electrons. Four I–Cl bonds plus the Cl lone pairs use 32, so I gets two lone pairs: 6 domains, **sp³d²**. The two lone pairs go opposite each other, leaving a **square planar** ion. (D) is the electron-domain geometry. (C) would be one lone pair, as in SF₄.
+
+- id: apchem-09-hybrid-orbital-count
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When one s orbital and two p orbitals on a carbon atom hybridize, how many hybrid orbitals form, and how many of carbon's 2p orbitals are left unhybridized?
+  choices:
+    - { id: a, text: "3 hybrid orbitals; 0 p orbitals left" }
+    - { id: b, text: "2 hybrid orbitals; 1 p orbital left" }
+    - { id: c, text: "3 hybrid orbitals; 1 p orbital left" }
+    - { id: d, text: "4 hybrid orbitals; 0 p orbitals left" }
+  answer: c
+  explanation: |
+    The number of hybrid orbitals always equals the number of atomic orbitals mixed: 1 + 2 = 3 sp² orbitals. Carbon has three 2p orbitals and only two were used, so one is left over. That leftover p orbital is what forms the π bond in C=C (as in C₂H₄).
+
+- id: apchem-09-be-promotion
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Ground-state Be is $1s^2 2s^2$. Why does the hybridization picture of $\ce{BeF2}$ start by promoting one 2s electron to a 2p orbital?
+  choices:
+    - { id: a, text: "Ground-state Be has no unpaired electrons to share with F" }
+    - { id: b, text: "Promotion releases energy, and that energy is what holds the two Be–F bonds together" }
+    - { id: c, text: "The 2p orbital is lower in energy than the 2s orbital, so the electron drops into it" }
+    - { id: d, text: "Be needs an octet, and moving an electron into 2p gives it eight valence electrons" }
+  answer: a
+  explanation: |
+    A covalent bond pairs one electron from each atom. Be's two valence electrons are paired in 2s, so promoting one gives two unpaired electrons (2s¹ 2p¹), which then mix into two sp orbitals. Promotion **costs** energy (B is backwards); forming two bonds pays it back. 2p is higher than 2s (C), and Be ends up with only 4 electrons (D).
+
+- id: apchem-09-kings-formula
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A shortcut finds the number of electron domains on a central atom as $Z = \tfrac{1}{2}(V + M + \text{anion charge} - \text{cation charge})$, where $V$ is the central atom's valence electrons and $M$ is the number of attached H or halogen atoms (O counts as 0). What does it give for Cl in $\ce{ClO3-}$, and what's the hybridization?
+  choices:
+    - { id: a, text: "Z = 3, sp²" }
+    - { id: b, text: "Z = 4, sp³" }
+    - { id: c, text: "Z = 3.5, can't be used" }
+    - { id: d, text: "Z = 5, sp³d" }
+  answer: b
+  explanation: |
+    $Z = \tfrac{1}{2}(7 + 0 + 1 - 0) = 4$, so Cl is **sp³**. Check with the Lewis structure: three Cl–O bonds and one lone pair on Cl, 4 domains. (C) forgets to add the 1− charge. (A) counts only the three O atoms.
+
+- id: apchem-09-seo3-shape
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    $\ce{SO3}$ is trigonal planar. What is the molecular geometry of the selenite ion, $\ce{SeO3^2-}$?
+  choices:
+    - { id: a, text: "Trigonal planar, like SO₃" }
+    - { id: b, text: "T-shaped" }
+    - { id: c, text: "Trigonal pyramidal" }
+    - { id: d, text: "Tetrahedral" }
+  answer: c
+  explanation: |
+    The 2− charge adds two electrons: $6 + 18 + 2 = 26$, versus 24 for SO₃. Three Se–O bonds and the O lone pairs use 24, so Se keeps a lone pair: 4 domains, tetrahedral electron domains, **trigonal pyramidal** shape. (D) is the electron-domain geometry. (B) would need 5 domains.
+
+- id: apchem-09-h3o-angle
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the best estimate of the H–O–H bond angle in the hydronium ion, $\ce{H3O+}$?
+  choices:
+    - { id: a, text: "Exactly 120°, since there are three H atoms" }
+    - { id: b, text: "Slightly less than 109.5°" }
+    - { id: c, text: "Exactly 109.5°" }
+    - { id: d, text: "90°" }
+  answer: b
+  explanation: |
+    $6 + 3 - 1 = 8$ electrons: three O–H bonds and one lone pair, 4 domains. The lone pair takes up more room than a bond and squeezes the H–O–H angles **below 109.5°**, as in NH₃ (107°), which has the same number of electrons. (C) ignores the lone pair. (A) would be a flat ion with 3 domains.
+
+- id: apchem-09-pcl4-plus
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What are the molecular geometry and polarity of $\ce{PCl4+}$?
+  choices:
+    - { id: a, text: "Seesaw; polar" }
+    - { id: b, text: "Trigonal pyramidal; polar" }
+    - { id: c, text: "Square planar; nonpolar" }
+    - { id: d, text: "Tetrahedral; nonpolar" }
+  answer: d
+  explanation: |
+    $5 + 4(7) - 1 = 32$ electrons. Four P–Cl bonds plus three lone pairs on each Cl use all 32, leaving none on P: 4 domains, **tetrahedral**. Four identical P–Cl dipoles in a tetrahedron cancel, so it's **nonpolar**. (A) would need a lone pair on P, which takes two more electrons, but the + charge means one fewer. (B) has only three bonds.
+
+- id: apchem-09-hno3-nitrogen
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In nitric acid, $\ce{HNO3}$, N is bonded to three O atoms and the H is bonded to one of the O atoms. What is the geometry around N?
+  choices:
+    - { id: a, text: "Trigonal pyramidal" }
+    - { id: b, text: "Trigonal planar" }
+    - { id: c, text: "Tetrahedral" }
+    - { id: d, text: "T-shaped" }
+  answer: b
+  explanation: |
+    24 electrons. N has one N=O double bond and two N–O single bonds and **no** lone pair, so it has 3 domains: **trigonal planar**, 120°. (A) assumes N has a lone pair as in NH₃, but here N's electron pairs are all in bonds (that's why its formal charge is +1).
+
+- id: apchem-09-sef4-domains
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many electron domains does Se have in $\ce{SeF4}$, and what is its electron-domain geometry?
+  choices:
+    - { id: a, text: "5, trigonal bipyramidal" }
+    - { id: b, text: "4, tetrahedral" }
+    - { id: c, text: "5, square pyramidal" }
+    - { id: d, text: "6, octahedral" }
+  answer: a
+  explanation: |
+    $6 + 4(7) = 34$ electrons. Four Se–F bonds and the F lone pairs use 32; the last pair goes on Se. 4 bonds + 1 lone pair = **5 domains, trigonal bipyramidal** (the molecule itself is seesaw). (B) forgets the lone pair. Square pyramidal (C) is a molecular geometry with 6 domains, not an electron-domain geometry.
+
+- id: apchem-09-brf3-angle
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    $\ce{BrF3}$ is T-shaped. What is the best description of its F–Br–F bond angles between the axial F atoms and the equatorial F atom?
+  choices:
+    - { id: a, text: "Exactly 120°" }
+    - { id: b, text: "Slightly more than 90°" }
+    - { id: c, text: "Slightly less than 90°" }
+    - { id: d, text: "Exactly 109.5°" }
+  answer: c
+  explanation: |
+    Br has 5 domains (3 bonds, 2 lone pairs) in a trigonal bipyramid. Both lone pairs go equatorial, and they push the two axial F atoms toward the one equatorial F, so the angles close to **a little under 90°** (about 86° measured). (B) has the push backwards. 120° (A) is between equatorial positions, but only one is occupied by an atom.
+
+- id: apchem-09-h2s-shape
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular geometry of $\ce{H2S}$?
+  choices:
+    - { id: a, text: "Linear" }
+    - { id: b, text: "Tetrahedral" }
+    - { id: c, text: "Trigonal planar" }
+    - { id: d, text: "Bent" }
+  answer: d
+  explanation: |
+    S has two S–H bonds and two lone pairs: 4 domains (tetrahedral), with two of the corners taken by lone pairs, so the molecule is **bent**, like H₂O. (A) leaves out the lone pairs. (B) is the electron-domain geometry.
+
+- id: apchem-09-linear-polar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    All four of these molecules are linear. Which one is **polar**?
+  choices:
+    - { id: a, text: "$\\ce{CO2}$" }
+    - { id: b, text: "$\\ce{XeF2}$" }
+    - { id: c, text: "$\\ce{HCN}$" }
+    - { id: d, text: "$\\ce{BeF2}$" }
+  answer: c
+  explanation: |
+    In a linear molecule the two bond dipoles point in opposite directions. They cancel only if the two ends are the **same**. CO₂, XeF₂, and BeF₂ have identical atoms on both sides. HCN has H on one end and N on the other: the C–H and C≡N dipoles both point toward N, so they add.
+
+- id: apchem-09-nonpolar-ion
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Each species has a central atom with an expanded octet. Which one is **nonpolar**?
+  choices:
+    - { id: a, text: "$\\ce{ICl4-}$" }
+    - { id: b, text: "$\\ce{BrF5}$" }
+    - { id: c, text: "$\\ce{SeF4}$" }
+    - { id: d, text: "$\\ce{BrF3}$" }
+  answer: a
+  explanation: |
+    $\ce{ICl4-}$ is square planar: its two lone pairs are opposite each other and every I–Cl bond has a partner pointing the opposite way, so the dipoles cancel. In BrF₅ (square pyramidal) the top F has only a lone pair opposite it, so its dipole isn't cancelled. In SeF₄ (seesaw) and BrF₃ (T-shaped) the equatorial lone pairs leave the F atoms bunched on one side. All three are polar.
+
+- id: apchem-09-square-pyramidal-abn
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.1", "9.3"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In ABₙ notation (A = central atom, n = number of atoms bonded to it), which type is a square pyramidal molecule such as $\ce{BrF5}$?
+  choices:
+    - { id: a, text: "AB₄" }
+    - { id: b, text: "AB₃" }
+    - { id: c, text: "AB₆" }
+    - { id: d, text: "AB₅" }
+  answer: d
+  explanation: |
+    Count the atoms around the center: four make the square base and one sits on top, so it's **AB₅** (with one lone pair, AB₅E). It has 6 electron domains, which is why it's easy to file under AB₆ (C) by mistake. AB₆ is only octahedral.
+
+- id: apchem-09-domains-vs-shape-pair
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which pair of species has the **same electron-domain geometry** but **different molecular geometries**?
+  choices:
+    - { id: a, text: "$\\ce{CH2Cl2}$ and $\\ce{SiH4}$" }
+    - { id: b, text: "$\\ce{SCl2}$ and $\\ce{CO2}$" }
+    - { id: c, text: "$\\ce{BrF5}$ and $\\ce{PCl5}$" }
+    - { id: d, text: "$\\ce{ClO3-}$ and $\\ce{PO4^3-}$" }
+  answer: d
+  explanation: |
+    $\ce{ClO3-}$ (3 bonds + 1 lone pair) and $\ce{PO4^3-}$ (4 bonds) both have 4 domains, tetrahedral electron-domain geometry, but ClO₃⁻ is trigonal pyramidal and PO₄³⁻ is tetrahedral. (A) is tetrahedral/tetrahedral (same both ways). (B): SCl₂ has 4 domains (bent) and CO₂ has 2 (linear), so the domain geometries differ. (C): BrF₅ has 6 domains and PCl₅ has 5.
+
+- id: apchem-09-sef4-frq
+  type: frq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.3", "9.5"]
+  cedTopics: ["2.5", "2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Selenium tetrafluoride, $\ce{SeF4}$, is one of the molecules in the class Lewis structures lab.
+  explanation: |
+    $6 + 4(7) = 34$ valence electrons. Four Se–F bonds and three lone pairs on each F use 32, so the last pair goes on Se, giving it 10 electrons (an expanded octet, allowed because Se is in period 4). Four bonds plus one lone pair is 5 domains. The lone pair goes equatorial, where it has more room, which leaves the seesaw shape. The lone pair sits on one side with nothing opposite it, so the polar Se–F bond dipoles don't cancel.
+  parts:
+    - label: a
+      points: 1
+      prompt: Draw the complete Lewis structure of $\ce{SeF4}$.
+      scoring:
+        - "Four Se–F single bonds, three lone pairs on each F, and one lone pair on Se (34 valence electrons)."
+    - label: b
+      points: 1
+      prompt: Give the number of electron domains on Se and the electron-domain geometry.
+      scoring:
+        - "5 electron domains; trigonal bipyramidal."
+    - label: c
+      points: 2
+      prompt: Name the molecular geometry, and explain where the lone pair goes.
+      scoring:
+        - "Seesaw."
+        - "The lone pair takes an equatorial position, because an equatorial position has only two neighbors at 90° (an axial one has three), so the lone pair has more room there."
+    - label: d
+      points: 1
+      prompt: Is $\ce{SeF4}$ polar or nonpolar? Justify your answer.
+      scoring:
+        - "Polar: the Se–F bonds are polar and the seesaw shape (with the lone pair on one side) is not symmetric, so the bond dipoles don't cancel."

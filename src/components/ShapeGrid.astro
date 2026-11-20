@@ -1,0 +1,207 @@
+---
+// The VSEPR chart as pictures. kind="domains": the five electron-domain geometries. kind="shapes"
+// (default): every molecular geometry, one row per number of electron domains, each with a
+// drawing, its bonds and lone pairs, angles, examples, and a link that opens it in <ShapeExplorer>.
+import { MOLECULES, SHAPES } from '../lib/molecules';
+import { moleculeSvg } from '../lib/svg-model';
+
+interface Props {
+  kind?: 'domains' | 'shapes';
+}
+
+const { kind = 'shapes' } = Astro.props;
+const rows = [2, 3, 4, 5, 6].map((domains) => ({ domains, shapes: SHAPES.filter((s) => s.domains === domains) }));
+const DOMAIN_ANGLES: Record<number, string> = { 2: '180°', 3: '120°', 4: '109.5°', 5: '90°, 120°, 180°', 6: '90°, 180°' };
+/** sp³d and sp³d² are class-only: the AP exam doesn't assess hybridization with d orbitals. */
+const classOnly = (h: string) => h.includes('d');
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+---
+
+{
+  kind === 'domains' ? (
+    <ul class="shape-grid domains">
+      {rows.map((r) => {
+        const base = r.shapes[0]!;
+        return (
+          <li class="shape-card">
+            <Fragment set:html={moleculeSvg(MOLECULES[base.example]!, `dom${r.domains}`, { domainsOnly: true, title: `${r.domains} electron domains arranged ${base.domainGeometry}` })} />
+            <p class="shape-count">{r.domains} domains</p>
+            <p class="shape-name">{base.domainGeometry}</p>
+            <p class="shape-meta">{DOMAIN_ANGLES[r.domains]}</p>
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <div class="shape-rows">
+      {rows.map((r) => (
+        <section class="shape-row" aria-label={`${r.domains} electron domains`}>
+          <h3 class="row-head">
+            <span class="row-n">{r.domains}</span> electron domains <span class="muted">· electron-domain geometry:</span> {r.shapes[0]!.domainGeometry}
+          </h3>
+          <ul class="shape-grid">
+            {r.shapes.map((s) => {
+              const bonds = s.domains - s.lonePairs;
+              return (
+                <li class="shape-card">
+                  <Fragment set:html={moleculeSvg(MOLECULES[s.example]!, `shape${s.domains}${s.lonePairs}`, { title: `${s.molecularGeometry}, for example ${s.examples[0]}` })} />
+                  <p class="shape-name">{s.molecularGeometry}</p>
+                  <p class="pips" aria-label={`${plural(bonds, 'bonded atom')}, ${plural(s.lonePairs, 'lone pair')}`}>
+                    {Array.from({ length: bonds }, () => <span class="pip bond" />)}
+                    {Array.from({ length: s.lonePairs }, () => <span class="pip lone" />)}
+                    <span class="pip-text">
+                      {bonds} bonded{s.lonePairs > 0 && `, ${s.lonePairs} lone`}
+                    </span>
+                  </p>
+                  <dl class="shape-facts">
+                    <dt>Angles</dt>
+                    <dd>{s.idealAngles}</dd>
+                    <dt>Examples</dt>
+                    <dd>{s.examples.join(', ')}</dd>
+                    <dt>Hybrid</dt>
+                    <dd>
+                      {s.hybridization}
+                      {classOnly(s.hybridization) && <span class="badge not-ap">class only</span>}
+                    </dd>
+                  </dl>
+                  <a class="turn" href="#shape-explorer" data-domains={s.domains} data-lone-pairs={s.lonePairs}>
+                    Turn it in 3D ↓
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+<script>
+  import { pickShape } from './molecule/pick';
+
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a.turn[data-domains]')) {
+    a.addEventListener('click', () => pickShape({ domains: Number(a.dataset.domains), lonePairs: Number(a.dataset.lonePairs) }));
+  }
+</script>
+
+<style>
+  .shape-rows {
+    display: grid;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .row-head {
+    margin: 0 0 0.45rem;
+    font-size: 0.95rem;
+  }
+  .row-n {
+    display: inline-grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: 0.2rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.9rem;
+  }
+  .shape-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .shape-grid.domains {
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    margin: 1rem 0;
+  }
+  .shape-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.65rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .shape-card :global(svg) {
+    display: block;
+    width: 100%;
+    max-width: 8.5rem;
+    height: auto;
+    margin: 0 auto;
+    aspect-ratio: 1;
+  }
+  .shape-card p {
+    margin: 0;
+  }
+  .shape-count {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .shape-name {
+    font-weight: 700;
+    font-size: 1.02rem;
+    text-align: center;
+    text-transform: capitalize;
+  }
+  .domains .shape-name {
+    font-size: 0.95rem;
+  }
+  .shape-meta {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-2);
+  }
+  .pips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    margin: 0.25rem 0 0.4rem !important;
+  }
+  .pip {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+  }
+  .pip.bond {
+    background: #8e959a;
+  }
+  .pip.lone {
+    border: 2px solid #8a74e8;
+    background: color-mix(in srgb, #8a74e8 25%, transparent);
+  }
+  .pip-text {
+    margin-left: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .shape-facts {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.1rem 0.5rem;
+    margin: 0 0 0.45rem;
+    font-size: 0.82rem;
+  }
+  .shape-facts dt {
+    color: var(--muted);
+  }
+  .shape-facts dd {
+    margin: 0;
+  }
+  .shape-facts .badge {
+    margin-left: 0.25rem;
+    font-size: 0.7rem;
+    padding: 0 0.4rem;
+  }
+  .turn {
+    margin-top: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+</style>

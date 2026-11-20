@@ -56,23 +56,25 @@ export interface Shape {
   hybridization: string;
   /** A molecule with this shape that has a model below. */
   example: string;
+  /** More molecules and ions with this shape, as text. */
+  examples: string[];
 }
 
 /** Every shape in the class's molecular-geometry table, in table order. */
 export const SHAPES: Shape[] = [
-  { domains: 2, lonePairs: 0, domainGeometry: 'linear', molecularGeometry: 'linear', idealAngles: '180°', hybridization: 'sp', example: 'co2' },
-  { domains: 3, lonePairs: 0, domainGeometry: 'trigonal planar', molecularGeometry: 'trigonal planar', idealAngles: '120°', hybridization: 'sp²', example: 'bf3' },
-  { domains: 3, lonePairs: 1, domainGeometry: 'trigonal planar', molecularGeometry: 'bent', idealAngles: 'less than 120°', hybridization: 'sp²', example: 'so2' },
-  { domains: 4, lonePairs: 0, domainGeometry: 'tetrahedral', molecularGeometry: 'tetrahedral', idealAngles: '109.5°', hybridization: 'sp³', example: 'ch4' },
-  { domains: 4, lonePairs: 1, domainGeometry: 'tetrahedral', molecularGeometry: 'trigonal pyramidal', idealAngles: 'less than 109.5° (107° in NH₃)', hybridization: 'sp³', example: 'nh3' },
-  { domains: 4, lonePairs: 2, domainGeometry: 'tetrahedral', molecularGeometry: 'bent', idealAngles: 'less than 109.5° (104.5° in H₂O)', hybridization: 'sp³', example: 'h2o' },
-  { domains: 5, lonePairs: 0, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'trigonal bipyramidal', idealAngles: '90° and 120°', hybridization: 'sp³d', example: 'pcl5' },
-  { domains: 5, lonePairs: 1, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'seesaw', idealAngles: 'less than 90° and 120°', hybridization: 'sp³d', example: 'sf4' },
-  { domains: 5, lonePairs: 2, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'T-shaped', idealAngles: 'less than 90°', hybridization: 'sp³d', example: 'clf3' },
-  { domains: 5, lonePairs: 3, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'linear', idealAngles: '180°', hybridization: 'sp³d', example: 'xef2' },
-  { domains: 6, lonePairs: 0, domainGeometry: 'octahedral', molecularGeometry: 'octahedral', idealAngles: '90°', hybridization: 'sp³d²', example: 'sf6' },
-  { domains: 6, lonePairs: 1, domainGeometry: 'octahedral', molecularGeometry: 'square pyramidal', idealAngles: 'less than 90°', hybridization: 'sp³d²', example: 'brf5' },
-  { domains: 6, lonePairs: 2, domainGeometry: 'octahedral', molecularGeometry: 'square planar', idealAngles: '90°', hybridization: 'sp³d²', example: 'xef4' },
+  { domains: 2, lonePairs: 0, domainGeometry: 'linear', molecularGeometry: 'linear', idealAngles: '180°', hybridization: 'sp', example: 'co2', examples: ['CO₂', 'HCN', 'BeCl₂'] },
+  { domains: 3, lonePairs: 0, domainGeometry: 'trigonal planar', molecularGeometry: 'trigonal planar', idealAngles: '120°', hybridization: 'sp²', example: 'bf3', examples: ['BF₃', 'SO₃', 'NO₃⁻'] },
+  { domains: 3, lonePairs: 1, domainGeometry: 'trigonal planar', molecularGeometry: 'bent', idealAngles: 'less than 120°', hybridization: 'sp²', example: 'so2', examples: ['SO₂', 'O₃', 'NO₂⁻'] },
+  { domains: 4, lonePairs: 0, domainGeometry: 'tetrahedral', molecularGeometry: 'tetrahedral', idealAngles: '109.5°', hybridization: 'sp³', example: 'ch4', examples: ['CH₄', 'NH₄⁺', 'SO₄²⁻'] },
+  { domains: 4, lonePairs: 1, domainGeometry: 'tetrahedral', molecularGeometry: 'trigonal pyramidal', idealAngles: 'less than 109.5° (107° in NH₃)', hybridization: 'sp³', example: 'nh3', examples: ['NH₃', 'PCl₃', 'H₃O⁺'] },
+  { domains: 4, lonePairs: 2, domainGeometry: 'tetrahedral', molecularGeometry: 'bent', idealAngles: 'less than 109.5° (104.5° in H₂O)', hybridization: 'sp³', example: 'h2o', examples: ['H₂O', 'OF₂', 'SCl₂'] },
+  { domains: 5, lonePairs: 0, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'trigonal bipyramidal', idealAngles: '90° and 120°', hybridization: 'sp³d', example: 'pcl5', examples: ['PCl₅', 'PF₅'] },
+  { domains: 5, lonePairs: 1, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'seesaw', idealAngles: 'less than 90° and 120°', hybridization: 'sp³d', example: 'sf4', examples: ['SF₄', 'SeF₄'] },
+  { domains: 5, lonePairs: 2, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'T-shaped', idealAngles: 'less than 90°', hybridization: 'sp³d', example: 'clf3', examples: ['ClF₃', 'BrF₃'] },
+  { domains: 5, lonePairs: 3, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'linear', idealAngles: '180°', hybridization: 'sp³d', example: 'xef2', examples: ['XeF₂', 'I₃⁻'] },
+  { domains: 6, lonePairs: 0, domainGeometry: 'octahedral', molecularGeometry: 'octahedral', idealAngles: '90°', hybridization: 'sp³d²', example: 'sf6', examples: ['SF₆'] },
+  { domains: 6, lonePairs: 1, domainGeometry: 'octahedral', molecularGeometry: 'square pyramidal', idealAngles: 'less than 90°', hybridization: 'sp³d²', example: 'brf5', examples: ['BrF₅', 'IF₅'] },
+  { domains: 6, lonePairs: 2, domainGeometry: 'octahedral', molecularGeometry: 'square planar', idealAngles: '90°', hybridization: 'sp³d²', example: 'xef4', examples: ['XeF₄', 'ICl₄⁻'] },
 ];
 
 export function shapeFor(domains: number, lonePairs: number): Shape | undefined {

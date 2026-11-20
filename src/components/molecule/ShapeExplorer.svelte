@@ -1,8 +1,10 @@
 <script lang="ts">
   // Pick a number of electron domains and lone pairs to see the shape, its names, angles, and
   // hybridization, on a real molecule with that shape.
+  import { onMount } from 'svelte';
   import { MOLECULES, SHAPES } from '../../lib/molecules';
   import MoleculeViewer from './MoleculeViewer.svelte';
+  import { type ShapePick, onPick, takePick } from './pick';
 
   // Unique radio-group names, in case a page ever has two explorers.
   const uid = $props.id();
@@ -12,6 +14,18 @@
   const domainCounts = [...new Set(SHAPES.map((s) => s.domains))];
   const lonePairCounts = $derived(SHAPES.filter((s) => s.domains === domains).map((s) => s.lonePairs));
   const shape = $derived(SHAPES.find((s) => s.domains === domains && s.lonePairs === lonePairs) ?? SHAPES.find((s) => s.domains === domains)!);
+
+  /** A "Turn in 3D" link on a shape card picked this shape. */
+  function show(p: ShapePick) {
+    domains = p.domains;
+    lonePairs = p.lonePairs;
+  }
+
+  onMount(() => {
+    const waiting = takePick();
+    if (waiting) show(waiting);
+    return onPick(show);
+  });
 
   function pickDomains(n: number) {
     domains = n;

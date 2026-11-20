@@ -6,8 +6,17 @@ sections: ["9.4", "9.5", "9.6"]
 cedTopics: ["2.2", "2.7"]
 order: 3
 authors: ["Claude"]
-summary: The potential-energy curve for a bond, valence-bond theory, sp, sp², and sp³ hybrid orbitals, sigma and pi bonds and how to count them, and delocalized pi bonding.
+summary: The potential-energy curve for a bond, hybrid orbitals step by step in 3D (atomic orbitals, promotion, mixing, overlap), sigma and pi bonds forming in 3D, and delocalized pi bonding in benzene, carbonate, and ozone, with what is and isn't on the AP exam.
 ---
+
+<Callout type="ap-tip" title="What's on the AP exam from this lesson">
+**On the exam (topics 2.2 and 2.7):** the potential-energy curve for a bond; naming an atom's
+hybridization as sp, sp², or sp³ and matching it to 180°, 120°, or 109.5°; σ and π bonds (counting them,
+π weaker than σ, no rotation around a double bond).
+
+**Class only:** how hybrid orbitals are formed and drawn (promotion, box diagrams, mixing), sp³d and
+sp³d², and the orbital picture of delocalized π bonds. Each section below says which it is.
+</Callout>
 
 VSEPR predicts shapes but doesn't say how the electrons actually form bonds. **Valence-bond theory**
 connects bonds to the atomic orbitals from Chapter 6.
@@ -40,53 +49,63 @@ Unhybridized atomic orbitals can't explain most shapes. Carbon's valence orbital
 2p orbitals at 90° to each other, yet methane's four C–H bonds are identical and 109.5° apart.
 
 The fix: the atom **mixes** some of its valence orbitals to make an equal number of new, identical
-**hybrid orbitals** that point toward the electron domains.
+**hybrid orbitals** that point toward the electron domains. **Count the electron domains on the atom
+and you have the hybridization**: each domain (bond or lone pair, with a multiple bond counting once)
+needs one hybrid orbital.
 
-| Electron domains | Hybridization | Orbitals mixed | Geometry | Left-over p orbitals | Example |
-|---|---|---|---|---|---|
-| 2 | **sp** | one s + one p | linear, 180° | 2 | Be in $\ce{BeF2}$, C in $\ce{CO2}$ |
-| 3 | **sp²** | one s + two p | trigonal planar, 120° | 1 | B in $\ce{BF3}$, C in $\ce{H2CO}$ |
-| 4 | **sp³** | one s + three p | tetrahedral, 109.5° | 0 | C in $\ce{CH4}$, N in $\ce{NH3}$, O in $\ce{H2O}$ |
+<HybridCards />
 
 ![The three hybrid sets. sp: two lobes pointing opposite ways. sp²: three lobes 120° apart in a plane, with an unhybridized p orbital (dashed) perpendicular to them. sp³: four lobes pointing to the corners of a tetrahedron.](./hybrid-sets.svg)
-
-**The number of hybrid orbitals equals the number of orbitals mixed**, which equals the number of
-electron domains. Count domains (lone pairs count, and a multiple bond counts as one) and read off the
-hybridization.
 
 Questions about hybridization ask about **central or interior atoms** (any atom bonded to two or
 more others). An outer atom such as an F in BF₃ isn't usually given a hybridization.
 
-**Lone pairs sit in hybrid orbitals too.** The N in NH₃ is sp³: three of its sp³ orbitals form N–H
-bonds and the fourth holds the lone pair (the purple lobe):
+### What happens, step by step
 
-<Molecule id="nh3" />
-
-<Reveal label="Worked example: how beryllium gets two bonds">
-
-Be is $1s^2 2s^2$, with no unpaired electrons, so it seemingly can't bond. In $\ce{BeF2}$:
-
-1. Imagine one 2s electron moving into an empty 2p orbital: now two unpaired electrons.
-2. Mixing the 2s and that 2p makes **two sp hybrid orbitals**, pointing 180° apart.
-3. Each sp orbital overlaps a 2p orbital of an F atom. The result is linear F–Be–F, which matches VSEPR.
-
-</Reveal>
-
-<Callout type="not-on-ap">
-The AP exam asks you to name the hybridization (sp, sp², sp³) of an atom. It doesn't test how hybrid
-orbitals are derived or drawn, or hybridization for five or six electron domains (sp³d, sp³d²).
+<Callout type="not-on-ap" title="This part is class-only">
+The AP Course and Exam Description says "an understanding of the derivation and depiction of hybrid
+orbitals will not be assessed on the AP Exam." Promotion, orbital box diagrams, and drawing the lobes
+are how your class and textbook explain hybridization, but the AP exam only asks you to **name** sp, sp²,
+or sp³ and connect it to 180°, 120°, or 109.5°.
 </Callout>
+
+Pick a molecule, then step through it. The box diagram under the model shows the same thing as
+energy levels: the highlighted column matches the step you're on.
+
+<OrbitalViewer ids="ch4,nh3,h2o,bf3,bef2" boxes />
+
+What happens in each step:
+
+1. **Atomic orbitals.** The central atom starts with one 2s and three 2p orbitals. The 2p orbitals point
+   along x, y, and z, at 90° to each other.
+2. **Promotion** (only Be, B, and C). These atoms have fewer unpaired electrons than bonds to make, so one
+   2s electron moves up into an empty 2p orbital. That costs energy, which forming the extra bonds pays
+   back. N and O already have enough unpaired electrons and skip this step.
+3. **Mixing.** The 2s and some of the 2p orbitals combine into the same number of hybrid orbitals. Each
+   hybrid has one big lobe (where the bond or lone pair goes) and a small lobe behind it. They're all
+   identical and point as far apart as possible: the VSEPR geometry.
+4. **Filling.** The electrons go one per hybrid first. Extra electrons pair up in hybrids as **lone
+   pairs** (N has one, O has two). In sp² and sp atoms, the leftover p orbitals keep their electrons for
+   π bonds (section 3).
+5. **Overlap.** Each half-filled hybrid overlaps a half-filled orbital on another atom, head-on, making a
+   σ bond.
 
 ## 3. Sigma and pi bonds (9.6)
 
+<Callout type="ap-tip" title="On the AP exam">
+This section **is** on the AP exam. The CED says bonds form by orbital overlap, that multiple bonds
+contain both σ and π bonds, that σ overlap is stronger than π (so σ bonds have greater bond energy),
+and that a π bond prevents rotation around the bond, which leads to geometric isomers. Expect to count
+σ and π bonds and explain why a double bond can't rotate.
+</Callout>
+
 There are two ways orbitals can overlap:
 
-| | **Sigma (σ) bond** | **Pi (π) bond** |
-|---|---|---|
-| Overlap | head-on, along the line between the nuclei | side-by-side, between two parallel p orbitals |
-| Electron density | on the axis between the nuclei | above and below the axis, none on it |
-| Made from | hybrid orbitals, s orbitals, or end-on p orbitals | unhybridized p orbitals |
-| Strength | stronger (more overlap) | weaker |
+- **Sigma (σ) bond:** head-on overlap, so the shared electrons sit **on** the line between the two
+  nuclei. Made from hybrid orbitals, s orbitals, or p orbitals pointing at each other. More overlap,
+  so it's the **stronger** of the two.
+- **Pi (π) bond:** side-by-side overlap of two **parallel p orbitals**, so the electrons sit **above and
+  below** that line, with none on it. Less overlap, so it's **weaker**.
 
 ![Left: a σ bond, two orbitals overlapping head-on so the shared density sits on the line between the nuclei. Right: a π bond, two parallel p orbitals overlapping side by side above and below that line.](./sigma-pi.svg)
 
@@ -98,14 +117,24 @@ Every bond between two atoms has exactly **one σ bond**. Extra pairs are π bon
 | double | 1 | 1 |
 | triple | 1 | 2 |
 
-**Ethylene**, $\ce{H2C=CH2}$: each carbon is **sp²**. The sp² orbitals form the C–C σ bond and the four C–H
-σ bonds, all in one plane. The leftover p orbital on each carbon points straight up and down, and the two
-overlap side by side to form the **π bond**. Twisting one end would pull those p orbitals out of
-alignment and break the π bond, so there is **no rotation around a double bond**, and the whole molecule
-stays flat.
+### See them form
 
-**Acetylene**, $\ce{HC#CH}$: each carbon is **sp**, with two leftover p orbitals at right angles. They form
-**two π bonds**, so the triple bond is one σ and two π. The molecule is linear.
+Each example starts with the hybrids and leftover p orbitals, then makes the σ bonds (green sticks),
+then the π bonds (pink clouds). Turn the model edge-on to see that a π bond is two lobes, one on each side
+of the bond axis.
+
+<OrbitalViewer ids="c2h4,c2h2,h2co,co2" boxes />
+
+- **Ethylene**, $\ce{H2C=CH2}$: each carbon is **sp²**. The sp² orbitals make the C–C σ bond and four C–H σ
+  bonds, all in one plane. The leftover p orbitals overlap side by side above and below that plane: the
+  **π bond**. Twisting one end would pull the p orbitals apart and break the π bond, so there is **no
+  rotation around a double bond**.
+- **Acetylene**, $\ce{HC#CH}$: each carbon is **sp**, with two leftover p orbitals at right angles. They
+  make **two π bonds** in perpendicular planes, so the triple bond is one σ and two π.
+- **Formaldehyde**, $\ce{H2CO}$: C and O are both sp². The C=O is one σ and one π, and O's two lone pairs
+  sit in its other two sp² hybrids.
+- **Carbon dioxide**: C is sp, each O is sp². The two π bonds are at right angles to each other, one to
+  each O.
 
 <Reveal label="Worked example: count σ and π bonds and name hybridizations">
 
@@ -130,13 +159,24 @@ Hybridization from domain counts:
 ## 4. Delocalized π bonding
 
 In a molecule with **resonance structures**, the π electrons aren't stuck between two atoms. In the
-nitrate ion, $\ce{NO3-}$, the N is sp² and has one leftover p orbital, and each O has one too. All four
-p orbitals overlap side by side, so the π electrons are spread over the **whole ion**. These are
-**delocalized** π bonds, and they're the orbital picture of resonance.
+carbonate ion, $\ce{CO3^2-}$, C is sp² with one leftover p orbital, and each O has a parallel p
+orbital too. All four overlap side by side, so the π electrons spread over the **whole ion**. These are
+**delocalized** π bonds, and they're the orbital picture of resonance: one resonance structure shows
+only one place the π bond could be; the real ion has it spread over all of them.
+
+<OrbitalViewer ids="benzene,co3,o3" />
 
 **Benzene** is the best-known example. All six carbons are sp², so there's a p orbital on each one
 pointing above and below the flat ring. The six π electrons spread around the whole ring, which is why
-all six C–C bonds are identical.
+all six C–C bonds are identical and why benzene is often drawn as a hexagon with a circle inside.
+
+<Callout type="ap-tip" title="What the AP exam asks here">
+Resonance is AP topic 2.6: you need to draw resonance structures, and to explain properties with them,
+for example that all three C–O bonds in carbonate are the **same length**, between a single and a
+double bond (bond order 1⅓). The CED doesn't mention "delocalized π bonds" or the p-orbital picture
+above, so you won't need to draw it. It's here because it explains **why** resonance makes the bonds
+equal.
+</Callout>
 
 <Callout type="warning">
 σ bonds are localized between two atoms. Only π bonds can be delocalized, and only when resonance

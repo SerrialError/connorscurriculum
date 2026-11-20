@@ -39,6 +39,7 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
     units: [...new Set(cedTopics.map((t) => data.topics.get(t)!.unitId))],
     difficulty: q.data.difficulty,
     ...(q.data.calculation ? { calculation: true as const } : {}),
+    ...(q.data.group ? { group: q.data.group } : {}),
     promptHtml: await renderMarkdown(q.data.prompt),
     promptText: await renderPlainText(q.data.prompt),
     image: await questionImage(q),

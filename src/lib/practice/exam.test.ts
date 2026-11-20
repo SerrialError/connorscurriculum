@@ -183,3 +183,27 @@ describe('apchem: the Chapters 8–9 practice quiz', () => {
     expect(examFrqs(pool).length).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe('drawing the Chapters 8–9 quiz', () => {
+  const quiz = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-quiz')!;
+  const inQuiz = readQuestionFiles()
+    .filter((q) => q.subject === 'apchem' && quiz.chapters.includes(q.chapter))
+    .map((q) => ({ ...q, sections: q.sections ?? [] }))
+    .filter((q) => q.sections.some((s) => quiz.sections.includes(s)));
+
+  it('never draws two questions from one group, an excluded question, or a calculation FRQ', () => {
+    for (let i = 0; i < 200; i++) {
+      const drawn = drawExam(inQuiz, quiz.exam!, seededRng(`seed${i}`));
+      expect(drawn.filter((q) => q.type === 'mcq')).toHaveLength(16);
+      const frqs = drawn.filter((q) => q.type === 'frq');
+      expect(frqs).toHaveLength(1);
+      expect(frqs[0]!.calculation).toBeFalsy();
+      const groups = drawn.flatMap((q) => (q.group ? [q.group] : []));
+      expect(new Set(groups).size, groups.join(', ')).toBe(groups.length);
+      for (const q of drawn) {
+        expect(quiz.exam!.exclude).not.toContain(q.id);
+        expect(q.difficulty).toBeGreaterThanOrEqual(2);
+      }
+    }
+  });
+});

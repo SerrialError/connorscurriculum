@@ -657,6 +657,7 @@
   sections: ["8.5"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: n2o
   authors: ["Claude"]
   prompt: |
     Nitrous oxide, $\ce{N2O}$, has the skeleton N–N–O. Three Lewis structures give every atom an octet. Which one contributes the **most** to the real molecule?
@@ -1002,7 +1003,7 @@
   chapter: 8
   sections: ["8.7"]
   cedTopics: ["2.5"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     How many lone pairs are on the xenon atom in $\ce{XeF2}$?
@@ -2181,7 +2182,7 @@
   chapter: 8
   sections: ["8.5", "8.7"]
   cedTopics: ["2.6"]
-  difficulty: 3
+  difficulty: 2
   authors: ["Claude"]
   prompt: |
     Draw $\ce{ClO4-}$ with four Cl–O single bonds and an octet on every atom. What is the formal charge on Cl, and what does it become if one Cl–O bond is redrawn as a double bond?
@@ -2220,6 +2221,7 @@
   sections: ["8.5"]
   cedTopics: ["2.5", "2.7"]
   difficulty: 2
+  group: nitrogen-dioxide-ions
   authors: ["Claude"]
   prompt: |
     In the best Lewis structure of the nitronium ion, $\ce{NO2+}$, how many lone pairs are on N, and what is the O–N–O bond angle?
@@ -2239,6 +2241,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 2
+  group: acetate
   authors: ["Claude"]
   prompt: |
     Which statement correctly compares the carbon–oxygen bonds in the acetate ion, $\ce{CH3COO-}$, and in acetic acid, $\ce{CH3COOH}$?
@@ -2258,6 +2261,7 @@
   sections: ["8.6"]
   cedTopics: ["2.6"]
   difficulty: 3
+  group: n2o
   authors: ["Claude"]
   prompt: |
     Nitrous oxide has the skeleton N–N–O (16 valence electrons). Which resonance structure contributes **least** to the real molecule?
@@ -2315,6 +2319,7 @@
   sections: ["8.5", "8.6"]
   cedTopics: ["2.5", "2.6", "2.7"]
   difficulty: 3
+  group: n2o
   authors: ["Claude"]
   prompt: |
     Nitrous oxide, $\ce{N2O}$, has the skeleton N–N–O, with the central N bonded to both other atoms.

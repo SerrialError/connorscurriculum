@@ -28,6 +28,8 @@ interface PracticeQuestionBase {
   difficulty: number;
   /** Needs a numeric calculation (a practice exam can limit how many it draws). */
   calculation?: true;
+  /** Related questions that give each other away; a practice exam draws at most one per group. */
+  group?: string;
   promptHtml: string;
   /** The prompt as one line of plain text (math written out), for the results list. */
   promptText: string;
@@ -68,9 +70,11 @@ export interface PracticeExam {
   sections: ExamSection[];
   /** Multiple-choice questions beyond the sections' counts, drawn from all of them together. */
   extra: number;
-  frq: { count: number; points: number };
+  frq: { count: number; points: number; calculations?: boolean };
   /** Only questions at least this hard are drawn (1 = any). */
   minDifficulty?: number;
+  /** Question ids never drawn (in its chapters and sections, but off-topic for it). */
+  exclude?: string[];
   /** What the screens call it: "exam" for a class test's practice exam, "quiz" for a practice quiz. */
   noun?: 'exam' | 'quiz';
 }

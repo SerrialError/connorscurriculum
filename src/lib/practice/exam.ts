@@ -12,11 +12,20 @@ export interface ExamCandidate {
   sections: string[];
   calculation?: boolean;
   difficulty: number;
+  group?: string;
 }
 
-/** The questions an exam can draw from `questions` (its test's): those at least as hard as minDifficulty. */
-export const examQuestions = <Q extends ExamCandidate>(questions: Q[], exam: PracticeExam): Q[] =>
-  questions.filter((q) => q.difficulty >= (exam.minDifficulty ?? 1));
+/**
+ * The questions an exam can draw from `questions` (its test's): at least as hard as minDifficulty,
+ * not excluded, and (when the exam says so) no calculation FRQs.
+ */
+export function examQuestions<Q extends ExamCandidate>(questions: Q[], exam: PracticeExam): Q[] {
+  const min = exam.minDifficulty ?? 1;
+  const excluded = new Set(exam.exclude ?? []);
+  return questions.filter(
+    (q) => q.difficulty >= min && !excluded.has(q.id) && !(q.type === 'frq' && q.calculation && exam.frq.calculations === false),
+  );
+}
 
 const fits = (q: ExamCandidate, s: ExamSection) =>
   s.match.chapters.includes(q.chapter) && (s.match.sections.length === 0 || q.sections.some((x) => s.match.sections.includes(x)));
@@ -86,8 +95,9 @@ export function examShortfalls(all: ExamCandidate[], exam: PracticeExam): string
 }
 
 /**
- * One exam drawn from the test's questions with `rng`: each section's count (with no more than its
- * maxCalculations), the extras from what's left of every section, then the FRQs. Multiple choice
+ * One exam drawn from the test's questions with `rng`: the FRQs, each section's count (with no more
+ * than its maxCalculations), then the extras from what's left of every section. At most one question
+ * comes from each group. Multiple choice
  * comes in section order and, within a section, by textbook section, so the exam reads like the test;
  * questions from the same textbook section come in random order. The FRQs come last.
  */
@@ -96,11 +106,23 @@ export function drawExam<Q extends ExamCandidate>(all: Q[], exam: PracticeExam, 
   const pools = examPools(questions, exam);
   const picked = new Set<string>();
   const calcs = new Map<string, number>();
-  const room = (q: Q, s: ExamSection) => !q.calculation || (calcs.get(s.id) ?? 0) < (s.maxCalculations ?? Infinity);
+  // At most one question per group, so one question can't give away another's answer.
+  const groups = new Set<string>();
+  const free = (q: Q) => !q.group || !groups.has(q.group);
+  const room = (q: Q, s: ExamSection) => free(q) && (!q.calculation || (calcs.get(s.id) ?? 0) < (s.maxCalculations ?? Infinity));
   const take = (q: Q, s: ExamSection) => {
     picked.add(q.id);
+    if (q.group) groups.add(q.group);
     if (q.calculation) calcs.set(s.id, (calcs.get(s.id) ?? 0) + 1);
   };
+  // The FRQs first (they're worth the most), so a group can't leave the exam without one.
+  const frqs: Q[] = [];
+  for (const q of shuffle(examFrqs(questions), rng)) {
+    if (frqs.length === exam.frq.count) break;
+    if (!free(q)) continue;
+    frqs.push(q);
+    if (q.group) groups.add(q.group);
+  }
   for (const { section, questions: qs } of pools) {
     let left = section.count;
     for (const q of shuffle(qs, rng)) {
@@ -124,7 +146,7 @@ export function drawExam<Q extends ExamCandidate>(all: Q[], exam: PracticeExam, 
   const mcqs = pools.flatMap((p) =>
     shuffle(p.questions.filter((q) => picked.has(q.id)), rng).sort((a, b) => compareSections(a.sections[0], b.sections[0])),
   );
-  return [...mcqs, ...shuffle(examFrqs(questions), rng).slice(0, exam.frq.count)];
+  return [...mcqs, ...frqs];
 }
 
 export interface SectionScore {
@@ -207,7 +229,8 @@ export function examParts(exam: PracticeExam): string[] {
   });
   if (exam.extra) parts.push(`${exam.extra} more from any of ${exam.sections.length > 1 ? 'these' : 'that'}`);
   if (exam.frq.count) parts.push(`${exam.frq.count} free-response ${exam.frq.count === 1 ? 'question' : 'questions'}`);
-  if ((exam.minDifficulty ?? 1) === 2) parts.push('medium and hard questions only');
-  if (exam.minDifficulty === 3) parts.push('hard questions only');
+  const min = exam.minDifficulty ?? 1;
+  if (min === 2) parts.push('medium and hard questions only');
+  if (min === 3) parts.push('hard questions only');
   return parts;
 }

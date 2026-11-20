@@ -45,8 +45,8 @@ function samePool(a: readonly string[], b: readonly string[]): boolean {
  * The quick starts: the latest class test with questions, its practice exam if it has one, and a
  * mixed review of the chapters the class has reached unless it has exactly the test's questions.
  * Each starts like a practice link elsewhere on the site (links.ts). `tests` are latest first,
- * each with the ids of its questions. Practice quizzes (`quizzes`) come first: they're written for
- * the chapters the class is on now.
+ * each with the ids of its questions. Practice quizzes (`quizzes`, for the chapters the class is on
+ * now) come first.
  */
 export function quickStarts(
   tests: { id: string; title: string; questions: string[]; exam?: PracticeExam }[],

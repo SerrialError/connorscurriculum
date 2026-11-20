@@ -68,7 +68,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{SF4}$?
@@ -87,7 +87,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{ClF3}$?
@@ -106,7 +106,8 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
+  group: xef4
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{XeF4}$?
@@ -144,7 +145,7 @@
   chapter: 9
   sections: ["9.2"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     $\ce{BrF5}$ has five Br–F bonds and one lone pair on Br. What is its molecular geometry?
@@ -240,6 +241,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: same-shape
   authors: ["Claude"]
   prompt: |
     Which pair of molecules has the **same** molecular geometry?
@@ -356,6 +358,7 @@
   sections: ["9.3"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: xef4
   authors: ["Claude"]
   prompt: |
     $\ce{XeF4}$ has two lone pairs on xenon and four polar Xe–F bonds. Is it polar?
@@ -606,7 +609,7 @@
   chapter: 9
   sections: ["9.5"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     What is the hybridization of sulfur in $\ce{SO2}$?
@@ -742,6 +745,7 @@
   sections: ["9.6"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: acetonitrile
   authors: ["Claude"]
   prompt: |
     How many σ and π bonds are in acetonitrile, $\ce{CH3-C#N}$?
@@ -779,7 +783,7 @@
   chapter: 9
   sections: ["9.6"]
   cedTopics: ["2.7"]
-  difficulty: 2
+  difficulty: 1
   authors: ["Claude"]
   prompt: |
     Where is the electron density of a **π** bond?
@@ -1196,6 +1200,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: nitrogen-dioxide-ions
   authors: ["Claude"]
   prompt: |
     Rank the O–N–O bond angle in $\ce{NO2+}$, $\ce{NO2}$, and $\ce{NO2-}$ from **largest to smallest**.
@@ -1487,6 +1492,7 @@
   sections: ["9.5"]
   cedTopics: []
   difficulty: 2
+  group: xef4
   authors: ["Claude"]
   prompt: |
     $\ce{XeF4}$ is square planar. What is the hybridization of Xe?
@@ -1849,7 +1855,7 @@
   difficulty: 2
   authors: ["Claude"]
   prompt: |
-    $\ce{SO3}$ is trigonal planar. What is the molecular geometry of xenon trioxide, $\ce{XeO3}$?
+    Xenon forms an oxide, xenon trioxide ($\ce{XeO3}$), with three O atoms on Xe. What is its molecular geometry?
   choices:
     - { id: a, text: "Trigonal planar" }
     - { id: b, text: "T-shaped" }
@@ -1857,7 +1863,7 @@
     - { id: d, text: "Tetrahedral" }
   answer: c
   explanation: |
-    Xe has 8 valence electrons: $8 + 3(6) = 26$. Three Xe–O bonds and the O lone pairs use 24, leaving one lone pair on Xe (drawing Xe=O double bonds to lower formal charges doesn't change that). 3 bonds + 1 lone pair = 4 domains, so the molecule is **trigonal pyramidal**, like NH₃. S in SO₃ has two fewer electrons and no lone pair. (D) is the electron-domain geometry.
+    Xe has 8 valence electrons: $8 + 3(6) = 26$. Three Xe–O bonds and the O lone pairs use 24, leaving one lone pair on Xe (drawing Xe=O double bonds to lower formal charges doesn't change that). 3 bonds + 1 lone pair = 4 domains, so the molecule is **trigonal pyramidal**, like NH₃. (A) is what SO₃ looks like, but Xe has two more valence electrons than S, and they stay on Xe as a lone pair. (D) is the electron-domain geometry.
 
 - id: apchem-09-quiz-same-shape
   type: mcq
@@ -1866,6 +1872,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: same-shape
   authors: ["Claude"]
   prompt: |
     Which pair has the **same molecular geometry**?
@@ -1885,6 +1892,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: acetonitrile
   authors: ["Claude"]
   prompt: |
     In acetonitrile, $\ce{CH3CN}$ (H₃C–C≡N), what are the H–C–H angle at the first carbon and the C–C≡N angle at the second carbon?
@@ -1904,6 +1912,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 3
+  group: xef4
   authors: ["Claude"]
   prompt: |
     In which molecule are **all** the F–X–F bond angles exactly 90° or 180°?
@@ -1952,7 +1961,7 @@
     - { id: d, text: "4 σ and 1 π" }
   answer: d
   explanation: |
-    The bonds are C–H, C=O, C–O, and O–H. Each bond between two atoms has one σ bond (4 σ), and the double bond adds one π. (C) counts the C=O as two σ bonds; (A) counts every pair of shared electrons as σ.
+    The bonds are C–H, C=O, C–O, and O–H. Each bond between two atoms has one σ bond (4 σ), and the double bond adds one π. (C) counts the C=O's π bond as a σ bond as well; (A) counts all five shared pairs as σ bonds; (B) treats both C–O bonds as double.
 
 - id: apchem-09-quiz-ketene
   type: mcq
@@ -1980,17 +1989,18 @@
   sections: ["9.5"]
   cedTopics: ["2.7"]
   difficulty: 2
+  group: acetonitrile
   authors: ["Claude"]
   prompt: |
     In which molecule is an **sp**-hybridized carbon bonded to an **sp³**-hybridized carbon?
   choices:
-    - { id: a, text: "$\\ce{CH3CN}$" }
-    - { id: b, text: "$\\ce{H2C=CH2}$" }
-    - { id: c, text: "$\\ce{HC#CH}$" }
-    - { id: d, text: "$\\ce{CH3CH3}$" }
-  answer: a
+    - { id: a, text: "$\\ce{CH2=CH-CH3}$" }
+    - { id: b, text: "$\\ce{HC#C-CH=CH2}$" }
+    - { id: c, text: "$\\ce{CH3-C#N}$" }
+    - { id: d, text: "$\\ce{CH3-CH=O}$" }
+  answer: c
   explanation: |
-    In acetonitrile the CH₃ carbon has four single bonds (sp³) and the C≡N carbon has two domains (sp). Ethylene's carbons are both sp², acetylene's are both sp, and ethane's are both sp³.
+    Name each carbon by its domains. In acetonitrile the CH₃ carbon has four single bonds (sp³) and the C≡N carbon has two domains (sp), and they're bonded to each other. Propene (A) bonds an sp² carbon to an sp³ carbon. In (B) the sp carbon of C≡C is bonded to an sp² carbon, and there's no sp³ carbon at all. Acetaldehyde (D) bonds sp³ to sp².
 
 - id: apchem-09-quiz-frq-acetate
   type: frq
@@ -1999,6 +2009,7 @@
   sections: ["9.2", "9.5", "9.6"]
   cedTopics: ["2.6", "2.7"]
   difficulty: 2
+  group: acetate
   authors: ["Claude"]
   prompt: |
     The acetate ion is $\ce{CH3COO-}$: a CH₃ group bonded to a carbon that is bonded to both oxygens.

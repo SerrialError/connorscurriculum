@@ -41,6 +41,7 @@
     "exam": {
       "mcqPoints": 2,
       "minDifficulty": 2,
+      "exclude": ["apchem-08-fc-vs-oxidation", "apchem-08-socl2-oxidation"],
       "sections": [
         { "id": "lewis", "label": "Drawing Lewis structures and formal charge", "count": 4, "match": { "chapters": [8], "sections": ["8.5", "8.7"] } },
         { "id": "resonance", "label": "Resonance", "count": 3, "match": { "chapters": [8], "sections": ["8.6"] } },
@@ -49,7 +50,7 @@
         { "id": "hybrid", "label": "Hybridization and σ and π bonds", "count": 3, "match": { "chapters": [9], "sections": ["9.5", "9.6"] } }
       ],
       "extra": 1,
-      "frq": { "count": 1, "points": 8 }
+      "frq": { "count": 1, "points": 8, "calculations": false }
     }
   }
 ]

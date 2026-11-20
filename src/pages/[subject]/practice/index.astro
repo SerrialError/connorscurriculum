@@ -58,7 +58,10 @@ const course: PracticeCourse = {
     testsByDate(data).map((t) => ({ id: t.id, title: t.title, exam: t.exam, questions: questions.filter((q) => inTest(t, q)).map((q) => q.id) })),
     questions.map((q) => ({ id: q.id, chapter: q.data.chapter })),
     new Set(data.chapters.map((c) => c.number).filter((n) => isTaught(data, n))),
-    quizzes(data).flatMap((t) => (t.exam ? [{ id: t.id, title: t.title, exam: t.exam, minutes: t.minutes }] : [])),
+    // Quick start offers a practice quiz only while the class is on its chapters.
+    quizzes(data)
+      .filter((t) => t.chapters.some((n) => data.progress.current.includes(n)))
+      .flatMap((t) => (t.exam ? [{ id: t.id, title: t.title, exam: t.exam, minutes: t.minutes }] : [])),
   ),
   // Lessons the practice screens link to ("Study this"); notes and review sheets aren't matched to questions.
   lessons: (await getLessons(subject))

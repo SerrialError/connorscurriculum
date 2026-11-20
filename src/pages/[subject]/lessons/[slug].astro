@@ -2,11 +2,15 @@
 import { render } from 'astro:content';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Callout from '../../../components/Callout.astro';
+import Originals from '../../../components/Originals.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
 import Molecule from '../../../components/Molecule.astro';
 import ShapeExplorer from '../../../components/ShapeExplorer.astro';
+import OrbitalViewer from '../../../components/OrbitalViewer.astro';
+import ShapeGrid from '../../../components/ShapeGrid.astro';
+import HybridCards from '../../../components/HybridCards.astro';
 import { lessonFilterQuery } from '../../../lib/lesson-filter';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { lessonPractice } from '../../../lib/practice/lessons';
@@ -75,7 +79,7 @@ const practice = picked && {
 };
 // A test review sheet is listed with the lessons, but belongs to its test: link to the test and
 // practice the whole test, not just the sheet's topics, and leave out the chapter's previous/next lessons.
-const test = lesson.data.kind === 'review' ? data.tests.find((t) => inTest(t, lesson)) : undefined;
+const test = lesson.data.kind === 'review' ? data.tests.find((t) => t.kind === 'test' && inTest(t, lesson)) : undefined;
 const testHref = test && url(`${subject}/tests/${test.id}/`);
 const testQuestions = test ? questions.filter((q) => inTest(test, q)).length : 0;
 const testPractice = test && testQuestions > 0 ? practiceStarts({ test: test.id }, testQuestions) : null;
@@ -115,6 +119,7 @@ const ahead = !isTaught(data, chapter.number);
       <p class="small muted notes-note" data-pagefind-ignore>
         A classmate's notes, with the wording kept as close to the original as possible. Where something needed fixing,
         there's a <strong>Correction</strong> box right below it.
+        {lesson.data.originals.length > 0 && <> <a href="#originals">See the original pages</a>.</>}
       </p>
     )}
     {(sample || ahead) && (
@@ -151,7 +156,11 @@ const ahead = !isTaught(data, chapter.number);
       </details>
     )}
 
-    <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer }} />
+    <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer, OrbitalViewer, ShapeGrid, HybridCards }} />
+
+    {lesson.data.originals.length > 0 && (
+      <Originals lessonId={lesson.id} authors={lesson.data.authors} kind={lesson.data.kind} items={lesson.data.originals} />
+    )}
 
     <footer class="lesson-footer" data-pagefind-ignore>
       {test ? (

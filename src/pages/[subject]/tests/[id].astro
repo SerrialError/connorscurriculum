@@ -39,17 +39,18 @@ const reviewSheets = lessons.filter((l) => l.data.kind === 'review');
 const others = lessons.filter((l) => l.data.kind !== 'review');
 const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)!, lessons: others.filter((l) => l.data.chapter === n) }));
 const exam = test.exam;
+const isQuiz = test.kind === 'quiz';
 if (exam) {
   const problems = examShortfalls(questions.map((q) => ({ ...q.data, id: q.id })), exam);
   if (problems.length) throw new Error(`src/data/${subject}/tests.json → ${test.id}.exam: ${problems.join('; ')}. Add questions or lower the counts.`);
 }
 ---
 
-<Base title={test.title} subject={subject} searchable searchMeta={{ type: 'Class test' }}>
-  <Breadcrumbs items={[{ href: url(`${subject}/tests/`), label: 'Class tests' }]} />
+<Base title={test.title} subject={subject} searchable searchMeta={{ type: isQuiz ? 'Practice quiz' : 'Class test' }}>
+  <Breadcrumbs items={[{ href: url(`${subject}/tests/`), label: 'Tests' }]} />
   <h1>{test.title}</h1>
   <p class="muted">
-    {test.date ? formatDate(test.date) : 'Date TBA'}{' · '}
+    {isQuiz ? <>Practice quiz{test.minutes && <>, about {test.minutes} minutes</>}</> : test.date ? formatDate(test.date) : 'Date TBA'}{' · '}
     {test.chapters.map((n, i) => (
       <>
         {i > 0 && ', '}
@@ -84,7 +85,22 @@ if (exam) {
     </section>
   )}
 
-  {questions.length > 0 ? (
+  {isQuiz && exam && (
+    <section class="card exam-card" aria-labelledby="quiz-h" data-pagefind-ignore>
+      <h2 id="quiz-h">Take the quiz</h2>
+      {test.summary && <p>{test.summary}</p>}
+      <p>
+        Written for this site to check yourself; it isn't a test your teacher gives. {examFormat(exam)} ({examPointsNote(exam)}).
+        Nothing is marked until you submit, and each time you take it the questions are drawn fresh:
+      </p>
+      <ul>
+        {examParts(exam).map((p) => <li>{p}</li>)}
+      </ul>
+      <a class="button" href={practiceUrl(subject, examStart(test.id).query)}>Take the quiz</a>
+    </section>
+  )}
+
+  {isQuiz ? null : questions.length > 0 ? (
     <div class="practice" data-pagefind-ignore>
       <div class="actions">
         <a class="button" href={practiceUrl(subject, start.query)}>{start.label}</a>
@@ -102,7 +118,7 @@ if (exam) {
     <p class="muted">No practice questions for this test yet.</p>
   )}
 
-  {exam && questions.length > 0 && (
+  {!isQuiz && exam && questions.length > 0 && (
     <section class="card exam-card" aria-labelledby="exam-h" data-pagefind-ignore>
       <h2 id="exam-h">Practice exam</h2>
       <p>
@@ -118,7 +134,7 @@ if (exam) {
 
   {hasTopics(data) && (
     <>
-      <h2>AP topics on this test</h2>
+      <h2>AP topics on this {isQuiz ? 'quiz' : 'test'}</h2>
       {topics.length ? (
         <>
           <TopicBadges subject={subject} topics={topics} />

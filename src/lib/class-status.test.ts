@@ -12,9 +12,10 @@ const withProgress = (finished: number[], current: number[]): SubjectData => ({
   chapterMap: new Map(chapters.map((c) => [c.number, c])),
   progress: { ...base.progress, chapters: new Set(finished), current },
   tests: [
-    { id: 'undated', title: 'Quiz', chapters: [1], sections: [], handouts: [] },
-    { id: 'early', title: 'Chapter 1 Test', date: '2026-10-01', chapters: [1], sections: [], handouts: [] },
-    { id: 'late', title: 'Chapter 2 Test', date: '2026-11-20', chapters: [2], sections: [], handouts: [] },
+    { id: 'undated', title: 'Pop quiz', kind: 'test', chapters: [1], sections: [], handouts: [] },
+    { id: 'early', title: 'Chapter 1 Test', kind: 'test', date: '2026-10-01', chapters: [1], sections: [], handouts: [] },
+    { id: 'late', title: 'Chapter 2 Test', kind: 'test', date: '2026-11-20', chapters: [2], sections: [], handouts: [] },
+    { id: 'practice', title: 'Practice quiz', kind: 'quiz', chapters: [2], sections: [], handouts: [] },
   ],
 });
 const entry = (chapter: number, sample = false) => ({ data: { chapter, sample } });
@@ -39,6 +40,7 @@ describe('class status', () => {
   });
 
   it('orders tests latest first, undated last', () => {
+    // The site's own practice quiz isn't a class test.
     expect(testsByDate(data).map((t) => t.id)).toEqual(['late', 'early', 'undated']);
   });
 

@@ -1,0 +1,123 @@
+---
+// The originals a lesson was typed up from: photo thumbnails that open full size, and PDFs.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { isImage, isPdf, originalPath } from '../lib/originals';
+
+interface Props {
+  lessonId: string;
+  /** Who made them, for the alt text ("Jaya"). */
+  authors: string[];
+  kind: 'lesson' | 'notes' | 'review';
+  items: { file: string; caption?: string }[];
+}
+
+const { lessonId, authors, kind, items } = Astro.props;
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/lessons/**/*.{jpg,jpeg,png,webp}', { eager: true });
+const pdfs = import.meta.glob<string>('/src/content/lessons/**/*.pdf', { eager: true, query: '?url', import: 'default' });
+const whose = authors.join(' and ');
+
+const shown = items.map((item, i) => {
+  const path = originalPath(lessonId, item.file);
+  const label = `Page ${i + 1}${item.caption ? `: ${item.caption}` : ''}`;
+  if (isImage(item.file)) {
+    const meta = images[path]?.default;
+    if (!meta) throw new Error(`${lessonId}: original "${item.file}" not found (looked for ${path})`);
+    return { kind: 'image' as const, meta, label };
+  }
+  if (isPdf(item.file)) {
+    const href = pdfs[path];
+    if (!href) throw new Error(`${lessonId}: original "${item.file}" not found (looked for ${path})`);
+    return { kind: 'pdf' as const, href, label: item.caption ?? 'PDF' };
+  }
+  throw new Error(`${lessonId}: original "${item.file}" must be a JPG, PNG, WebP, or PDF`);
+});
+---
+
+<section class="originals" id="originals" aria-labelledby="originals-h" data-pagefind-ignore>
+  <h2 id="originals-h">The originals</h2>
+  <p class="small muted">
+    {kind === 'notes' ? `${whose}'s notes as they were shared, before typing up. Select one to see it full size.` : 'What this page was made from.'}
+  </p>
+  <ul class="originals-grid">
+    {
+      shown.map((o) =>
+        o.kind === 'image' ? (
+          <li>
+            <a href={o.meta.src}>
+              <Image src={o.meta} width={320} alt={`Photo of ${whose}'s handwritten notes, ${o.label.toLowerCase()}`} loading="lazy" />
+              <span class="caption">{o.label}</span>
+            </a>
+          </li>
+        ) : (
+          <li>
+            <a class="pdf" href={o.href}>
+              <span class="pdf-icon" aria-hidden="true">PDF</span>
+              <span class="caption">{o.label}</span>
+            </a>
+          </li>
+        ),
+      )
+    }
+  </ul>
+</section>
+
+<style>
+  .originals {
+    margin-top: 2.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .originals h2 {
+    margin-bottom: 0.25rem;
+  }
+  .originals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: 0.75rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .originals-grid a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    height: 100%;
+    padding: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--link);
+    text-decoration: none;
+  }
+  .originals-grid a:hover {
+    border-color: var(--accent);
+  }
+  .originals-grid :global(img) {
+    display: block;
+    width: 100%;
+    height: 11rem;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 6px;
+  }
+  .caption {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .pdf {
+    justify-content: center;
+    align-items: center;
+    min-height: 13rem;
+  }
+  .pdf-icon {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 5.5rem;
+    border: 2px solid var(--bad);
+    border-radius: 6px;
+    color: var(--bad);
+    font-weight: 800;
+  }
+</style>

@@ -36,10 +36,14 @@ export default defineConfig({
     processor: unified({ remarkPlugins, rehypePlugins }),
   },
   vite: {
-    // The /admin/ lesson preview imports these in the browser. Pre-bundle them at startup so the
-    // dev server doesn't re-bundle mid-session and serve stale copies (a blank editor page).
+    // The /admin/ lesson preview and the 3D viewers import these in the browser. Pre-bundle them at
+    // startup so the dev server doesn't re-bundle mid-session and serve stale copies (a blank editor
+    // page, or a 3D viewer that never draws).
     optimizeDeps: {
       include: [
+        'three',
+        'three/examples/jsm/controls/OrbitControls.js',
+        'three/examples/jsm/renderers/CSS2DRenderer.js',
         'katex/contrib/mhchem',
         'rehype-katex',
         'rehype-stringify',

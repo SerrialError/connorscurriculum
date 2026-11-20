@@ -157,7 +157,7 @@
 
 {#if attempt.current}
   {@const q = attempt.current}
-  <section class="session" aria-label={attempt.exam ? 'Practice exam' : 'Practice set'}>
+  <section class="session" aria-label={attempt.exam ? (attempt.exam.noun === 'quiz' ? 'Practice quiz' : 'Practice exam') : 'Practice set'}>
     <SessionHeader {attempt} {label} {note} {reviewing} {onfilters} onresults={() => (attempt.taking ? requestSubmit() : onresults())} />
 
     {#key q.id}
@@ -178,7 +178,7 @@
         </header>
 
         {#if q.type === 'frq' && attempt.taking}
-          <p class="frq-hint small">Write your answers on paper. You score them yourself after you submit the exam.</p>
+          <p class="frq-hint small">Write your answers on paper. You score them yourself after you submit the {attempt.exam?.noun ?? 'exam'}.</p>
         {:else if q.type === 'frq' && !attempt.finished[q.id]}
           <p class="frq-hint small">Write your answers on paper first.</p>
         {/if}
@@ -217,7 +217,7 @@
           {/if}
           <span class="spacer"></span>
           {#if attempt.taking}
-            <button class="button" type="button" onclick={() => next()}>{isLast ? 'Submit exam' : 'Next question →'}</button>
+            <button class="button" type="button" onclick={() => next()}>{isLast ? `Submit ${attempt.exam?.noun ?? 'exam'}` : 'Next question →'}</button>
           {:else if q.type === 'mcq' && !attempt.checked[q.id]}
             <button class="button secondary" type="button" onclick={() => next()}>Skip</button>
             <button class="button" type="button" disabled={!attempt.picks[q.id]} onclick={() => check(q)}>Check answer</button>

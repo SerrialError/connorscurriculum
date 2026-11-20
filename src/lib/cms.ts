@@ -9,7 +9,7 @@ export const CMS_AUTH_URL = 'https://sveltia-cms-auth.serrialerror.workers.dev';
 
 const BODY_HINT = [
   'Markdown. Math: `$k = 0.693/t_{1/2}$` inline, `$$ ... $$` on their own lines for display. Chemistry: `$\\ce{2H2 + O2 -> 2H2O}$`.',
-  'Boxes: `<Callout type="note">...</Callout>` (note, warning, ap-tip, not-on-ap), `<Reveal label="Show answer">...</Reveal>`, `<YouTube id="wYqQCojggyM" />`. 3D models: `<Molecule id="sf4" />` (ids in src/lib/molecules.ts), `<ShapeExplorer />`.',
+  'Boxes: `<Callout type="note">...</Callout>` (note, warning, ap-tip, not-on-ap), `<Reveal label="Show answer">...</Reveal>`, `<YouTube id="wYqQCojggyM" />`. 3D models: `<Molecule id="sf4" />` (ids in src/lib/molecules.ts), `<ShapeExplorer />`, `<OrbitalViewer ids="ch4,nh3" boxes />` (ids in src/lib/orbitals.ts). Charts: `<ShapeGrid />` (its "Turn it in 3D" links need a `<ShapeExplorer />` on the page), `<ShapeGrid kind="domains" />`, `<HybridCards />`.',
   'Curly braces outside math are read as code: write `\\{` and `\\}`. The preview flags anything that would break the site.',
 ].join(' ');
 
@@ -86,6 +86,18 @@ export function lessonCollection(data: SubjectData) {
       },
       { name: 'authors', label: 'Authors', widget: 'list', min: 1, hint: 'Your name (first name is fine).' },
       { name: 'summary', label: 'Summary', widget: 'text', required: false, hint: 'One sentence shown on cards and in search.' },
+      {
+        name: 'originals',
+        label: 'Original pages',
+        widget: 'list',
+        required: false,
+        default: [],
+        hint: 'Photos or PDFs of the notes this was typed up from. Readers can open them from the end of the page.',
+        fields: [
+          { name: 'file', label: 'Photo or PDF', widget: 'file', media_folder: 'originals', public_folder: 'originals' },
+          { name: 'caption', label: 'Caption', widget: 'string', required: false, hint: 'e.g. 8.1–8.4' },
+        ],
+      },
       {
         name: 'draft',
         label: 'Draft',

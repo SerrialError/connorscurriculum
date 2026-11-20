@@ -66,7 +66,7 @@ const frqMatches = matchFrqs(frqs, new Set(chapter.cedTopics));
   )}
   {tests.map((t) => (
     <p class="test-link" data-pagefind-ignore>
-      <span class="muted">Class test:</span> <a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a>
+      <span class="muted">{t.kind === 'quiz' ? 'Practice quiz:' : 'Class test:'}</span> <a href={url(`${subject}/tests/${t.id}/`)}>{t.title}</a>
       {t.date && <span class="muted"> · {formatDate(t.date)}</span>}
     </p>
   ))}

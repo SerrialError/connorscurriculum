@@ -85,12 +85,30 @@ export const examSchema = z.object({
   sections: z.array(examSectionSchema).min(1),
   /** Multiple-choice questions beyond the groups' counts, drawn from all the groups together. */
   extra: z.number().int().nonnegative().default(0),
-  frq: z.object({ count: z.number().int().nonnegative(), points: z.number().nonnegative() }),
+  /** Only questions at least this hard (1 easy, 2 medium, 3 hard) are drawn, multiple choice and FRQ. */
+  minDifficulty: z.number().int().min(1).max(3).default(1),
+  /** Question ids never drawn: in the test's chapters and sections, but off-topic for it. */
+  exclude: z.array(z.string()).default([]),
+  frq: z.object({
+    count: z.number().int().nonnegative(),
+    points: z.number().nonnegative(),
+    /** false: never draw an FRQ that needs a calculation (questions with calculation: true). */
+    calculations: z.boolean().default(true),
+  }),
 });
 
 export const testSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/, 'test id must be lowercase letters, digits, or dashes'),
   title: z.string().min(1),
+  /**
+   * test: a class test the teacher gives. quiz: a practice quiz written for this site, not a class
+   * test; it's listed separately and never counts as the class's next or latest test.
+   */
+  kind: z.enum(['test', 'quiz']).default('test'),
+  /** About how long it takes (quizzes). */
+  minutes: z.number().int().positive().optional(),
+  /** One line on what it covers (quizzes). */
+  summary: z.string().min(1).optional(),
   date: z.iso.date().optional(),
   chapters: z.array(z.number().int()).min(1),
   sections: z.array(z.string()).default([]),

@@ -39,9 +39,17 @@ describe('renderLessonPreview', () => {
     expect(html).not.toContain('preview-problem');
   });
 
+  it('shows where the 3D models go', async () => {
+    const html = await renderLessonPreview('<Molecule id="sf4" />\n\n<ShapeExplorer />');
+    expect(html).toContain('3D model of SF₄ (seesaw)');
+    expect(html).toContain('VSEPR shape explorer');
+    expect(html).not.toContain('preview-problem');
+  });
+
   it('flags what the build would reject', async () => {
     expect(await renderLessonPreview('<Callout type="tip">x</Callout>')).toContain('type must be note, warning, ap-tip, or not-on-ap');
     expect(await renderLessonPreview('<YouTube id="nope" />')).toContain('expected an 11-character video id');
+    expect(await renderLessonPreview('<Molecule id="nope" />')).toContain('no model with that id');
     expect(await renderLessonPreview('<Chart />')).toContain('&#x3C;Chart> is not a lesson component');
     expect(await renderLessonPreview('a set {1, 2} here')).toContain('is read as code');
   });

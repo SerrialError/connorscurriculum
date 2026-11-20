@@ -1,0 +1,15 @@
+---
+// <Molecule id="sf4" />: a 3D model you can turn, from src/lib/molecules.ts. The viewer only loads
+// when it scrolls into view (or when the <Reveal> around it is opened).
+import { getMolecule } from '../lib/molecules';
+import MoleculeViewer from './molecule/MoleculeViewer.svelte';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+getMolecule(id); // fails the build on an unknown id
+---
+
+<MoleculeViewer client:visible id={id} />

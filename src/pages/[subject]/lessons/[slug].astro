@@ -5,6 +5,8 @@ import Callout from '../../../components/Callout.astro';
 import Reveal from '../../../components/Reveal.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
+import Molecule from '../../../components/Molecule.astro';
+import ShapeExplorer from '../../../components/ShapeExplorer.astro';
 import { lessonFilterQuery } from '../../../lib/lesson-filter';
 import { pickQuery, practiceStarts } from '../../../lib/practice/links';
 import { lessonPractice } from '../../../lib/practice/lessons';
@@ -149,7 +151,7 @@ const ahead = !isTaught(data, chapter.number);
       </details>
     )}
 
-    <Content components={{ YouTube, Callout, Reveal }} />
+    <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer }} />
 
     <footer class="lesson-footer" data-pagefind-ignore>
       {test ? (

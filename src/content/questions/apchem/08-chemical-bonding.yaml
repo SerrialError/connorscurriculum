@@ -2075,3 +2075,100 @@
     **(c)** The double bond can be drawn to either O, and the two drawings are mirror images, so they're equivalent.
 
     **(d)** The real molecule is the average of the two structures. Each S–O bond is double in one and single in the other, so its bond order is $(2 + 1)/2 = 3/2$.
+
+# --- Added with Jaya's Chapter 8 notes ---
+
+- id: apchem-08-no-unpaired-atom
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Nitrogen monoxide, $\ce{NO}$, has 11 valence electrons. In its best Lewis structure (an N=O double bond, with every formal charge 0), where is the unpaired electron?
+  choices:
+    - { id: a, text: "On the O atom" }
+    - { id: b, text: "On the N atom" }
+    - { id: c, text: "Shared in the N=O bond" }
+    - { id: d, text: "There is no unpaired electron; NO has an octet on both atoms" }
+  answer: b
+  explanation: |
+    With N=O, two lone pairs on O, and one lone pair plus one single electron on N, the formal charges are N: $5 - (3 + 2) = 0$ and O: $6 - (4 + 2) = 0$. Putting the odd electron on O instead gives O a formal charge of −1 and N +1. The less electronegative atom ends up "one electron short" of an octet, as the lab handout puts it. (D) can't be right: an odd total can never be all pairs.
+
+- id: apchem-08-ionic-cutoff
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.4"]
+  cedTopics: ["2.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Using an electronegativity difference of about 2 as the rough line between polar covalent and ionic, which bond is best described as **ionic**? (Electronegativities: Li 1.0, H 2.1, C 2.5, P 2.1, O 3.5, Cl 3.0, F 4.0)
+  choices:
+    - { id: a, text: "H–F" }
+    - { id: b, text: "C–O" }
+    - { id: c, text: "Li–F" }
+    - { id: d, text: "P–Cl" }
+  answer: c
+  explanation: |
+    The differences are Li–F 3.0, H–F 1.9, C–O 1.0, and P–Cl 0.9. Only Li–F is well above 2, and it's a metal bonded to a nonmetal. H–F is very polar but still covalent: HF is a molecule, not an ionic solid.
+
+- id: apchem-08-co2-fc-triple
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In the Lewis structure of $\ce{CO2}$ drawn as $\ce{O-C#O}$ (three lone pairs on the single-bonded O, one lone pair on the triple-bonded O), what are the formal charges on the single-bonded O, the C, and the triple-bonded O?
+  choices:
+    - { id: a, text: "0, 0, 0" }
+    - { id: b, text: "+1, 0, −1" }
+    - { id: c, text: "−1, +1, 0" }
+    - { id: d, text: "−1, 0, +1" }
+  answer: d
+  explanation: |
+    Single-bonded O: $6 - (6 + 1) = -1$. C: $4 - (0 + 4) = 0$. Triple-bonded O: $6 - (2 + 3) = +1$. Because O=C=O has all zeros, it's the better structure. (B) has the signs swapped: the atom with more lone pairs gets the negative charge.
+
+- id: apchem-08-be-four-electrons
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a gas-phase $\ce{BeCl2}$ molecule, Cl–Be–Cl with two single bonds, how many valence electrons surround the Be atom?
+  choices:
+    - { id: a, text: "2" }
+    - { id: b, text: "4" }
+    - { id: c, text: "6" }
+    - { id: d, text: "8" }
+  answer: b
+  explanation: |
+    Be has 2 valence electrons and forms two single bonds, so it's surrounded by 2 shared pairs = 4 electrons. Be is stable with 4 and B with 6, the two common "fewer than an octet" exceptions. Drawing Be=Cl double bonds to reach 8 would put a positive formal charge on the very electronegative Cl.
+
+- id: apchem-08-hypervalent-period
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which of these could **not** exist as written, because its central atom would need more than an octet?
+  choices:
+    - { id: a, text: "$\\ce{PCl5}$" }
+    - { id: b, text: "$\\ce{SF4}$" }
+    - { id: c, text: "$\\ce{NCl5}$" }
+    - { id: d, text: "$\\ce{XeF2}$" }
+  answer: c
+  explanation: |
+    Five bonds need 10 electrons around the central atom. Only central atoms from period 3 and below can be hypervalent; N is in period 2, with no 2d subshell and too little room for five atoms. P (period 3) forms $\ce{PCl5}$, and S and Xe expand their octets in $\ce{SF4}$ and $\ce{XeF2}$.

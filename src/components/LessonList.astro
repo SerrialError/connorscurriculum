@@ -39,7 +39,7 @@ const H = `h${headingLevel}` as 'h2' | 'h3';
             <div class="meta">
               <span class="small muted">
                 {showChapter && <>Ch. {l.data.chapter}{l.data.sections.length > 0 && <> · §{l.data.sections.join(', ')}</>} · </>}
-                {isSample(l) ? 'sample page, not class material' : <>by {l.data.authors.join(', ')}</>}
+                {isSample(l) ? 'sample page, not class material' : l.data.source ? <>from {l.data.source}</> : <>by {l.data.authors.join(', ')}</>}
               </span>
               <TopicBadges subject={l.data.subject.id} topics={topicIds(l)} />
             </div>

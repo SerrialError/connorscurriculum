@@ -56,7 +56,7 @@
 </script>
 
 <figure class="mol">
-  <div class="mol-stage" bind:this={stage} tabindex="0" role="img" aria-label={description}>
+  <div class="mol-stage" bind:this={stage} tabindex="0" role="group" aria-roledescription="3D model" aria-label={description}>
     <span class="mol-hint" aria-hidden="true">Drag to turn</span>
   </div>
   <div class="mol-bar">

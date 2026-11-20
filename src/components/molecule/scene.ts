@@ -28,7 +28,7 @@ const Y = new Vector3(0, 1, 0);
 const v = (p: Vec) => new Vector3(...p);
 
 /** The default view: a little above and to the right, so depth is visible. */
-const START = { polar: (72 * Math.PI) / 180, azimuth: (20 * Math.PI) / 180 };
+const START = { polar: (64 * Math.PI) / 180, azimuth: (20 * Math.PI) / 180 };
 const FOV = 32;
 
 /** Shapes and materials for one view. Each view owns its own, so freeing them can't affect another. */
@@ -238,8 +238,8 @@ export class MoleculeView {
     s.phi = Math.min(Math.PI - 0.05, Math.max(0.05, s.phi + dPolar));
     this.camera.position.setFromSpherical(s);
     this.camera.lookAt(0, 0, 0);
+    // The controls' change event re-renders; without controls (off screen) there's nothing to draw.
     this.controls?.update();
-    this.render();
   }
 
   dispose() {

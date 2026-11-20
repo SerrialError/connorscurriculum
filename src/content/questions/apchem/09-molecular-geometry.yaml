@@ -1681,13 +1681,13 @@
   prompt: |
     How many electron domains does Se have in $\ce{SeF4}$, and what is its electron-domain geometry?
   choices:
-    - { id: a, text: "4, tetrahedral" }
-    - { id: b, text: "5, trigonal bipyramidal" }
+    - { id: a, text: "5, trigonal bipyramidal" }
+    - { id: b, text: "4, tetrahedral" }
     - { id: c, text: "5, square pyramidal" }
     - { id: d, text: "6, octahedral" }
-  answer: b
+  answer: a
   explanation: |
-    $6 + 4(7) = 34$ electrons. Four Se–F bonds and the F lone pairs use 32; the last pair goes on Se. 4 bonds + 1 lone pair = **5 domains, trigonal bipyramidal** (the molecule itself is seesaw). (A) forgets the lone pair. Square pyramidal (C) is a molecular geometry with 6 domains, not an electron-domain geometry.
+    $6 + 4(7) = 34$ electrons. Four Se–F bonds and the F lone pairs use 32; the last pair goes on Se. 4 bonds + 1 lone pair = **5 domains, trigonal bipyramidal** (the molecule itself is seesaw). (B) forgets the lone pair. Square pyramidal (C) is a molecular geometry with 6 domains, not an electron-domain geometry.
 
 - id: apchem-09-brf3-angle
   type: mcq
@@ -1720,12 +1720,12 @@
     What is the molecular geometry of $\ce{H2S}$?
   choices:
     - { id: a, text: "Linear" }
-    - { id: b, text: "Bent" }
+    - { id: b, text: "Tetrahedral" }
     - { id: c, text: "Trigonal planar" }
-    - { id: d, text: "Tetrahedral" }
-  answer: b
+    - { id: d, text: "Bent" }
+  answer: d
   explanation: |
-    S has two S–H bonds and two lone pairs: 4 domains (tetrahedral), with two of the corners taken by lone pairs, so the molecule is **bent**, like H₂O. (A) leaves out the lone pairs. (D) is the electron-domain geometry.
+    S has two S–H bonds and two lone pairs: 4 domains (tetrahedral), with two of the corners taken by lone pairs, so the molecule is **bent**, like H₂O. (A) leaves out the lone pairs. (B) is the electron-domain geometry.
 
 - id: apchem-09-linear-polar
   type: mcq
@@ -1777,10 +1777,10 @@
     In ABₙ notation (A = central atom, n = number of atoms bonded to it), which type is a square pyramidal molecule such as $\ce{BrF5}$?
   choices:
     - { id: a, text: "AB₄" }
-    - { id: b, text: "AB₅" }
+    - { id: b, text: "AB₃" }
     - { id: c, text: "AB₆" }
-    - { id: d, text: "AB₃" }
-  answer: b
+    - { id: d, text: "AB₅" }
+  answer: d
   explanation: |
     Count the atoms around the center: four make the square base and one sits on top, so it's **AB₅** (with one lone pair, AB₅E). It has 6 electron domains, which is why it's easy to file under AB₆ (C) by mistake. AB₆ is only octahedral.
 

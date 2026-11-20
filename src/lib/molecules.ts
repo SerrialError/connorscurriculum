@@ -51,7 +51,7 @@ export interface Shape {
   lonePairs: number;
   domainGeometry: string;
   molecularGeometry: string;
-  /** Ideal bond angles, as listed in the class table. */
+  /** Bond angles to show in the explorer, including how lone pairs squeeze them. */
   idealAngles: string;
   hybridization: string;
   /** A molecule with this shape that has a model below. */

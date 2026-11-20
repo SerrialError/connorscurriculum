@@ -2106,15 +2106,15 @@
   difficulty: 1
   authors: ["Claude"]
   prompt: |
-    Using an electronegativity difference of about 2 as the rough line between polar covalent and ionic, which bond is best described as **ionic**? (Electronegativities: Li 1.0, H 2.1, C 2.5, P 2.1, O 3.5, Cl 3.0, F 4.0)
+    Using an electronegativity difference of more than 2 as the rough line between polar covalent and ionic, which bond is best described as **ionic**? (Electronegativities: Li 1.0, P 2.1, C 2.5, O 3.5, Cl 3.0, F 4.0)
   choices:
-    - { id: a, text: "H–F" }
+    - { id: a, text: "C–Cl" }
     - { id: b, text: "C–O" }
     - { id: c, text: "Li–F" }
     - { id: d, text: "P–Cl" }
   answer: c
   explanation: |
-    The differences are Li–F 3.0, H–F 1.9, C–O 1.0, and P–Cl 0.9. Only Li–F is well above 2, and it's a metal bonded to a nonmetal. H–F is very polar but still covalent: HF is a molecule, not an ionic solid.
+    The differences are Li–F 3.0, C–O 1.0, P–Cl 0.9, and C–Cl 0.5. Only Li–F is above 2, and it's a metal bonded to a nonmetal. The other three are polar covalent bonds between nonmetals.
 
 - id: apchem-08-co2-fc-triple
   type: mcq

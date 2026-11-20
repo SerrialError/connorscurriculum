@@ -1,12 +1,13 @@
 ---
 // <HybridCards />: one card per hybridization: what's mixed, how many hybrids, their geometry, what's
-// left over for π bonds, and examples. sp³d and sp³d² are marked class-only (not on the AP exam).
+// left over for π bonds, and examples. sp³d and sp³d² are marked class-only (not on the AP exam);
+// for sp, sp², and sp³ the exam asks for the name and angle, not how the orbitals are mixed.
 const CARDS = [
   { name: 'sp', domains: 2, mixed: '1 s + 1 p', makes: '2 sp', shape: 'linear', angle: '180°', left: '2 p left over: up to 2 π bonds', examples: 'C in CO₂ and HC≡CH, Be in BeF₂', ap: true },
   { name: 'sp²', domains: 3, mixed: '1 s + 2 p', makes: '3 sp²', shape: 'trigonal planar', angle: '120°', left: '1 p left over: up to 1 π bond', examples: 'C in C₂H₄ and H₂CO, B in BF₃', ap: true },
   { name: 'sp³', domains: 4, mixed: '1 s + 3 p', makes: '4 sp³', shape: 'tetrahedral', angle: '109.5°', left: 'no p left over: no π bonds', examples: 'C in CH₄, N in NH₃, O in H₂O', ap: true },
-  { name: 'sp³d', domains: 5, mixed: '1 s + 3 p + 1 d', makes: '5 sp³d', shape: 'trigonal bipyramidal', angle: '90°, 120°', left: '', examples: 'P in PCl₅, S in SF₄', ap: false },
-  { name: 'sp³d²', domains: 6, mixed: '1 s + 3 p + 2 d', makes: '6 sp³d²', shape: 'octahedral', angle: '90°', left: '', examples: 'S in SF₆, Xe in XeF₄', ap: false },
+  { name: 'sp³d', domains: 5, mixed: '1 s + 3 p + 1 d', makes: '5 sp³d', shape: 'trigonal bipyramidal', angle: '90°, 120°, 180°', left: '', examples: 'P in PCl₅, S in SF₄', ap: false },
+  { name: 'sp³d²', domains: 6, mixed: '1 s + 3 p + 2 d', makes: '6 sp³d²', shape: 'octahedral', angle: '90°, 180°', left: '', examples: 'S in SF₆, Xe in XeF₄', ap: false },
 ];
 ---
 
@@ -24,7 +25,7 @@ const CARDS = [
         </p>
         {c.left && <p class="h-left">{c.left}</p>}
         <p class="h-ex">{c.examples}</p>
-        <p class="h-ap">{c.ap ? <span class="badge topic">On the AP exam</span> : <span class="badge not-ap">Class only</span>}</p>
+        <p class="h-ap">{c.ap ? <span class="badge topic">Name and angle on the AP exam</span> : <span class="badge not-ap">Class only</span>}</p>
       </li>
     ))
   }

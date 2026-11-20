@@ -88,7 +88,9 @@ function drawOrbital(o: OrbitalShape, kit: Kit, labels: boolean): Object3D {
   }
   if (labels && o.label) {
     const tag = label(o.label, 'orb-label');
-    tag.position.copy(atPos).addScaledVector(dir, (o.type === 's' ? size : size * 1.02) + 0.18);
+    // Hybrid labels sit inside the lobe's tip, so they don't cover the atom it bonds to.
+    const reach = o.type === 's' ? size + 0.18 : typeof o.type === 'number' ? size * 0.8 : size * 1.02 + 0.18;
+    tag.position.copy(atPos).addScaledVector(dir, reach);
     g.add(tag);
   }
   return g;

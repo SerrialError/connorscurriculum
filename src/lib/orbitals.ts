@@ -61,7 +61,7 @@ export interface Stage {
   /** Short name for the step button. */
   title: string;
   /** The orbital box diagram column this stage matches (scenes with a box diagram). */
-  column?: 'ground' | 'hybrid';
+  column?: BoxColumnKind;
   /** One or two sentences under the model saying what changed. */
   caption: string;
   shapes: Shape[];
@@ -77,6 +77,7 @@ export interface OrbitalScene {
 }
 
 export type BoxElement = 'Be' | 'B' | 'C' | 'N' | 'O';
+export type BoxColumnKind = 'ground' | 'promoted' | 'hybrid';
 
 // ---------------------------------------------------------------------------
 // Vector helpers
@@ -152,6 +153,8 @@ function hybridScene(
   domains: Domain[],
   partner: 'H' | 'F',
   captions: [string, string, string],
+  /** Be, B, and C: the orbitals after one 2s electron moves up, and what that step says. */
+  promoted?: { orbitals: Parameters<typeof valenceOrbitals>; caption: string },
 ): OrbitalScene {
   const name = HYBRID_NAME[hybrid];
   const hybrids: Shape[] = domains.map((d) => orb(O, d.dir, hybrid, d.electrons, d.electrons === 2 ? 'lone pair' : name));
@@ -173,6 +176,7 @@ function hybridScene(
     boxes: { el, hybrid },
     stages: [
       { title: 'Atomic orbitals', column: 'ground', caption: captions[0], shapes: valenceOrbitals(...ground) },
+      ...(promoted ? [{ title: 'Promote', column: 'promoted' as const, caption: promoted.caption, shapes: valenceOrbitals(...promoted.orbitals) }] : []),
       { title: `Mix into ${name}`, column: 'hybrid', caption: captions[1], shapes: [atom(el, O), ...hybrids, ...leftover] },
       { title: 'Form σ bonds', column: 'hybrid', caption: captions[2], shapes: [atom(el, O), ...hybrids, ...leftover, ...bonded] },
     ],
@@ -194,6 +198,10 @@ const methane = hybridScene(
     'The 2s and all three 2p orbitals mix into four identical sp³ hybrids, each with one big lobe pointing to a corner of a tetrahedron and one electron in it.',
     "Each sp³ lobe overlaps an H 1s orbital head-on: four σ bonds, 109.5° apart. That's methane's tetrahedral shape.",
   ],
+  {
+    orbitals: ['C', 1, [1, 1, 1]],
+    caption: 'One 2s electron moves up into the empty 2p orbital. Now carbon has four unpaired electrons, one for each bond. This costs a little energy, which forming two extra bonds more than pays back.',
+  },
 );
 
 const ammonia = hybridScene(
@@ -239,6 +247,10 @@ const boronTrifluoride = hybridScene(
     "The 2s and two 2p orbitals mix into three sp² hybrids, 120° apart in a plane, each with one electron. The third 2p wasn't mixed in: it stays, empty, at 90° to the plane.",
     "Each sp² lobe overlaps a 2p orbital on an F atom: three σ bonds in a flat triangle. The empty p orbital is why BF₃ can accept a lone pair from NH₃.",
   ],
+  {
+    orbitals: ['B', 1, [1, 1, 'empty']],
+    caption: 'One 2s electron moves up into an empty 2p orbital, giving three unpaired electrons for three bonds. One 2p orbital is still empty.',
+  },
 );
 
 const berylliumFluoride = hybridScene(
@@ -257,6 +269,10 @@ const berylliumFluoride = hybridScene(
     'The 2s and one 2p mix into two sp hybrids pointing opposite ways (180°), one electron in each. Two 2p orbitals are left over, empty.',
     'Each sp lobe overlaps an F 2p orbital: two σ bonds in a straight line.',
   ],
+  {
+    orbitals: ['Be', 1, [1, 'empty', 'empty']],
+    caption: 'One 2s electron moves up into a 2p orbital: now two unpaired electrons, one for each bond.',
+  },
 );
 
 // ---------------------------------------------------------------------------
@@ -360,20 +376,24 @@ function formaldehyde(): OrbitalScene {
   return {
     id: 'h2co',
     formula: 'H₂CO',
+    boxes: { el: 'C', hybrid: 2 },
     stages: [
       {
         title: 'Both sp²',
+        column: 'hybrid',
         caption:
           'C and O are both sp² here (each has 3 electron domains). C points its hybrids at O and the two H atoms. O points one hybrid at C, and its two lone pairs sit in the other two.',
         shapes: [...frame, ...hybridsToward(c, [o, h1, h2], 2), orb(o, sub(c, o), 2, 1, 'sp²'), ...oLonePairs, ...ps],
       },
       {
         title: 'σ bonds',
+        column: 'hybrid',
         caption: 'Three σ bonds: C–O and two C–H. The O lone pairs stay in their sp² hybrids, in the plane of the molecule.',
         shapes: [...frame, ...sigmas, ...oLonePairs, ...ps],
       },
       {
         title: 'π bond',
+        column: 'hybrid',
         caption: "The p orbitals on C and O overlap side by side into the π part of C=O. The molecule's 3 σ + 1 π bonds hold 8 electrons; the O lone pairs hold the other 4.",
         shapes: [...frame, ...sigmas, ...oLonePairs, pi(c, o, Z)],
       },
@@ -393,20 +413,24 @@ function carbonDioxide(): OrbitalScene {
   return {
     id: 'co2',
     formula: 'CO₂',
+    boxes: { el: 'C', hybrid: 1 },
     stages: [
       {
         title: 'C sp, O sp²',
+        column: 'hybrid',
         caption:
           "C is sp (2 domains), with its two leftover p orbitals at right angles. Each O is sp² (3 domains): one hybrid toward C, two holding lone pairs, and one p orbital that lines up with one of carbon's.",
         shapes: [...frame, ...hybridsToward(O, [oL, oR], 1), orb(oL, X, 2, 1, 'sp²'), orb(oR, scale(X, -1), 2, 1, 'sp²'), ...leftLp, ...rightLp, ...ps],
       },
       {
         title: 'σ bonds',
+        column: 'hybrid',
         caption: 'Two σ bonds along the axis, one to each O.',
         shapes: [...frame, ...sigmas, ...leftLp, ...rightLp, ...ps],
       },
       {
         title: 'π bonds',
+        column: 'hybrid',
         caption:
           "Two π bonds, one to each O, in planes at right angles to each other (turn the model to see it). Each C=O is 1 σ + 1 π, so CO₂ has 2 σ and 2 π. The two π bonds use carbon's two leftover p orbitals, which are at 90° to each other, so the π bonds are too.",
         shapes: [...frame, ...sigmas, ...leftLp, ...rightLp, pi(oL, O, Z), pi(O, oR, Y)],

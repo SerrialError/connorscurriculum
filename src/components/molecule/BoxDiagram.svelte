@@ -1,18 +1,20 @@
 <script lang="ts">
   // Orbital box diagram for a period-2 atom: ground state → (promotion) → hybridized. Higher
   // energy is higher up: 2p on top, 2s at the bottom, hybrids in between.
-  import { type BoxElement, boxDiagram } from '../../lib/orbitals';
+  import { type BoxColumnKind, type BoxElement, boxDiagram } from '../../lib/orbitals';
 
   interface Props {
     el: BoxElement;
     hybrid: 1 | 2 | 3;
-    /** Highlight the ground-state or the hybridized column (to match the 3D stage showing). */
-    current?: 'ground' | 'hybrid';
+    /** The column to highlight, to match the 3D stage showing. */
+    current?: BoxColumnKind;
   }
 
   let { el, hybrid, current }: Props = $props();
 
   const columns = $derived(boxDiagram(el, hybrid));
+  /** Ground state is first, hybridized last, and promotion (when there is one) in between. */
+  const kindOf = (i: number): BoxColumnKind => (i === 0 ? 'ground' : i === columns.length - 1 ? 'hybrid' : 'promoted');
   /** Grid row for an energy level: 2p on top, hybrids in the middle, 2s at the bottom. */
   const row = (name: string) => (name === '2p' ? 1 : name === '2s' ? 3 : 2);
   const arrows = (e: number) => (e === 2 ? '↑↓' : e === 1 ? '↑' : '');
@@ -25,7 +27,7 @@
   <div class="cols">
     {#each columns as col, i (col.title)}
       {#if i > 0}<span class="step" aria-hidden="true">→</span>{/if}
-      <div class="col" class:on={(current === 'ground' && i === 0) || (current === 'hybrid' && i === columns.length - 1)}>
+      <div class="col" class:on={current === kindOf(i)}>
         <p class="col-title">{col.title}</p>
         <div class="levels">
           {#each col.levels as level (level.name)}
@@ -46,7 +48,8 @@
     {/each}
   </div>
   <figcaption class="small muted">
-    {el}: higher boxes are higher in energy. Each arrow is one electron; a pair has opposite spins.
+    {el}: higher boxes are higher in energy. Each arrow is one electron; a pair has opposite spins. Class only:
+    the AP exam doesn't ask for these diagrams.
   </figcaption>
 </figure>
 

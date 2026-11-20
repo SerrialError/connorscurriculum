@@ -40,9 +40,9 @@ describe('boxDiagram', () => {
 });
 
 describe('ORBITAL_SCENES', () => {
-  it('gives every scene three named stages with something to draw', () => {
+  it('gives every scene three named stages (four with promotion) with something to draw', () => {
     for (const s of Object.values(ORBITAL_SCENES)) {
-      expect(s.stages.length, s.id).toBe(3);
+      expect(s.stages.length, s.id).toBe(['ch4', 'bf3', 'bef2'].includes(s.id) ? 4 : 3);
       for (const st of s.stages) {
         expect(st.title && st.caption, s.id).toBeTruthy();
         expect(st.shapes.length, `${s.id}: ${st.title}`).toBeGreaterThan(0);
@@ -52,7 +52,7 @@ describe('ORBITAL_SCENES', () => {
 
   it('puts the right number of electrons in the central atom’s hybrids', () => {
     const hybridElectrons = (id: string) =>
-      getOrbitalScene(id).stages[1]!.shapes.reduce((n, s) => n + (s.kind === 'orbital' && typeof s.type === 'number' && typeof s.electrons === 'number' ? s.electrons : 0), 0);
+      getOrbitalScene(id).stages.find((st) => st.title.startsWith('Mix'))!.shapes.reduce((n, s) => n + (s.kind === 'orbital' && typeof s.type === 'number' && typeof s.electrons === 'number' ? s.electrons : 0), 0);
     expect(hybridElectrons('ch4')).toBe(4);
     expect(hybridElectrons('nh3')).toBe(5);
     expect(hybridElectrons('h2o')).toBe(6);
@@ -61,11 +61,21 @@ describe('ORBITAL_SCENES', () => {
   });
 
   it('counts σ and π bonds the way the lesson says', () => {
-    const count = (id: string, kind: 'sigma' | 'cloud') => getOrbitalScene(id).stages[2]!.shapes.filter((s) => s.kind === kind).length;
+    const count = (id: string, kind: 'sigma' | 'cloud') => getOrbitalScene(id).stages.at(-1)!.shapes.filter((s) => s.kind === kind).length;
     expect([count('c2h4', 'sigma'), count('c2h4', 'cloud')]).toEqual([5, 1]);
     expect([count('c2h2', 'sigma'), count('c2h2', 'cloud')]).toEqual([3, 2]);
     expect([count('h2co', 'sigma'), count('h2co', 'cloud')]).toEqual([3, 1]);
     expect([count('co2', 'sigma'), count('co2', 'cloud')]).toEqual([2, 2]);
+  });
+
+  it('promotes only where the box diagram does, and matches every stage to a box column', () => {
+    for (const s of Object.values(ORBITAL_SCENES)) {
+      if (!s.boxes) continue;
+      const promotes = boxDiagram(s.boxes.el, s.boxes.hybrid).length === 3;
+      const hybridScene = s.stages[0]!.column === 'ground';
+      if (hybridScene) expect(s.stages.some((st) => st.column === 'promoted'), s.id).toBe(promotes);
+      for (const st of s.stages) expect(st.column, `${s.id}: ${st.title}`).toBeDefined();
+    }
   });
 
   it('rejects an unknown id', () => {

@@ -35,6 +35,19 @@
     { cls: 'pi', text: 'π electrons' },
     { cls: 'dot', text: 'electron' },
   ];
+  /** The legend entries for what this example draws, in any of its steps. */
+  const legend = $derived.by(() => {
+    const shapes = scene.stages.flatMap((s) => s.shapes);
+    const has = new Set<string>();
+    for (const s of shapes) {
+      if (s.kind === 'orbital') {
+        has.add(s.role);
+        if (typeof s.electrons === 'number' && s.electrons > 0) has.add('dot');
+      } else if (s.kind === 'sigma') has.add('sigma');
+      else if (s.kind === 'cloud') has.add('pi');
+    }
+    return LEGEND.filter((item) => has.has(item.cls));
+  });
 
   let shownScene = '';
   function draw() {
@@ -99,13 +112,13 @@
   <p class="caption" aria-live="polite"><strong>{scene.formula}, step {step + 1}:</strong> {current.caption}</p>
   <div class="mol-bar">
     <button type="button" class="mol-reset back" disabled={step === 0} onclick={() => step--}>← Back</button>
-    <button type="button" class="mol-reset" disabled={step === scene.stages.length - 1} onclick={() => step++}>Next →</button>
+    <button type="button" class="mol-reset next" disabled={step === scene.stages.length - 1} onclick={() => step++}>Next →</button>
     <label class="mol-check"><input type="checkbox" bind:checked={labels} /> Labels</label>
     <button type="button" class="mol-reset" onclick={() => view?.resetView()}>Reset view</button>
   </div>
   <figcaption>
     <ul class="legend" aria-label="Colors">
-      {#each LEGEND as item (item.cls)}
+      {#each legend as item (item.cls)}
         <li><span class={`swatch ${item.cls}`}></span>{item.text}</li>
       {/each}
     </ul>
@@ -170,7 +183,8 @@
     border-top: 1px solid var(--border);
     font-size: 0.95rem;
   }
-  .mol-reset.back {
+  .mol-reset.back,
+  .mol-reset.next {
     margin-left: 0;
   }
   .mol-reset:disabled {

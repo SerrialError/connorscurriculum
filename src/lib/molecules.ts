@@ -68,11 +68,11 @@ export const SHAPES: Shape[] = [
   { domains: 4, lonePairs: 0, domainGeometry: 'tetrahedral', molecularGeometry: 'tetrahedral', idealAngles: '109.5°', hybridization: 'sp³', example: 'ch4', examples: ['CH₄', 'NH₄⁺', 'SO₄²⁻'] },
   { domains: 4, lonePairs: 1, domainGeometry: 'tetrahedral', molecularGeometry: 'trigonal pyramidal', idealAngles: 'less than 109.5° (107° in NH₃)', hybridization: 'sp³', example: 'nh3', examples: ['NH₃', 'PCl₃', 'H₃O⁺'] },
   { domains: 4, lonePairs: 2, domainGeometry: 'tetrahedral', molecularGeometry: 'bent', idealAngles: 'less than 109.5° (104.5° in H₂O)', hybridization: 'sp³', example: 'h2o', examples: ['H₂O', 'OF₂', 'SCl₂'] },
-  { domains: 5, lonePairs: 0, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'trigonal bipyramidal', idealAngles: '90° and 120°', hybridization: 'sp³d', example: 'pcl5', examples: ['PCl₅', 'PF₅'] },
+  { domains: 5, lonePairs: 0, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'trigonal bipyramidal', idealAngles: '90°, 120°, and 180°', hybridization: 'sp³d', example: 'pcl5', examples: ['PCl₅', 'PF₅'] },
   { domains: 5, lonePairs: 1, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'seesaw', idealAngles: 'less than 90° and 120°', hybridization: 'sp³d', example: 'sf4', examples: ['SF₄', 'SeF₄'] },
   { domains: 5, lonePairs: 2, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'T-shaped', idealAngles: 'less than 90°', hybridization: 'sp³d', example: 'clf3', examples: ['ClF₃', 'BrF₃'] },
   { domains: 5, lonePairs: 3, domainGeometry: 'trigonal bipyramidal', molecularGeometry: 'linear', idealAngles: '180°', hybridization: 'sp³d', example: 'xef2', examples: ['XeF₂', 'I₃⁻'] },
-  { domains: 6, lonePairs: 0, domainGeometry: 'octahedral', molecularGeometry: 'octahedral', idealAngles: '90°', hybridization: 'sp³d²', example: 'sf6', examples: ['SF₆'] },
+  { domains: 6, lonePairs: 0, domainGeometry: 'octahedral', molecularGeometry: 'octahedral', idealAngles: '90° and 180°', hybridization: 'sp³d²', example: 'sf6', examples: ['SF₆'] },
   { domains: 6, lonePairs: 1, domainGeometry: 'octahedral', molecularGeometry: 'square pyramidal', idealAngles: 'less than 90°', hybridization: 'sp³d²', example: 'brf5', examples: ['BrF₅', 'IF₅'] },
   { domains: 6, lonePairs: 2, domainGeometry: 'octahedral', molecularGeometry: 'square planar', idealAngles: '90°', hybridization: 'sp³d²', example: 'xef4', examples: ['XeF₄', 'ICl₄⁻'] },
 ];

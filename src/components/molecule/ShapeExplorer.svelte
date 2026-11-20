@@ -57,7 +57,14 @@
     <tbody>
       <tr><th scope="row">Bonding domains</th><td>{shape.domains - shape.lonePairs}</td></tr>
       <tr><th scope="row">Bond angles</th><td>{shape.idealAngles}</td></tr>
-      <tr><th scope="row">Hybridization</th><td>{shape.hybridization}</td></tr>
+      <tr>
+        <th scope="row">Hybridization</th>
+        <td>
+          {shape.hybridization}
+          <!-- The AP exam doesn't assess hybridization with d orbitals (CED 2.7). -->
+          {#if shape.hybridization.includes('d')}<span class="badge not-ap">class only</span>{/if}
+        </td>
+      </tr>
       <tr><th scope="row">Example</th><td>{MOLECULES[shape.example]!.formula}</td></tr>
     </tbody>
   </table>

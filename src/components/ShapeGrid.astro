@@ -11,7 +11,7 @@ interface Props {
 
 const { kind = 'shapes' } = Astro.props;
 const rows = [2, 3, 4, 5, 6].map((domains) => ({ domains, shapes: SHAPES.filter((s) => s.domains === domains) }));
-const DOMAIN_ANGLES: Record<number, string> = { 2: '180°', 3: '120°', 4: '109.5°', 5: '90°, 120°, 180°', 6: '90°, 180°' };
+const DOMAIN_ANGLES: Record<number, string> = { 2: '180°', 3: '120°', 4: '109.5°', 5: '90°, 120°, and 180°', 6: '90° and 180°' };
 /** sp³d and sp³d² are class-only: the AP exam doesn't assess hybridization with d orbitals. */
 const classOnly = (h: string) => h.includes('d');
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -150,7 +150,6 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
     font-weight: 700;
     font-size: 1.02rem;
     text-align: center;
-    text-transform: capitalize;
   }
   .domains .shape-name {
     font-size: 0.95rem;

@@ -5,6 +5,7 @@ import { file, glob, type Loader } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { parse as parseYaml } from 'yaml';
 import { DATA_DIR, loadRegistry, subjectSchema } from './lib/registry';
+import { RESOURCE_KINDS } from './lib/resources';
 import { checkTags, expandTopicIds } from './lib/validate';
 
 const ROOT = process.cwd();
@@ -112,6 +113,20 @@ const lessons = defineCollection({
         // The photos or documents (images or PDFs) the page was typed up from, relative to its
         // folder, e.g. originals/page-1.jpg. Shown at the end of the page.
         originals: z.array(z.object({ file: z.string().min(1), caption: z.string().min(1).optional() })).default([]),
+        // Videos, simulations, and practice sets from other sites, shown near the end of the page.
+        // "why" is the reason it was picked, in a sentence or two.
+        resources: z
+          .array(
+            z.object({
+              kind: z.enum(RESOURCE_KINDS),
+              title: z.string().min(1),
+              url: z.url({ protocol: /^https$/ }),
+              by: z.string().min(1),
+              minutes: z.number().int().positive().optional(),
+              why: z.string().min(1),
+            }),
+          )
+          .default([]),
       })
       .superRefine(checkTags),
   ),

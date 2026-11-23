@@ -43,6 +43,8 @@ export function pageText(html: string): string {
   return out
     .join('')
     .replace(/&nbsp;|&#160;/g, ' ')
+    .replace(/&quot;|&#34;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
     .replace(/&amp;/g, '&')
     .replace(/\s+/g, ' ');
 }

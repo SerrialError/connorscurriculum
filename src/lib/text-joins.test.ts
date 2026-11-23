@@ -16,6 +16,12 @@ describe('pageText', () => {
   it('reads entities for spaces', () => {
     expect(pageText('<p>Ch.&nbsp;9</p>').trim()).toBe('Ch. 9');
   });
+
+  it('reads quote entities, so a quoted word is not mistaken for a join ("quot;Three")', () => {
+    const text = pageText('<p>The &quot;Three Atoms&quot; screen and Chad&#39;s Prep</p>');
+    expect(text.trim()).toBe(`The "Three Atoms" screen and Chad's Prep`);
+    expect(runTogether(text)).toEqual([]);
+  });
 });
 
 describe('runTogether', () => {

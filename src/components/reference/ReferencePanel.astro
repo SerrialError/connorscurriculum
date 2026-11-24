@@ -29,7 +29,19 @@ const source = url(`${data.subject.id}/reference/`);
 
 {!scriptOnly && (
 <dialog class="ref-panel" id="ref-panel" aria-labelledby="ref-title" data-storage-key={key} data-source={source} data-css={sheetCss}>
-  <div class="ref-head">
+  {/* Docked: drag the left edge to resize (or arrow keys on it). On phones the sheet's top bar is
+      dragged instead (see the script). */}
+  <div
+    class="ref-resize"
+    role="separator"
+    aria-orientation="vertical"
+    aria-label="Resize the reference panel"
+    aria-controls="ref-panel"
+    tabindex="0"
+    title="Drag, or use ← and →, to resize. Double-click to reset."
+    data-ref-resize
+  ></div>
+  <div class="ref-head" data-ref-head>
     {/* With tabs, they say what this is, so the heading is for screen readers only. */}
     <h2 id="ref-title" class:list={['ref-title', { 'visually-hidden': hasTable }]}>Reference</h2>
     {
@@ -46,8 +58,16 @@ const source = url(`${data.subject.id}/reference/`);
     }
     <span class="ref-spacer"></span>
     {/* The official version of whichever sheet is showing. */}
-    <a class="ref-official small" href={reference.official.url} target="_blank" rel="noopener" data-for="eq" title={reference.official.label} aria-label={reference.official.label}><span class="long">Official </span>PDF</a>
-    {hasTable && <a class="ref-official small" href={reference.periodicTable!.url} target="_blank" rel="noopener" data-for="pt" title={reference.periodicTable!.label} aria-label={reference.periodicTable!.label}><span class="long">Official </span>PDF</a>}
+    {
+      [
+        { tab: 'eq', source: reference.official },
+        ...(hasTable ? [{ tab: 'pt', source: reference.periodicTable! }] : []),
+      ].map(({ tab, source }) => (
+        <a class="ref-official" href={source.url} target="_blank" rel="noopener" data-for={tab} title={source.label} aria-label={`${source.label} (opens in a new tab)`}>
+          <span class="long">Official </span>PDF
+        </a>
+      ))
+    }
     <a class="ref-icon" href={url(`${data.subject.id}/reference/`)} title="Open as a full page" aria-label="Open the reference as a full page">
       <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 4h5v5M20 4l-6 6M9 20H4v-5M4 20l6-6"></path>
@@ -165,7 +185,8 @@ const source = url(`${data.subject.id}/reference/`);
     }
     if (panel.open) void loadContent();
 
-    type Saved = { open?: boolean; tab?: 'eq' | 'pt' };
+    /** width: the docked panel's, in px. height: the phone sheet's, as a share of the screen. */
+    type Saved = { open?: boolean; tab?: 'eq' | 'pt'; width?: number | null; height?: number | null };
     // localStorage directly, not lib/storage: one less file for every page to fetch.
     const save = (s: Saved) => {
       try {
@@ -187,8 +208,12 @@ const source = url(`${data.subject.id}/reference/`);
       if (wide.matches) {
         panel!.show();
         root.classList.add('ref-docked');
-        before?.focus({ preventScroll: true });
+        // show() focuses the first control in the panel (a tab), which then shows a focus ring
+        // nobody asked for. Put focus back where it was, or nowhere.
+        if (before && before !== document.body) before.focus({ preventScroll: true });
+        else (document.activeElement as HTMLElement | null)?.blur();
       } else {
+        root.classList.remove('ref-docked');
         panel!.showModal();
         panel!.querySelector<HTMLElement>('.ref-body')!.focus();
       }
@@ -201,6 +226,9 @@ const source = url(`${data.subject.id}/reference/`);
     }
 
     panel.addEventListener('close', () => {
+      // Closed only to reopen in the other mode (crossing the docking size): this event arrives
+      // after it's open again, so there's nothing to undo.
+      if (panel.open) return;
       root.classList.remove('ref-docked');
       save({ open: false });
       sync();
@@ -276,19 +304,120 @@ const source = url(`${data.subject.id}/reference/`);
         selectTab(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]!, true);
       });
     }
+
+    /*
+     * Resizing. Docked: the left edge sets the width, which the page makes room for. The CSS
+     * (--ref-w) keeps any width between 22rem and leaving the page 36rem, so a size saved on a
+     * big screen still fits a smaller one. Phones: dragging the sheet's top bar sets its height,
+     * and dragging it most of the way down closes it.
+     */
+    const rem = () => parseFloat(getComputedStyle(root).fontSize);
+    const widthLimits = () => [22 * rem(), Math.max(22 * rem(), innerWidth - 36 * rem())] as const;
+    const handle = panel.querySelector<HTMLElement>('[data-ref-resize]')!;
+    function describeWidth() {
+      const [min, max] = widthLimits();
+      const w = panel!.getBoundingClientRect().width;
+      handle.setAttribute('aria-valuemin', String(Math.round(min)));
+      handle.setAttribute('aria-valuemax', String(Math.round(max)));
+      handle.setAttribute('aria-valuenow', String(Math.round(w)));
+      handle.setAttribute('aria-valuetext', `${Math.round((w / innerWidth) * 100)}% of the window`);
+    }
+    function setWidth(px: number | null, keep: boolean) {
+      if (px === null) root.style.removeProperty('--ref-user-w');
+      else {
+        const [min, max] = widthLimits();
+        root.style.setProperty('--ref-user-w', `${Math.round(Math.min(max, Math.max(min, px)))}px`);
+      }
+      if (keep) save({ width: px === null ? null : Math.round(panel!.getBoundingClientRect().width) });
+      describeWidth();
+    }
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      handle.setPointerCapture(e.pointerId);
+      root.classList.add('ref-resizing');
+      const startX = e.clientX;
+      const startW = panel!.getBoundingClientRect().width;
+      const move = (m: PointerEvent) => setWidth(startW + startX - m.clientX, false);
+      const end = () => {
+        root.classList.remove('ref-resizing');
+        handle.removeEventListener('pointermove', move);
+        setWidth(panel!.getBoundingClientRect().width, true);
+      };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('lostpointercapture', end, { once: true });
+    });
+    handle.addEventListener('dblclick', () => setWidth(null, true));
+    handle.addEventListener('keydown', (e) => {
+      const w = panel!.getBoundingClientRect().width;
+      const [min, max] = widthLimits();
+      const to = { ArrowLeft: w + 32, ArrowRight: w - 32, Home: min, End: max, Enter: null }[e.key];
+      if (to === undefined) return;
+      e.preventDefault();
+      setWidth(to, true);
+    });
+    panel.addEventListener('toggle', describeWidth);
+    addEventListener('resize', describeWidth, { passive: true });
+
+    const head = panel.querySelector<HTMLElement>('[data-ref-head]')!;
+    head.addEventListener('pointerdown', (e) => {
+      if (wide.matches || e.button !== 0 || (e.target as HTMLElement).closest('a, button')) return;
+      const startY = e.clientY;
+      const startH = panel!.getBoundingClientRect().height;
+      head.setPointerCapture(e.pointerId);
+      // While dragging, the sheet follows the finger all the way down (the 40% floor is applied
+      // on release), and fades once letting go would close it.
+      root.classList.add('ref-resizing', 'ref-sheet-drag');
+      let share = startH / innerHeight;
+      const move = (m: PointerEvent) => {
+        share = Math.max(0.05, Math.min(0.94, (startH + startY - m.clientY) / innerHeight));
+        root.style.setProperty('--ref-user-h', `${share * 100}dvh`);
+        panel!.classList.toggle('will-close', share < 0.3);
+      };
+      const end = () => {
+        root.classList.remove('ref-resizing', 'ref-sheet-drag');
+        panel!.classList.remove('will-close');
+        head.removeEventListener('pointermove', move);
+        if (Math.abs(share * innerHeight - startH) < 4) return; // a tap, not a drag
+        if (share < 0.3) {
+          // Dragged away: close, and open at the earlier height next time.
+          root.style.setProperty('--ref-user-h', `${(startH / innerHeight) * 100}dvh`);
+          return close();
+        }
+        share = Math.max(0.4, share);
+        root.style.setProperty('--ref-user-h', `${share * 100}dvh`);
+        save({ height: Math.round(share * 100) / 100 });
+      };
+      head.addEventListener('pointermove', move);
+      head.addEventListener('lostpointercapture', end, { once: true });
+    });
     sync();
   }
 </script>
 
 <style is:global>
   /* Docked: the page makes room for the panel instead of sitting under it. Both tabs use the same
-     width, so switching never re-wraps the page; the periodic table fits itself to it. */
+     width, so switching never re-wraps the page; the periodic table fits itself to it. The width is
+     the reader's (dragged, --ref-user-w) or a default that grows with the screen, and always leaves
+     the page at least 36rem. */
   @media (min-width: 64rem) {
     html {
-      --ref-w: clamp(24rem, 34vw, 42rem);
+      --ref-w: clamp(22rem, var(--ref-user-w, clamp(24rem, 44vw, 72rem)), max(22rem, 100vw - 36rem));
     }
     html.ref-docked body {
       padding-right: var(--ref-w);
+    }
+  }
+  /* While dragging a size: no text selection, and the cursor stays the resize one. */
+  html.ref-resizing,
+  html.ref-resizing * {
+    user-select: none;
+    cursor: col-resize !important;
+  }
+  @media (max-width: 63.99rem) {
+    html.ref-resizing,
+    html.ref-resizing * {
+      cursor: grabbing !important;
     }
   }
   /* The open tab, from the last page too (set in <head>). */
@@ -314,18 +443,28 @@ const source = url(`${data.subject.id}/reference/`);
     background: var(--bg);
     display: none;
     flex-direction: column;
-    /* Phones: a sheet from the bottom, nearly full height. */
+    overflow: visible;
+    /* Phones: a sheet from the bottom; drag its top bar to change the height. */
     inset: auto 0 0 0;
     width: 100%;
     max-width: 100%;
-    height: min(88dvh, 100%);
+    height: clamp(40dvh, var(--ref-user-h, 88dvh), 94dvh);
     max-height: 100%;
-    border-radius: 14px 14px 0 0;
+    border-radius: 16px 16px 0 0;
     box-shadow: 0 -8px 30px rgb(0 0 0 / 0.18);
     z-index: 40;
+    container-type: inline-size;
   }
   .ref-panel[open] {
     display: flex;
+  }
+  /* Dragging the phone sheet: it follows the finger below its usual 40% floor, and fades when
+     letting go would close it. */
+  :global(html.ref-sheet-drag) .ref-panel {
+    height: min(var(--ref-user-h), 94dvh);
+  }
+  .ref-panel.will-close {
+    opacity: 0.6;
   }
   .ref-panel::backdrop {
     background: rgb(0 0 0 / 0.35);
@@ -340,45 +479,128 @@ const source = url(`${data.subject.id}/reference/`);
       box-shadow: -4px 0 18px rgb(0 0 0 / 0.06);
     }
   }
-  .ref-panel {
-    container-type: inline-size;
+
+  /* The docked panel's left edge: a wide target for dragging, a line and grip where you can see it. */
+  .ref-resize {
+    display: none;
   }
+  @media (min-width: 64rem) {
+    .ref-resize {
+      display: block;
+      position: absolute;
+      inset: 0 auto 0 0;
+      z-index: 1;
+      width: 12px;
+      translate: -6px 0;
+      cursor: col-resize;
+      touch-action: none;
+    }
+    .ref-resize::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 5px;
+      width: 2px;
+      background: transparent;
+      transition: background 0.15s;
+    }
+    .ref-resize::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 3px;
+      width: 6px;
+      height: 3rem;
+      translate: 0 -50%;
+      border-radius: 3px;
+      background: var(--muted);
+      opacity: 0.55;
+      transition: background 0.15s;
+    }
+    .ref-resize:hover::before,
+    .ref-resize:focus-visible::before,
+    :global(html.ref-resizing) .ref-resize::before {
+      background: var(--accent);
+    }
+    .ref-resize:hover::after,
+    .ref-resize:focus-visible::after,
+    :global(html.ref-resizing) .ref-resize::after {
+      background: var(--accent);
+      opacity: 1;
+    }
+    .ref-resize:focus-visible {
+      outline: none;
+    }
+  }
+
   .ref-head {
+    position: relative;
     display: flex;
-    flex-wrap: nowrap;
     align-items: center;
-    gap: 0.4rem 0.6rem;
-    padding: 0.6rem 0.75rem 0.6rem 1rem;
+    gap: 0.5rem;
+    padding: 0.7rem 0.75rem 0.7rem 1rem;
     border-bottom: 1px solid var(--border);
     background: var(--surface);
+  }
+  /* Phones: the head is the sheet's handle, with the usual grabber bar on top. */
+  @media (max-width: 63.99rem) {
+    .ref-panel {
+      border-top: 1px solid var(--border);
+    }
+    .ref-head {
+      padding-top: 1.15rem;
+      border-radius: 16px 16px 0 0;
+      touch-action: none;
+      cursor: grab;
+    }
+    .ref-head::before {
+      content: '';
+      position: absolute;
+      top: 0.45rem;
+      left: 50%;
+      width: 2.5rem;
+      height: 4px;
+      translate: -50% 0;
+      border-radius: 2px;
+      background: var(--border);
+    }
   }
   .ref-title {
     margin: 0;
     font-size: 1rem;
   }
+  /* The tabs: a segmented control, the open one raised. */
   .ref-tabs {
     display: inline-flex;
-    padding: 2px;
-    border-radius: var(--pill);
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
     background: var(--surface-2);
-    border: 1px solid var(--border);
   }
   .ref-tabs button {
-    min-height: 2rem;
-    padding: 0.2rem 0.7rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.9rem;
     white-space: nowrap;
     border: 0;
-    border-radius: var(--pill);
+    border-radius: 7px;
     background: none;
     color: var(--text-2);
     font: inherit;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .ref-tabs button:hover {
+    color: var(--text);
   }
   .ref-tabs button[aria-selected='true'] {
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 0 0 1px var(--border);
+  }
+  .ref-tabs button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
   }
   .ref-spacer {
     flex: 1;
@@ -386,30 +608,31 @@ const source = url(`${data.subject.id}/reference/`);
   .ref-tabs .short {
     display: none;
   }
-  /* A narrow panel or a phone: shorter labels, so the close button always fits. */
-  @container (max-width: 30rem) {
-    .ref-tabs .long,
-    .ref-official .long {
-      display: none;
-    }
-    .ref-tabs .short {
-      display: inline;
-    }
-    .ref-head {
-      gap: 0.25rem;
-      padding-inline: 0.6rem 0.4rem;
-    }
-  }
   .ref-official {
-    padding: 0.3rem 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--pill);
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: 0.85rem;
     font-weight: 600;
     white-space: nowrap;
+    text-decoration: none;
+  }
+  .ref-official:hover {
+    background: var(--surface-2);
+    color: var(--text);
   }
   .ref-icon {
     display: inline-grid;
     place-items: center;
     width: 2.25rem;
     height: 2.25rem;
+    flex: none;
     border: 0;
     border-radius: 8px;
     background: none;
@@ -420,19 +643,49 @@ const source = url(`${data.subject.id}/reference/`);
     background: var(--surface-2);
     color: var(--text);
   }
+  /* A narrow panel or a phone: shorter labels, so the close button always fits. */
+  @container (max-width: 36rem) {
+    .ref-tabs .long,
+    .ref-official .long {
+      display: none;
+    }
+    .ref-tabs .short {
+      display: inline;
+    }
+    .ref-head {
+      gap: 0.3rem;
+      padding-inline: 0.6rem 0.4rem;
+    }
+    .ref-tabs button {
+      padding-inline: 0.75rem;
+    }
+    .ref-official {
+      padding-inline: 0.6rem;
+    }
+  }
   .ref-body:focus {
     outline: none;
   }
   .ref-body {
     flex: 1;
+    /* A little larger in a wide panel, so a big screen doesn't get small print. */
+    font-size: clamp(1rem, 0.85rem + 0.35cqi, 1.125rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: 0.9rem 1rem 1.5rem;
+    padding: 1.1rem 1.25rem 2rem;
+  }
+  @container (max-width: 36rem) {
+    .ref-body {
+      padding-inline: 1rem;
+    }
   }
   @media (max-width: 520px) {
     .ref-tabs button,
-    .ref-icon {
+    .ref-icon,
+    .ref-official {
       min-height: 2.75rem;
+    }
+    .ref-icon {
       min-width: 2.75rem;
     }
   }

@@ -15,10 +15,12 @@ const { elements } = Astro.props;
 const cells = elements.map((e) => ({ ...e, ...periodicPosition(e.number) }));
 // Row 1 holds the group numbers, so every element row moves down one.
 const groups = Array.from({ length: 18 }, (_, i) => i + 1);
-const HINT = 'Point at or select an element for its name and mass.';
+// Before anything is selected. Which one shows depends on the table's size (reference.css).
+const HINT = 'Select an element for its name and mass.';
+const NARROW_HINT = 'Masses are hidden at this size. Select an element to see its mass.';
 ---
 
-<div class="pt" data-periodic-table data-hint={HINT}>
+<div class="pt" data-periodic-table>
   <div class="pt-tools">
     <label class="pt-search">
       <span class="visually-hidden">Find an element</span>
@@ -28,7 +30,9 @@ const HINT = 'Point at or select an element for its name and mass.';
       </svg>
       <input type="search" placeholder="Find: Fe, iron, or 26" autocomplete="off" spellcheck="false" data-pt-input />
     </label>
-    <p class="pt-info" aria-live="polite" data-pt-info>{HINT}</p>
+    <p class="pt-info" aria-live="polite" data-pt-info>
+      <span class="hint-roomy">{HINT}</span>{' '}<span class="hint-narrow">{NARROW_HINT}</span>
+    </p>
   </div>
   <div class="pt-scroll" data-scroll-x="Periodic table">
   <div class="pt-sizer">

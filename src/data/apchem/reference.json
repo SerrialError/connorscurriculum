@@ -301,7 +301,7 @@
         "K_c = \\dfrac{[C]^c [D]^d}{[A]^a [B]^b}",
         "\\text{where } aA + bB \\rightleftharpoons cC + dD",
         "K_p = \\dfrac{(P_C)^c (P_D)^d}{(P_A)^a (P_B)^b}",
-        "K_w = [\\text{H}_3\\text{O}^+][\\text{OH}^-] = 1.0 \\times 10^{-14} \\text{ at } 25\\,{}^\\circ\\text{C}",
+        "K_w = [\\text{H}_3\\text{O}^+][\\text{OH}^-] = {1.0 \\times 10^{-14} \\text{ at } 25\\,{}^\\circ\\text{C}}",
         "\\text{p}K_w = 14 = \\text{pH} + \\text{pOH} \\text{ at } 25\\,{}^\\circ\\text{C}",
         "\\text{pH} = -\\log[\\text{H}_3\\text{O}^+]",
         "\\text{pOH} = -\\log[\\text{OH}^-]",

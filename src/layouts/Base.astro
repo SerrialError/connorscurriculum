@@ -53,11 +53,13 @@ const showReference = !!subjectData && hasReference(subjectData) && !path.starts
     </script>
     {showReference && (
       <script is:inline data-key={`study:${subject}:reference`}>
-        // The reference panel's tab, and whether it's docked open (wide screens), before the first
-        // paint, so the page is laid out beside it from the start (ReferencePanel.astro).
+        // The reference panel's tab, size, and whether it's docked open (wide screens), before the
+        // first paint, so the page is laid out beside it from the start (ReferencePanel.astro).
         try {
           const s = JSON.parse(localStorage.getItem(document.currentScript.dataset.key) || '{}');
           if (s.tab === 'pt') document.documentElement.dataset.refTab = 'pt';
+          if (s.width > 0) document.documentElement.style.setProperty('--ref-user-w', s.width + 'px');
+          if (s.height > 0) document.documentElement.style.setProperty('--ref-user-h', s.height * 100 + 'dvh');
           if (s.open && matchMedia('(min-width: 64rem)').matches) document.documentElement.classList.add('ref-docked');
         } catch {}
       </script>

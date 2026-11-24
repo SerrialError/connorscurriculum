@@ -30,9 +30,6 @@ export function periodicPosition(n: number): { row: number; col: number } {
   throw new Error(`no position for element ${n}`);
 }
 
-/** Metalloids, shaded as the staircase between metals and nonmetals. */
-export const METALLOIDS = new Set(['B', 'Si', 'Ge', 'As', 'Sb', 'Te']);
-
 export interface ElementLike {
   number: number;
   symbol: string;

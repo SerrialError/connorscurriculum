@@ -4,8 +4,9 @@ import '../styles/global.css';
 import ScrollCues from '../components/ScrollCues.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import ReferencePanel from '../components/reference/ReferencePanel.astro';
 import { getSubjectData, url } from '../lib/content';
-import { navKeyFor, searchPlaceholder, subjectNav } from '../lib/features';
+import { hasReference, navKeyFor, searchPlaceholder, subjectNav } from '../lib/features';
 import { CONTRIBUTE_URL, SITE_DESCRIPTION, SITE_NAME } from '../site';
 
 interface Props {
@@ -31,6 +32,8 @@ const current = subject && path.startsWith(classRoot) ? navKeyFor(nav, path.slic
 const onHome = subject !== undefined && path === classRoot;
 /** The home pages have their own search box, so the header has no Search button there. */
 const hasSearchBox = onHome || path === url();
+/** The test reference sheet (equations, periodic table), for a class that has one, everywhere but its own page. */
+const showReference = !!subjectData && hasReference(subjectData) && !path.startsWith(url(`${subject}/reference/`));
 ---
 
 <!doctype html>
@@ -48,6 +51,17 @@ const hasSearchBox = onHome || path === url();
         if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
       } catch {}
     </script>
+    {showReference && (
+      <script is:inline data-key={`study:${subject}:reference`}>
+        // The reference panel's tab, and whether it's docked open (wide screens), before the first
+        // paint, so the page is laid out beside it from the start (ReferencePanel.astro).
+        try {
+          const s = JSON.parse(localStorage.getItem(document.currentScript.dataset.key) || '{}');
+          if (s.tab === 'pt') document.documentElement.dataset.refTab = 'pt';
+          if (s.open && matchMedia('(min-width: 64rem)').matches) document.documentElement.classList.add('ref-docked');
+        } catch {}
+      </script>
+    )}
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -64,6 +78,14 @@ const hasSearchBox = onHome || path === url();
           </a>
         )}
         <span class="spacer"></span>
+        {showReference && (
+          <button class="icon-button ref-open" type="button" data-ref-open aria-controls="ref-panel" aria-expanded="false" aria-keyshortcuts="r" title="Equations and periodic table (press R)">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 4h4v6h10V6h4v10H3zM7 10v6M17 10v6M7 19h12"></path>
+            </svg>
+            <span class="ref-label">Reference</span>
+          </button>
+        )}
         <button class="icon-button search-open" type="button" aria-haspopup="dialog" aria-keyshortcuts="/" title="Search (press /)" hidden={hasSearchBox}>
           <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
             <circle cx="10.5" cy="10.5" r="6.5"></circle>
@@ -118,6 +140,7 @@ const hasSearchBox = onHome || path === url();
         Not affiliated with or endorsed by College Board or Pearson. AP® is a registered trademark of College Board.
       </p>
     </footer>
+    {subjectData && hasReference(subjectData) && <ReferencePanel data={subjectData} scriptOnly={!showReference} />}
     <ScrollCues />
     <script is:inline>
       // Class tests (data-test-date): past or upcoming by the reader's date, since the build can be
@@ -150,6 +173,19 @@ const hasSearchBox = onHome || path === url();
   .site-header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
+    container: header / inline-size;
+  }
+  /* Short of room (a phone, or beside the docked reference panel): icon-only header buttons. */
+  @container header (max-width: 48rem) {
+    .search-label,
+    .ref-label,
+    .bar :global(.theme-toggle .text) {
+      display: none;
+    }
+    .icon-button.search-open,
+    .icon-button.ref-open {
+      padding: 0.3rem 0.55rem;
+    }
   }
   .bar {
     display: flex;
@@ -184,6 +220,11 @@ const hasSearchBox = onHome || path === url();
   }
   .spacer {
     flex: 1;
+  }
+  .icon-button.ref-open[aria-expanded='true'] {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--link);
   }
   .subnav {
     display: flex;
@@ -242,8 +283,12 @@ const hasSearchBox = onHome || path === url();
       display: block;
       flex: none;
     }
-    .search-label {
+    .search-label,
+    .ref-label {
       display: none;
+    }
+    .icon-button.ref-open {
+      padding: 0.3rem 0.55rem;
     }
     .icon-button.search-open {
       padding: 0.3rem 0.55rem;

@@ -1,0 +1,71 @@
+---
+// The class's periodic table (periodic-table.json): atomic number, symbol, and mass as on the
+// official table, plus search and a line naming the element pointed at or selected. It always fits
+// its space: roomy cells show number, symbol, and mass; in a narrow panel or on a phone the cells
+// show the symbol only, and the line above gives the rest. Its search and keys are in
+// lib/periodic-table-ui.ts, started by ReferencePanel's script (on every class page).
+import type { Element } from '../../lib/registry';
+import { METALLOIDS, periodicPosition } from '../../lib/elements';
+
+interface Props {
+  elements: Element[];
+}
+
+const { elements } = Astro.props;
+const cells = elements.map((e) => ({ ...e, ...periodicPosition(e.number), metalloid: METALLOIDS.has(e.symbol) }));
+// Row 1 holds the group numbers, so every element row moves down one.
+const groups = Array.from({ length: 18 }, (_, i) => i + 1);
+const HINT = 'Point at or select an element for its name and mass.';
+---
+
+<div class="pt" data-periodic-table data-hint={HINT}>
+  <div class="pt-tools">
+    <label class="pt-search">
+      <span class="visually-hidden">Find an element</span>
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+        <circle cx="10.5" cy="10.5" r="6.5"></circle>
+        <path d="m15.5 15.5 5 5"></path>
+      </svg>
+      <input type="search" placeholder="Find: Fe, iron, or 26" autocomplete="off" spellcheck="false" data-pt-input />
+    </label>
+    <p class="pt-info" aria-live="polite" data-pt-info>{HINT}</p>
+  </div>
+  <div class="pt-scroll" data-scroll-x="Periodic table">
+  <div class="pt-sizer">
+    <div class="pt-grid" role="group" aria-label="Periodic table">
+      {groups.map((g) => <span class="pt-group" style={`grid-area: 1 / ${g}`} aria-hidden="true">{g}</span>)}
+      <span class="pt-gap" style="grid-area: 7 / 3" aria-hidden="true"><span class="roomy">57–71<br /></span>*</span>
+      <span class="pt-gap" style="grid-area: 8 / 3" aria-hidden="true"><span class="roomy">89–103<br /></span>†</span>
+      <span class="pt-series" style="grid-area: 10 / 1 / 11 / 4" aria-hidden="true">*<span class="roomy">Lanthanoids</span></span>
+      <span class="pt-series" style="grid-area: 11 / 1 / 12 / 4" aria-hidden="true">†<span class="roomy">Actinoids</span></span>
+      {
+        cells.map((e) => (
+          <button
+            type="button"
+            class:list={['pt-cell', { metalloid: e.metalloid }]}
+            style={`grid-area: ${e.row + 1} / ${e.col}`}
+            tabindex={e.number === 1 ? 0 : -1}
+            data-number={e.number}
+            data-symbol={e.symbol}
+            data-name={e.name}
+            data-mass={e.mass ?? ''}
+            data-row={e.row}
+            data-col={e.col}
+            aria-label={`${e.name}, ${e.symbol}, atomic number ${e.number}${e.mass ? `, mass ${e.mass}` : ''}`}
+          >
+            <span class="n">{e.number}</span>
+            <span class="s">{e.symbol}</span>
+            <span class="m">{e.mass}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+  </div>
+  <p class="pt-legend small muted">
+    <span class="swatch" aria-hidden="true"></span> Shaded: metalloids, the line between metals and nonmetals. Masses are in g/mol. Elements
+    without a mass on the AP table have none here.
+  </p>
+</div>
+
+

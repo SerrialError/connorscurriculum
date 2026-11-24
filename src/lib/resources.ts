@@ -10,6 +10,8 @@ export interface Resource {
   url: string;
   by: string;
   minutes?: number;
+  /** YouTube id of the same video, when the link goes somewhere else (Khan Academy). */
+  youtube?: string;
   why: string;
 }
 
@@ -27,6 +29,17 @@ export function siteName(url: string): string {
   if (host === 'khanacademy.org') return 'Khan Academy';
   if (host === 'phet.colorado.edu') return 'PhET';
   return host;
+}
+
+/** The YouTube video to play on the page: from a YouTube link, or the "youtube" field. */
+export function youtubeId(r: Resource): string | null {
+  if (r.kind !== 'video') return null;
+  if (r.youtube) return r.youtube;
+  const u = new URL(r.url);
+  const host = u.hostname.replace(/^www\./, '');
+  if (host === 'youtube.com') return u.searchParams.get('v');
+  if (host === 'youtu.be') return u.pathname.slice(1) || null;
+  return null;
 }
 
 /** "Jeremy Krug · 12 min · YouTube", leaving out the site when it is also the creator. */

@@ -1,0 +1,16 @@
+---
+// Under each reference sheet: this is a copy laid out for screens, and where the official one is.
+interface Props {
+  source: { label: string; url: string; note?: string };
+  /** How this copy differs from the official one, as a sentence. */
+  differences: string;
+}
+
+const { source, differences } = Astro.props;
+---
+
+<p class="source-note small">
+  {differences} On a test you get the official one:{' '}
+  <a href={source.url} target="_blank" rel="noopener">{source.label}</a>{source.note && <span class="muted"> ({source.note})</span>}.
+</p>
+

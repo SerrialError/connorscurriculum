@@ -1,0 +1,439 @@
+---
+// The Reference panel: the class's equation sheet and periodic table, opened from the header
+// button (or R). Wide screens dock it on the right and keep the page usable beside it, so a
+// practice question and the sheet are both in view; it stays open across pages until closed.
+// Phones get a sheet from the bottom over the page.
+// Its content isn't in every page: it's loaded from the reference page the first time it's needed
+// (as soon as the button is pointed at or tapped), and kept for the browser tab.
+import type { SubjectData } from '../../lib/registry';
+import { url } from '../../lib/content';
+// The sheet's styles too: a separate file, fetched only when the panel is used.
+import sheetCss from '../../styles/reference.css?url';
+
+interface Props {
+  data: SubjectData;
+  /**
+   * Just the script, no panel: on the reference page, where it sets up the page's own periodic
+   * table. One script for both keeps the table's code inside it rather than in a separate file
+   * that every page would wait for.
+   */
+  scriptOnly?: boolean;
+}
+
+const { data, scriptOnly = false } = Astro.props;
+const reference = data.reference!;
+const hasTable = data.elements.length > 0;
+const key = `study:${data.subject.id}:reference`;
+const source = url(`${data.subject.id}/reference/`);
+---
+
+{!scriptOnly && (
+<dialog class="ref-panel" id="ref-panel" aria-labelledby="ref-title" data-storage-key={key} data-source={source} data-css={sheetCss}>
+  <div class="ref-head">
+    {/* With tabs, they say what this is, so the heading is for screen readers only. */}
+    <h2 id="ref-title" class:list={['ref-title', { 'visually-hidden': hasTable }]}>Reference</h2>
+    {
+      hasTable && (
+        <div class="ref-tabs" role="tablist" aria-label="Reference">
+          <button type="button" role="tab" id="ref-tab-eq" aria-controls="ref-eq" aria-selected="true" data-tab="eq">
+            Equations
+          </button>
+          <button type="button" role="tab" id="ref-tab-pt" aria-controls="ref-pt" aria-selected="false" tabindex="-1" data-tab="pt" aria-label="Periodic table">
+            <span class="long">Periodic table</span><span class="short" aria-hidden="true">Table</span>
+          </button>
+        </div>
+      )
+    }
+    <span class="ref-spacer"></span>
+    {/* The official version of whichever sheet is showing. */}
+    <a class="ref-official small" href={reference.official.url} target="_blank" rel="noopener" data-for="eq" title={reference.official.label} aria-label={reference.official.label}><span class="long">Official </span>PDF</a>
+    {hasTable && <a class="ref-official small" href={reference.periodicTable!.url} target="_blank" rel="noopener" data-for="pt" title={reference.periodicTable!.label} aria-label={reference.periodicTable!.label}><span class="long">Official </span>PDF</a>}
+    <a class="ref-icon" href={url(`${data.subject.id}/reference/`)} title="Open as a full page" aria-label="Open the reference as a full page">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 4h5v5M20 4l-6 6M9 20H4v-5M4 20l6-6"></path>
+      </svg>
+    </a>
+    <button type="button" class="ref-icon" data-ref-close aria-label="Close reference" title="Close (Esc)">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="ref-body" tabindex="-1">
+    <section id="ref-eq" role={hasTable ? 'tabpanel' : undefined} aria-labelledby={hasTable ? 'ref-tab-eq' : 'ref-title'} data-panel="eq">
+      <p class="muted small" data-ref-slot="eq">Loading…</p>
+    </section>
+    {
+      hasTable && (
+        <section id="ref-pt" role="tabpanel" aria-labelledby="ref-tab-pt" data-panel="pt">
+          <p class="muted small" data-ref-slot="pt">Loading…</p>
+        </section>
+      )
+    }
+  </div>
+</dialog>
+)}
+
+<!-- <head> (Base.astro) set html.ref-docked and data-ref-tab from the last page, so the layout is
+     right from the first paint and CSS shows the right tab. Open the dialog to match, without
+     moving focus (show() would). -->
+<script is:inline>
+  (() => {
+    const d = document.getElementById('ref-panel');
+    if (!d || !document.documentElement.classList.contains('ref-docked')) return;
+    d.setAttribute('open', '');
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = d.dataset.css;
+    css.dataset.refCss = '';
+    document.head.append(css);
+    // Its content from an earlier page in this tab, so it doesn't flash "Loading…" (see loadContent).
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('ref-content:' + d.dataset.source) || 'null');
+      if (saved) for (const slot of d.querySelectorAll('[data-ref-slot]')) slot.outerHTML = saved[slot.dataset.refSlot] ?? slot.outerHTML;
+    } catch {}
+  })();
+</script>
+
+<script>
+  import { isTypingTarget } from '../../lib/keyboard';
+  import { initPeriodicTable } from '../../lib/periodic-table-ui';
+
+  // The reference page's own table (no panel there).
+  document.querySelectorAll<HTMLElement>('main [data-periodic-table]').forEach(initPeriodicTable);
+
+  const panel = document.getElementById('ref-panel') as HTMLDialogElement | null;
+  if (panel) {
+    const root = document.documentElement;
+    const key = panel.dataset.storageKey!;
+    const wide = matchMedia('(min-width: 64rem)');
+    const openers = () => [...document.querySelectorAll<HTMLButtonElement>('[data-ref-open]')];
+    const tabs = [...panel.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    let returnFocus: HTMLElement | null = null;
+
+    /**
+     * Fill the panel from the reference page's [data-ref-content] parts, once. Kept in
+     * sessionStorage, so later pages in this tab show it at once (the inline script above).
+     */
+    const contentKey = `ref-content:${panel.dataset.source}`;
+    let content: Promise<void> | null = null;
+    /** The periodic table's search and keys, on the panel's copy. */
+    const startTable = () => panel!.querySelectorAll<HTMLElement>('[data-periodic-table]').forEach(initPeriodicTable);
+    function loadContent(): Promise<void> {
+      if (!document.querySelector('link[data-ref-css]')) {
+        const css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = panel!.dataset.css!;
+        css.dataset.refCss = '';
+        document.head.append(css);
+      }
+      // Filled already, from an earlier page in this tab (the inline script above).
+      if (!panel!.querySelector('[data-ref-slot]')) {
+        content ??= Promise.resolve(startTable());
+        return content;
+      }
+      content ??= fetch(panel!.dataset.source!)
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.text();
+        })
+        .then((html) => {
+          const page = new DOMParser().parseFromString(html, 'text/html');
+          const parts: Record<string, string> = {};
+          for (const slot of panel!.querySelectorAll<HTMLElement>('[data-ref-slot]')) {
+            const part = page.querySelector(`[data-ref-content="${slot.dataset.refSlot}"]`);
+            if (!part) throw new Error('missing part');
+            parts[slot.dataset.refSlot!] = part.outerHTML;
+            slot.outerHTML = part.outerHTML;
+          }
+          try {
+            sessionStorage.setItem(contentKey, JSON.stringify(parts));
+          } catch {}
+          startTable();
+        })
+        .catch(() => {
+          content = null; // try again next time
+          for (const slot of panel!.querySelectorAll<HTMLElement>('[data-ref-slot]')) {
+            slot.innerHTML = `Couldn't load this. <a href="${panel!.dataset.source}">Open the reference page</a> instead.`;
+          }
+        });
+      return content;
+    }
+    // Start loading as soon as someone heads for the button, so it's there when the panel opens.
+    for (const b of document.querySelectorAll<HTMLElement>('[data-ref-open]')) {
+      for (const ev of ['pointerenter', 'touchstart', 'focus']) b.addEventListener(ev, () => void loadContent(), { once: true, passive: true });
+    }
+    if (panel.open) void loadContent();
+
+    type Saved = { open?: boolean; tab?: 'eq' | 'pt' };
+    // localStorage directly, not lib/storage: one less file for every page to fetch.
+    const save = (s: Saved) => {
+      try {
+        localStorage.setItem(key, JSON.stringify({ ...JSON.parse(localStorage.getItem(key) || '{}'), ...s }));
+      } catch {}
+    };
+    const sync = () => {
+      for (const b of openers()) b.setAttribute('aria-expanded', String(panel.open));
+    };
+
+    /**
+     * Docked, focus stays where it was, so practice shortcuts (A–D, arrows) keep working beside
+     * it. The phone sheet is modal, so focus moves into it, onto the scrolling sheet.
+     */
+    function open() {
+      void loadContent();
+      const before = document.activeElement as HTMLElement | null;
+      if (panel!.open) panel!.close();
+      if (wide.matches) {
+        panel!.show();
+        root.classList.add('ref-docked');
+        before?.focus({ preventScroll: true });
+      } else {
+        panel!.showModal();
+        panel!.querySelector<HTMLElement>('.ref-body')!.focus();
+      }
+      save({ open: true });
+      sync();
+    }
+
+    function close() {
+      panel!.close();
+    }
+
+    panel.addEventListener('close', () => {
+      root.classList.remove('ref-docked');
+      save({ open: false });
+      sync();
+      returnFocus?.focus();
+      returnFocus = null;
+    });
+
+    function toggle(from: HTMLElement | null) {
+      if (panel!.open) return close();
+      returnFocus = from;
+      open();
+    }
+
+    for (const b of openers()) b.addEventListener('click', () => toggle(b));
+    panel.querySelector('[data-ref-close]')!.addEventListener('click', close);
+
+    // Esc closes it from anywhere (a docked panel isn't modal, so the browser doesn't do this for
+    // it), unless it's clearing the element search or closing another dialog such as search.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape' || !panel.open || e.defaultPrevented) return;
+      const t = e.target as HTMLElement;
+      if (t.matches?.('input[type="search"]:not(:placeholder-shown)')) return;
+      if (t.closest?.('dialog[open]') && !panel.contains(t)) return;
+      e.preventDefault();
+      close();
+    });
+
+    // Tapping the dimmed page around the phone sheet closes it.
+    panel.addEventListener('click', (e) => {
+      if (e.target === panel && !wide.matches) close();
+    });
+
+    // R, except while typing: opens the panel; with it docked open and focus on the page, moves
+    // into it (it comes last in tab order); from inside it, closes it.
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() !== 'r' || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const t = e.target as HTMLElement;
+      const inside = panel.contains(t);
+      if (inside ? t.closest('input, textarea, select') : isTypingTarget(t)) return;
+      e.preventDefault();
+      if (panel.open && !inside) {
+        returnFocus = t;
+        (tabs.find((x) => x.getAttribute('aria-selected') === 'true') ?? panel.querySelector<HTMLElement>('.ref-body'))!.focus();
+        return;
+      }
+      toggle(panel.open ? null : (document.activeElement as HTMLElement | null));
+    });
+
+    // Crossing the size where it docks: reopen it in the other mode.
+    wide.addEventListener('change', () => {
+      if (panel.open) open();
+    });
+
+    /** Tabs are shown by CSS from html[data-ref-tab]; this keeps the tab buttons in step. */
+    function selectTab(tab: HTMLButtonElement, focus: boolean) {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      }
+      root.dataset.refTab = tab.dataset.tab;
+      save({ tab: tab.dataset.tab as Saved['tab'] });
+      if (focus) tab.focus();
+    }
+    const startTab = tabs.find((t) => t.dataset.tab === (root.dataset.refTab ?? 'eq'));
+    if (startTab) selectTab(startTab, false);
+    for (const t of tabs) {
+      t.addEventListener('click', () => selectTab(t, false));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        e.preventDefault();
+        const i = tabs.indexOf(t);
+        selectTab(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]!, true);
+      });
+    }
+    sync();
+  }
+</script>
+
+<style is:global>
+  /* Docked: the page makes room for the panel instead of sitting under it. Both tabs use the same
+     width, so switching never re-wraps the page; the periodic table fits itself to it. */
+  @media (min-width: 64rem) {
+    html {
+      --ref-w: clamp(24rem, 34vw, 42rem);
+    }
+    html.ref-docked body {
+      padding-right: var(--ref-w);
+    }
+  }
+  /* The open tab, from the last page too (set in <head>). */
+  html:not([data-ref-tab='pt']) #ref-pt,
+  html[data-ref-tab='pt'] #ref-eq,
+  html:not([data-ref-tab='pt']) .ref-official[data-for='pt'],
+  html[data-ref-tab='pt'] .ref-official[data-for='eq'] {
+    display: none;
+  }
+  /* The phone sheet is modal: the page behind it doesn't scroll. */
+  html:has(.ref-panel:modal) {
+    overflow: hidden;
+  }
+</style>
+
+<style>
+  .ref-panel {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--text);
+    background: var(--bg);
+    display: none;
+    flex-direction: column;
+    /* Phones: a sheet from the bottom, nearly full height. */
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: 100%;
+    height: min(88dvh, 100%);
+    max-height: 100%;
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -8px 30px rgb(0 0 0 / 0.18);
+    z-index: 40;
+  }
+  .ref-panel[open] {
+    display: flex;
+  }
+  .ref-panel::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  @media (min-width: 64rem) {
+    .ref-panel {
+      inset: 0 0 0 auto;
+      width: var(--ref-w);
+      height: 100dvh;
+      border-radius: 0;
+      border-left: 1px solid var(--border);
+      box-shadow: -4px 0 18px rgb(0 0 0 / 0.06);
+    }
+  }
+  .ref-panel {
+    container-type: inline-size;
+  }
+  .ref-head {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    padding: 0.6rem 0.75rem 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .ref-title {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .ref-tabs {
+    display: inline-flex;
+    padding: 2px;
+    border-radius: var(--pill);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .ref-tabs button {
+    min-height: 2rem;
+    padding: 0.2rem 0.7rem;
+    white-space: nowrap;
+    border: 0;
+    border-radius: var(--pill);
+    background: none;
+    color: var(--text-2);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .ref-tabs button[aria-selected='true'] {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .ref-spacer {
+    flex: 1;
+  }
+  .ref-tabs .short {
+    display: none;
+  }
+  /* A narrow panel or a phone: shorter labels, so the close button always fits. */
+  @container (max-width: 30rem) {
+    .ref-tabs .long,
+    .ref-official .long {
+      display: none;
+    }
+    .ref-tabs .short {
+      display: inline;
+    }
+    .ref-head {
+      gap: 0.25rem;
+      padding-inline: 0.6rem 0.4rem;
+    }
+  }
+  .ref-official {
+    padding: 0.3rem 0.4rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .ref-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--text-2);
+    cursor: pointer;
+  }
+  .ref-icon:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .ref-body:focus {
+    outline: none;
+  }
+  .ref-body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.9rem 1rem 1.5rem;
+  }
+  @media (max-width: 520px) {
+    .ref-tabs button,
+    .ref-icon {
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+    }
+  }
+</style>

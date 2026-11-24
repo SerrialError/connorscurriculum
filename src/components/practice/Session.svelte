@@ -106,7 +106,9 @@
   }
 
   /** The set's shortcuts work from inside it, or from the page itself (nothing focused), not from the header or nav. */
-  const pageOrSession = (el: HTMLElement): boolean => el === document.body || el.id === 'main' || !!el.closest('.session');
+  /** Keys count from the page, the session, or the docked reference panel beside it (not the phone sheet over it). */
+  const pageOrSession = (el: HTMLElement): boolean =>
+    el === document.body || el.id === 'main' || !!el.closest('.session') || !!el.closest('.ref-panel:not(:modal)');
 
   /**
    * ← → move between questions, but only from the page itself, the question, or a button: a
@@ -120,7 +122,8 @@
   /** A–D (or 1–4) pick a choice, Enter checks, ← → move between questions. */
   function onKey(e: KeyboardEvent) {
     const q = attempt.current;
-    if (!q || e.altKey || e.ctrlKey || e.metaKey) return;
+    // Something else used the key already (the periodic table's arrows, say).
+    if (!q || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
     const el = e.target as HTMLElement;
     if (isTypingTarget(el) || !pageOrSession(el)) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { groupResources, resourceMeta, siteName, type Resource } from './resources';
+import { groupResources, resourceMeta, siteName, youtubeId, type Resource } from './resources';
 
 const r = (kind: Resource['kind'], title: string, url: string, by: string, minutes?: number): Resource => ({
   kind,
@@ -21,6 +21,14 @@ describe('resources', () => {
   it('shows who made it, how long it is, and the site, without repeating the site', () => {
     expect(resourceMeta(r('video', 'VSEPR', 'https://www.youtube.com/watch?v=a', 'Jeremy Krug', 18))).toBe('Jeremy Krug · 18 min · YouTube');
     expect(resourceMeta(r('practice', 'VSEPR', 'https://www.khanacademy.org/e/vsepr', 'Khan Academy'))).toBe('Khan Academy');
+  });
+
+  it('finds the YouTube video to play, from the link or the youtube field', () => {
+    expect(youtubeId(r('video', 'V', 'https://www.youtube.com/watch?v=a8xDFQLYtYE', 'A'))).toBe('a8xDFQLYtYE');
+    expect(youtubeId(r('video', 'V', 'https://youtu.be/a8xDFQLYtYE', 'A'))).toBe('a8xDFQLYtYE');
+    expect(youtubeId({ ...r('video', 'V', 'https://www.khanacademy.org/v/x', 'Khan Academy'), youtube: 'paXRIINiYlQ' })).toBe('paXRIINiYlQ');
+    expect(youtubeId(r('video', 'V', 'https://www.khanacademy.org/v/x', 'Khan Academy'))).toBeNull();
+    expect(youtubeId(r('practice', 'P', 'https://www.youtube.com/watch?v=a8xDFQLYtYE', 'A'))).toBeNull();
   });
 
   it('groups in watch, try, practice order and keeps the order within a group', () => {

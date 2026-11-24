@@ -28,4 +28,12 @@ describe('isTypingTarget', () => {
     expect(isTypingTarget(el('A', {}, el('LI', {}, open)))).toBe(true);
     expect(isTypingTarget(el('BUTTON', {}, el('DIALOG', { open: false })))).toBe(false);
   });
+
+  it('leaves a non-modal dialog (the docked reference panel) to page shortcuts', () => {
+    const docked = el('DIALOG', { open: true, matches: (s) => s !== ':modal' });
+    const modal = el('DIALOG', { open: true, matches: (s) => s === ':modal' });
+    expect(isTypingTarget(el('BUTTON', {}, docked))).toBe(false);
+    expect(isTypingTarget(el('INPUT', { type: 'search' }, docked))).toBe(true);
+    expect(isTypingTarget(el('BUTTON', {}, modal))).toBe(true);
+  });
 });

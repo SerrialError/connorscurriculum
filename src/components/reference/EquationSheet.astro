@@ -1,0 +1,94 @@
+---
+// The equations, constants, and unit tables from a class's reference.json. Lays itself out by the
+// space it gets (container queries), so it fits the side panel, a phone, and the full page.
+import type { Reference } from '../../lib/registry';
+import { cell, tex } from '../../lib/reference';
+
+interface Props {
+  reference: Reference;
+}
+
+// Section titles are h3s: they sit under the page's or the panel's h2.
+const { reference } = Astro.props;
+---
+
+<div class="sheet">
+  {
+    reference.sections.map((s) => (
+      <section class="sheet-section">
+        <h3 class="sheet-h">{s.title}</h3>
+        <div class="sheet-cols">
+          <ul class="equations">
+            {s.equations.map((e) => (
+              <li set:html={tex(e)} />
+            ))}
+          </ul>
+          {(s.key.length > 0 || s.constants.length > 0) && (
+            <div class="sheet-key">
+              {s.keyTitle && <p class="key-title">{s.keyTitle}</p>}
+              {s.key.length > 0 && (
+                <dl class:list={['key', { named: !!s.keyTitle }]}>
+                  {s.key.map(([sym, meaning]) => (
+                    <div>
+                      <dt set:html={tex(sym)} />
+                      <dd>{meaning}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+              {s.constants.length > 0 && (
+                <dl class="constants">
+                  {s.constants.map(([name, value]) => (
+                    <div>
+                      <dt>{name}</dt>
+                      <dd set:html={tex(value)} />
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+  <section class="sheet-section units">
+    <h3 class="sheet-h">Units and prefixes</h3>
+    <div class="unit-tables">
+      {
+        reference.tables.map((t) => (
+          <div class="unit-table">
+            <p class="key-title">{t.title}</p>
+            {'math' in t ? (
+              <ul class="equations compact">
+                {t.math.map((m) => (
+                  <li set:html={tex(m)} />
+                ))}
+              </ul>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    {t.columns.map((c) => (
+                      <th scope="col">{c}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {t.rows.map((r) => (
+                    <tr>
+                      {r.map((c) => (
+                        <td set:html={cell(c)} />
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</div>
+

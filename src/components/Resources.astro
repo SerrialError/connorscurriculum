@@ -1,6 +1,8 @@
 ---
 // Videos, simulations, and practice from outside the site, grouped by kind, each with why it's here.
-import { groupResources, resourceMeta, type Resource } from '../lib/resources';
+// Videos on YouTube play right on the page (YouTube.astro: a thumbnail until started).
+import YouTube from './YouTube.astro';
+import { groupResources, resourceMeta, youtubeId, type Resource } from '../lib/resources';
 
 interface Props {
   items: Resource[];
@@ -11,19 +13,28 @@ const groups = groupResources(Astro.props.items);
 
 <section class="resources" id="resources" aria-labelledby="resources-h" data-pagefind-ignore>
   <h2 id="resources-h">Videos and practice</h2>
-  <p class="small muted">Picked from other sites to go with this page. Khan Academy practice works without an account, but it only saves your progress if you sign in.</p>
+  <p class="small muted">
+    Picked from other sites to go with this page. Videos play here; each title opens the original. Khan Academy practice works without an account,
+    but it only saves your progress if you sign in.
+  </p>
   {
     groups.map((g) => (
       <>
         <h3>{g.label}</h3>
         <ul class="resource-list">
-          {g.items.map((r) => (
-            <li>
-              <a href={r.url}>{r.title}</a>
-              <span class="meta small muted">{resourceMeta(r)}</span>
-              <p class="why">{r.why}</p>
-            </li>
-          ))}
+          {g.items.map((r) => {
+            const id = youtubeId(r);
+            return (
+              <li class:list={{ 'has-player': !!id }}>
+                {id && <YouTube id={id} title={r.title} minutes={r.minutes} class="card-video" />}
+                <div class="text">
+                  <a class="title" href={r.url}>{r.title}</a>
+                  <span class="meta small muted">{resourceMeta(r)}</span>
+                  <p class="why">{r.why}</p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </>
     ))
@@ -34,6 +45,7 @@ const groups = groupResources(Astro.props.items);
   .resources {
     margin-top: 2.5rem;
     scroll-margin-top: 1rem;
+    container-type: inline-size;
   }
   .resources h2 {
     margin-bottom: 0.25rem;
@@ -53,13 +65,16 @@ const groups = groupResources(Astro.props.items);
     padding: 0;
     list-style: none;
   }
-  .resource-list li {
-    padding: 0.65rem 0.9rem;
+  .resource-list > li {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--surface);
+    overflow: hidden;
   }
-  .resource-list a {
+  .text {
+    padding: 0.65rem 0.9rem 0.75rem;
+  }
+  .title {
     font-weight: 600;
   }
   .meta {
@@ -69,5 +84,19 @@ const groups = groupResources(Astro.props.items);
   .why {
     margin: 0.35rem 0 0;
     font-size: 0.95rem;
+  }
+
+  /* Videos: the thumbnail beside the text where there's room, above it on phones. A started video
+     grows to the card's full width in place: the cards keep their order, and only what's below moves down. */
+  .resource-list :global(.card-video) {
+    margin: 0;
+    border-radius: 0;
+  }
+  @container (min-width: 34rem) {
+    .has-player:not(:has([data-playing])) {
+      display: grid;
+      grid-template-columns: 14rem minmax(0, 1fr);
+      align-items: start;
+    }
   }
 </style>

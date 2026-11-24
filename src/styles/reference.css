@@ -16,7 +16,7 @@
 }
 .sheet .sheet-h {
   margin: 0 0 0.6rem;
-  font-size: 0.8rem;
+  font-size: 0.8em;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -34,29 +34,31 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 1.05rem;
+  font-size: 1.05em;
 }
 .sheet .equations.compact {
   gap: 0.4rem;
-  font-size: 0.95rem;
+  font-size: 0.95em;
 }
-/* One line per equation: KaTeX would otherwise wrap mid-fraction on a phone. A long one scrolls
-   sideways instead of widening the page. */
-.sheet .equations li .katex {
-  white-space: nowrap;
-}
+/* A long equation wraps after an "=" or operator (KaTeX never breaks inside a fraction or a
+   braced group, so values like 1.0 × 10⁻¹⁴ stay whole), and its next line is indented. Anything
+   still too wide scrolls sideways instead of widening the page. */
 .sheet .equations li {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.1rem 0;
+  padding: 0.1rem 0 0.1rem 1.5em;
+  text-indent: -1.5em;
+}
+.sheet .equations li .katex {
+  text-indent: 0;
 }
 .sheet .sheet-key {
-  font-size: 0.875rem;
+  font-size: 0.875em;
 }
 .sheet .key-title {
   margin: 0 0 0.35rem;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.85em;
   color: var(--text-2);
 }
 .sheet dl {
@@ -74,6 +76,8 @@
   align-items: baseline;
 }
 .sheet .key dt {
+  flex: none;
+  white-space: nowrap;
   min-width: 1.6rem;
   text-align: right;
 }
@@ -126,7 +130,7 @@
 .sheet table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 0.85em;
 }
 .sheet th {
   text-align: left;
@@ -144,6 +148,8 @@
   .sheet .sheet-cols {
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     gap: 1.5rem;
+    /* In a very wide panel, keep the key near the equations it explains. */
+    max-width: 48rem;
   }
   .sheet .key {
     grid-template-columns: 1fr;
@@ -151,12 +157,28 @@
 }
 
 /* PeriodicTable */
+/* The table is a size container too, so the hint can match what the cells show. */
+.pt {
+  container-type: inline-size;
+}
+.pt .hint-narrow {
+  display: none;
+}
+@container (max-width: 36rem) {
+  .pt .hint-roomy {
+    display: none;
+  }
+  .pt .hint-narrow {
+    display: inline;
+  }
+}
+/* Search, and beside it (below it when narrow) a line naming the element pointed at or selected. */
 .pt .pt-tools {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 1rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.9rem;
 }
 .pt .pt-search {
   display: flex;
@@ -184,24 +206,27 @@
   font: inherit;
   outline: none;
 }
-/* Two lines tall, so naming an element never moves the table. */
+/* Two lines tall whatever it says, so naming an element never moves the table. */
 .pt .pt-info {
-  flex: 1 1 14rem;
-  min-height: 2.6em;
+  flex: 1 1 16rem;
+  min-width: 0;
+  min-height: 2lh;
   margin: 0;
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  line-height: 1.3;
+  line-height: 1.35;
+  font-size: 0.95em;
   color: var(--text-2);
 }
-/* Never so small that cells are under 24 px to tap: narrower than that, the table scrolls sideways. */
+.pt .pt-info strong {
+  color: var(--text);
+}
+/* The whole table in view, even on a phone (cells about 19 px there; the search box reaches any
+   element at full size). Only narrower than 20rem does it scroll sideways. */
 .pt .pt-scroll {
   overflow-x: auto;
 }
 .pt .pt-sizer {
   container-type: inline-size;
-  min-width: 28rem;
+  min-width: 20rem;
 }
 .pt .pt-grid {
   --gap: 2px;
@@ -260,11 +285,11 @@
 }
 .pt .n,
 .pt .m {
-  font-size: max(0.56rem, calc(var(--cell) * 0.22));
+  font-size: max(0.56rem, calc(var(--cell) * 0.23));
   font-variant-numeric: tabular-nums;
 }
 .pt .m {
-  font-size: max(0.56rem, calc(var(--cell) * 0.215));
+  font-size: max(0.56rem, calc(var(--cell) * 0.23));
   letter-spacing: -0.03em;
 }
 .pt .s {
@@ -320,9 +345,9 @@
 
 /* SourceNote */
 .source-note {
-  margin: 1rem 0 0;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 1px dashed var(--border);
-  color: var(--text-2);
+  margin: 1.5rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  line-height: 1.55;
 }

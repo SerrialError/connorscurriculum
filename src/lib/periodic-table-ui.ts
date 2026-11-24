@@ -18,17 +18,19 @@ export function initPeriodicTable(root: HTMLElement): void {
   if (first(57)) at.set('6/3', first(57)!);
   if (first(89)) at.set('7/3', first(89)!);
   const selected = () => cells.find((c) => c.getAttribute('aria-current') === 'true');
+  // The hint from the page: one wording for each table size, picked by CSS.
+  const hint = [...info.childNodes];
 
   /** "Iron (Fe) · 26 · 55.85 g/mol" in the line above the table, or the hint. */
   const describe = (c: HTMLButtonElement | undefined) => {
     if (!c) {
-      info.textContent = root.dataset.hint!;
+      info.replaceChildren(...hint);
       return;
     }
     const { number, symbol, name, mass } = c.dataset;
     const strong = document.createElement('strong');
     strong.textContent = `${name} (${symbol})`;
-    // In a span: the line is a flex box, which would drop a bare text node's leading space.
+    // The rest in its own span, after the bold name.
     const rest = document.createElement('span');
     rest.textContent = ` · atomic number ${number} · ${mass ? `${mass} g/mol` : 'no mass listed'}`;
     info.replaceChildren(strong, rest);

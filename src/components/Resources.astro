@@ -1,0 +1,73 @@
+---
+// Videos, simulations, and practice from outside the site, grouped by kind, each with why it's here.
+import { groupResources, resourceMeta, type Resource } from '../lib/resources';
+
+interface Props {
+  items: Resource[];
+}
+
+const groups = groupResources(Astro.props.items);
+---
+
+<section class="resources" id="resources" aria-labelledby="resources-h" data-pagefind-ignore>
+  <h2 id="resources-h">Videos and practice</h2>
+  <p class="small muted">Picked from other sites to go with this page. Khan Academy practice works without an account, but it only saves your progress if you sign in.</p>
+  {
+    groups.map((g) => (
+      <>
+        <h3>{g.label}</h3>
+        <ul class="resource-list">
+          {g.items.map((r) => (
+            <li>
+              <a href={r.url}>{r.title}</a>
+              <span class="meta small muted">{resourceMeta(r)}</span>
+              <p class="why">{r.why}</p>
+            </li>
+          ))}
+        </ul>
+      </>
+    ))
+  }
+</section>
+
+<style>
+  .resources {
+    margin-top: 2.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .resources h2 {
+    margin-bottom: 0.25rem;
+  }
+  .resources h3 {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .resource-list {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .resource-list li {
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .resource-list a {
+    font-weight: 600;
+  }
+  .meta {
+    display: block;
+    margin-top: 0.1rem;
+  }
+  .why {
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+  }
+</style>

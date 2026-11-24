@@ -99,6 +99,33 @@ export function lessonCollection(data: SubjectData) {
         ],
       },
       {
+        name: 'resources',
+        label: 'Videos and practice',
+        widget: 'list',
+        required: false,
+        default: [],
+        summary: '{{fields.title}}',
+        hint: 'Links to videos, simulations, or practice on other sites, shown near the end of the page.',
+        fields: [
+          {
+            name: 'kind',
+            label: 'Kind',
+            widget: 'select',
+            options: [
+              { label: 'Video', value: 'video' },
+              { label: 'Simulation', value: 'simulation' },
+              { label: 'Practice set', value: 'practice' },
+              { label: 'Reading', value: 'reading' },
+            ],
+          },
+          { name: 'title', label: 'Title', widget: 'string' },
+          { name: 'url', label: 'Link', widget: 'string', pattern: ['^https://', 'Must start with https://'] },
+          { name: 'by', label: 'Made by', widget: 'string', hint: 'The channel, teacher, or site, e.g. Khan Academy' },
+          { name: 'minutes', label: 'Length (minutes)', widget: 'number', value_type: 'int', required: false },
+          { name: 'why', label: 'Why this one', widget: 'text', hint: 'A sentence or two on what it adds to the page.' },
+        ],
+      },
+      {
         name: 'draft',
         label: 'Draft',
         widget: 'boolean',

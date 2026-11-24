@@ -4,6 +4,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Callout from '../../../components/Callout.astro';
 import Originals from '../../../components/Originals.astro';
 import Reveal from '../../../components/Reveal.astro';
+import Resources from '../../../components/Resources.astro';
 import TopicBadges from '../../../components/TopicBadges.astro';
 import YouTube from '../../../components/YouTube.astro';
 import Molecule from '../../../components/Molecule.astro';
@@ -60,7 +61,11 @@ const { subject } = Astro.params;
 const { lesson, prev, next } = Astro.props;
 const { Content, headings } = await render(lesson);
 // "On this page": the lesson's sections, for pages long enough to need it.
-const toc = headings.filter((h) => h.depth === 2);
+// The videos-and-practice section comes from frontmatter, not the lesson body, so it's added here.
+const toc = [
+  ...headings.filter((h) => h.depth === 2),
+  ...(lesson.data.resources.length > 0 ? [{ slug: 'resources', text: 'Videos and practice' }] : []),
+];
 const showToc = toc.length >= 3;
 const data = getSubjectData(subject);
 const chapter = data.chapterMap.get(lesson.data.chapter)!;
@@ -157,6 +162,8 @@ const ahead = !isTaught(data, chapter.number);
     )}
 
     <Content components={{ YouTube, Callout, Reveal, Molecule, ShapeExplorer, OrbitalViewer, ShapeGrid, HybridCards }} />
+
+    {lesson.data.resources.length > 0 && <Resources items={lesson.data.resources} />}
 
     {lesson.data.originals.length > 0 && (
       <Originals lessonId={lesson.id} authors={lesson.data.authors} kind={lesson.data.kind} items={lesson.data.originals} />

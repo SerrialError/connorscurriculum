@@ -1,23 +1,120 @@
 ---
-// Privacy-enhanced YouTube embed (youtube-nocookie.com), lazy-loaded, 16:9.
+// A YouTube video that shows its thumbnail and loads the player (youtube-nocookie.com) only when
+// it's started, so pages with several videos stay light. Starting one stops any other on the page.
+// Used in lesson bodies (<YouTube id="…" />) and on the resource cards.
 interface Props {
   id: string;
   /** Start time in seconds. */
   start?: number;
   title?: string;
+  /** Shown on the thumbnail, e.g. 12 → "12 min". */
+  minutes?: number;
+  class?: string;
 }
 
-const { id, start = 0, title = 'YouTube video' } = Astro.props;
+const { id, start = 0, title = 'YouTube video', minutes, class: className } = Astro.props;
 if (!/^[\w-]{11}$/.test(id)) throw new Error(`<YouTube id="${id}">: expected an 11-character video id`);
-const src = `https://www.youtube-nocookie.com/embed/${id}${start > 0 ? `?start=${Math.floor(start)}` : ''}`;
+const params = new URLSearchParams({ autoplay: '1', rel: '0', playsinline: '1' });
+if (start > 0) params.set('start', String(Math.floor(start)));
+const embed = `https://www.youtube-nocookie.com/embed/${id}?${params}`;
+const watch = `https://www.youtube.com/watch?v=${id}${start > 0 ? `&t=${Math.floor(start)}s` : ''}`;
 ---
 
-<figure class="youtube">
-  <iframe
-    src={src}
-    title={title}
-    loading="lazy"
-    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen></iframe>
+<figure class:list={['youtube', className]} data-youtube={embed} data-title={title}>
+  <a class="yt-poster" href={watch}>
+    <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" />
+    <span class="yt-play" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>
+    </span>
+    {minutes && <span class="yt-length" aria-hidden="true">{minutes} min</span>}
+    <span class="visually-hidden">Play: {title}</span>
+  </a>
 </figure>
+
+<script>
+  // One player at a time: starting a video puts the one already playing back to its thumbnail.
+  let playing: { figure: HTMLElement; poster: HTMLElement } | null = null;
+
+  function stop() {
+    if (!playing) return;
+    playing.figure.querySelector('iframe')?.replaceWith(playing.poster);
+    delete playing.figure.dataset.playing;
+    playing = null;
+  }
+
+  document.addEventListener('click', (e) => {
+    const poster = (e.target as HTMLElement).closest<HTMLAnchorElement>('.yt-poster');
+    // Ctrl/Cmd-click still opens YouTube in a new tab.
+    if (!poster || e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    stop();
+    const figure = poster.closest<HTMLElement>('figure[data-youtube]')!;
+    const frame = document.createElement('iframe');
+    frame.src = figure.dataset.youtube!;
+    frame.title = figure.dataset.title ?? 'YouTube video';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    frame.allowFullscreen = true;
+    poster.replaceWith(frame);
+    figure.dataset.playing = '';
+    playing = { figure, poster };
+    frame.focus();
+  });
+</script>
+
+<style>
+  .youtube {
+    position: relative;
+    margin: 1.25rem 0;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+  }
+  .youtube :global(iframe),
+  .yt-poster,
+  .yt-poster img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .yt-poster img {
+    object-fit: cover;
+  }
+  .yt-play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding-left: 0.2rem;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.4);
+    transition: transform 0.15s;
+  }
+  .yt-poster:hover .yt-play,
+  .yt-poster:focus-visible .yt-play {
+    transform: scale(1.08);
+  }
+  .yt-poster:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: -3px;
+  }
+  .yt-length {
+    position: absolute;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: rgb(0 0 0 / 0.75);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+</style>

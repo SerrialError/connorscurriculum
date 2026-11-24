@@ -122,6 +122,13 @@ export function lessonCollection(data: SubjectData) {
           { name: 'url', label: 'Link', widget: 'string', pattern: ['^https://', 'Must start with https://'] },
           { name: 'by', label: 'Made by', widget: 'string', hint: 'The channel, teacher, or site, e.g. Khan Academy' },
           { name: 'minutes', label: 'Length (minutes)', widget: 'number', value_type: 'int', required: false },
+          {
+            name: 'youtube',
+            label: 'YouTube id',
+            widget: 'string',
+            required: false,
+            hint: 'Only for a video linked somewhere else (like Khan Academy) that is also on YouTube: the 11 characters after watch?v=. It then plays on the page.',
+          },
           { name: 'why', label: 'Why this one', widget: 'text', hint: 'A sentence or two on what it adds to the page.' },
         ],
       },

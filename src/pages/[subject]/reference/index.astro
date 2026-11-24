@@ -1,0 +1,66 @@
+---
+// The class's test reference sheet as a page: the same equations and periodic table as the
+// Reference panel, with room to read, and links to the official versions.
+import EquationSheet from '../../../components/reference/EquationSheet.astro';
+import PeriodicTable from '../../../components/reference/PeriodicTable.astro';
+import SourceNote from '../../../components/reference/SourceNote.astro';
+import Base from '../../../layouts/Base.astro';
+import { getSubjectData, subjectPathsWith } from '../../../lib/content';
+import { hasReference } from '../../../lib/features';
+import { EQUATION_DIFFERENCES, TABLE_DIFFERENCES } from '../../../lib/reference';
+import '../../../styles/reference.css';
+
+export const getStaticPaths = subjectPathsWith(hasReference);
+
+const { subject } = Astro.params;
+const data = getSubjectData(subject);
+const reference = data.reference!;
+const hasTable = data.elements.length > 0;
+---
+
+<Base title="Equations and periodic table" subject={subject} description={`${reference.title}${hasTable ? ' and the periodic table' : ''}, as given on tests.`}>
+  <h1>Equations and periodic table</h1>
+  <p class="muted lead">
+    What you're given on tests. On any other page, the <strong>Reference</strong> button at the top (or the R key) opens this beside what
+    you're working on.
+  </p>
+  {hasTable && (
+    <nav class="jump-nav" aria-label="On this page">
+      <span class="jump-label" aria-hidden="true">Jump to</span>
+      <a href="#equations">Equations</a>
+      <a href="#periodic-table">Periodic table</a>
+    </nav>
+  )}
+
+  <section id="equations" class="ref-section" aria-labelledby="equations-h">
+    <h2 id="equations-h">{reference.title}</h2>
+    {/* data-ref-content: what the Reference panel on other pages loads from here. */}
+    <div data-ref-content="eq">
+      <EquationSheet reference={reference} />
+      <SourceNote source={reference.official} differences={EQUATION_DIFFERENCES} />
+    </div>
+  </section>
+
+  {hasTable && (
+    <section id="periodic-table" class="ref-section" aria-labelledby="pt-h">
+      <h2 id="pt-h">Periodic table</h2>
+      <div data-ref-content="pt">
+        <PeriodicTable elements={data.elements} />
+        <SourceNote source={reference.periodicTable!} differences={TABLE_DIFFERENCES} />
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .lead {
+    max-width: var(--measure);
+  }
+  .ref-section {
+    margin-top: 2rem;
+    scroll-margin-top: 1rem;
+  }
+  #equations {
+    max-width: 56rem;
+  }
+</style>

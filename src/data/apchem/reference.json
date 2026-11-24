@@ -1,0 +1,428 @@
+{
+  "title": "AP Chemistry equations and constants",
+  "official": {
+    "label": "Official equations and constants sheet",
+    "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf",
+    "note": "College Board's current sheet, the same one handed out with class tests"
+  },
+  "tables": [
+    {
+      "title": "Unit symbols",
+      "columns": [
+        "Unit",
+        "Symbol"
+      ],
+      "rows": [
+        [
+          "gram",
+          "g"
+        ],
+        [
+          "mole",
+          "mol"
+        ],
+        [
+          "liter",
+          "L"
+        ],
+        [
+          "meter",
+          "m"
+        ],
+        [
+          "second",
+          "s"
+        ],
+        [
+          "hertz",
+          "Hz"
+        ],
+        [
+          "atmosphere",
+          "atm"
+        ],
+        [
+          "millimeter of mercury",
+          "mm Hg"
+        ],
+        [
+          "degree Celsius",
+          "°C"
+        ],
+        [
+          "kelvin",
+          "K"
+        ],
+        [
+          "joule",
+          "J"
+        ],
+        [
+          "volt",
+          "V"
+        ],
+        [
+          "coulomb",
+          "C"
+        ],
+        [
+          "ampere",
+          "A"
+        ]
+      ]
+    },
+    {
+      "title": "Unit conversions",
+      "math": [
+        "1\\ \\text{hertz} = 1\\ \\text{s}^{-1}",
+        "1\\ \\text{atm} = 760\\ \\text{mm Hg} = 760\\ \\text{torr}",
+        "\\text{K} = {}^\\circ\\text{C} + 273.15",
+        "1\\ \\text{volt} = \\dfrac{1\\ \\text{joule}}{1\\ \\text{coulomb}}",
+        "1\\ \\text{ampere} = \\dfrac{1\\ \\text{coulomb}}{1\\ \\text{second}}"
+      ]
+    },
+    {
+      "title": "Metric prefixes",
+      "columns": [
+        "Factor",
+        "Prefix",
+        "Symbol"
+      ],
+      "rows": [
+        [
+          "$10^{9}$",
+          "giga",
+          "G"
+        ],
+        [
+          "$10^{6}$",
+          "mega",
+          "M"
+        ],
+        [
+          "$10^{3}$",
+          "kilo",
+          "k"
+        ],
+        [
+          "$10^{-2}$",
+          "centi",
+          "c"
+        ],
+        [
+          "$10^{-3}$",
+          "milli",
+          "m"
+        ],
+        [
+          "$10^{-6}$",
+          "micro",
+          "μ"
+        ],
+        [
+          "$10^{-9}$",
+          "nano",
+          "n"
+        ],
+        [
+          "$10^{-12}$",
+          "pico",
+          "p"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "title": "Atomic structure",
+      "equations": [
+        "E = h\\nu",
+        "c = \\lambda\\nu",
+        "F_{\\text{coulombic}} \\propto \\dfrac{q_1 q_2}{r^2}"
+      ],
+      "key": [
+        [
+          "E",
+          "energy"
+        ],
+        [
+          "\\nu",
+          "frequency"
+        ],
+        [
+          "\\lambda",
+          "wavelength"
+        ],
+        [
+          "F",
+          "force"
+        ],
+        [
+          "q",
+          "charge"
+        ],
+        [
+          "r",
+          "separation"
+        ]
+      ],
+      "constants": [
+        [
+          "Planck's constant",
+          "h = 6.626 \\times 10^{-34}\\ \\text{J s}"
+        ],
+        [
+          "Speed of light",
+          "c = 2.998 \\times 10^{8}\\ \\text{m s}^{-1}"
+        ],
+        [
+          "Avogadro's number",
+          "6.022 \\times 10^{23}\\ \\text{mol}^{-1}"
+        ]
+      ]
+    },
+    {
+      "title": "Gases, liquids, and solutions",
+      "equations": [
+        "\\dfrac{P_1 V_1}{T_1} = \\dfrac{P_2 V_2}{T_2}",
+        "PV = nRT",
+        "P_A = P_{\\text{total}} \\times X_A",
+        "\\text{where } X_A = \\dfrac{\\text{moles A}}{\\text{total moles}}",
+        "P_{\\text{total}} = P_A + P_B + P_C + \\ldots",
+        "n = \\dfrac{m}{\\mathbf{M}}",
+        "D = \\dfrac{m}{V}",
+        "KE = \\tfrac{1}{2} m v^2",
+        "M = \\dfrac{n_{\\text{solute}}}{\\text{L}_{\\text{solution}}}",
+        "A = \\varepsilon b c"
+      ],
+      "key": [
+        [
+          "P",
+          "pressure"
+        ],
+        [
+          "V",
+          "volume"
+        ],
+        [
+          "T",
+          "temperature"
+        ],
+        [
+          "n",
+          "number of moles"
+        ],
+        [
+          "X",
+          "mole fraction"
+        ],
+        [
+          "m",
+          "mass"
+        ],
+        [
+          "\\mathbf{M}",
+          "molar mass"
+        ],
+        [
+          "D",
+          "density"
+        ],
+        [
+          "KE",
+          "kinetic energy"
+        ],
+        [
+          "v",
+          "velocity"
+        ],
+        [
+          "M",
+          "molarity"
+        ],
+        [
+          "A",
+          "absorbance"
+        ],
+        [
+          "\\varepsilon",
+          "molar absorptivity"
+        ],
+        [
+          "b",
+          "path length"
+        ],
+        [
+          "c",
+          "concentration"
+        ]
+      ],
+      "constants": [
+        [
+          "Gas constant",
+          "R = 8.314\\ \\text{J mol}^{-1}\\,\\text{K}^{-1} = 0.08206\\ \\text{L atm mol}^{-1}\\,\\text{K}^{-1}"
+        ],
+        [
+          "STP",
+          "273.15\\ \\text{K and } 1.0\\ \\text{atm}"
+        ],
+        [
+          "Ideal gas at STP",
+          "22.4\\ \\text{L mol}^{-1}"
+        ]
+      ]
+    },
+    {
+      "title": "Kinetics",
+      "equations": [
+        "[A]_t - [A]_0 = -kt",
+        "\\ln[A]_t - \\ln[A]_0 = -kt",
+        "\\dfrac{1}{[A]_t} - \\dfrac{1}{[A]_0} = kt",
+        "t_{1/2} = \\dfrac{0.693}{k}"
+      ],
+      "key": [
+        [
+          "k",
+          "rate constant"
+        ],
+        [
+          "t",
+          "time"
+        ],
+        [
+          "t_{1/2}",
+          "half-life"
+        ]
+      ]
+    },
+    {
+      "title": "Equilibrium",
+      "equations": [
+        "K_c = \\dfrac{[C]^c [D]^d}{[A]^a [B]^b}",
+        "\\text{where } aA + bB \\rightleftharpoons cC + dD",
+        "K_p = \\dfrac{(P_C)^c (P_D)^d}{(P_A)^a (P_B)^b}",
+        "K_w = [\\text{H}_3\\text{O}^+][\\text{OH}^-] = 1.0 \\times 10^{-14} \\text{ at } 25\\,{}^\\circ\\text{C}",
+        "\\text{p}K_w = 14 = \\text{pH} + \\text{pOH} \\text{ at } 25\\,{}^\\circ\\text{C}",
+        "\\text{pH} = -\\log[\\text{H}_3\\text{O}^+]",
+        "\\text{pOH} = -\\log[\\text{OH}^-]",
+        "K_a = \\dfrac{[\\text{H}_3\\text{O}^+][\\text{A}^-]}{[\\text{HA}]}",
+        "K_b = \\dfrac{[\\text{OH}^-][\\text{HB}^+]}{[\\text{B}]}",
+        "\\text{p}K_a = -\\log K_a",
+        "\\text{p}K_b = -\\log K_b",
+        "K_w = K_a \\times K_b",
+        "\\text{p}K_w = \\text{p}K_a + \\text{p}K_b",
+        "\\text{pH} = \\text{p}K_a + \\log\\dfrac{[\\text{A}^-]}{[\\text{HA}]}"
+      ],
+      "key": [
+        [
+          "K_c",
+          "molar concentrations"
+        ],
+        [
+          "K_p",
+          "gas pressures"
+        ],
+        [
+          "K_w",
+          "water"
+        ],
+        [
+          "K_a",
+          "acid"
+        ],
+        [
+          "K_b",
+          "base"
+        ]
+      ],
+      "keyTitle": "Equilibrium constants"
+    },
+    {
+      "title": "Thermodynamics and electrochemistry",
+      "equations": [
+        "q = mc\\Delta T",
+        "\\Delta H^\\circ_{\\text{reaction}} = \\sum \\Delta H^\\circ_f\\,\\text{products} - \\sum \\Delta H^\\circ_f\\,\\text{reactants}",
+        "\\Delta S^\\circ_{\\text{reaction}} = \\sum S^\\circ\\,\\text{products} - \\sum S^\\circ\\,\\text{reactants}",
+        "\\Delta G^\\circ_{\\text{reaction}} = \\sum \\Delta G^\\circ_f\\,\\text{products} - \\sum \\Delta G^\\circ_f\\,\\text{reactants}",
+        "\\Delta G^\\circ = \\Delta H^\\circ - T\\Delta S^\\circ",
+        "\\Delta G^\\circ = -RT\\ln K",
+        "\\Delta G^\\circ = -nFE^\\circ",
+        "I = \\dfrac{q}{t}",
+        "E_{\\text{cell}} = E^\\circ_{\\text{cell}} - \\dfrac{RT}{nF}\\ln Q"
+      ],
+      "key": [
+        [
+          "q",
+          "heat"
+        ],
+        [
+          "m",
+          "mass"
+        ],
+        [
+          "c",
+          "specific heat capacity"
+        ],
+        [
+          "T",
+          "temperature"
+        ],
+        [
+          "S^\\circ",
+          "standard entropy"
+        ],
+        [
+          "H^\\circ",
+          "standard enthalpy"
+        ],
+        [
+          "G^\\circ",
+          "standard Gibbs free energy"
+        ],
+        [
+          "R",
+          "gas constant"
+        ],
+        [
+          "K",
+          "equilibrium constant"
+        ],
+        [
+          "n",
+          "number of moles of electrons"
+        ],
+        [
+          "E^\\circ",
+          "standard potential"
+        ],
+        [
+          "I",
+          "current (amperes)"
+        ],
+        [
+          "q",
+          "charge (coulombs)"
+        ],
+        [
+          "t",
+          "time (seconds)"
+        ],
+        [
+          "Q",
+          "reaction quotient"
+        ]
+      ],
+      "constants": [
+        [
+          "Faraday's constant",
+          "F = 96{,}485\\ \\text{coulombs}/\\text{1 mol e}^-"
+        ]
+      ]
+    }
+  ],
+  "periodicTable": {
+    "label": "Official AP Chemistry periodic table",
+    "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-course-and-exam-description-effective-fall-2024.pdf#page=233",
+    "note": "Appendix 1 of the AP Chemistry Course and Exam Description: printed page 226, page 233 of the PDF"
+  }
+}

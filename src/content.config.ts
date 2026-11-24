@@ -123,6 +123,8 @@ const lessons = defineCollection({
               url: z.url({ protocol: /^https$/ }),
               by: z.string().min(1),
               minutes: z.number().int().positive().optional(),
+              // For a video hosted elsewhere (Khan Academy) that's also on YouTube: plays on the page.
+              youtube: z.string().regex(/^[\w-]{11}$/, 'youtube must be an 11-character video id').optional(),
               why: z.string().min(1),
             }),
           )

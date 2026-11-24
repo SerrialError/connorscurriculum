@@ -191,7 +191,58 @@ export const pastFrqsSchema = z.object({
   ),
 });
 
+const officialSourceSchema = z.object({
+  label: z.string().min(1),
+  url: z.url({ protocol: /^https$/ }),
+  /** Where it's from or what it is, after the label ("the PDF handed out with the AP exam"). */
+  note: z.string().min(1).optional(),
+});
+
+/**
+ * The reference sheet students get on tests (reference.json): equations, constants, and unit
+ * tables, plus a periodic table if periodic-table.json exists. Math is TeX; table cells may hold
+ * inline math in $…$. Shown in the Reference panel and on the class's reference page.
+ */
+export const referenceSchema = z.object({
+  title: z.string().min(1),
+  /** The official sheet this one copies, always linked next to it. */
+  official: officialSourceSchema,
+  tables: z
+    .array(
+      z.union([
+        z.object({ title: z.string().min(1), columns: z.array(z.string().min(1)).min(1), rows: z.array(z.array(z.string())).min(1) }),
+        z.object({ title: z.string().min(1), math: z.array(z.string().min(1)).min(1) }),
+      ]),
+    )
+    .default([]),
+  sections: z
+    .array(
+      z.object({
+        title: z.string().min(1),
+        equations: z.array(z.string().min(1)).min(1),
+        /** Symbol (TeX) and what it stands for. */
+        key: z.array(z.tuple([z.string().min(1), z.string().min(1)])).default([]),
+        keyTitle: z.string().min(1).optional(),
+        /** Name and value (TeX). */
+        constants: z.array(z.tuple([z.string().min(1), z.string().min(1)])).default([]),
+      }),
+    )
+    .min(1),
+  /** Where the periodic table's values come from (required when periodic-table.json exists). */
+  periodicTable: officialSourceSchema.optional(),
+});
+
+export const elementSchema = z.object({
+  number: z.number().int().min(1).max(118),
+  symbol: z.string().regex(/^[A-Z][a-z]?$/),
+  name: z.string().min(1),
+  /** As printed on the official table, e.g. "207.2"; null where it shows none. */
+  mass: z.string().regex(/^\d+\.\d+$/).nullable(),
+});
+
 export type Subject = z.infer<typeof subjectSchema>;
+export type Reference = z.infer<typeof referenceSchema>;
+export type Element = z.infer<typeof elementSchema>;
 export type PastFrqExam = z.infer<typeof pastFrqsSchema>['exams'][number];
 export type PastFrq = PastFrqExam['questions'][number];
 export type Ced = z.infer<typeof cedSchema>;
@@ -252,6 +303,10 @@ export interface SubjectData {
     topics: Map<string, TextbookGap>;
     other: (TextbookGap & { title: string })[];
   };
+  /** The test reference sheet (null if reference.json is missing). */
+  reference: Reference | null;
+  /** Elements 1–118 in order (empty if periodic-table.json is missing). */
+  elements: Element[];
 }
 
 export class DataError extends Error {
@@ -420,7 +475,19 @@ function loadSubject(subject: Subject, dataDir: string): SubjectData {
   });
   pastFrqs.sort((a, b) => b.year - a.year);
 
-  return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs, textbookGaps };
+  const referenceFile = join(dir, 'reference.json');
+  const reference = existsSync(referenceFile) ? readJson(referenceFile, referenceSchema) : null;
+  const elementsFile = join(dir, 'periodic-table.json');
+  const elements = existsSync(elementsFile) ? readJson(elementsFile, z.array(elementSchema)) : [];
+  if (elements.length > 0) {
+    if (!reference?.periodicTable) throw new DataError(referenceFile, 'periodicTable', 'say where periodic-table.json comes from');
+    elements.forEach((e, i) => {
+      if (e.number !== i + 1) throw new DataError(elementsFile, `[${i}].number`, `expected ${i + 1} (list every element in order)`);
+    });
+    if (elements.length !== 118) throw new DataError(elementsFile, '(root)', `lists ${elements.length} elements, not 118`);
+  }
+
+  return { subject, ced, chapters, tests, topics, skills, chapterMap, topicChapters, progress, pastFrqs, textbookGaps, reference, elements };
 }
 
 /** Cross-checks for tests.json: unique ids, and chapters and sections the class has. */

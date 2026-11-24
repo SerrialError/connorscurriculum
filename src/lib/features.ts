@@ -8,6 +8,7 @@ import type { SubjectData } from './registry';
 export const hasTopics = (d: SubjectData): boolean => d.topics.size > 0;
 export const hasTests = (d: SubjectData): boolean => d.tests.length > 0;
 export const hasPastFrqs = (d: SubjectData): boolean => d.pastFrqs.length > 0;
+export const hasReference = (d: SubjectData): boolean => d.reference !== null;
 
 export type NavKey = 'home' | 'lessons' | 'practice' | 'tests' | 'topics' | 'frqs';
 

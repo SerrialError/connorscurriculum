@@ -272,8 +272,12 @@ const ahead = !isTaught(data, chapter.number);
   .toc-side {
     display: none;
   }
-  /* Wide screens: the list sits beside the lesson and stays in view. */
-  @media (min-width: 66rem) {
+  /* The lesson's own width, not the screen's, decides: the docked reference panel takes room. */
+  :global(main) {
+    container: page / inline-size;
+  }
+  /* Room beside the lesson: the list sits there and stays in view. */
+  @container page (min-width: 60rem) {
     .lesson-page.has-toc {
       display: grid;
       grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr);

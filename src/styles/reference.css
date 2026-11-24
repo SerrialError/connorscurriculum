@@ -1,0 +1,328 @@
+/* The reference sheet's parts (components/reference/), global so the Reference panel can load its
+   content from the reference page when it's first opened, and still be styled. Every rule is
+   scoped under its part's class. */
+
+/* EquationSheet */
+.sheet {
+  container-type: inline-size;
+}
+.sheet .sheet-section {
+  padding: 0.9rem 0 1rem;
+  border-top: 1px solid var(--border);
+}
+.sheet .sheet-section:first-child {
+  border-top: 0;
+  padding-top: 0.25rem;
+}
+.sheet .sheet-h {
+  margin: 0 0 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sheet .sheet-cols {
+  display: grid;
+  gap: 0.75rem;
+  align-items: start;
+}
+.sheet .equations {
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.05rem;
+}
+.sheet .equations.compact {
+  gap: 0.4rem;
+  font-size: 0.95rem;
+}
+/* One line per equation: KaTeX would otherwise wrap mid-fraction on a phone. A long one scrolls
+   sideways instead of widening the page. */
+.sheet .equations li .katex {
+  white-space: nowrap;
+}
+.sheet .equations li {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.1rem 0;
+}
+.sheet .sheet-key {
+  font-size: 0.875rem;
+}
+.sheet .key-title {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-2);
+}
+.sheet dl {
+  margin: 0;
+}
+.sheet .key {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.15rem 0.9rem;
+}
+.sheet .key div,
+.sheet .constants div {
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
+}
+.sheet .key dt {
+  min-width: 1.6rem;
+  text-align: right;
+}
+.sheet .key dt::after {
+  content: ' =';
+  color: var(--muted);
+}
+/* A titled key names things rather than defining symbols: "Kc (molar concentrations)". */
+.sheet .key.named dt::after {
+  content: none;
+}
+.sheet .key.named dd::before {
+  content: '(';
+}
+.sheet .key.named dd::after {
+  content: ')';
+}
+.sheet dd {
+  margin: 0;
+  color: var(--text-2);
+}
+.sheet .constants {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+.sheet .constants div {
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+}
+.sheet .constants dt {
+  font-weight: 600;
+}
+.sheet .constants dt::after {
+  content: ':';
+}
+.sheet .constants dd {
+  color: var(--text);
+  overflow-x: auto;
+}
+.sheet .unit-tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem 1.25rem;
+  align-items: start;
+}
+.sheet table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.sheet th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  padding: 0.2rem 0.4rem 0.2rem 0;
+}
+.sheet td {
+  padding: 0.15rem 0.4rem 0.15rem 0;
+  border-bottom: 1px solid var(--border);
+}
+/* Wide enough for equations beside their key, as on the printed sheet. */
+@container (min-width: 36rem) {
+  .sheet .sheet-cols {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+  .sheet .key {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* PeriodicTable */
+.pt .pt-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.pt .pt-search {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1 1 12rem;
+  max-width: 20rem;
+  padding: 0 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+}
+.pt .pt-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.pt .pt-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.5rem;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+/* Two lines tall, so naming an element never moves the table. */
+.pt .pt-info {
+  flex: 1 1 14rem;
+  min-height: 2.6em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: var(--text-2);
+}
+/* Never so small that cells are under 24 px to tap: narrower than that, the table scrolls sideways. */
+.pt .pt-scroll {
+  overflow-x: auto;
+}
+.pt .pt-sizer {
+  container-type: inline-size;
+  min-width: 28rem;
+}
+.pt .pt-grid {
+  --gap: 2px;
+  --cell: calc((100cqi - 17 * var(--gap)) / 18);
+  display: grid;
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+  grid-template-rows: auto repeat(7, var(--cell)) calc(var(--cell) * 0.3) repeat(2, var(--cell));
+  gap: var(--gap);
+}
+.pt .pt-group {
+  align-self: end;
+  text-align: center;
+  font-size: max(0.6rem, calc(var(--cell) * 0.2));
+  color: var(--muted);
+}
+.pt .pt-gap,
+.pt .pt-series {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: max(0.65rem, calc(var(--cell) * 0.18));
+  line-height: 1.2;
+  color: var(--muted);
+}
+.pt .pt-series {
+  justify-items: end;
+  padding-right: 0.4rem;
+  font-size: max(0.7rem, calc(var(--cell) * 0.22));
+}
+.pt .pt-cell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  align-items: center;
+  padding: 0.08em 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  overflow: hidden;
+}
+.pt .pt-cell:hover {
+  border-color: var(--accent);
+}
+.pt .pt-cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.pt .pt-cell[aria-current='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.pt .n,
+.pt .m {
+  font-size: max(0.56rem, calc(var(--cell) * 0.22));
+  font-variant-numeric: tabular-nums;
+}
+.pt .m {
+  font-size: max(0.56rem, calc(var(--cell) * 0.215));
+  letter-spacing: -0.03em;
+}
+.pt .s {
+  font-weight: 700;
+  font-size: calc(var(--cell) * 0.38);
+}
+/* Middle size (a wide docked panel): symbol and mass; the atomic number is in the line above. */
+@container (min-width: 36rem) and (max-width: 50rem) {
+  .pt .n {
+    display: none;
+  }
+  .pt .pt-cell {
+    grid-template-rows: 1fr auto;
+  }
+  .pt .s {
+    font-size: calc(var(--cell) * 0.42);
+  }
+  .pt .m {
+    font-size: max(0.5rem, calc(var(--cell) * 0.24));
+    padding-bottom: 0.1em;
+  }
+}
+/* Too narrow for masses at a readable size (a docked panel, a phone): symbols only. Pointing at
+   or selecting an element gives its number and mass in the line above. */
+@container (max-width: 36rem) {
+  .pt .pt-grid {
+    --gap: 1px;
+  }
+  .pt .n,
+  .pt .m,
+  .pt .roomy {
+    display: none;
+  }
+  .pt .pt-cell {
+    grid-template-rows: 1fr;
+    padding: 0;
+    border-radius: 3px;
+  }
+  .pt .s {
+    font-size: clamp(0.6rem, calc(var(--cell) * 0.5), 0.8rem);
+    letter-spacing: -0.04em;
+  }
+  .pt .pt-group {
+    font-size: 0.55rem;
+  }
+  .pt .pt-series {
+    padding-right: 0.25rem;
+  }
+}
+.pt.searching .pt-cell:not(.match) {
+  opacity: 0.3;
+}
+
+/* SourceNote */
+.source-note {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+  color: var(--text-2);
+}

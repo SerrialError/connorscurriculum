@@ -1,0 +1,95 @@
+{
+  "$comment": "Limits for scripts/perf.mjs (see its header). Measured as a mid-range phone on slow 4G. kb: compressed kB by the time the page is ready; total: after it settles; readyRatio: ready time over the typical page's, in the same run; cls: layout shift; fcp, ready, tbt: ms (warnings in CI). Pages marked typical set the baseline for readyRatio. A page's own budget overrides the default. Raise a limit only on purpose, and say why in the pull request.",
+  "default": {
+    "kb": 60,
+    "total": 80,
+    "readyRatio": 1.4,
+    "cls": 0.1,
+    "fcp": 1500,
+    "ready": 1500,
+    "tbt": 300
+  },
+  "pages": [
+    {
+      "name": "home",
+      "path": "/",
+      "budget": {
+        "kb": 40,
+        "total": 40
+      }
+    },
+    {
+      "name": "class home",
+      "path": "/apchem/",
+      "typical": true
+    },
+    {
+      "name": "lessons",
+      "path": "/apchem/lessons/",
+      "typical": true
+    },
+    {
+      "name": "lesson (3D)",
+      "path": "/apchem/lessons/09-vsepr/",
+      "budget": {
+        "kb": 130,
+        "total": 400,
+        "readyRatio": 2,
+        "ready": 1800
+      }
+    },
+    {
+      "name": "notes (photos)",
+      "path": "/apchem/lessons/08-notes-jaya/",
+      "budget": {
+        "kb": 130,
+        "total": 200,
+        "readyRatio": 2,
+        "ready": 2000
+      }
+    },
+    {
+      "name": "practice",
+      "path": "/apchem/practice/",
+      "ready": "body[data-practice] .filters-head",
+      "budget": {
+        "kb": 100,
+        "total": 120,
+        "readyRatio": 2,
+        "ready": 2000
+      }
+    },
+    {
+      "name": "practice set",
+      "path": "/apchem/practice/?chapter=9&section=9.1,9.2&start=1",
+      "ready": "body[data-practice] .session",
+      "budget": {
+        "kb": 150,
+        "total": 250,
+        "readyRatio": 2.6,
+        "ready": 2600,
+        "tbt": 350
+      }
+    },
+    {
+      "name": "test page",
+      "path": "/apchem/tests/ch6-7-test/",
+      "typical": true
+    },
+    {
+      "name": "AP topics",
+      "path": "/apchem/ap/",
+      "typical": true
+    },
+    {
+      "name": "reference",
+      "path": "/apchem/reference/",
+      "budget": {
+        "kb": 140,
+        "total": 200,
+        "readyRatio": 2.2,
+        "ready": 2000
+      }
+    }
+  ]
+}

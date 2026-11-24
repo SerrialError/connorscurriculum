@@ -1,13 +1,13 @@
-// All questions for a subject with Markdown/KaTeX pre-rendered to HTML, so the
-// practice island ships no Markdown or math parser.
+// The practice page's question data, built at build time (server only). questionMeta is the
+// small part every question carries on the practice page itself; toPractice adds the text, with
+// Markdown and KaTeX pre-rendered to HTML so the practice island ships no Markdown or math parser.
+// The text is served one chapter per file (pages/[subject]/practice/questions/[chapter].json.ts).
 import { dirname, join } from 'node:path';
-import type { APIRoute, GetStaticPaths, ImageMetadata } from 'astro';
+import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
-import { type Question, getQuestions, getSubjectData, isClassContent, subjectPaths, topicIds } from '../../../lib/content';
-import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../../../lib/markdown';
-import type { PracticeQuestion } from '../../../lib/practice/types';
-
-export const getStaticPaths = subjectPaths satisfies GetStaticPaths;
+import { type Question, getSubjectData, isClassContent, topicIds } from '../content';
+import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../markdown';
+import type { PracticeQuestion, QuestionMeta } from './types';
 
 const images = import.meta.glob<ImageMetadata>('/src/content/questions/**/*.{png,jpg,jpeg,webp,gif,avif,svg}', {
   eager: true,
@@ -28,11 +28,13 @@ async function questionImage(q: Question) {
   };
 }
 
-async function toPractice(subject: string, q: Question): Promise<PracticeQuestion> {
+/** What filtering and picking a set need: no text. */
+export function questionMeta(subject: string, q: Question): QuestionMeta {
   const data = getSubjectData(subject);
   const cedTopics = topicIds(q);
-  const base = {
+  return {
     id: q.id,
+    type: q.data.type,
     chapter: q.data.chapter,
     sections: q.data.sections,
     cedTopics,
@@ -40,12 +42,20 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
     difficulty: q.data.difficulty,
     ...(q.data.calculation ? { calculation: true as const } : {}),
     ...(q.data.group ? { groups: [q.data.group].flat() } : {}),
+    // Samples and later chapters stay out of practice unless their chapter is picked.
+    ...(isClassContent(data, q) ? {} : { extra: true }),
+  };
+}
+
+/** The whole question, text included. */
+export async function toPractice(subject: string, q: Question): Promise<PracticeQuestion> {
+  const { type: _, ...meta } = questionMeta(subject, q);
+  const base = {
+    ...meta,
     promptHtml: await renderMarkdown(q.data.prompt),
     promptText: await renderPlainText(q.data.prompt),
     image: await questionImage(q),
     explanationHtml: await renderMarkdown(q.data.explanation),
-    // Samples and later chapters stay out of practice unless their chapter is picked.
-    ...(isClassContent(data, q) ? {} : { extra: true }),
   };
   if (q.data.type === 'mcq') {
     return {
@@ -70,10 +80,3 @@ async function toPractice(subject: string, q: Question): Promise<PracticeQuestio
     ),
   };
 }
-
-export const GET: APIRoute = async ({ params }) => {
-  const subject = params.subject!;
-  const questions = await getQuestions(subject);
-  const body = await Promise.all(questions.map((q) => toPractice(subject, q)));
-  return new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } });
-};

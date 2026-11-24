@@ -1,5 +1,5 @@
 // The practice filters: their defaults, and which questions they match.
-import type { Filters, Mode, PracticeQuestion, PracticeTest } from './types';
+import type { Filters, Mode, PracticeQuestion, PracticeTest, QuestionMeta } from './types';
 
 export const DEFAULT_COUNT = 10;
 
@@ -50,21 +50,30 @@ export const inSections = (q: Pick<PracticeQuestion, 'sections'>, sections: read
  * by the chapter filter or by the class test's chapters: no chapter picked means the class's
  * chapters, not everything.
  */
-export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests: PracticeTest[]): PracticeQuestion[] {
+export function filterQuestions<Q extends QuestionMeta>(questions: Q[], f: Filters, tests: PracticeTest[]): Q[] {
+  // Read each filter once: `f` is often the setup screen's reactive state, where every read costs
+  // something, and the setup screen runs this for every filter chip's count.
+  const chapters = new Set(f.chapters);
+  const sections = [...f.sections];
+  const units = new Set(f.units);
+  const topics = new Set(f.topics);
+  const difficulty = new Set(f.difficulty);
+  const { type, ap } = f;
   const test = f.test ? tests.find((t) => t.id === f.test) : undefined;
+  if (f.test && !test) return [];
+  const testChapters = new Set(test?.chapters ?? []);
+  const testSections = test?.sections ?? [];
   return questions.filter((q) => {
-    if (f.chapters.length && !f.chapters.includes(q.chapter)) return false;
-    if (!inSections(q, f.sections)) return false;
-    if (q.extra && !f.chapters.includes(q.chapter) && !test?.chapters.includes(q.chapter)) return false;
-    if (f.test && (!test || !test.chapters.includes(q.chapter) || !inSections(q, test.sections))) return false;
-    if (f.units.length || f.topics.length) {
-      const inUnit = q.units.some((u) => f.units.includes(u));
-      const hasTopic = q.cedTopics.some((t) => f.topics.includes(t));
-      if (!inUnit && !hasTopic) return false;
+    if (chapters.size && !chapters.has(q.chapter)) return false;
+    if (!inSections(q, sections)) return false;
+    if (q.extra && !chapters.has(q.chapter) && !testChapters.has(q.chapter)) return false;
+    if (test && (!testChapters.has(q.chapter) || !inSections(q, testSections))) return false;
+    if (units.size || topics.size) {
+      if (!q.units.some((u) => units.has(u)) && !q.cedTopics.some((t) => topics.has(t))) return false;
     }
-    if (f.difficulty.length && !f.difficulty.includes(q.difficulty)) return false;
-    if (f.type && q.type !== f.type) return false;
-    if (f.ap && onApExam(q) !== (f.ap === 'ap')) return false;
+    if (difficulty.size && !difficulty.has(q.difficulty)) return false;
+    if (type && q.type !== type) return false;
+    if (ap && onApExam(q) !== (ap === 'ap')) return false;
     return true;
   });
 }
@@ -74,12 +83,27 @@ export function filterQuestions(questions: PracticeQuestion[], f: Filters, tests
  * next to each filter option (e.g. "Ch. 7 · 64") given the other filters already chosen.
  */
 export function countWith(
-  questions: PracticeQuestion[],
+  questions: QuestionMeta[],
   f: Filters,
   tests: PracticeTest[],
   patch: Partial<Filters>,
 ): number {
   return filterQuestions(questions, { ...f, ...patch }, tests).length;
+}
+
+/**
+ * Every unit's and topic's countWith(questions, f, tests, { units: [id], topics: [] }) (or
+ * topics: [id]), in one pass over the questions instead of one per chip.
+ */
+export function cedCounts(questions: QuestionMeta[], f: Filters, tests: PracticeTest[]): { units: Map<string, number>; topics: Map<string, number> } {
+  const units = new Map<string, number>();
+  const topics = new Map<string, number>();
+  const add = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1);
+  for (const q of filterQuestions(questions, { ...f, units: [], topics: [] }, tests)) {
+    new Set(q.units).forEach((u) => add(units, u));
+    new Set(q.cedTopics).forEach((t) => add(topics, t));
+  }
+  return { units, topics };
 }
 
 /** Number of questions a set with these settings will have. */

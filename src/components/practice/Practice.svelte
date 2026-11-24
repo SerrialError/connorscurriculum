@@ -13,7 +13,7 @@
   import { amendLastResult, recordResult, weakHasNoHistory, weakTopics } from '../../lib/practice/score';
   import { newSeed } from '../../lib/practice/random';
   import { questionsForSet } from '../../lib/practice/select';
-  import type { Filters, History, PracticeExam, PracticeQuestion } from '../../lib/practice/types';
+  import type { Filters, History, PracticeExam, PracticeQuestion, QuestionMeta } from '../../lib/practice/types';
   import { type SetSpec, filtersToQuery, hasBadSeed, parseFilters, parseSet, setToQuery, setupQuery } from '../../lib/practice/url';
   import { readJson, storageKey, writeJson } from '../../lib/storage';
   import { plural } from '../../lib/text';
@@ -24,17 +24,25 @@
   import Session from './Session.svelte';
   import Setup from './Setup.svelte';
 
-  let { course: input }: { course: PracticeCourse } = $props();
+  let { courseJson }: { courseJson: string } = $props();
   // The course never changes after the page is built.
   // svelte-ignore state_referenced_locally
-  const course = setCourse(withDerived(input));
+  const course = setCourse(withDerived(JSON.parse(courseJson) as PracticeCourse));
   const { tests, everything } = course;
 
   const historyKey = storageKey(course.subject, 'practice-history');
   const savedKey = storageKey(course.subject, 'practice-session');
 
-  let all = $state<PracticeQuestion[] | null>(null);
+  /** Every question, without its text: enough for the setup screen and for picking a set. */
+  const all: QuestionMeta[] = course.questions;
+  /** Question text, loaded one chapter at a time (questions/<chapter>.json) when a set needs it. */
+  const texts = new Map<string, PracticeQuestion>();
+  const chapterLoads = new Map<number, Promise<void>>();
   let loadError = $state('');
+  /** The address has been read and the right screen is up (until then the setup screen is the built one). */
+  let ready = $state(false);
+  /** Waiting for question text to open a set. */
+  let opening = $state(false);
   let phase = $state<'setup' | 'session' | 'results'>('setup');
   let filters = $state<Filters>(emptyFilters());
   let history = $state<History>({});
@@ -56,9 +64,53 @@
     return (spec?.exam && tests.find((t) => t.id === spec.filters.test)?.exam) || null;
   }
   const setFrqTopics = $derived(filterTopics(setFilters, course.units, course.chapterTopics, tests));
-  const weakSpots = $derived(all ? weakTopics(filterQuestions(all, emptyFilters(), tests), history) : []);
+  const weakSpots = $derived(weakTopics(filterQuestions(all, emptyFilters(), tests), history));
   /** `f` checked against what this class has. */
-  const checked = (f: Filters) => knownFilters(f, { chapters: course.chapters.map((c) => c.number), tests, units: course.units, questions: all! });
+  const checked = (f: Filters) => knownFilters(f, { chapters: course.chapters.map((c) => c.number), tests, units: course.units, questions: all });
+
+  function loadChapter(n: number): Promise<void> {
+    let load = chapterLoads.get(n);
+    if (!load) {
+      // Already on its way if the page opened with a "Start" link (see practice/index.astro).
+      const early = (window as { __practiceText?: Record<number, Promise<PracticeQuestion[]>> }).__practiceText?.[n];
+      load = (
+        early ??
+        fetch(`${course.questionsBase}${n}.json`).then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json() as Promise<PracticeQuestion[]>;
+        })
+      )
+        .then((qs) => {
+          for (const q of qs) texts.set(q.id, q);
+        });
+      // A failed load can be tried again.
+      load.catch(() => chapterLoads.delete(n));
+      chapterLoads.set(n, load);
+    }
+    return load;
+  }
+
+  /**
+   * The questions with their text, loading their chapters if needed. "Loading questions…" shows
+   * only if that takes long enough to notice.
+   */
+  async function withText(questions: QuestionMeta[]): Promise<PracticeQuestion[] | null> {
+    const missing = [...new Set(questions.filter((q) => !texts.has(q.id)).map((q) => q.chapter))];
+    loadError = '';
+    if (missing.length) {
+      const slow = setTimeout(() => (opening = true), 150);
+      try {
+        await Promise.all(missing.map(loadChapter));
+      } catch (err) {
+        loadError = `Could not load the questions (${(err as Error).message}). Check your connection and try again.`;
+        return null;
+      } finally {
+        clearTimeout(slow);
+        opening = false;
+      }
+    }
+    return questions.flatMap((q) => texts.get(q.id) ?? []);
+  }
 
   const entry = (): Entry => readEntry(window.history.state);
 
@@ -74,7 +126,7 @@
 
   // Keep the URL in sync with the setup filters, so reloading or copying the address keeps them.
   $effect(() => {
-    if (all && phase === 'setup') navigate(syncSetup(location.search, filtersToQuery(filters)));
+    if (ready && phase === 'setup') navigate(syncSetup(location.search, filtersToQuery(filters)));
   });
 
   // During a set the page title ("Practice") is hidden, so the question starts higher on phones.
@@ -92,35 +144,41 @@
   onMount(() => {
     filters = parseFilters(location.search);
     history = readJson<History>(historyKey, {});
-    const onPop = () => arrive();
+    const onPop = () => void arrive();
     window.addEventListener('popstate', onPop);
-    void load();
+    // Opening a set (a "Start" link, a reload mid-set): say so at once instead of showing setup first.
+    if (parseSet(location.search) || entry()) opening = true;
+    void arrive();
+    // The chapters the class is on now are the likeliest sets: load their text as soon as the
+    // student points at or taps a button (Start, a quick start), not on every visit.
+    const prefetch = (e: Event) => {
+      if (!(e.target as HTMLElement).closest?.('button, a')) return;
+      course.prefetchChapters.forEach((n) => void loadChapter(n).catch(() => {}));
+      for (const ev of ['pointerover', 'focusin', 'touchstart']) document.removeEventListener(ev, prefetch);
+    };
+    for (const ev of ['pointerover', 'focusin', 'touchstart']) document.addEventListener(ev, prefetch, { passive: true });
     return () => window.removeEventListener('popstate', onPop);
   });
-
-  async function load() {
-    try {
-      const res = await fetch(course.questionsUrl);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      all = (await res.json()) as PracticeQuestion[];
-    } catch (err) {
-      loadError = `Could not load questions (${(err as Error).message}).`;
-      return;
-    }
-    arrive();
-  }
 
   /**
    * The page landed on a history entry (load, Back, Forward): show the set its address names (a
    * reload, a bookmark, a shared link, or a "Start" link elsewhere on the site), else setup.
    */
-  function arrive() {
+  async function arrive() {
     const current = entry();
     const spec = parseSet(location.search);
     const isOpen = !!spec?.seed && spec.seed === set.id && attempt.questions.length > 0;
     // A link with filters the class doesn't have opens the setup screen without them (showSetup says so).
     const fits = !spec || checked(spec.filters).unknown === null;
-    const opened = isOpen || (spec ? fits && openSet(spec, hasBadSeed(location.search)) : !!current && openSaved(current.set));
+    const opened = isOpen || (spec ? fits && (await openSet(spec, hasBadSeed(location.search))) : !!current && (await openSaved(current.set)));
+    opening = false;
+    document.documentElement.classList.remove('practice-opening');
+    ready = true;
+    // The set couldn't load: the setup screen, with the error above it.
+    if (loadError) {
+      phase = 'setup';
+      return;
+    }
     const landed = land(location.search, current, opened ? set : null);
     navigate(landed.steps);
     if (landed.entry) {
@@ -131,29 +189,31 @@
     }
   }
 
-  const savedSets = () => (all ? readSavedSets(readJson<unknown>(savedKey, null), new Set(all.map((q) => q.id))) : []);
+  const savedSets = () => readSavedSets(readJson<unknown>(savedKey, null), new Set(all.map((q) => q.id)));
 
   /**
    * Open a set from its address: the saved attempt with that seed, or a new one built from it.
    * `badSeed`: the address's seed was damaged, so a new set's questions aren't the ones shared.
    */
-  function openSet(spec: SetSpec, badSeed: boolean): boolean {
-    if (spec.seed && openSaved(spec.seed, setToQuery(spec))) return true;
+  async function openSet(spec: SetSpec, badSeed: boolean): Promise<boolean> {
+    if (spec.seed && (await openSaved(spec.seed, setToQuery(spec)))) return true;
     const full = { ...spec, seed: spec.seed ?? newSeed() };
-    const questions = questionsForSet(all!, full, tests, history);
-    if (questions.length === 0) return false;
+    const questions = await withText(questionsForSet(all, full, tests, history));
+    if (!questions?.length) return false;
     loadSet(full, questions);
     if (badSeed && !spec.ids) set.note = RESHUFFLED_NOTE;
     return true;
   }
 
   /** The saved set `id` (with address `query`, if given), with its answers. */
-  function openSaved(id: string, query?: string): boolean {
+  async function openSaved(id: string, query?: string): Promise<boolean> {
     const s = savedSets().find((x) => x.id === id && (query === undefined || x.query === query));
     if (!s) return false;
-    const byId = new Map(all!.map((q) => [q.id, q]));
+    const byId = new Map(all.map((q) => [q.id, q]));
+    const questions = await withText(s.ids.map((i) => byId.get(i)!));
+    if (!questions) return false;
     attempt.load(
-      s.ids.map((i) => byId.get(i)!),
+      questions,
       s,
       s.index,
       examFor(s.query),
@@ -165,7 +225,7 @@
 
   /** Make `questions` the current set, unanswered. */
   function loadSet(spec: SetSpec & { seed: string }, questions: PracticeQuestion[], label?: string) {
-    const pool = filterQuestions(all!, spec.filters, tests);
+    const pool = filterQuestions(all, spec.filters, tests);
     const query = setToQuery(spec);
     attempt.load(questions, undefined, 0, examFor(query));
     set = {
@@ -185,7 +245,7 @@
   }
 
   /** The line shown with a new set: questions missing from a shared set, or why "weakest first" is random. */
-  function setNote(spec: SetSpec, found: number, pool: PracticeQuestion[]): string {
+  function setNote(spec: SetSpec, found: number, pool: QuestionMeta[]): string {
     if (spec.exam) return EXAM_NOTE;
     if (spec.ids) {
       const asked = new Set(spec.ids).size;
@@ -195,10 +255,10 @@
   }
 
   /** Start a new set from filters `f`: exact questions for a retry, or a practice exam of the filters' test. */
-  function begin(f: Filters, { ids = null, label, exam = false }: { ids?: string[] | null; label?: string; exam?: boolean } = {}) {
+  async function begin(f: Filters, { ids = null, label, exam = false }: { ids?: string[] | null; label?: string; exam?: boolean } = {}) {
     const spec = { filters: f, exam, seed: newSeed(), ids };
-    const questions = questionsForSet(all!, spec, tests, history);
-    if (questions.length === 0) return;
+    const questions = await withText(questionsForSet(all, spec, tests, history));
+    if (!questions?.length) return;
     if (phase === 'setup') filters = f;
     notice = '';
     loadSet(spec, questions, label);
@@ -206,12 +266,12 @@
     phase = 'session';
   }
 
-  function resume() {
+  async function resume() {
     if (!resumable) return;
     // Like starting it: the setup entry below shows the filters that made this set.
     const q = setupQuery(resumable.query);
+    if (!(await openSaved(resumable.id))) return;
     filters = parseFilters(q);
-    openSaved(resumable.id);
     navigate(startSet('setup', entry(), q, set));
     phase = 'session';
   }
@@ -270,7 +330,7 @@
   /** A topic's set from "Topics to work on", started like a topic's link elsewhere on the site. */
   function topicStart(topic: string) {
     const pool = { topics: [topic] };
-    return practiceStarts(pool, filterQuestions(all!, { ...emptyFilters(), ...pool }, tests).length).start;
+    return practiceStarts(pool, filterQuestions(all, { ...emptyFilters(), ...pool }, tests).length).start;
   }
 
   function clearHistory() {
@@ -280,9 +340,10 @@
 </script>
 
 {#if loadError}
-  <p class="notice">{loadError}</p>
-{:else if !all}
-  <p class="muted" aria-live="polite">Loading questions…</p>
+  <p class="notice" role="alert">{loadError}</p>
+{/if}
+{#if opening}
+  <p class="muted loading" aria-live="polite">Loading questions…</p>
 {:else if phase === 'setup'}
   {#if notice}
     <p class="notice link-notice" role="status">{notice}</p>
@@ -340,6 +401,10 @@
 {/if}
 
 <style>
+  /* The space the set will take, so nothing below jumps when it appears. */
+  .loading {
+    min-height: 80vh;
+  }
   .resume {
     display: flex;
     flex-wrap: wrap;

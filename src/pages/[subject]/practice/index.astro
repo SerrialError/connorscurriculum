@@ -18,6 +18,7 @@ import {
   url,
 } from '../../../lib/content';
 import { hasTests, hasTopics } from '../../../lib/features';
+import { questionMeta } from '../../../lib/practice/build';
 import { quickStarts } from '../../../lib/practice/presets';
 
 export const getStaticPaths = subjectPaths;
@@ -33,7 +34,9 @@ const description = `Practice questions by ${by.join(', ')}, and difficulty.`;
 
 const course: PracticeCourse = {
   subject,
-  questionsUrl: url(`${subject}/practice/questions.json`),
+  questions: questions.map((q) => questionMeta(subject, q)),
+  questionsBase: url(`${subject}/practice/questions/`),
+  prefetchChapters: data.progress.current.filter((n) => chapterNumbers.has(n)),
   chapters: data.chapters.map((c) => ({
     number: c.number,
     title: c.title,
@@ -69,10 +72,62 @@ const course: PracticeCourse = {
     .map((l) => ({ title: l.data.title, href: lessonHref(l), chapter: l.data.chapter, sections: l.data.sections, topics: topicIds(l) })),
   hrefs: { topics: url(`${subject}/ap/`), chapters: url(`${subject}/chapters/`), frqs: url(`${subject}/frqs/`) },
 };
+// For the inline script below: which chapters a "Start" link's set can come from.
+const early = {
+  base: course.questionsBase,
+  withQuestions: [...chapterNumbers],
+  testChapters: Object.fromEntries(data.tests.map((t) => [t.id, t.chapters])),
+};
 ---
 
 <Base title="Practice" subject={subject} description={description}>
   <h1 class="practice-title">Practice</h1>
   <noscript><p class="notice">Practice needs JavaScript.</p></noscript>
-  <Practice client:load course={course} />
+  {/* One JSON string: the browser parses it natively, much faster than Astro's prop format, which
+      rebuilds every value of a large object one at a time. */}
+  {/* Before the first paint:
+      - A link that opens a set, or a reload mid-set: the page built here shows the setup screen,
+        which the island replaces with the set a moment later. Say "Loading questions…" instead
+        until it has (Practice.svelte removes html.practice-opening). Filter links keep the built
+        setup screen; its chips update when the island starts.
+      - A set: the page is laid out for it from the start (body[data-practice]).
+      - A link that starts a set by chapter or test: fetch those chapters' question text now, while
+        the page's scripts load (Practice.svelte picks them up from window.__practiceText). Other
+        sets (by topic, say) wait for the island, which works out their chapters. */}
+  <script is:inline define:vars={{ early }}>
+    const p = new URLSearchParams(location.search);
+    const state = history.state;
+    const inSet = state && (state.phase === 'session' || state.phase === 'results');
+    if (p.has('start') || inSet) document.documentElement.classList.add('practice-opening');
+    // Opening a set: lay the page out for it now (no title, and no class nav on phones; see
+    // global.css), so nothing jumps when it appears. Practice.svelte keeps this up to date.
+    if (p.has('start') || inSet) document.body.dataset.practice = inSet ? state.phase : 'session';
+    const chapters = p.has('chapter')
+      ? p.get('chapter').split(',').map(Number)
+      : p.get('test') && early.testChapters[p.get('test')]
+        ? early.testChapters[p.get('test')]
+        : [];
+    if (p.has('start')) {
+      window.__practiceText = {};
+      for (const n of chapters.filter((n) => early.withQuestions.includes(n))) {
+        window.__practiceText[n] = fetch(early.base + n + '.json').then((r) => (r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))));
+      }
+    }
+  </script>
+  <p class="muted opening-note" aria-live="polite">Loading questions…</p>
+  <Practice client:load courseJson={JSON.stringify(course)} />
 </Base>
+
+<style>
+  /* Holds the space the set will take, so the footer doesn't jump down when it appears. */
+  .opening-note {
+    display: none;
+    min-height: 80vh;
+  }
+  :global(html.practice-opening) .opening-note {
+    display: block;
+  }
+  :global(html.practice-opening astro-island) {
+    display: none;
+  }
+</style>

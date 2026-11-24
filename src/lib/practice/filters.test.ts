@@ -1,8 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { activeFilterCount, countWith, emptyFilters, filterQuestions, filterTopics, isCustomCount, sessionSize, toggled } from './filters';
+import { activeFilterCount, cedCounts, countWith, emptyFilters, filterQuestions, filterTopics, isCustomCount, sessionSize, toggled } from './filters';
 import type { PracticeQuestion, PracticeTest } from './types';
 import { filtersToQuery, parseFilters } from './url';
 import { mcq, questions, tests } from './test-fixtures';
+
+describe('cedCounts', () => {
+  it('matches counting each unit and topic chip on its own', () => {
+    const ids = (k: 'units' | 'cedTopics') => [...new Set(questions.flatMap((q) => q[k]))];
+    for (const f of [emptyFilters(), { ...emptyFilters(), difficulty: [1, 2] }, { ...emptyFilters(), chapters: [14], topics: ['5.1'] }]) {
+      const counts = cedCounts(questions, f, tests);
+      for (const u of ids('units')) expect(counts.units.get(u) ?? 0, `unit ${u}`).toBe(countWith(questions, f, tests, { units: [u], topics: [] }));
+      for (const t of ids('cedTopics')) expect(counts.topics.get(t) ?? 0, `topic ${t}`).toBe(countWith(questions, f, tests, { units: [], topics: [t] }));
+    }
+  });
+});
 
 describe('filterQuestions', () => {
   const ids = (qs: PracticeQuestion[]) => qs.map((q) => q.id);

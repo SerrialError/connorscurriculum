@@ -5,7 +5,7 @@
   import { matchFrqs } from '../../lib/frqs';
   import { countWith, emptyFilters, filterQuestions, filterTopics, isDefaultFilters, toggled } from '../../lib/practice/filters';
   import { AP_LABELS, DIFFICULTY_LABELS, MODE_LABELS, TYPE_LABELS, filterChips } from '../../lib/practice/labels';
-  import type { Filters, PracticeQuestion } from '../../lib/practice/types';
+  import type { Filters, QuestionMeta } from '../../lib/practice/types';
   import { filtersToQuery } from '../../lib/practice/url';
   import { byId } from '../../lib/text';
   import Chip from './Chip.svelte';
@@ -17,7 +17,7 @@
   import TopicPicker from './TopicPicker.svelte';
 
   interface Props {
-    all: PracticeQuestion[];
+    all: QuestionMeta[];
     filters: Filters;
     /** Show the "Weakest topics" quick start (there is history with weak topics). */
     weakest: boolean;

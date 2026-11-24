@@ -2,13 +2,13 @@
   // "AP unit or topic" under More options: one closed box per unit (open when a topic in it is
   // picked), with a "Whole unit" chip and a chip for each topic that has questions. Only units and
   // topics with questions in the picked chapters show, plus any already picked (from a link).
-  import { countWith, emptyFilters, filterQuestions, toggled } from '../../lib/practice/filters';
-  import type { Filters, PracticeQuestion } from '../../lib/practice/types';
+  import { cedCounts, emptyFilters, filterQuestions, toggled } from '../../lib/practice/filters';
+  import type { Filters, QuestionMeta } from '../../lib/practice/types';
   import Chip from './Chip.svelte';
   import { getCourse } from './context';
 
   interface Props {
-    all: PracticeQuestion[];
+    all: QuestionMeta[];
     filters: Filters;
   }
 
@@ -22,8 +22,9 @@
   const visibleUnits = $derived(
     units.filter((u) => usedUnits.has(u.id) || filters.units.includes(u.id) || u.topics.some((t) => filters.topics.includes(t.id))),
   );
-  /** Questions a unit (and none of the picked topics) would give. */
-  const unitCount = (id: string) => countWith(all, filters, tests, { units: [id], topics: [] });
+  /** Each unit's and topic's count with only it picked, worked out together (one pass, not one per chip). */
+  const counts = $derived(cedCounts(all, filters, tests));
+  const unitCount = (id: string) => counts.units.get(id) ?? 0;
 </script>
 
 {#each visibleUnits as u (u.id)}
@@ -42,7 +43,7 @@
         <Chip
           checked={filters.topics.includes(t.id)}
           onchange={() => (filters.topics = toggled(filters.topics, t.id))}
-          count={countWith(all, filters, tests, { units: [], topics: [t.id] })}
+          count={counts.topics.get(t.id) ?? 0}
         >
           {t.id} <span class="chip-sub">{t.title}</span>
         </Chip>

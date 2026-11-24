@@ -17,8 +17,13 @@ export interface PracticePart {
   scoringHtml: string[];
 }
 
-interface PracticeQuestionBase {
+/**
+ * What the setup screen, filters, and set picking need about a question: no text. The practice
+ * page carries these for every question; the text loads per chapter when a set starts.
+ */
+export interface QuestionMeta {
   id: string;
+  type: 'mcq' | 'frq';
   chapter: number;
   sections: string[];
   /** Topic ids like "5.4" (subject prefix removed). */
@@ -30,16 +35,19 @@ interface PracticeQuestionBase {
   calculation?: true;
   /** Related questions that give each other away; a practice exam draws at most one per group. */
   groups?: string[];
-  promptHtml: string;
-  /** The prompt as one line of plain text (math written out), for the results list. */
-  promptText: string;
-  image?: { src: string; width: number; height: number; alt: string };
-  explanationHtml: string;
   /**
    * Not class material yet: a sample question, or one from a chapter the class hasn't reached.
    * Left out of practice unless its chapter is picked (see filterQuestions).
    */
   extra?: boolean;
+}
+
+interface PracticeQuestionBase extends Omit<QuestionMeta, 'type'> {
+  promptHtml: string;
+  /** The prompt as one line of plain text (math written out), for the results list. */
+  promptText: string;
+  image?: { src: string; width: number; height: number; alt: string };
+  explanationHtml: string;
 }
 
 export interface McqQuestion extends PracticeQuestionBase {

@@ -6,7 +6,7 @@ import { ALL_QUESTIONS, areaLabel } from '../../lib/practice/labels';
 import type { PracticeLesson } from '../../lib/practice/lessons';
 import type { Preset } from '../../lib/practice/presets';
 import type { ScoreArea } from '../../lib/practice/score';
-import type { PracticeTest } from '../../lib/practice/types';
+import type { PracticeTest, QuestionMeta } from '../../lib/practice/types';
 import { chapterRange } from '../../lib/text';
 
 export interface PracticeChapter {
@@ -27,7 +27,12 @@ export interface PracticeUnit {
 /** The practice page's data, as the Astro page builds it. */
 export interface PracticeCourse {
   subject: string;
-  questionsUrl: string;
+  /** Every question without its text (lib/practice/build.ts questionMeta). */
+  questions: QuestionMeta[];
+  /** Where each chapter's question text is: append "<chapter>.json". */
+  questionsBase: string;
+  /** Chapters whose text loads in the background once the page is idle: the ones the class is on. */
+  prefetchChapters: number[];
   chapters: PracticeChapter[];
   units: PracticeUnit[];
   tests: PracticeTest[];

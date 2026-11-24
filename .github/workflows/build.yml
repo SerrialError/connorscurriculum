@@ -43,6 +43,15 @@ jobs:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}/
           SITE_URL: ${{ steps.pages.outputs.origin }}
 
+      # Key pages on a throttled phone, against perf-budgets.json (the runner has Chrome installed).
+      # Pull requests only: a regression is caught before it merges, and a slow runner can't hold up
+      # a deploy from main.
+      - name: Page speed budgets
+        if: github.event_name == 'pull_request'
+        run: npm run perf -- --check
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+
       - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v5
         with:

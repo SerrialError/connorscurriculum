@@ -1,6 +1,6 @@
 // Scoring answers, and the practice history kept on this device (recent scores per question),
 // with what it says about each topic.
-import type { FrqQuestion, McqQuestion, PracticeQuestion, History } from './types';
+import type { FrqQuestion, McqQuestion, PracticeQuestion, History, QuestionMeta } from './types';
 import { byId } from '../text';
 
 // ---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ export function summarize(results: QuestionResult[]): Summary {
 export type ScoreArea = { kind: 'topic'; topic: string } | { kind: 'chapter'; chapter: number };
 
 /** The areas a question counts towards: its AP topics, or its chapter. */
-export function scoreAreas(q: PracticeQuestion): ScoreArea[] {
+export function scoreAreas(q: Pick<QuestionMeta, 'cedTopics' | 'chapter'>): ScoreArea[] {
   return q.cedTopics.length ? q.cedTopics.map((topic) => ({ kind: 'topic', topic })) : [{ kind: 'chapter', chapter: q.chapter }];
 }
 
@@ -90,7 +90,7 @@ export interface TopicScore {
 }
 
 /** Every area the questions count towards, with the sum and number of their `scoresOf` scores. */
-function scoresByArea(questions: PracticeQuestion[], scoresOf: (q: PracticeQuestion) => number[]): TopicScore[] {
+function scoresByArea<Q extends QuestionMeta>(questions: Q[], scoresOf: (q: Q) => number[]): TopicScore[] {
   const map = new Map<string, TopicScore>();
   for (const q of questions) {
     const scores = scoresOf(q);
@@ -113,7 +113,7 @@ function scoresByArea(questions: PracticeQuestion[], scoresOf: (q: PracticeQuest
  * key in CED order).
  * `scores` maps question id to its 0–1 score; unanswered questions are left out.
  */
-export function topicBreakdown(questions: PracticeQuestion[], scores: Record<string, number>): TopicScore[] {
+export function topicBreakdown(questions: QuestionMeta[], scores: Record<string, number>): TopicScore[] {
   const classOnly = (t: TopicScore) => Number(t.area.kind === 'chapter');
   return scoresByArea(questions, (q) => (scores[q.id] === undefined ? [] : [scores[q.id]!])).sort(
     (a, b) => classOnly(a) - classOnly(b) || a.score / a.count - b.score / b.count || byId(a.key, b.key),
@@ -141,7 +141,7 @@ export function amendLastResult(history: History, questionId: string, score: num
 }
 
 /** Mean recent score per area (by areaKey), across all questions with history. */
-export function topicAccuracy(questions: PracticeQuestion[], history: History): Map<string, number> {
+export function topicAccuracy(questions: QuestionMeta[], history: History): Map<string, number> {
   return new Map(scoresByArea(questions, (q) => history[q.id] ?? []).map((t) => [t.key, t.score / t.count]));
 }
 
@@ -155,7 +155,7 @@ export const WEAK_THRESHOLD = 0.75;
  * Topics with history that are below WEAK_THRESHOLD, weakest first (CED topics only: class-only
  * chapter keys have no topic page or practice link of their own).
  */
-export function weakTopics(questions: PracticeQuestion[], history: History, max = 4): [string, number][] {
+export function weakTopics(questions: QuestionMeta[], history: History, max = 4): [string, number][] {
   return scoresByArea(questions, (q) => history[q.id] ?? [])
     .flatMap((t): [string, number][] => (t.area.kind === 'topic' ? [[t.area.topic, t.score / t.count]] : []))
     .filter(([, acc]) => acc < WEAK_THRESHOLD)

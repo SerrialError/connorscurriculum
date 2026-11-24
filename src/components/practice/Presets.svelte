@@ -2,12 +2,12 @@
   // "Quick start" on the setup screen: ready-made sets (presets.ts), one tap each, and "Weakest
   // topics" once there is history with weak topics.
   import { emptyFilters, filterQuestions, sessionSize } from '../../lib/practice/filters';
-  import type { Filters, PracticeQuestion } from '../../lib/practice/types';
+  import type { Filters, QuestionMeta } from '../../lib/practice/types';
   import { plural } from '../../lib/text';
   import { getCourse } from './context';
 
   interface Props {
-    all: PracticeQuestion[];
+    all: QuestionMeta[];
     /** Show "Weakest topics". */
     weakest: boolean;
     onstart: (f: Filters, exam?: boolean) => void;

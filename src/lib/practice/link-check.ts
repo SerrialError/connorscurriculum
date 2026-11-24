@@ -3,7 +3,7 @@
 // practice page says what happened in one line and shows the filters, so Start (or removing a
 // filter) is one click away.
 import { filterChips } from './labels';
-import type { Filters, PracticeQuestion, PracticeTest } from './types';
+import type { Filters, PracticeTest, QuestionMeta } from './types';
 import { plural } from '../text';
 
 /** What a class has, for checking a link's filters against. */
@@ -11,7 +11,7 @@ export interface KnownValues {
   chapters: number[];
   tests: PracticeTest[];
   units: { id: string; topics: { id: string }[] }[];
-  questions: Pick<PracticeQuestion, 'sections'>[];
+  questions: Pick<QuestionMeta, 'sections'>[];
 }
 
 /** Filter values a link asked for that the class doesn't have. */

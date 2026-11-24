@@ -4,20 +4,20 @@ import { drawExam } from './exam';
 import { emptyFilters, filterQuestions } from './filters';
 import { type Rng, seededRng, shuffle } from './random';
 import { UNSEEN_ACCURACY, areaKey, scoreAreas, topicAccuracy } from './score';
-import type { Filters, History, PracticeQuestion, PracticeTest } from './types';
+import type { Filters, History, PracticeTest, QuestionMeta } from './types';
 
-export function selectQuestions(
-  matching: PracticeQuestion[],
+export function selectQuestions<Q extends QuestionMeta>(
+  matching: Q[],
   f: Pick<Filters, 'mode' | 'n'>,
   history: History,
   rng: Rng,
-): PracticeQuestion[] {
+): Q[] {
   const n = f.n ?? matching.length;
   if (f.mode === 'all') return matching.slice(0, n);
   if (f.mode === 'random') return shuffle(matching, rng).slice(0, n);
 
   const accuracy = topicAccuracy(matching, history);
-  const weakness = (q: PracticeQuestion) => Math.min(...scoreAreas(q).map((a) => accuracy.get(areaKey(a)) ?? UNSEEN_ACCURACY));
+  const weakness = (q: Q) => Math.min(...scoreAreas(q).map((a) => accuracy.get(areaKey(a)) ?? UNSEEN_ACCURACY));
   // Shuffle first so ties are broken randomly; sort is stable.
   return shuffle(matching, rng)
     .map((q) => ({ q, w: weakness(q) }))
@@ -31,12 +31,12 @@ export function selectQuestions(
  * exam for its class test (none if the test has no exam), or the questions its filters match,
  * picked with its seed.
  */
-export function questionsForSet(
-  all: PracticeQuestion[],
+export function questionsForSet<Q extends QuestionMeta>(
+  all: Q[],
   spec: { filters: Filters; exam: boolean; seed: string; ids: string[] | null },
   tests: PracticeTest[],
   history: History,
-): PracticeQuestion[] {
+): Q[] {
   if (spec.ids) {
     const byId = new Map(all.map((q) => [q.id, q]));
     return [...new Set(spec.ids)].flatMap((id) => byId.get(id) ?? []);

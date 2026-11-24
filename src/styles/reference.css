@@ -253,9 +253,6 @@
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
-.pt .pt-cell.metalloid {
-  background: var(--warn-soft);
-}
 .pt .pt-cell[aria-current='true'] {
   background: var(--accent);
   border-color: var(--accent);
@@ -319,19 +316,6 @@
 }
 .pt.searching .pt-cell:not(.match) {
   opacity: 0.3;
-}
-.pt .pt-legend {
-  margin: 0.5rem 0 0;
-}
-.pt .swatch {
-  display: inline-block;
-  width: 0.8rem;
-  height: 0.8rem;
-  margin-right: 0.15rem;
-  vertical-align: -0.1rem;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  background: var(--warn-soft);
 }
 
 /* SourceNote */

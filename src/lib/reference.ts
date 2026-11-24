@@ -21,4 +21,4 @@ export function cell(text: string): string {
 export const EQUATION_DIFFERENCES =
   'Same equations and constants as the official sheet, laid out for screens: one equation per line, and the unit tables at the end.';
 export const TABLE_DIFFERENCES =
-  'Same numbers and masses as the official table. Element names and the metalloid shading are added here.';
+  'Same numbers and masses as the official table. Element names are added here.';

@@ -1,0 +1,1169 @@
+# Practice questions for Chapter 1 (Introduction: Matter, Energy, and Measurement). Original; not
+# taken from the textbook or College Board materials. Classification of matter is tagged with AP topic
+# 1.4 (pure substances vs. mixtures), physical/chemical change with 4.1 and 4.4, and separations with
+# 3.9. Units, significant figures, and dimensional analysis are background skills, tagged cedTopics: [].
+# calculation: true marks questions that need a numeric calculation.
+
+# ---------------------------------------------------------------------------
+# 1.2 Classifications of matter
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-o2-box
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A sealed flask contains only $\ce{O2}$ molecules. How is its contents classified?
+  choices:
+    - { id: a, text: "A compound, because each particle has two atoms bonded together" }
+    - { id: b, text: "A heterogeneous mixture, because the molecules are spread out" }
+    - { id: c, text: "A homogeneous mixture, because the gas is uniform throughout" }
+    - { id: d, text: "An element, because every particle has only one kind of atom" }
+  answer: d
+  explanation: |
+    Every particle is identical (pure substance), and each contains only oxygen atoms, so it's an element. A molecule of an element is still an element: (A) confuses "molecule" with "compound." (C) and (B) are wrong because there's only one kind of particle.
+
+- id: apchem-01-classify-list
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which list is ordered **element, compound, homogeneous mixture, heterogeneous mixture**?
+  choices:
+    - { id: a, text: "Brass, water, air, granite" }
+    - { id: b, text: "Mercury, table salt, salt water, oil and water" }
+    - { id: c, text: "Oxygen, air, sugar, sand and water" }
+    - { id: d, text: "Carbon dioxide, iron, vinegar, milk" }
+  answer: b
+  explanation: |
+    Mercury is an element, NaCl a compound, salt water a solution (homogeneous), and oil with water separates into layers (heterogeneous).
+    (A) starts with brass, which is a mixture of copper and zinc. (C) lists air as a compound and sugar as a mixture; it's the reverse. (D) starts with $\ce{CO2}$, a compound, and iron, an element.
+
+- id: apchem-01-particle-mixture
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A particle diagram shows a box with 4 separate Ar atoms, 3 $\ce{N2}$ molecules, and 2 $\ce{NH3}$ molecules. Which statement about the sample is correct?
+  choices:
+    - { id: a, text: "It is a mixture of two elements and a compound" }
+    - { id: b, text: "It is a mixture of three compounds" }
+    - { id: c, text: "It is a single compound, since N appears twice" }
+    - { id: d, text: "It is a mixture of three elements" }
+  answer: a
+  explanation: |
+    Three different kinds of particle means a mixture. Ar and $\ce{N2}$ each contain one kind of atom (elements); $\ce{NH3}$ contains N and H (a compound).
+    (D) treats $\ce{NH3}$ as an element. (B) treats Ar and $\ce{N2}$ as compounds. (C) ignores that the particles aren't all identical.
+
+- id: apchem-01-compound-vs-mixture
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.3", "1.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Samples of a white solid from three different suppliers are analyzed. All three contain only calcium, carbon, and oxygen, but their mass percents of calcium are 40.0%, 32.5%, and 37.1%. What is the best conclusion?
+  choices:
+    - { id: a, text: "The solid is a single compound whose composition depends on how it was made" }
+    - { id: b, text: "The three samples are three different elements that look alike" }
+    - { id: c, text: "The samples can't all be the same pure compound" }
+    - { id: d, text: "The analysis must be wrong, since calcium can't combine with carbon" }
+  answer: c
+  explanation: |
+    By the law of constant composition, every sample of one pure compound has the same mass percent of each element. Different percents mean the samples aren't all the same pure substance: at least some are mixtures (for example, $\ce{CaCO3}$ with an impurity), or they're different compounds.
+    (A) contradicts the law. (B) is impossible, since each sample contains three elements. (D) is false: $\ce{CaCO3}$ contains Ca, C, and O.
+
+- id: apchem-01-homogeneous
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which of these is a **homogeneous** mixture?
+  choices:
+    - { id: a, text: "Distilled water" }
+    - { id: b, text: "Concrete" }
+    - { id: c, text: "Muddy river water" }
+    - { id: d, text: "Filtered air" }
+  answer: d
+  explanation: |
+    Air is a uniform mixture of $\ce{N2}$, $\ce{O2}$, Ar, and other gases, so it's a solution. Distilled water (A) is a pure compound. Concrete (B) and muddy water (C) aren't uniform, so they're heterogeneous.
+
+- id: apchem-01-states-particles
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which state of matter has a fixed volume but takes the shape of its container?
+  choices:
+    - { id: a, text: "Liquid" }
+    - { id: b, text: "Gas" }
+    - { id: c, text: "Solid" }
+    - { id: d, text: "All three" }
+  answer: a
+  explanation: |
+    Liquid particles are close together (fixed volume) but slide past each other (no fixed shape). A gas has neither a fixed shape nor a fixed volume; a solid has both.
+
+- id: apchem-01-compound-breakdown
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Heating a pure orange solid produces a silvery liquid and a colorless gas, and nothing can turn either product into anything simpler. What was the orange solid?
+  choices:
+    - { id: a, text: "An element, since it was pure before heating" }
+    - { id: b, text: "A heterogeneous mixture of a liquid and a gas" }
+    - { id: c, text: "A compound of the two elements formed" }
+    - { id: d, text: "A homogeneous mixture of two elements" }
+  answer: c
+  explanation: |
+    A pure substance that breaks down chemically into two simpler substances is a compound. The products can't be broken down further, so they're elements. (This is what happens when mercury(II) oxide is heated: Hg and $\ce{O2}$.)
+    (A) is wrong because an element can't be decomposed. A mixture (B, D) would be separated by physical means, and the original was described as pure.
+
+- id: apchem-01-particle-count
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.4"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A box contains 6 $\ce{H2O}$ molecules and 2 $\ce{H2O2}$ molecules. A student says, "This is a pure substance, because it contains only hydrogen and oxygen atoms." Which response is correct?
+  choices:
+    - { id: a, text: "Correct, because a substance is defined by which elements it contains" }
+    - { id: b, text: "Wrong, because H₂O and H₂O₂ are elements, so this is a mixture of elements" }
+    - { id: c, text: "Correct, because both are compounds and a compound is a pure substance" }
+    - { id: d, text: "Wrong, because the particles aren't all identical, so this is a mixture of two compounds" }
+  answer: d
+  explanation: |
+    A pure substance has one kind of particle. $\ce{H2O}$ and $\ce{H2O2}$ are different compounds with different properties, even though they contain the same elements. Two kinds of molecule make a mixture.
+    (A) and (C) use the wrong test. (B) wrongly calls the molecules elements.
+
+# ---------------------------------------------------------------------------
+# 1.3 Properties and changes
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-intensive
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which property is **intensive**?
+  choices:
+    - { id: a, text: "Mass" }
+    - { id: b, text: "Volume" }
+    - { id: c, text: "Boiling point" }
+    - { id: d, text: "Heat released on burning" }
+  answer: c
+  explanation: |
+    An intensive property doesn't depend on how much of the substance there is. A drop and a pot of water both boil at 100 °C at 1 atm. Mass, volume, and the total heat released all grow with the amount, so they're extensive.
+
+- id: apchem-01-chemical-property
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which describes a **chemical** property of sodium?
+  choices:
+    - { id: a, text: "It is soft enough to be cut with a butter knife" }
+    - { id: b, text: "It melts at 98 °C" }
+    - { id: c, text: "It is a good conductor of electricity" }
+    - { id: d, text: "It reacts with water to form hydrogen gas" }
+  answer: d
+  explanation: |
+    A chemical property describes how a substance turns into other substances. Reacting with water makes $\ce{H2}$ and NaOH. Hardness, melting point, and conductivity can be observed without changing sodium into anything else, so they're physical properties.
+
+- id: apchem-01-physical-change
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.1", "4.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which is a **physical** change?
+  choices:
+    - { id: a, text: "Dry ice turning into a gas" }
+    - { id: b, text: "Milk going sour" }
+    - { id: c, text: "A candle wick burning" }
+    - { id: d, text: "Silver slowly tarnishing black in moist air" }
+  answer: a
+  explanation: |
+    Sublimation of dry ice changes solid $\ce{CO2}$ into gaseous $\ce{CO2}$; the molecules stay the same. Souring, burning, and tarnishing all make new substances.
+
+- id: apchem-01-boiling-particles
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    When liquid water boils, what happens at the particle level?
+  choices:
+    - { id: a, text: "O–H bonds break, releasing H₂ and O₂ gas in the bubbles" }
+    - { id: b, text: "Attractions between H₂O molecules are overcome, but the molecules stay intact" }
+    - { id: c, text: "H₂O molecules split into H⁺ and OH⁻ ions that escape as a gas" }
+    - { id: d, text: "Water molecules get larger as they absorb heat, until they float away" }
+  answer: b
+  explanation: |
+    Boiling is a physical change: molecules separate from each other, but no bonds within the molecules break. The bubbles are water vapor.
+    (A) describes electrolysis, a chemical change. (C) doesn't happen on boiling. (D) is wrong because molecules don't change size when heated; they move faster.
+
+- id: apchem-01-evidence
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which observation is the **strongest** evidence that a chemical reaction happened?
+  choices:
+    - { id: a, text: "A solid disappears when it is stirred into water" }
+    - { id: b, text: "A liquid gives off bubbles when it is heated to 100 °C" }
+    - { id: c, text: "A yellow solid forms when two clear, colorless solutions are mixed" }
+    - { id: d, text: "A metal bar left in the sun gets warm to the touch after an hour" }
+  answer: c
+  explanation: |
+    A precipitate (a new solid) forming from two solutions, with a color change, means a new substance was made.
+    (A) can be just dissolving. (B) is boiling. (D) is heat transfer with no new substance.
+
+- id: apchem-01-dissolve-nacl
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.4"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Dissolving NaCl in water is sometimes called a chemical change and sometimes a physical change. Which statement best explains why it can be argued either way?
+  choices:
+    - { id: a, text: "The attractions between Na⁺ and Cl⁻ in the crystal are broken, but the ions themselves are unchanged and the salt can be recovered" }
+    - { id: b, text: "Sodium atoms give their electrons to water, but the chlorine atoms stay as Cl₂ molecules" }
+    - { id: c, text: "It is endothermic, and endothermic processes can be either physical or chemical" }
+    - { id: d, text: "The water molecules break apart into H⁺ and OH⁻, but they quickly re-form" }
+  answer: a
+  explanation: |
+    Dissolving breaks the ionic attractions that hold the crystal together (bonds), which sounds chemical, and new attractions form between ions and water. But the ions don't change, and evaporating the water gives NaCl back, which sounds physical. The AP exam accepts either answer with this reasoning.
+    (B) is wrong: NaCl already contains ions. (C) doesn't distinguish anything. (D) doesn't describe dissolving.
+
+- id: apchem-01-sugar-dissolve
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why is dissolving sugar ($\ce{C12H22O11}$) in water classified as a physical change?
+  choices:
+    - { id: a, text: "The sugar molecules stay intact; only attractions between molecules change" }
+    - { id: b, text: "The sugar breaks into C, H, and O atoms that are spread through the water" }
+    - { id: c, text: "No energy is absorbed or released when sugar dissolves" }
+    - { id: d, text: "Sugar reacts with water, but the products happen to be colorless and odorless" }
+  answer: a
+  explanation: |
+    Dissolved sugar is still $\ce{C12H22O11}$ molecules, now surrounded by water. No covalent bonds break.
+    (B) would be a chemical change. (C) is false; dissolving has a small energy change. (D) describes a reaction.
+
+- id: apchem-01-filtration
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["3.9"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which mixture can be separated by filtration?
+  choices:
+    - { id: a, text: "Sugar dissolved in water" }
+    - { id: b, text: "Ethanol mixed with water" }
+    - { id: c, text: "Iron filings in water" }
+    - { id: d, text: "Salt dissolved in water" }
+  answer: c
+  explanation: |
+    Filtration separates an undissolved solid from a liquid. In a solution (A, B, D), the dissolved particles are spread among the water molecules and pass through the filter with them.
+
+- id: apchem-01-distill
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["3.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A solution of liquids X and Y is distilled. X boils at 56 °C and Y at 118 °C. Which statement is correct?
+  choices:
+    - { id: a, text: "Y collects first because its molecules are attracted to each other more strongly" }
+    - { id: b, text: "Y collects first because a higher boiling point means it evaporates faster" }
+    - { id: c, text: "X collects first because its molecules are attracted to each other more strongly" }
+    - { id: d, text: "X collects first because its molecules are attracted to each other less strongly" }
+  answer: d
+  explanation: |
+    The liquid with the lower boiling point vaporizes first. A lower boiling point means weaker attractions between its molecules, so less energy separates them.
+    (C) gives the wrong reason; stronger attractions raise the boiling point. (A) and (B) have the order backward.
+
+- id: apchem-01-rf-polarity
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["3.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A mixture is separated by paper chromatography on polar paper with a nonpolar solvent. The solvent front moves 10.0 cm. Component P moves 1.5 cm and component Q moves 8.5 cm. Which is the best explanation?
+  choices:
+    - { id: a, text: "P is more polar, so it is attracted more strongly to the paper" }
+    - { id: b, text: "P is less polar, so it is attracted more strongly to the paper" }
+    - { id: c, text: "P has a larger molar mass, so gravity holds it back" }
+    - { id: d, text: "P is more polar, so it dissolves better in the solvent" }
+  answer: a
+  explanation: |
+    P stayed near the start, held by the stationary phase. The paper is polar, so the component that's held more is the more polar one. Q is attracted more to the nonpolar solvent and travels with it.
+    (B) reverses "like attracts like." (D) would make P move farther, not less. (C) isn't how chromatography separates.
+
+- id: apchem-01-rf-solvent-switch
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["3.9"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Two dyes, a polar dye and a nonpolar dye, are separated on the same polar paper twice: first with a nonpolar solvent, then with water as the solvent. How do the distances they travel change when the solvent is switched to water?
+  choices:
+    - { id: a, text: "Both increase by the same amount, because water is a better solvent for everything" }
+    - { id: b, text: "Neither changes, because the distance depends only on the paper" }
+    - { id: c, text: "The polar dye travels less far and the nonpolar dye travels farther" }
+    - { id: d, text: "The polar dye travels farther and the nonpolar dye travels less far" }
+  answer: d
+  explanation: |
+    With a polar solvent, the polar dye is now attracted to the moving phase as well as the paper, so it travels farther. The nonpolar dye is attracted less to water than to the nonpolar solvent, so it moves less. The order of the spots usually flips.
+    (C) is the reverse. (B) ignores the mobile phase. (A) isn't true: water dissolves polar substances, not nonpolar ones.
+
+- id: apchem-01-separation-method
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["3.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which method would best separate the colored dyes that are dissolved together in a drop of black ink?
+  choices:
+    - { id: a, text: "Filtration" }
+    - { id: b, text: "Decanting the liquid" }
+    - { id: c, text: "Using a magnet" }
+    - { id: d, text: "Chromatography" }
+  answer: d
+  explanation: |
+    The dyes are dissolved, so filtration and decanting (pouring off a liquid above a solid) won't work, and they aren't magnetic. Chromatography separates them by how strongly each is attracted to the solvent and to the paper.
+
+# ---------------------------------------------------------------------------
+# 1.4 Energy
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-ke-double
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.4"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    If the speed of a moving object doubles, its kinetic energy is multiplied by
+  choices:
+    - { id: a, text: "1/2" }
+    - { id: b, text: "2" }
+    - { id: c, text: "4" }
+    - { id: d, text: "8" }
+  answer: c
+  explanation: |
+    $E_k = \tfrac{1}{2}mv^2$. Kinetic energy depends on the square of the speed, so doubling $v$ multiplies $E_k$ by $2^2 = 4$.
+
+- id: apchem-01-ke-calc
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.4"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the kinetic energy of a 60.0 g tennis ball moving at 25.0 m/s?
+  choices:
+    - { id: a, text: "0.750 J" }
+    - { id: b, text: "18.8 J" }
+    - { id: c, text: "37.5 J" }
+    - { id: d, text: "1.88 × 10⁴ J" }
+  answer: b
+  explanation: |
+    Mass must be in kilograms: 60.0 g = 0.0600 kg.
+    $E_k = \tfrac{1}{2}(0.0600\ \text{kg})(25.0\ \text{m/s})^2 = 18.8\ \text{J}$.
+    (D) leaves the mass in grams. (C) forgets the ½. (A) doesn't square the speed.
+
+- id: apchem-01-coulomb-compare
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.4"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which pair of ions has the **most negative** electrostatic potential energy? (Distances are between the centers.)
+  choices:
+    - { id: a, text: "+1 and −1, 0.40 nm apart" }
+    - { id: b, text: "+1 and −1, 0.20 nm apart" }
+    - { id: c, text: "+2 and −1, 0.30 nm apart" }
+    - { id: d, text: "+2 and −2, 0.30 nm apart" }
+  answer: d
+  explanation: |
+    $E_{\text{el}} \propto Q_1Q_2/d$. Compare $Q_1Q_2/d$: (A) $-1/0.40 = -2.5$, (B) $-1/0.20 = -5.0$, (C) $-2/0.30 = -6.7$, (D) $-4/0.30 = -13.3$. The largest charges at a short distance give the strongest attraction.
+
+- id: apchem-01-like-charges
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.4"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Two positively charged particles are pushed closer together. What happens to the electrostatic potential energy of the pair?
+  choices:
+    - { id: a, text: "It decreases, because the particles become more stable" }
+    - { id: b, text: "It increases, because work must be done against the repulsion" }
+    - { id: c, text: "It stays the same, because the charges don't change" }
+    - { id: d, text: "It becomes negative, because the particles attract when close" }
+  answer: b
+  explanation: |
+    For like charges $Q_1Q_2$ is positive, so $E_{\text{el}}$ is positive and grows as $d$ shrinks. Pushing them together takes energy, which is stored as potential energy.
+    (A) and (D) describe opposite charges. (C) ignores the distance.
+
+# ---------------------------------------------------------------------------
+# 1.5 Units of measurement
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-prefix
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many micrometers are in 1 millimeter?
+  choices:
+    - { id: a, text: "10" }
+    - { id: b, text: "100" }
+    - { id: c, text: "1000" }
+    - { id: d, text: "1 × 10⁶" }
+  answer: c
+  explanation: |
+    $1\ \text{mm} = 10^{-3}$ m and $1\ \mu\text{m} = 10^{-6}$ m, so $1\ \text{mm} = 10^{-3}/10^{-6} = 10^3\ \mu\text{m}$.
+
+- id: apchem-01-kelvin
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5"]
+  cedTopics: []
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Liquid nitrogen boils at 77 K. What is this temperature in °C?
+  choices:
+    - { id: a, text: "−196 °C" }
+    - { id: b, text: "−350 °C" }
+    - { id: c, text: "−77 °C" }
+    - { id: d, text: "350 °C" }
+  answer: a
+  explanation: |
+    $^\circ\text{C} = \text{K} - 273.15 = 77 - 273 = -196\ ^\circ\text{C}$. (D) adds 273; (B) adds 273 and makes it negative.
+
+- id: apchem-01-temp-change
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The temperature of a sample rises by 15 °C. By how much did it rise in kelvins?
+  choices:
+    - { id: a, text: "15 K" }
+    - { id: b, text: "27 K" }
+    - { id: c, text: "258 K" }
+    - { id: d, text: "288 K" }
+  answer: a
+  explanation: |
+    A kelvin and a Celsius degree are the same size; the scales differ only in where zero is. A **change** of 15 °C is a change of 15 K. (D) converts 15 °C as if it were a temperature, not a change. (B) multiplies by 1.8, as if K and °C were different-sized degrees.
+
+- id: apchem-01-density-calc
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5"]
+  cedTopics: []
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 12.5 mL sample of a liquid has a mass of 9.86 g. What is its density?
+  choices:
+    - { id: a, text: "0.789 g/mL" }
+    - { id: b, text: "1.27 g/mL" }
+    - { id: c, text: "2.64 g/mL" }
+    - { id: d, text: "1.23 × 10² g/mL" }
+  answer: a
+  explanation: |
+    $d = m/V = 9.86\ \text{g} / 12.5\ \text{mL} = 0.789\ \text{g/mL}$. (B) divides volume by mass. (D) multiplies them.
+
+- id: apchem-01-displacement
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 35.6 g piece of metal is dropped into a graduated cylinder holding 20.0 mL of water, and the water level rises to 24.0 mL. Which metal is it most likely to be?
+  choices:
+    - { id: a, text: "Aluminum, 2.70 g/cm³" }
+    - { id: b, text: "Zinc, 7.13 g/cm³" }
+    - { id: c, text: "Nickel, 8.90 g/cm³" }
+    - { id: d, text: "Lead, 11.3 g/cm³" }
+  answer: c
+  explanation: |
+    The metal's volume is the water it displaces: $24.0 - 20.0 = 4.0$ mL = 4.0 cm³. $d = 35.6 / 4.0 = 8.9$ g/cm³, nickel.
+    Using 24.0 mL as the volume gives 1.48 g/cm³, which matches nothing; using 20.0 mL gives 1.78.
+
+- id: apchem-01-volume-units
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which volume is the same as 250 mL?
+  choices:
+    - { id: a, text: "2.50 L" }
+    - { id: b, text: "250 cm³" }
+    - { id: c, text: "25.0 dm³" }
+    - { id: d, text: "0.250 m³" }
+  answer: b
+  explanation: |
+    $1\ \text{mL} = 1\ \text{cm}^3$, so 250 mL = 250 cm³ (and 0.250 L = 0.250 dm³). (D) is 250 L, a thousand times too big.
+
+# ---------------------------------------------------------------------------
+# 1.6 Uncertainty and significant figures
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-sigfig-count
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many significant figures are in 0.004050 g?
+  choices:
+    - { id: a, text: "3" }
+    - { id: b, text: "4" }
+    - { id: c, text: "6" }
+    - { id: d, text: "7" }
+  answer: b
+  explanation: |
+    The leading zeros (0.00) don't count. The 4, the zero between 4 and 5, the 5, and the trailing zero (there's a decimal point) do: **4050**, 4 significant figures.
+
+- id: apchem-01-sigfig-most
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which measurement has the **most** significant figures?
+  choices:
+    - { id: a, text: "0.000720 m" }
+    - { id: b, text: "3.0 × 10⁵ s" }
+    - { id: c, text: "101.0 g" }
+    - { id: d, text: "4.5 × 10³ mL" }
+  answer: c
+  explanation: |
+    101.0 has 4 (the zero between 1s counts, and so does the trailing zero after the decimal point). 0.000720 has 3, $3.0 \times 10^5$ has 2, and $4.5 \times 10^3$ has 2.
+
+- id: apchem-01-exact-numbers
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which of these is an **exact** number?
+  choices:
+    - { id: a, text: "The mass of a paper clip, 1.03 g" }
+    - { id: b, text: "The length of a desk, 1.52 m" }
+    - { id: c, text: "The number of centimeters in a meter" }
+    - { id: d, text: "The measured density of water at 20 °C, 0.998 g/mL" }
+  answer: c
+  explanation: |
+    1 m = 100 cm by definition, so 100 has no uncertainty. Every measured value (A, B, D) is inexact.
+
+- id: apchem-01-precision-accuracy
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A sample's true mass is 5.00 g. A student weighs it four times and gets 5.42, 5.41, 5.43, and 5.42 g. How should these results be described?
+  choices:
+    - { id: a, text: "Accurate and precise" }
+    - { id: b, text: "Accurate but not precise" }
+    - { id: c, text: "Neither accurate nor precise" }
+    - { id: d, text: "Precise but not accurate" }
+  answer: d
+  explanation: |
+    The readings agree within 0.02 g of each other (precise) but are all about 0.42 g too high (not accurate). This pattern suggests a **systematic** error, such as a balance that wasn't zeroed.
+
+- id: apchem-01-systematic
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A thermometer reads 2.0 °C too high at every temperature. A student measures the temperature of a sample ten times and averages the readings. Compared with a single reading, the average is
+  choices:
+    - { id: a, text: "more precise, and the 2.0 °C error disappears in the average" }
+    - { id: b, text: "still about 2.0 °C too high, since averaging doesn't remove a systematic error" }
+    - { id: c, text: "about 0.2 °C too high, since the 2.0 °C error is spread out over the ten readings" }
+    - { id: d, text: "less accurate, because more readings means more chances for error" }
+  answer: b
+  explanation: |
+    Averaging reduces **random** error, which scatters readings on both sides of the true value. A systematic error pushes every reading the same way, so the average is off by the same 2.0 °C. Calibrating the thermometer is the fix.
+
+- id: apchem-01-multiply-sigfigs
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Report $4.512\ \text{m} \times 0.30\ \text{m}$ to the correct number of significant figures.
+  choices:
+    - { id: a, text: "1.3536 m²" }
+    - { id: b, text: "1.354 m²" }
+    - { id: c, text: "1.35 m²" }
+    - { id: d, text: "1.4 m²" }
+  answer: d
+  explanation: |
+    For multiplication the answer has as many significant figures as the factor with the fewest. 0.30 has 2 (the leading zero doesn't count), so 1.3536 rounds to **1.4** m².
+
+- id: apchem-01-add-sigfigs
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Report $152.06\ \text{g} + 0.0345\ \text{g} + 3.1\ \text{g}$ to the correct number of significant figures.
+  choices:
+    - { id: a, text: "155.1945 g" }
+    - { id: b, text: "155.19 g" }
+    - { id: c, text: "155.2 g" }
+    - { id: d, text: "155 g" }
+  answer: c
+  explanation: |
+    For addition, keep the fewest **decimal places**. 3.1 has one decimal place, so 155.1945 rounds to **155.2** g. (B) keeps two decimal places, but 3.1 is known only to the tenths place. (D) rounds to whole grams, throwing away a digit that is known.
+
+- id: apchem-01-mixed-sigfigs
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Calculate $\dfrac{25.632 - 24.3}{0.508}$ and report it to the correct number of significant figures.
+  choices:
+    - { id: a, text: "2.62" }
+    - { id: b, text: "2.6" }
+    - { id: c, text: "3" }
+    - { id: d, text: "2.622" }
+  answer: b
+  explanation: |
+    Subtraction first: $25.632 - 24.3 = 1.332$. 24.3 is known only to the tenths place, so the difference is good to the tenths place too: 1.3, which has **2** significant figures.
+    Then $1.332 / 0.508 = 2.622$. The numerator has 2 significant figures and 0.508 has 3, so the answer has 2: **2.6**. (Keep 1.332 in the calculator and round only at the end.)
+    (A) uses the 3 significant figures of 0.508 and ignores what the subtraction did. (D) isn't rounded. (C) rounds too far.
+
+- id: apchem-01-ruler
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A graduated cylinder is marked every 1 mL. The bottom of the meniscus is a little more than halfway between the 36 mL and 37 mL marks. How should the volume be recorded?
+  choices:
+    - { id: a, text: "36 mL" }
+    - { id: b, text: "36.6 mL" }
+    - { id: c, text: "36.60 mL" }
+    - { id: d, text: "37 mL" }
+  answer: b
+  explanation: |
+    Record all the certain digits plus one estimated digit. The marks give the ones place for sure; the tenths place is estimated: **36.6** mL. (C) claims more precision than the cylinder has. (A) and (D) drop the estimated digit.
+
+# ---------------------------------------------------------------------------
+# 1.7 Dimensional analysis
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-conversion-factor-choice
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    To convert a length from inches to centimeters, which conversion factor should multiply the length in inches? (1 in = 2.54 cm)
+  choices:
+    - { id: a, text: "1 in / 2.54 cm" }
+    - { id: b, text: "2.54 cm / 1 in" }
+    - { id: c, text: "2.54 in / 1 cm" }
+    - { id: d, text: "1 cm / 2.54 in" }
+  answer: b
+  explanation: |
+    Put the unit you want to cancel (in) on the bottom and the unit you want (cm) on top. (A) leaves in²/cm. (C) and (D) aren't true equalities.
+
+- id: apchem-01-speed-convert
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A runner's speed is 5.50 m/s. What is this in km/h?
+  choices:
+    - { id: a, text: "0.0917 km/h" }
+    - { id: b, text: "1.53 km/h" }
+    - { id: c, text: "19.8 km/h" }
+    - { id: d, text: "330 km/h" }
+  answer: c
+  explanation: |
+    $5.50\ \tfrac{\text{m}}{\text{s}} \times \tfrac{1\ \text{km}}{1000\ \text{m}} \times \tfrac{3600\ \text{s}}{1\ \text{h}} = 19.8\ \text{km/h}$.
+    (B) flips both factors (multiplies by 1000 and divides by 3600). (D) multiplies by 60 only, as if converting to meters per minute. (A) divides by 60.
+
+- id: apchem-01-cubed-convert
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A box has a volume of 0.0250 m³. What is its volume in cm³?
+  choices:
+    - { id: a, text: "2.50 cm³" }
+    - { id: b, text: "250 cm³" }
+    - { id: c, text: "2.50 × 10⁻⁸ cm³" }
+    - { id: d, text: "2.50 × 10⁴ cm³" }
+  answer: d
+  explanation: |
+    $1\ \text{m}^3 = (100\ \text{cm})^3 = 10^6\ \text{cm}^3$, so $0.0250 \times 10^6 = 2.50 \times 10^4$ cm³.
+    (A) multiplies by 100 instead of $100^3$. (C) divides by $10^6$ instead of multiplying; a cubic meter is far bigger than a cubic centimeter, so the number must get larger.
+
+- id: apchem-01-density-convert
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Osmium has a density of 22.6 g/cm³. What is its density in kg/m³?
+  choices:
+    - { id: a, text: "0.0226 kg/m³" }
+    - { id: b, text: "2.26 kg/m³" }
+    - { id: c, text: "2.26 × 10⁴ kg/m³" }
+    - { id: d, text: "2.26 × 10⁷ kg/m³" }
+  answer: c
+  explanation: |
+    $22.6\ \tfrac{\text{g}}{\text{cm}^3} \times \tfrac{1\ \text{kg}}{1000\ \text{g}} \times \left(\tfrac{100\ \text{cm}}{1\ \text{m}}\right)^3 = 22.6 \times 10^{-3} \times 10^6 = 2.26 \times 10^4\ \text{kg/m}^3$.
+    (B) uses 100 instead of $100^3$. (D) forgets the g → kg step. (A) only converts g → kg.
+
+- id: apchem-01-mass-to-volume
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5", "1.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Acetone has a density of 0.785 g/mL. What volume of acetone, in liters, has a mass of 2.00 kg?
+  choices:
+    - { id: a, text: "1.57 L" }
+    - { id: b, text: "2.55 L" }
+    - { id: c, text: "2.00 L" }
+    - { id: d, text: "2.55 × 10³ L" }
+  answer: b
+  explanation: |
+    $2.00\ \text{kg} \times \tfrac{1000\ \text{g}}{1\ \text{kg}} \times \tfrac{1\ \text{mL}}{0.785\ \text{g}} \times \tfrac{1\ \text{L}}{1000\ \text{mL}} = 2.55\ \text{L}$.
+    (A) multiplies by the density instead of dividing. (D) stops at milliliters but labels them liters. Acetone is less dense than water, so 2.00 kg must take up more than 2.00 L.
+
+- id: apchem-01-area-convert
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A sheet of gold foil has an area of 8.00 cm² and a mass of 0.0193 g. Gold's density is 19.3 g/cm³. How thick is the foil, in nanometers?
+  choices:
+    - { id: a, text: "1.25 nm" }
+    - { id: b, text: "125 nm" }
+    - { id: c, text: "1250 nm" }
+    - { id: d, text: "1.25 × 10⁵ nm" }
+  answer: c
+  explanation: |
+    Volume $= 0.0193\ \text{g} / 19.3\ \text{g/cm}^3 = 1.00 \times 10^{-3}\ \text{cm}^3$.
+    Thickness $= V / A = 1.00 \times 10^{-3}\ \text{cm}^3 / 8.00\ \text{cm}^2 = 1.25 \times 10^{-4}\ \text{cm}$.
+    $1.25 \times 10^{-4}\ \text{cm} \times \tfrac{10^{-2}\ \text{m}}{1\ \text{cm}} \times \tfrac{1\ \text{nm}}{10^{-9}\ \text{m}} = 1.25 \times 10^{3}\ \text{nm} = 1250\ \text{nm}$ (3 significant figures).
+    (B) and (D) are off by factors of 10 and 100 from the cm → nm step.
+
+- id: apchem-01-dosage
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A medicine dose is 8.0 mg per kg of body mass. How many milligrams should a 132 lb patient receive? (1 kg = 2.205 lb)
+  choices:
+    - { id: a, text: "7.5 mg" }
+    - { id: b, text: "4.8 × 10² mg" }
+    - { id: c, text: "1.1 × 10³ mg" }
+    - { id: d, text: "2.3 × 10³ mg" }
+  answer: b
+  explanation: |
+    $132\ \text{lb} \times \tfrac{1\ \text{kg}}{2.205\ \text{lb}} = 59.9\ \text{kg}$, and $59.9\ \text{kg} \times 8.0\ \tfrac{\text{mg}}{\text{kg}} = 479 \approx 4.8 \times 10^2\ \text{mg}$ (2 sig figs from 8.0).
+    (D) multiplies by 2.205 instead of dividing. (C) multiplies pounds by 8.0 without converting. (A) divides the mass by the dose.
+
+- id: apchem-01-constant-composition-calc
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 4.00 g sample of pure magnesium oxide contains 2.41 g of magnesium. How many grams of magnesium are in a 15.0 g sample of pure magnesium oxide from a different source?
+  choices:
+    - { id: a, text: "9.04 g" }
+    - { id: b, text: "2.41 g" }
+    - { id: c, text: "6.22 g" }
+    - { id: d, text: "13.4 g" }
+  answer: a
+  explanation: |
+    By the law of constant composition, every pure sample has the same mass fraction of Mg: $2.41 / 4.00 = 0.6025$. So $15.0 \times 0.6025 = 9.04$ g.
+    (B) assumes the mass of Mg doesn't depend on the sample size. (C) is $15.0 / 2.41$. (D) is $15.0 - (4.00 - 2.41)$, subtracting the oxygen from the first sample.
+
+- id: apchem-01-condense-particles
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.3", "4.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A "before" particle diagram shows 6 $\ce{Br2}$ molecules spread far apart. The "after" diagram shows the same 6 $\ce{Br2}$ molecules packed close together at the bottom of the container. Which process does this represent?
+  choices:
+    - { id: a, text: "Decomposition of bromine, a chemical change" }
+    - { id: b, text: "Combination of bromine atoms into molecules, a chemical change" }
+    - { id: c, text: "Boiling of bromine, a physical change" }
+    - { id: d, text: "Condensation of bromine, a physical change" }
+  answer: d
+  explanation: |
+    The molecules are the same before and after (each is still $\ce{Br2}$), so no bonds broke or formed. They went from far apart (gas) to close together (liquid): condensation. Boiling (C) is the reverse. (A) and (B) would change the particles.
+
+- id: apchem-01-energy-released
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.4"]
+  cedTopics: ["1.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which process **releases** energy because the electrostatic potential energy of the system decreases?
+  choices:
+    - { id: a, text: "Pulling an electron away from a nucleus" }
+    - { id: b, text: "A Na⁺ ion and a Cl⁻ ion moving together from far apart" }
+    - { id: c, text: "Pushing two protons closer together" }
+    - { id: d, text: "Separating a Mg²⁺ ion from an O²⁻ ion" }
+  answer: b
+  explanation: |
+    Opposite charges have lower (more negative) potential energy closer together, so bringing $\ce{Na+}$ and $\ce{Cl-}$ together lowers the energy, and the difference is released.
+    (A) and (D) separate opposite charges, which raises the energy (energy must be added). (C) pushes like charges together, which also raises the energy.
+
+- id: apchem-01-area-convert-ft
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.7"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A classroom floor has an area of 855 ft². What is the area in square meters? (1 ft = 12 in exactly, 1 in = 2.54 cm exactly)
+  choices:
+    - { id: a, text: "261 m²" }
+    - { id: b, text: "2.81 × 10³ m²" }
+    - { id: c, text: "9.20 × 10³ m²" }
+    - { id: d, text: "79.4 m²" }
+  answer: d
+  explanation: |
+    $1\ \text{ft} = 12 \times 2.54 = 30.48\ \text{cm} = 0.3048\ \text{m}$. Square the whole factor:
+    $855\ \text{ft}^2 \times \left(\tfrac{0.3048\ \text{m}}{1\ \text{ft}}\right)^2 = 855 \times 0.09290 = 79.4\ \text{m}^2$.
+    (A) uses 0.3048 without squaring it. (B) divides by 0.3048 instead. (C) divides by $0.3048^2$.
+
+- id: apchem-01-sci-notation
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which correctly writes 0.0005060 in scientific notation, keeping its significant figures?
+  choices:
+    - { id: a, text: "5.06 × 10⁻⁴" }
+    - { id: b, text: "5.060 × 10⁻⁴" }
+    - { id: c, text: "5.060 × 10⁻³" }
+    - { id: d, text: "5.0600 × 10⁻⁴" }
+  answer: b
+  explanation: |
+    0.0005060 has 4 significant figures (5, 0, 6, and the trailing 0; the leading zeros don't count). Moving the decimal point 4 places right gives $5.060 \times 10^{-4}$.
+    (A) drops the significant trailing zero. (D) adds one that isn't there. (C) has the wrong exponent.
+
+
+# ---------------------------------------------------------------------------
+# Free response
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-separation-frq
+  type: frq
+  subject: apchem
+  chapter: 1
+  sections: ["1.2", "1.3"]
+  cedTopics: ["1.4", "3.9", "4.4"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A student is given a mixture of sand, table salt (NaCl), and a small amount of a water-soluble blue dye. The student adds water, stirs, and filters the mixture. A clear blue solution passes through the filter, and the sand stays on the filter paper.
+  parts:
+    - label: a
+      points: 1
+      prompt: Is the blue solution that passes through the filter a pure substance, a homogeneous mixture, or a heterogeneous mixture? Justify your answer.
+      scoring:
+        - "Homogeneous mixture (a solution): it contains more than one kind of particle (water, Na⁺ and Cl⁻ ions, dye molecules), spread uniformly."
+    - label: b
+      points: 1
+      prompt: Explain why filtration separated the sand but not the salt or the dye.
+      scoring:
+        - "The sand particles are large and undissolved, so they can't pass through the filter; the dissolved ions and dye molecules are spread among the water molecules and pass through with them."
+    - label: c
+      points: 1
+      prompt: The student heats the blue solution until all the water is gone. Is evaporating the water a physical or chemical change? Justify your answer in terms of particles.
+      scoring:
+        - "Physical: only the attractions between water molecules (and between water and the solutes) are overcome; the H₂O molecules stay intact, so no new substance forms."
+    - label: d
+      points: 2
+      prompt: To check the dye's purity, the student runs paper chromatography on it with a nonpolar solvent and polar paper. The solvent front moves 10.0 cm, and two spots appear, 2.0 cm and 7.0 cm from the starting line. What does this show about the dye, and which spot comes from the more polar component? Justify.
+      scoring:
+        - "The dye is a mixture of (at least) two colored substances, since two spots formed."
+        - "The spot that moved 2.0 cm is more polar: it is attracted more strongly to the polar paper, so it moves less with the nonpolar solvent."
+  explanation: |
+    **(a)** It's a solution, a homogeneous mixture of water, dissolved NaCl (as $\ce{Na+}$ and $\ce{Cl-}$ ions), and dye. It looks the same throughout, but it contains several kinds of particles, and its composition could vary.
+
+    **(b)** Filtration separates by particle size. Sand doesn't dissolve, and its grains are too big to pass through the paper. The salt and dye are dissolved into individual ions or molecules that pass through with the water.
+
+    **(c)** Physical. Water molecules escape into the gas phase when the attractions between them are overcome. Each $\ce{H2O}$ keeps its O–H bonds. The salt and dye are left behind unchanged.
+
+    **(d)** A pure substance gives one spot, so two spots mean the "dye" is at least two substances. The spot at 2.0 cm traveled least: it's held most strongly by the polar paper, so it's the more polar component. The component at 7.0 cm is attracted more to the nonpolar solvent.
+
+- id: apchem-01-density-frq
+  type: frq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5", "1.6", "1.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A student finds the density of an irregular metal sample. The sample's mass is 47.36 g. A graduated cylinder holds 25.0 mL of water; after the sample is added, the water level is 30.3 mL.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the volume of the sample in cm³, with the correct number of significant figures.
+      scoring:
+        - "V = 30.3 − 25.0 = 5.3 mL = 5.3 cm³ (2 significant figures, one decimal place)."
+    - label: b
+      points: 1
+      prompt: Calculate the density of the sample, with the correct number of significant figures.
+      scoring:
+        - "d = 47.36 g / 5.3 cm³ = 8.9 g/cm³ (2 significant figures, limited by the volume)."
+    - label: c
+      points: 1
+      prompt: Express the density in kg/m³.
+      scoring:
+        - "8.9 g/cm³ × (1 kg / 1000 g) × (100 cm / 1 m)³ = 8.9 × 10³ kg/m³."
+    - label: d
+      points: 1
+      prompt: The mass has 4 significant figures, but the density has only 2. Which measurement should be improved to get a more precise density, and why?
+      scoring:
+        - "The volume: its subtraction leaves only 2 significant figures, which limits the answer; a finer graduated cylinder (or a larger sample) would give a more precise volume."
+  explanation: |
+    **(a)** $V = 30.3 - 25.0 = 5.3$ mL. For subtraction, keep one decimal place, which leaves 2 significant figures. $1\ \text{mL} = 1\ \text{cm}^3$, so $V = 5.3\ \text{cm}^3$.
+
+    **(b)** $d = 47.36 / 5.3 = 8.936\ldots$ which rounds to **8.9 g/cm³**: division keeps the fewest significant figures, and 5.3 has 2.
+
+    **(c)** $8.9\ \tfrac{\text{g}}{\text{cm}^3} \times \tfrac{1\ \text{kg}}{1000\ \text{g}} \times \tfrac{10^6\ \text{cm}^3}{1\ \text{m}^3} = 8.9 \times 10^3\ \text{kg/m}^3$.
+
+    **(d)** The mass has 4 significant figures, but the volume has only 2 because two close readings were subtracted. The density can't be more precise than the volume, so improve that measurement: use a narrower cylinder with finer markings, or a larger sample so the volume change is bigger.
+
+- id: apchem-01-coulomb-frq
+  type: frq
+  subject: apchem
+  chapter: 1
+  sections: ["1.4"]
+  cedTopics: ["1.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    The electrostatic potential energy of two charged particles is $E_{\text{el}} = \dfrac{\kappa Q_1 Q_2}{d}$.
+  parts:
+    - label: a
+      points: 1
+      prompt: For a pair of opposite charges, is $E_{\text{el}}$ positive or negative, and does it increase or decrease as the charges move closer together?
+      scoring:
+        - "Negative (Q₁Q₂ < 0), and it decreases (becomes more negative) as d decreases."
+    - label: b
+      points: 1
+      prompt: "Ion pair I is $\\ce{Na+}$ and $\\ce{Cl-}$ with centers 0.28 nm apart. Ion pair II is $\\ce{Mg^2+}$ and $\\ce{O^2-}$ with centers 0.21 nm apart. Calculate the ratio $E_{\\text{el}}(\\text{II}) / E_{\\text{el}}(\\text{I})$."
+      scoring:
+        - "Ratio = [(2)(−2)/0.21] / [(1)(−1)/0.28] = 19.0 / 3.57 ≈ 5.3."
+    - label: c
+      points: 1
+      prompt: MgO melts at about 2800 °C and NaCl at 801 °C. Use your answer to (b) to explain the difference.
+      scoring:
+        - "The ions in MgO attract each other about 5 times more strongly (larger charges at a smaller distance), so much more energy is needed to separate them, giving a higher melting point."
+  explanation: |
+    **(a)** $Q_1Q_2$ is negative, so $E_{\text{el}}$ is negative. As $d$ shrinks the magnitude grows, so the energy becomes **more negative** (decreases): opposite charges are lower in energy closer together, which is why they attract.
+
+    **(b)** The constant cancels:
+
+    $$
+    \frac{E_{\text{II}}}{E_{\text{I}}} = \frac{(+2)(-2)/0.21}{(+1)(-1)/0.28} = \frac{-19.0}{-3.57} = 5.3
+    $$
+
+    **(c)** The attraction between $\ce{Mg^2+}$ and $\ce{O^2-}$ is about five times stronger: four times the charge product, at a shorter distance. Melting requires pulling the ions apart enough to move past each other, which takes much more energy in MgO, so it melts at a far higher temperature. Chapter 8 returns to this as lattice energy.

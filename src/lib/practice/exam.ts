@@ -104,6 +104,10 @@ export function examShortfalls(all: ExamCandidate[], exam: PracticeExam): string
     if (concepts < needed) {
       out.push(`section "${s.id}" allows ${plural(s.maxCalculations!, 'calculation')}, so it needs ${needed} other questions, but only ${concepts} aren't calculations`);
     }
+    const calcs = qs.length - concepts;
+    if (calcs < (s.minCalculations ?? 0)) {
+      out.push(`section "${s.id}" needs at least ${plural(s.minCalculations!, 'calculation')}, but only ${calcs} match`);
+    }
   }
   const spare = pools.reduce((n, p) => n + Math.max(0, p.questions.length - p.section.count), 0);
   if (spare < exam.extra) out.push(`"extra" needs ${plural(exam.extra, 'question')} beyond the sections' counts, but there are only ${spare}`);
@@ -113,8 +117,8 @@ export function examShortfalls(all: ExamCandidate[], exam: PracticeExam): string
 }
 
 /**
- * One exam drawn from the test's questions with `rng`: the FRQs, each section's count (with no more
- * than its maxCalculations), then the extras from what's left of every section. At most one question
+ * One exam drawn from the test's questions with `rng`: the FRQs, each section's count (its
+ * minCalculations calculations first, and no more than its maxCalculations), then the extras from what's left of every section. At most one question
  * comes from each group. Multiple choice
  * comes in section order and, within a section, by textbook section, so the exam reads like the test;
  * questions from the same textbook section come in random order. The FRQs come last.
@@ -143,9 +147,17 @@ export function drawExam<Q extends ExamCandidate>(all: Q[], exam: PracticeExam, 
   }
   for (const { section, questions: qs } of pools) {
     let left = section.count;
-    for (const q of shuffle(qs, rng)) {
+    const order = shuffle(qs, rng);
+    // The calculations a section requires first, then anything that fits.
+    for (const q of order) {
+      if (left === 0 || (calcs.get(section.id) ?? 0) >= (section.minCalculations ?? 0)) break;
+      if (!q.calculation || !room(q, section)) continue;
+      take(q, section);
+      left -= 1;
+    }
+    for (const q of order) {
       if (left === 0) break;
-      if (!room(q, section)) continue;
+      if (picked.has(q.id) || !room(q, section)) continue;
       take(q, section);
       left -= 1;
     }
@@ -233,7 +245,15 @@ export function examFormat(exam: PracticeExam): string {
 /** How the points are split: "2.8 points per multiple-choice question; the free response is worth 7.2" */
 export function examPointsNote(exam: PracticeExam): string {
   const frq = exam.frq.count ? `; the free response is worth ${formatPoints(exam.frq.points)}` : '';
-  return `${formatPoints(exam.mcqPoints)} points per multiple-choice question${frq}`;
+  return `${formatPoints(exam.mcqPoints)} ${exam.mcqPoints === 1 ? 'point' : 'points'} per multiple-choice question${frq}`;
+}
+
+/** " (2–3 calculations)", " (at least 2 calculations)", " (no more than 3 calculations)", or "". */
+function calculationRange(min = 0, max?: number): string {
+  const word = (n: number) => (n === 1 ? 'calculation' : 'calculations');
+  if (min > 0 && max !== undefined) return min === max ? ` (${min} ${word(min)})` : ` (${min}–${max} ${word(max)})`;
+  if (min > 0) return ` (at least ${min} ${word(min)})`;
+  return max === undefined ? '' : ` (no more than ${max} ${word(max)})`;
 }
 
 /**
@@ -242,7 +262,7 @@ export function examPointsNote(exam: PracticeExam): string {
  */
 export function examParts(exam: PracticeExam): string[] {
   const parts = exam.sections.map((s) => {
-    const calc = s.maxCalculations === undefined ? '' : ` (no more than ${s.maxCalculations} ${s.maxCalculations === 1 ? 'calculation' : 'calculations'})`;
+    const calc = calculationRange(s.minCalculations, s.maxCalculations);
     return `${s.count} on ${lowerFirst(s.label)}${calc}`;
   });
   if (exam.extra) parts.push(`${exam.extra} more from any of ${exam.sections.length > 1 ? 'these' : 'that'}`);

@@ -1,0 +1,1270 @@
+# Practice questions for Chapter 2 (Atoms, Molecules, and Ions). Original; not taken from the
+# textbook or College Board materials. Mass spectra and atomic weights are AP topic 1.2, the mass laws
+# and empirical formulas 1.3, atomic structure 1.5, and ion charges and ionic formulas 1.8. The history
+# of atomic structure and the names of acids and molecular compounds are tagged
+# cedTopics: [] (not assessed on their own). calculation: true marks questions that need a calculation.
+
+# ---------------------------------------------------------------------------
+# 2.1 Atomic theory and the mass laws
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-dalton-wrong
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1", "2.3"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which part of Dalton's atomic theory was later shown to be **incorrect**?
+  choices:
+    - { id: a, text: "Atoms are rearranged, not created or destroyed, in chemical reactions" }
+    - { id: b, text: "All atoms of a given element have the same mass" }
+    - { id: c, text: "Compounds contain atoms of different elements in whole-number ratios" }
+    - { id: d, text: "Each element is made of extremely small particles called atoms" }
+  answer: b
+  explanation: |
+    Isotopes of an element have different numbers of neutrons and so different masses. The other three postulates still hold for chemical reactions.
+
+- id: apchem-02-conservation-mass
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1"]
+  cedTopics: []
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    In a sealed container, 6.0 g of carbon reacts completely with oxygen to form 22.0 g of carbon dioxide and nothing else. What mass of oxygen reacted?
+  choices:
+    - { id: a, text: "6.0 g" }
+    - { id: b, text: "11.0 g" }
+    - { id: c, text: "16.0 g" }
+    - { id: d, text: "28.0 g" }
+  answer: c
+  explanation: |
+    Mass is conserved: $22.0 - 6.0 = 16.0$ g of $\ce{O2}$. (D) adds the masses instead of subtracting.
+
+- id: apchem-02-definite-proportions
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which observation is an example of the **law of definite proportions**?
+  choices:
+    - { id: a, text: "Water from a glacier and water from a lab both contain 88.8% oxygen by mass" }
+    - { id: b, text: "Burning a candle in a sealed jar doesn't change the total mass of the jar" }
+    - { id: c, text: "Carbon forms CO and CO₂, with twice as much oxygen per gram of carbon in CO₂" }
+    - { id: d, text: "Salt water can be 2% or 20% salt, depending on how much is dissolved" }
+  answer: a
+  explanation: |
+    The law of definite (constant) proportions says a pure compound always has the same composition by mass, whatever its source.
+    (B) is conservation of mass. (C) is the law of multiple proportions. (D) describes a mixture, whose composition can vary.
+
+- id: apchem-02-multiple-proportions
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1"]
+  cedTopics: ["1.3"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Three oxides of nitrogen contain these masses of oxygen per 1.000 g of nitrogen:
+
+    | Oxide | I | II | III |
+    |---|---|---|---|
+    | g O per g N | 0.571 | 1.142 | 2.284 |
+
+    If oxide II is NO, what are the formulas of oxides I and III?
+  choices:
+    - { id: a, text: "I is NO₂ and III is N₂O" }
+    - { id: b, text: "I is NO₂ and III is N₂O₅" }
+    - { id: c, text: "I is N₂O and III is NO₂" }
+    - { id: d, text: "I is NO and III is N₂O₃" }
+  answer: c
+  explanation: |
+    Compare each with oxide II (NO): oxide I has $0.571/1.142 = 1/2$ as much O per N, so it has half an O per N: $\ce{N2O}$. Oxide III has $2.284/1.142 = 2$ times as much: $\ce{NO2}$.
+    (A) has the two reversed. (B) and (D) don't match the ratios: N₂O₅ would have 2.5 times the O per N of NO, and N₂O₃ 1.5 times.
+
+- id: apchem-02-multiple-proportions-ratio
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Sulfur forms two oxides. In one, 1.00 g of sulfur is combined with 0.998 g of oxygen. In the other, 1.00 g of sulfur is combined with 1.497 g of oxygen. What is the ratio of the oxygen masses, and what does it show?
+  choices:
+    - { id: a, text: "1.5 : 1, showing the oxides could be SO₂ and SO₃" }
+    - { id: b, text: "1 : 1, showing the two oxides are the same compound" }
+    - { id: c, text: "2 : 1, showing the oxides could be SO and SO₂" }
+    - { id: d, text: "1.5 : 1, showing atoms can combine in fractional amounts" }
+  answer: a
+  explanation: |
+    $1.497 / 0.998 = 1.50 = 3/2$, a ratio of small whole numbers, as the law of multiple proportions predicts. $\ce{SO2}$ and $\ce{SO3}$ have 2 and 3 O per S, a 3 : 2 ratio.
+    (D) misreads the ratio: 3 : 2 means whole atoms, not fractions of atoms.
+
+# ---------------------------------------------------------------------------
+# 2.2 Discovery of atomic structure
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-cathode-ray
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.2"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Cathode rays bend toward a positively charged plate, and they are the same no matter what metal the cathode is made of. What do these observations show?
+  choices:
+    - { id: a, text: "Atoms have a small, dense nucleus at the center that holds most of their mass" }
+    - { id: b, text: "Cathode rays are a form of light with no mass or charge" }
+    - { id: c, text: "Different metals give off different kinds of electrons when they are heated" }
+    - { id: d, text: "All atoms contain the same kind of negatively charged particle" }
+  answer: d
+  explanation: |
+    Bending toward the positive plate shows the rays are negative. Getting the same particles from every metal shows they're part of all atoms: electrons.
+    (A) came from the gold-foil experiment. (B) is ruled out by the bending. (C) contradicts the second observation.
+
+- id: apchem-02-millikan
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.2"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    In an oil-drop experiment, a student measures these charges on four drops (in units of $10^{-19}$ C): 4.8, 8.0, 3.2, 11.2. Which is the most likely charge on one electron, based only on these data?
+  choices:
+    - { id: a, text: "0.80 × 10⁻¹⁹ C" }
+    - { id: b, text: "1.6 × 10⁻¹⁹ C" }
+    - { id: c, text: "3.2 × 10⁻¹⁹ C" }
+    - { id: d, text: "6.8 × 10⁻¹⁹ C" }
+  answer: b
+  explanation: |
+    Every drop's charge should be a whole-number multiple of the electron's charge. 1.6 divides all four: 3, 5, 2, and 7 electrons. 3.2 (C) doesn't divide 4.8 or 11.2 evenly. 0.80 (A) also divides them, but it's not the **largest** common factor, and no drop shows an odd multiple of 0.80, so there's no evidence for it. (D) is the average.
+
+- id: apchem-02-gold-foil
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.2"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In the gold-foil experiment, most alpha particles passed straight through the foil. What did this show?
+  choices:
+    - { id: a, text: "Gold atoms have no electrons" }
+    - { id: b, text: "Alpha particles have no charge" }
+    - { id: c, text: "An atom is mostly empty space" }
+    - { id: d, text: "Gold atoms are positively charged" }
+  answer: c
+  explanation: |
+    If the alpha particles met nothing that could deflect them, most of each atom's volume must be nearly empty. The few large deflections showed the mass and positive charge are concentrated in a tiny nucleus.
+
+- id: apchem-02-gold-foil-deflect
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.2"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why did a very small fraction of alpha particles bounce almost straight back from the gold foil?
+  choices:
+    - { id: a, text: "They hit electrons, which are much heavier than alpha particles" }
+    - { id: b, text: "They came close to a tiny region holding most of the atom's mass and all its positive charge" }
+    - { id: c, text: "They were attracted by the negative charge that is spread evenly through each gold atom's whole volume" }
+    - { id: d, text: "They struck the spaces between atoms and lost their energy there" }
+  answer: b
+  explanation: |
+    An alpha particle (+2, fairly heavy) can only be turned back by something both massive and strongly positive. Since this happened rarely, that region must be tiny: the nucleus.
+    (A) is wrong; electrons are about 7000 times lighter than an alpha particle. (C) would attract, not repel, and an even spread of charge can't cause large deflections. (D) doesn't describe anything real.
+
+- id: apchem-02-radiation-types
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Radiation from a radioactive sample passes between two charged plates. One beam bends slightly toward the negative plate, one bends sharply toward the positive plate, and one goes straight through. Which list matches the beams in that order?
+  choices:
+    - { id: a, text: "beta, alpha, gamma" }
+    - { id: b, text: "gamma, beta, alpha" }
+    - { id: c, text: "alpha, gamma, beta" }
+    - { id: d, text: "alpha, beta, gamma" }
+  answer: d
+  explanation: |
+    Alpha particles are positive (+2), so they bend toward the negative plate, only slightly because they're heavy. Beta particles are electrons (−1), so they bend sharply toward the positive plate because they're so light. Gamma rays have no charge and go straight.
+
+# ---------------------------------------------------------------------------
+# 2.3 The modern view of atomic structure
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-defines-element
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What determines which element an atom is?
+  choices:
+    - { id: a, text: "The number of neutrons" }
+    - { id: b, text: "The number of protons" }
+    - { id: c, text: "The mass number" }
+    - { id: d, text: "The number of electrons" }
+  answer: b
+  explanation: |
+    The atomic number (protons) defines the element. Neutrons vary between isotopes, and electrons vary between an atom and its ions.
+
+- id: apchem-02-count-cobalt
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many protons, neutrons, and electrons are in ${}^{59}\text{Co}^{3+}$?
+  choices:
+    - { id: a, text: "27 p, 32 n, 30 e" }
+    - { id: b, text: "27 p, 59 n, 24 e" }
+    - { id: c, text: "32 p, 27 n, 29 e" }
+    - { id: d, text: "27 p, 32 n, 24 e" }
+  answer: d
+  explanation: |
+    Co is element 27, so 27 protons. Neutrons $= 59 - 27 = 32$. A 3+ charge means 3 fewer electrons than protons: 24.
+    (A) adds 3 electrons instead of removing them. (B) uses the mass number as the neutron count.
+
+- id: apchem-02-identify-species
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A species has 16 protons, 18 neutrons, and 18 electrons. What is it?
+  choices:
+    - { id: a, text: "³⁴S²⁻" }
+    - { id: b, text: "³⁴Ar" }
+    - { id: c, text: "³⁴S²⁺" }
+    - { id: d, text: "³⁶Ar²⁻" }
+  answer: a
+  explanation: |
+    16 protons makes it sulfur. Mass number $= 16 + 18 = 34$. Two more electrons than protons gives a 2− charge.
+    (B) and (D) pick the element from the electron count (18, argon), but protons decide the element.
+
+- id: apchem-02-isotopes-differ
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    $^{35}\text{Cl}$ and $^{37}\text{Cl}$ differ in their number of
+  choices:
+    - { id: a, text: "protons" }
+    - { id: b, text: "electrons" }
+    - { id: c, text: "neutrons" }
+    - { id: d, text: "valence electrons" }
+  answer: c
+  explanation: |
+    Isotopes have the same number of protons (17 for Cl) and, as neutral atoms, the same electrons. $^{35}\text{Cl}$ has 18 neutrons and $^{37}\text{Cl}$ has 20.
+
+- id: apchem-02-not-isotopes
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which pair are isotopes of each other?
+  choices:
+    - { id: a, text: "⁴⁰Ar and ⁴⁰Ca" }
+    - { id: b, text: "¹⁴C and ¹⁴N" }
+    - { id: c, text: "O₂ and O₃" }
+    - { id: d, text: "²³⁵U and ²³⁸U" }
+  answer: d
+  explanation: |
+    Isotopes are the same element with different mass numbers. Both uranium atoms have 92 protons, with 143 and 146 neutrons.
+    (A) and (B) share a mass number but are different elements. (C) are two molecular forms of oxygen (allotropes), not isotopes.
+
+- id: apchem-02-same-electrons
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3", "2.7"]
+  cedTopics: ["1.5", "1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species has the **same number of electrons** as an argon atom?
+  choices:
+    - { id: a, text: "Na⁺" }
+    - { id: b, text: "Ca²⁺" }
+    - { id: c, text: "Br⁻" }
+    - { id: d, text: "Mg²⁺" }
+  answer: b
+  explanation: |
+    Argon has 18 electrons. $\ce{Ca^2+}$ has $20 - 2 = 18$. $\ce{Na+}$ and $\ce{Mg^2+}$ have 10 (like Ne), and $\ce{Br-}$ has 36 (like Kr).
+
+- id: apchem-02-mass-of-electron
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Nearly all of an atom's mass is in its nucleus. Why?
+  choices:
+    - { id: a, text: "Protons and neutrons are each about 1800 times as massive as an electron" }
+    - { id: b, text: "The nucleus takes up most of the atom's volume" }
+    - { id: c, text: "Electrons have no mass, only charge" }
+    - { id: d, text: "Protons and neutrons carry more charge than electrons, and charge adds mass" }
+  answer: a
+  explanation: |
+    A proton or neutron is about 1 amu; an electron is about 1/1836 amu. The nucleus is tiny in volume (B is backward). Electrons do have mass (C), just very little. (D) is false: a proton has the same size of charge as an electron, and a neutron has none.
+
+- id: apchem-02-atom-size-scale
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A typical atom has a diameter of about 2 Å and its nucleus about $2 \times 10^{-4}$ Å. If the nucleus were enlarged to the size of a 1 cm marble, about how large would the atom be?
+  choices:
+    - { id: a, text: "1 m across" }
+    - { id: b, text: "10 cm across" }
+    - { id: c, text: "100 m across" }
+    - { id: d, text: "10 km across" }
+  answer: c
+  explanation: |
+    The atom is $2 / (2 \times 10^{-4}) = 10^4$ times wider than the nucleus. Scaling a 1 cm nucleus by $10^4$ gives $10^4$ cm = 100 m, about the size of a football field.
+
+# ---------------------------------------------------------------------------
+# 2.4 Atomic weights and mass spectra
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-amu-def
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The atomic mass unit is defined as
+  choices:
+    - { id: a, text: "the mass of one hydrogen atom" }
+    - { id: b, text: "1/12 the mass of one carbon-12 atom" }
+    - { id: c, text: "the mass of one proton" }
+    - { id: d, text: "1/16 the mass of one oxygen atom, the standard used before carbon" }
+  answer: b
+  explanation: |
+    The scale is set by $^{12}\text{C}$, which is exactly 12 amu. A hydrogen atom is 1.008 amu and a proton is 1.0073 amu, close to 1 but not exactly.
+
+- id: apchem-02-gallium-avg
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Gallium has two natural isotopes: $^{69}\text{Ga}$ (68.926 amu, 60.11%) and $^{71}\text{Ga}$ (70.925 amu, 39.89%). What is gallium's atomic weight?
+  choices:
+    - { id: a, text: "69.72 amu" }
+    - { id: b, text: "69.93 amu" }
+    - { id: c, text: "70.13 amu" }
+    - { id: d, text: "70.00 amu" }
+  answer: a
+  explanation: |
+    $(0.6011)(68.926) + (0.3989)(70.925) = 41.43 + 28.29 = 69.72$ amu.
+    (B) is the plain average of the two masses, ignoring abundance. (C) swaps the percentages. The answer must be closer to 69 than 71, since $^{69}\text{Ga}$ is more common.
+
+- id: apchem-02-silicon-avg
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Silicon's isotopes are $^{28}\text{Si}$ (27.977 amu, 92.23%), $^{29}\text{Si}$ (28.976 amu, 4.68%), and $^{30}\text{Si}$ (29.974 amu, 3.09%). What is its atomic weight?
+  choices:
+    - { id: a, text: "28.98 amu" }
+    - { id: b, text: "28.00 amu" }
+    - { id: c, text: "28.09 amu" }
+    - { id: d, text: "28.31 amu" }
+  answer: c
+  explanation: |
+    $(0.9223)(27.977) + (0.0468)(28.976) + (0.0309)(29.974) = 25.803 + 1.356 + 0.926 = 28.09$ amu (the last two terms are good to the thousandths place, but the percents have only 3 significant figures, so report 28.09).
+    (A) is the plain average of the three masses. The answer must be just above 27.977, since almost all Si is $^{28}\text{Si}$.
+
+- id: apchem-02-boron-estimate
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Boron has two isotopes, $^{10}\text{B}$ and $^{11}\text{B}$, and an atomic weight of 10.81 amu. Which statement is correct?
+  choices:
+    - { id: a, text: "The two isotopes are about equally common" }
+    - { id: b, text: "Most boron atoms have a mass of 10.81 amu" }
+    - { id: c, text: "¹⁰B is more abundant than ¹¹B" }
+    - { id: d, text: "¹¹B is more abundant than ¹⁰B" }
+  answer: d
+  explanation: |
+    The average (10.81) is much closer to 11 than to 10, so $^{11}\text{B}$ must make up most of the sample (about 80%). No individual atom has the average mass (B).
+
+- id: apchem-02-silver-abundance
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Silver has two isotopes, $^{107}\text{Ag}$ (106.905 amu) and $^{109}\text{Ag}$ (108.905 amu). Its atomic weight is 107.87 amu. What percent of silver atoms are $^{107}\text{Ag}$?
+  choices:
+    - { id: a, text: "48.3%" }
+    - { id: b, text: "51.8%" }
+    - { id: c, text: "50.0%" }
+    - { id: d, text: "99.1%" }
+  answer: b
+  explanation: |
+    Let $x$ = fraction of $^{107}\text{Ag}$: $106.905x + 108.905(1 - x) = 107.87$, so $108.905 - 2.000x = 107.87$ and $x = 1.035 / 2.000 = 0.5175$, about **51.8%**.
+    (A) is the percent of $^{109}\text{Ag}$. (C) would give an average of exactly 107.905. 107.87 is a little below the midpoint, so $^{107}\text{Ag}$ is slightly more common.
+
+- id: apchem-02-spectrum-identify
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    The mass spectrum of an element shows two peaks: one at 19.99 amu with relative height 100, and one at 21.99 amu with relative height 10.2. Which element is it?
+  choices:
+    - { id: a, text: "Fluorine (19.00)" }
+    - { id: b, text: "Calcium (40.08)" }
+    - { id: c, text: "Sodium (22.99)" }
+    - { id: d, text: "Neon (20.18)" }
+  answer: d
+  explanation: |
+    Convert heights to fractions: total $= 110.2$, so $100/110.2 = 0.907$ and $10.2/110.2 = 0.093$.
+    Average $= (0.907)(19.99) + (0.093)(21.99) = 18.13 + 2.05 = 20.18$ amu: neon.
+    Using the heights as if they were percents of 100 gives $19.99 + 0.102(21.99) = 22.2$, close to sodium (C).
+
+- id: apchem-02-spectrum-reading
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In the mass spectrum of a pure element, what does the **number of peaks** tell you?
+  choices:
+    - { id: a, text: "The number of protons in the nucleus" }
+    - { id: b, text: "The number of naturally occurring isotopes" }
+    - { id: c, text: "The number of electrons in the atom" }
+    - { id: d, text: "The number of neutrons in the most common isotope" }
+  answer: b
+  explanation: |
+    Each isotope has a different mass, so each gives its own peak. The peak's position is the isotope's mass, and its height is the isotope's relative abundance.
+
+- id: apchem-02-spectrum-heaviest
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Element X has peaks in its mass spectrum at 63 amu (69%) and 65 amu (31%). A student says, "The average atomic mass of X is 64 amu, because that's halfway between the peaks." What's wrong with this?
+  choices:
+    - { id: a, text: "Nothing; the average atomic mass is always the midpoint of the peaks" }
+    - { id: b, text: "The average should be weighted by abundance, so it is closer to 63 amu" }
+    - { id: c, text: "The average should be weighted by abundance, so it is closer to 65 amu" }
+    - { id: d, text: "The average atomic mass must be a whole number, so it is 63 amu" }
+  answer: b
+  explanation: |
+    $(0.69)(63) + (0.31)(65) = 63.6$ amu, closer to 63 because that isotope is more common. (This is copper, 63.55.) Average atomic masses are rarely whole numbers (D).
+
+- id: apchem-02-mass-spec-ions
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.4"]
+  cedTopics: ["1.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In a mass spectrometer, ions of the same charge pass through a magnetic field. Which ions are deflected the **most**?
+  choices:
+    - { id: a, text: "The lightest ions" }
+    - { id: b, text: "The heaviest ions" }
+    - { id: c, text: "The most abundant ions" }
+    - { id: d, text: "All ions are deflected equally" }
+  answer: a
+  explanation: |
+    For ions with the same charge and speed, lighter ones are easier to turn, so they bend more. That's how the instrument sorts ions by mass. Abundance (C) sets how many hit the detector, not where.
+
+# ---------------------------------------------------------------------------
+# 2.5 The periodic table
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-same-group
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which pair of elements would you expect to have the most similar chemical properties?
+  choices:
+    - { id: a, text: "Na and Mg" }
+    - { id: b, text: "S and Cl" }
+    - { id: c, text: "K and Rb" }
+    - { id: d, text: "N and C" }
+  answer: c
+  explanation: |
+    Elements in the same group behave similarly. K and Rb are both alkali metals (group 1). The other pairs are neighbors in the same period, which differ more.
+
+- id: apchem-02-group-names
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which element is a **halogen** in period 4?
+  choices:
+    - { id: a, text: "Br" }
+    - { id: b, text: "Kr" }
+    - { id: c, text: "Se" }
+    - { id: d, text: "I" }
+  answer: a
+  explanation: |
+    The halogens are group 17. In period 4 that's bromine. Kr is a noble gas, Se is in group 16, and I is the halogen in period 5.
+
+- id: apchem-02-metalloid
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which element is a **metalloid**?
+  choices:
+    - { id: a, text: "Al" }
+    - { id: b, text: "P" }
+    - { id: c, text: "Sn" }
+    - { id: d, text: "Ge" }
+  answer: d
+  explanation: |
+    Germanium sits on the staircase line, along with B, Si, As, Sb, and Te. Al and Sn are metals just to the left of the line, and P is a nonmetal.
+
+- id: apchem-02-metal-properties
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    An unknown element is a dull, brittle solid that doesn't conduct electricity. Where on the periodic table is it most likely found?
+  choices:
+    - { id: a, text: "Group 1, on the far left" }
+    - { id: b, text: "Groups 3–12, in the middle" }
+    - { id: c, text: "The upper right, among the nonmetals" }
+    - { id: d, text: "Group 2, next to the alkali metals on the left side of the table" }
+  answer: c
+  explanation: |
+    Dull, brittle, and nonconducting are nonmetal properties. Nonmetals are in the upper right (solid examples: C, P, S, I). Groups 1, 2, and 3–12 are all metals, which are shiny, malleable conductors.
+
+- id: apchem-02-row-column
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    An element is in period 3 and group 15. Which statement about it is correct?
+  choices:
+    - { id: a, text: "It is phosphorus, a nonmetal" }
+    - { id: b, text: "It is arsenic, a metalloid" }
+    - { id: c, text: "It is nitrogen, a nonmetal" }
+    - { id: d, text: "It is aluminum, a metal" }
+  answer: a
+  explanation: |
+    Period 3 is the row Na through Ar; group 15 is the nitrogen column. Their intersection is phosphorus. Nitrogen is period 2, and arsenic is period 4.
+
+# ---------------------------------------------------------------------------
+# 2.6 Molecules and molecular compounds
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-empirical-of
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.6"]
+  cedTopics: ["1.3"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the empirical formula of butane, $\ce{C4H10}$?
+  choices:
+    - { id: a, text: "CH₂" }
+    - { id: b, text: "C₂H₅" }
+    - { id: c, text: "CH₃" }
+    - { id: d, text: "C₄H₁₀" }
+  answer: b
+  explanation: |
+    Divide both subscripts by their greatest common factor, 2: $\ce{C2H5}$. It can't be reduced further, since 2 and 5 share no factor.
+
+- id: apchem-02-same-empirical
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.6"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which two compounds have the **same empirical formula**?
+  choices:
+    - { id: a, text: "C₂H₄ and C₂H₆" }
+    - { id: b, text: "C₂H₂ and C₆H₆" }
+    - { id: c, text: "H₂O and H₂O₂" }
+    - { id: d, text: "CO and CO₂" }
+  answer: b
+  explanation: |
+    Acetylene ($\ce{C2H2}$) and benzene ($\ce{C6H6}$) both reduce to CH. The other pairs have different atom ratios: $\ce{CH2}$ vs $\ce{CH3}$, $\ce{H2O}$ vs HO, and CO vs $\ce{CO2}$.
+
+- id: apchem-02-diatomic
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.6"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which element exists as **diatomic molecules** at room temperature?
+  choices:
+    - { id: a, text: "Phosphorus" }
+    - { id: b, text: "Sulfur" }
+    - { id: c, text: "Bromine" }
+    - { id: d, text: "Sodium" }
+  answer: c
+  explanation: |
+    The seven diatomic elements are $\ce{H2}$, $\ce{N2}$, $\ce{O2}$, $\ce{F2}$, $\ce{Cl2}$, $\ce{Br2}$, and $\ce{I2}$. Phosphorus forms $\ce{P4}$ molecules, sulfur forms $\ce{S8}$ rings, and sodium is a metal.
+
+- id: apchem-02-molecular-only-nonmetals
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.6", "2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which compound is **molecular** rather than ionic?
+  choices:
+    - { id: a, text: "NH₄NO₃" }
+    - { id: b, text: "CaF₂" }
+    - { id: c, text: "PCl₅" }
+    - { id: d, text: "Na₂CO₃" }
+  answer: c
+  explanation: |
+    $\ce{PCl5}$ contains only nonmetals and no ions. $\ce{CaF2}$ and $\ce{Na2CO3}$ contain metal ions. $\ce{NH4NO3}$ has only nonmetals but is made of $\ce{NH4+}$ and $\ce{NO3-}$ ions, so it's ionic.
+
+- id: apchem-02-molecular-empirical-claim
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.6", "2.7"]
+  cedTopics: ["1.3"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which statement is correct?
+  choices:
+    - { id: a, text: "An ionic formula such as MgCl₂ is an empirical formula, giving only the ion ratio" }
+    - { id: b, text: "Every molecular formula can be reduced to a different, simpler empirical formula" }
+    - { id: c, text: "Two different compounds can never have the same empirical formula" }
+    - { id: d, text: "Glucose, C₆H₁₂O₆, and its empirical formula CH₂O are the same compound" }
+  answer: a
+  explanation: |
+    An ionic solid has no molecules, so its formula is the lowest ratio of ions: always an empirical formula.
+    (B) fails for $\ce{H2O}$ or $\ce{CO2}$, which are already in lowest terms. (C) is false: $\ce{C2H2}$ and $\ce{C6H6}$ share CH. (D) is false: formaldehyde, $\ce{CH2O}$, is a different compound from glucose.
+
+# ---------------------------------------------------------------------------
+# 2.7 Ions and ionic compounds
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-ion-charge-group
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What ion does selenium (group 16) most commonly form?
+  choices:
+    - { id: a, text: "Se²⁻" }
+    - { id: b, text: "Se⁶⁺" }
+    - { id: c, text: "Se²⁺" }
+    - { id: d, text: "Se⁻" }
+  answer: a
+  explanation: |
+    Group 16 nonmetals gain 2 electrons to reach the electron count of the next noble gas (Kr for Se), forming 2− ions like $\ce{O^2-}$ and $\ce{S^2-}$.
+
+- id: apchem-02-formula-ca-n
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the formula of the ionic compound formed by calcium and nitrogen?
+  choices:
+    - { id: a, text: "CaN" }
+    - { id: b, text: "Ca₂N₃" }
+    - { id: c, text: "CaN₂" }
+    - { id: d, text: "Ca₃N₂" }
+  answer: d
+  explanation: |
+    The ions are $\ce{Ca^2+}$ and $\ce{N^3-}$. Three calcium ions (+6) balance two nitride ions (−6): $\ce{Ca3N2}$. (B) swaps the subscripts.
+
+- id: apchem-02-formula-al-sulfate
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which formula is **written correctly**?
+  choices:
+    - { id: a, text: "Al₂SO₄₃" }
+    - { id: b, text: "Al₃(SO₄)₂" }
+    - { id: c, text: "Al₂(SO₄)₃" }
+    - { id: d, text: "AlSO₄" }
+  answer: c
+  explanation: |
+    $\ce{Al^3+}$ and $\ce{SO4^2-}$: $2(+3) = +6$ and $3(-2) = -6$. The sulfate needs parentheses because it takes a subscript. (A) has the right numbers but no parentheses, which would mean 43 oxygen atoms. (B) has unbalanced charge. (D) has a net +1 charge.
+
+- id: apchem-02-same-pattern
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Strontium forms $\ce{SrCl2}$ with chlorine. Which formula is most likely correct for the compound of barium and bromine?
+  choices:
+    - { id: a, text: "BaBr" }
+    - { id: b, text: "BaBr₂" }
+    - { id: c, text: "Ba₂Br" }
+    - { id: d, text: "BaBr₃" }
+  answer: b
+  explanation: |
+    Ba is in the same group as Sr (group 2, 2+ ions), and Br is in the same group as Cl (group 17, 1− ions). Elements in the same group form compounds with the same formula pattern: $\ce{MX2}$.
+
+- id: apchem-02-isoelectronic-set
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which set contains species that all have the **same number of electrons**?
+  choices:
+    - { id: a, text: "Na⁺, K⁺, Rb⁺" }
+    - { id: b, text: "Cl⁻, Ar, K⁺" }
+    - { id: c, text: "F⁻, Cl⁻, Br⁻" }
+    - { id: d, text: "O²⁻, S²⁻, Ne" }
+  answer: b
+  explanation: |
+    $\ce{Cl-}$ ($17 + 1$), Ar (18), and $\ce{K+}$ ($19 - 1$) all have 18 electrons. The ions in (A) and (C) are in the same group, so they have different numbers of electrons. In (D), $\ce{S^2-}$ has 18 while the others have 10.
+
+- id: apchem-02-polyatomic-charge
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7", "2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The formula of sodium arsenate is $\ce{Na3AsO4}$. What is the formula of calcium arsenate?
+  choices:
+    - { id: a, text: "CaAsO₄" }
+    - { id: b, text: "Ca₂(AsO₄)₃" }
+    - { id: c, text: "Ca₃AsO₄" }
+    - { id: d, text: "Ca₃(AsO₄)₂" }
+  answer: d
+  explanation: |
+    Three $\ce{Na+}$ balance one arsenate, so arsenate is $\ce{AsO4^3-}$. With $\ce{Ca^2+}$: $3(+2) = +6$ and $2(-3) = -6$, so $\ce{Ca3(AsO4)2}$, the same pattern as calcium phosphate.
+
+- id: apchem-02-atoms-in-formula
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many oxygen atoms are in one formula unit of $\ce{Ca3(PO4)2}$?
+  choices:
+    - { id: a, text: "4" }
+    - { id: b, text: "6" }
+    - { id: c, text: "8" }
+    - { id: d, text: "12" }
+  answer: c
+  explanation: |
+    Each phosphate has 4 O, and the subscript 2 outside the parentheses gives 2 phosphates: $4 \times 2 = 8$. (D) multiplies by the 3 on calcium instead.
+
+- id: apchem-02-ionic-solid-units
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A student describes solid potassium sulfide as "a collection of $\ce{K2S}$ molecules." Which correction is best?
+  choices:
+    - { id: a, text: "It is a collection of K₂S molecules, but they are held together by ionic bonds" }
+    - { id: b, text: "It is a mixture of K atoms and S atoms in a 2 : 1 ratio" }
+    - { id: c, text: "It is a collection of KS molecules, and the 2 is only the charge" }
+    - { id: d, text: "It is a lattice of K⁺ and S²⁻ ions, and K₂S gives their 2 : 1 ratio" }
+  answer: d
+  explanation: |
+    Ionic compounds aren't made of discrete molecules. Each $\ce{K+}$ is surrounded by $\ce{S^2-}$ ions and vice versa in a continuous lattice, and the formula unit $\ce{K2S}$ gives the ratio that makes it neutral.
+    (A) keeps the idea of molecules. (B) says atoms instead of ions and calls it a mixture. (C) confuses a subscript with a charge.
+
+# ---------------------------------------------------------------------------
+# 2.8 Naming inorganic compounds
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-name-fe2o3
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the name of $\ce{Fe2O3}$?
+  choices:
+    - { id: a, text: "Iron(II) oxide" }
+    - { id: b, text: "Iron(III) oxide" }
+    - { id: c, text: "Diiron trioxide" }
+    - { id: d, text: "Iron(VI) oxide" }
+  answer: b
+  explanation: |
+    Three $\ce{O^2-}$ give −6, so the two Fe give +6 and each is +3: iron(III) oxide. Ionic compounds don't use Greek prefixes (C). (D) uses the total charge of both iron ions instead of one.
+
+- id: apchem-02-name-cocl
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the name of $\ce{Co(NO3)2}$?
+  choices:
+    - { id: a, text: "Cobalt(II) nitrate" }
+    - { id: b, text: "Cobalt dinitrate" }
+    - { id: c, text: "Cobalt(II) nitrite" }
+    - { id: d, text: "Cobalt(I) nitrate" }
+  answer: a
+  explanation: |
+    $\ce{NO3-}$ is nitrate (nitrite is $\ce{NO2-}$). Two nitrates are −2, so Co is +2: cobalt(II) nitrate. (B) uses a prefix, which ionic names don't. (D) uses the number of cobalt atoms.
+
+- id: apchem-02-hypochlorite
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Chlorate is $\ce{ClO3-}$. What is the formula of the **hypochlorite** ion?
+  choices:
+    - { id: a, text: "ClO₄⁻" }
+    - { id: b, text: "ClO₂⁻" }
+    - { id: c, text: "ClO⁻" }
+    - { id: d, text: "Cl⁻" }
+  answer: c
+  explanation: |
+    -ite has one fewer O than -ate, and hypo-...-ite has two fewer: $\ce{ClO3-}$ → $\ce{ClO2-}$ (chlorite) → $\ce{ClO-}$ (hypochlorite). The charge stays −1. (A) is perchlorate and (D) is chloride.
+
+- id: apchem-02-iodate
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Bromine and iodine form oxyanions with the same pattern as chlorine. What is the formula of **potassium periodate**?
+  choices:
+    - { id: a, text: "KIO₄" }
+    - { id: b, text: "KIO₃" }
+    - { id: c, text: "K₂IO₄" }
+    - { id: d, text: "KI" }
+  answer: a
+  explanation: |
+    Perchlorate is $\ce{ClO4-}$, so periodate is $\ce{IO4-}$ (the name is per-iodate). With $\ce{K+}$: $\ce{KIO4}$. (B) is potassium iodate. (C) gives periodate a 2− charge. (D) is potassium iodide.
+
+- id: apchem-02-hydrogen-carbonate
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the formula of magnesium hydrogen carbonate?
+  choices:
+    - { id: a, text: "MgHCO₃" }
+    - { id: b, text: "Mg(HCO₃)₂" }
+    - { id: c, text: "MgH₂CO₃" }
+    - { id: d, text: "Mg₂HCO₃" }
+  answer: b
+  explanation: |
+    Adding $\ce{H+}$ to carbonate ($\ce{CO3^2-}$) gives hydrogen carbonate, $\ce{HCO3-}$, with a 1− charge. Two are needed for $\ce{Mg^2+}$: $\ce{Mg(HCO3)2}$.
+
+- id: apchem-02-acid-names
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which name–formula pair is **correct**?
+  choices:
+    - { id: a, text: "HNO₂, nitric acid" }
+    - { id: b, text: "HClO₃, hydrochloric acid" }
+    - { id: c, text: "H₂SO₃, sulfurous acid" }
+    - { id: d, text: "HBr(aq), bromic acid" }
+  answer: c
+  explanation: |
+    $\ce{SO3^2-}$ is sulfite, and -ite acids end in -ous: sulfurous acid.
+    (A) $\ce{HNO2}$ comes from nitrite, so it's nitrous acid. (B) $\ce{HClO3}$ comes from chlorate: chloric acid. (D) Bromide (-ide) gives hydrobromic acid.
+
+- id: apchem-02-acid-formula
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the formula of phosphoric acid?
+  choices:
+    - { id: a, text: "H₃PO₃" }
+    - { id: b, text: "HPO₄" }
+    - { id: c, text: "H₃P" }
+    - { id: d, text: "H₃PO₄" }
+  answer: d
+  explanation: |
+    -ic acids come from -ate anions. Phosphate is $\ce{PO4^3-}$, so three H are needed: $\ce{H3PO4}$. (A) is phosphorous acid, from phosphite.
+
+- id: apchem-02-binary-molecular
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the name of $\ce{N2O5}$?
+  choices:
+    - { id: a, text: "Nitrogen oxide" }
+    - { id: b, text: "Nitrogen(V) oxide" }
+    - { id: c, text: "Dinitrogen pentoxide" }
+    - { id: d, text: "Dinitride pentoxide" }
+  answer: c
+  explanation: |
+    Two nonmetals: use Greek prefixes. Di- for 2 N, penta- for 5 O, with the a dropped before "oxide." (B) uses the ionic system. (D) gives the first element an -ide ending.
+
+- id: apchem-02-molecular-formula-from-name
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the formula of sulfur hexafluoride?
+  choices:
+    - { id: a, text: "S₆F" }
+    - { id: b, text: "SF₆" }
+    - { id: c, text: "SF₂" }
+    - { id: d, text: "S₂F₆" }
+  answer: b
+  explanation: |
+    Hexa- means 6, on fluorine. No prefix on sulfur means one: $\ce{SF6}$.
+
+- id: apchem-02-naming-error
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Which name is **incorrect** for the formula given?
+  choices:
+    - { id: a, text: "CuCl, copper(I) chloride" }
+    - { id: b, text: "(NH₄)₂Cr₂O₇, ammonium dichromate" }
+    - { id: c, text: "P₄O₁₀, tetraphosphorus decoxide" }
+    - { id: d, text: "MgCl₂, magnesium dichloride" }
+  answer: d
+  explanation: |
+    $\ce{MgCl2}$ is ionic (a metal and a nonmetal), so it gets no prefixes, and magnesium has only one charge, so no Roman numeral: magnesium chloride.
+    The others are right: Cu is +1 in CuCl; dichromate is $\ce{Cr2O7^2-}$ ("di" here is part of the ion's name); $\ce{P4O10}$ is molecular and takes prefixes.
+
+- id: apchem-02-hydrate-name
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the formula of nickel(II) chloride hexahydrate?
+  choices:
+    - { id: a, text: "NiCl₂·6H₂O" }
+    - { id: b, text: "NiCl₆·H₂O" }
+    - { id: c, text: "Ni₂Cl·6H₂O" }
+    - { id: d, text: "NiCl·6H₂O" }
+  answer: a
+  explanation: |
+    $\ce{Ni^2+}$ needs two $\ce{Cl-}$: $\ce{NiCl2}$. Hexahydrate means six water molecules per formula unit, written after a dot.
+
+# ---------------------------------------------------------------------------
+# Free response
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-mass-spec-frq
+  type: frq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3", "2.4"]
+  cedTopics: ["1.2", "1.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    The mass spectrum of a sample of a pure element X shows the following peaks for 1+ ions.
+
+    | Mass (amu) | 49.95 | 51.94 | 52.94 | 53.94 |
+    |---|---|---|---|---|
+    | Relative abundance (%) | 4.35 | 83.79 | 9.50 | 2.36 |
+  parts:
+    - label: a
+      points: 1
+      prompt: How many naturally occurring isotopes does X have? What do the isotopes have in common, and how do they differ?
+      scoring:
+        - "Four isotopes; they have the same number of protons (and electrons, as atoms) but different numbers of neutrons."
+    - label: b
+      points: 2
+      prompt: Calculate the average atomic mass of X and identify the element.
+      scoring:
+        - "Weighted average: (0.0435)(49.95) + (0.8379)(51.94) + (0.0950)(52.94) + (0.0236)(53.94) = 52.00 amu."
+        - "X is chromium (Cr, 52.00)."
+    - label: c
+      points: 1
+      prompt: How many neutrons are in an atom of the most abundant isotope?
+      scoring:
+        - "Mass number 52, Z = 24, so 52 − 24 = 28 neutrons."
+    - label: d
+      points: 1
+      prompt: Without calculating, explain why the average atomic mass is close to 52 even though there are isotopes on both sides of it.
+      scoring:
+        - "About 84% of the atoms are the mass-52 isotope, so the weighted average is pulled very close to its mass; the lighter and heavier isotopes are rare and partly offset each other."
+  explanation: |
+    **(a)** Four peaks, so four isotopes. They're the same element, so each has the same number of protons, but their masses differ because they have different numbers of neutrons.
+
+    **(b)**
+
+    $$
+    (0.0435)(49.95) + (0.8379)(51.94) + (0.0950)(52.94) + (0.0236)(53.94) = 2.17 + 43.52 + 5.03 + 1.27 = 52.00\ \text{amu}
+    $$
+
+    That's chromium.
+
+    **(c)** The most abundant isotope is $^{52}\text{Cr}$. Chromium's atomic number is 24, so it has $52 - 24 = 28$ neutrons.
+
+    **(d)** A weighted average sits closest to the most abundant isotope. With 84% of the atoms at about 52 amu, the rare isotopes at 50, 53, and 54 can only shift the average slightly, and they pull in opposite directions.
+
+- id: apchem-02-ions-names-frq
+  type: frq
+  subject: apchem
+  chapter: 2
+  sections: ["2.7", "2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Answer the following about ionic compounds.
+  parts:
+    - label: a
+      points: 1
+      prompt: Aluminum reacts with oxygen to form an ionic compound. Write the symbols and charges of both ions, and the formula of the compound.
+      scoring:
+        - "Al³⁺ and O²⁻; Al₂O₃ (2(+3) + 3(−2) = 0)."
+    - label: b
+      points: 1
+      prompt: Explain, using the periodic table, why aluminum forms a 3+ ion and oxygen forms a 2− ion.
+      scoring:
+        - "Al (group 13) loses its 3 valence electrons and O (group 16) gains 2, so each reaches the same number of electrons as neon (10)."
+    - label: c
+      points: 1
+      prompt: Write the formula of iron(III) sulfate and of ammonium phosphate.
+      scoring:
+        - "Fe₂(SO₄)₃ and (NH₄)₃PO₄ (both needed)."
+    - label: d
+      points: 1
+      prompt: Name $\ce{CuSO3}$ and $\ce{HClO2}$.
+      scoring:
+        - "Copper(II) sulfite and chlorous acid (both needed)."
+  explanation: |
+    **(a)** $\ce{Al^3+}$ and $\ce{O^2-}$. The smallest numbers that balance the charges are 2 Al and 3 O: $\ce{Al2O3}$.
+
+    **(b)** Main-group elements tend to lose or gain electrons until they have the same number as the nearest noble gas. Al has 13 electrons and loses 3 to have 10; O has 8 and gains 2 to have 10. Both match neon.
+
+    **(c)** Iron(III) is $\ce{Fe^3+}$ and sulfate is $\ce{SO4^2-}$: $\ce{Fe2(SO4)3}$. Ammonium is $\ce{NH4+}$ and phosphate is $\ce{PO4^3-}$: $\ce{(NH4)3PO4}$.
+
+    **(d)** $\ce{SO3^2-}$ is sulfite, so Cu must be +2: copper(II) sulfite. $\ce{ClO2-}$ is chlorite, and an -ite anion gives an -ous acid: chlorous acid.
+
+- id: apchem-02-atomic-history-frq
+  type: frq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1", "2.2", "2.3"]
+  cedTopics: ["1.3", "1.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Copper forms two oxides. Oxide A is 88.82% Cu by mass and oxide B is 79.89% Cu by mass.
+  parts:
+    - label: a
+      points: 1
+      prompt: For each oxide, calculate the mass of oxygen combined with 1.000 g of copper.
+      scoring:
+        - "A: 11.18/88.82 = 0.1259 g O per g Cu; B: 20.11/79.89 = 0.2517 g O per g Cu."
+    - label: b
+      points: 1
+      prompt: Show that these data agree with the law of multiple proportions.
+      scoring:
+        - "0.2517/0.1259 = 2.00, a ratio of small whole numbers (2 : 1)."
+    - label: c
+      points: 1
+      prompt: Which part of Dalton's atomic theory explains the result in (b)?
+      scoring:
+        - "Atoms combine in whole-number ratios (and are not divided), so the compounds differ by whole O atoms per Cu atom."
+    - label: d
+      points: 1
+      prompt: Oxide B contains $\ce{Cu^2+}$ ions. Write the formulas of oxides A and B and name them.
+      scoring:
+        - "A is Cu₂O, copper(I) oxide; B is CuO, copper(II) oxide."
+  explanation: |
+    **(a)** In 100 g of A there are 88.82 g Cu and 11.18 g O, so $11.18 / 88.82 = 0.1259$ g O per gram of Cu. For B: $20.11 / 79.89 = 0.2517$ g O per gram of Cu.
+
+    **(b)** $0.2517 / 0.1259 = 2.00$. With the copper mass fixed, the oxygen masses are in a 2 : 1 ratio, small whole numbers.
+
+    **(c)** Dalton's postulate that compounds form from whole atoms in whole-number ratios. B has twice as many O atoms per Cu atom as A.
+
+    **(d)** If B has $\ce{Cu^2+}$ and $\ce{O^2-}$, it's CuO, copper(II) oxide. A has half as much O per Cu: $\ce{Cu2O}$, which contains $\ce{Cu+}$, so it's copper(I) oxide. (Check: $2(63.55) / 143.10 = 88.82\%$ Cu.)

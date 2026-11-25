@@ -1,0 +1,235 @@
+---
+title: Empirical Formulas, Combustion Analysis, and Mixtures
+subject: apchem
+chapter: 3
+sections: ["3.5"]
+cedTopics: ["1.3", "1.4"]
+order: 3
+authors: ["Claude"]
+summary: Finding empirical formulas from mass percents or masses, molecular formulas from molar mass, combustion analysis, hydrates, and using mass percent to judge the purity of a mixture.
+resources:
+  - kind: video
+    title: "Composition of Pure Substances - AP Chem Unit 1, Topic 3"
+    url: https://www.youtube.com/watch?v=_uqIROUX0js
+    by: Jeremy Krug
+    minutes: 13
+    why: AP topic 1.3, the link between mass percent and the empirical formula, for sections 1 and 2.
+  - kind: video
+    title: "Composition of Mixtures - AP Chem, Unit 1, Topic 4"
+    url: https://www.youtube.com/watch?v=00RufJkBZy4
+    by: Jeremy Krug
+    minutes: 5
+    why: AP topic 1.4, which the textbook barely covers. It's the idea behind section 6.
+  - kind: video
+    title: Empirical Formula and Molecular Formula Introduction
+    url: https://www.youtube.com/watch?v=wnRaBWvhYKY
+    by: Tyler DeWitt
+    minutes: 9
+    why: A slower start on what empirical and molecular formulas mean before doing the calculation.
+  - kind: video
+    title: Introduction to Combustion Analysis, Empirical Formula & Molecular Formula Problems
+    url: https://www.youtube.com/watch?v=uvR7zNJ1KoI
+    by: The Organic Chemistry Tutor
+    minutes: 17
+    why: Several worked combustion-analysis problems like the one in section 4, including finding oxygen by subtraction.
+  - kind: practice
+    title: Elemental composition of pure substances
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:atomic-structure-and-properties/x2eef969c74e0d802:elemental-composition-of-pure-substances/e/elemental-composition-of-pure-substances
+    by: Khan Academy
+    why: AP practice on topic 1.3, empirical formulas from mass data.
+  - kind: practice
+    title: Composition of mixtures
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:atomic-structure-and-properties/x2eef969c74e0d802:composition-of-mixtures/e/composition-of-mixtures
+    by: Khan Academy
+    why: AP practice on topic 1.4, including how an impurity changes a measured mass percent.
+---
+
+The last lesson went from a formula to percent composition. This one goes the other way: from
+measured masses to a formula. It works because of the law of constant composition: a pure compound
+always has the same ratio of elements by mass.
+
+## 1. Empirical formula from mass percents (3.5)
+
+The subscripts in a formula are **mole ratios** of atoms, so convert masses to moles and compare:
+
+1. **Percent to mass.** Assume a 100 g sample, so each percent becomes grams.
+2. **Mass to moles.** Divide each mass by the element's atomic weight.
+3. **Divide by the smallest** number of moles.
+4. **Make whole numbers.** If a ratio is close to a fraction, multiply all of them by the same small
+   integer.
+
+| Ratio ends in about | Multiply by |
+|---|---|
+| .5 | 2 |
+| .33 or .67 | 3 |
+| .25 or .75 | 4 |
+
+"Percent to mass, mass to mole, divide by small, multiply till whole."
+
+<Reveal label="Worked example: an oxide of phosphorus">
+
+A compound is 43.64% P and 56.36% O by mass. Find its empirical formula.
+
+| | Mass in 100 g | Moles | ÷ smallest |
+|---|---|---|---|
+| P | 43.64 g | $43.64 / 30.97 = 1.409$ | 1.000 |
+| O | 56.36 g | $56.36 / 16.00 = 3.523$ | 2.500 |
+
+The ratio 1 : 2.5 isn't whole, so double it: 2 : 5. The empirical formula is $\ce{P2O5}$.
+
+</Reveal>
+
+<Reveal label="Worked example: a ratio of 1.33">
+
+An iron oxide is 72.36% Fe. Find its empirical formula.
+
+The rest is oxygen: 27.64%.
+
+- Fe: $72.36 / 55.85 = 1.296$ mol
+- O: $27.64 / 16.00 = 1.728$ mol
+
+Divide by 1.296: Fe 1.000, O 1.333. Multiply by 3: Fe 3, O 4. The formula is $\ce{Fe3O4}$.
+
+</Reveal>
+
+<Callout type="warning">
+Don't round 1.33 to 1 or 2.5 to 3. A ratio within about 0.1 of a whole number can be rounded; anything
+else means you need to multiply. Rounding too soon in the moles step can also hide the right ratio, so
+keep 3–4 significant figures until the end.
+</Callout>
+
+## 2. Molecular formula from the empirical formula (3.5)
+
+The molecular formula is a whole-number multiple of the empirical formula. If you know the molar mass:
+
+$$
+n = \frac{\text{molar mass of the compound}}{\text{mass of one empirical formula unit}} \qquad \text{molecular formula} = (\text{empirical formula})_n
+$$
+
+<Reveal label="Worked example: from P₂O₅ to the molecule">
+
+The phosphorus oxide above has a molar mass of about 284 g/mol. Find its molecular formula.
+
+Empirical formula mass of $\ce{P2O5}$ $= 2(30.97) + 5(16.00) = 141.94$ g/mol.
+
+$n = 284 / 141.94 = 2.00$, so the molecular formula is $\ce{P4O10}$.
+
+</Reveal>
+
+## 3. Empirical formula from masses
+
+When a problem gives masses instead of percents, skip step 1 and convert the grams directly.
+
+<Reveal label="Worked example: a hydrate">
+
+A 2.50 g sample of a copper(II) sulfate hydrate, $\ce{CuSO4.xH2O}$, is heated until all the water is
+gone. The anhydrous $\ce{CuSO4}$ left behind has a mass of 1.60 g. Find $x$.
+
+Water lost $= 2.50 - 1.60 = 0.90$ g.
+
+- $\ce{CuSO4}$: $1.60 / 159.61 = 0.01002$ mol
+- $\ce{H2O}$: $0.90 / 18.02 = 0.050$ mol
+
+Ratio $= 0.050 / 0.01002 = 5.0$. The hydrate is $\ce{CuSO4.5H2O}$, copper(II) sulfate pentahydrate.
+
+If the sample isn't heated long enough, some water stays behind. The measured water mass is then too
+low, and so is $x$.
+
+</Reveal>
+
+## 4. Combustion analysis (3.5)
+
+For compounds of carbon and hydrogen (and often oxygen), the sample is burned in excess oxygen.
+**All the carbon ends up in $\ce{CO2}$ and all the hydrogen ends up in $\ce{H2O}$**, which are trapped
+and weighed.
+
+![Combustion analysis apparatus. O₂ flows into a furnace where the sample burns. The gases pass through an H₂O absorber, then a CO₂ absorber. The gain in mass of each absorber gives the grams of H₂O and CO₂ formed. Oxygen in the sample is found by subtraction.](./combustion-analysis.svg)
+
+1. Moles of C = moles of $\ce{CO2}$ (one C per $\ce{CO2}$).
+2. Moles of H = **2 ×** moles of $\ce{H2O}$ (two H per $\ce{H2O}$).
+3. If the compound contains O, find its mass **by subtraction**: sample mass − mass of C − mass of H.
+   (The O in the products came partly from the added $\ce{O2}$, so it can't be used directly.)
+4. Find the mole ratio as before.
+
+<Reveal label="Worked example: a compound of C, H, and O">
+
+Burning 0.2550 g of a compound containing C, H, and O gives 0.5602 g of $\ce{CO2}$ and 0.3058 g of
+$\ce{H2O}$. Find the empirical formula.
+
+**Carbon:** $0.5602 / 44.01 = 0.01273$ mol $\ce{CO2}$, so 0.01273 mol C, which is
+$0.01273 \times 12.01 = 0.1529$ g C.
+
+**Hydrogen:** $0.3058 / 18.02 = 0.01697$ mol $\ce{H2O}$, so $2 \times 0.01697 = 0.03394$ mol H, which is
+$0.03394 \times 1.008 = 0.03421$ g H.
+
+**Oxygen:** $0.2550 - 0.1529 - 0.0342 = 0.0679$ g O, which is $0.0679 / 16.00 = 0.00424$ mol O.
+
+**Ratio** (÷ 0.00424): C 3.00, H 8.00, O 1.00. The empirical formula is $\ce{C3H8O}$.
+
+</Reveal>
+
+<Callout type="warning">
+Two mistakes are common here: forgetting to **double** the moles of $\ce{H2O}$ to get moles of H, and
+taking the oxygen from the $\ce{CO2}$ and $\ce{H2O}$ instead of by subtraction.
+</Callout>
+
+## 5. Mixtures versus pure substances
+
+A pure compound has one fixed composition. A **mixture**'s composition depends on how much of each
+component is in it. The **mass percent** of a component in a mixture is
+
+$$
+\text{mass percent} = \frac{\text{mass of component}}{\text{total mass of mixture}} \times 100\%
+$$
+
+A 1.25 g tablet that contains 0.500 g of vitamin C is 40.0% vitamin C by mass. Another tablet from a
+different brand might be 60%; both are still mixtures.
+
+## 6. Using composition to check purity
+
+**Elemental analysis** measures the mass percent of an element in a sample. Compare it with the
+percent expected for the pure compound:
+
+- If it matches, the sample is likely pure.
+- If it doesn't, something else is mixed in. Whether the measured percent is **higher or lower**
+  tells you about the impurity.
+
+The rule: an impurity pulls the measured percent toward **its own** percent of that element. An
+impurity with **less** of the element (or none) lowers the measured value; one with **more** raises it.
+
+<Reveal label="Worked example: higher or lower?">
+
+A sample of NaCl is contaminated with a small amount of NaI. Is its measured mass percent of sodium
+higher or lower than in pure NaCl?
+
+- Pure NaCl: $22.99 / 58.44 = 39.34\%$ Na
+- NaI: $22.99 / 149.89 = 15.34\%$ Na
+
+NaI has a much smaller percent of Na (iodine is heavy), so the mixture's percent of Na is **lower**
+than 39.34%.
+
+</Reveal>
+
+<Reveal label="Worked example: how much of each?">
+
+A white powder is a mixture of NaCl and KCl. Analysis shows it's 55.0% chlorine by mass. What percent of
+the mixture is NaCl?
+
+Pure NaCl is $35.45 / 58.44 = 60.66\%$ Cl. Pure KCl is $35.45 / 74.55 = 47.55\%$ Cl.
+
+Let $x$ be the mass fraction of NaCl:
+
+$$
+60.66x + 47.55(1 - x) = 55.0 \quad\Rightarrow\quad 13.11x = 7.45 \quad\Rightarrow\quad x = 0.568
+$$
+
+The mixture is about **56.8% NaCl** and 43.2% KCl. As a check, 55.0% is between 47.55% and 60.66%,
+a bit closer to NaCl's value.
+
+</Reveal>
+
+<Callout type="ap-tip">
+AP topic 1.4 usually asks this qualitatively: given a measured mass percent, decide which impurity
+could explain it, or whether a result was too high or too low. Compare each possible impurity's
+percent of the element with the pure compound's.
+</Callout>

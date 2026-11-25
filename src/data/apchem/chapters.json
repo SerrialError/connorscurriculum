@@ -6,21 +6,47 @@
     "notOnAP": [
       "Measurement, units, and significant figures are background skills, not CED topics"
     ],
-    "sections": []
+    "sections": [
+      { "id": "1.1", "title": "The Study of Chemistry" },
+      { "id": "1.2", "title": "Classifications of Matter" },
+      { "id": "1.3", "title": "Properties of Matter" },
+      { "id": "1.4", "title": "The Nature of Energy" },
+      { "id": "1.5", "title": "Units of Measurement" },
+      { "id": "1.6", "title": "Uncertainty in Measurement and Significant Figures" },
+      { "id": "1.7", "title": "Dimensional Analysis" }
+    ]
   },
   {
     "number": 2,
     "title": "Atoms, Molecules, and Ions",
     "cedTopics": ["1.2", "1.5", "1.8"],
     "notOnAP": [],
-    "sections": []
+    "sections": [
+      { "id": "2.1", "title": "The Atomic Theory of Matter" },
+      { "id": "2.2", "title": "The Discovery of Atomic Structure" },
+      { "id": "2.3", "title": "The Modern View of Atomic Structure" },
+      { "id": "2.4", "title": "Atomic Weights" },
+      { "id": "2.5", "title": "The Periodic Table" },
+      { "id": "2.6", "title": "Molecules and Molecular Compounds" },
+      { "id": "2.7", "title": "Ions and Ionic Compounds" },
+      { "id": "2.8", "title": "Naming Inorganic Compounds" },
+      { "id": "2.9", "title": "Some Simple Organic Compounds" }
+    ]
   },
   {
     "number": 3,
     "title": "Chemical Reactions and Reaction Stoichiometry",
     "cedTopics": ["1.1", "1.3", "1.4", "4.1", "4.3", "4.5", "4.7"],
     "notOnAP": [],
-    "sections": []
+    "sections": [
+      { "id": "3.1", "title": "Chemical Equations" },
+      { "id": "3.2", "title": "Simple Patterns of Chemical Reactivity" },
+      { "id": "3.3", "title": "Formula Weights" },
+      { "id": "3.4", "title": "Avogadro’s Number and the Mole" },
+      { "id": "3.5", "title": "Empirical Formulas from Analyses" },
+      { "id": "3.6", "title": "Quantitative Information from Balanced Equations" },
+      { "id": "3.7", "title": "Limiting Reactants" }
+    ]
   },
   {
     "number": 4,

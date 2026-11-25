@@ -1,0 +1,156 @@
+---
+title: Naming Compounds
+subject: apchem
+chapter: 2
+sections: ["2.8"]
+cedTopics: ["1.8"]
+order: 4
+authors: ["Claude"]
+summary: Names and formulas of ionic compounds (including transition metals and oxyanions), acids, and binary molecular compounds.
+resources:
+  - kind: video
+    title: Naming Ionic Compounds with Transition Metals Introduction
+    url: https://www.youtube.com/watch?v=Rq0A-AHdB74
+    by: Tyler DeWitt
+    minutes: 10
+    why: Working out the Roman numeral from the anion's charge, the step in section 1 that trips people up most.
+  - kind: video
+    title: Naming Covalent Molecular Compounds
+    url: https://www.youtube.com/watch?v=DejkvR4pvRw
+    by: Tyler DeWitt
+    minutes: 11
+    why: The Greek-prefix system in section 4, including when to drop mono-.
+  - kind: video
+    title: Naming Acids Introduction
+    url: https://www.youtube.com/watch?v=5Jb2u9ihfm4
+    by: Tyler DeWitt
+    minutes: 13
+    why: The hydro-/-ic/-ous rules in section 3, worked from the anion's name.
+---
+
+Naming isn't a separate AP topic, but every AP question uses names and expects you to turn them into
+formulas. These rules let you do that without memorizing every compound.
+
+## 1. Ionic compounds (2.8)
+
+Name the **cation first**, then the **anion**: sodium chloride, calcium nitrate, ammonium sulfate.
+Prefixes (di-, tri-) are never used to count the ions in an ionic compound; the charges fix the ratio.
+
+### Cations
+
+- **Metal ions with one charge** (groups 1 and 2, Al, Zn, Ag) take the element's name: $\ce{Na+}$ is
+  sodium ion, $\ce{Al^3+}$ is aluminum ion.
+- **Metal ions with more than one possible charge** (most transition metals, and Sn and Pb) get the charge
+  as a **Roman numeral**: $\ce{Fe^2+}$ is iron(II), $\ce{Fe^3+}$ is iron(III), $\ce{Cu+}$ is copper(I).
+- **Polyatomic cations**: ammonium, $\ce{NH4+}$, is the one you'll see most.
+
+### Anions
+
+- **Monatomic anions** end in **-ide**: $\ce{Cl-}$ chloride, $\ce{O^2-}$ oxide, $\ce{N^3-}$ nitride,
+  $\ce{S^2-}$ sulfide. Hydroxide ($\ce{OH-}$) and cyanide ($\ce{CN-}$) are polyatomic but also end in -ide.
+- **Oxyanions** (a nonmetal plus oxygen) use endings to show how many O atoms there are:
+
+| Prefix/suffix | Meaning | Chlorine series | Other examples |
+|---|---|---|---|
+| per___ate | one more O than -ate | $\ce{ClO4-}$ perchlorate | |
+| ___ate | the common one | $\ce{ClO3-}$ chlorate | $\ce{NO3-}$ nitrate, $\ce{SO4^2-}$ sulfate |
+| ___ite | one fewer O, **same charge** | $\ce{ClO2-}$ chlorite | $\ce{NO2-}$ nitrite, $\ce{SO3^2-}$ sulfite |
+| hypo___ite | two fewer O | $\ce{ClO-}$ hypochlorite | |
+
+Bromine and iodine follow the same pattern as chlorine ($\ce{BrO3-}$ bromate, $\ce{IO4-}$ periodate).
+
+- **Adding $\ce{H+}$** to an oxyanion lowers its charge by one and adds "hydrogen" to the name:
+  $\ce{CO3^2-}$ carbonate → $\ce{HCO3-}$ hydrogen carbonate; $\ce{PO4^3-}$ phosphate → $\ce{HPO4^2-}$
+  hydrogen phosphate → $\ce{H2PO4-}$ dihydrogen phosphate.
+
+<Reveal label="Worked example: name from a formula">
+
+Name $\ce{Fe2(SO4)3}$, $\ce{CuNO2}$, and $\ce{Mn(ClO4)2}$.
+
+The anions have fixed charges, so work backward to the metal's charge.
+
+- $\ce{Fe2(SO4)3}$: three sulfates are $3(-2) = -6$, so two Fe make +6 and each is +3.
+  **Iron(III) sulfate.**
+- $\ce{CuNO2}$: nitrite is −1, so Cu is +1. **Copper(I) nitrite.**
+- $\ce{Mn(ClO4)2}$: two perchlorates are −2, so Mn is +2. **Manganese(II) perchlorate.**
+
+</Reveal>
+
+<Reveal label="Worked example: formula from a name">
+
+Write formulas for lead(IV) oxide, ammonium phosphate, and magnesium hydrogen carbonate.
+
+- Lead(IV) is $\ce{Pb^4+}$; oxide is $\ce{O^2-}$. Two oxides balance +4: $\ce{PbO2}$.
+- Ammonium is $\ce{NH4+}$; phosphate is $\ce{PO4^3-}$. Three ammoniums: $\ce{(NH4)3PO4}$.
+- Magnesium is $\ce{Mg^2+}$; hydrogen carbonate is $\ce{HCO3-}$. Two of them: $\ce{Mg(HCO3)2}$.
+
+</Reveal>
+
+<Callout type="warning">
+The Roman numeral is the **charge of one metal ion**, not the number of metal atoms. In
+$\ce{Fe2O3}$ there are two iron ions, each +3, so the name is iron(III) oxide.
+</Callout>
+
+### Hydrates
+
+Some ionic solids hold water molecules in their crystals. A prefix gives the number of waters:
+$\ce{CuSO4.5H2O}$ is copper(II) sulfate pentahydrate. Heating drives the water off, which is how a
+hydrate's formula is found in the lab (a Chapter 3 calculation).
+
+## 2. The Greek prefixes
+
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|
+| mono- | di- | tri- | tetra- | penta- | hexa- | hepta- | octa- | nona- | deca- |
+
+These count atoms in molecular compounds and waters in hydrates. They never count the ions in an ionic compound.
+
+## 3. Acids (2.8)
+
+An **acid** here is a compound whose formula starts with H and that releases $\ce{H+}$ in water. Its name
+comes from its anion:
+
+| Anion ends in | Acid name | Example |
+|---|---|---|
+| **-ide** | **hydro**___**ic** acid | $\ce{Cl-}$ chloride → $\ce{HCl}$ hydrochloric acid |
+| **-ate** | ___**ic** acid | $\ce{NO3-}$ nitrate → $\ce{HNO3}$ nitric acid |
+| **-ite** | ___**ous** acid | $\ce{NO2-}$ nitrite → $\ce{HNO2}$ nitrous acid |
+
+A memory aid: "-ate" makes "-ic" and "-ite" makes "-ous." The per- and hypo- prefixes stay:
+$\ce{HClO4}$ is perchloric acid and $\ce{HClO}$ is hypochlorous acid. The number of H atoms equals the
+anion's negative charge: sulfate ($\ce{SO4^2-}$) gives $\ce{H2SO4}$, sulfuric acid.
+
+Sulfur and phosphorus acids keep a longer stem: sulfuric (not sulfic) and phosphoric (not phosphic).
+
+<Callout type="note">
+Hydrochloric acid is HCl dissolved in water. The pure gas is hydrogen chloride. The "hydro-" names are
+for the water solutions.
+</Callout>
+
+## 4. Binary molecular compounds (2.8)
+
+For two nonmetals:
+
+1. The element farther **left** on the periodic table (or lower, in the same group) is usually named
+   first. Oxygen is always named last except with fluorine. Hydrogen comes first in most of its
+   compounds with nonmetals ($\ce{HCl}$).
+2. The second element gets **-ide**.
+3. **Greek prefixes** give the number of each atom. Leave off **mono-** on the first element. When a
+   prefix ending in a or o meets "oxide," drop the vowel: monoxide, pentoxide.
+
+| Formula | Name |
+|---|---|
+| $\ce{CO}$ | carbon monoxide |
+| $\ce{CO2}$ | carbon dioxide |
+| $\ce{N2O4}$ | dinitrogen tetroxide |
+| $\ce{P4O10}$ | tetraphosphorus decoxide |
+| $\ce{SF6}$ | sulfur hexafluoride |
+| $\ce{Cl2O7}$ | dichlorine heptoxide |
+
+A few have common names that are always used instead: $\ce{H2O}$ water, $\ce{NH3}$ ammonia,
+$\ce{CH4}$ methane.
+
+<Callout type="warning">
+Prefixes are only for compounds of two nonmetals. $\ce{MgCl2}$ is magnesium chloride, not "magnesium
+dichloride," and $\ce{N2O4}$ is dinitrogen tetroxide, not "nitrogen oxide."
+</Callout>

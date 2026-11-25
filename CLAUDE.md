@@ -21,6 +21,8 @@ them and asks for them to be typed up.
   guessing. On NixOS: `nix-shell -p poppler-utils --run "pdftotext ced.pdf ced.txt"`.
 - Where the class is: `src/data/apchem/progress.json` (`chapters` finished, `current` in class).
   Only write content for the chapters Connor asks for.
+- Don't save anything to Claude's memory folder. If a later session should know something, add it
+  to this file.
 
 ## Commands
 
@@ -113,8 +115,17 @@ These come from Connor's corrections. Breaking one has meant redoing work.
   aufbau-exception configurations, deriving or drawing hybrid orbitals, d-orbital hybridization
   (shape only for 5–6 domains), and MO theory. Assessed: σ/π bonds, sp/sp²/sp³ names, resonance.
   Class-only questions get `cedTopics: []`.
-- The Chapters 6–7 exam format (36 MCQ × 2.8 + one 7.2-point FRQ) is encoded in
-  `src/data/apchem/tests.json`. Ask for the format of any new test rather than guessing it.
+- If something is on neither the AP exam nor the class tests, delete it from lessons and questions.
+  Don't keep it with a "not on AP" note. For Chapters 1–3 that meant Fahrenheit, R_f values,
+  calories, mass spectra of molecules, and organic naming (2.9). The atom-history experiments
+  (Dalton, Thomson, Millikan, Rutherford) were on the class test, so they stay.
+- Review sheets list only what to memorize. Don't restate what the equation sheet gives.
+- The CED has no list of polyatomic ions, but AP questions name compounds and expect the formula.
+  The site teaches the common 16 plus hydronium.
+- The Chapters 1–3 format (45 MCQ, about 20 of them math, including empirical formulas and
+  limiting/excess reactants) and the Chapters 6–7 format (36 MCQ × 2.8 + one 7.2-point FRQ) are
+  encoded in `src/data/apchem/tests.json`. Ask for the format of any new test rather than guessing
+  it.
 
 **Questions**
 - `src/lib/practice/choice-balance.test.ts` fails a chapter when the correct choice is the longest

@@ -1,5 +1,30 @@
 [
   {
+    "id": "ch1-3-test",
+    "title": "Chapters 1–3 Test",
+    "date": "2026-09-04",
+    "chapters": [1, 2, 3],
+    "sections": [],
+    "handouts": [
+      { "title": "AP Chemistry equation sheet", "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf" }
+    ],
+    "exam": {
+      "mcqPoints": 1,
+      "sections": [
+        { "id": "matter", "label": "Matter, properties, separations, and energy", "count": 8, "match": { "chapters": [1], "sections": ["1.1", "1.2", "1.3", "1.4"] }, "minCalculations": 1, "maxCalculations": 2 },
+        { "id": "measurement", "label": "Units, significant figures, and dimensional analysis", "count": 6, "match": { "chapters": [1], "sections": ["1.5", "1.6", "1.7"] }, "minCalculations": 4, "maxCalculations": 5 },
+        { "id": "atoms", "label": "Atomic structure, isotopes, and mass spectra", "count": 7, "match": { "chapters": [2], "sections": ["2.1", "2.2", "2.3", "2.4"] }, "minCalculations": 2, "maxCalculations": 3 },
+        { "id": "ions", "label": "The periodic table, ions, formulas, and names", "count": 8, "match": { "chapters": [2], "sections": ["2.5", "2.6", "2.7", "2.8", "2.9"] } },
+        { "id": "reactions", "label": "Balancing equations and reaction types", "count": 4, "match": { "chapters": [3], "sections": ["3.1", "3.2"] } },
+        { "id": "moles", "label": "Formula weights, percent composition, and moles", "count": 4, "match": { "chapters": [3], "sections": ["3.3", "3.4"] }, "minCalculations": 3, "maxCalculations": 4 },
+        { "id": "formulas", "label": "Empirical formulas and mixtures", "count": 3, "match": { "chapters": [3], "sections": ["3.5"] }, "minCalculations": 2, "maxCalculations": 3 },
+        { "id": "stoichiometry", "label": "Amounts from balanced equations", "count": 2, "match": { "chapters": [3], "sections": ["3.6"] }, "minCalculations": 2, "maxCalculations": 2 },
+        { "id": "limiting", "label": "Limiting and excess reactants, and percent yield", "count": 3, "match": { "chapters": [3], "sections": ["3.7"] }, "minCalculations": 2, "maxCalculations": 3 }
+      ],
+      "frq": { "count": 0, "points": 0 }
+    }
+  },
+  {
     "id": "ch6-7-test",
     "title": "Chapters 6–7 Test",
     "date": "2026-11-04",

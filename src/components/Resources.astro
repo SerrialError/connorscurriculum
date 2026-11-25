@@ -28,7 +28,7 @@ const groups = groupResources(Astro.props.items);
               <li class:list={{ 'has-player': !!id }}>
                 {id && <YouTube id={id} title={r.title} minutes={r.minutes} class="card-video" />}
                 <div class="text">
-                  <a class="title" href={r.url}>{r.title}</a>
+                  <a class="title" href={r.url}>{r.title}</a>{' '}
                   <span class="meta small muted">{resourceMeta(r)}</span>
                   <p class="why">{r.why}</p>
                 </div>

@@ -145,6 +145,7 @@ describe('checkTests: practice exams', () => {
     expect(check({ sections: [{ ...section, match: { chapters: [6], sections: ['6.4'] } }] })).toThrow('[0].exam.sections[0].match.sections[0]: section "6.4" is not in chapter 6');
     expect(check({ sections: [section, section] })).toThrow('[0].exam.sections[1].id: duplicate section id "light"');
     expect(check({ sections: [{ ...section, maxCalculations: 3 }] })).toThrow('maxCalculations: is 3, more than the section');
+    expect(check({ sections: [{ ...section, minCalculations: 2, maxCalculations: 1 }] })).toThrow('minCalculations: is 2, more than the section');
   });
 });
 

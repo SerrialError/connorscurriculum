@@ -106,14 +106,17 @@ exam":
 - Each section draws `count` multiple-choice questions that `match`: from one of `chapters`, and if
   `sections` is given, tagged with one of those sections. A question counts toward the first
   section it matches.
-- `maxCalculations` caps how many of a section's questions can have `calculation: true`.
+- `maxCalculations` caps how many of a section's questions can have `calculation: true`, and
+  `minCalculations` sets how many must, so a test with "about 20 math questions" can be drawn that
+  way. The Chapters 1–3 test uses both.
 - `extra` adds that many more multiple-choice questions from any section.
 - `frq.count` free-response questions come from the test's chapters, self-scored and scaled to
   `frq.points`.
 - Questions sharing a `group` are never drawn together.
 
 The build stops if a section has fewer matching questions than it draws. For a real test, aim for
-at least twice as many, so that two practice exams don't repeat each other.
+at least twice as many, so that two practice exams don't repeat each other. A unit test checks this
+for the Chapters 1–3 and 6–7 exams.
 
 ## Textbook sections
 
@@ -125,7 +128,8 @@ chapter's lessons and questions:
 ```
 
 Copy section numbers and titles from the book itself, not from memory or another edition.
-Chapters 6–9 have lists so far.
+Chapters 1–3 and 6–9 have lists so far. Chapters 1–3 were copied from the 15th edition's table of
+contents in Pearson's preview (ISBN 9780137493609).
 
 ## Topics the textbook covers thinly
 

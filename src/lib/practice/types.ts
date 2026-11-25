@@ -69,6 +69,7 @@ export interface ExamSection {
   label: string;
   count: number;
   match: { chapters: number[]; sections: string[] };
+  minCalculations?: number;
   maxCalculations?: number;
 }
 

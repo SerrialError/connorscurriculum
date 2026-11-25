@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getSubjectData } from '../registry';
-import { compareSections, drawExam, drawable, examFormat, examFrqs, examMax, examParts, examPools, examQuestions, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
+import { compareSections, drawExam, drawable, examFormat, examFrqs, examMax, examParts, examPointsNote, examPools, examQuestions, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
 import { seededRng } from './random';
 import { readQuestionFiles } from './question-files';
 import { frq, mcq } from './test-fixtures';
@@ -65,6 +65,13 @@ describe('drawExam', () => {
     }
   });
 
+  it('draws at least a section\'s minCalculations, and no more than its maxCalculations', () => {
+    const ranged: PracticeExam = { ...exam, extra: 0, sections: [{ ...exam.sections[0]!, minCalculations: 2, maxCalculations: 2 }, ...exam.sections.slice(1)] };
+    for (const seed of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+      expect(drawExam(bank, ranged, seededRng(seed)).filter((q) => q.calculation)).toHaveLength(2);
+    }
+  });
+
   it('keeps the multiple choice in exam-section order, and by textbook section within one', () => {
     for (const seed of ['xyz', 'q1', 'q2']) {
       const drawn = drawExam(bank, exam, seededRng(seed)).filter((q) => q.type === 'mcq');
@@ -102,6 +109,8 @@ describe('examShortfalls', () => {
       'needs 1 free-response question but only 0 match',
     ]);
     expect(examShortfalls(bank.slice(0, 3), { ...exam, extra: 1 })).toContain('section "configs" needs 2 multiple-choice questions but only 0 match (counting each group once)');
+    const needsCalcs = { ...exam, sections: [exam.sections[0]!, { ...exam.sections[1]!, minCalculations: 1 }, exam.sections[2]!] };
+    expect(examShortfalls(bank, needsCalcs)).toEqual(['section "configs" needs at least 1 calculation, but only 0 match']);
   });
 });
 
@@ -142,6 +151,13 @@ describe('exam words', () => {
   });
 });
 
+describe('examPointsNote', () => {
+  it('says point or points', () => {
+    expect(examPointsNote(exam)).toBe('2.8 points per multiple-choice question; the free response is worth 7.2');
+    expect(examPointsNote({ ...exam, mcqPoints: 1, frq: { count: 0, points: 0 } })).toBe('1 point per multiple-choice question');
+  });
+});
+
 describe('apchem: the Chapters 6–7 practice exam', () => {
   const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch6-7-test')!;
 
@@ -158,6 +174,42 @@ describe('apchem: the Chapters 6–7 practice exam', () => {
     for (const p of examPools(questions, test.exam!)) {
       expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
       expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
+    }
+  });
+});
+
+describe('apchem: the Chapters 1–3 practice exam', () => {
+  const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch1-3-test')!;
+  const questions = readQuestionFiles()
+    .filter((q) => q.subject === 'apchem' && test.chapters.includes(q.chapter))
+    .map((q) => ({ ...q, sections: q.sections ?? [] }));
+
+  it('is 45 multiple choice with no free response, about 20 of them calculations', () => {
+    expect(mcqCount(test.exam!)).toBe(45);
+    expect(test.exam!.frq.count).toBe(0);
+    expect(test.exam!.sections.reduce((n, s) => n + (s.minCalculations ?? 0), 0)).toBe(16);
+  });
+
+  // So that two practice exams don't keep repeating the same questions.
+  it('has at least twice the questions, concept questions, and calculations each section needs', () => {
+    expect(examShortfalls(questions, test.exam!)).toEqual([]);
+    for (const p of examPools(questions, test.exam!)) {
+      const s = p.section;
+      expect(p.questions.length, s.id).toBeGreaterThanOrEqual(2 * s.count);
+      expect(p.concepts, `${s.id} concept questions`).toBeGreaterThanOrEqual(2 * (s.count - (s.maxCalculations ?? s.count)));
+      expect(p.questions.length - p.concepts, `${s.id} calculations`).toBeGreaterThanOrEqual(2 * (s.minCalculations ?? 0));
+    }
+  });
+
+  it('always draws 16 to 22 calculations, including stoichiometry and empirical formulas', () => {
+    for (let i = 0; i < 100; i++) {
+      const drawn = drawExam(questions, test.exam!, seededRng(`seed${i}`));
+      expect(drawn).toHaveLength(45);
+      const calcs = drawn.filter((q) => q.calculation);
+      expect(calcs.length).toBeGreaterThanOrEqual(16);
+      expect(calcs.length).toBeLessThanOrEqual(22);
+      expect(calcs.some((q) => q.sections.includes('3.5'))).toBe(true);
+      expect(calcs.some((q) => q.sections.includes('3.7'))).toBe(true);
     }
   });
 });

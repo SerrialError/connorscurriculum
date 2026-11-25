@@ -239,10 +239,11 @@ from the practice questions. The test page, the class home, and Practice's Quick
 Each section draws `count` multiple-choice questions that `match`: from one of `chapters` and, if
 `sections` is given, tagged with one of those textbook sections. A question counts in the first
 section it matches. `maxCalculations` caps how many of a section's questions can be calculations
-(questions with `calculation: true`). `extra` adds that many more multiple-choice questions from any
+(questions with `calculation: true`), and `minCalculations` sets how many must be, so a test with
+"about 20 math questions" can be drawn that way. `extra` adds that many more multiple-choice questions from any
 section. Then come `frq.count` free-response questions from the test's chapters, self-scored and
 scaled to `frq.points`. The build stops if a section has fewer matching questions than it draws, and
-for the Chapters 6–7 exam, a unit test also expects at least twice as many, so two exams don't repeat each other.
+for the Chapters 1–3 and 6–7 exams, a unit test also expects at least twice as many, so two exams don't repeat each other.
 
 ## Class progress
 

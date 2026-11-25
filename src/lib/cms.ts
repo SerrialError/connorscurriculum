@@ -4,7 +4,7 @@ import type { SubjectData } from './registry';
 
 export const CMS_REPO = 'SerrialError/connorscurriculum';
 
-// GitHub sign-in goes through a sveltia-cms-auth Cloudflare Worker (see README, "Editor sign-in").
+// GitHub sign-in goes through a sveltia-cms-auth Cloudflare Worker (see CLAUDE.md, "Hosting").
 export const CMS_AUTH_URL = 'https://sveltia-cms-auth.serrialerror.workers.dev';
 
 const BODY_HINT = [

@@ -1,150 +1,83 @@
 # connorscurriculum
 
-A static study site for AP Chemistry, built so more subjects can be added later. Lessons and
-practice questions are plain files tagged with both a textbook chapter and an AP CED topic, so the
-same content can be studied in class order or in AP order.
+**https://connorscurriculum.com/**
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add lessons, questions, and tests.
+A free study site for AP Chemistry, written by students in the class. It has lessons, classmates'
+notes typed up from their notebooks, practice questions with worked explanations, practice exams
+in the format of the class tests, and links to the released AP free-response questions.
 
-## Running it
+Everything is tagged twice: by textbook chapter (Brown, LeMay et al., *Chemistry: The Central
+Science*, 15th ed.) and by topic in College Board's AP Chemistry Course and Exam Description. You
+can study in the order the class covers it, or by AP unit before the exam.
 
-The dev environment is managed by [devenv](https://devenv.sh) (`devenv.nix`), which provides
-Node 24 and runs `npm clean-install` whenever `package-lock.json` changes. With direnv, it loads
-automatically when you `cd` into the repo (run `direnv allow` once). Without direnv, run
-`devenv shell`. `devenv up` starts the dev server.
+## What's on the site
 
-Without Nix, any Node 22.12 or newer works: run `npm install` first.
+- **Lessons.** Teaching pages for each chapter, with diagrams, 3D molecule and orbital models you
+  can rotate, and hand-picked outside videos and simulations.
+- **Classmates' notes.** Typed up from the original pages. Each one links the photos it came from,
+  and any corrections are marked as such.
+- **Practice.** Filter by chapter, textbook section, AP topic, difficulty, or class test. Questions
+  are marked "AP exam" or "Class only", and "Weakest first" puts the topics you miss most up front.
+- **Practice exams.** Drawn fresh each time to match a class test's format and point values.
+- **AP topics.** Every CED topic, whether the class has covered it, and where the textbook is thin.
+- **Past FRQs.** The 2023–2026 released questions, each part tagged by AP topic, linked to College
+  Board's PDFs.
+- **Reference panel.** The AP equation sheet and periodic table, one click (or <kbd>R</kbd>) away
+  on every class page.
+
+## Contributing
+
+Notes, lessons, questions, and corrections are all welcome. You don't need to write code: there's
+a browser editor at [connorscurriculum.com/admin/](https://connorscurriculum.com/admin/) that
+opens a pull request for you. See [CONTRIBUTING.md](CONTRIBUTING.md) for how it works and how to
+format lessons and questions.
+
+Found a wrong answer or a broken page?
+[Open an issue](https://github.com/SerrialError/connorscurriculum/issues/new) with a link to the
+page.
+
+## Running it locally
+
+You need Node 22.12 or newer.
 
 ```sh
-npm run dev       # dev server at http://localhost:4321 (search only works after a build)
-npm run build     # astro build + Pagefind index, output in dist/ (fails if page text runs together, e.g. "yet.See")
-npm run preview   # serve dist/
-npm run check     # astro check + vitest
+npm install
+npm run dev       # http://localhost:4321 (search only works after a build)
+npm run build     # builds dist/ and the search index; fails on any bad tag
+npm run preview   # serves dist/
+npm run check     # type check and unit tests
+npm run perf      # page speed on a throttled phone, after a build
 ```
 
-To host under a sub-path (for example GitHub Pages at `/<repo>/`), build with
-`BASE_PATH=/<repo>/ npm run build`. Set `SITE_URL` to the full site URL if you want canonical URLs.
-The site name lives in `src/site.ts`.
+With [Nix](https://nixos.org/), `devenv.nix` provides Node and installs the packages for you:
+run `direnv allow` once (or use `devenv shell`), then `devenv up` to start the dev server.
 
-## CI and hosting
+## How it's built
 
-`.github/workflows/build.yml` runs `npm run check` and `npm run build` on every pull request and
-every push to `main`, so a bad tag or a broken lesson shows up as a failed check. `main` requires
-that `build` check to pass before anything is merged. Pushes to `main` also deploy
-`dist/` to GitHub Pages at https://connorscurriculum.com/. The workflow reads `BASE_PATH` and
-`SITE_URL` from the repo's Pages settings. Pages must be set to deploy from GitHub Actions (repo
-Settings → Pages → Source: GitHub Actions), with `connorscurriculum.com` as the custom domain.
-
-The domain's DNS is on Cloudflare: four `A` and four `AAAA` records on `@` pointing at GitHub Pages
-(185.199.108–111.153 and 2606:50c0:8000–8003::153), a `CNAME` from `www` to `serrialerror.github.io`,
-and the `_github-pages-challenge-SerrialError` TXT record that verifies the domain. Keep them all on
-DNS only (grey cloud), because GitHub can't issue the HTTPS certificate behind Cloudflare's proxy.
-The old address, https://serrialerror.github.io/connorscurriculum/, redirects to the domain.
-
-## Editor sign-in
-
-The lesson editor at `/admin/` ([Sveltia CMS](https://sveltiacms.app/)) is configured in
-`src/lib/cms.ts`. Every save goes to a `cms/<collection>/<slug>` branch with its own pull request
-(`publish_mode: editorial_workflow`). Classmates without write access edit in their own fork and
-submit a pull request from there (`open_authoring`). CI builds each pull request, and nothing
-reaches `main` or the live site until you merge it.
-
-"Sign In Using Access Token" works with no setup. "Sign In with GitHub" needs a small login
-service, because GitHub Pages can't complete GitHub's sign-in on its own. Set it up once:
-
-1. **Deploy the Worker.** Open [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth), click
-   **Deploy to Cloudflare Workers**, and sign in or create a free Cloudflare account. Copy the Worker
-   URL, which looks like `https://sveltia-cms-auth.<you>.workers.dev`.
-2. **Register a GitHub OAuth app** at https://github.com/settings/applications/new:
-   - Application name: `connorscurriculum editor`
-   - Homepage URL: `https://connorscurriculum.com/`
-   - Authorization callback URL: `<Worker URL>/callback`
-
-   Then click **Generate a new client secret**.
-3. **Give the Worker the app's keys.** In the Cloudflare dashboard, open the Worker, go to
-   Settings → Variables and Secrets, and add:
-   - `GITHUB_CLIENT_ID`: the app's Client ID
-   - `GITHUB_CLIENT_SECRET`: the client secret (type **Secret**)
-   - `ALLOWED_DOMAINS`: `connorscurriculum.com, serrialerror.github.io, localhost`
-4. **Point the editor at it.** Set `CMS_AUTH_URL` in `src/lib/cms.ts` to the Worker URL.
-
-`main` requires the `build` check from GitHub Actions, so a lesson that doesn't build can't be
-merged, from the editor or from GitHub. By default GitHub waits for you to approve CI on a
-first-time contributor's pull request (Settings → Actions → General); approve it from the pull
-request page.
-
-## Layout
+[Astro](https://astro.build/) generates a static site, with [Svelte](https://svelte.dev/) for
+the practice page and [three.js](https://threejs.org/) for the 3D models. Math is rendered with
+KaTeX and mhchem, and search uses [Pagefind](https://pagefind.app/). Lessons are MDX files and
+questions are YAML lists, all under `src/content/`. Course structure (chapters, AP topics, tests,
+class progress) is JSON under `src/data/`. The editor is [Sveltia CMS](https://sveltiacms.app/).
 
 ```
 src/
-  content.config.ts        collection schemas and loaders (validation happens here)
-  data/
-    subjects.json
-    apchem/ced.json        AP CED units and topics
-    apchem/chapters.json   textbook chapters, the CED topics each one teaches, "not on AP" notes
-    apchem/tests.json      class tests
-    apchem/progress.json   chapters finished and in progress (topic checkmarks follow), topics skipped in class
-    apchem/textbook-gaps.json  AP topics the textbook covers thinly, and where to learn them
-    apchem/past-frqs.json  released AP FRQs (links only), each part tagged by CED topic
-  content/
-    lessons/<subject>/<chapter>-<slug>/index.mdx
-    questions/<subject>/<chapter>-<slug>.yaml
-  components/              .astro components and the Practice Svelte island
-  lib/                     registry, validation, Markdown pipeline, practice logic (+ tests)
-  pages/                   routes, all keyed by subject id
+  content/lessons/<subject>/<chapter>-<slug>/index.mdx   one folder per lesson, images alongside
+  content/questions/<subject>/<chapter>-<slug>.yaml      a list of questions per file
+  data/<subject>/                                        chapters, AP topics, tests, progress, FRQs
+  content.config.ts                                      schemas: every tag is checked at build time
+  components/  lib/  pages/                              site code (lib/ has the unit tests)
 ```
 
-## Where the data came from
+More subjects can be added without code changes; see [docs/data.md](docs/data.md#adding-a-subject).
+[docs/data.md](docs/data.md) also covers the course data files and where their contents came from.
 
-**`ced.json`** was checked on 2026-10-08 against the *AP Chemistry Course and Exam Description,
-Effective Fall 2024* ([AP Central PDF](https://apcentral.collegeboard.org/media/pdf/ap-chemistry-course-and-exam-description.pdf), file revised June 2026; the AP topics page links it through `standardsUrl` in `subjects.json`). Unit and topic titles come from the
-Course at a Glance, and exam weights from the exam weighting table. `"verified"` is still `false`,
-so the AP topics page says the list hasn't been checked. Set it to `true` once you have confirmed the list.
+Every pull request is type-checked, tested, built, and checked for page speed. Merges to `main`
+deploy to GitHub Pages.
 
-The current CED differs from the older (2020) topic list in several places:
+## Credits
 
-- Unit titles: Unit 2 is "Compound Structure and Properties", Unit 3 is "Properties of Substances
-  and Mixtures", Unit 6 is "Thermochemistry", and Unit 9 is "Thermodynamics and Electrochemistry".
-  (The exam weighting table calls Unit 7 "Principles of Equilibrium"; the Course at a Glance says
-  "Equilibrium", which is used here.)
-- Renamed topics: 1.2 Mass Spectra of Elements, 2.7 VSEPR and Hybridization, 3.1 Intermolecular and
-  Interparticle Forces, 3.9 Separation of Solutions and Mixtures, 3.12 Properties of Photons,
-  5.9 Pre-Equilibrium Approximation.
-- Moved topics: "pH and Solubility" is now 8.11 (was 7.13), and "Free Energy of Dissolution" is now
-  9.6 (was 7.14). That leaves Unit 7 with 12 topics, and Units 8 and 9 with 11 each, for 91 in total.
-
-**`chapters.json`** chapter titles come from Pearson's listing for the 15th edition. Two differ from
-older editions: Chapter 3 is "Chemical Reactions and Reaction Stoichiometry" and Chapter 17 is
-"Aqueous Equilibria: Buffers, Titrations, and Solubility". The `notOnAP` notes are based on the
-CED's exclusion statements (for example: phase diagrams, colligative properties, Arrhenius-equation
-calculations, Kc/Kp conversion, Lewis acid-base concepts). Section lists for Ch. 1–3 were
-copied from the 15th edition table of contents (Pearson preview, ISBN 9780137493609); Ch. 6–9 were
-filled in from the book. The rest are empty until someone fills them in.
-
-**Chapter-to-topic mapping.** Each chapter in `chapters.json` lists the CED topics it teaches,
-based on comparing each topic's learning objectives in the CED with the chapter contents. Topics
-taught across several chapters are listed under each one, for example 1.5 (Ch. 2 and 6), 1.7 (Ch. 7, and Ch. 8 for electronegativity), 1.8
-(Ch. 2, 7, 8), 3.7 (Ch. 4 and 13), 3.9 (Ch. 1 and 13), 4.8 (Ch. 4 and 16), and 4.9 (Ch. 4 and 20). One placement could
-not be confirmed for the 15th edition: photoelectron spectroscopy (1.6) is listed under both Ch. 6 and 7.
-The class skipped it, so `progress.json` lists it under `notCovered` and it shows as "Skipped in class"
-rather than ✓, and `textbook-gaps.json` lists it with the other topics the book covers thinly
-(1.4, 3.9, 3.11, 3.13, 4.4, 6.3, 9.4, 9.7, and lab skills).
-Beer–Lambert (3.13) is under Ch. 14, where the book uses absorbance to measure reaction rates.
-
-**`progress.json`** lists finished chapters (1–7 as of 2026-11-12, with 8 and 9 in progress as `current`); topic checkmarks are derived
-from the mapping above. Its `lastYear` block records what was covered in Scholars Chemistry,
-based on the owner's answers on 2026-10-09: fully covered were 3.4, 4.8, 8.1, 8.2, 9.1, 9.2, and 9.3,
-and partly covered were 1.5, 3.5, 8.3, and 8.5.
-
-**`past-frqs.json`** links the released AP Chemistry FRQs for 2023–2026, which are the years AP
-Central currently hosts; the older URLs now redirect to a general page. Each of the 169 parts was
-tagged on 2026-10-09 by reading the questions and scoring guidelines against the CED.
-Point values were copied from the scoring guidelines. Sample-response PDFs exist for 2023–2025,
-and the posted 2026 exam is Version J for questions 2, 3, and 6. The topic tags are judgment calls,
-so spot-check the ones you use.
-
-Each part also has its science-practice skill (e.g. 5.F, Mathematical Routines). These are College
-Board's own labels for 2023 and 2024 (scoring commentaries) and 2025 (Chief Reader Report). The 2026
-skills are our own tags, modeled on how earlier years label similar parts, and are shown as "our
-labels" on the site; replace them when the 2026 Chief Reader Report is published. The list of six
-practices and 28 skills in `ced.json` comes from the CED's Science Practices table (pp. 12–13).
+Lessons and questions name their authors on each page. Classmates' notes are credited to the
+classmate who wrote them. Outside videos and simulations belong to their creators and are linked,
+not copied. AP is a trademark of College Board, which is not involved with this site. Released FRQs
+are linked to College Board's own PDFs and never reproduced here.

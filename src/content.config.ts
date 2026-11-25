@@ -145,7 +145,8 @@ const questionBase = {
   ...tagShape,
   difficulty: z.number().int().min(1).max(3),
   // Needs a numeric calculation (plugging numbers into an equation), not just reasoning. A class
-  // test's practice exam can limit how many of these it draws (tests.json exam maxCalculations).
+  // test's practice exam can set how many of these it draws (tests.json exam minCalculations and
+  // maxCalculations).
   calculation: z.boolean().default(false),
   // Questions about the same molecule or fact, where one gives away another's answer (e.g. an MCQ
   // and an FRQ on N₂O). A practice exam or quiz draws at most one question from each group. A

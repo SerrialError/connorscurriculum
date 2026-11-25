@@ -71,7 +71,9 @@ const examSectionSchema = z.object({
     chapters: z.array(z.number().int()).min(1, 'list at least one chapter'),
     sections: z.array(z.string()).default([]),
   }),
-  /** At most this many of the group's questions may be calculations (questions with calculation: true). */
+  /** At least this many of the group's questions must be calculations (questions with calculation: true). */
+  minCalculations: z.number().int().nonnegative().optional(),
+  /** At most this many of the group's questions may be calculations. */
   maxCalculations: z.number().int().nonnegative().optional(),
 });
 
@@ -530,6 +532,9 @@ function checkExam(test: ClassTest, at: string, chapterMap: ReadonlyMap<number, 
     });
     if (group.maxCalculations !== undefined && group.maxCalculations > group.count) {
       throw new DataError(file, `${field}.maxCalculations`, `is ${group.maxCalculations}, more than the section's count (${group.count})`);
+    }
+    if (group.minCalculations !== undefined && group.minCalculations > Math.min(group.count, group.maxCalculations ?? group.count)) {
+      throw new DataError(file, `${field}.minCalculations`, `is ${group.minCalculations}, more than the section's count or maxCalculations`);
     }
   });
 }

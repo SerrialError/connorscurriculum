@@ -1,15 +1,66 @@
-# Contributing content
+# Contributing
 
-Everything on the site is generated from plain files in this repo. You don't need to touch
-any code to add a lesson or a question. If a tag is wrong (an unknown topic, a chapter that
-doesn't exist, a missing author), `npm run build` stops and tells you which file and field.
+Thanks for helping. Everything on the site is generated from plain files in this repo, so adding a
+lesson, your notes, or a question doesn't take any code. If something is tagged wrong (an unknown
+topic, a chapter that doesn't exist, a missing author), the build stops and names the file and
+field.
+
+You can help in a few ways:
+
+- **Share your notes or write a lesson** in the [browser editor](#using-the-editor-cms). It turns
+  your work into a pull request, and Connor reviews it before it goes live.
+- **Add practice questions** by editing a YAML file. Editing a file on GitHub works fine for this
+  (see [Questions](#questions)).
+- **Report a mistake**, like a wrong answer key, a typo in a formula, or a broken page, by
+  [opening an issue](https://github.com/SerrialError/connorscurriculum/issues/new). Include a link
+  to the page.
 
 ## Ground rules
 
-- Write it yourself. Do not copy text, figures, or problems from the textbook, AP Classroom,
-  or past College Board exams. Paraphrase ideas in your own words and make up your own numbers.
-- Check the chemistry. Work every number in a worked example or explanation before you commit it.
-- Put your name in `authors`.
+- **Write it yourself.** Don't copy text, figures, or problems from the textbook, AP Classroom,
+  or College Board exams. Explain ideas in your own words and make up your own numbers.
+- **Check the chemistry.** Work every number in an example or explanation before you submit it.
+- **Credit people.** Put your name in `authors`. If you're typing up someone else's notes, they're
+  the author. Material whose creator you can't name doesn't go on the site.
+
+## Using the editor (CMS)
+
+The editor is at [connorscurriculum.com/admin/](https://connorscurriculum.com/admin/). The
+**Share your notes or write a lesson** link at the bottom of every page leads here. It previews
+your lesson with the math, chemistry, and boxes as the site will show them, and it flags anything
+that would break the build, like an unclosed `<Callout>`, a stray `{`, or an unknown component. The
+chapter and AP topic pickers list the real chapters and topics.
+
+1. Make a free GitHub account if you don't have one.
+2. Open the editor and click **Sign In with GitHub**. The first time you save, GitHub makes your
+   own copy (a fork) of the repo. Your edits go there, so you can't break the live site.
+3. Write the lesson and click **Save** as often as you like. Each lesson becomes a pull request.
+4. When it's finished, set its status to **In Review**. Connor reviews it, and it goes live once
+   it's merged.
+
+Turning on `draft` keeps a lesson hidden even after it's merged.
+
+To try the editor without signing in, run the site locally (`npm run dev`), open
+http://localhost:4321/admin/ in Chrome, Edge, or another Chromium browser, click **Work with Local
+Repository**, and pick the repo folder. Saving writes straight into `src/content/lessons/`.
+
+## Working with the files
+
+Fork the repo, then:
+
+```sh
+npm install
+npm run dev     # http://localhost:4321, reloads as you edit
+```
+
+Before you open a pull request:
+
+```sh
+npm run check   # type check and unit tests
+npm run build   # validates every tag and builds the site
+```
+
+The same checks run on every pull request.
 
 ## Tags
 
@@ -19,51 +70,34 @@ Every lesson and question has both kinds of tag:
 |---|---|---|
 | `subject` | Subject id from `src/data/subjects.json` | `apchem` |
 | `chapter` | Textbook chapter number from `src/data/<subject>/chapters.json` | `14` |
-| `sections` | Optional textbook sections. Checked only once that chapter's `sections` list is filled in. | `["14.3"]` |
-| `cedTopics` | AP CED topic ids from `src/data/<subject>/ced.json`. **Required**, but `[]` means "class only, not on the AP exam". | `["5.2", "5.3"]` |
+| `sections` | Optional textbook sections. Checked once that chapter's section list is filled in. | `["14.3"]` |
+| `cedTopics` | AP CED topic ids from `src/data/<subject>/ced.json`. **Required**; `[]` means "class only, not on the AP exam". | `["5.2", "5.3"]` |
 | `authors` | At least one name | `["Jordan"]` |
-| `sample` | Optional. `true` only for a page or question written to show the format (see Sample content below). | `true` |
+| `sample` | Optional. `true` only for content written to show the format (see [Sample content](#sample-content)). | `true` |
 
-## Using the editor (CMS)
-
-Lessons can be written in a browser editor instead of editing files: open
-[the editor](https://connorscurriculum.com/admin/) (`/admin/` on the site). The
-**Share your notes or write a lesson** link at the bottom of every page leads to this section. It shows a live preview with the math, chemistry, and
-boxes rendered the way the site will show them, and flags anything that would break the build (an
-unclosed `<Callout>`, a stray `{`, an unknown component). The chapter and AP topic pickers come
-from `chapters.json` and `ced.json`.
-
-To write a lesson:
-
-1. Make a free GitHub account if you don't have one.
-2. Open the editor and click **Sign In with GitHub**. The first time you save, it makes your own copy
-   (a fork) of the repo. Your edits go there, so you can't break the site.
-3. Write the lesson and click **Save** as often as you like. Each lesson becomes a pull request.
-4. When it's finished, set its status to **In Review**. Connor reviews it, and it goes live once it's merged.
-
-Turning on `draft` keeps a lesson hidden on the live site even after it's merged.
-
-To try the editor without signing in, run `npm run dev`, open http://localhost:4321/admin/ in Chrome,
-Edge, or another Chromium browser, click **Work with Local Repository**, and pick this repo's folder.
-Saving writes the files straight into `src/content/lessons/`; commit them with git as usual.
+**AP or class only?** Tag `cedTopics` only when the content is something the AP exam assesses.
+The CED's exclusion statements decide this. For example, assigning quantum numbers, hybrid orbitals
+with d orbitals, and molecular orbital diagrams are excluded, so questions on them get
+`cedTopics: []`. Students see every question marked "AP exam" or "Class only" and can filter by it.
+In a lesson, mark a class-only part with `<Callout type="not-on-ap">`.
 
 ## Lessons
 
-One folder per lesson: `src/content/lessons/<subject>/<chapter>-<slug>/index.mdx`.
-Images go in the same folder.
+One folder per lesson: `src/content/lessons/<subject>/<chapter>-<slug>/index.mdx`. Images go in
+the same folder.
 
 ```mdx
 ---
 title: Reaction Rates and Rate Laws
 subject: apchem
 chapter: 14
-sections: []
+sections: ["14.1", "14.3"]
 cedTopics: ["5.1", "5.2"]
-kind: lesson        # lesson, notes (your class notes), or review (a test review sheet)
+kind: lesson        # lesson, notes (a classmate's notes), or review (a test review sheet)
 order: 1            # position within the chapter (lower first)
 authors: ["Jordan"]
 summary: One sentence shown on cards and in search.
-draft: false        # true hides it from the production build
+draft: false        # true hides it from the live site
 ---
 
 Normal **Markdown** here.
@@ -81,40 +115,77 @@ $$
 <Reveal label="Show answer">
 Worked solution, hidden until clicked.
 </Reveal>
-
-<YouTube id="wYqQCojggyM" start={30} />
 ```
 
-`Callout`, `Reveal`, and `YouTube` are available in every lesson without importing them.
-A `kind: notes` page gets a note at the top saying it's a classmate's notes with the wording kept,
-and that fixes are in **Correction** boxes, so the file doesn't need one. Mark a fix with
-`<Callout type="warning">**Correction:** …</Callout>` right below the line it corrects.
 `\ce{...}` (mhchem) works anywhere math works.
 
-Every lesson shows up on the **Lessons** page (`/<subject>/lessons/`), grouped by chapter, and on its
-chapter page. The home page lists the lessons and notes for the latest finished chapters. Practice
-links a question to the `kind: lesson` pages from its chapter that share one of its `sections` (or,
-failing that, an AP topic), so tag `sections` on both lessons and questions.
-
-Sample content: `sample: true` marks a page or question written only to show the format (it needs no
-`authors`). Sample pages, and anything in a chapter the class hasn't reached yet (not finished or
-current in `progress.json`), are labelled as not class material, listed in a closed "Sample pages"
-section at the end of the Lessons page, and left off the home page. Practice leaves their questions
-out unless the student picks their chapter (or a class test covering it): with no chapter picked,
-sets come from the chapters the class has reached.
-
-Practice links: `/<subject>/practice/?chapter=7&difficulty=3` opens the practice page with those
-filters ticked (`section`, `topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak` and `n=5|all` work
-the same way; the defaults are 10 questions, shuffled). A lesson page's practice links use its chapter
-and `sections`, falling back to the whole chapter when no question is tagged with those sections.
-Add `start=1` to start that set right away. While a set is open its address also has a `seed`, so
-the same link opens the same questions.
-
-Lessons links: `/<subject>/lessons/?kind=notes&q=bohr` opens the Lessons page filtered to one kind
-(`lesson`, `notes`, or `review`) and the typed words. The filter stays in the address as it changes.
-
-Watch out for curly braces `{ }` in ordinary MDX text (outside `$...$`): MDX reads them as code.
+**Watch out for curly braces** `{ }` in ordinary text (outside `$...$`): MDX reads them as code.
 Write `\{` or put the text inside math.
+
+### Components
+
+These work in every lesson without importing them:
+
+| Component | What it shows |
+|---|---|
+| `<Callout type="note">` | A box: `note`, `warning`, `ap-tip`, or `not-on-ap`. Optional `title`. |
+| `<Reveal label="Show answer">` | Content hidden until clicked |
+| `<YouTube id="wYqQCojggyM" start={30} />` | A video that plays on the page. Optional `start` (seconds), `title`, `minutes`. |
+| `<Molecule id="sf4" />` | A 3D molecule you can rotate. Ids are in `src/lib/molecules.ts`. |
+| `<ShapeExplorer />` | Pick electron domains and lone pairs to see each VSEPR shape in 3D |
+| `<OrbitalViewer ids="ch4,nh3" boxes />` | Step-by-step 3D hybridization, σ and π bonds. Ids are in `src/lib/orbitals.ts`; `boxes` adds orbital box diagrams. |
+| `<ShapeGrid />` | Cards for every molecular shape. `kind="domains"` groups them by electron domains. Its "Turn it in 3D" links need a `<ShapeExplorer />` on the same page. |
+| `<HybridCards />` | One card per hybridization: what's mixed, the geometry, what's left for π bonds |
+
+### Outside resources
+
+`resources` in the frontmatter lists the best videos, simulations, practice sets, or readings for
+the lesson. They're shown near the end of the page:
+
+```yaml
+resources:
+  - kind: video                  # video, simulation, practice, or reading
+    title: VSEPR Theory and Molecular Geometry (AP Chem 2.7B)
+    url: https://www.youtube.com/watch?v=a8xDFQLYtYE
+    by: Jeremy Krug
+    minutes: 18
+    why: Every shape you need for AP, including expanded octets from 8:57, then a summary table at 12:10.
+```
+
+`why` says what the resource does better than the lesson, in a sentence or two. Open every link
+and check every claim in `why` (titles, lengths, timestamps) before adding it. A Khan Academy video
+that's also on YouTube can add `youtube: <video id>` so it plays on the page.
+
+### Notes pages
+
+A classmate's notes use `kind: notes` with the classmate in `authors`. The page tells readers
+these are a classmate's notes with the wording kept, so the file doesn't need to say so.
+
+- Type the notes up as written. Fill in blank cells left by merged table cells so each row reads
+  on its own.
+- Mark a mistake with `<Callout type="warning">**Correction:** …</Callout>` right below the line it
+  corrects, rather than changing the original.
+- List the photos or PDFs the notes came from in `originals`, with the files in an `originals/`
+  folder next to `index.mdx`. They're shown at the end of the page.
+
+```yaml
+originals:
+  - { file: originals/page-1.jpg, caption: "8.1–8.4" }
+  - { file: originals/notes.pdf }
+```
+
+Phone photos can carry your location. Strip their metadata and shrink them before committing, for
+example with ImageMagick: `magick in.jpg -auto-orient -strip -resize "2000x2000>" -quality 80 out.jpg`.
+
+### Where lessons show up
+
+Every lesson is listed on the **Lessons** page (`/<subject>/lessons/`), grouped by chapter, and on
+its chapter page. The class home lists the lessons and notes from the latest finished chapters. A
+`kind: review` page is featured on its test's page.
+
+Practice links each question to the `kind: lesson` pages in its chapter that share one of its
+`sections` (or, failing that, an AP topic). Tag `sections` on lessons and questions alike so the
+links are precise.
 
 ## Questions
 
@@ -124,15 +195,12 @@ relative to it.
 
 Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short-name>`.
 
-Don't let the answer give itself away: a unit test fails if, across a chapter's MCQs, the correct
-choice is the longest one, or one letter is the answer, much more often than chance. Write wrong
-choices as long and as specific as the right one, and spread answers over A–D.
-
 ```yaml
 - id: apchem-14-half-life
   type: mcq
   subject: apchem
   chapter: 14
+  sections: ["14.4"]
   cedTopics: ["5.3"]
   difficulty: 2            # 1 easy, 2 medium, 3 hard
   calculation: true        # optional: the question needs a numeric calculation
@@ -142,7 +210,9 @@ choices as long and as specific as the right one, and spread answers over A–D.
   choices:                 # 2 to 5 choices, ids are single letters
     - { id: a, text: "33%" }
     - { id: b, text: "12.5%" }
-  answer: b                # must be one of the choice ids
+    - { id: c, text: "25%" }
+    - { id: d, text: "6.25%" }
+  answer: b                # one of the choice ids
   explanation: |
     Why (B) is right, and why the others are wrong. Students see the choices
     labeled A, B, C, D, so refer to them as (A), (B), and so on.
@@ -154,6 +224,7 @@ choices as long and as specific as the right one, and spread answers over A–D.
   cedTopics: ["5.7", "5.8"]
   difficulty: 3
   authors: ["Jordan"]
+  group: n2o5-mechanism     # optional, see below
   prompt: |
     Shared stem for all parts.
   image: ./images/profile.svg     # optional
@@ -168,186 +239,49 @@ choices as long and as specific as the right one, and spread answers over A–D.
     Full worked answer.
 ```
 
-In YAML, text containing a colon followed by a space, or starting with `$`, `{`, `[`, or `*`, must be quoted.
-Inside double quotes, backslashes must be doubled (`"$\\ce{H2O}$"`). Using `|` block text avoids both problems.
+### Writing good questions
 
-## Past AP FRQs
+- **Don't let the answer give itself away.** A unit test fails if, across a chapter's
+  multiple-choice questions, the correct choice is the longest one or one letter is the answer
+  much more often than chance. Write wrong choices as long and specific as the right one, and
+  spread answers over A–D. Stick to four choices: a lone five-choice question in a chapter fails the
+  letter check whichever letter it uses.
+- **Test understanding, not trivia.** If a student couldn't reason their way to the answer from
+  what the class teaches, give them the facts in the prompt and ask for the reasoning.
+- **Use the equation sheet.** Class tests come with the
+  [AP equation sheet](https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf)
+  and periodic table, so don't ask students to recall what's on them.
+- **Rate difficulty honestly.** Hard questions are welcome; label them 3.
+- **Set `calculation: true`** when the question needs numbers plugged into an equation. Practice
+  exams limit how many of these they draw.
+- **Use `group`** for questions about the same molecule or fact, where one gives away another's
+  answer. A practice exam draws at most one question from each group. A question can list several:
+  `group: [n2o5-mechanism, rate-law]`.
 
-Released exam questions live in `src/data/<subject>/past-frqs.json`. We **link** to College Board's
-PDFs and never copy the question text. Each part is tagged with the CED topics it tests:
+### YAML pitfalls
 
-```json
-{
-  "number": 2,
-  "title": "Ascorbic acid (vitamin C)",
-  "page": 6,
-  "samplesUrl": "https://apcentral.collegeboard.org/media/pdf/ap25-apc-chemistry-q2.pdf",
-  "parts": [
-    { "label": "A(i)", "points": 1, "cedTopics": ["1.1"], "skills": ["5.F"] },
-    { "label": "B(iii)", "points": 1, "cedTopics": ["8.9"], "skills": ["5.F"] }
-  ]
-}
-```
+Text containing a colon followed by a space, or starting with `$`, `{`, `[`, or `*`, must be
+quoted. Inside double quotes, backslashes must be doubled (`"$\\ce{H2O}$"`). Using `|` block text
+for anything longer than a few words avoids both problems.
 
-- `page` is where the question starts in the questions PDF, so the link opens at the right page.
-- Take point values from the scoring guidelines. A unit test checks that each exam's questions add
-  up to 10, 10, 10, 4, 4, 4, 4.
-- `skills` are the CED science-practice skill codes (the six practices and their skills are listed
-  in `ced.json` under `sciencePractices`). College Board states the skill for each part in the
-  scoring commentary or the Chief Reader Report, which usually come out in the fall after the exam.
-  Copy theirs when available, and set the exam's `"skillsSource"` to `"official"`; until then,
-  tag them yourself and use `"unofficial"`.
-- Tag a part with every topic it really needs, not every topic it mentions. These tags drive the
-  "pts ready" badges and the FRQ lists on topic and practice pages.
+## Linking to practice
 
-When a new exam is released (usually in the summer), add an entry at the top of `exams`.
+`/<subject>/practice/?chapter=7&difficulty=3` opens Practice with those filters picked. `section`,
+`topic`, `unit`, `test`, `type=mcq|frq`, `mode=all|weak`, and `n=5|all` work the same way. The
+default is 10 shuffled questions. Add `start=1` to start the set right away. While a set is open,
+its address also has a `seed`, so the same link opens the same questions.
 
-## Class tests
+`/<subject>/lessons/?kind=notes&q=bohr` opens the Lessons page filtered to one kind (`lesson`,
+`notes`, or `review`) and the typed words.
 
-Add an entry to `src/data/<subject>/tests.json`:
+## Sample content
 
-```json
-{ "id": "ch15-test", "title": "Chapter 15 Test", "date": "2026-12-03", "chapters": [15], "sections": [] }
-```
+`sample: true` marks a page or question written only to show the format (it needs no `authors`).
+Sample pages, and anything in a chapter the class hasn't reached yet, are labeled as not class
+material, listed in a closed "Sample pages" section at the end of the Lessons page, and left off
+the class home. Practice leaves their questions out unless the student picks their chapter.
 
-Empty `sections` means the whole chapters. `date` is optional. A lesson with `kind: review` in one
-of the test's chapters is featured at the top of the test page and on the subject page.
+## Course data
 
-`handouts` (optional) lists what comes with the test, such as an equation sheet. The test page links them:
-
-```json
-"handouts": [{ "title": "AP Chemistry equation sheet", "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf" }]
-```
-
-`exam` (optional) describes the test's format, so students can take a practice exam drawn fresh
-from the practice questions. The test page, the class home, and Practice's Quick start then offer
-"Take a practice exam":
-
-```json
-"exam": {
-  "mcqPoints": 2.8,
-  "sections": [
-    { "id": "light", "label": "Energy, wavelength, and frequency", "count": 8,
-      "match": { "chapters": [6], "sections": ["6.1", "6.2", "6.3", "6.4"] }, "maxCalculations": 3 },
-    { "id": "trends", "label": "Periodic trends", "count": 14, "match": { "chapters": [7] } }
-  ],
-  "extra": 1,
-  "frq": { "count": 1, "points": 7.2 }
-}
-```
-
-Each section draws `count` multiple-choice questions that `match`: from one of `chapters` and, if
-`sections` is given, tagged with one of those textbook sections. A question counts in the first
-section it matches. `maxCalculations` caps how many of a section's questions can be calculations
-(questions with `calculation: true`). `extra` adds that many more multiple-choice questions from any
-section. Then come `frq.count` free-response questions from the test's chapters, self-scored and
-scaled to `frq.points`. The build stops if a section has fewer matching questions than it draws, and
-for the Chapters 6–7 exam, a unit test also expects at least twice as many, so two exams don't repeat each other.
-
-## Class progress
-
-When the class finishes a chapter, add its number to `src/data/<subject>/progress.json`, and list
-the chapters the class is working on now in `current` (optional; a chapter can't be in both lists):
-
-```json
-{ "chapters": [1, 2, 3, 4, 5, 6, 7], "current": [8, 9] }
-```
-
-The `current` chapters are shown as "Now in class" on the subject and chapters pages. Without
-`current`, the first unfinished chapter after the last finished one is shown as "Up next".
-
-That's all. The AP topics fill in by themselves, because each chapter in `chapters.json` lists
-the CED topics it teaches:
-
-```json
-{ "number": 6, "title": "Electronic Structure of Atoms", "cedTopics": ["1.5", "1.6", "3.11", "3.12"] }
-```
-
-A topic gets a ✓ once **every** chapter that lists it is finished, and a ◐ (with a note such as
-"Started in Ch. 2; continues in Ch. 6.") when only some are. The checkmarks are the same for everyone.
-
-### Last year's course
-
-Topics already seen in an earlier course go in an optional `lastYear` block in the same file:
-
-```json
-"lastYear": {
-  "course": "Scholars Chemistry",
-  "covered": ["3.4", "8.2"],
-  "partial": ["3.5"],
-  "notes": { "3.5": "kinetic molecular theory, but not Maxwell-Boltzmann distributions." }
-}
-```
-
-`covered` topics get a ↺ ("seen last year"), and `partial` ones get a ◐. The note appears as
-"Partly covered in Scholars Chemistry: …". Once a topic is finished this year, the ✓ replaces the
-↺ or ◐. Anything with no mark at all is completely new.
-
-### Topics the class skipped
-
-If the class finished a chapter but skipped one of its AP topics, list it in `notCovered` with a
-short note for students. It then shows "! Skipped in class" instead of a ✓:
-
-```json
-"notCovered": { "1.6": "the class skipped photoelectron spectroscopy in Ch. 6–7, so learn it on your own." }
-```
-
-The build fails if the topic doesn't exist or none of its chapters is finished yet.
-
-### Other mapping fixes
-
-If a topic's mark looks wrong, fix the mapping in `chapters.json` rather than `progress.json`.
-For example, if your teacher covers half-reactions in Ch. 4, remove `"4.9"` from Chapter 20's
-`cedTopics`. The chapter's AP unit badges come from the same list. Every CED topic must be listed
-by at least one chapter (a unit test checks this).
-
-## Topics the textbook covers thinly
-
-`src/data/<subject>/textbook-gaps.json` (optional) lists AP topics the textbook teaches only briefly
-(`"thin"`) or not at all (`"missing"`), so students know to learn them elsewhere. Each entry says
-what the book does and what students need from somewhere else:
-
-```json
-{
-  "topics": [
-    { "id": "3.13", "coverage": "thin", "book": "A short treatment in Ch. 14.", "learn": "A = εbc and calibration curves." }
-  ],
-  "other": [
-    { "title": "Lab skills", "coverage": "thin", "book": "…", "learn": "…" }
-  ]
-}
-```
-
-These show up on the AP topics page, on each listed topic's page, and next to the topic on chapter
-pages. The build fails on an unknown or duplicate topic id.
-
-## Textbook sections
-
-`sections` in `src/data/<subject>/chapters.json` starts empty. To turn on section checking for a
-chapter, fill it in:
-
-```json
-"sections": [{ "id": "14.1", "title": "Factors That Affect Reaction Rates" }]
-```
-
-## Adding a subject
-
-1. Add an entry to `src/data/subjects.json` (`id`, `name`, `textbook`; for an AP class also
-   `standardsUrl`, the College Board PDF of its Course and Exam Description, linked from the AP
-   topics page).
-2. Create `src/data/<id>/chapters.json`. Optional: `ced.json` (the AP CED's units and topics;
-   pages say "AP topics", "AP unit", and "not on the AP exam" only for a class that has one),
-   `tests.json`, `past-frqs.json`, `progress.json`, `textbook-gaps.json`.
-3. Add content under `src/content/lessons/<id>/` and `src/content/questions/<id>/`.
-
-No code changes are needed. The site's home page (`/`) lists every class with what it's on now;
-each class has its own home at `/<id>/`. A class gets a Tests, topics, or Past FRQs page (and nav
-item, and dashboard button for Tests) only when it has that data (`src/lib/features.ts`), and search inside a class finds only its
-pages. `src/lib/features.test.ts` builds a site with a second, minimal class to keep it that way.
-
-## Before you push
-
-```sh
-npm run check   # type check + unit tests
-npm run build   # validates every tag and builds the site
-```
+Chapters, AP topics, class tests and practice exams, class progress, and past FRQs are JSON files
+under `src/data/`. See [docs/data.md](docs/data.md).

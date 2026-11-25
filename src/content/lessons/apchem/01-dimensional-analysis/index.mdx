@@ -1,0 +1,148 @@
+---
+title: Dimensional Analysis
+subject: apchem
+chapter: 1
+sections: ["1.7"]
+cedTopics: []
+order: 4
+authors: ["Claude"]
+summary: Converting units with conversion factors, chaining several factors, converting squared and cubed units, and using density as a conversion factor.
+resources:
+  - kind: video
+    title: Converting Units with Conversion Factors
+    url: https://www.youtube.com/watch?v=7N0lRJLwpPI
+    by: Tyler DeWitt
+    minutes: 13
+    why: Builds conversion factors from scratch and shows why the units cancel, which is section 1.
+  - kind: video
+    title: Converting Units using Multiple Conversion Factors
+    url: https://www.youtube.com/watch?v=LdZ00OFAfaQ
+    by: Tyler DeWitt
+    minutes: 10
+    why: The follow-up, chaining several factors in a row as in section 2.
+---
+
+Dimensional analysis carries the **units** through every step of a calculation. If the units work out
+to what the question asks for, the setup is almost always right. Chapter 3's mole calculations, and most
+calculations after that, use the same method.
+
+## 1. Conversion factors (1.7)
+
+A **conversion factor** is a fraction whose top and bottom are equal amounts in different units, so it
+equals 1. From $1\ \text{in} = 2.54\ \text{cm}$ you get two factors:
+
+$$
+\frac{2.54\ \text{cm}}{1\ \text{in}} \qquad \text{and} \qquad \frac{1\ \text{in}}{2.54\ \text{cm}}
+$$
+
+Multiplying by either one doesn't change the quantity, only its units. Pick the one that puts the unit
+you want to **cancel** on the bottom:
+
+$$
+\text{given units} \times \frac{\text{desired units}}{\text{given units}} = \text{desired units}
+$$
+
+<Reveal label="Worked example: one factor">
+
+Convert 8.50 in to centimeters.
+
+$$
+8.50\ \cancel{\text{in}} \times \frac{2.54\ \text{cm}}{1\ \cancel{\text{in}}} = 21.6\ \text{cm}
+$$
+
+2.54 cm and 1 in are exact (a definition), so the answer keeps the 3 significant figures of 8.50.
+
+</Reveal>
+
+## 2. Chaining factors (1.7)
+
+When there's no single factor from the starting unit to the final one, chain several, canceling one unit
+at a time.
+
+<Reveal label="Worked example: speed in different units">
+
+A car travels at 65.0 mi/h. What is its speed in meters per second? (1 mi = 1.609 km)
+
+Convert miles to meters on top, and hours to seconds on the bottom:
+
+$$
+\frac{65.0\ \cancel{\text{mi}}}{1\ \cancel{\text{h}}} \times \frac{1.609\ \cancel{\text{km}}}{1\ \cancel{\text{mi}}} \times \frac{1000\ \text{m}}{1\ \cancel{\text{km}}} \times \frac{1\ \cancel{\text{h}}}{60\ \cancel{\text{min}}} \times \frac{1\ \cancel{\text{min}}}{60\ \text{s}} = 29.1\ \text{m/s}
+$$
+
+</Reveal>
+
+After calculating, check that the units are the ones asked for and that the size makes sense: 1 mi/h
+is about 0.45 m/s, so 65 mi/h should be roughly 29 m/s.
+
+## 3. Squared and cubed units (1.7)
+
+When a unit is squared or cubed, the **conversion factor is squared or cubed too**, numbers and
+units together:
+
+$$
+1\ \text{m} = 100\ \text{cm} \quad\Rightarrow\quad 1\ \text{m}^3 = (100\ \text{cm})^3 = 10^6\ \text{cm}^3
+$$
+
+<Callout type="warning">
+A common mistake is to convert $\text{m}^3$ to $\text{cm}^3$ by multiplying by 100. A cubic meter is
+a million cubic centimeters, not a hundred. Cube the whole factor:
+$\left(\dfrac{100\ \text{cm}}{1\ \text{m}}\right)^3$.
+</Callout>
+
+<Reveal label="Worked example: a cubed conversion">
+
+A room has a volume of 52.0 m³. What is its volume in liters?
+
+$$
+52.0\ \cancel{\text{m}^3} \times \left(\frac{100\ \cancel{\text{cm}}}{1\ \cancel{\text{m}}}\right)^3 \times \frac{1\ \cancel{\text{mL}}}{1\ \cancel{\text{cm}^3}} \times \frac{1\ \text{L}}{1000\ \cancel{\text{mL}}} = 5.20 \times 10^4\ \text{L}
+$$
+
+A shortcut is $1\ \text{m}^3 = 1000\ \text{L}$, since $1\ \text{L} = 1\ \text{dm}^3$ and a meter is 10 dm.
+
+</Reveal>
+
+## 4. Density as a conversion factor
+
+Any quantity that relates two units can be a conversion factor. Density relates mass and volume, so it
+can be used either way up:
+
+$$
+\frac{0.789\ \text{g}}{1\ \text{mL}} \qquad \text{or} \qquad \frac{1\ \text{mL}}{0.789\ \text{g}}
+$$
+
+<Reveal label="Worked example: volume from mass">
+
+Ethanol has a density of 0.789 g/mL. What volume of ethanol, in liters, has a mass of 1.50 kg?
+
+$$
+1.50\ \cancel{\text{kg}} \times \frac{1000\ \cancel{\text{g}}}{1\ \cancel{\text{kg}}} \times \frac{1\ \cancel{\text{mL}}}{0.789\ \cancel{\text{g}}} \times \frac{1\ \text{L}}{1000\ \cancel{\text{mL}}} = 1.90\ \text{L}
+$$
+
+Ethanol is less dense than water, so 1.50 kg should take up more than 1.50 L, as it does.
+
+</Reveal>
+
+<Reveal label="Worked example: density in different units">
+
+Mercury has a density of 13.6 g/cm³. Express it in kg/m³.
+
+$$
+\frac{13.6\ \cancel{\text{g}}}{1\ \cancel{\text{cm}^3}} \times \frac{1\ \text{kg}}{1000\ \cancel{\text{g}}} \times \left(\frac{100\ \cancel{\text{cm}}}{1\ \text{m}}\right)^3 = 1.36 \times 10^4\ \text{kg/m}^3
+$$
+
+</Reveal>
+
+## 5. A problem-solving routine
+
+1. Write down what's given (with units) and what's asked for.
+2. Plan the path of units from one to the other.
+3. Set up every factor so the unwanted unit cancels.
+4. Calculate, then round to the right number of significant figures. Exact factors (definitions like
+   1000 g = 1 kg) don't limit the significant figures.
+5. Check the units and whether the size of the answer is sensible.
+
+<Callout type="ap-tip">
+The AP exam never asks for unit conversion on its own, but almost every calculation uses it: grams to
+moles, mL to L for molarity, °C to K for gases. Writing units on every number is the easiest way to
+catch a setup mistake on a free-response question.
+</Callout>

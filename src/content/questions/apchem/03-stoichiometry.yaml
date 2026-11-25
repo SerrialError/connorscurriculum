@@ -1,0 +1,1449 @@
+# Practice questions for Chapter 3 (Chemical Reactions and Reaction Stoichiometry). Original; not
+# taken from the textbook or College Board materials. Moles are AP topic 1.1, formulas from composition
+# 1.3, mixtures 1.4, balanced equations 4.2, particle diagrams 4.3, stoichiometry 4.5, and combustion as
+# a redox reaction 4.7. Atomic weights are those on the AP periodic table.
+# calculation: true marks questions that need a numeric calculation.
+
+# ---------------------------------------------------------------------------
+# 3.1 Chemical equations
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-balance-iron-oxide
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When $\ce{Fe + O2 -> Fe2O3}$ is balanced with the smallest whole-number coefficients, what is the **sum** of the coefficients?
+  choices:
+    - { id: a, text: "4" }
+    - { id: b, text: "6" }
+    - { id: c, text: "9" }
+    - { id: d, text: "12" }
+  answer: c
+  explanation: |
+    $\ce{4Fe + 3O2 -> 2Fe2O3}$: Fe 4 = 4, O 6 = 6. The sum is $4 + 3 + 2 = 9$.
+
+- id: apchem-03-balance-butane
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    When the combustion of butane, $\ce{C4H10 + O2 -> CO2 + H2O}$, is balanced with the smallest whole-number coefficients, what is the coefficient of $\ce{O2}$?
+  choices:
+    - { id: a, text: "13" }
+    - { id: b, text: "6.5" }
+    - { id: c, text: "9" }
+    - { id: d, text: "26" }
+  answer: a
+  explanation: |
+    For one $\ce{C4H10}$: 4 $\ce{CO2}$ and 5 $\ce{H2O}$, which need $8 + 5 = 13$ O atoms, or 6.5 $\ce{O2}$. Doubling everything to clear the fraction: $\ce{2C4H10 + 13O2 -> 8CO2 + 10H2O}$.
+    (B) isn't a whole number. (D) doubles twice.
+
+- id: apchem-03-balance-al-hcl
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Balance $\ce{Al(s) + HCl(aq) -> AlCl3(aq) + H2(g)}$ with the smallest whole numbers. What is the coefficient of $\ce{H2}$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "2" }
+    - { id: c, text: "6" }
+    - { id: d, text: "3" }
+  answer: d
+  explanation: |
+    $\ce{AlCl3}$ needs 3 Cl, and $\ce{H2}$ needs H in pairs. Two $\ce{AlCl3}$ use 6 HCl, which releases 6 H, or 3 $\ce{H2}$: $\ce{2Al + 6HCl -> 2AlCl3 + 3H2}$.
+
+- id: apchem-03-balance-nh3-o2
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.2"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Balance $\ce{NH3(g) + O2(g) -> NO(g) + H2O(g)}$ with the smallest whole numbers. What is the coefficient of $\ce{O2}$?
+  choices:
+    - { id: a, text: "3" }
+    - { id: b, text: "5" }
+    - { id: c, text: "7" }
+    - { id: d, text: "4" }
+  answer: b
+  explanation: |
+    Start with 2 $\ce{NH3}$ (6 H, so 3 $\ce{H2O}$) and 2 NO. O on the right: $2 + 3 = 5$, so $\tfrac{5}{2}\ \ce{O2}$. Double: $\ce{4NH3 + 5O2 -> 4NO + 6H2O}$. Check: N 4 = 4, H 12 = 12, O 10 = 10.
+
+- id: apchem-03-subscript-change
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A student "balances" $\ce{H2 + O2 -> H2O}$ by writing $\ce{H2 + O2 -> H2O2}$. Why is this wrong?
+  choices:
+    - { id: a, text: "Hydrogen peroxide can't exist as a stable compound at room temperature" }
+    - { id: b, text: "Changing a subscript changes the product into a different substance" }
+    - { id: c, text: "Equations must have more product molecules than reactant molecules" }
+    - { id: d, text: "Oxygen must always appear as single O atoms in an equation" }
+  answer: b
+  explanation: |
+    The equation is balanced, but it now describes making hydrogen peroxide, not water. Balance by changing coefficients only: $\ce{2H2 + O2 -> 2H2O}$.
+
+- id: apchem-03-conserved
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For the balanced reaction $\ce{N2(g) + 3H2(g) -> 2NH3(g)}$, which quantity is the **same** before and after the reaction?
+  choices:
+    - { id: a, text: "The total number of molecules in the container" }
+    - { id: b, text: "The total number of moles of gas" }
+    - { id: c, text: "The number of atoms of each element" }
+    - { id: d, text: "The number of N–N bonds" }
+  answer: c
+  explanation: |
+    Atoms (and so mass) are conserved. Molecules aren't: 4 molecules (1 + 3) become 2, so (A) and (B) change. The N≡N bond breaks, so (D) changes too.
+
+- id: apchem-03-aq-meaning
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a chemical equation, what does **(aq)** after a formula mean?
+  choices:
+    - { id: a, text: "The substance is a liquid" }
+    - { id: b, text: "The substance is an acid" }
+    - { id: c, text: "The substance is a gas dissolved in air" }
+    - { id: d, text: "The substance is dissolved in water" }
+  answer: d
+  explanation: |
+    "Aqueous" means dissolved in water. A pure liquid is (l). Plenty of aqueous substances aren't acids, like NaCl(aq).
+
+- id: apchem-03-particle-equation
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1"]
+  cedTopics: ["4.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A "before" diagram shows 4 $\ce{A2}$ molecules and 4 $\ce{B2}$ molecules. The "after" diagram shows 8 AB molecules and nothing else. Which balanced equation matches?
+  choices:
+    - { id: a, text: '$\ce{A2 + B2 -> 2AB}$' }
+    - { id: b, text: '$\ce{4A2 + 4B2 -> 8AB}$' }
+    - { id: c, text: '$\ce{A + B -> AB}$' }
+    - { id: d, text: '$\ce{2A2 + B2 -> 2A2B}$' }
+  answer: a
+  explanation: |
+    The ratio 4 : 4 : 8 reduces to 1 : 1 : 2. (B) is balanced but not in lowest terms. (C) uses single atoms, which aren't in the diagram. (D) makes a product that isn't there.
+
+# ---------------------------------------------------------------------------
+# 3.2 Simple patterns of chemical reactivity
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-classify-decomp
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What type of reaction is $\ce{2KClO3(s) -> 2KCl(s) + 3O2(g)}$?
+  choices:
+    - { id: a, text: "Combination" }
+    - { id: b, text: "Combustion" }
+    - { id: c, text: "Decomposition" }
+    - { id: d, text: "Precipitation" }
+  answer: c
+  explanation: |
+    One reactant breaks into two products: decomposition. It produces $\ce{O2}$ but doesn't use it, so it isn't combustion.
+
+- id: apchem-03-combination-product
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: ["1.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Lithium metal combines with nitrogen gas. What is the product?
+  choices:
+    - { id: a, text: "LiN" }
+    - { id: b, text: "Li₃N" }
+    - { id: c, text: "LiN₃" }
+    - { id: d, text: "Li₂N₃" }
+  answer: b
+  explanation: |
+    A metal and a nonmetal combine into an ionic compound: $\ce{Li+}$ and $\ce{N^3-}$ give $\ce{Li3N}$. Balanced: $\ce{6Li + N2 -> 2Li3N}$.
+
+- id: apchem-03-carbonate-decomp
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When solid magnesium carbonate is heated strongly, it decomposes. What are the products?
+  choices:
+    - { id: a, text: "MgO(s) and CO₂(g)" }
+    - { id: b, text: "Mg(s) and CO₃(g)" }
+    - { id: c, text: "Mg(s), C(s), and O₂(g)" }
+    - { id: d, text: "MgC(s) and O₃(g)" }
+  answer: a
+  explanation: |
+    Metal carbonates decompose to the metal oxide and carbon dioxide: $\ce{MgCO3(s) -> MgO(s) + CO2(g)}$.
+
+- id: apchem-03-combustion-products
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What are the products of the **complete** combustion of isopropyl alcohol, $\ce{C3H7OH}$?
+  choices:
+    - { id: a, text: "C (soot) and H₂O" }
+    - { id: b, text: "CO and H₂" }
+    - { id: c, text: "CO₂ and H₂O" }
+    - { id: d, text: "CO₂ and H₂" }
+  answer: c
+  explanation: |
+    When a compound of C, H, and O burns completely in oxygen, all the carbon becomes $\ce{CO2}$ and all the hydrogen becomes $\ce{H2O}$. Soot (A) and CO (B) come from incomplete combustion.
+
+- id: apchem-03-combustion-coefficient
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1", "3.2"]
+  cedTopics: ["4.2", "4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In the balanced equation for the complete combustion of butanol, $\ce{C4H9OH(l)}$, with the smallest whole-number coefficients, what is the coefficient of $\ce{O2}$?
+  choices:
+    - { id: a, text: "4" }
+    - { id: b, text: "5" }
+    - { id: c, text: "13" }
+    - { id: d, text: "6" }
+  answer: d
+  explanation: |
+    $\ce{C4H9OH}$ has 4 C and 10 H, so 4 $\ce{CO2}$ and 5 $\ce{H2O}$: $8 + 5 = 13$ O on the right. The butanol supplies 1 O, so $\ce{O2}$ supplies 12, which is 6 $\ce{O2}$:
+    $\ce{C4H9OH + 6O2 -> 4CO2 + 5H2O}$.
+    (C) forgets the O already in the fuel and counts O atoms instead of $\ce{O2}$ molecules.
+
+- id: apchem-03-combustion-redox
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement about the combustion of methane, $\ce{CH4 + 2O2 -> CO2 + 2H2O}$, is correct?
+  choices:
+    - { id: a, text: "It is an oxidation–reduction reaction: carbon loses electrons and oxygen gains them" }
+    - { id: b, text: "It is an acid–base reaction, since water is one of the products that form" }
+    - { id: c, text: "It is a precipitation reaction, since a new compound forms" }
+    - { id: d, text: "It is a decomposition reaction, since methane breaks apart" }
+  answer: a
+  explanation: |
+    Combustion is a type of redox reaction. Carbon goes from −4 in $\ce{CH4}$ to +4 in $\ce{CO2}$ (it loses electrons), and oxygen goes from 0 in $\ce{O2}$ to −2 (it gains them). Oxidation numbers come in Chapter 4.
+    (D) is wrong because a decomposition has one reactant, and this has two.
+
+- id: apchem-03-incomplete-combustion
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A furnace burning natural gas ($\ce{CH4}$) is starved of air. Which product becomes more likely?
+  choices:
+    - { id: a, text: "Ozone, O₃" }
+    - { id: b, text: "Hydrogen peroxide, H₂O₂" }
+    - { id: c, text: "Methanol, CH₃OH" }
+    - { id: d, text: "Carbon monoxide, CO" }
+  answer: d
+  explanation: |
+    With too little oxygen, carbon can't be fully oxidized to $\ce{CO2}$, so combustion is incomplete and gives CO (and soot), which is why furnaces need ventilation and CO detectors.
+
+- id: apchem-03-classify-combination
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which equation represents a **combination** reaction?
+  choices:
+    - { id: a, text: '$\ce{CaO(s) + H2O(l) -> Ca(OH)2(s)}$' }
+    - { id: b, text: '$\ce{2H2O2(l) -> 2H2O(l) + O2(g)}$' }
+    - { id: c, text: '$\ce{C2H4(g) + 3O2(g) -> 2CO2(g) + 2H2O(g)}$' }
+    - { id: d, text: '$\ce{NH4Cl(s) -> NH3(g) + HCl(g)}$' }
+  answer: a
+  explanation: |
+    Two reactants form a single product. (B) and (D) are decompositions; (C) is a combustion.
+
+# ---------------------------------------------------------------------------
+# 3.3 Formula weights and percent composition
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-fw-calcium-phosphate
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3"]
+  cedTopics: ["1.1"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the formula weight of calcium phosphate, $\ce{Ca3(PO4)2}$?
+  choices:
+    - { id: a, text: "135.05 amu" }
+    - { id: b, text: "215.21 amu" }
+    - { id: c, text: "310.18 amu" }
+    - { id: d, text: "246.18 amu" }
+  answer: c
+  explanation: |
+    3 Ca, 2 P, 8 O: $3(40.08) + 2(30.97) + 8(16.00) = 120.24 + 61.94 + 128.00 = 310.18$ amu.
+    (A) is one Ca, one P, and four O. (D) counts only 4 O, applying the subscript 2 to P alone. (B) is $\ce{Ca3PO4}$.
+
+- id: apchem-03-mw-sucrose
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3"]
+  cedTopics: ["1.1"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the molecular weight of sucrose, $\ce{C12H22O11}$?
+  choices:
+    - { id: a, text: "29.02 amu" }
+    - { id: b, text: "342.30 amu" }
+    - { id: c, text: "180.16 amu" }
+    - { id: d, text: "358.30 amu" }
+  answer: b
+  explanation: |
+    $12(12.01) + 22(1.008) + 11(16.00) = 144.12 + 22.18 + 176.00 = 342.30$ amu. (A) adds one of each atom. (C) is glucose.
+
+- id: apchem-03-percent-n
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the mass percent of nitrogen in ammonium nitrate, $\ce{NH4NO3}$?
+  choices:
+    - { id: a, text: "17.50%" }
+    - { id: b, text: "22.22%" }
+    - { id: c, text: "45.19%" }
+    - { id: d, text: "35.00%" }
+  answer: d
+  explanation: |
+    $\ce{NH4NO3}$ has **two** N atoms. Formula weight $= 2(14.01) + 4(1.008) + 3(16.00) = 80.05$. %N $= 28.02 / 80.05 \times 100\% = 35.00\%$.
+    (A) counts only one N. (B) is 2 N out of 9 atoms, a count rather than a mass. (C) divides by the mass of the nitrate ion (62.00) instead of the whole compound.
+
+- id: apchem-03-percent-water-hydrate
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What percent of the mass of copper(II) sulfate pentahydrate, $\ce{CuSO4.5H2O}$, is water?
+  choices:
+    - { id: a, text: "7.22%" }
+    - { id: b, text: "36.08%" }
+    - { id: c, text: "56.44%" }
+    - { id: d, text: "10.14%" }
+  answer: b
+  explanation: |
+    $\ce{CuSO4}$: $63.55 + 32.06 + 64.00 = 159.61$. Five waters: $5(18.02) = 90.08$. Total 249.69.
+    %water $= 90.08 / 249.69 \times 100\% = 36.08\%$. (A) uses just one water. (C) divides by the mass of $\ce{CuSO4}$ alone.
+
+- id: apchem-03-highest-percent-o
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which compound has the **highest** mass percent of oxygen?
+  choices:
+    - { id: a, text: "CO" }
+    - { id: b, text: "CO₂" }
+    - { id: c, text: "H₂O" }
+    - { id: d, text: "H₂O₂" }
+  answer: d
+  explanation: |
+    $\ce{H2O2}$: $32.00/34.02 = 94.1\%$. $\ce{H2O}$: $16.00/18.02 = 88.8\%$. $\ce{CO2}$: $32.00/44.01 = 72.7\%$. CO: $16.00/28.01 = 57.1\%$.
+    Hydrogen is so light that the O–H compounds are mostly oxygen by mass, and $\ce{H2O2}$ has the most O per H.
+
+- id: apchem-03-same-percent
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3", "3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Formaldehyde ($\ce{CH2O}$), acetic acid ($\ce{C2H4O2}$), and glucose ($\ce{C6H12O6}$) are analyzed. Which statement about their compositions is correct?
+  choices:
+    - { id: a, text: "All three have the same mass percent of each element" }
+    - { id: b, text: "Glucose has the highest mass percent of carbon, since it has the most C atoms" }
+    - { id: c, text: "Formaldehyde has the highest mass percent of carbon, since it is the smallest" }
+    - { id: d, text: "They have the same percents only if equal masses are analyzed" }
+  answer: a
+  explanation: |
+    All three have the empirical formula $\ce{CH2O}$, so the same ratio of atoms and the same mass percents (40.0% C, 6.7% H, 53.3% O). Percent composition can't tell them apart; you also need the molar mass.
+    Mass percent doesn't depend on sample size (D).
+
+- id: apchem-03-percent-mass-from-percent
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.3"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Iron(III) oxide, $\ce{Fe2O3}$, is 69.94% iron by mass. What mass of iron can be obtained from 250. g of pure $\ce{Fe2O3}$?
+  choices:
+    - { id: a, text: "75.2 g" }
+    - { id: b, text: "125 g" }
+    - { id: c, text: "175 g" }
+    - { id: d, text: "357 g" }
+  answer: c
+  explanation: |
+    $250.\ \text{g} \times 0.6994 = 175$ g Fe. (A) uses the oxygen percent (30.06%). (D) divides by 0.6994 instead of multiplying, which gives more iron than oxide.
+
+# ---------------------------------------------------------------------------
+# 3.4 Avogadro's number and the mole
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-moles-water
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How many moles of water are in 45.0 g of $\ce{H2O}$?
+  choices:
+    - { id: a, text: "0.400 mol" }
+    - { id: b, text: "2.50 mol" }
+    - { id: c, text: "811 mol" }
+    - { id: d, text: "1.50 × 10²⁴ mol" }
+  answer: b
+  explanation: |
+    $45.0\ \text{g} \div 18.02\ \text{g/mol} = 2.50$ mol. (A) divides 18.02 by 45.0. (C) multiplies. (D) multiplies by Avogadro's number, which gives molecules, not moles.
+
+- id: apchem-03-mass-sodium-carbonate
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the mass of 0.250 mol of sodium carbonate, $\ce{Na2CO3}$?
+  choices:
+    - { id: a, text: "20.8 g" }
+    - { id: b, text: "424 g" }
+    - { id: c, text: "26.5 g" }
+    - { id: d, text: "0.00236 g" }
+  answer: c
+  explanation: |
+    Molar mass $= 2(22.99) + 12.01 + 3(16.00) = 105.99$ g/mol. $0.250 \times 105.99 = 26.5$ g. (A) uses NaCO₃ (one Na). (B) divides 105.99 by 0.250. (D) divides 0.250 by 105.99.
+
+- id: apchem-03-molecules-co2
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How many molecules are in 1.00 g of carbon dioxide?
+  choices:
+    - { id: a, text: "1.37 × 10²² molecules" }
+    - { id: b, text: "2.65 × 10²⁵ molecules" }
+    - { id: c, text: "6.02 × 10²³ molecules" }
+    - { id: d, text: "4.10 × 10²² molecules" }
+  answer: a
+  explanation: |
+    $1.00\ \text{g} \div 44.01\ \text{g/mol} = 0.02272$ mol, and $0.02272 \times 6.022 \times 10^{23} = 1.37 \times 10^{22}$ molecules.
+    (B) multiplies by the molar mass instead of dividing. (D) counts atoms (3 per molecule).
+
+- id: apchem-03-h-atoms-ammonia
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How many hydrogen **atoms** are in 3.00 mol of ammonia, $\ce{NH3}$?
+  choices:
+    - { id: a, text: "1.81 × 10²⁴" }
+    - { id: b, text: "5.42 × 10²⁴" }
+    - { id: c, text: "9.00" }
+    - { id: d, text: "7.23 × 10²⁴" }
+  answer: b
+  explanation: |
+    Each $\ce{NH3}$ has 3 H, so 3.00 mol $\ce{NH3}$ contains 9.00 mol H. $9.00 \times 6.022 \times 10^{23} = 5.42 \times 10^{24}$ atoms.
+    (A) is the number of molecules. (C) is moles of H, not atoms. (D) counts all 4 atoms per molecule.
+
+- id: apchem-03-mass-one-molecule
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the mass of a single water molecule, in grams?
+  choices:
+    - { id: a, text: "18.02 g" }
+    - { id: b, text: "1.085 × 10²⁵ g" }
+    - { id: c, text: "2.992 × 10⁻²³ g" }
+    - { id: d, text: "1.661 × 10⁻²⁴ g" }
+  answer: c
+  explanation: |
+    One mole has a mass of 18.02 g and contains $6.022 \times 10^{23}$ molecules: $18.02 / (6.022 \times 10^{23}) = 2.992 \times 10^{-23}$ g.
+    (A) is the mass of a mole. (B) multiplies instead of dividing. (D) is the mass of 1 amu.
+
+- id: apchem-03-equal-mass-molecules
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which 10.0 g sample contains the **most molecules**?
+  choices:
+    - { id: a, text: "H₂" }
+    - { id: b, text: "N₂" }
+    - { id: c, text: "O₂" }
+    - { id: d, text: "CO₂" }
+  answer: a
+  explanation: |
+    For equal masses, the substance with the smallest molar mass has the most moles, and so the most molecules. $\ce{H2}$ (2.016 g/mol) has about 5 mol in 10.0 g; $\ce{CO2}$ has only 0.23 mol.
+
+- id: apchem-03-equal-mass-atoms
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Which 1.00 g sample contains the **most atoms**?
+  choices:
+    - { id: a, text: "He" }
+    - { id: b, text: "Ne" }
+    - { id: c, text: "H₂O" }
+    - { id: d, text: "CH₄" }
+  answer: d
+  explanation: |
+    Moles of atoms = (mass ÷ molar mass) × atoms per formula:
+
+    - He: $1.00 / 4.00 \times 1 = 0.250$
+    - Ne: $1.00 / 20.18 \times 1 = 0.0496$
+    - $\ce{H2O}$: $1.00 / 18.02 \times 3 = 0.166$
+    - $\ce{CH4}$: $1.00 / 16.04 \times 5 = 0.312$
+
+    $\ce{CH4}$ has the most atoms. He has the most **particles**, but each methane molecule brings five atoms.
+
+- id: apchem-03-ions-in-alcl3
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many moles of chloride ions are in 0.40 mol of aluminum chloride, $\ce{AlCl3}$?
+  choices:
+    - { id: a, text: "0.13 mol" }
+    - { id: b, text: "0.40 mol" }
+    - { id: c, text: "1.2 mol" }
+    - { id: d, text: "1.6 mol" }
+  answer: c
+  explanation: |
+    Each formula unit contains 3 $\ce{Cl-}$ ions, so $0.40 \times 3 = 1.2$ mol $\ce{Cl-}$. (D) counts all 4 ions (Al³⁺ too). (A) divides by 3.
+
+- id: apchem-03-amu-to-grams
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The average mass of one ethanol molecule is 46.07 amu. What is the mass of one **mole** of ethanol?
+  choices:
+    - { id: a, text: "46.07 g" }
+    - { id: b, text: "7.650 × 10⁻²³ g" }
+    - { id: c, text: "2.774 × 10²⁵ g" }
+    - { id: d, text: "46.07 amu" }
+  answer: a
+  explanation: |
+    The mass of one particle in amu has the same number as the mass of one mole in grams. That's why Avogadro's number has the value it does.
+    (B) is the mass of one molecule in grams. (D) is the mass of one molecule, not a mole.
+
+# ---------------------------------------------------------------------------
+# 3.5 Empirical formulas, combustion analysis, and mixtures
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-empirical-ch2
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A hydrocarbon is 85.6% C and 14.4% H by mass. What is its empirical formula?
+  choices:
+    - { id: a, text: "CH" }
+    - { id: b, text: "C₆H" }
+    - { id: c, text: "CH₄" }
+    - { id: d, text: "CH₂" }
+  answer: d
+  explanation: |
+    In 100 g: C $85.6 / 12.01 = 7.13$ mol; H $14.4 / 1.008 = 14.3$ mol. Dividing by 7.13 gives 1 : 2.00, so $\ce{CH2}$.
+    (B) compares masses (85.6 : 14.4 ≈ 6 : 1) instead of moles.
+
+- id: apchem-03-empirical-so3
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    An oxide of sulfur is 40.0% S by mass. What is its empirical formula?
+  choices:
+    - { id: a, text: "SO" }
+    - { id: b, text: "SO₂" }
+    - { id: c, text: "SO₃" }
+    - { id: d, text: "S₂O₃" }
+  answer: c
+  explanation: |
+    In 100 g: S $40.0 / 32.06 = 1.25$ mol; O $60.0 / 16.00 = 3.75$ mol. Ratio 1 : 3.00, so $\ce{SO3}$.
+
+- id: apchem-03-empirical-cr2o3
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A chromium oxide is 68.42% Cr by mass. What is its empirical formula?
+  choices:
+    - { id: a, text: "CrO" }
+    - { id: b, text: "Cr₂O₃" }
+    - { id: c, text: "CrO₂" }
+    - { id: d, text: "CrO₃" }
+  answer: b
+  explanation: |
+    In 100 g: Cr $68.42 / 52.00 = 1.316$ mol; O $31.58 / 16.00 = 1.974$ mol. Ratio $1.974 / 1.316 = 1.50$, so Cr : O = 1 : 1.5 = 2 : 3. Don't round 1.5 to 1 or 2 (A, C).
+
+- id: apchem-03-molecular-c4h10
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A compound has the empirical formula $\ce{C2H5}$ and a molar mass of 58.12 g/mol. What is its molecular formula?
+  choices:
+    - { id: a, text: "C₂H₅" }
+    - { id: b, text: "C₃H₇" }
+    - { id: c, text: "C₄H₁₀" }
+    - { id: d, text: "C₆H₁₅" }
+  answer: c
+  explanation: |
+    Empirical formula mass $= 2(12.01) + 5(1.008) = 29.06$. $58.12 / 29.06 = 2$, so the molecular formula is $(\ce{C2H5})_2 = \ce{C4H10}$ (butane).
+
+- id: apchem-03-molecular-benzene
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A compound is 92.3% C and 7.7% H by mass, and its molar mass is about 78 g/mol. What is its molecular formula?
+  choices:
+    - { id: a, text: "C₆H₆" }
+    - { id: b, text: "CH" }
+    - { id: c, text: "C₂H₂" }
+    - { id: d, text: "C₆H₁₂" }
+  answer: a
+  explanation: |
+    In 100 g: C $92.3 / 12.01 = 7.69$ mol; H $7.7 / 1.008 = 7.6$ mol. Ratio 1 : 1, so the empirical formula is CH (13.02 g/mol). $78 / 13.02 = 6$, so $\ce{C6H6}$ (benzene). (B) and (C) have the right ratio but the wrong molar mass.
+
+- id: apchem-03-combustion-hydrocarbon
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A hydrocarbon burns completely to give 3.30 g of $\ce{CO2}$ and 1.35 g of $\ce{H2O}$. What is its empirical formula?
+  choices:
+    - { id: a, text: "CH" }
+    - { id: b, text: "CH₄" }
+    - { id: c, text: "CH₃" }
+    - { id: d, text: "CH₂" }
+  answer: d
+  explanation: |
+    mol C = mol $\ce{CO2}$ $= 3.30 / 44.01 = 0.0750$.
+    mol H = 2 × mol $\ce{H2O}$ $= 2(1.35 / 18.02) = 2(0.0749) = 0.150$.
+    Ratio 0.0750 : 0.150 = 1 : 2, so $\ce{CH2}$. Forgetting to double the water gives CH (A).
+
+- id: apchem-03-combustion-cho
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 1.000 g sample of a compound containing only C, H, and O burns completely to give 1.466 g of $\ce{CO2}$ and 0.600 g of $\ce{H2O}$. What is its empirical formula?
+  choices:
+    - { id: a, text: "CH₂" }
+    - { id: b, text: "CH₂O" }
+    - { id: c, text: "CHO" }
+    - { id: d, text: "C₂H₄O" }
+  answer: b
+  explanation: |
+    C: $1.466 / 44.01 = 0.03331$ mol, which is $0.4001$ g.
+    H: $2(0.600 / 18.02) = 0.06659$ mol, which is $0.06712$ g.
+    O by subtraction: $1.000 - 0.4001 - 0.0671 = 0.5328$ g, or $0.5328 / 16.00 = 0.03330$ mol.
+    Ratio C : H : O $= 1 : 2 : 1$, so $\ce{CH2O}$. (A) ignores the oxygen; (C) forgets to double the moles of water.
+
+- id: apchem-03-hydrate-bacl2
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 5.00 g sample of $\ce{BaCl2.xH2O}$ is heated until all the water is driven off, leaving 4.26 g of $\ce{BaCl2}$. What is $x$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "4" }
+    - { id: c, text: "6" }
+    - { id: d, text: "2" }
+  answer: d
+  explanation: |
+    Water lost $= 5.00 - 4.26 = 0.74$ g, or $0.74 / 18.02 = 0.041$ mol.
+    $\ce{BaCl2}$: $4.26 / 208.23 = 0.0205$ mol.
+    Ratio $0.041 / 0.0205 = 2.0$, so $\ce{BaCl2.2H2O}$.
+
+- id: apchem-03-hydrate-error
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    In a hydrate experiment, a student stops heating before all the water has been driven off. How does this affect the calculated value of $x$ in $\ce{MgSO4.xH2O}$?
+  choices:
+    - { id: a, text: "Too high, because the remaining solid is heavier than it should be" }
+    - { id: b, text: "Too low, because the mass of water lost is smaller than the true value" }
+    - { id: c, text: "Too high, because the moles of MgSO₄ calculated are too small" }
+    - { id: d, text: "No effect, because x only depends on the formula of the hydrate" }
+  answer: b
+  explanation: |
+    Less water is lost, so the measured water mass and moles are too small. The leftover solid is heavier, so the calculated moles of $\ce{MgSO4}$ are too **large**. Both errors make the water : $\ce{MgSO4}$ ratio, $x$, too low.
+
+- id: apchem-03-mixture-percent
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 10.00 g mixture of sand and salt is stirred into water and filtered. After drying, the sand on the filter paper has a mass of 3.62 g. What is the mass percent of salt in the mixture?
+  choices:
+    - { id: a, text: "36.2%" }
+    - { id: b, text: "63.8%" }
+    - { id: c, text: "56.7%" }
+    - { id: d, text: "176%" }
+  answer: b
+  explanation: |
+    Salt $= 10.00 - 3.62 = 6.38$ g, and $6.38 / 10.00 \times 100\% = 63.8\%$. (A) is the sand. (C) is sand ÷ salt and (D) is salt ÷ sand. Mass percent always divides by the **total** mass.
+
+- id: apchem-03-impurity-direction
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A sample of KCl (47.55% Cl) is contaminated with a small amount of NaCl (60.66% Cl). How does the measured mass percent of chlorine compare with that of pure KCl?
+  choices:
+    - { id: a, text: "It is higher, because NaCl has a higher mass percent of Cl than KCl" }
+    - { id: b, text: "It is lower, because the sample contains less KCl" }
+    - { id: c, text: "It is the same, because both compounds contain one Cl per formula" }
+    - { id: d, text: "It is lower, because sodium atoms are lighter than potassium atoms" }
+  answer: a
+  explanation: |
+    The mixture's percent lies between the two pure values. Mixing in NaCl, which is richer in Cl by mass, pulls the result above 47.55%.
+    (C) confuses atom ratios with mass percents. (D) has the right fact (Na is lighter) but the wrong conclusion: a lighter cation makes Cl a **larger** share of the mass.
+
+- id: apchem-03-impurity-identify
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.4"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A sample labeled "pure $\ce{CaCO3}$" (40.04% Ca) is found to be 42.5% Ca by mass. Which single impurity could explain this result?
+  choices:
+    - { id: a, text: "MgCO₃" }
+    - { id: b, text: "CaSO₄" }
+    - { id: c, text: "CaO" }
+    - { id: d, text: "SiO₂ (sand)" }
+  answer: c
+  explanation: |
+    The measured percent is **higher** than pure $\ce{CaCO3}$, so the impurity must have a higher percent of Ca. CaO is $40.08/56.08 = 71.5\%$ Ca.
+    $\ce{MgCO3}$ and $\ce{SiO2}$ have no Ca, and $\ce{CaSO4}$ is only 29.4% Ca, so each would lower the result.
+
+- id: apchem-03-mixture-calc
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A mixture contains only NaCl (60.66% Cl) and $\ce{NaNO3}$ (no Cl). Elemental analysis shows the mixture is 30.0% Cl by mass. What is the mass percent of NaCl in the mixture?
+  choices:
+    - { id: a, text: "30.0%" }
+    - { id: b, text: "18.2%" }
+    - { id: c, text: "60.7%" }
+    - { id: d, text: "49.5%" }
+  answer: d
+  explanation: |
+    All the Cl comes from NaCl. In 100 g of mixture there are 30.0 g Cl, which requires $30.0 / 0.6066 = 49.5$ g NaCl. So the mixture is 49.5% NaCl.
+    (B) multiplies $30.0 \times 0.6066$. (A) assumes the Cl percent equals the NaCl percent.
+
+# ---------------------------------------------------------------------------
+# 3.6 Quantitative information from balanced equations
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-mole-ratio-nh3
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    For $\ce{N2(g) + 3H2(g) -> 2NH3(g)}$, how many moles of $\ce{NH3}$ can form from 4.5 mol of $\ce{H2}$ (with plenty of $\ce{N2}$)?
+  choices:
+    - { id: a, text: "1.5 mol" }
+    - { id: b, text: "6.8 mol" }
+    - { id: c, text: "3.0 mol" }
+    - { id: d, text: "9.0 mol" }
+  answer: c
+  explanation: |
+    $4.5\ \text{mol H}_2 \times \dfrac{2\ \text{mol NH}_3}{3\ \text{mol H}_2} = 3.0$ mol. (B) flips the ratio. (D) uses 2 : 1.
+
+- id: apchem-03-mass-co2-methane
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What mass of $\ce{CO2}$ forms when 25.0 g of methane burns completely? $\ce{CH4 + 2O2 -> CO2 + 2H2O}$
+  choices:
+    - { id: a, text: "25.0 g" }
+    - { id: b, text: "68.6 g" }
+    - { id: c, text: "137 g" }
+    - { id: d, text: "9.11 g" }
+  answer: b
+  explanation: |
+    $25.0 / 16.04 = 1.559$ mol $\ce{CH4}$ → 1.559 mol $\ce{CO2}$ (1 : 1) → $1.559 \times 44.01 = 68.6$ g.
+    (A) assumes mass is the same for each substance. (C) uses the 2 from the $\ce{O2}$ coefficient. (D) uses the two molar masses upside down ($25.0 \times 16.04 / 44.01$).
+
+- id: apchem-03-o2-for-al
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What mass of $\ce{O2}$ reacts completely with 10.0 g of aluminum? $\ce{4Al(s) + 3O2(g) -> 2Al2O3(s)}$
+  choices:
+    - { id: a, text: "8.90 g" }
+    - { id: b, text: "11.9 g" }
+    - { id: c, text: "15.8 g" }
+    - { id: d, text: "4.45 g" }
+  answer: a
+  explanation: |
+    $10.0 / 26.98 = 0.3706$ mol Al. $0.3706 \times \tfrac{3}{4} = 0.2780$ mol $\ce{O2}$. $0.2780 \times 32.00 = 8.90$ g.
+    (C) uses 4/3 instead of 3/4. (B) uses a 1 : 1 ratio. (D) uses 16.00 g/mol for $\ce{O2}$ (oxygen atoms instead of molecules).
+
+- id: apchem-03-kclo3-o2
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What mass of $\ce{O2}$ is produced when 12.25 g of potassium chlorate decomposes completely? $\ce{2KClO3(s) -> 2KCl(s) + 3O2(g)}$
+  choices:
+    - { id: a, text: "3.20 g" }
+    - { id: b, text: "7.45 g" }
+    - { id: c, text: "4.80 g" }
+    - { id: d, text: "9.60 g" }
+  answer: c
+  explanation: |
+    $\mathcal{M}(\ce{KClO3}) = 39.10 + 35.45 + 48.00 = 122.55$ g/mol, so $12.25 / 122.55 = 0.1000$ mol.
+    $0.1000 \times \tfrac{3}{2} = 0.1500$ mol $\ce{O2}$, or $0.1500 \times 32.00 = 4.80$ g.
+    (B) is the mass of KCl formed. (A) uses a 1 : 1 ratio. Check with mass conservation: $12.25 - 7.45 = 4.80$ g.
+
+- id: apchem-03-mole-ratio-meaning
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement about $\ce{2H2(g) + O2(g) -> 2H2O(g)}$ is correct?
+  choices:
+    - { id: a, text: "2 g of H₂ reacts with 1 g of O₂ to make 2 g of H₂O" }
+    - { id: b, text: "2 mol of H₂ reacts with 1 mol of O₂ to make 2 mol of H₂O" }
+    - { id: c, text: "2 L of H₂O forms from every 3 L of gas, so mass is lost" }
+    - { id: d, text: "The total number of moles stays the same during the reaction" }
+  answer: b
+  explanation: |
+    Coefficients give mole (or molecule) ratios, not mass ratios (A). Moles of gas go from 3 to 2, so (D) is wrong, but mass is still conserved (C is wrong): 4.03 g of $\ce{H2}$ and 32.00 g of $\ce{O2}$ make 36.03 g of $\ce{H2O}$.
+
+- id: apchem-03-iron-from-oxide
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What mass of iron can be made from 50.0 g of $\ce{Fe2O3}$? $\ce{Fe2O3(s) + 3CO(g) -> 2Fe(s) + 3CO2(g)}$
+  choices:
+    - { id: a, text: "17.5 g" }
+    - { id: b, text: "25.0 g" }
+    - { id: c, text: "35.0 g" }
+    - { id: d, text: "70.0 g" }
+  answer: c
+  explanation: |
+    $50.0 / 159.70 = 0.3131$ mol $\ce{Fe2O3}$, which gives $2 \times 0.3131 = 0.6262$ mol Fe, or $0.6262 \times 55.85 = 35.0$ g. (A) forgets the factor of 2. (D) is more than the oxide's mass, which can't be right.
+
+- id: apchem-03-reactant-needed
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6"]
+  cedTopics: ["4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Ammonia is made by $\ce{N2(g) + 3H2(g) -> 2NH3(g)}$. What mass of $\ce{H2}$ is needed to make 1.00 kg of $\ce{NH3}$?
+  choices:
+    - { id: a, text: "59.2 g" }
+    - { id: b, text: "118 g" }
+    - { id: c, text: "178 g" }
+    - { id: d, text: "355 g" }
+  answer: c
+  explanation: |
+    $1000 / 17.03 = 58.72$ mol $\ce{NH3}$. $58.72 \times \tfrac{3}{2} = 88.08$ mol $\ce{H2}$. $88.08 \times 2.016 = 178$ g.
+    (B) uses a 1 : 1 ratio. (A) uses a 1 : 1 ratio and 1.008 g/mol (H atoms instead of $\ce{H2}$). (D) multiplies by 3 instead of 3/2.
+
+# ---------------------------------------------------------------------------
+# 3.7 Limiting reactants and yield
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-limiting-particles
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.3", "4.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For the reaction $\ce{X2 + 3Y2 -> 2XY3}$, a container holds 3 $\ce{X2}$ molecules and 6 $\ce{Y2}$ molecules. After the reaction goes as far as it can, what does the container hold?
+  choices:
+    - { id: a, text: "6 XY₃ molecules and nothing else" }
+    - { id: b, text: "2 XY₃ and 1 X₂" }
+    - { id: c, text: "6 XY₃ and 3 Y₂" }
+    - { id: d, text: "4 XY₃ and 1 X₂" }
+  answer: d
+  explanation: |
+    6 $\ce{Y2}$ react with $6/3 = 2$ $\ce{X2}$, making 4 $\ce{XY3}$. $\ce{Y2}$ runs out (it's limiting) and 1 $\ce{X2}$ is left over. Check atoms: before, 6 X and 12 Y; after, 4 + 2 = 6 X and 12 Y.
+    (A) and (C) assume all of the $\ce{X2}$ reacts, which would need 9 $\ce{Y2}$.
+
+- id: apchem-03-limiting-moles
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    4.0 mol of $\ce{H2}$ and 3.0 mol of $\ce{O2}$ react by $\ce{2H2 + O2 -> 2H2O}$. What is left over when the reaction is complete?
+  choices:
+    - { id: a, text: "1.0 mol of O₂" }
+    - { id: b, text: "2.0 mol of H₂" }
+    - { id: c, text: "1.0 mol of H₂" }
+    - { id: d, text: "Nothing; both react completely" }
+  answer: a
+  explanation: |
+    4.0 mol $\ce{H2}$ needs 2.0 mol $\ce{O2}$. There are 3.0 mol, so $\ce{H2}$ is limiting and $3.0 - 2.0 = 1.0$ mol $\ce{O2}$ is left. 4.0 mol of $\ce{H2O}$ forms.
+
+- id: apchem-03-limiting-grams-water
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    10.0 g of $\ce{H2}$ and 64.0 g of $\ce{O2}$ react to form water: $\ce{2H2 + O2 -> 2H2O}$. What mass of water forms?
+  choices:
+    - { id: a, text: "36.0 g" }
+    - { id: b, text: "74.0 g" }
+    - { id: c, text: "89.4 g" }
+    - { id: d, text: "72.1 g" }
+  answer: d
+  explanation: |
+    $\ce{H2}$: $10.0 / 2.016 = 4.96$ mol, which could make 4.96 mol $\ce{H2O}$. $\ce{O2}$: $64.0 / 32.00 = 2.00$ mol, which could make 4.00 mol $\ce{H2O}$. $\ce{O2}$ makes less, so it's limiting: $4.00 \times 18.02 = 72.1$ g.
+    (C) uses $\ce{H2}$ as limiting. (B) adds the reactant masses, but some $\ce{H2}$ is left over.
+
+- id: apchem-03-excess-left
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    28.0 g of $\ce{N2}$ and 9.00 g of $\ce{H2}$ react by $\ce{N2 + 3H2 -> 2NH3}$. What mass of the excess reactant remains?
+  choices:
+    - { id: a, text: "6.04 g of H₂" }
+    - { id: b, text: "2.96 g of H₂" }
+    - { id: c, text: "19.0 g of N₂" }
+    - { id: d, text: "1.47 g of H₂" }
+  answer: b
+  explanation: |
+    $\ce{N2}$: $28.0 / 28.02 = 0.999$ mol, which needs $3(0.999) = 2.998$ mol $\ce{H2}$. $\ce{H2}$: $9.00 / 2.016 = 4.464$ mol available, so $\ce{N2}$ is limiting.
+    $\ce{H2}$ left $= 4.464 - 2.998 = 1.466$ mol, or $1.466 \times 2.016 = 2.96$ g.
+    (A) is the mass of $\ce{H2}$ used. (D) is the moles left, labeled as grams. Check: $28.0 + 9.00 = 37.0$ g; $\ce{NH3}$ formed is $1.998 \times 17.03 = 34.0$ g, and $34.0 + 2.96 = 37.0$ g.
+
+- id: apchem-03-equal-masses-limiting
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Equal masses (10.0 g each) of zinc and sulfur are heated together: $\ce{Zn + S -> ZnS}$. Which is the limiting reactant?
+  choices:
+    - { id: a, text: "Sulfur, because sulfur atoms are smaller" }
+    - { id: b, text: "Neither, because equal masses were used" }
+    - { id: c, text: "Zinc, because 10.0 g of Zn is fewer moles" }
+    - { id: d, text: "Sulfur, because 10.0 g of S is fewer moles" }
+  answer: c
+  explanation: |
+    The ratio is 1 : 1 in moles. Zn: $10.0 / 65.38 = 0.153$ mol. S: $10.0 / 32.06 = 0.312$ mol. Zinc runs out first. Equal masses aren't equal moles (B).
+
+- id: apchem-03-add-excess
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In a reaction, $\ce{HCl}$ is the limiting reactant and Mg is in excess: $\ce{Mg + 2HCl -> MgCl2 + H2}$. If the mass of Mg used is doubled and the HCl is unchanged, the mass of $\ce{H2}$ produced will
+  choices:
+    - { id: a, text: "double, because twice as much Mg reacts" }
+    - { id: b, text: "stay the same, because the HCl still runs out at the same point" }
+    - { id: c, text: "be cut in half, because the ratio of the two reactants is now further from 1 : 2" }
+    - { id: d, text: "increase, but by less than double" }
+  answer: b
+  explanation: |
+    The product is set by the limiting reactant. HCl still runs out after the same amount reacts, so the same $\ce{H2}$ forms; there's just more Mg left over.
+
+- id: apchem-03-percent-yield
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A reaction has a theoretical yield of 18.4 g, and the student collects 15.0 g of product. What is the percent yield?
+  choices:
+    - { id: a, text: "3.4%" }
+    - { id: b, text: "122.7%" }
+    - { id: c, text: "18.5%" }
+    - { id: d, text: "81.5%" }
+  answer: d
+  explanation: |
+    $15.0 / 18.4 \times 100\% = 81.5\%$. (B) divides upside down. (C) is the percent **lost**.
+
+- id: apchem-03-yield-over-100
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A student calculates a percent yield of 108% for a solid product. Which is the most likely cause?
+  choices:
+    - { id: a, text: "The product was still wet with solvent when it was weighed" }
+    - { id: b, text: "Some of the product was spilled during filtration" }
+    - { id: c, text: "A side reaction used up part of the limiting reactant to make a different product" }
+    - { id: d, text: "The reaction stopped before all the reactant was used" }
+  answer: a
+  explanation: |
+    A yield above 100% means the product weighed more than possible, usually because water or solvent (or an impurity) was weighed with it. (B), (C), and (D) all make the yield lower, not higher.
+
+- id: apchem-03-thermite-yield
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    5.40 g of Al reacts with 20.0 g of $\ce{Fe2O3}$: $\ce{2Al + Fe2O3 -> Al2O3 + 2Fe}$. The reaction produces 9.80 g of Fe. What is the percent yield?
+  choices:
+    - { id: a, text: "70.1%" }
+    - { id: b, text: "87.7%" }
+    - { id: c, text: "49.0%" }
+    - { id: d, text: "181%" }
+  answer: b
+  explanation: |
+    Al: $5.40 / 26.98 = 0.2001$ mol, which could make 0.2001 mol Fe. $\ce{Fe2O3}$: $20.0 / 159.70 = 0.1252$ mol, which could make 0.2505 mol Fe. Al is limiting.
+    Theoretical yield $= 0.2001 \times 55.85 = 11.18$ g Fe. Percent yield $= 9.80 / 11.18 = 87.7\%$.
+    (A) uses $\ce{Fe2O3}$ as limiting (13.99 g). (C) divides by the 20.0 g of oxide, and (D) by the 5.40 g of Al.
+
+- id: apchem-03-theoretical-yield-meaning
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The **theoretical yield** of a reaction is
+  choices:
+    - { id: a, text: "the mass of product actually collected in the lab" }
+    - { id: b, text: "the amount of product calculated from the limiting reactant" }
+    - { id: c, text: "the total mass of all the reactants used" }
+    - { id: d, text: "the amount of product calculated from the excess reactant instead" }
+  answer: b
+  explanation: |
+    It's the maximum possible product, set by the reactant that runs out first. (A) is the actual yield. (D) would overestimate the product.
+
+# ---------------------------------------------------------------------------
+# Free response
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-combustion-frq
+  type: frq
+  subject: apchem
+  chapter: 3
+  sections: ["3.1", "3.5"]
+  cedTopics: ["1.3", "4.2"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 0.3000 g sample of a liquid containing only carbon, hydrogen, and oxygen is burned completely in excess oxygen. The products are 0.5994 g of $\ce{CO2}$ and 0.2454 g of $\ce{H2O}$.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the mass of carbon in the sample.
+      scoring:
+        - "0.5994 g CO₂ ÷ 44.01 g/mol = 0.01362 mol C; × 12.01 g/mol = 0.1636 g C."
+    - label: b
+      points: 1
+      prompt: Calculate the mass of hydrogen in the sample.
+      scoring:
+        - "0.2454 g H₂O ÷ 18.02 g/mol = 0.01362 mol H₂O; × 2 = 0.02724 mol H; × 1.008 = 0.02746 g H."
+    - label: c
+      points: 1
+      prompt: Calculate the mass of oxygen in the sample, and explain why it can't be found from the masses of the products directly.
+      scoring:
+        - "0.3000 − 0.1636 − 0.0275 = 0.1089 g O; the O in the products also came from the O₂ added, so the sample's O must be found by subtraction."
+    - label: d
+      points: 1
+      prompt: Determine the empirical formula of the compound.
+      scoring:
+        - "Moles C : H : O = 0.01362 : 0.02724 : 0.006806 = 2 : 4 : 1, so C₂H₄O."
+    - label: e
+      points: 1
+      prompt: The molar mass of the compound is 88.1 g/mol. Determine its molecular formula.
+      scoring:
+        - "Empirical formula mass = 44.05 g/mol; 88.1 / 44.05 = 2, so C₄H₈O₂."
+    - label: f
+      points: 1
+      prompt: Write the balanced equation for the complete combustion of the compound.
+      scoring:
+        - "C₄H₈O₂ + 5 O₂ → 4 CO₂ + 4 H₂O."
+  explanation: |
+    **(a)** Every C atom ends up in $\ce{CO2}$: $0.5994 / 44.01 = 0.01362$ mol C, and $0.01362 \times 12.01 = 0.1636$ g C.
+
+    **(b)** Every H ends up in $\ce{H2O}$, two per molecule: $0.2454 / 18.02 = 0.01362$ mol $\ce{H2O}$, so $0.02724$ mol H, and $0.02724 \times 1.008 = 0.02746$ g H.
+
+    **(c)** $0.3000 - 0.1636 - 0.0275 = 0.1089$ g O. Some of the oxygen in $\ce{CO2}$ and $\ce{H2O}$ came from the $\ce{O2}$ the sample burned in, so the products' oxygen doesn't tell you how much was in the sample.
+
+    **(d)** $0.1089 / 16.00 = 0.006806$ mol O. Dividing by 0.006806: C 2.00, H 4.00, O 1.00. Empirical formula $\ce{C2H4O}$.
+
+    **(e)** $\ce{C2H4O}$ has a formula mass of $2(12.01) + 4(1.008) + 16.00 = 44.05$. $88.1 / 44.05 = 2.00$, so the molecular formula is $\ce{C4H8O2}$.
+
+    **(f)** 4 $\ce{CO2}$ and 4 $\ce{H2O}$ need $8 + 4 = 12$ O atoms. The compound supplies 2, so $\ce{O2}$ supplies 10, which is 5 $\ce{O2}$:
+
+    $$
+    \ce{C4H8O2 + 5O2 -> 4CO2 + 4H2O}
+    $$
+
+- id: apchem-03-limiting-frq
+  type: frq
+  subject: apchem
+  chapter: 3
+  sections: ["3.6", "3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Nitrogen monoxide is made industrially by the reaction
+
+    $$
+    \ce{4NH3(g) + 5O2(g) -> 4NO(g) + 6H2O(g)}
+    $$
+
+    A reactor is loaded with 34.0 g of $\ce{NH3}$ and 64.0 g of $\ce{O2}$.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the number of moles of each reactant.
+      scoring:
+        - "NH₃: 34.0 / 17.03 = 2.00 mol; O₂: 64.0 / 32.00 = 2.00 mol."
+    - label: b
+      points: 1
+      prompt: Identify the limiting reactant. Justify your answer with a calculation.
+      scoring:
+        - "O₂ is limiting: 2.00 mol NH₃ would need 2.00 × 5/4 = 2.50 mol O₂, but only 2.00 mol is present (or: O₂ gives 1.60 mol NO vs. 2.00 mol from NH₃)."
+    - label: c
+      points: 1
+      prompt: Calculate the theoretical yield of NO in grams.
+      scoring:
+        - "2.00 mol O₂ × 4/5 = 1.60 mol NO × 30.01 g/mol = 48.0 g NO."
+    - label: d
+      points: 1
+      prompt: Calculate the mass of the excess reactant that remains.
+      scoring:
+        - "NH₃ used = 2.00 × 4/5 = 1.60 mol; left = 2.00 − 1.60 = 0.40 mol × 17.03 = 6.8 g NH₃."
+    - label: e
+      points: 1
+      prompt: The reactor actually produces 40.0 g of NO. Calculate the percent yield.
+      scoring:
+        - "40.0 / 48.0 × 100% = 83.3%."
+  explanation: |
+    **(a)** $\ce{NH3}$: $34.0 / 17.03 = 2.00$ mol. $\ce{O2}$: $64.0 / 32.00 = 2.00$ mol.
+
+    **(b)** The reactants are present in equal moles, but the equation needs 5 $\ce{O2}$ for every 4 $\ce{NH3}$. All 2.00 mol of $\ce{NH3}$ would need $2.00 \times \tfrac{5}{4} = 2.50$ mol of $\ce{O2}$, and only 2.00 mol is there. **$\ce{O2}$ is limiting.**
+
+    **(c)** $2.00\ \text{mol O}_2 \times \tfrac{4\ \text{mol NO}}{5\ \text{mol O}_2} = 1.60$ mol NO, and $1.60 \times 30.01 = 48.0$ g.
+
+    **(d)** $\ce{NH3}$ used $= 2.00\ \text{mol O}_2 \times \tfrac{4}{5} = 1.60$ mol. Left over: $2.00 - 1.60 = 0.40$ mol, or $0.40 \times 17.03 = 6.8$ g.
+
+    **(e)** $40.0 / 48.0 \times 100\% = 83.3\%$.
+
+- id: apchem-03-mixture-frq
+  type: frq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4", "3.5", "3.6"]
+  cedTopics: ["1.1", "1.4", "4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 2.000 g sample of a mixture of NaCl and $\ce{NaNO3}$ is dissolved in water. Excess silver nitrate is added, which precipitates all the chloride as AgCl:
+
+    $$
+    \ce{NaCl(aq) + AgNO3(aq) -> AgCl(s) + NaNO3(aq)}
+    $$
+
+    The dried AgCl has a mass of 2.870 g.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the number of moles of AgCl formed.
+      scoring:
+        - "AgCl = 107.87 + 35.45 = 143.32 g/mol; 2.870 / 143.32 = 0.02003 mol."
+    - label: b
+      points: 1
+      prompt: Calculate the mass of NaCl in the original sample.
+      scoring:
+        - "1 : 1 ratio, so 0.02003 mol NaCl × 58.44 g/mol = 1.170 g NaCl."
+    - label: c
+      points: 1
+      prompt: Calculate the mass percent of NaCl in the mixture.
+      scoring:
+        - "1.170 / 2.000 × 100% = 58.51%."
+    - label: d
+      points: 1
+      prompt: If the AgCl were weighed before it was completely dry, would the calculated mass percent of NaCl be too high, too low, or unchanged? Explain.
+      scoring:
+        - "Too high: the water adds mass, so the moles of AgCl, and so the mass of NaCl calculated from them, are too large."
+  explanation: |
+    **(a)** $\mathcal{M}(\ce{AgCl}) = 107.87 + 35.45 = 143.32$ g/mol. $2.870 / 143.32 = 0.02003$ mol AgCl.
+
+    **(b)** Each NaCl gives one AgCl, so there were 0.02003 mol NaCl: $0.02003 \times 58.44 = 1.170$ g.
+
+    **(c)** $1.170 / 2.000 \times 100\% = 58.51\%$ NaCl. (The rest, 41.49%, is $\ce{NaNO3}$.)
+
+    **(d)** Too high. Leftover water makes the precipitate look heavier, so the calculated moles of AgCl are too large. That gives too much NaCl, and since the 2.000 g sample mass didn't change, the percent comes out too high.

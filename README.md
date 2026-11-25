@@ -117,8 +117,9 @@ The current CED differs from the older (2020) topic list in several places:
 older editions: Chapter 3 is "Chemical Reactions and Reaction Stoichiometry" and Chapter 17 is
 "Aqueous Equilibria: Buffers, Titrations, and Solubility". The `notOnAP` notes are based on the
 CED's exclusion statements (for example: phase diagrams, colligative properties, Arrhenius-equation
-calculations, Kc/Kp conversion, Lewis acid-base concepts). Section lists are empty until someone
-fills them in from the book.
+calculations, Kc/Kp conversion, Lewis acid-base concepts). Section lists for Ch. 1–3 were
+copied from the 15th edition table of contents (Pearson preview, ISBN 9780137493609); Ch. 6–9 were
+filled in from the book. The rest are empty until someone fills them in.
 
 **Chapter-to-topic mapping.** Each chapter in `chapters.json` lists the CED topics it teaches,
 based on comparing each topic's learning objectives in the CED with the chapter contents. Topics

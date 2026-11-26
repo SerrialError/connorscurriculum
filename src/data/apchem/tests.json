@@ -25,6 +25,30 @@
     }
   },
   {
+    "id": "ch4-5-test",
+    "title": "Chapters 4–5 Test",
+    "date": "2026-10-05",
+    "chapters": [4, 5],
+    "sections": [],
+    "handouts": [
+      { "title": "AP Chemistry equation sheet", "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf" }
+    ],
+    "exam": {
+      "mcqPoints": 2.6,
+      "sections": [
+        { "id": "solutions", "label": "Electrolytes, precipitation, and net ionic equations", "count": 6, "match": { "chapters": [4], "sections": ["4.1", "4.2"] } },
+        { "id": "acids", "label": "Acids, bases, and neutralization", "count": 5, "match": { "chapters": [4], "sections": ["4.3"] } },
+        { "id": "redox", "label": "Oxidation numbers and redox reactions", "count": 4, "match": { "chapters": [4], "sections": ["4.4"] } },
+        { "id": "concentration", "label": "Molarity, dilution, and titrations", "count": 5, "match": { "chapters": [4], "sections": ["4.5", "4.6"] }, "maxCalculations": 4 },
+        { "id": "enthalpy", "label": "Energy, heat flow, and enthalpies of reaction", "count": 5, "match": { "chapters": [5], "sections": ["5.1", "5.2", "5.3", "5.4"] }, "maxCalculations": 2 },
+        { "id": "calorimetry", "label": "Calorimetry", "count": 5, "match": { "chapters": [5], "sections": ["5.5"] }, "maxCalculations": 3 },
+        { "id": "hess", "label": "Enthalpies of formation, bond enthalpies, and Hess's law", "count": 6, "match": { "chapters": [5], "sections": ["5.6", "5.7", "5.8"] }, "maxCalculations": 4 }
+      ],
+      "extra": 1,
+      "frq": { "count": 1, "points": 6 }
+    }
+  },
+  {
     "id": "ch6-7-test",
     "title": "Chapters 6–7 Test",
     "date": "2026-11-04",

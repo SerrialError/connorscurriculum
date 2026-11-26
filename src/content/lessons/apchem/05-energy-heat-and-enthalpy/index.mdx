@@ -1,0 +1,165 @@
+---
+title: Energy, Heat, and Enthalpy
+subject: apchem
+chapter: 5
+sections: ["5.1", "5.2", "5.3"]
+cedTopics: ["6.1", "6.3"]
+order: 1
+authors: ["Claude"]
+summary: Where chemical energy comes from, system and surroundings, heat flow and thermal equilibrium, exothermic and endothermic processes and their signs, the first law, and enthalpy.
+resources:
+  - kind: video
+    title: Introduction to Thermodynamics - AP Chemistry Unit 6 Topic 1
+    url: https://www.youtube.com/watch?v=Zmhdr-8E1Mo
+    by: Jeremy Krug
+    minutes: 16
+    why: System and surroundings, exothermic and endothermic reactions, and internal energy from heat and work, the same ground as sections 2, 4, and 5.
+  - kind: video
+    title: How Heat Flows in Chemical Systems - AP Chem Unit 6, Topics 2-3
+    url: https://www.youtube.com/watch?v=fwe9ApxkxSU
+    by: Jeremy Krug
+    minutes: 8
+    why: Heat, temperature, and average kinetic energy, and how two objects reach thermal equilibrium (section 3).
+---
+
+## 1. Chemical energy (5.1)
+
+Chapter 1 split energy into **kinetic energy**, the energy of motion, and **potential energy**, energy
+stored by position. In chemistry the potential energy is stored in the attractions between charged
+particles: electrons and nuclei in bonds, and ions in a crystal.
+
+- **Breaking** a bond or separating attracted particles **takes** energy.
+- **Forming** a bond or bringing attracted particles together **releases** energy.
+
+A reaction breaks some bonds and forms others. If the new bonds are stronger overall, energy is
+released; if they're weaker, energy is absorbed. Thermochemistry measures that difference.
+
+## 2. System and surroundings (5.2)
+
+To track energy, split the world in two:
+
+- the **system** is the part you're studying, usually the reacting chemicals,
+- the **surroundings** are everything else: the water they're dissolved in, the beaker, the air.
+
+Energy moves between them as **heat** (q), energy transferred because of a temperature difference, and as
+**work** (w), energy used to move something, such as a gas pushing back a piston.
+
+## 3. Heat, temperature, and thermal equilibrium (5.1, AP topic 6.3)
+
+**Temperature** measures the **average kinetic energy** of the particles. **Heat** is energy that moves
+from a hotter object to a cooler one. They aren't the same thing: a bathtub of warm water holds more
+thermal energy than a cup of boiling water, though its temperature is lower.
+
+![Before contact: a hot metal block at 80 °C with fast-moving particles beside cool water at 20 °C with slow particles. After: both at 26 °C with particles moving at the same average speed. Faster particles in the hot object collide with slower ones and transfer kinetic energy until both have the same average kinetic energy, which means the same temperature. Heat lost by the metal equals heat gained by the water.](./thermal-equilibrium.svg)
+
+When a hot object touches a cool one, the faster-moving particles of the hot object collide with the
+slower particles of the cool one and pass on kinetic energy. This continues until both have the **same
+average kinetic energy**, and so the same temperature. That's **thermal equilibrium**. Particles still
+collide and exchange energy afterward, but there's no longer a net flow in either direction.
+
+Energy is conserved, so the heat lost by the hot object equals the heat gained by the cool one:
+
+$$
+q_\text{hot} = -q_\text{cold}
+$$
+
+<Callout type="ap-tip">
+AP topic 6.3 asks for this at the **particle level**. A complete explanation says the particles of the
+warmer object have a higher average kinetic energy, that **collisions** transfer energy from them to the
+particles of the cooler object, and that the transfer stops when the average kinetic energies (the
+temperatures) are equal. "Heat flows from hot to cold" alone isn't enough.
+</Callout>
+
+## 4. Exothermic and endothermic processes (5.2)
+
+Every sign in thermochemistry is from the **system's** point of view.
+
+![Two diagrams. Exothermic: heat arrows point out of the system into the surroundings; ΔH < 0 and q of the system < 0; the surroundings warm up, so the beaker feels hot. Endothermic: heat arrows point into the system; ΔH > 0 and q > 0; the surroundings cool down, so the beaker feels cold.](./exo-endo.svg)
+
+- **Exothermic**: the system **releases** heat to the surroundings. q is **negative**. The surroundings
+  get **warmer**.
+- **Endothermic**: the system **absorbs** heat from the surroundings. q is **positive**. The surroundings
+  get **colder**.
+
+<Callout type="warning">
+An endothermic reaction in a beaker makes the beaker feel **cold**, even though the system is **gaining**
+energy. The thermometer and your hand are part of the surroundings, and the energy the reaction absorbs is
+taken from them.
+</Callout>
+
+| Process | Exo or endo | Why |
+|---|---|---|
+| Burning methane, wood, or gasoline | Exothermic | Strong C=O and O–H bonds form |
+| Ice melting, water boiling | Endothermic | Attractions between molecules are overcome |
+| Water freezing, steam condensing | Exothermic | Attractions between molecules form |
+| Breaking any bond | Endothermic | Separating attracted particles takes energy |
+| $\ce{NH4NO3}$ dissolving (cold pack) | Endothermic | Breaking the ionic lattice costs more than hydrating the ions releases |
+| $\ce{CaCl2}$ dissolving (some hot packs) | Exothermic | Hydrating the ions releases more than breaking the lattice costs |
+
+Dissolving can go either way (AP topic 6.1). It breaks the attractions inside the solute and between
+solvent molecules, and forms new solute–solvent attractions. Whichever is larger decides the sign.
+
+## 5. The first law of thermodynamics (5.2)
+
+**Energy is conserved**: it changes form and moves between system and surroundings, but it isn't created
+or destroyed. Whatever energy the system loses, the surroundings gain.
+
+The first law is written with the **internal energy** E, the total kinetic and potential energy of
+everything in the system:
+
+$$
+\Delta E = q + w
+$$
+
+- q > 0 when heat flows **into** the system, and q < 0 when heat flows out.
+- w > 0 when work is done **on** the system (a gas is compressed), and w < 0 when the system does work
+  (a gas expands and pushes back the atmosphere).
+
+<Reveal label="Worked example: ΔE from heat and work">
+
+A system absorbs 50 J of heat and does 20 J of work on its surroundings. Find ΔE.
+
+Heat in: $q = +50$ J. Work done **by** the system: $w = -20$ J.
+
+$$
+\Delta E = (+50) + (-20) = +30\ \text{J}
+$$
+
+</Reveal>
+
+E is a **state function**: its change depends only on the starting and ending states, not on the path
+between them. Heat and work separately do depend on the path, though their sum doesn't. Enthalpy, in
+the next section, is a state function too, which is why Hess's law works.
+
+<Callout type="not-on-ap" title="On the class test, not the AP exam">
+ΔE = q + w, the signs of work, and the term "state function" were covered in class, so they can be on
+the test. The AP exam doesn't assess them or the difference between ΔE and ΔH.
+</Callout>
+
+## 6. Enthalpy (5.3)
+
+Most reactions happen in open containers at **constant pressure**. For those, chemists use **enthalpy**
+(H). Its change, **ΔH**, equals the heat the system gains or loses at constant pressure:
+
+$$
+\Delta H = q_P
+$$
+
+So ΔH is negative for an exothermic process and positive for an endothermic one, matching the signs
+above. ΔH and ΔE differ only by the small amount of work a reaction does when it makes or uses up gas,
+so in practice **ΔH is the heat of the reaction**.
+
+<Reveal label="Worked example: signs from observations">
+
+For each, give the sign of ΔH for the system.
+
+**(a)** Solid NaOH dissolves in water, and the solution gets hot. The surroundings (the water) warmed up,
+so heat left the system: **ΔH < 0**, exothermic.
+
+**(b)** Barium hydroxide and ammonium chloride are mixed, and the flask freezes to a wet board. The
+surroundings got colder, so the system took in heat: **ΔH > 0**, endothermic.
+
+**(c)** Sweat evaporates from your skin. Evaporating water (the system) takes in heat, which is why it
+cools your skin: **ΔH > 0**.
+
+</Reveal>

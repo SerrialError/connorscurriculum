@@ -158,6 +158,27 @@ describe('examPointsNote', () => {
   });
 });
 
+describe('apchem: the Chapters 4–5 practice exam', () => {
+  const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch4-5-test')!;
+
+  it('is 37 multiple choice at 2.6 points and a 6-point FRQ, with more Chapter 4 than Chapter 5', () => {
+    expect(mcqCount(test.exam!)).toBe(37);
+    expect(examMax(test.exam!)).toBe(102.2);
+    const perChapter = (c: number) => test.exam!.sections.filter((s) => s.match.chapters?.includes(c)).reduce((n, s) => n + s.count, 0);
+    expect(perChapter(4)).toBeGreaterThan(perChapter(5));
+  });
+
+  it('has at least twice as many questions as each section draws, and twice the concept questions it needs', () => {
+    const questions = readQuestionFiles()
+      .filter((q) => q.subject === 'apchem' && test.chapters.includes(q.chapter))
+      .map((q) => ({ ...q, sections: q.sections ?? [] }));
+    for (const p of examPools(questions, test.exam!)) {
+      expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
+      expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
+    }
+  });
+});
+
 describe('apchem: the Chapters 6–7 practice exam', () => {
   const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch6-7-test')!;
 

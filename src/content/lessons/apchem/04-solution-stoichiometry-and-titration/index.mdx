@@ -1,0 +1,179 @@
+---
+title: Solution Stoichiometry and Titration
+subject: apchem
+chapter: 4
+sections: ["4.6"]
+cedTopics: ["4.5", "4.6"]
+order: 6
+authors: ["Claude"]
+summary: Stoichiometry with molarities and volumes, precipitate masses, limiting reactants in solution, and using a titration to find an unknown concentration or molar mass.
+resources:
+  - kind: video
+    title: Introduction to Titration - AP Chemistry Unit 4, Topic 6
+    url: https://www.youtube.com/watch?v=kxdu490P4Tw
+    by: Jeremy Krug
+    minutes: 7
+    why: How a titration is carried out in the lab, with the equipment and technique, which section 3 only describes.
+  - kind: practice
+    title: Introduction to titration
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:chemical-reactions/x2eef969c74e0d802:introduction-to-titration/e/introduction-to-titration
+    by: Khan Academy
+    why: AP practice on topic 4.6.
+  - kind: practice
+    title: Stoichiometry
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:chemical-reactions/x2eef969c74e0d802:stoichiometry/e/stoichiometry
+    by: Khan Academy
+    why: AP practice on topic 4.5, including problems with molarity.
+---
+
+## 1. Stoichiometry with solutions (4.6)
+
+Chapter 3 converted grams to moles with molar mass. For a solution, **molarity × volume** gives moles.
+After that, the problem is the same: the mole ratio from the balanced equation connects the two
+substances.
+
+![A map. M × L of a solution of A, or grams of solid A divided by its molar mass, gives moles of A. Multiplying by the mole ratio B/A gives moles of B. From moles of B, divide by M to get liters of a solution of B, or multiply by molar mass to get grams of solid B.](./solution-stoichiometry-map.svg)
+
+<Reveal label="Worked example: volume needed to neutralize an acid">
+
+What volume of 0.150 M NaOH neutralizes 25.0 mL of 0.200 M $\ce{H2SO4}$?
+
+$$
+\ce{H2SO4(aq) + 2NaOH(aq) -> Na2SO4(aq) + 2H2O(l)}
+$$
+
+Moles of $\ce{H2SO4}$: $0.0250\ \text{L} \times 0.200\ M = 0.00500$ mol
+
+Moles of NaOH: $0.00500 \times \tfrac{2}{1} = 0.0100$ mol
+
+$$
+V = \frac{0.0100\ \text{mol}}{0.150\ \text{mol/L}} = 0.0667\ \text{L} = 66.7\ \text{mL}
+$$
+
+Using $M_1V_1 = M_2V_2$ here gives 33.3 mL, which is wrong. That shortcut is for dilution. It ignores
+the 1 : 2 ratio in the equation.
+
+</Reveal>
+
+<Reveal label="Worked example: mass of a precipitate">
+
+Excess $\ce{Na2SO4}$ solution is added to 40.0 mL of 0.100 M $\ce{BaCl2}$. What mass of $\ce{BaSO4}$
+precipitates?
+
+$$
+\ce{Ba^2+(aq) + SO4^2-(aq) -> BaSO4(s)}
+$$
+
+Moles of $\ce{Ba^2+}$: $0.0400\ \text{L} \times 0.100\ M = 0.00400$ mol, giving 0.00400 mol $\ce{BaSO4}$.
+
+$\mathcal{M}(\ce{BaSO4}) = 137.33 + 32.06 + 4(16.00) = 233.39$ g/mol
+
+$$
+0.00400\ \text{mol} \times 233.39\ \text{g/mol} = 0.934\ \text{g}
+$$
+
+Measuring an unknown amount by weighing a precipitate like this is called **gravimetric analysis**.
+
+</Reveal>
+
+## 2. Limiting reactants in solution (4.6)
+
+When neither solution is in excess, find the limiting reactant from moles, as in Chapter 3. Then the ions
+left over, and the spectators, are spread through the **combined** volume.
+
+<Reveal label="Worked example: silver chloride (hard)">
+
+50.0 mL of 0.100 M $\ce{AgNO3}$ is mixed with 30.0 mL of 0.200 M NaCl.
+
+**(a)** What mass of AgCl forms? **(b)** What are the concentrations of the ions left in solution?
+
+**Moles:** $\ce{Ag+}$: $0.0500 \times 0.100 = 0.00500$ mol. $\ce{Cl-}$: $0.0300 \times 0.200 = 0.00600$ mol.
+
+The ratio is 1 : 1, so **$\ce{Ag+}$ is limiting**, and 0.00500 mol of AgCl forms.
+
+**(a)** $0.00500 \times 143.32 = 0.717$ g AgCl.
+
+**(b)** Total volume $= 50.0 + 30.0 = 80.0$ mL $= 0.0800$ L.
+
+- $\ce{Cl-}$ left: $0.00600 - 0.00500 = 0.00100$ mol, so $[\ce{Cl-}] = 0.00100 / 0.0800 = 0.0125\ M$
+- $\ce{Na+}$ (spectator): $0.00600 / 0.0800 = 0.0750\ M$
+- $\ce{NO3-}$ (spectator): $0.00500 / 0.0800 = 0.0625\ M$
+- $[\ce{Ag+}] \approx 0$: it was all used up.
+
+Check the charge balance: $0.0750 = 0.0125 + 0.0625$. Positive and negative charge match.
+
+</Reveal>
+
+## 3. Titration (4.6)
+
+A **titration** finds the amount of a substance (the **analyte**) by reacting it with a solution of
+known concentration (the **titrant**), added slowly from a buret until the reaction is just complete.
+
+![A buret clamped above an Erlenmeyer flask. The buret holds the titrant, of known concentration such as 0.100 M NaOH; read its volume before and after. The flask holds a measured volume of analyte, of unknown concentration, with a few drops of indicator. Equivalence point: the moles of titrant added are exactly what the balanced equation needs for the analyte. End point: the indicator changes color, pink for phenolphthalein in base.](./titration-setup.svg)
+
+- The **equivalence point** is where the titrant added exactly uses up the analyte, in the ratio of the
+  balanced equation.
+- The **end point** is where you *see* the change, usually an **indicator** changing color. A good
+  indicator makes the end point fall very close to the equivalence point.
+- A solution whose concentration is known precisely is a **standard solution**.
+
+Phenolphthalein is colorless in acid and pink in base. In an acid titrated with NaOH, the first drop of
+extra base turns the whole flask faint pink.
+
+<Reveal label="Worked example: concentration of an acid">
+
+25.00 mL of HCl solution needs 31.20 mL of 0.1050 M NaOH to reach the end point. What is the
+concentration of the HCl?
+
+$$
+\ce{HCl(aq) + NaOH(aq) -> NaCl(aq) + H2O(l)}
+$$
+
+Moles of NaOH: $0.03120\ \text{L} \times 0.1050\ M = 0.003276$ mol
+
+1 : 1 ratio, so 0.003276 mol HCl in 25.00 mL:
+
+$$
+[\ce{HCl}] = \frac{0.003276\ \text{mol}}{0.02500\ \text{L}} = 0.1310\ M
+$$
+
+</Reveal>
+
+<Reveal label="Worked example: molar mass of an unknown acid">
+
+0.2040 g of a solid monoprotic acid is dissolved in water and titrated with 0.0750 M NaOH. The end
+point is reached after 18.30 mL. What is the acid's molar mass?
+
+Moles of NaOH $= 0.01830 \times 0.0750 = 0.001373$ mol. A monoprotic acid reacts 1 : 1, so the sample
+contained 0.001373 mol of acid.
+
+$$
+\mathcal{M} = \frac{0.2040\ \text{g}}{0.001373\ \text{mol}} = 149\ \text{g/mol}
+$$
+
+The answer has three significant figures because 0.0750 M has three.
+
+</Reveal>
+
+Titrations aren't only for acids and bases. A redox titration works the same way. Purple $\ce{MnO4-}$
+turns colorless when it reacts, so a permanganate titration needs no indicator: the end point is the
+first lasting purple tint.
+
+## 4. Titration errors
+
+AP lab questions ask whether a mistake makes the calculated result **too high, too low, or unchanged**.
+Trace each one through the calculation, starting with the volume of titrant.
+
+| Mistake | Effect on the titrant volume | Calculated analyte concentration |
+|---|---|---|
+| Buret rinsed with water, not titrant, so the titrant is diluted | More titrant needed | Too high |
+| Went past the end point (too dark pink) | Volume recorded too large | Too high |
+| Air bubble in the buret tip that comes out during the titration | Reading larger than what was delivered | Too high |
+| Extra water added to the analyte in the flask | No change: same moles of analyte | Unchanged |
+| Some analyte spilled before titrating | Less titrant needed | Too low |
+
+<Callout type="ap-tip">
+Adding water to the **flask** changes nothing, because the titration counts moles of analyte, not its
+concentration in the flask. This is a favorite AP question. Water in the **buret** is different: it
+dilutes the titrant, so each mL carries fewer moles than you think.
+</Callout>

@@ -1,0 +1,1694 @@
+# Practice questions for Chapter 4 (Reactions in Aqueous Solution). Original; not taken from the
+# textbook or College Board materials. Molarity is AP topic 3.7, net ionic equations 4.2, particle
+# diagrams of reactions 4.3, physical and chemical changes 4.4, stoichiometry 4.5, titration 4.6,
+# reaction types 4.7, Brønsted–Lowry acids and bases 4.8, and half-reactions 4.9. Atomic weights are
+# those on the AP periodic table. Solubility beyond "Na+, K+, NH4+, and NO3- compounds are soluble" is
+# given in the prompt, as on the AP exam.
+# calculation: true marks questions that need a numeric calculation.
+
+# ---------------------------------------------------------------------------
+# 4.1 General properties of aqueous solutions
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-weak-electrolyte
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which substance is a **weak** electrolyte when dissolved in water?
+  choices:
+    - { id: a, text: "$\\ce{KBr}$, potassium bromide" }
+    - { id: b, text: "$\\ce{HC2H3O2}$, acetic acid" }
+    - { id: c, text: "$\\ce{C6H12O6}$, glucose" }
+    - { id: d, text: "$\\ce{HNO3}$, nitric acid" }
+  answer: b
+  explanation: |
+    Acetic acid is a weak acid: only a small fraction of its molecules ionize, so its solution conducts weakly.
+    (A) is a soluble ionic compound and (D) a strong acid, so both are strong electrolytes. (C) is a molecular compound that dissolves as neutral molecules: a nonelectrolyte.
+
+- id: apchem-04-count-ions-ammonium-phosphate
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    0.20 mol of ammonium phosphate, $\ce{(NH4)3PO4}$, is dissolved in water. How many moles of **ions** are in the solution?
+  choices:
+    - { id: a, text: "0.40 mol" }
+    - { id: b, text: "0.60 mol" }
+    - { id: c, text: "0.80 mol" }
+    - { id: d, text: "1.6 mol" }
+  answer: c
+  explanation: |
+    $\ce{(NH4)3PO4 -> 3NH4+ + PO4^3-}$: 4 ions per formula unit, so $0.20 \times 4 = 0.80$ mol.
+    (B) counts only the ammonium ions. (A) treats the compound as giving 2 ions. (D) breaks the polyatomic ions apart; $\ce{NH4+}$ and $\ce{PO4^3-}$ stay whole.
+
+- id: apchem-04-best-conductor
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Equal volumes of four 0.10 M solutions are tested with a conductivity meter. Which conducts electricity **best**?
+  choices:
+    - { id: a, text: "$\\ce{AlCl3}$" }
+    - { id: b, text: "$\\ce{CaCl2}$" }
+    - { id: c, text: "$\\ce{NaCl}$" }
+    - { id: d, text: "$\\ce{HF}$" }
+  answer: a
+  explanation: |
+    Conductivity depends on the concentration of ions. $\ce{AlCl3}$ gives 4 ions per formula unit (0.40 M of ions), $\ce{CaCl2}$ gives 3 (0.30 M), and NaCl 2 (0.20 M). HF is a weak acid and forms very few ions.
+
+- id: apchem-04-methanol-nonelectrolyte
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Methanol, $\ce{CH3OH}$, dissolves completely in water, but the solution does not conduct electricity. Which statement best explains this?
+  choices:
+    - { id: a, text: "Methanol releases its OH group as $\\ce{OH-}$ ions, but they are too large to move" }
+    - { id: b, text: "Methanol only conducts electricity when it is a liquid, not when it is dissolved" }
+    - { id: c, text: "Methanol molecules ionize completely but the ions pair up again immediately" }
+    - { id: d, text: "Methanol dissolves as neutral molecules, so the solution contains no free ions" }
+  answer: d
+  explanation: |
+    A solution conducts only if it contains mobile ions. Methanol is a molecular compound that dissolves as whole, neutral molecules, so it is a nonelectrolyte.
+    (A) is wrong: the OH in an alcohol is covalently bonded and isn't released as hydroxide. (B) and (C) describe things that don't happen.
+
+- id: apchem-04-hydration-orientation
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: hydration-picture
+  prompt: |
+    Which description of the water molecules around a dissolved $\ce{K+}$ ion is correct?
+  choices:
+    - { id: a, text: "The H atoms point toward $\\ce{K+}$, because H carries a partial negative charge" }
+    - { id: b, text: "The O atoms point toward $\\ce{K+}$, because O carries a partial negative charge" }
+    - { id: c, text: "The water molecules bond covalently to $\\ce{K+}$ and form a new compound" }
+    - { id: d, text: "The water molecules have no preferred orientation around a positive ion" }
+  answer: b
+  explanation: |
+    Oxygen is more electronegative than hydrogen, so the O end of water is partially negative and is attracted to the cation. Around an anion, the partially positive H ends point inward instead.
+    These are ion–dipole attractions, not covalent bonds, so (C) is wrong.
+
+- id: apchem-04-hydration-anion
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: hydration-picture
+  prompt: |
+    A particle diagram of $\ce{KCl(aq)}$ shows a $\ce{Cl-}$ ion surrounded by six water molecules. Which feature would make the diagram **incorrect**?
+  choices:
+    - { id: a, text: "The water molecules sit close to the $\\ce{Cl-}$ ion instead of far away" }
+    - { id: b, text: "The $\\ce{K+}$ ions are drawn separate from the $\\ce{Cl-}$ ions" }
+    - { id: c, text: "The O atoms of the water molecules are drawn pointing at the $\\ce{Cl-}$ ion" }
+    - { id: d, text: "The diagram includes the same number of $\\ce{K+}$ and $\\ce{Cl-}$ ions" }
+  answer: c
+  explanation: |
+    $\ce{Cl-}$ attracts the partially **positive** H ends of water, so the H atoms should point toward it. O pointing at an anion would be a repulsion.
+    (A), (B), and (D) are all correct features: the ions are hydrated, dissociated, and present in a 1 : 1 ratio.
+
+- id: apchem-04-dissolving-chemical-argument
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement is the best evidence for classifying the dissolving of NaCl in water as a **chemical** process?
+  choices:
+    - { id: a, text: "Solid NaCl is recovered unchanged when the water is evaporated" }
+    - { id: b, text: "The temperature of the water changes only slightly as NaCl dissolves" }
+    - { id: c, text: "Ionic bonds in the crystal break, and ion–dipole attractions to water form" }
+    - { id: d, text: "No gas, precipitate, or color change appears when the NaCl dissolves" }
+  answer: c
+  explanation: |
+    AP topic 4.4 accepts dissolving a salt as either physical or chemical, depending on the argument. The chemical argument is that bonds (here, ionic bonds) are broken and new interactions form.
+    (A) and (D) support calling it physical. (B) says nothing about bonds.
+
+- id: apchem-04-strength-vs-concentration
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A 1.0 M solution of acetic acid, $\ce{HC2H3O2}$, conducts electricity less well than a 0.10 M solution of HCl. Which statement explains this?
+  choices:
+    - { id: a, text: "Only a small fraction of the acetic acid ionizes, so it forms fewer ions" }
+    - { id: b, text: "Acetic acid molecules are larger, so its ions move more slowly in water" }
+    - { id: c, text: "The HCl solution contains more dissolved solute than the acetic acid solution" }
+    - { id: d, text: "Acetic acid is a molecular compound, and HCl is an ionic compound" }
+  answer: a
+  explanation: |
+    HCl ionizes completely, giving 0.10 M $\ce{H+}$ and 0.10 M $\ce{Cl-}$. Acetic acid is weak: even at 1.0 M, only a few percent of the molecules ionize, so the total concentration of ions is lower.
+    (C) is false: 1.0 M is more solute than 0.10 M. (D) is false: both are molecular acids.
+
+- id: apchem-04-weak-electrolyte-picture
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A particle diagram of a solution shows mostly neutral solute molecules and a few ions. Which solute is this diagram most likely showing?
+  choices:
+    - { id: a, text: "$\\ce{NaF}$" }
+    - { id: b, text: "$\\ce{HCl}$" }
+    - { id: c, text: "$\\ce{CH3OH}$" }
+    - { id: d, text: "$\\ce{HF}$" }
+  answer: d
+  explanation: |
+    Mostly molecules plus a few ions is a weak electrolyte. HF is a weak acid.
+    NaF (A) and HCl (B) are strong electrolytes and would show only ions. $\ce{CH3OH}$ (C) is a nonelectrolyte and would show no ions.
+
+- id: apchem-04-dissociation-k2so4
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which equation correctly shows potassium sulfate dissolving in water?
+  choices:
+    - { id: a, text: "$\\ce{K2SO4(s) -> K2^2+(aq) + SO4^2-(aq)}$" }
+    - { id: b, text: "$\\ce{K2SO4(s) -> 2K+(aq) + SO4^2-(aq)}$" }
+    - { id: c, text: "$\\ce{K2SO4(s) -> 2K+(aq) + S^2-(aq) + 2O2(g)}$" }
+    - { id: d, text: "$\\ce{K2SO4(s) -> 2K+(aq) + S^6+(aq) + 4O^2-(aq)}$" }
+  answer: b
+  explanation: |
+    The compound separates into two $\ce{K+}$ ions and one sulfate ion. Polyatomic ions such as $\ce{SO4^2-}$ stay in one piece, so (C) and (D) are wrong, and potassium doesn't form a $\ce{K2^2+}$ ion (A).
+
+# ---------------------------------------------------------------------------
+# 4.2 Precipitation reactions
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-always-soluble
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which of these compounds can you be **sure** is soluble in water, without being told?
+  choices:
+    - { id: a, text: "$\\ce{(NH4)2CO3}$, ammonium carbonate" }
+    - { id: b, text: "$\\ce{BaSO4}$, barium sulfate" }
+    - { id: c, text: "$\\ce{PbI2}$, lead(II) iodide" }
+    - { id: d, text: "$\\ce{CaCO3}$, calcium carbonate" }
+  answer: a
+  explanation: |
+    Every compound containing $\ce{Na+}$, $\ce{K+}$, $\ce{NH4+}$, or $\ce{NO3-}$ is soluble. Ammonium carbonate contains $\ce{NH4+}$.
+    The others contain none of these ions. (In fact all three are insoluble.)
+
+- id: apchem-04-identify-precipitate
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A white precipitate forms when solutions of lead(II) nitrate and sodium chloride are mixed. What is the precipitate?
+  choices:
+    - { id: a, text: "$\\ce{NaNO3}$" }
+    - { id: b, text: "$\\ce{Pb(NO3)2}$" }
+    - { id: c, text: "$\\ce{NaCl}$" }
+    - { id: d, text: "$\\ce{PbCl2}$" }
+  answer: d
+  explanation: |
+    The ions trade partners: $\ce{Pb^2+}$ with $\ce{Cl-}$, and $\ce{Na+}$ with $\ce{NO3-}$. $\ce{NaNO3}$ contains $\ce{Na+}$ and $\ce{NO3-}$, so it is soluble. The precipitate must be $\ce{PbCl2}$.
+    (B) and (C) are the starting compounds, which were dissolved.
+
+- id: apchem-04-spectators-agcl
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Solutions of silver nitrate and potassium chloride are mixed, and AgCl precipitates. Which ions are the spectator ions?
+  choices:
+    - { id: a, text: "$\\ce{K+}$ and $\\ce{NO3-}$" }
+    - { id: b, text: "$\\ce{Ag+}$ and $\\ce{Cl-}$" }
+    - { id: c, text: "$\\ce{Ag+}$ and $\\ce{NO3-}$" }
+    - { id: d, text: "$\\ce{K+}$ and $\\ce{Cl-}$" }
+  answer: a
+  explanation: |
+    $\ce{Ag+}$ and $\ce{Cl-}$ combine into the solid, so they take part in the reaction. $\ce{K+}$ and $\ce{NO3-}$ are dissolved before and after: spectators. The net ionic equation is $\ce{Ag+(aq) + Cl-(aq) -> AgCl(s)}$.
+
+- id: apchem-04-net-ionic-copper-hydroxide
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the net ionic equation for $\ce{CuSO4(aq) + 2NaOH(aq) -> Cu(OH)2(s) + Na2SO4(aq)}$?
+  choices:
+    - { id: a, text: "$\\ce{CuSO4(aq) + 2OH-(aq) -> Cu(OH)2(s) + SO4^2-(aq)}$" }
+    - { id: b, text: "$\\ce{Cu^2+(aq) + 2OH-(aq) -> Cu(OH)2(s)}$" }
+    - { id: c, text: "$\\ce{2Na+(aq) + SO4^2-(aq) -> Na2SO4(aq)}$" }
+    - { id: d, text: "$\\ce{Cu^2+(aq) + OH-(aq) -> CuOH(s)}$" }
+  answer: b
+  explanation: |
+    Split the soluble compounds: $\ce{Cu^2+ + SO4^2- + 2Na+ + 2OH- -> Cu(OH)2(s) + 2Na+ + SO4^2-}$. Cancel $\ce{2Na+}$ and $\ce{SO4^2-}$.
+    (A) leaves $\ce{CuSO4}$ unsplit. (C) shows only spectators. (D) has the wrong formula for the precipitate.
+
+- id: apchem-04-iron-hydroxide-coefficient
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Solutions of iron(III) chloride and sodium hydroxide are mixed, and iron(III) hydroxide precipitates. In the balanced **net ionic** equation, what is the coefficient of $\ce{OH-}$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "2" }
+    - { id: c, text: "6" }
+    - { id: d, text: "3" }
+  answer: d
+  explanation: |
+    $\ce{Fe^3+}$ needs three $\ce{OH-}$ to make neutral $\ce{Fe(OH)3}$: $\ce{Fe^3+(aq) + 3OH-(aq) -> Fe(OH)3(s)}$. Charge: $+3 - 3 = 0$ on each side.
+
+- id: apchem-04-no-precipitate-pair
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Assume that every compound **not** containing $\ce{Na+}$, $\ce{K+}$, $\ce{NH4+}$, or $\ce{NO3-}$ is insoluble. Mixing which pair of solutions produces **no** precipitate?
+  choices:
+    - { id: a, text: "$\\ce{AgNO3}$ and $\\ce{KI}$" }
+    - { id: b, text: "$\\ce{BaCl2}$ and $\\ce{K2SO4}$" }
+    - { id: c, text: "$\\ce{NH4Cl}$ and $\\ce{NaNO3}$" }
+    - { id: d, text: "$\\ce{Pb(NO3)2}$ and $\\ce{Na2S}$" }
+  answer: c
+  explanation: |
+    The possible new products for (C) are $\ce{NH4NO3}$ and NaCl, which both contain an always-soluble ion. Nothing precipitates.
+    The others make AgI (A), $\ce{BaSO4}$ (B), and PbS (D), none of which contains an always-soluble ion.
+
+- id: apchem-04-particle-barium-left
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A particle diagram of a $\ce{BaCl2}$ solution shows 5 $\ce{Ba^2+}$ and 10 $\ce{Cl-}$ ions. It is mixed with a $\ce{Na2SO4}$ solution showing 3 $\ce{SO4^2-}$ and 6 $\ce{Na+}$ ions. $\ce{BaSO4}$ is insoluble. After the reaction, how many $\ce{Ba^2+}$ ions are still dissolved?
+  choices:
+    - { id: a, text: "0" }
+    - { id: b, text: "2" }
+    - { id: c, text: "3" }
+    - { id: d, text: "5" }
+  answer: b
+  explanation: |
+    $\ce{Ba^2+}$ and $\ce{SO4^2-}$ combine 1 : 1. The 3 sulfate ions use 3 of the 5 barium ions, forming 3 $\ce{BaSO4}$ units, so 2 $\ce{Ba^2+}$ remain in solution. Sulfate is the limiting reactant. The 10 $\ce{Cl-}$ and 6 $\ce{Na+}$ are unchanged.
+
+- id: apchem-04-balanced-silver-phosphate
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Silver phosphate is insoluble. Which is the correct net ionic equation for its precipitation?
+  choices:
+    - { id: a, text: "$\\ce{Ag+(aq) + PO4^3-(aq) -> AgPO4(s)}$" }
+    - { id: b, text: "$\\ce{Ag^3+(aq) + PO4^3-(aq) -> AgPO4(s)}$" }
+    - { id: c, text: "$\\ce{3Ag+(aq) + 3PO4^3-(aq) -> Ag3PO4(s)}$" }
+    - { id: d, text: "$\\ce{3Ag+(aq) + PO4^3-(aq) -> Ag3PO4(s)}$" }
+  answer: d
+  explanation: |
+    Silver forms $\ce{Ag+}$, so three are needed for each $\ce{PO4^3-}$: $\ce{Ag3PO4}$. Charge: $3(+1) - 3 = 0$, matching the neutral solid.
+    (A) has the wrong formula and an unbalanced charge. (B) uses an ion silver doesn't form. (C) doesn't balance the phosphate.
+
+- id: apchem-04-complete-ionic-count
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In the complete ionic equation for $\ce{Na2CO3(aq) + CaCl2(aq) -> CaCO3(s) + 2NaCl(aq)}$, how many ions are written on the **reactant** side?
+  choices:
+    - { id: a, text: "4" }
+    - { id: b, text: "6" }
+    - { id: c, text: "5" }
+    - { id: d, text: "8" }
+  answer: b
+  explanation: |
+    $\ce{2Na+ + CO3^2- + Ca^2+ + 2Cl-}$: $2 + 1 + 1 + 2 = 6$ ions.
+    (A) counts each compound as two ions. (D) would come from also splitting the carbonate ion.
+
+- id: apchem-04-what-to-split
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which substance should be written as separate **ions** in a complete ionic equation?
+  choices:
+    - { id: a, text: "$\\ce{AgCl(s)}$" }
+    - { id: b, text: "$\\ce{H2O(l)}$" }
+    - { id: c, text: "$\\ce{KNO3(aq)}$" }
+    - { id: d, text: "$\\ce{HF(aq)}$" }
+  answer: c
+  explanation: |
+    Only strong electrolytes in solution are split. $\ce{KNO3(aq)}$ is a soluble ionic compound.
+    Solids (A) and liquids (B) are written whole, and HF (D) is a weak acid, which stays as molecules.
+
+- id: apchem-04-identify-unknown-cation
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A solution contains one of these cations: $\ce{Ag+}$, $\ce{Ba^2+}$, or $\ce{Na+}$. Adding NaCl solution gives no precipitate. Adding $\ce{Na2SO4}$ solution gives a white precipitate.
+
+    Solubility information: AgCl is insoluble, $\ce{BaCl2}$ is soluble, $\ce{BaSO4}$ is insoluble, and $\ce{Ag2SO4}$ is soluble at these concentrations.
+
+    Which cation is present?
+  choices:
+    - { id: a, text: "$\\ce{Ag+}$, since its sulfate was the precipitate" }
+    - { id: b, text: "$\\ce{Na+}$, since sodium compounds don't precipitate" }
+    - { id: c, text: "$\\ce{Ba^2+}$, since only its sulfate is insoluble" }
+    - { id: d, text: "There isn't enough information to decide" }
+  answer: c
+  explanation: |
+    No precipitate with $\ce{Cl-}$ rules out $\ce{Ag+}$ (AgCl would have formed). A precipitate with $\ce{SO4^2-}$ rules out $\ce{Na+}$, whose compounds are all soluble. $\ce{Ba^2+}$ fits both tests: $\ce{BaCl2}$ dissolves and $\ce{BaSO4}$ precipitates.
+
+- id: apchem-04-particle-pbi2-after
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2"]
+  cedTopics: ["4.3"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A solution containing 6 $\ce{Pb^2+}$ ions (and nitrate ions) is mixed with a solution containing 6 $\ce{I-}$ ions (and potassium ions). $\ce{PbI2}$ is insoluble. Apart from the spectator ions, what should a particle diagram of the mixture show after the reaction?
+  choices:
+    - { id: a, text: "6 $\\ce{PbI2}$ units in the solid, and no lead or iodide ions left dissolved" }
+    - { id: b, text: "3 $\\ce{PbI2}$ units in the solid, and 3 $\\ce{I-}$ ions still dissolved" }
+    - { id: c, text: "6 $\\ce{PbI}$ units in the solid, and no lead or iodide ions left dissolved" }
+    - { id: d, text: "3 $\\ce{PbI2}$ units in the solid, and 3 $\\ce{Pb^2+}$ ions still dissolved" }
+  answer: d
+  explanation: |
+    Each $\ce{PbI2}$ uses one $\ce{Pb^2+}$ and **two** $\ce{I-}$. Six iodide ions make only 3 $\ce{PbI2}$ units, using 3 of the lead ions. Iodide is limiting, and 3 $\ce{Pb^2+}$ are left over.
+    (A) ignores the 1 : 2 ratio. (B) has the leftover ion backward. (C) has the wrong formula.
+
+# ---------------------------------------------------------------------------
+# 4.3 Acids, bases, and neutralization reactions
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-bronsted-base-water
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In the reaction $\ce{HNO2(aq) + H2O(l) <=> H3O+(aq) + NO2^-(aq)}$, which species acts as a Brønsted–Lowry **base**?
+  choices:
+    - { id: a, text: "$\\ce{HNO2}$" }
+    - { id: b, text: "$\\ce{H3O+}$" }
+    - { id: c, text: "$\\ce{H2O}$" }
+    - { id: d, text: "$\\ce{NO2-}$" }
+  answer: c
+  explanation: |
+    A base accepts $\ce{H+}$. Water gains an H to become $\ce{H3O+}$, so water is the base in the forward reaction. $\ce{HNO2}$ is the acid. $\ce{NO2-}$ (D) is the conjugate base of $\ce{HNO2}$, and $\ce{H3O+}$ (B) is the conjugate acid of water.
+
+- id: apchem-04-conjugate-base-hso4
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the conjugate base of the hydrogen sulfate ion, $\ce{HSO4-}$?
+  choices:
+    - { id: a, text: "$\\ce{SO4^2-}$" }
+    - { id: b, text: "$\\ce{H2SO4}$" }
+    - { id: c, text: "$\\ce{SO3^2-}$" }
+    - { id: d, text: "$\\ce{H2SO4-}$" }
+  answer: a
+  explanation: |
+    A conjugate base has one fewer $\ce{H+}$: remove one H and lower the charge by one, giving $\ce{SO4^2-}$.
+    (B) is the conjugate **acid** (one more $\ce{H+}$). (C) loses an O, not an H.
+
+- id: apchem-04-conjugate-pair-ammonium
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which pair is a conjugate acid–base pair in the reaction below?
+
+    $$
+    \ce{NH4+(aq) + CO3^2-(aq) <=> NH3(aq) + HCO3^-(aq)}
+    $$
+  choices:
+    - { id: a, text: "$\\ce{NH4+}$ and $\\ce{CO3^2-}$" }
+    - { id: b, text: "$\\ce{CO3^2-}$ and $\\ce{NH3}$" }
+    - { id: c, text: "$\\ce{HCO3-}$ and $\\ce{NH4+}$" }
+    - { id: d, text: "$\\ce{NH4+}$ and $\\ce{NH3}$" }
+  answer: d
+  explanation: |
+    The members of a conjugate pair differ by exactly one $\ce{H+}$. $\ce{NH4+}$ loses an H to become $\ce{NH3}$. (The other pair is $\ce{CO3^2-}$ and $\ce{HCO3-}$.)
+    (A) and (B) are the two reactants or a base with a base. (C) pairs the two acids.
+
+- id: apchem-04-amphiprotic
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which species can act as **either** a Brønsted–Lowry acid or a Brønsted–Lowry base?
+  choices:
+    - { id: a, text: "$\\ce{HCO3-}$" }
+    - { id: b, text: "$\\ce{ClO4-}$" }
+    - { id: c, text: "$\\ce{NH4+}$" }
+    - { id: d, text: "$\\ce{Cl-}$" }
+  answer: a
+  explanation: |
+    $\ce{HCO3-}$ can give up its H (becoming $\ce{CO3^2-}$) or accept one (becoming $\ce{H2CO3}$), so it is amphiprotic.
+    $\ce{NH4+}$ (C) can only donate. $\ce{ClO4-}$ and $\ce{Cl-}$ have no H to donate.
+
+- id: apchem-04-which-weak-acid
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which of these is a **weak** acid?
+  choices:
+    - { id: a, text: "$\\ce{HCl}$" }
+    - { id: b, text: "$\\ce{HF}$" }
+    - { id: c, text: "$\\ce{HNO3}$" }
+    - { id: d, text: "$\\ce{HClO4}$" }
+  answer: b
+  explanation: |
+    HF is weak even though HCl, HBr, and HI are strong. The other three are on the list of strong acids.
+
+- id: apchem-04-net-ionic-strong-strong
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the net ionic equation for the reaction of hydrochloric acid with potassium hydroxide solution?
+  choices:
+    - { id: a, text: "$\\ce{HCl(aq) + OH-(aq) -> Cl-(aq) + H2O(l)}$" }
+    - { id: b, text: "$\\ce{K+(aq) + Cl-(aq) -> KCl(aq)}$" }
+    - { id: c, text: "$\\ce{HCl(aq) + KOH(aq) -> KCl(aq) + H2O(l)}$" }
+    - { id: d, text: "$\\ce{H+(aq) + OH-(aq) -> H2O(l)}$" }
+  answer: d
+  explanation: |
+    HCl and KOH are a strong acid and a strong base, so both are split into ions. $\ce{K+}$ and $\ce{Cl-}$ are spectators, leaving $\ce{H+ + OH- -> H2O}$.
+    (A) leaves the strong acid unsplit. (B) shows only spectators. (C) is the molecular equation.
+
+- id: apchem-04-net-ionic-acetic-naoh
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the net ionic equation for the reaction of acetic acid, $\ce{HC2H3O2}$, with sodium hydroxide solution?
+  choices:
+    - { id: a, text: "$\\ce{H+(aq) + OH-(aq) -> H2O(l)}$" }
+    - { id: b, text: "$\\ce{HC2H3O2(aq) + OH-(aq) -> C2H3O2^-(aq) + H2O(l)}$" }
+    - { id: c, text: "$\\ce{HC2H3O2(aq) + Na+(aq) -> NaC2H3O2(s) + H+(aq)}$" }
+    - { id: d, text: "$\\ce{C2H3O2^-(aq) + Na+(aq) -> NaC2H3O2(aq)}$" }
+  answer: b
+  explanation: |
+    Acetic acid is weak, so it stays as a molecule; NaOH is split, and $\ce{Na+}$ is the spectator. The hydroxide takes the acid's $\ce{H+}$.
+    (A) is right only for a **strong** acid. (C) and (D) give $\ce{Na+}$ a role it doesn't have; sodium acetate is soluble.
+
+- id: apchem-04-net-ionic-ammonia-nitric
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.2", "4.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the net ionic equation for the reaction of aqueous ammonia with nitric acid?
+  choices:
+    - { id: a, text: "$\\ce{NH3(aq) + H+(aq) -> NH4+(aq)}$" }
+    - { id: b, text: "$\\ce{NH3(aq) + HNO3(aq) -> NH4NO3(s)}$" }
+    - { id: c, text: "$\\ce{NH4+(aq) + OH-(aq) -> NH3(aq) + H2O(l)}$" }
+    - { id: d, text: "$\\ce{H+(aq) + OH-(aq) -> H2O(l)}$" }
+  answer: a
+  explanation: |
+    Nitric acid is strong, so it is written as $\ce{H+}$ and $\ce{NO3-}$; nitrate is the spectator. Ammonia is a weak base and stays as a molecule. It accepts the $\ce{H+}$ to form ammonium.
+    (D) would need $\ce{OH-}$, which ammonia doesn't supply as a reactant. (B) shows ammonium nitrate as a solid, but it is soluble.
+
+- id: apchem-04-carbonate-acid-net-ionic
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Hydrochloric acid is added to a sodium carbonate solution, and bubbles of gas form. What is the net ionic equation?
+  choices:
+    - { id: a, text: "$\\ce{Na2CO3(aq) + 2H+(aq) -> 2Na+(aq) + H2O(l) + CO2(g)}$" }
+    - { id: b, text: "$\\ce{CO3^2-(aq) + H+(aq) -> H2O(l) + CO2(g)}$" }
+    - { id: c, text: "$\\ce{CO3^2-(aq) + 2H+(aq) -> H2O(l) + CO2(g)}$" }
+    - { id: d, text: "$\\ce{2Na+(aq) + 2Cl-(aq) -> 2NaCl(aq)}$" }
+  answer: c
+  explanation: |
+    Both reactants are strong electrolytes; $\ce{Na+}$ and $\ce{Cl-}$ are spectators. Carbonate takes two $\ce{H+}$ to form $\ce{H2CO3}$, which breaks down to $\ce{H2O}$ and $\ce{CO2}$.
+    (B) isn't balanced for H or charge. (A) leaves the dissolved sodium carbonate unsplit.
+
+- id: apchem-04-salt-from-neutralization
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Sulfuric acid is completely neutralized by potassium hydroxide. What salt forms?
+  choices:
+    - { id: a, text: "$\\ce{KSO4}$" }
+    - { id: b, text: "$\\ce{K2S}$" }
+    - { id: c, text: "$\\ce{KHSO4}$" }
+    - { id: d, text: "$\\ce{K2SO4}$" }
+  answer: d
+  explanation: |
+    $\ce{H2SO4 + 2KOH -> K2SO4 + 2H2O}$. The salt is the base's cation ($\ce{K+}$) with the acid's anion ($\ce{SO4^2-}$), so two $\ce{K+}$ per sulfate.
+    (C) would form with only one KOH per acid, which isn't complete neutralization.
+
+- id: apchem-04-weak-acid-picture
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    HA is a weak acid. Which describes a correct particle diagram of HA dissolved in water (water molecules not shown)?
+  choices:
+    - { id: a, text: "Only $\\ce{H3O+}$ and $\\ce{A-}$ ions, in equal numbers, and no HA molecules" }
+    - { id: b, text: "Mostly HA molecules, with a few $\\ce{H3O+}$ and $\\ce{A-}$ ions in equal numbers" }
+    - { id: c, text: "Mostly HA molecules, with a few $\\ce{H3O+}$ ions and no $\\ce{A-}$ ions at all" }
+    - { id: d, text: "Mostly $\\ce{A-}$ ions, with a few HA molecules and twice as many $\\ce{H3O+}$" }
+  answer: b
+  explanation: |
+    A weak acid ionizes only slightly, and each molecule that ionizes makes one $\ce{H3O+}$ and one $\ce{A-}$. So the picture shows mostly HA and a few ions in a 1 : 1 ratio.
+    (A) is a strong acid. (C) and (D) break the 1 : 1 ratio between $\ce{H3O+}$ and $\ce{A-}$.
+
+- id: apchem-04-classify-sulfide-acid
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    How should the reaction $\ce{Na2S(aq) + 2HCl(aq) -> 2NaCl(aq) + H2S(g)}$ be classified?
+  choices:
+    - { id: a, text: "Redox, because a gas is produced from two solutions" }
+    - { id: b, text: "Precipitation, because a new substance leaves the solution" }
+    - { id: c, text: "Acid–base, because $\\ce{H+}$ is transferred from HCl to $\\ce{S^2-}$" }
+    - { id: d, text: "Redox, because sulfur changes from an ion into a molecule" }
+  answer: c
+  explanation: |
+    The net ionic equation is $\ce{S^2-(aq) + 2H+(aq) -> H2S(g)}$: sulfide accepts protons. No oxidation number changes (S stays −2, H stays +1), so it isn't redox, whatever the products look like. A precipitation reaction forms an insoluble **solid**, not a gas.
+
+- id: apchem-04-which-is-h-plus-oh
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For which mixture is the net ionic equation $\ce{H+(aq) + OH-(aq) -> H2O(l)}$?
+  choices:
+    - { id: a, text: "$\\ce{HF(aq)}$ and $\\ce{NaOH(aq)}$" }
+    - { id: b, text: "$\\ce{HCl(aq)}$ and $\\ce{NH3(aq)}$" }
+    - { id: c, text: "$\\ce{HNO3(aq)}$ and $\\ce{Mg(OH)2(s)}$" }
+    - { id: d, text: "$\\ce{HClO4(aq)}$ and $\\ce{Ba(OH)2(aq)}$" }
+  answer: d
+  explanation: |
+    This equation needs a strong acid and a dissolved strong base. $\ce{HClO4}$ and $\ce{Ba(OH)2}$ both ionize completely, and $\ce{ClO4-}$ and $\ce{Ba^2+}$ are spectators.
+    (A) keeps HF as a molecule. (B) keeps $\ce{NH3}$ as a molecule and makes $\ce{NH4+}$. (C) keeps the solid $\ce{Mg(OH)2}$ in the equation.
+
+# ---------------------------------------------------------------------------
+# 4.4 Oxidation–reduction reactions
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-ox-number-sulfurous
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the oxidation number of sulfur in $\ce{H2SO3}$?
+  choices:
+    - { id: a, text: "+4" }
+    - { id: b, text: "+6" }
+    - { id: c, text: "+2" }
+    - { id: d, text: "−2" }
+  answer: a
+  explanation: |
+    $2(+1) + x + 3(-2) = 0$, so $x = +4$. (B) is sulfur in $\ce{H2SO4}$. (D) is sulfur in a sulfide.
+
+- id: apchem-04-ox-number-perchlorate
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the oxidation number of chlorine in the perchlorate ion, $\ce{ClO4-}$?
+  choices:
+    - { id: a, text: "+1" }
+    - { id: b, text: "+3" }
+    - { id: c, text: "+5" }
+    - { id: d, text: "+7" }
+  answer: d
+  explanation: |
+    The oxidation numbers add up to the ion's charge: $x + 4(-2) = -1$, so $x = +7$. Chlorine is positive here because it's bonded to oxygen. (C) is the oxidation number of chlorine in chlorate, $\ce{ClO3-}$.
+
+- id: apchem-04-ox-number-hydride
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What is the oxidation number of hydrogen in calcium hydride, $\ce{CaH2}$?
+  choices:
+    - { id: a, text: "+1" }
+    - { id: b, text: "−1" }
+    - { id: c, text: "0" }
+    - { id: d, text: "+2" }
+  answer: b
+  explanation: |
+    Calcium, a group 2 metal, is +2. The two H atoms must total −2, so each is −1. Hydrogen is −1 when it's bonded to a metal (a hydride) and +1 when bonded to a nonmetal.
+
+- id: apchem-04-oxidized-aluminum
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In the reaction $\ce{2Al(s) + 3Cl2(g) -> 2AlCl3(s)}$, which statement is correct?
+  choices:
+    - { id: a, text: "Al is oxidized, because its oxidation number rises from 0 to +3" }
+    - { id: b, text: "Al is reduced, because its oxidation number rises from 0 to +3" }
+    - { id: c, text: "Cl is oxidized, because its oxidation number falls from 0 to −1" }
+    - { id: d, text: "Nothing is oxidized, because both reactants are elements" }
+  answer: a
+  explanation: |
+    Al goes from 0 to +3: it loses electrons, so it's oxidized. Cl goes from 0 to −1: it gains electrons, so it's reduced.
+    (B) has the right numbers but the wrong term: a rising oxidation number is oxidation. (C) also mixes up the terms.
+
+- id: apchem-04-reduced-iron-oxide
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In a blast furnace, $\ce{Fe2O3(s) + 3CO(g) -> 2Fe(l) + 3CO2(g)}$. Which element is **reduced**, and how does its oxidation number change?
+  choices:
+    - { id: a, text: "Carbon, from +2 to +4" }
+    - { id: b, text: "Oxygen, from −2 to 0" }
+    - { id: c, text: "Iron, from +3 to 0" }
+    - { id: d, text: "Iron, from +2 to 0" }
+  answer: c
+  explanation: |
+    In $\ce{Fe2O3}$, $2x + 3(-2) = 0$ gives Fe = +3. Iron ends as the element (0), so its oxidation number falls: it's reduced. Carbon goes from +2 in CO to +4 in $\ce{CO2}$, so carbon is **oxidized** (A). Oxygen stays −2.
+
+- id: apchem-04-not-redox
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: peroxide-decomposition
+  prompt: |
+    Which reaction is **not** an oxidation–reduction reaction?
+  choices:
+    - { id: a, text: "$\\ce{2Na(s) + Cl2(g) -> 2NaCl(s)}$" }
+    - { id: b, text: "$\\ce{Zn(s) + 2HCl(aq) -> ZnCl2(aq) + H2(g)}$" }
+    - { id: c, text: "$\\ce{2H2O2(l) -> 2H2O(l) + O2(g)}$" }
+    - { id: d, text: "$\\ce{CaCO3(s) -> CaO(s) + CO2(g)}$" }
+  answer: d
+  explanation: |
+    In (D), Ca stays +2, C stays +4, and O stays −2. Nothing changes, so it isn't redox.
+    (A) and (B) each have an element turning into a compound. In (C), O goes from −1 in $\ce{H2O2}$ to −2 in water and to 0 in $\ce{O2}$.
+
+- id: apchem-04-activity-predict
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: activity-series-given
+  prompt: |
+    Part of the activity series, from most to least easily oxidized: Mg > Zn > Fe > Pb > $\ce{H2}$ > Cu > Ag.
+
+    Which reaction will happen?
+  choices:
+    - { id: a, text: "$\\ce{Cu(s) + Zn^2+(aq) -> Cu^2+(aq) + Zn(s)}$" }
+    - { id: b, text: "$\\ce{2Ag(s) + Pb^2+(aq) -> 2Ag+(aq) + Pb(s)}$" }
+    - { id: c, text: "$\\ce{Pb(s) + Cu^2+(aq) -> Pb^2+(aq) + Cu(s)}$" }
+    - { id: d, text: "$\\ce{Fe(s) + Mg^2+(aq) -> Fe^2+(aq) + Mg(s)}$" }
+  answer: c
+  explanation: |
+    A metal is oxidized by the ions of a metal **below** it in the series. Pb is above Cu, so lead metal reduces $\ce{Cu^2+}$.
+    In (A), (B), and (D) the metal is below the ion's metal, so there's no reaction.
+
+- id: apchem-04-activity-acid
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: activity-series-given
+  prompt: |
+    Part of the activity series, from most to least easily oxidized: Mg > Zn > Fe > Pb > $\ce{H2}$ > Cu > Ag.
+
+    Which metal will **not** produce hydrogen gas when placed in hydrochloric acid?
+  choices:
+    - { id: a, text: "Cu" }
+    - { id: b, text: "Zn" }
+    - { id: c, text: "Fe" }
+    - { id: d, text: "Mg" }
+  answer: a
+  explanation: |
+    Only metals above $\ce{H2}$ in the series reduce $\ce{H+}$ to $\ce{H2}$. Copper is below hydrogen, so it doesn't react with HCl.
+
+- id: apchem-04-balance-cr-ag
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    When $\ce{Cr(s) + Ag+(aq) -> Cr^3+(aq) + Ag(s)}$ is balanced, what is the coefficient of $\ce{Ag+}$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "2" }
+    - { id: c, text: "3" }
+    - { id: d, text: "6" }
+  answer: c
+  explanation: |
+    Cr loses 3 electrons ($\ce{Cr -> Cr^3+ + 3e-}$) and each $\ce{Ag+}$ gains 1. Three $\ce{Ag+}$ are needed: $\ce{Cr + 3Ag+ -> Cr^3+ + 3Ag}$. Charge: +3 on each side.
+    With a coefficient of 1 (A), the atoms balance but the charge doesn't.
+
+- id: apchem-04-combine-half-reactions
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: fe-permanganate
+  prompt: |
+    Two half-reactions:
+
+    $$
+    \ce{Fe^2+ -> Fe^3+ + e-}
+    $$
+
+    $$
+    \ce{MnO4- + 8H+ + 5e- -> Mn^2+ + 4H2O}
+    $$
+
+    In the balanced overall equation with the smallest whole-number coefficients, how many $\ce{Fe^2+}$ ions react for each $\ce{MnO4-}$?
+  choices:
+    - { id: a, text: "1" }
+    - { id: b, text: "5" }
+    - { id: c, text: "8" }
+    - { id: d, text: "4" }
+  answer: b
+  explanation: |
+    Each $\ce{MnO4-}$ gains 5 electrons, and each $\ce{Fe^2+}$ loses 1. Multiply the iron half-reaction by 5 so the electrons cancel:
+    $\ce{5Fe^2+ + MnO4- + 8H+ -> 5Fe^3+ + Mn^2+ + 4H2O}$.
+    Charge check: $10 - 1 + 8 = +17$ on the left, $15 + 2 = +17$ on the right.
+
+- id: apchem-04-electrons-transferred
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many electrons are transferred in the balanced reaction $\ce{3Mg(s) + 2Fe^3+(aq) -> 3Mg^2+(aq) + 2Fe(s)}$?
+  choices:
+    - { id: a, text: "2" }
+    - { id: b, text: "3" }
+    - { id: c, text: "5" }
+    - { id: d, text: "6" }
+  answer: d
+  explanation: |
+    Three Mg atoms each lose 2 electrons: $3 \times 2 = 6$. Two $\ce{Fe^3+}$ ions each gain 3: $2 \times 3 = 6$. Electrons lost equal electrons gained.
+
+- id: apchem-04-highest-ox-nitrogen
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In which compound does nitrogen have the **highest** oxidation number?
+  choices:
+    - { id: a, text: "$\\ce{NH3}$" }
+    - { id: b, text: "$\\ce{HNO3}$" }
+    - { id: c, text: "$\\ce{NO2}$" }
+    - { id: d, text: "$\\ce{N2O}$" }
+  answer: b
+  explanation: |
+    $\ce{NH3}$: −3. $\ce{N2O}$: $2x - 2 = 0$, +1. $\ce{NO2}$: +4. $\ce{HNO3}$: $1 + x - 6 = 0$, +5.
+
+- id: apchem-04-peroxide-both
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  group: peroxide-decomposition
+  prompt: |
+    Hydrogen peroxide decomposes: $\ce{2H2O2(aq) -> 2H2O(l) + O2(g)}$. Which statement is correct?
+  choices:
+    - { id: a, text: "It is not a redox reaction, because only one reactant is involved" }
+    - { id: b, text: "Hydrogen is oxidized and oxygen is reduced as the peroxide falls apart" }
+    - { id: c, text: "Oxygen is reduced to $\\ce{O2}$, and no element is oxidized at all" }
+    - { id: d, text: "Oxygen is both oxidized (to $\\ce{O2}$) and reduced (to $\\ce{H2O}$)" }
+  answer: d
+  explanation: |
+    In a peroxide, O is −1. Some oxygen atoms go to 0 in $\ce{O2}$ (oxidized) and others to −2 in $\ce{H2O}$ (reduced). H stays +1, so (B) is wrong. A reaction with one reactant can still be redox (A).
+
+- id: apchem-04-charge-balance-redox
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which equation for aluminum reacting with nickel(II) ions is completely balanced?
+  choices:
+    - { id: a, text: "$\\ce{Al(s) + Ni^2+(aq) -> Al^3+(aq) + Ni(s)}$" }
+    - { id: b, text: "$\\ce{2Al(s) + 3Ni^2+(aq) -> 2Al^3+(aq) + 3Ni(s)}$" }
+    - { id: c, text: "$\\ce{3Al(s) + 2Ni^2+(aq) -> 3Al^3+(aq) + 2Ni(s)}$" }
+    - { id: d, text: "$\\ce{Al(s) + 3Ni^2+(aq) -> Al^3+(aq) + 3Ni(s)}$" }
+  answer: b
+  explanation: |
+    Al loses 3 electrons and $\ce{Ni^2+}$ gains 2, so 2 Al and 3 $\ce{Ni^2+}$ exchange 6 electrons. Charge: $3(+2) = +6$ left and $2(+3) = +6$ right.
+    (A) balances atoms but not charge (+2 vs +3). (C) has charge +4 vs +9, and (D) +6 vs +3.
+
+# ---------------------------------------------------------------------------
+# 4.5 Concentrations of solutions
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-molarity-naoh
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    10.0 g of NaOH is dissolved in enough water to make 500.0 mL of solution. What is the molarity?
+  choices:
+    - { id: a, text: "0.250 M" }
+    - { id: b, text: "0.0200 M" }
+    - { id: c, text: "2.00 M" }
+    - { id: d, text: "0.500 M" }
+  answer: d
+  explanation: |
+    $\mathcal{M}(\ce{NaOH}) = 22.99 + 16.00 + 1.008 = 40.00$ g/mol, so $10.0 / 40.00 = 0.250$ mol. $0.250\ \text{mol} / 0.5000\ \text{L} = 0.500\ M$.
+    (A) is the moles, not the molarity. (B) divides grams by milliliters.
+
+- id: apchem-04-moles-from-volume
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How many moles of solute are in 35.0 mL of 0.150 M $\ce{KNO3}$?
+  choices:
+    - { id: a, text: "5.25 mol" }
+    - { id: b, text: "0.00525 mol" }
+    - { id: c, text: "0.233 mol" }
+    - { id: d, text: "0.0525 mol" }
+  answer: b
+  explanation: |
+    moles = $M \times V = 0.150\ \text{mol/L} \times 0.0350\ \text{L} = 0.00525$ mol.
+    (A) uses 35.0 L instead of 0.0350 L. (C) divides 35.0 by 150.
+
+- id: apchem-04-nitrate-concentration
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the concentration of nitrate ions in 0.25 M $\ce{Fe(NO3)3}$?
+  choices:
+    - { id: a, text: "0.75 M" }
+    - { id: b, text: "0.083 M" }
+    - { id: c, text: "0.25 M" }
+    - { id: d, text: "1.00 M" }
+  answer: a
+  explanation: |
+    Each $\ce{Fe(NO3)3}$ gives three $\ce{NO3-}$: $3 \times 0.25 = 0.75\ M$. (D) is the total concentration of all ions, including $\ce{Fe^3+}$.
+
+- id: apchem-04-mass-copper-sulfate
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What mass of $\ce{CuSO4}$ is needed to prepare 250.0 mL of 0.100 M solution?
+  choices:
+    - { id: a, text: "3.99 g" }
+    - { id: b, text: "0.399 g" }
+    - { id: c, text: "39.9 g" }
+    - { id: d, text: "6.38 g" }
+  answer: a
+  explanation: |
+    moles $= 0.2500\ \text{L} \times 0.100\ M = 0.02500$ mol. $\mathcal{M}(\ce{CuSO4}) = 63.55 + 32.06 + 4(16.00) = 159.61$ g/mol, so $0.02500 \times 159.61 = 3.99$ g.
+    (C) leaves out the 0.100 M and uses 0.2500 mol. (B) is off by a factor of 10. (D) divides the molar mass by 25.0 instead of multiplying.
+
+- id: apchem-04-dilution-concentration
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    25.0 mL of 6.00 M HCl is diluted with water to a total volume of 150.0 mL. What is the new concentration?
+  choices:
+    - { id: a, text: "1.00 M" }
+    - { id: b, text: "1.20 M" }
+    - { id: c, text: "0.167 M" }
+    - { id: d, text: "36.0 M" }
+  answer: a
+  explanation: |
+    $M_2 = M_1V_1 / V_2 = (6.00)(25.0) / 150.0 = 1.00\ M$.
+    (B) divides by 125.0 mL, the volume of water added, instead of the total volume. (D) multiplies instead of dividing.
+
+- id: apchem-04-dilution-water-added
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How much water must be **added** to 50.0 mL of 2.00 M NaCl to make the concentration 0.500 M?
+  choices:
+    - { id: a, text: "200. mL" }
+    - { id: b, text: "150. mL" }
+    - { id: c, text: "100. mL" }
+    - { id: d, text: "12.5 mL" }
+  answer: b
+  explanation: |
+    The final volume is $V_2 = (2.00)(50.0) / 0.500 = 200.$ mL. That includes the 50.0 mL already there, so add $200. - 50.0 = 150.$ mL of water.
+    (A) is the final volume, not the water added.
+
+- id: apchem-04-mixing-potassium
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    100.0 mL of 0.300 M KCl is mixed with 200.0 mL of 0.150 M $\ce{K2SO4}$. No reaction occurs. What is $[\ce{K+}]$ in the mixture?
+  choices:
+    - { id: a, text: "0.150 M" }
+    - { id: b, text: "0.225 M" }
+    - { id: c, text: "0.450 M" }
+    - { id: d, text: "0.300 M" }
+  answer: d
+  explanation: |
+    From KCl: $0.1000 \times 0.300 = 0.0300$ mol $\ce{K+}$. From $\ce{K2SO4}$: $0.2000 \times 0.150 = 0.0300$ mol of salt, which gives $2 \times 0.0300 = 0.0600$ mol $\ce{K+}$. Total: 0.0900 mol in 0.3000 L, so $[\ce{K+}] = 0.300\ M$.
+    (B) averages the two salt concentrations, and (C) adds them. (A) is just the concentration of $\ce{K2SO4}$. Work in moles of $\ce{K+}$.
+
+- id: apchem-04-wrong-way-to-prepare
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    To make 1.00 M NaCl, a student dissolves 58.44 g of NaCl **in** 1.00 L of water instead of adding water **to** a total volume of 1.00 L. How does the actual concentration compare with 1.00 M?
+  choices:
+    - { id: a, text: "Lower, because the volume of the solution is more than 1.00 L" }
+    - { id: b, text: "Higher, because the water has more NaCl in it than intended" }
+    - { id: c, text: "Exactly 1.00 M, because the moles and the water volume are both correct" }
+    - { id: d, text: "Higher, because the dissolved NaCl takes up none of the volume" }
+  answer: a
+  explanation: |
+    Molarity is moles per liter of **solution**. Adding the solid to 1.00 L of water makes a little more than 1.00 L of solution, so 1.00 mol is spread through a larger volume and the concentration is slightly below 1.00 M.
+
+- id: apchem-04-particle-concentration-compare
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Four particle diagrams of the same solute show these numbers of solute particles in these volumes. Which solution is the **most** concentrated?
+  choices:
+    - { id: a, text: "6 particles in 1.0 L" }
+    - { id: b, text: "10 particles in 2.0 L" }
+    - { id: c, text: "4 particles in 0.50 L" }
+    - { id: d, text: "1 particle in 0.25 L" }
+  answer: c
+  explanation: |
+    Concentration is particles per volume: (A) 6 per L, (B) 5 per L, (C) 8 per L, (D) 4 per L. (B) has the most particles, but they're spread through the most volume.
+
+- id: apchem-04-same-sodium
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which statement about 0.20 M NaCl and 0.10 M $\ce{Na2SO4}$ is true?
+  choices:
+    - { id: a, text: "The NaCl solution has twice the sodium ion concentration of the $\\ce{Na2SO4}$ solution" }
+    - { id: b, text: "Both solutions have the same concentration of sodium ions, 0.20 M" }
+    - { id: c, text: "The $\\ce{Na2SO4}$ solution has twice the sodium ion concentration of the NaCl solution" }
+    - { id: d, text: "Both solutions have the same total concentration of ions, 0.40 M" }
+  answer: b
+  explanation: |
+    NaCl: $[\ce{Na+}] = 0.20\ M$. $\ce{Na2SO4}$: $[\ce{Na+}] = 2 \times 0.10 = 0.20\ M$. The totals differ: 0.40 M of ions for NaCl and 0.30 M for $\ce{Na2SO4}$, so (D) is false.
+
+# ---------------------------------------------------------------------------
+# 4.6 Solution stoichiometry and chemical analysis
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-neutralize-hcl-volume
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.5", "4.6"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What volume of 0.100 M NaOH is needed to neutralize 20.0 mL of 0.250 M HCl?
+  choices:
+    - { id: a, text: "8.00 mL" }
+    - { id: b, text: "25.0 mL" }
+    - { id: c, text: "50.0 mL" }
+    - { id: d, text: "100. mL" }
+  answer: c
+  explanation: |
+    Moles HCl $= 0.0200 \times 0.250 = 0.00500$ mol. The ratio is 1 : 1, so 0.00500 mol NaOH is needed: $0.00500 / 0.100 = 0.0500$ L $= 50.0$ mL.
+    (A) puts the concentrations upside down.
+
+- id: apchem-04-neutralize-sulfuric-volume
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.5", "4.6"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What volume of 0.200 M NaOH is needed to completely neutralize 30.0 mL of 0.120 M $\ce{H2SO4}$?
+  choices:
+    - { id: a, text: "18.0 mL" }
+    - { id: b, text: "72.0 mL" }
+    - { id: c, text: "50.0 mL" }
+    - { id: d, text: "36.0 mL" }
+  answer: d
+  explanation: |
+    $\ce{H2SO4 + 2NaOH -> Na2SO4 + 2H2O}$. Moles $\ce{H2SO4} = 0.0300 \times 0.120 = 0.00360$ mol, so NaOH $= 2 \times 0.00360 = 0.00720$ mol. $0.00720 / 0.200 = 0.0360$ L $= 36.0$ mL.
+    (A) ignores the 1 : 2 ratio, as $M_1V_1 = M_2V_2$ would.
+
+- id: apchem-04-titration-barium-hydroxide
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 20.00 mL sample of $\ce{Ba(OH)2}$ solution is titrated with 0.1500 M HCl. The end point is reached after 24.60 mL of acid is added. What is the concentration of the $\ce{Ba(OH)2}$?
+  choices:
+    - { id: a, text: "0.1845 M" }
+    - { id: b, text: "0.09225 M" }
+    - { id: c, text: "0.1220 M" }
+    - { id: d, text: "0.04613 M" }
+  answer: b
+  explanation: |
+    $\ce{Ba(OH)2 + 2HCl -> BaCl2 + 2H2O}$. Moles HCl $= 0.02460 \times 0.1500 = 0.003690$ mol, so $\ce{Ba(OH)2} = 0.003690 / 2 = 0.001845$ mol. $0.001845 / 0.02000 = 0.09225\ M$.
+    (A) ignores the 2 : 1 ratio. (C) inverts the volume ratio.
+
+- id: apchem-04-mass-agcl
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Excess $\ce{AgNO3}$ solution is added to 30.0 mL of 0.150 M NaCl. What mass of AgCl precipitates?
+  choices:
+    - { id: a, text: "0.645 g" }
+    - { id: b, text: "6.45 g" }
+    - { id: c, text: "0.263 g" }
+    - { id: d, text: "0.0645 g" }
+  answer: a
+  explanation: |
+    Moles $\ce{Cl-} = 0.0300 \times 0.150 = 0.00450$ mol, giving 0.00450 mol AgCl. $\mathcal{M}(\ce{AgCl}) = 107.87 + 35.45 = 143.32$ g/mol, so $0.00450 \times 143.32 = 0.645$ g.
+    (C) uses the molar mass of NaCl.
+
+- id: apchem-04-limiting-barium-sulfate
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: bacl2-na2so4-mix
+  prompt: |
+    20.0 mL of 0.300 M $\ce{BaCl2}$ is mixed with 30.0 mL of 0.100 M $\ce{Na2SO4}$. What mass of $\ce{BaSO4}$ (233.39 g/mol) forms?
+  choices:
+    - { id: a, text: "0.700 g" }
+    - { id: b, text: "1.40 g" }
+    - { id: c, text: "1.17 g" }
+    - { id: d, text: "0.467 g" }
+  answer: a
+  explanation: |
+    $\ce{Ba^2+}$: $0.0200 \times 0.300 = 0.00600$ mol. $\ce{SO4^2-}$: $0.0300 \times 0.100 = 0.00300$ mol. They react 1 : 1, so sulfate is limiting and 0.00300 mol $\ce{BaSO4}$ forms: $0.00300 \times 233.39 = 0.700$ g.
+    (B) uses the barium, which is in excess.
+
+- id: apchem-04-leftover-barium
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: bacl2-na2so4-mix
+  prompt: |
+    20.0 mL of 0.300 M $\ce{BaCl2}$ is mixed with 30.0 mL of 0.100 M $\ce{Na2SO4}$, and $\ce{BaSO4}$ precipitates. What is the concentration of $\ce{Ba^2+}$ left in the solution?
+  choices:
+    - { id: a, text: "0.150 M" }
+    - { id: b, text: "0.120 M" }
+    - { id: c, text: "0.0600 M" }
+    - { id: d, text: "0.200 M" }
+  answer: c
+  explanation: |
+    $\ce{Ba^2+}$ starts at 0.00600 mol, and 0.00300 mol reacts with all the sulfate, leaving 0.00300 mol. The total volume is 50.0 mL, so $[\ce{Ba^2+}] = 0.00300 / 0.0500 = 0.0600\ M$.
+    (A) divides by 20.0 mL, the original volume of the barium solution. (B) ignores the reaction: $0.00600 / 0.0500 = 0.120\ M$.
+
+- id: apchem-04-equivalence-point
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a titration, what is the **equivalence point**?
+  choices:
+    - { id: a, text: "The point where the indicator first changes color in the flask" }
+    - { id: b, text: "The point where equal volumes of titrant and analyte have been mixed" }
+    - { id: c, text: "The point where the titrant added exactly reacts with all of the analyte" }
+    - { id: d, text: "The point where the concentrations of titrant and analyte are equal" }
+  answer: c
+  explanation: |
+    At the equivalence point, the moles of titrant added are exactly what the balanced equation needs for the analyte. (A) is the **end point**, which a good indicator puts close to the equivalence point. The volumes (B) and concentrations (D) don't have to be equal.
+
+- id: apchem-04-buret-water-error
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A student rinses the buret with distilled water but not with the NaOH titrant, then titrates an acid of unknown concentration. How does this affect the calculated concentration of the acid?
+  choices:
+    - { id: a, text: "Too high, because the diluted NaOH requires a larger volume to be added" }
+    - { id: b, text: "Too low, because the diluted NaOH contains fewer moles of hydroxide" }
+    - { id: c, text: "Unchanged, because water takes no part in the neutralization reaction" }
+    - { id: d, text: "Too low, because a smaller volume of NaOH reaches the end point" }
+  answer: a
+  explanation: |
+    Leftover water dilutes the titrant, so more mL are needed to deliver the moles the acid requires. The calculation still uses the labeled concentration, so it overstates the moles of NaOH, and of acid, giving a concentration that is too high.
+
+- id: apchem-04-water-in-flask
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: water-in-titration-flask
+  prompt: |
+    Before titrating 25.00 mL of an acid, a student adds 20 mL of distilled water to the flask to make the color change easier to see. How does this affect the calculated concentration of the original acid?
+  choices:
+    - { id: a, text: "Too low, because the acid in the flask has been diluted by the water" }
+    - { id: b, text: "Too high, because more titrant is needed to reach the end point" }
+    - { id: c, text: "Too low, because less titrant is needed to reach the end point" }
+    - { id: d, text: "Unchanged, because the moles of acid in the flask are the same" }
+  answer: d
+  explanation: |
+    The titration measures moles of acid, and adding water doesn't change the moles in the flask. The same volume of titrant is needed, and the calculation still divides by the original 25.00 mL, so the result is unchanged.
+
+- id: apchem-04-molar-mass-diprotic
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    0.300 g of a solid **diprotic** acid, $\ce{H2A}$, needs 25.0 mL of 0.200 M NaOH to react completely. What is the molar mass of the acid?
+  choices:
+    - { id: a, text: "60.0 g/mol" }
+    - { id: b, text: "0.120 g/mol" }
+    - { id: c, text: "30.0 g/mol" }
+    - { id: d, text: "120. g/mol" }
+  answer: d
+  explanation: |
+    Moles NaOH $= 0.0250 \times 0.200 = 0.00500$ mol. A diprotic acid uses 2 NaOH per molecule ($\ce{H2A + 2NaOH -> Na2A + 2H2O}$), so moles of acid $= 0.00250$. $0.300 / 0.00250 = 120.$ g/mol.
+    (A) treats the acid as monoprotic. (C) multiplies the moles by 2 instead of dividing. (B) leaves the volume in milliliters.
+
+- id: apchem-04-indicator-choice
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why does a student titrating an acid with NaOH add an indicator to the flask?
+  choices:
+    - { id: a, text: "It speeds up the reaction between the acid and the hydroxide ions" }
+    - { id: b, text: "Its color change signals that the equivalence point has been reached" }
+    - { id: c, text: "It neutralizes any acid that the NaOH titrant fails to react with" }
+    - { id: d, text: "It keeps the analyte from being diluted by the added titrant" }
+  answer: b
+  explanation: |
+    The neutralization itself has no visible sign. An indicator changes color at the end point, which is chosen to fall very close to the equivalence point. It isn't a catalyst (A) and is present in amounts far too small to react with the analyte (C).
+
+- id: apchem-04-ion-ranking-pbi2
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.3", "4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    20.0 mL of 0.100 M $\ce{Pb(NO3)2}$ is mixed with 30.0 mL of 0.100 M KI, and $\ce{PbI2}$ precipitates:
+
+    $$
+    \ce{Pb^2+(aq) + 2I-(aq) -> PbI2(s)}
+    $$
+
+    Which ranks the ions left in solution from highest to lowest concentration?
+  choices:
+    - { id: a, text: "$\\ce{NO3-} > \\ce{K+} > \\ce{Pb^2+} > \\ce{I-}$" }
+    - { id: b, text: "$\\ce{NO3-} > \\ce{K+} > \\ce{I-} > \\ce{Pb^2+}$" }
+    - { id: c, text: "$\\ce{K+} > \\ce{NO3-} > \\ce{Pb^2+} > \\ce{I-}$" }
+    - { id: d, text: "$\\ce{NO3-} > \\ce{K+} = \\ce{I-} > \\ce{Pb^2+}$" }
+  answer: a
+  explanation: |
+    $\ce{Pb^2+}$: $0.0200 \times 0.100 = 0.00200$ mol. $\ce{I-}$: $0.0300 \times 0.100 = 0.00300$ mol. Using all the $\ce{Pb^2+}$ would take 0.00400 mol $\ce{I-}$, so **$\ce{I-}$ is limiting**. It reacts with 0.00150 mol $\ce{Pb^2+}$, leaving 0.00050 mol. In 0.0500 L: $[\ce{NO3-}] = 0.00400 / 0.0500 = 0.0800\ M$, $[\ce{K+}] = 0.0600\ M$, $[\ce{Pb^2+}] = 0.0100\ M$, and $[\ce{I-}] \approx 0$. Charge check: $0.0600 + 2(0.0100) = 0.0800$.
+    (B) uses a 1 : 1 ratio, which makes $\ce{Pb^2+}$ limiting. (C) counts one nitrate per $\ce{Pb(NO3)2}$. (D) ignores the precipitation.
+
+- id: apchem-04-permanganate-titration
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6", "4.9"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: fe-permanganate
+  prompt: |
+    A 50.0 mL sample containing $\ce{Fe^2+}$ is titrated with 0.0200 M $\ce{KMnO4}$. The first lasting purple tint appears after 25.0 mL.
+
+    $$
+    \ce{5Fe^2+(aq) + MnO4-(aq) + 8H+(aq) -> 5Fe^3+(aq) + Mn^2+(aq) + 4H2O(l)}
+    $$
+
+    What was the concentration of $\ce{Fe^2+}$ in the sample?
+  choices:
+    - { id: a, text: "0.0100 M" }
+    - { id: b, text: "0.00200 M" }
+    - { id: c, text: "0.0500 M" }
+    - { id: d, text: "0.0333 M" }
+  answer: c
+  explanation: |
+    Moles $\ce{MnO4-} = 0.0250 \times 0.0200 = 5.00 \times 10^{-4}$ mol. Each $\ce{MnO4-}$ reacts with 5 $\ce{Fe^2+}$: $2.50 \times 10^{-3}$ mol. Divide by the sample volume: $2.50 \times 10^{-3} / 0.0500 = 0.0500\ M$.
+    (A) leaves out the 5 : 1 ratio. (B) divides by 5 instead of multiplying. (D) divides by the total volume after mixing, 75.0 mL.
+
+- id: apchem-04-back-titration-antacid
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{Mg(OH)2}$ doesn't dissolve, so it can't be titrated directly. Instead, an antacid tablet is dissolved in 50.0 mL of 0.200 M HCl, which is more acid than it needs. The **leftover** HCl is then titrated with 12.0 mL of 0.100 M NaOH. What mass of $\ce{Mg(OH)2}$ (58.33 g/mol) was in the tablet?
+
+    $$
+    \ce{Mg(OH)2(s) + 2HCl(aq) -> MgCl2(aq) + 2H2O(l)}
+    $$
+  choices:
+    - { id: a, text: "0.513 g" }
+    - { id: b, text: "0.257 g" }
+    - { id: c, text: "0.292 g" }
+    - { id: d, text: "0.0350 g" }
+  answer: b
+  explanation: |
+    HCl added: $0.0500 \times 0.200 = 0.0100$ mol. HCl left over (equal to the NaOH): $0.0120 \times 0.100 = 0.00120$ mol. HCl that reacted with the tablet: $0.0100 - 0.00120 = 0.00880$ mol. $\ce{Mg(OH)2}$: $0.00880 / 2 = 0.00440$ mol, and $0.00440 \times 58.33 = 0.257$ g.
+    (A) skips the 1 : 2 ratio. (C) doesn't subtract the leftover acid. (D) uses only the leftover acid.
+
+# ---------------------------------------------------------------------------
+# Free response
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-silver-chromate-frq
+  type: frq
+  subject: apchem
+  chapter: 4
+  sections: ["4.2", "4.6"]
+  cedTopics: ["4.2", "4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A student mixes 50.0 mL of 0.200 M $\ce{AgNO3}$ with 50.0 mL of 0.150 M $\ce{K2CrO4}$. A red precipitate of silver chromate, $\ce{Ag2CrO4}$ (331.74 g/mol), forms.
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the balanced net ionic equation for the reaction.
+      scoring:
+        - "$\\ce{2Ag+(aq) + CrO4^2-(aq) -> Ag2CrO4(s)}$, with states and the 2 in front of $\\ce{Ag+}$."
+    - label: b
+      points: 1
+      prompt: Identify the spectator ions.
+      scoring:
+        - "$\\ce{K+}$ and $\\ce{NO3-}$."
+    - label: c
+      points: 1
+      prompt: Identify the limiting reactant. Justify your answer with a calculation.
+      scoring:
+        - "$\\ce{Ag+}$ = 0.0100 mol and $\\ce{CrO4^2-}$ = 0.00750 mol; 0.0100 mol $\\ce{Ag+}$ needs only 0.00500 mol $\\ce{CrO4^2-}$, so $\\ce{Ag+}$ ($\\ce{AgNO3}$) is limiting."
+    - label: d
+      points: 1
+      prompt: Calculate the mass of $\ce{Ag2CrO4}$ that forms.
+      scoring:
+        - "0.00500 mol × 331.74 g/mol = 1.66 g."
+    - label: e
+      points: 1
+      prompt: Calculate the concentration of $\ce{CrO4^2-}$ remaining in the solution after the reaction.
+      scoring:
+        - "0.00750 − 0.00500 = 0.00250 mol in 0.1000 L = 0.0250 M."
+    - label: f
+      points: 1
+      prompt: The student weighs the precipitate before it is completely dry. Will the calculated percent yield be too high, too low, or unchanged? Explain.
+      scoring:
+        - "Too high: the leftover water adds mass, so the measured (actual) yield is larger than the true mass of $\\ce{Ag2CrO4}$."
+  explanation: |
+    **(a)** Silver chromate forms from two $\ce{Ag+}$ for each $\ce{CrO4^2-}$: $\ce{2Ag+(aq) + CrO4^2-(aq) -> Ag2CrO4(s)}$.
+
+    **(b)** $\ce{K+}$ and $\ce{NO3-}$ stay dissolved and unchanged.
+
+    **(c)** $\ce{Ag+}$: $0.0500 \times 0.200 = 0.0100$ mol. $\ce{CrO4^2-}$: $0.0500 \times 0.150 = 0.00750$ mol. All the silver would need $0.0100 / 2 = 0.00500$ mol of chromate, and 0.00750 mol is available, so **$\ce{Ag+}$ is limiting**. (Chromate would need 0.0150 mol $\ce{Ag+}$, more than is present.)
+
+    **(d)** $0.0100\ \text{mol Ag}^+ \times \tfrac{1\ \text{mol Ag}_2\text{CrO}_4}{2\ \text{mol Ag}^+} = 0.00500$ mol, and $0.00500 \times 331.74 = 1.66$ g.
+
+    **(e)** $0.00750 - 0.00500 = 0.00250$ mol of chromate left in $50.0 + 50.0 = 100.0$ mL: $0.00250 / 0.1000 = 0.0250\ M$.
+
+    **(f)** Too high. The water adds to the measured mass of product.
+
+- id: apchem-04-vinegar-titration-frq
+  type: frq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3", "4.6"]
+  cedTopics: ["4.2", "4.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: water-in-titration-flask
+  prompt: |
+    A student standardizes a NaOH solution, then uses it to find the concentration of acetic acid, $\ce{HC2H3O2}$, in vinegar.
+
+    **Standardizing.** 0.5105 g of potassium hydrogen phthalate, $\ce{KHC8H4O4}$ (KHP, 204.22 g/mol, a monoprotic acid), is dissolved in water and titrated with the NaOH. The end point is reached after 24.85 mL.
+
+    **Vinegar.** A 5.00 mL sample of vinegar is titrated with the same NaOH. The end point is reached after 41.40 mL.
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the net ionic equation for the reaction of acetic acid with sodium hydroxide.
+      scoring:
+        - "$\\ce{HC2H3O2(aq) + OH-(aq) -> C2H3O2^-(aq) + H2O(l)}$, with acetic acid written as a molecule."
+    - label: b
+      points: 1
+      prompt: Calculate the molarity of the NaOH solution.
+      scoring:
+        - "0.5105 / 204.22 = 0.002500 mol KHP = mol NaOH; 0.002500 / 0.02485 L = 0.1006 M."
+    - label: c
+      points: 1
+      prompt: Calculate the molarity of acetic acid in the vinegar.
+      scoring:
+        - "0.1006 × 0.04140 = 0.004165 mol; 0.004165 / 0.00500 L = 0.833 M."
+    - label: d
+      points: 1
+      prompt: The student overshoots the end point in the vinegar titration, so the solution turns dark pink. Will the calculated molarity of acetic acid be too high, too low, or unchanged? Explain.
+      scoring:
+        - "Too high: the recorded volume of NaOH is larger than needed, so the calculated moles of acetic acid are too large."
+    - label: e
+      points: 1
+      prompt: Before titrating, the student adds 25 mL of distilled water to the vinegar in the flask. Will the calculated molarity of acetic acid be too high, too low, or unchanged? Explain.
+      scoring:
+        - "Unchanged: the moles of acetic acid in the flask don't change, so the same volume of NaOH is needed, and the calculation still uses the 5.00 mL sample volume."
+  explanation: |
+    **(a)** Acetic acid is weak, so it stays whole; $\ce{Na+}$ is a spectator.
+
+    **(b)** $0.5105 / 204.22 = 0.002500$ mol KHP. KHP is monoprotic, so it reacts 1 : 1 with NaOH: 0.002500 mol NaOH in 0.02485 L, which is $0.1006\ M$.
+
+    **(c)** $0.1006 \times 0.04140 = 0.004165$ mol NaOH, which equals the moles of acetic acid (1 : 1). $0.004165 / 0.00500 = 0.833\ M$.
+
+    **(d)** Too high. More NaOH volume is recorded than the acid actually needed.
+
+    **(e)** Unchanged. A titration counts moles of analyte. Water changes the concentration in the flask but not the moles of acid.
+
+- id: apchem-04-zinc-silver-frq
+  type: frq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.7", "4.9"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A piece of zinc metal is placed in a solution of silver nitrate. Over time, gray-white silver crystals grow on the zinc, and the zinc slowly dissolves.
+  parts:
+    - label: a
+      points: 1
+      prompt: Is this an acid–base, precipitation, or oxidation–reduction reaction? Justify your answer.
+      scoring:
+        - "Oxidation–reduction: zinc's oxidation number changes from 0 to +2 and silver's from +1 to 0 (electrons are transferred)."
+    - label: b
+      points: 1
+      prompt: Write the oxidation half-reaction and the reduction half-reaction.
+      scoring:
+        - "Oxidation: $\\ce{Zn -> Zn^2+ + 2e-}$. Reduction: $\\ce{Ag+ + e- -> Ag}$. Both needed for the point."
+    - label: c
+      points: 1
+      prompt: Write the balanced net ionic equation for the overall reaction.
+      scoring:
+        - "$\\ce{Zn(s) + 2Ag+(aq) -> Zn^2+(aq) + 2Ag(s)}$, balanced for charge."
+    - label: d
+      points: 1
+      prompt: Calculate the mass of silver produced when 1.00 g of zinc reacts completely with excess silver nitrate.
+      scoring:
+        - "1.00 / 65.38 = 0.01530 mol Zn; × 2 = 0.03059 mol Ag; × 107.87 = 3.30 g."
+    - label: e
+      points: 1
+      prompt: A student places a silver wire in a solution of zinc nitrate. Predict whether a reaction occurs, and justify your answer using the observations above.
+      scoring:
+        - "No reaction: zinc is oxidized by $\\ce{Ag+}$, so zinc gives up electrons more easily than silver; silver metal therefore can't reduce $\\ce{Zn^2+}$ (the reverse reaction)."
+  explanation: |
+    **(a)** Zn goes from 0 to +2 and Ag from +1 to 0, so electrons move from zinc to silver ions. The nitrate ions are spectators.
+
+    **(b)** $\ce{Zn(s) -> Zn^2+(aq) + 2e-}$ and $\ce{Ag+(aq) + e- -> Ag(s)}$.
+
+    **(c)** Multiply the silver half-reaction by 2 so 2 electrons cancel: $\ce{Zn(s) + 2Ag+(aq) -> Zn^2+(aq) + 2Ag(s)}$. Charge: +2 on each side.
+
+    **(d)** $1.00 / 65.38 = 0.01530$ mol Zn. Two Ag form per Zn: $0.03059$ mol Ag, and $0.03059 \times 107.87 = 3.30$ g.
+
+    **(e)** No reaction. The observations show zinc is more easily oxidized than silver. The reverse reaction, Ag reducing $\ce{Zn^2+}$, would need silver to give up electrons more easily than zinc.

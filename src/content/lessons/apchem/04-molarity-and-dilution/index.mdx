@@ -1,0 +1,169 @@
+---
+title: Molarity and Dilution
+subject: apchem
+chapter: 4
+sections: ["4.5"]
+cedTopics: ["3.7"]
+order: 5
+authors: ["Claude"]
+summary: Molarity, the concentrations of the ions in a solution, converting between molarity, moles, and volume, making a solution, and diluting one.
+resources:
+  - kind: video
+    title: Solutions and Mixtures - AP Chemistry Unit 3, Topic 7
+    url: https://www.youtube.com/watch?v=aob4zGMCVIM
+    by: Jeremy Krug
+    minutes: 16
+    why: Several molarity problems and the dilution equation, at AP level.
+  - kind: simulation
+    title: Molarity
+    url: https://phet.colorado.edu/en/simulations/molarity
+    by: PhET Interactive Simulations
+    why: Add solute or change the volume and see the molarity change. Try predicting the new value before you move a slider.
+  - kind: practice
+    title: Solutions and mixtures
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:intermolecular-forces-and-properties/x2eef969c74e0d802:solutions-and-mixtures/e/solutions-and-mixtures
+    by: Khan Academy
+    why: AP practice on topic 3.7, molarity and particles in solution.
+---
+
+## 1. Molarity (4.5)
+
+**Molarity** (M) is the moles of solute per liter of **solution**:
+
+$$
+M = \frac{\text{moles of solute}}{\text{liters of solution}}
+$$
+
+This is on the AP equation sheet. A "0.50 M" solution, read "0.50 molar," has 0.50 mol of solute in
+every liter of solution.
+
+<Reveal label="Worked example: molarity from a mass">
+
+5.85 g of NaCl is dissolved in enough water to make 250.0 mL of solution. What is the molarity?
+
+$$
+5.85\ \text{g} \times \frac{1\ \text{mol}}{58.44\ \text{g}} = 0.1001\ \text{mol NaCl}
+$$
+
+$$
+M = \frac{0.1001\ \text{mol}}{0.2500\ \text{L}} = 0.400\ M
+$$
+
+Convert mL to L first. Dividing by 250.0 instead of 0.2500 gives a number 1000 times too small.
+
+</Reveal>
+
+## 2. Concentrations of ions (4.5)
+
+When an ionic compound dissolves, each ion has its own concentration, set by the formula:
+
+![Two boxes of the same volume. 0.10 M NaCl has four Na⁺ and four Cl⁻ ions: [Na⁺] = 0.10 M and [Cl⁻] = 0.10 M. 0.10 M CaCl₂ has four Ca²⁺ and eight Cl⁻ ions: [Ca²⁺] = 0.10 M and [Cl⁻] = 0.20 M.](./ion-concentrations.svg)
+
+Square brackets mean "molar concentration of": $[\ce{Cl-}] = 0.20\ M$.
+
+<Reveal label="Worked example: ions in aluminum sulfate">
+
+What are $[\ce{Al^3+}]$ and $[\ce{SO4^2-}]$ in 0.30 M $\ce{Al2(SO4)3}$?
+
+$\ce{Al2(SO4)3 -> 2Al^3+ + 3SO4^2-}$, so
+
+- $[\ce{Al^3+}] = 2 \times 0.30 = 0.60\ M$
+- $[\ce{SO4^2-}] = 3 \times 0.30 = 0.90\ M$
+
+</Reveal>
+
+## 3. Moles, volume, and molarity (4.5)
+
+Rearranging the definition gives the two forms you use most:
+
+$$
+\text{moles} = M \times V \qquad\qquad V = \frac{\text{moles}}{M}
+$$
+
+with $V$ in liters. Molarity works like a conversion factor between volume and moles:
+0.200 M means $\frac{0.200\ \text{mol}}{1\ \text{L}}$.
+
+<Reveal label="Worked example: mass needed to make a solution">
+
+What mass of $\ce{KMnO4}$ is needed to make 500.0 mL of 0.0200 M solution?
+
+$$
+0.5000\ \text{L} \times \frac{0.0200\ \text{mol}}{1\ \text{L}} = 0.01000\ \text{mol KMnO}_4
+$$
+
+$\mathcal{M}(\ce{KMnO4}) = 39.10 + 54.94 + 4(16.00) = 158.04$ g/mol
+
+$$
+0.01000\ \text{mol} \times 158.04\ \text{g/mol} = 1.58\ \text{g}
+$$
+
+</Reveal>
+
+### Making the solution
+
+1. Weigh the solute and transfer it to a **volumetric flask** of the right size.
+2. Add some water and swirl until it dissolves.
+3. Add water up to the line on the neck, then cap and invert to mix.
+
+<Callout type="warning">
+Molarity uses the volume of the **solution**, not of the water added. Dissolving 1.58 g of $\ce{KMnO4}$
+**in** 500.0 mL of water gives a little more than 500.0 mL of solution, so the concentration would be a
+little below 0.0200 M. Fill the flask **to** the mark instead.
+</Callout>
+
+## 4. Dilution (4.5)
+
+Adding water to a solution lowers its concentration, but the **moles of solute don't change**:
+
+![A small beaker of 50.0 mL of 1.00 M solution containing 0.0500 mol of solute is diluted with water to 200.0 mL. The large beaker has the same twelve solute particles spread through four times the volume: 0.250 M, still 0.0500 mol of solute. Beside it: M₁V₁ = M₂V₂.](./dilution.svg)
+
+Moles before equal moles after, so
+
+$$
+M_1 V_1 = M_2 V_2
+$$
+
+This one isn't on the equation sheet, but it follows from moles = $M \times V$. Both volumes can stay in
+mL, as long as they're in the same unit.
+
+<Reveal label="Worked example: diluting a stock solution">
+
+How much 12.0 M HCl is needed to make 500. mL of 0.750 M HCl?
+
+$$
+V_1 = \frac{M_2 V_2}{M_1} = \frac{(0.750\ M)(500.\ \text{mL})}{12.0\ M} = 31.3\ \text{mL}
+$$
+
+Measure 31.3 mL of the concentrated acid and dilute it with water to a total of 500. mL. (Add acid to
+water, not water to acid: diluting a concentrated acid releases a lot of heat.)
+
+</Reveal>
+
+## 5. Mixing two solutions
+
+When two solutions are mixed and **don't react**, each solute is diluted into the combined volume. Work
+in moles:
+
+<Reveal label="Worked example: chloride from two sources">
+
+50.0 mL of 0.200 M NaCl is mixed with 50.0 mL of 0.100 M $\ce{CaCl2}$. What is $[\ce{Cl-}]$ in the mixture?
+
+- From NaCl: $0.0500\ \text{L} \times 0.200\ M = 0.0100$ mol $\ce{Cl-}$
+- From $\ce{CaCl2}$: $0.0500\ \text{L} \times 0.100\ M = 0.00500$ mol $\ce{CaCl2}$, which gives $2 \times 0.00500 = 0.0100$ mol $\ce{Cl-}$
+- Total: 0.0200 mol in $0.1000$ L
+
+$$
+[\ce{Cl-}] = \frac{0.0200\ \text{mol}}{0.1000\ \text{L}} = 0.200\ M
+$$
+
+Averaging the two solutions' chloride concentrations happens to give the same answer here only because the
+volumes are equal. Working in moles always works.
+
+</Reveal>
+
+<Callout type="ap-tip">
+AP questions often show particle diagrams of solutions and ask which is most concentrated. Count the
+solute particles **per unit volume**: a box with 6 particles in 1 L is more concentrated than a box with 8
+particles in 2 L. Also check the formula: a box of $\ce{CaCl2}$ should show twice as many $\ce{Cl-}$ as
+$\ce{Ca^2+}$.
+</Callout>

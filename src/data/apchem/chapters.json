@@ -167,8 +167,21 @@
     "number": 10,
     "title": "Gases",
     "cedTopics": ["3.4", "3.5", "3.6"],
-    "notOnAP": [],
-    "sections": []
+    "notOnAP": [
+      "Manometer readings",
+      "Graham’s law and root-mean-square speed calculations (that lighter gases effuse and diffuse faster is on the exam, topic 3.5)",
+      "The van der Waals equation (the reasons real gases deviate from ideal behavior are on the exam, topic 3.6)"
+    ],
+    "sections": [
+      { "id": "10.1", "title": "Characteristics of Gases" },
+      { "id": "10.2", "title": "Pressure" },
+      { "id": "10.3", "title": "The Gas Laws" },
+      { "id": "10.4", "title": "The Ideal Gas Equation" },
+      { "id": "10.5", "title": "Gas Mixtures and Partial Pressures" },
+      { "id": "10.6", "title": "The Kinetic-Molecular Theory of Gases" },
+      { "id": "10.7", "title": "Molecular Effusion and Diffusion" },
+      { "id": "10.8", "title": "Real Gases: Deviations from Ideal Behavior" }
+    ]
   },
   {
     "number": 11,

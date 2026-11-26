@@ -1,0 +1,1890 @@
+# Practice questions for Chapter 10 (Gases). Original; not taken from the textbook or College Board
+# materials. The ideal gas law, partial pressures, and gas-law graphs are AP topic 3.4, kinetic-molecular
+# theory and Maxwell–Boltzmann distributions 3.5, and deviations from ideal behavior 3.6. Gas
+# stoichiometry also gets 4.5. Manometers, Graham's law calculations, root-mean-square speed, and the van
+# der Waals equation are class only (not in the CED), so those questions have cedTopics: [].
+# 1 atm = 760 torr and R are on the equation sheet; prompts give 1 atm = 101.325 kPa and vapor pressures
+# of water when they're needed. calculation: true marks questions that need a numeric calculation.
+
+# ---------------------------------------------------------------------------
+# 10.1–10.2 Characteristics of gases and pressure
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-gas-compressible
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.1"]
+  cedTopics: ["3.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Why can a gas be compressed into a much smaller volume, while a liquid can hardly be compressed at all?
+  choices:
+    - { id: a, text: "Gas particles are much smaller than the particles of the same substance as a liquid" }
+    - { id: b, text: "Gas particles are far apart, so most of the volume of a gas is empty space" }
+    - { id: c, text: "Gas particles shrink when they are pushed closer together by a higher pressure" }
+    - { id: d, text: "Gas particles attract each other more strongly than liquid particles do" }
+  answer: b
+  explanation: |
+    In a gas the particles are far apart compared with their own size, so pushing them closer just removes empty space. In a liquid the particles already touch.
+    The particles are the same size in both states (A), and they don't shrink (C). Gas particles attract each other far less than liquid particles do (D); that's why they stay apart.
+
+- id: apchem-10-pressure-collisions
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: ["3.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    At the particle level, what causes the pressure that a gas exerts on the walls of its container?
+  choices:
+    - { id: a, text: "The weight of the gas particles resting on the bottom of the container" }
+    - { id: b, text: "Attractions between the gas particles and the atoms that make up the walls" }
+    - { id: c, text: "Collisions of the moving gas particles with the walls of the container" }
+    - { id: d, text: "Repulsions between the gas particles that push them apart and outward" }
+  answer: c
+  explanation: |
+    Gas particles move constantly and randomly. Each collision with a wall pushes on it, and the force of all the collisions divided by the wall's area is the pressure.
+    Gas pressure acts equally on every wall, including the top, so it isn't the weight of the gas (A). The ideal-gas model assumes no attractions or repulsions at all, (B) and (D).
+
+- id: apchem-10-convert-kpa-mmhg
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A weather station reports an air pressure of 102.4 kPa. What is this pressure in mm Hg? (1 atm = 101.325 kPa = 760 mm Hg)
+  choices:
+    - { id: a, text: "768 mm Hg" }
+    - { id: b, text: "752 mm Hg" }
+    - { id: c, text: "1.01 mm Hg" }
+    - { id: d, text: "77,800 mm Hg" }
+  answer: a
+  explanation: |
+    $$
+    102.4\ \text{kPa} \times \frac{1\ \text{atm}}{101.325\ \text{kPa}} \times \frac{760\ \text{mm Hg}}{1\ \text{atm}} = 768\ \text{mm Hg}
+    $$
+    A pressure slightly above 1 atm should be slightly above 760 mm Hg. (B) uses the kPa ratio upside down, (C) stops at atm, and (D) multiplies kPa by 760 without dividing by 101.325.
+
+- id: apchem-10-convert-torr-atm
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A gas sample has a pressure of 645 torr. What is its pressure in atmospheres?
+  choices:
+    - { id: a, text: "1.18 atm" }
+    - { id: b, text: "6.37 atm" }
+    - { id: c, text: "4.90 × 10⁵ atm" }
+    - { id: d, text: "0.849 atm" }
+  answer: d
+  explanation: |
+    1 atm = 760 torr, so $645 / 760 = 0.849$ atm. A pressure below 760 torr must be below 1 atm, which rules out (A), the ratio upside down. (B) divides by 101.325, the kPa value, and (C) multiplies by 760.
+
+- id: apchem-10-barometer-altitude
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A mercury barometer reads 760 mm at sea level. Carried to the top of a mountain, it reads 620 mm. Which statement best explains the change?
+  choices:
+    - { id: a, text: "Mercury is less dense at high altitude, so a shorter column of it has the same weight" }
+    - { id: b, text: "There is less air above the mountain, so less force pushes down on the mercury in the dish" }
+    - { id: c, text: "The vacuum at the top of the tube pulls on the mercury less strongly at high altitude" }
+    - { id: d, text: "Gravity on the mountain is about 18% weaker, so the mercury column weighs less" }
+  answer: b
+  explanation: |
+    The column is held up by the atmosphere pressing on the mercury in the dish. Higher up there is less air above, so the atmospheric pressure is lower and it supports a shorter column.
+    A vacuum doesn't pull on anything (C); the space above the column simply exerts no pressure. Mercury's density (A) and gravity (D) change by far too little on a mountain to explain an 18% drop.
+
+- id: apchem-10-other-liquid-barometer
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A barometer is built with a liquid whose density is 3.40 g/mL instead of mercury (13.6 g/mL). How tall is the column of this liquid at 1.00 atm?
+  choices:
+    - { id: a, text: "190 mm" }
+    - { id: b, text: "760 mm" }
+    - { id: c, text: "3040 mm" }
+    - { id: d, text: "10,300 mm" }
+  answer: c
+  explanation: |
+    The liquid is $13.6 / 3.40 = 4.00$ times less dense than mercury, so it takes a column 4.00 times as tall to exert the same pressure: $760 \times 4.00 = 3040$ mm.
+    (A) divides instead of multiplying: a less dense liquid needs a **taller** column. (D) is the height for water, 1.00 g/mL.
+
+- id: apchem-10-manometer-open-higher
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  group: open-manometer
+  prompt: |
+    A flask of gas is connected to an open-end mercury manometer. The atmospheric pressure is 745 torr. The mercury level in the arm open to the air is 52 mm higher than the level in the arm connected to the flask. What is the pressure of the gas?
+  choices:
+    - { id: a, text: "797 torr" }
+    - { id: b, text: "693 torr" }
+    - { id: c, text: "745 torr" }
+    - { id: d, text: "52 torr" }
+  answer: a
+  explanation: |
+    The mercury has been pushed down on the gas side and up on the open side, so the gas pushes harder than the atmosphere:
+    $P_\text{gas} = P_\text{atm} + h = 745 + 52 = 797$ torr.
+    (B) subtracts, which would be right if the mercury were higher on the gas side.
+
+- id: apchem-10-manometer-gas-higher
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.2"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  group: open-manometer
+  prompt: |
+    In an open-end mercury manometer, the mercury in the arm connected to a gas bulb stands 18 mm **higher** than the mercury in the arm open to the air. The atmospheric pressure is 0.980 atm. What is the pressure of the gas, in torr?
+  choices:
+    - { id: a, text: "763 torr" }
+    - { id: b, text: "745 torr" }
+    - { id: c, text: "18 torr" }
+    - { id: d, text: "727 torr" }
+  answer: d
+  explanation: |
+    First, $P_\text{atm} = 0.980 \times 760 = 744.8$ torr. The atmosphere has pushed the mercury toward the gas, so the gas pressure is lower:
+    $P_\text{gas} = 744.8 - 18 = 727$ torr.
+    (A) adds the height instead of subtracting it, and (B) is just the atmospheric pressure.
+
+# ---------------------------------------------------------------------------
+# 10.3 The gas laws
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-boyle-calc
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A gas occupies 4.00 L at 0.950 atm. At constant temperature, the pressure is raised to 1.50 atm. What is the new volume?
+  choices:
+    - { id: a, text: "6.32 L" }
+    - { id: b, text: "2.53 L" }
+    - { id: c, text: "1.43 L" }
+    - { id: d, text: "0.356 L" }
+  answer: b
+  explanation: |
+    $$
+    V_2 = \frac{P_1V_1}{P_2} = \frac{(0.950)(4.00)}{1.50} = 2.53\ \text{L}
+    $$
+    Higher pressure at constant temperature means a smaller volume, which rules out (A), the ratio upside down.
+
+- id: apchem-10-charles-kelvin
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A gas in a cylinder with a movable piston occupies 3.00 L at 27 °C. It is heated to 127 °C at constant pressure. What is its new volume?
+  choices:
+    - { id: a, text: "2.25 L" }
+    - { id: b, text: "14.1 L" }
+    - { id: c, text: "4.00 L" }
+    - { id: d, text: "3.03 L" }
+  answer: c
+  explanation: |
+    Convert to kelvins: 300.15 K and 400.15 K.
+    $$
+    V_2 = V_1 \times \frac{T_2}{T_1} = 3.00 \times \frac{400.15}{300.15} = 4.00\ \text{L}
+    $$
+    (B) uses Celsius temperatures ($3.00 \times 127/27$), and (A) inverts the ratio.
+
+- id: apchem-10-rigid-tank-cooled
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A rigid steel tank holds a gas at 5.00 atm and 25 °C. The tank is cooled to −25 °C. What is the pressure in the tank now?
+  choices:
+    - { id: a, text: "4.16 atm" }
+    - { id: b, text: "−5.00 atm" }
+    - { id: c, text: "6.01 atm" }
+    - { id: d, text: "5.00 atm, since the volume can't change" }
+  answer: a
+  explanation: |
+    At constant volume, pressure is proportional to kelvin temperature: 298.15 K → 248.15 K.
+    $$
+    P_2 = 5.00 \times \frac{248.15}{298.15} = 4.16\ \text{atm}
+    $$
+    Using Celsius gives the impossible negative pressure in (B). (C) inverts the ratio; a cooler gas must have a lower pressure.
+
+- id: apchem-10-weather-balloon
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A weather balloon holds 5.00 L of helium at 25 °C and 1.00 atm. It rises to an altitude where the pressure is 0.500 atm and the temperature is −23 °C. What is its volume there? (Assume the amount of helium doesn't change.)
+  choices:
+    - { id: a, text: "10.0 L" }
+    - { id: b, text: "11.9 L" }
+    - { id: c, text: "2.10 L" }
+    - { id: d, text: "8.39 L" }
+  answer: d
+  explanation: |
+    $$
+    V_2 = V_1 \times \frac{P_1}{P_2} \times \frac{T_2}{T_1} = 5.00 \times \frac{1.00}{0.500} \times \frac{250.15}{298.15} = 8.39\ \text{L}
+    $$
+    The pressure drop doubles the volume, and the cooling shrinks it a little. (A) ignores the temperature change, and (B) has the temperature ratio upside down.
+
+- id: apchem-10-avogadro-calc
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A balloon contains 0.100 mol of helium and has a volume of 2.40 L. More helium is added at the same temperature and pressure until the volume is 3.60 L. How many moles of helium were **added**?
+  choices:
+    - { id: a, text: "0.150 mol" }
+    - { id: b, text: "0.0500 mol" }
+    - { id: c, text: "0.0667 mol" }
+    - { id: d, text: "0.250 mol" }
+  answer: b
+  explanation: |
+    At constant $T$ and $P$, volume is proportional to moles: $n_2 = 0.100 \times 3.60/2.40 = 0.150$ mol. That's the total, so $0.150 - 0.100 = 0.0500$ mol was added. (A) is the total, not the amount added.
+
+- id: apchem-10-graph-boyle-line
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For a fixed amount of gas at constant temperature, which plot gives a straight line that passes through the origin?
+  choices:
+    - { id: a, text: "P on the y-axis against V on the x-axis" }
+    - { id: b, text: "PV on the y-axis against V on the x-axis" }
+    - { id: c, text: "P on the y-axis against 1/V on the x-axis" }
+    - { id: d, text: "1/P on the y-axis against 1/V on the x-axis" }
+  answer: c
+  explanation: |
+    Boyle's law says $P = k/V$, so $P = k \times (1/V)$: a line through the origin with slope $k$.
+    $P$ against $V$ (A) is a curve that falls steeply and levels off. $PV$ is constant (B), a flat line that doesn't pass through the origin. (D) gives $1/P = (1/k) \times V$, which is a curve when plotted against $1/V$.
+
+- id: apchem-10-graph-absolute-zero
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A student measures the volume of a gas at several temperatures at constant pressure and plots volume against temperature in °C. The points fall on a straight line. If the line is extended, at what temperature does it reach zero volume?
+  choices:
+    - { id: a, text: "About −273 °C" }
+    - { id: b, text: "0 °C" }
+    - { id: c, text: "About 273 °C" }
+    - { id: d, text: "It depends on which gas and which pressure were used" }
+  answer: a
+  explanation: |
+    Every gas, at any constant pressure, gives a line that extends to zero volume at −273.15 °C, absolute zero (0 K). Volume is proportional to kelvin temperature, not Celsius, so 0 °C (B) is not special. That all lines meet at the same point is what makes (D) wrong.
+
+- id: apchem-10-graph-not-through-origin
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    For an ideal gas, which pair of variables gives a straight line with a positive slope that does **not** pass through the origin? The other two variables are held constant in each case.
+  choices:
+    - { id: a, text: "V against n, at constant P and T" }
+    - { id: b, text: "P against T in kelvins, at constant n and V" }
+    - { id: c, text: "V against T in kelvins, at constant n and P" }
+    - { id: d, text: "V against T in °C, at constant n and P" }
+  answer: d
+  explanation: |
+    Volume is proportional to kelvin temperature. On a Celsius axis the line is shifted: at 0 °C the volume is not zero, and the line reaches zero volume only at −273 °C. (A), (B), and (C) are direct proportions, so their lines pass through the origin.
+
+- id: apchem-10-boyle-particles
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3", "10.6"]
+  cedTopics: ["3.4", "3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A gas is compressed to half its volume at constant temperature, and its pressure doubles. Which statement best explains why, in terms of the particles?
+  choices:
+    - { id: a, text: "The particles move twice as fast, so each collision with the walls is twice as forceful" }
+    - { id: b, text: "The particles are closer together, so they attract each other and pull inward on the walls" }
+    - { id: c, text: "The particles move at the same speeds, but they hit each area of the wall twice as often" }
+    - { id: d, text: "Each particle takes up twice as much of the space, so it reaches the walls twice as often" }
+  answer: c
+  explanation: |
+    Constant temperature means the same average kinetic energy, so the speeds don't change (ruling out A). With half the space, the particles reach the walls twice as often, and the pressure doubles.
+    Attractions would **lower** the pressure (B), and the particles' own size doesn't change (D).
+
+- id: apchem-10-balloon-freezer
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3", "10.6"]
+  cedTopics: ["3.4", "3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A sealed balloon is put in a freezer and shrinks. Which statement best explains this at the particle level?
+  choices:
+    - { id: a, text: "The gas particles lose mass as they cool, so they push less on the inside of the balloon" }
+    - { id: b, text: "The particles slow down, so they strike the balloon wall less often and with less force" }
+    - { id: c, text: "The particles slow down and stick together in clusters that take up less total space" }
+    - { id: d, text: "The particles get smaller when they cool, so the gas as a whole takes up less space" }
+  answer: b
+  explanation: |
+    Lower temperature means lower average kinetic energy, so the particles move more slowly. They hit the inside of the balloon less often and less forcefully, and the outside air pressure pushes the balloon smaller until the pressures match again.
+    Particles don't change mass (A) or size (D) when cooled, and the gas hasn't condensed (C).
+
+- id: apchem-10-rigid-heated
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3", "10.6"]
+  cedTopics: ["3.4", "3.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A sealed, rigid container of gas is heated. Which statement describes what happens?
+  choices:
+    - { id: a, text: "The particles' average speed increases, and the pressure increases" }
+    - { id: b, text: "The particles' average speed stays the same, but they expand and press harder" }
+    - { id: c, text: "The volume of the gas increases because the particles are moving faster" }
+    - { id: d, text: "The number of particles increases, so the pressure in the container rises" }
+  answer: a
+  explanation: |
+    Higher temperature means higher average kinetic energy, so the particles move faster and hit the walls more often and harder: the pressure rises. A rigid container can't expand (C), the particles themselves don't expand (B), and in a sealed container the number of particles stays the same (D).
+
+- id: apchem-10-double-pressure-temp
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A gas in a rigid, sealed container is at 1.0 atm and 27 °C. To what temperature must it be heated to double its pressure?
+  choices:
+    - { id: a, text: "54 °C" }
+    - { id: b, text: "327 °C" }
+    - { id: c, text: "600 °C" }
+    - { id: d, text: "573 °C" }
+  answer: b
+  explanation: |
+    Pressure is proportional to kelvin temperature, so the kelvin temperature must double: 300 K → 600 K. In Celsius, $600 - 273 = 327$ °C.
+    (A) doubles the Celsius temperature, and (C) is the right number in the wrong unit.
+
+- id: apchem-10-two-changes-pressure
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The kelvin temperature of a fixed amount of gas is doubled and, at the same time, its volume is tripled. By what factor does its pressure change?
+  choices:
+    - { id: a, text: "It becomes 6 times as large" }
+    - { id: b, text: "It becomes 3/2 as large" }
+    - { id: c, text: "It becomes 2/3 as large" }
+    - { id: d, text: "It becomes 1/6 as large" }
+  answer: c
+  explanation: |
+    $P \propto T/V$ for fixed $n$. Doubling $T$ multiplies $P$ by 2, and tripling $V$ divides it by 3: $2/3$.
+    (B) has the factors reversed. (A) and (D) treat both changes as pushing the pressure the same way.
+
+- id: apchem-10-piston-add-and-heat
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A cylinder with a movable piston holds 0.40 mol of gas at 300 K, and its volume is 10.0 L. Another 0.20 mol of the same gas is added, and the temperature is raised to 450 K. The pressure stays the same. What is the new volume?
+  choices:
+    - { id: a, text: "15.0 L" }
+    - { id: b, text: "6.67 L" }
+    - { id: c, text: "30.0 L" }
+    - { id: d, text: "22.5 L" }
+  answer: d
+  explanation: |
+    At constant pressure, $V \propto nT$.
+    $$
+    V_2 = 10.0 \times \frac{0.60}{0.40} \times \frac{450}{300} = 10.0 \times 1.5 \times 1.5 = 22.5\ \text{L}
+    $$
+    (A) applies only one of the two factors of 1.5. (B) divides by one factor instead of multiplying, and (C) adds the two factors instead of multiplying them.
+
+- id: apchem-10-celsius-mistake
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3"]
+  cedTopics: ["3.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A student says: "A 1.00 L sample of gas at 10 °C is warmed to 20 °C at constant pressure. The temperature doubled, so the volume doubles to 2.00 L." What should the volume be, and what is wrong with the reasoning?
+  choices:
+    - { id: a, text: "1.04 L. Volume is proportional to kelvin temperature, which rose by only about 3.5%." }
+    - { id: b, text: "2.00 L. Doubling the Celsius temperature doubles the particles' average kinetic energy." }
+    - { id: c, text: "0.50 L. The student set up the temperature ratio upside down, so the volume halves." }
+    - { id: d, text: "1.00 L. At constant pressure, the volume of a gas doesn't depend on its temperature." }
+  answer: a
+  explanation: |
+    In kelvins the temperature goes from 283.15 K to 293.15 K, a factor of 1.035:
+    $$
+    V_2 = 1.00 \times \frac{293.15}{283.15} = 1.04\ \text{L}
+    $$
+    Average kinetic energy is proportional to kelvin temperature, not Celsius (B). Warming at constant pressure always increases the volume, ruling out (C) and (D).
+
+# ---------------------------------------------------------------------------
+# 10.4 The ideal gas equation, density, molar mass, and gas stoichiometry
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-ideal-moles
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 5.00 L tank holds nitrogen at 3.20 atm and 27 °C. How many moles of nitrogen are in the tank?
+  choices:
+    - { id: a, text: "7.22 mol" }
+    - { id: b, text: "0.650 mol" }
+    - { id: c, text: "1.54 mol" }
+    - { id: d, text: "0.0650 mol" }
+  answer: b
+  explanation: |
+    $$
+    n = \frac{PV}{RT} = \frac{(3.20)(5.00)}{(0.08206)(300.15)} = 0.650\ \text{mol}
+    $$
+    (A) uses 27 instead of 300.15 K, and (C) is the expression upside down.
+
+- id: apchem-10-ideal-volume-mass
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What volume does 8.80 g of $\ce{CO2}$ occupy at 0.950 atm and 50 °C?
+  choices:
+    - { id: a, text: "4.48 L" }
+    - { id: b, text: "5.30 L" }
+    - { id: c, text: "0.864 L" }
+    - { id: d, text: "5.58 L" }
+  answer: d
+  explanation: |
+    $n = 8.80/44.01 = 0.200$ mol, and $T = 323.15$ K.
+    $$
+    V = \frac{nRT}{P} = \frac{(0.200)(0.08206)(323.15)}{0.950} = 5.58\ \text{L}
+    $$
+    (A) uses 22.4 L/mol, which applies only at STP. (B) leaves out the pressure, and (C) uses 50 instead of 323.15 K.
+
+- id: apchem-10-which-r
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A problem gives a gas's pressure in kilopascals and its volume in liters. Which value of $R$ from the equation sheet can be used without converting either unit?
+  choices:
+    - { id: a, text: "0.08206 L·atm/(mol·K), because liters are already the right unit" }
+    - { id: b, text: "8.314 J/(mol·K), but only after converting the volume to milliliters" }
+    - { id: c, text: "8.314 J/(mol·K), because a kilopascal times a liter equals a joule" }
+    - { id: d, text: "Either value, because R is the same number whatever units are used" }
+  answer: c
+  explanation: |
+    1 kPa × 1 L = 1000 N/m² × 0.001 m³ = 1 N·m = 1 J. So $R = 8.314$ J/(mol·K) is the same as 8.314 L·kPa/(mol·K).
+    0.08206 (A) needs the pressure in atm. The numerical value of $R$ depends on its units (D).
+
+- id: apchem-10-stp-volume
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What volume does 14.0 g of $\ce{N2}$ occupy at STP?
+  choices:
+    - { id: a, text: "11.2 L" }
+    - { id: b, text: "22.4 L" }
+    - { id: c, text: "314 L" }
+    - { id: d, text: "0.625 L" }
+  answer: a
+  explanation: |
+    $14.0\ \text{g} / 28.02\ \text{g/mol} = 0.500$ mol, and at STP $0.500 \times 22.4 = 11.2$ L.
+    (B) is the volume of a whole mole, (C) multiplies the mass by 22.4, and (D) divides it.
+
+- id: apchem-10-density-so2
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    What is the density of $\ce{SO2}$ gas at 0.800 atm and 100. °C?
+  choices:
+    - { id: a, text: "2.86 g/L" }
+    - { id: b, text: "1.67 g/L" }
+    - { id: c, text: "6.25 g/L" }
+    - { id: d, text: "0.598 g/L" }
+  answer: b
+  explanation: |
+    $$
+    d = \frac{P\mathcal{M}}{RT} = \frac{(0.800)(64.07)}{(0.08206)(373.15)} = 1.67\ \text{g/L}
+    $$
+    (A) is the density at STP ($64.07/22.4$). (C) uses 100 instead of 373.15 K, and (D) is the expression upside down.
+
+- id: apchem-10-identify-gas-molar-mass
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 1.00 L flask contains 2.84 g of a gaseous element at 0.987 atm and 27 °C. Which element could it be?
+  choices:
+    - { id: a, text: "Kr" }
+    - { id: b, text: "Ar" }
+    - { id: c, text: "$\\ce{Cl2}$" }
+    - { id: d, text: "$\\ce{F2}$" }
+  answer: c
+  explanation: |
+    $$
+    n = \frac{PV}{RT} = \frac{(0.987)(1.00)}{(0.08206)(300.15)} = 0.0401\ \text{mol} \qquad \mathcal{M} = \frac{2.84\ \text{g}}{0.0401\ \text{mol}} = 70.9\ \text{g/mol}
+    $$
+    That is $\ce{Cl2}$ (70.90 g/mol). Kr is 83.80 g/mol, Ar 39.95, and $\ce{F2}$ 38.00.
+
+- id: apchem-10-density-rank
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    At the same temperature and pressure, which gas has the greatest density?
+  choices:
+    - { id: a, text: "$\\ce{CH4}$" }
+    - { id: b, text: "Ne" }
+    - { id: c, text: "$\\ce{NH3}$" }
+    - { id: d, text: "$\\ce{F2}$" }
+  answer: d
+  explanation: |
+    At the same $T$ and $P$, $d = P\mathcal{M}/RT$ is proportional to molar mass. $\ce{F2}$ is 38.00 g/mol, compared with 16.04 for $\ce{CH4}$, 20.18 for Ne, and 17.03 for $\ce{NH3}$.
+
+- id: apchem-10-hot-air-balloon
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Heating the air inside a hot-air balloon, which is open at the bottom, makes the balloon rise. Which statement best explains why?
+  choices:
+    - { id: a, text: "At constant pressure, hotter air has a lower density than the cooler air around it" }
+    - { id: b, text: "Heating breaks N₂ and O₂ into lighter atoms, which lowers the air's molar mass" }
+    - { id: c, text: "Heating raises the pressure inside the balloon, and that pressure pushes it up" }
+    - { id: d, text: "Hot air particles move faster, and faster particles weigh less than slow ones" }
+  answer: a
+  explanation: |
+    The balloon is open, so the air inside stays at atmospheric pressure. From $d = P\mathcal{M}/RT$, raising $T$ at constant $P$ lowers the density: some air leaves the balloon, and what's left weighs less than the same volume of outside air.
+    The molecules don't break apart (B), the open balloon can't hold a higher pressure (C), and speed doesn't change mass (D).
+
+- id: apchem-10-dumas-temperature-error
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 3
+  authors: ["Claude"]
+  group: dumas-method
+  prompt: |
+    A student finds the molar mass of a volatile liquid by vaporizing it in a flask in boiling water, then using $\mathcal{M} = \dfrac{mRT}{PV}$ with the mass of the vapor. The water was at 100 °C, but the student records 90 °C. How does this error affect the calculated molar mass?
+  choices:
+    - { id: a, text: "Too high, because the calculated number of moles of vapor is too small" }
+    - { id: b, text: "Too low, because the calculated number of moles of vapor is too small" }
+    - { id: c, text: "Too low, because the value of T used in the calculation is too small" }
+    - { id: d, text: "No effect, because the mass of the vapor doesn't depend on temperature" }
+  answer: c
+  explanation: |
+    $T$ is in the numerator of $\mathcal{M} = mRT/PV$, so a temperature that is too low gives a molar mass that is too low.
+    Put another way: $n = PV/RT$ comes out too **large** when $T$ is too small, so $\mathcal{M} = m/n$ is too small. That rules out (A) and (B), which both say the moles are too small.
+
+- id: apchem-10-kclo3-oxygen-volume
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4", "4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Potassium chlorate decomposes when heated:
+
+    $$
+    \ce{2KClO3(s) -> 2KCl(s) + 3O2(g)}
+    $$
+
+    What volume of $\ce{O2}$, measured at 25 °C and 1.00 atm, is produced by 4.90 g of $\ce{KClO3}$ (122.55 g/mol)?
+  choices:
+    - { id: a, text: "1.47 L" }
+    - { id: b, text: "0.978 L" }
+    - { id: c, text: "2.20 L" }
+    - { id: d, text: "1.34 L" }
+  answer: a
+  explanation: |
+    $4.90/122.55 = 0.0400$ mol $\ce{KClO3}$, which gives $0.0400 \times 3/2 = 0.0600$ mol $\ce{O2}$.
+    $$
+    V = \frac{nRT}{P} = \frac{(0.0600)(0.08206)(298.15)}{1.00} = 1.47\ \text{L}
+    $$
+    (B) skips the 3 : 2 mole ratio, and (D) uses 22.4 L/mol even though the gas isn't at STP.
+
+- id: apchem-10-propane-volumes
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4", "4.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Propane burns according to
+
+    $$
+    \ce{C3H8(g) + 5O2(g) -> 3CO2(g) + 4H2O(g)}
+    $$
+
+    2.0 L of propane burns completely in excess oxygen. All volumes are measured at the same temperature and pressure, high enough that the water stays a gas. What is the total volume of the **products**?
+  choices:
+    - { id: a, text: "7.0 L" }
+    - { id: b, text: "10 L" }
+    - { id: c, text: "14 L" }
+    - { id: d, text: "6.0 L" }
+  answer: c
+  explanation: |
+    For gases at the same $T$ and $P$, volume ratios equal mole ratios. 2.0 L of propane gives $3 \times 2.0 = 6.0$ L of $\ce{CO2}$ and $4 \times 2.0 = 8.0$ L of $\ce{H2O}$, 14 L in all.
+    (D) counts only the $\ce{CO2}$, and (B) is the oxygen used.
+
+- id: apchem-10-hydrogen-oxygen-limiting
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4", "4.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    6.0 L of $\ce{H2}$ and 4.0 L of $\ce{O2}$, at the same temperature and pressure, react completely:
+
+    $$
+    \ce{2H2(g) + O2(g) -> 2H2O(g)}
+    $$
+
+    The products are returned to the same temperature and pressure, where water is a gas. What is the total volume of gas afterward?
+  choices:
+    - { id: a, text: "6.0 L" }
+    - { id: b, text: "10.0 L" }
+    - { id: c, text: "8.0 L" }
+    - { id: d, text: "7.0 L" }
+  answer: d
+  explanation: |
+    6.0 L of $\ce{H2}$ needs only 3.0 L of $\ce{O2}$, so $\ce{H2}$ is limiting and 1.0 L of $\ce{O2}$ is left over. The reaction makes 6.0 L of $\ce{H2O}$ gas. Total: $6.0 + 1.0 = 7.0$ L.
+    (A) forgets the leftover oxygen, and (B) assumes the volume doesn't change. Gas volume isn't conserved in a reaction.
+
+- id: apchem-10-magnesium-for-hydrogen
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4", "4.5"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $$
+    \ce{Mg(s) + 2HCl(aq) -> MgCl2(aq) + H2(g)}
+    $$
+
+    What mass of magnesium is needed to produce 500. mL of $\ce{H2}$, measured at 30.0 °C and 0.960 atm?
+  choices:
+    - { id: a, text: "0.938 g" }
+    - { id: b, text: "0.469 g" }
+    - { id: c, text: "0.543 g" }
+    - { id: d, text: "0.234 g" }
+  answer: b
+  explanation: |
+    $$
+    n_{\ce{H2}} = \frac{(0.960)(0.500)}{(0.08206)(303.15)} = 0.01930\ \text{mol}
+    $$
+    The ratio is 1 mol Mg : 1 mol $\ce{H2}$, so $0.01930 \times 24.31 = 0.469$ g.
+    (A) and (D) use a 2 : 1 ratio from the HCl coefficient, and (C) uses 22.4 L/mol at conditions that aren't STP.
+
+- id: apchem-10-molar-volume-when
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When does one mole of gas occupy 22.4 L?
+  choices:
+    - { id: a, text: "For any gas at room temperature and a pressure of 1 atm" }
+    - { id: b, text: "For any gas at a pressure of 1 atm, whatever the temperature" }
+    - { id: c, text: "Only for gases of low molar mass, such as hydrogen and helium" }
+    - { id: d, text: "For an ideal gas at 273.15 K and a pressure of 1 atm" }
+  answer: d
+  explanation: |
+    $V = nRT/P = (1)(0.08206)(273.15)/1 = 22.4$ L only at STP. At room temperature (A), one mole takes up about 24.5 L. The molar volume of an ideal gas doesn't depend on its molar mass (C).
+
+- id: apchem-10-equal-volumes
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Two identical flasks are at the same temperature and pressure. One holds $\ce{CH4}$ (16.04 g/mol) and the other holds $\ce{SO2}$ (64.07 g/mol). Which statement is correct?
+  choices:
+    - { id: a, text: "They hold equal numbers of molecules, and the SO₂ has about four times the mass" }
+    - { id: b, text: "They hold equal masses of gas, and the CH₄ has about four times as many molecules" }
+    - { id: c, text: "The SO₂ flask holds more molecules, because SO₂ molecules have more atoms" }
+    - { id: d, text: "The CH₄ flask holds more molecules, because its lighter molecules hit more softly" }
+  answer: a
+  explanation: |
+    Same $P$, $V$, and $T$ means the same $n$ (Avogadro's law), whatever the gas. With equal moles, the mass is proportional to molar mass: $64.07/16.04 = 3.99$.
+
+- id: apchem-10-density-ratio
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    At a certain temperature and pressure, $\ce{O2}$ has a density of 1.31 g/L and an unknown gas has a density of 2.53 g/L. What is the molar mass of the unknown gas?
+  choices:
+    - { id: a, text: "16.6 g/mol" }
+    - { id: b, text: "81.0 g/mol" }
+    - { id: c, text: "61.8 g/mol" }
+    - { id: d, text: "44.0 g/mol" }
+  answer: c
+  explanation: |
+    At the same $T$ and $P$, density is proportional to molar mass:
+    $$
+    \mathcal{M} = 32.00 \times \frac{2.53}{1.31} = 61.8\ \text{g/mol}
+    $$
+    (A) inverts the ratio. A denser gas must have a larger molar mass than $\ce{O2}$.
+
+# ---------------------------------------------------------------------------
+# 10.5 Gas mixtures and partial pressures
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-mole-fraction-from-pressures
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A gas mixture contains $\ce{N2}$ at 0.40 atm, $\ce{O2}$ at 0.30 atm, and Ar at 0.10 atm. What is the mole fraction of $\ce{O2}$?
+  choices:
+    - { id: a, text: "0.30" }
+    - { id: b, text: "0.375" }
+    - { id: c, text: "0.80" }
+    - { id: d, text: "0.50" }
+  answer: b
+  explanation: |
+    The total pressure is $0.40 + 0.30 + 0.10 = 0.80$ atm, and $X_{\ce{O2}} = P_{\ce{O2}}/P_\text{total} = 0.30/0.80 = 0.375$. (A) is the partial pressure itself, and (C) is the total pressure.
+
+- id: apchem-10-partial-from-masses
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A container holds 2.00 g of $\ce{H2}$ and 8.00 g of He at a total pressure of 3.00 atm. What is the partial pressure of $\ce{H2}$?
+  choices:
+    - { id: a, text: "0.600 atm" }
+    - { id: b, text: "1.50 atm" }
+    - { id: c, text: "0.995 atm" }
+    - { id: d, text: "2.00 atm" }
+  answer: c
+  explanation: |
+    Convert to moles: $2.00/2.016 = 0.992$ mol $\ce{H2}$ and $8.00/4.003 = 1.999$ mol He, 2.991 mol in all.
+    $$
+    P_{\ce{H2}} = \frac{0.992}{2.991} \times 3.00 = 0.995\ \text{atm}
+    $$
+    (A) uses the mass fraction (2.00 g of 10.00 g). Partial pressures follow mole fractions, not mass fractions.
+
+- id: apchem-10-equal-masses-partial
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A container holds equal masses of $\ce{CH4}$ (16.04 g/mol) and $\ce{O2}$ (32.00 g/mol). How do their partial pressures compare?
+  choices:
+    - { id: a, text: "The partial pressure of CH₄ is about twice that of O₂" }
+    - { id: b, text: "The two partial pressures are equal, since the masses are equal" }
+    - { id: c, text: "The partial pressure of O₂ is about twice that of CH₄" }
+    - { id: d, text: "It can't be decided without knowing the container's volume" }
+  answer: a
+  explanation: |
+    Equal masses of a gas with half the molar mass means twice as many moles. Partial pressure is proportional to moles, so $\ce{CH4}$ has about twice the partial pressure. The ratio is the same whatever the volume (D).
+
+- id: apchem-10-add-gas-rigid
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A rigid container holds $\ce{N2}$ at 0.80 atm. Helium is added at constant temperature until the total pressure is 1.50 atm. What is the partial pressure of $\ce{N2}$ now?
+  choices:
+    - { id: a, text: "0.70 atm" }
+    - { id: b, text: "1.50 atm" }
+    - { id: c, text: "0.43 atm" }
+    - { id: d, text: "0.80 atm" }
+  answer: d
+  explanation: |
+    The moles of $\ce{N2}$, the volume, and the temperature haven't changed, so $P_{\ce{N2}} = n_{\ce{N2}}RT/V$ is still 0.80 atm. The helium adds its own 0.70 atm (A) to the total. The mole fraction of $\ce{N2}$ drops, but the nitrogen molecules hit the walls just as often and as hard as before.
+
+- id: apchem-10-two-flasks-valve
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 1.00 L flask of $\ce{CO2}$ at 2.40 atm is connected through a closed valve to a 4.00 L flask of $\ce{N2}$ at 0.600 atm. The valve is opened and the gases mix at constant temperature. What is the final total pressure?
+  choices:
+    - { id: a, text: "3.00 atm" }
+    - { id: b, text: "0.960 atm" }
+    - { id: c, text: "1.50 atm" }
+    - { id: d, text: "0.600 atm" }
+  answer: b
+  explanation: |
+    Each gas spreads into the total 5.00 L. By Boyle's law:
+    $$
+    P_{\ce{CO2}} = \frac{(2.40)(1.00)}{5.00} = 0.480\ \text{atm} \qquad P_{\ce{N2}} = \frac{(0.600)(4.00)}{5.00} = 0.480\ \text{atm}
+    $$
+    Total: 0.960 atm. (A) adds the starting pressures, and (C) averages them without weighting by volume.
+
+- id: apchem-10-over-water-pressure
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  group: oxygen-over-water
+  prompt: |
+    Oxygen is collected over water at 22 °C until the water levels inside and outside the collection bottle are equal. The atmospheric pressure is 748 torr, and the vapor pressure of water at 22 °C is 19.8 torr. What is the partial pressure of the oxygen?
+  choices:
+    - { id: a, text: "768 torr" }
+    - { id: b, text: "748 torr" }
+    - { id: c, text: "728 torr" }
+    - { id: d, text: "19.8 torr" }
+  answer: c
+  explanation: |
+    With the levels equal, the gas in the bottle is at atmospheric pressure, and it's a mixture of $\ce{O2}$ and water vapor: $P_{\ce{O2}} = 748 - 19.8 = 728$ torr. (B) ignores the water vapor, and (A) adds it instead of subtracting.
+
+- id: apchem-10-over-water-moles
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A student collects 375 mL of $\ce{N2}$ over water at 20 °C. The total pressure in the bottle is 752 torr, and the vapor pressure of water at 20 °C is 17.5 torr. How many moles of $\ce{N2}$ were collected?
+  choices:
+    - { id: a, text: "0.0151 mol" }
+    - { id: b, text: "0.0154 mol" }
+    - { id: c, text: "15.1 mol" }
+    - { id: d, text: "0.0167 mol" }
+  answer: a
+  explanation: |
+    $P_{\ce{N2}} = 752 - 17.5 = 734.5$ torr $= 0.9664$ atm.
+    $$
+    n = \frac{PV}{RT} = \frac{(0.9664)(0.375)}{(0.08206)(293.15)} = 0.0151\ \text{mol}
+    $$
+    (B) forgets to subtract the water vapor, (C) uses 375 instead of 0.375 L, and (D) uses 22.4 L/mol.
+
+- id: apchem-10-over-water-error
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 3
+  authors: ["Claude"]
+  group: oxygen-over-water
+  prompt: |
+    A student heats a mixture of $\ce{KClO3}$ and an inert solid, collects the $\ce{O2}$ over water, and uses the moles of $\ce{O2}$ to find the mass percent of $\ce{KClO3}$ in the mixture. The student forgets to subtract the vapor pressure of water. How does this affect the calculated mass percent of $\ce{KClO3}$?
+  choices:
+    - { id: a, text: "Too low, because the pressure used for O₂ is too high, so the moles of O₂ come out too low" }
+    - { id: b, text: "Too high, because the pressure used for O₂ is too high, so the moles of O₂ come out too high" }
+    - { id: c, text: "Too low, because water vapor in the bottle takes the place of some of the O₂ produced" }
+    - { id: d, text: "No effect, because the water's vapor pressure is constant and cancels out in the ratio" }
+  answer: b
+  explanation: |
+    The total pressure includes the water vapor, so using it as $P_{\ce{O2}}$ makes the pressure too high. From $n = PV/RT$, the calculated moles of $\ce{O2}$ are too high, which means too much $\ce{KClO3}$ and a mass percent that is too high.
+    In (A), a higher pressure can't give fewer moles. The water vapor doesn't destroy any $\ce{O2}$ (C); it only adds to the measured pressure.
+
+- id: apchem-10-particle-count-partial
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A particle diagram of a gas mixture shows 4 Ar atoms, 6 Ne atoms, and 2 Kr atoms. The total pressure is 1.80 atm. What is the partial pressure of Ne?
+  choices:
+    - { id: a, text: "0.60 atm" }
+    - { id: b, text: "0.30 atm" }
+    - { id: c, text: "1.80 atm" }
+    - { id: d, text: "0.90 atm" }
+  answer: d
+  explanation: |
+    $X_\text{Ne} = 6/12 = 0.50$, so $P_\text{Ne} = 0.50 \times 1.80 = 0.90$ atm. (A) is the partial pressure of Ar (4/12), and (B) is Kr's (2/12).
+
+- id: apchem-10-altitude-oxygen
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Air has a mole fraction of $\ce{O2}$ of 0.209. At an altitude where the air pressure is 0.700 atm, what is the partial pressure of $\ce{O2}$?
+  choices:
+    - { id: a, text: "0.209 atm" }
+    - { id: b, text: "3.35 atm" }
+    - { id: c, text: "0.146 atm" }
+    - { id: d, text: "0.491 atm" }
+  answer: c
+  explanation: |
+    $P_{\ce{O2}} = X_{\ce{O2}} P_\text{total} = (0.209)(0.700) = 0.146$ atm. The fraction of oxygen is the same as at sea level, but the partial pressure is lower because the total pressure is lower. (A) is the sea-level value.
+
+- id: apchem-10-why-partial-pressures-add
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5", "10.6"]
+  cedTopics: ["3.4", "3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why is the total pressure of a mixture of ideal gases equal to the sum of the pressures each gas would exert alone in the same container?
+  choices:
+    - { id: a, text: "Lighter particles move faster and carry the heavier particles along to the walls" }
+    - { id: b, text: "The particles don't attract or repel, so each gas hits the walls as if it were alone" }
+    - { id: c, text: "The gases react to form a new gas whose pressure is the sum of the originals" }
+    - { id: d, text: "Every gas in a mixture moves at one shared average speed, so each pushes equally" }
+  answer: b
+  explanation: |
+    In the ideal model the particles are far apart and don't interact, so the collisions of one gas with the walls don't depend on the other gases. Each gas's pressure is $n_ART/V$, and they add.
+    At the same temperature, different gases have the same average kinetic energy, not the same speed (D).
+
+- id: apchem-10-mixture-total-pressure
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 10.0 L tank at 25 °C contains 7.00 g of $\ce{N2}$ and 0.800 g of He. What is the total pressure in the tank?
+  choices:
+    - { id: a, text: "1.10 atm" }
+    - { id: b, text: "0.611 atm" }
+    - { id: c, text: "0.489 atm" }
+    - { id: d, text: "0.0922 atm" }
+  answer: a
+  explanation: |
+    $n_{\ce{N2}} = 7.00/28.02 = 0.2498$ mol and $n_\text{He} = 0.800/4.003 = 0.1999$ mol, 0.4497 mol in all.
+    $$
+    P = \frac{nRT}{V} = \frac{(0.4497)(0.08206)(298.15)}{10.0} = 1.10\ \text{atm}
+    $$
+    (B) is the nitrogen alone and (C) the helium alone. (D) uses 25 instead of 298.15 K.
+
+# ---------------------------------------------------------------------------
+# 10.6–10.7 Kinetic-molecular theory, effusion, and diffusion
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-kmt-not-assumption
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement is **not** an assumption of the kinetic-molecular theory of gases?
+  choices:
+    - { id: a, text: "Gas particles are in continuous, random motion" }
+    - { id: b, text: "The particles' own volume is negligible compared with the container" }
+    - { id: c, text: "The particles attract each other weakly, which holds the gas together" }
+    - { id: d, text: "The average kinetic energy is proportional to the kelvin temperature" }
+  answer: c
+  explanation: |
+    The model assumes the particles **don't** attract or repel each other at all. Real gases do have attractions, which is one reason they deviate from ideal behavior. (A), (B), and (D) are all assumptions of the theory.
+
+- id: apchem-10-same-temperature-same-ke
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A sample of He and a sample of Xe are at the same temperature. Which quantity is the same for both?
+  choices:
+    - { id: a, text: "The average speed of the atoms" }
+    - { id: b, text: "The rate at which they effuse through a pinhole" }
+    - { id: c, text: "The fraction of atoms moving faster than 500 m/s" }
+    - { id: d, text: "The average kinetic energy of the atoms" }
+  answer: d
+  explanation: |
+    Temperature measures average kinetic energy, so equal temperatures mean equal average $KE$. Since $KE = \tfrac{1}{2}mv^2$, the lighter He atoms move much faster on average, so their average speed (A), effusion rate (B), and fraction of fast atoms (C) are all larger.
+
+- id: apchem-10-fastest-molecules
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Four gases are all at 300 K. Which one has the greatest average molecular speed?
+  choices:
+    - { id: a, text: "$\\ce{SO2}$" }
+    - { id: b, text: "Ne" }
+    - { id: c, text: "$\\ce{NH3}$" }
+    - { id: d, text: "$\\ce{N2}$" }
+  answer: c
+  explanation: |
+    At the same temperature every gas has the same average kinetic energy, so the gas with the smallest molar mass moves fastest. $\ce{NH3}$ is 17.03 g/mol, just under Ne at 20.18 g/mol. $\ce{N2}$ is 28.02 and $\ce{SO2}$ 64.07.
+
+- id: apchem-10-double-temperature-speed
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The kelvin temperature of a gas is doubled. What happens to the average kinetic energy of its molecules and to their average speed?
+  choices:
+    - { id: a, text: "Both the average kinetic energy and the average speed double" }
+    - { id: b, text: "The kinetic energy doubles, and the speed rises by a factor of √2" }
+    - { id: c, text: "The kinetic energy rises by a factor of √2, and the speed doubles" }
+    - { id: d, text: "The kinetic energy quadruples, and the average speed doubles" }
+  answer: b
+  explanation: |
+    Average kinetic energy is proportional to kelvin temperature, so it doubles. Since $KE = \tfrac{1}{2}mv^2$, the speed depends on the square root of $KE$: doubling $KE$ multiplies the speed by $\sqrt{2} \approx 1.41$.
+
+- id: apchem-10-mb-higher-temperature
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A Maxwell–Boltzmann distribution of molecular speeds is drawn for a sample of $\ce{O2}$ at 300 K. The same sample is then heated to 500 K. How does its distribution compare with the one at 300 K?
+  choices:
+    - { id: a, text: "The peak moves to a higher speed and gets lower; the curve is wider" }
+    - { id: b, text: "The peak moves to a higher speed and gets taller; the curve is narrower" }
+    - { id: c, text: "The peak stays at the same speed, but the whole curve is taller" }
+    - { id: d, text: "The peak moves to a lower speed and gets lower; the curve is wider" }
+  answer: a
+  explanation: |
+    At higher temperature the molecules move faster on average, so the peak shifts right. The area under the curve is the number of molecules, which hasn't changed, so a curve that spreads over a wider range of speeds must be lower.
+
+- id: apchem-10-mb-identify-curve
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Speed distributions for He, $\ce{N2}$, and $\ce{Cl2}$, all at the same temperature, are labeled X, Y, and Z. Curve X peaks at the lowest speed and is the tallest and narrowest. Curve Z peaks at the highest speed and is the lowest and widest. Which gas is curve Z?
+  choices:
+    - { id: a, text: "$\\ce{Cl2}$" }
+    - { id: b, text: "He" }
+    - { id: c, text: "$\\ce{N2}$" }
+    - { id: d, text: "It can't be told, because all three are at the same temperature" }
+  answer: b
+  explanation: |
+    At the same temperature, the lightest particles move fastest and have the widest spread of speeds, so Z is He (4.00 g/mol). X, the slowest, is $\ce{Cl2}$ (70.90 g/mol), and Y is $\ce{N2}$. Equal temperatures mean equal average kinetic energies, not equal speeds (D).
+
+- id: apchem-10-mb-kinetic-energy-axis
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A student plots the distribution of **kinetic energies** (not speeds) for He atoms and for Ar atoms, both at 300 K. How do the two curves compare?
+  choices:
+    - { id: a, text: "They are the same, since at 300 K both gases have one distribution of energies" }
+    - { id: b, text: "The He curve peaks at a higher kinetic energy, because He atoms move faster" }
+    - { id: c, text: "The Ar curve peaks at a higher kinetic energy, because Ar atoms are heavier" }
+    - { id: d, text: "The He curve is taller and narrower, because He has the smaller molar mass" }
+  answer: a
+  explanation: |
+    The distribution of kinetic energies depends only on temperature. He atoms move faster, but they are lighter, and $\tfrac{1}{2}mv^2$ comes out the same on average and in its spread. Only the **speed** distributions differ between the two gases.
+
+- id: apchem-10-mb-fraction-fast
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which change increases the **fraction** of $\ce{N2}$ molecules in a sample that move faster than 1000 m/s?
+  choices:
+    - { id: a, text: "Adding more N₂ to the container at the same temperature" }
+    - { id: b, text: "Compressing the gas into a smaller volume at constant temperature" }
+    - { id: c, text: "Cooling the gas while keeping the volume constant" }
+    - { id: d, text: "Heating the gas while keeping the volume constant" }
+  answer: d
+  explanation: |
+    The shape of the speed distribution depends on the temperature (and the molar mass), not on the amount of gas or the volume. Heating shifts the distribution to higher speeds, so a larger fraction of molecules is above 1000 m/s. (A) increases the **number** of fast molecules but not the fraction.
+
+- id: apchem-10-pump-tire
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: ["3.4", "3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Air is pumped into a rigid tank at constant temperature, and the pressure rises. Which statement best explains why?
+  choices:
+    - { id: a, text: "Each particle moves faster, because it is squeezed into less space" }
+    - { id: b, text: "Each particle hits the walls harder, because it has more mass" }
+    - { id: c, text: "More particles strike the walls each second, with the same average force" }
+    - { id: d, text: "The particles attract each other more, so they pull harder on the walls" }
+  answer: c
+  explanation: |
+    At constant temperature the average kinetic energy, and so the force of each collision on average, stays the same. More particles in the same volume means more collisions with the walls per second, so the pressure rises.
+
+- id: apchem-10-effusion-order
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: ["3.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    $\ce{H2}$, $\ce{CO2}$, and $\ce{CH4}$ are at the same temperature and pressure. Which list puts them in order of effusion rate, fastest first?
+  choices:
+    - { id: a, text: "CO₂ > CH₄ > H₂" }
+    - { id: b, text: "H₂ > CH₄ > CO₂" }
+    - { id: c, text: "CH₄ > H₂ > CO₂" }
+    - { id: d, text: "All three effuse at the same rate" }
+  answer: b
+  explanation: |
+    Lighter molecules move faster at the same temperature, so they reach and pass through a pinhole more often. $\ce{H2}$ (2.02 g/mol) is fastest, then $\ce{CH4}$ (16.04), then $\ce{CO2}$ (44.01).
+
+- id: apchem-10-helium-balloon
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Two identical rubber balloons are filled to the same size at the same temperature, one with He and one with $\ce{N2}$. A day later, the He balloon is much smaller. Which statement best explains this?
+  choices:
+    - { id: a, text: "He atoms move faster on average, so they escape through tiny pores in the rubber more often" }
+    - { id: b, text: "He atoms have more kinetic energy on average, so they push outward on the balloon less" }
+    - { id: c, text: "He atoms are larger than N₂ molecules, so they stretch the pores open and slip out" }
+    - { id: d, text: "He atoms react slowly with the rubber of the balloon, while N₂ molecules do not" }
+  answer: a
+  explanation: |
+    At the same temperature both gases have the same average kinetic energy (ruling out B), so the much lighter He atoms move faster and effuse through the rubber faster. He is a small, unreactive atom (C, D).
+
+- id: apchem-10-diffusion-tube
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Cotton soaked in $\ce{NH3}$ solution is placed at one end of a long glass tube, and cotton soaked in $\ce{HCl}$ solution at the other. Where the two gases meet, a white ring of $\ce{NH4Cl}$ forms. Where does the ring form?
+  choices:
+    - { id: a, text: "Closer to the NH₃ end, because the heavier HCl molecules push through the air more easily" }
+    - { id: b, text: "In the middle, because both gases are at the same temperature and so move equally fast" }
+    - { id: c, text: "Closer to the HCl end, because NH₃ molecules are lighter and move faster on average" }
+    - { id: d, text: "Closer to the HCl end, because HCl molecules have more kinetic energy on average" }
+  answer: c
+  explanation: |
+    At the same temperature, $\ce{NH3}$ (17.03 g/mol) moves faster than $\ce{HCl}$ (36.46 g/mol), so it travels farther in the same time and the ring forms nearer the HCl end. Same temperature means the same average kinetic energy (D), not the same speed (B).
+
+- id: apchem-10-diffusion-slow
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: ["3.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Molecules in air at room temperature move at hundreds of meters per second, yet the smell of perfume takes many seconds to cross a room. Why?
+  choices:
+    - { id: a, text: "The perfume molecules lose kinetic energy as they travel away from the bottle" }
+    - { id: b, text: "The perfume molecules move only when pushed by the molecules behind them" }
+    - { id: c, text: "The perfume molecules attract the air molecules and stick to them on the way" }
+    - { id: d, text: "The perfume molecules collide with air molecules constantly and change direction" }
+  answer: d
+  explanation: |
+    A molecule travels only a tiny distance (the mean free path) before hitting another molecule and heading off in a new direction. Its path is a random zigzag, so the net distance covered is far smaller than its speed suggests.
+
+- id: apchem-10-graham-hydrogen-oxygen
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How many times faster does $\ce{H2}$ effuse than $\ce{O2}$ at the same temperature and pressure?
+  choices:
+    - { id: a, text: "15.9 times" }
+    - { id: b, text: "3.98 times" }
+    - { id: c, text: "0.251 times" }
+    - { id: d, text: "1.41 times" }
+  answer: b
+  explanation: |
+    $$
+    \frac{r_{\ce{H2}}}{r_{\ce{O2}}} = \sqrt{\frac{\mathcal{M}_{\ce{O2}}}{\mathcal{M}_{\ce{H2}}}} = \sqrt{\frac{32.00}{2.016}} = 3.98
+    $$
+    (A) leaves out the square root, and (C) inverts the ratio.
+
+- id: apchem-10-graham-unknown
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    An unknown gas effuses 0.354 times as fast as helium (4.003 g/mol) at the same conditions. What is the molar mass of the unknown gas?
+  choices:
+    - { id: a, text: "11.3 g/mol" }
+    - { id: b, text: "1.42 g/mol" }
+    - { id: c, text: "31.9 g/mol" }
+    - { id: d, text: "0.502 g/mol" }
+  answer: c
+  explanation: |
+    $$
+    \frac{r_x}{r_\text{He}} = 0.354 = \sqrt{\frac{4.003}{\mathcal{M}_x}} \qquad \mathcal{M}_x = \frac{4.003}{0.354^2} = 31.9\ \text{g/mol}
+    $$
+    That's consistent with $\ce{O2}$. A gas that effuses more slowly than He must be heavier, which rules out (B) and (D). (A) forgets to square 0.354.
+
+- id: apchem-10-rms-speed
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Using $u_\text{rms} = \sqrt{\dfrac{3RT}{\mathcal{M}}}$, what is the root-mean-square speed of $\ce{O2}$ molecules at 300. K? ($R = 8.314$ J/(mol·K))
+  choices:
+    - { id: a, text: "484 m/s" }
+    - { id: b, text: "15.3 m/s" }
+    - { id: c, text: "395 m/s" }
+    - { id: d, text: "2.34 × 10⁵ m/s" }
+  answer: a
+  explanation: |
+    $\mathcal{M}$ must be in kg/mol, 0.03200 kg/mol, so that J/kg = m²/s².
+    $$
+    u_\text{rms} = \sqrt{\frac{3(8.314)(300.)}{0.03200}} = \sqrt{2.34 \times 10^5} = 484\ \text{m/s}
+    $$
+    (B) uses 32.00 g/mol, (C) uses 2 instead of 3, and (D) forgets the square root.
+
+# ---------------------------------------------------------------------------
+# 10.8 Real gases
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-most-ideal-conditions
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Under which conditions does a real gas behave most like an ideal gas?
+  choices:
+    - { id: a, text: "Low temperature and low pressure" }
+    - { id: b, text: "High temperature and low pressure" }
+    - { id: c, text: "Low temperature and high pressure" }
+    - { id: d, text: "High temperature and high pressure" }
+  answer: b
+  explanation: |
+    At low pressure the particles are far apart, so their own volume is negligible and they rarely get close enough to attract. At high temperature they move fast enough that attractions barely affect them. Low temperature and high pressure (C) give the largest deviations.
+
+- id: apchem-10-most-ideal-gas
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    At 300 K and 10 atm, which gas would behave most nearly like an ideal gas?
+  choices:
+    - { id: a, text: "$\\ce{NH3}$" }
+    - { id: b, text: "$\\ce{SO2}$" }
+    - { id: c, text: "$\\ce{CO2}$" }
+    - { id: d, text: "He" }
+  answer: d
+  explanation: |
+    He atoms are tiny, nonpolar, and have only two electrons, so they barely attract each other and take up little space. $\ce{NH3}$ and $\ce{SO2}$ are polar, and $\ce{CO2}$ is a larger molecule with many more electrons, so all three attract each other much more strongly.
+
+- id: apchem-10-z-below-one
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    At 250 K and 50 atm, the measured value of $\dfrac{PV}{nRT}$ for methane is 0.88. Which statement best explains why it is less than 1?
+  choices:
+    - { id: a, text: "The volume of the CH₄ molecules leaves less free space than the volume V" }
+    - { id: b, text: "CH₄ molecules move faster than the ideal gas law predicts at 250 K" }
+    - { id: c, text: "Attractions between CH₄ molecules weaken their collisions with the walls" }
+    - { id: d, text: "Some CH₄ molecules break apart at 50 atm, adding to the number of particles" }
+  answer: c
+  explanation: |
+    Attractions pull molecules back as they approach the wall, so they hit with less force and the measured pressure is lower than $nRT/V$. That makes $PV/nRT$ less than 1.
+    The particles' volume (A) makes the ratio **greater** than 1, and becomes the bigger effect only at much higher pressures.
+
+- id: apchem-10-z-above-one
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    At 1000 atm, $\dfrac{PV}{nRT}$ for $\ce{N2}$ is well above 1. Which statement best explains this?
+  choices:
+    - { id: a, text: "Attractions between N₂ molecules become stronger at very high pressure" }
+    - { id: b, text: "The molecules' own volume takes up a real share of the container" }
+    - { id: c, text: "The molecules move faster at high pressure, so each collision is harder" }
+    - { id: d, text: "Some N₂ molecules split into atoms, increasing the number of particles" }
+  answer: b
+  explanation: |
+    When the molecules are packed this closely, their own volume is a significant part of the container. The space they can actually move in is less than $V$, so they hit the walls more often than the ideal model predicts and the pressure is higher.
+    Attractions (A) would push the ratio **below** 1. Speed depends on temperature, not pressure (C).
+
+- id: apchem-10-nh3-vs-ch4
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    $\ce{NH3}$ (17.03 g/mol) and $\ce{CH4}$ (16.04 g/mol) have nearly the same molar mass. At the same temperature and pressure, $\ce{NH3}$ deviates more from ideal behavior. Why?
+  choices:
+    - { id: a, text: "NH₃ molecules are polar, so they attract each other more strongly than CH₄ molecules do" }
+    - { id: b, text: "NH₃ has the larger molar mass, so its molecules move much more slowly than CH₄'s do" }
+    - { id: c, text: "NH₃ molecules are much bigger, so their own volume is a larger share of the container" }
+    - { id: d, text: "CH₄ molecules are polar, so they repel each other and stay farther apart than NH₃'s" }
+  answer: a
+  explanation: |
+    $\ce{NH3}$ is a polar molecule (trigonal pyramidal, with polar N–H bonds), while $\ce{CH4}$ is nonpolar. The stronger attractions between $\ce{NH3}$ molecules make its behavior less ideal. The molar masses (B) differ by only 6%, and the molecules are similar in size (C).
+
+- id: apchem-10-so2-measured-pressure
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    1.00 mol of $\ce{SO2}$ is placed in a 2.00 L container at 300 K. The ideal gas law predicts a pressure of 12.3 atm. What is the measured pressure most likely to be?
+  choices:
+    - { id: a, text: "More than 12.3 atm, because attractions pull the SO₂ molecules toward the walls" }
+    - { id: b, text: "More than 12.3 atm, because the volume of the SO₂ molecules is the main effect" }
+    - { id: c, text: "Exactly 12.3 atm, because SO₂ is a gas at 300 K and so it behaves ideally" }
+    - { id: d, text: "Less than 12.3 atm, because attractions between SO₂ molecules soften wall hits" }
+  answer: d
+  explanation: |
+    $\ce{SO2}$ is polar, and 12 atm is a moderate pressure, so attractions are the main effect: molecules are pulled back from the walls and hit them with less force. The measured pressure is lower than the ideal value.
+    Attractions pull molecules **away** from the walls, toward other molecules (A). The volume effect (B) wins only at much higher pressures. Being a gas doesn't make a substance ideal (C).
+
+- id: apchem-10-z-curve-temperature
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Graphs of $\dfrac{PV}{nRT}$ against pressure are drawn for $\ce{N2}$ at 200 K and at 500 K. At 200 K the curve dips well below 1 before rising. How does the 500 K curve compare?
+  choices:
+    - { id: a, text: "It dips farther below 1, because faster molecules collide with each other more often" }
+    - { id: b, text: "It is identical, because deviations depend only on the pressure, not the temperature" }
+    - { id: c, text: "It stays at exactly 1, because N₂ molecules have no attractions above 300 K at all" }
+    - { id: d, text: "It stays closer to 1, because fast molecules are less affected by attractions" }
+  answer: d
+  explanation: |
+    At higher temperature the molecules have more kinetic energy, so the brief pull of their neighbors changes their motion less, and the dip below 1 is much smaller. The attractions themselves don't disappear (C); they just matter less compared with the molecules' kinetic energy.
+
+- id: apchem-10-vdw-largest-a
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In the van der Waals equation, the constant $a$ corrects for attractions between particles. Which gas would have the **largest** value of $a$?
+  choices:
+    - { id: a, text: "He" }
+    - { id: b, text: "$\\ce{CH4}$" }
+    - { id: c, text: "$\\ce{N2}$" }
+    - { id: d, text: "$\\ce{H2O}$" }
+  answer: d
+  explanation: |
+    $\ce{H2O}$ is very polar and its molecules attract each other strongly (they form hydrogen bonds, which Chapter 11 covers), so it has the largest $a$ of these. He, with tiny attractions, has the smallest.
+
+- id: apchem-10-vdw-b-meaning
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In the van der Waals equation, $\left(P + \dfrac{an^2}{V^2}\right)(V - nb) = nRT$, what does the term $nb$ account for?
+  choices:
+    - { id: a, text: "The volume taken up by the gas particles themselves" }
+    - { id: b, text: "The attractions that pull the particles toward each other" }
+    - { id: c, text: "The spread of molecular speeds at a given temperature" }
+    - { id: d, text: "The extra pressure from collisions between particles" }
+  answer: a
+  explanation: |
+    $b$ is roughly the volume one mole of the particles takes up, so $V - nb$ is the free space they actually move through. The attractions are corrected by $an^2/V^2$ (B).
+
+# ---------------------------------------------------------------------------
+# Free response
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-frq-magnesium-over-water
+  type: frq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4", "10.5"]
+  cedTopics: ["3.4", "4.5"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A student reacts 0.250 g of magnesium ribbon with excess hydrochloric acid:
+
+    $$
+    \ce{Mg(s) + 2HCl(aq) -> MgCl2(aq) + H2(g)}
+    $$
+
+    The $\ce{H2}$ is collected over water at 24.0 °C. When the water levels inside and outside the collection tube are equal, the volume of gas is 250. mL. The atmospheric pressure is 755.0 torr, and the vapor pressure of water at 24.0 °C is 22.4 torr.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the partial pressure of $\ce{H2}$ in the tube, in atm.
+      scoring:
+        - "P(H₂) = 755.0 − 22.4 = 732.6 torr, and 732.6/760 = 0.9639 atm."
+    - label: b
+      points: 1
+      prompt: Calculate the number of moles of $\ce{H2}$ collected.
+      scoring:
+        - "n = PV/RT = (0.9639)(0.250)/((0.08206)(297.15)) = 9.88 × 10⁻³ mol, consistent with (a)."
+    - label: c
+      points: 1
+      prompt: Calculate the theoretical yield of $\ce{H2}$, in moles, and the percent yield.
+      scoring:
+        - "0.250 g / 24.31 g/mol = 0.01028 mol Mg → 0.01028 mol H₂; percent yield = 9.88 × 10⁻³ / 0.01028 × 100 = 96.1%, consistent with (b)."
+    - label: d
+      points: 1
+      prompt: Another student forgets to subtract the vapor pressure of water. Would that student's calculated percent yield be higher, lower, or the same? Justify your answer.
+      scoring:
+        - "Higher: the pressure used for H₂ (755.0 torr) is too high, so the calculated moles of H₂ (n = PV/RT) are too high."
+    - label: e
+      points: 1
+      prompt: The experiment is repeated with the same mass of magnesium at the same atmospheric pressure, but at 30.0 °C. Would the volume of gas collected be greater, smaller, or the same? Justify your answer.
+      scoring:
+        - "Greater: the same moles of H₂ at a higher temperature (and constant pressure) occupy a larger volume, because V is proportional to T (and the higher vapor pressure of water at 30 °C also adds water vapor to the gas)."
+  explanation: |
+    **(a)** The gas in the tube is $\ce{H2}$ plus water vapor at a total of 755.0 torr. $P_{\ce{H2}} = 755.0 - 22.4 = 732.6$ torr $= 0.9639$ atm.
+
+    **(b)** $T = 297.15$ K and $V = 0.250$ L.
+    $$
+    n = \frac{(0.9639)(0.250)}{(0.08206)(297.15)} = 9.88 \times 10^{-3}\ \text{mol}
+    $$
+
+    **(c)** $0.250/24.31 = 0.01028$ mol Mg, and the 1 : 1 ratio gives 0.01028 mol $\ce{H2}$ in theory. Percent yield $= 0.00988/0.01028 \times 100 = 96.1\%$.
+
+    **(d)** Using 755.0 torr gives $n = 0.01019$ mol and a percent yield of about 99.0%, higher than the true value.
+
+    **(e)** $V = nRT/P$ with the same $n$ and $P$: a higher $T$ gives a larger $V$. At 30.0 °C the dry $\ce{H2}$ alone would take up $250. \times 303.15/297.15 = 255$ mL, and the extra water vapor makes the collected volume larger still.
+
+- id: apchem-10-frq-kmt-flasks
+  type: frq
+  subject: apchem
+  chapter: 10
+  sections: ["10.6", "10.7"]
+  cedTopics: ["3.4", "3.5"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Three rigid 10.0 L flasks each hold 1.00 mol of gas.
+
+    | Flask | Gas | Temperature |
+    |---|---|---|
+    | A | Ne | 300 K |
+    | B | Ne | 600 K |
+    | C | Ar | 300 K |
+  parts:
+    - label: a
+      points: 1
+      prompt: Which flask, A or B, has the higher pressure? Explain in terms of the motion of the particles.
+      scoring:
+        - "B: at the higher temperature the Ne atoms move faster (greater average kinetic energy), so they collide with the walls more often and with more force."
+    - label: b
+      points: 1
+      prompt: What is the ratio of the average kinetic energy of the atoms in flask B to that in flask A? Justify your answer.
+      scoring:
+        - "2 : 1, because average kinetic energy is proportional to kelvin temperature, and 600 K is twice 300 K."
+    - label: c
+      points: 1
+      prompt: Describe how the Maxwell–Boltzmann distribution of speeds for flask B differs from the one for flask A.
+      scoring:
+        - "B's curve peaks at a higher speed and is lower and broader (the same area, since the number of atoms is the same)."
+    - label: d
+      points: 1
+      prompt: How does the pressure in flask C compare with the pressure in flask A? Explain, even though Ar atoms move more slowly than Ne atoms at the same temperature.
+      scoring:
+        - "The same: same n, V, and T. At the same temperature Ar atoms have the same average kinetic energy as Ne atoms; they move more slowly but are heavier, so they hit the walls less often but with more force on each collision, and the effects balance."
+    - label: e
+      points: 1
+      prompt: A pinhole is opened in flask A and in flask C at the same time. From which flask does gas effuse faster? Explain.
+      scoring:
+        - "Flask A: Ne atoms are lighter than Ar atoms, so at the same temperature (same average kinetic energy) they move faster and pass through the pinhole more often."
+  explanation: |
+    **(a)** Higher temperature means faster particles: more frequent and more forceful wall collisions. At constant $n$ and $V$, $P \propto T$, so B's pressure is twice A's.
+
+    **(b)** $KE_\text{avg} \propto T$, so $600/300 = 2$.
+
+    **(c)** The distribution shifts to higher speeds, and since the area (the number of atoms) is fixed, the peak is lower and the curve wider.
+
+    **(d)** $P = nRT/V$ doesn't depend on which gas it is. In particle terms, each Ar atom is about twice as heavy as a Ne atom and moves more slowly, so it hits the walls less often but transfers more momentum per hit. The same average kinetic energy makes these balance.
+
+    **(e)** At the same temperature, lighter particles move faster on average, so Ne effuses faster than Ar.
+
+- id: apchem-10-frq-real-gas-data
+  type: frq
+  subject: apchem
+  chapter: 10
+  sections: ["10.8"]
+  cedTopics: ["3.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    A student is given values of $\dfrac{PV}{nRT}$ for a gas, X, at 300 K.
+
+    | Pressure (atm) | $PV/nRT$ |
+    |---|---|
+    | 1 | 0.998 |
+    | 100 | 0.82 |
+    | 800 | 1.45 |
+  parts:
+    - label: a
+      points: 1
+      prompt: At which of the three pressures does gas X behave most like an ideal gas? Explain in terms of the particles.
+      scoring:
+        - "1 atm (ratio closest to 1): the particles are far apart, so their volume is negligible compared with the container and attractions between them have little effect."
+    - label: b
+      points: 1
+      prompt: Explain why $PV/nRT$ is less than 1 at 100 atm.
+      scoring:
+        - "Attractions between the particles pull them back as they approach the walls (or hold them together), reducing the force and frequency of wall collisions, so the measured pressure is lower than ideal."
+    - label: c
+      points: 1
+      prompt: Explain why $PV/nRT$ is greater than 1 at 800 atm.
+      scoring:
+        - "At very high pressure the particles' own volume is a significant fraction of the container, so the free space is less than V and the measured pressure is higher than ideal."
+    - label: d
+      points: 1
+      prompt: The same measurements are made on helium at 300 K and 100 atm. Would $PV/nRT$ for helium be closer to 1 or farther from 1 than 0.82? Justify your answer.
+      scoring:
+        - "Closer to 1: He atoms are small, nonpolar, and have few electrons, so the attractions between them are much weaker than between the particles of X (which deviate noticeably at 100 atm)."
+  explanation: |
+    **(a)** At 1 atm the ratio is 0.998, almost exactly ideal. The particles are so far apart that neither their size nor their attractions matter much.
+
+    **(b)** Below 1 means the pressure is lower than ideal. Attractions between particles reduce how hard and how often they hit the walls.
+
+    **(c)** Above 1 means the pressure is higher than ideal. At 800 atm the particles take up a real share of the container, so they have less room to move in and hit the walls more often.
+
+    **(d)** He behaves more ideally than nearly any other gas. Its tiny, nonpolar atoms barely attract each other, so the dip caused by attractions is much smaller.
+
+- id: apchem-10-frq-mixture-valve
+  type: frq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4", "10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A rigid 3.00 L vessel at 27 °C contains 0.0800 mol of $\ce{N2}$ and 0.0400 mol of $\ce{O2}$.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the total pressure in the vessel, in atm.
+      scoring:
+        - "n = 0.1200 mol; P = (0.1200)(0.08206)(300.15)/3.00 = 0.985 atm."
+    - label: b
+      points: 1
+      prompt: Calculate the partial pressure of $\ce{O2}$.
+      scoring:
+        - "X(O₂) = 0.0400/0.1200 = 0.333; P(O₂) = 0.333 × 0.985 = 0.328 atm, consistent with (a)."
+    - label: c
+      points: 1
+      prompt: The vessel is connected to an evacuated 2.00 L vessel, and the gas spreads through both at 27 °C. Calculate the new partial pressure of $\ce{O2}$.
+      scoring:
+        - "P(O₂) = 0.328 × 3.00/5.00 = 0.197 atm (Boyle's law, or nRT/V with V = 5.00 L)."
+    - label: d
+      points: 1
+      prompt: Next, 0.0400 mol of Ar is added to the combined vessels at constant temperature. Does the partial pressure of $\ce{N2}$ increase, decrease, or stay the same? Justify your answer.
+      scoring:
+        - "It stays the same: the moles of N₂, the volume, and the temperature are unchanged, and ideal gas particles don't interact, so N₂ collides with the walls just as before (P(N₂) = n(N₂)RT/V)."
+  explanation: |
+    **(a)**
+    $$
+    P = \frac{nRT}{V} = \frac{(0.1200)(0.08206)(300.15)}{3.00} = 0.985\ \text{atm}
+    $$
+
+    **(b)** $X_{\ce{O2}} = 1/3$, so $P_{\ce{O2}} = 0.985/3 = 0.328$ atm.
+
+    **(c)** The volume goes from 3.00 L to 5.00 L, so $P_{\ce{O2}} = 0.328 \times 3.00/5.00 = 0.197$ atm.
+
+    **(d)** The argon raises the total pressure and lowers the mole fraction of $\ce{N2}$, but the partial pressure of $\ce{N2}$ is still $n_{\ce{N2}}RT/V = (0.0800)(0.08206)(300.15)/5.00 = 0.394$ atm, unchanged.
+
+- id: apchem-10-frq-volatile-liquid
+  type: frq
+  subject: apchem
+  chapter: 10
+  sections: ["10.4", "10.8"]
+  cedTopics: ["3.4", "3.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: dumas-method
+  prompt: |
+    A student finds the molar mass of a volatile liquid. A few milliliters of the liquid are put in a 256.0 mL flask covered with foil that has a pinhole. The flask is heated in boiling water at 99.0 °C until all the liquid has vaporized and the excess vapor has escaped, leaving the flask full of vapor at the atmospheric pressure of 742 torr. The flask is cooled so the vapor condenses, and the condensed liquid has a mass of 0.475 g.
+  parts:
+    - label: a
+      points: 1
+      prompt: Calculate the number of moles of vapor that filled the flask at 99.0 °C.
+      scoring:
+        - "P = 742/760 = 0.9763 atm, V = 0.2560 L, T = 372.15 K; n = PV/RT = 8.18 × 10⁻³ mol."
+    - label: b
+      points: 1
+      prompt: Calculate the molar mass of the liquid.
+      scoring:
+        - "M = 0.475 g / 8.18 × 10⁻³ mol = 58.0 g/mol, consistent with (a)."
+    - label: c
+      points: 1
+      prompt: The liquid's empirical formula is $\ce{C3H6O}$. What is its molecular formula? Justify your answer.
+      scoring:
+        - "C₃H₆O: the empirical formula mass is 58.08 g/mol, which matches the molar mass, so the molecular formula is the same as the empirical formula."
+    - label: d
+      points: 1
+      prompt: The student takes the flask out of the water before all of the liquid has vaporized, so a little liquid is still in the flask. Would the calculated molar mass be too high, too low, or unaffected? Justify your answer.
+      scoring:
+        - "Too high: the measured mass includes the extra liquid, so m is too large while n (from PV/RT) is unchanged, and M = m/n is too large."
+    - label: e
+      points: 1
+      prompt: Near its boiling point, the vapor deviates from ideal behavior more than $\ce{N2}$ does at the same temperature and pressure. Explain why.
+      scoring:
+        - "The molecules of the volatile liquid attract each other much more strongly than N₂ molecules do (it is a liquid at room temperature), and at 99.0 °C it is close to the conditions where it condenses, so attractions reduce its pressure noticeably below the ideal value."
+  explanation: |
+    **(a)**
+    $$
+    n = \frac{PV}{RT} = \frac{(0.9763)(0.2560)}{(0.08206)(372.15)} = 8.18 \times 10^{-3}\ \text{mol}
+    $$
+
+    **(b)** $\mathcal{M} = 0.475/0.00818 = 58.0$ g/mol.
+
+    **(c)** $\ce{C3H6O}$ has a formula mass of $3(12.01) + 6(1.008) + 16.00 = 58.08$ g/mol, equal to the molar mass, so the molecular formula is $\ce{C3H6O}$.
+
+    **(d)** The leftover liquid is weighed as if it were vapor, so $m$ is too large. The moles come from $P$, $V$, and $T$, which don't change, so $\mathcal{M} = m/n$ is too high.
+
+    **(e)** A substance that is a liquid at room temperature has much stronger attractions between its molecules than $\ce{N2}$, which stays a gas down to about −196 °C. Close to its boiling point, those attractions pull the molecules together enough that the gas deviates noticeably from $PV = nRT$.

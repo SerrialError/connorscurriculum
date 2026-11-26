@@ -1,0 +1,181 @@
+---
+title: Kinetic-Molecular Theory, Effusion, and Diffusion
+subject: apchem
+chapter: 10
+sections: ["10.6", "10.7"]
+cedTopics: ["3.5"]
+order: 5
+authors: ["Claude"]
+summary: The assumptions of kinetic-molecular theory, temperature as average kinetic energy, reading and sketching Maxwell–Boltzmann distributions, how the model explains each gas law, and effusion and diffusion.
+resources:
+  - kind: video
+    title: Kinetic-Molecular Theory & Graham's Law - AP Chem Unit 3, Topic 5
+    url: https://www.youtube.com/watch?v=d3nEzAUWqfE
+    by: Jeremy Krug
+    minutes: 13
+    why: The assumptions of the theory and how it applies to gases, then Graham's law problems.
+  - kind: simulation
+    title: Gas Properties
+    url: https://phet.colorado.edu/en/simulations/gas-properties
+    by: PhET Interactive Simulations
+    why: The Energy screen plots the speed distribution of the particles live. Heat the gas, or mix heavy and light particles, and watch the curves move.
+  - kind: practice
+    title: Kinetic molecular theory
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:intermolecular-forces-and-properties/x2eef969c74e0d802:kinetic-molecular-theory/e/kinetic-molecular-theory
+    by: Khan Academy
+    why: AP practice on topic 3.5.
+---
+
+The gas laws describe **what** gases do. **Kinetic-molecular theory** (KMT) explains **why**, using a
+simple model of moving particles.
+
+## 1. The assumptions of the model (10.6)
+
+1. A gas is made of a huge number of particles in **continuous, random motion**.
+2. The **volume of the particles themselves is negligible** compared with the volume of the container.
+3. The particles **don't attract or repel each other**.
+4. Collisions are **elastic**: energy can pass from one particle to another, but the total kinetic energy
+   doesn't change as long as the temperature stays the same.
+5. The **average kinetic energy** of the particles is **proportional to the absolute (kelvin)
+   temperature**.
+
+An ideal gas is one that fits these assumptions exactly. Assumptions 2 and 3 are the ones real gases
+break, which is the subject of the [Real Gases lesson](../10-real-gases/).
+
+## 2. Temperature is average kinetic energy (10.6)
+
+Assumption 5 is what temperature **means** at the particle level. Double the kelvin temperature and you
+double the average kinetic energy of the particles.
+
+$$
+KE = \tfrac{1}{2}mv^2
+$$
+
+(This is on the equation sheet.) Two consequences come up constantly:
+
+- **At the same temperature, every gas has the same average kinetic energy.** He, $\ce{N2}$, and $\ce{CO2}$
+  at 300 K all have the same average $KE$ per particle.
+- **So lighter particles move faster.** If $\tfrac{1}{2}mv^2$ is the same and $m$ is smaller, $v$ must be
+  larger. At the same temperature, helium atoms move about 3.2 times as fast on average as argon atoms,
+  because $\sqrt{39.95/4.003} = 3.16$.
+
+<Callout type="warning">
+"Same temperature" means same average kinetic energy, **not** same speed. And doubling the kelvin
+temperature doubles the kinetic energy but raises the average speed only by a factor of $\sqrt{2}$, about
+1.4.
+</Callout>
+
+## 3. Maxwell–Boltzmann distributions (10.6, AP topic 3.5)
+
+Not every particle moves at the average speed. Collisions constantly speed some up and slow others down.
+A **Maxwell–Boltzmann distribution** shows how many particles have each speed (or each kinetic energy).
+
+![Speed distributions for N₂ at 200 K, 300 K, and 600 K. Each curve rises from zero, peaks, and tails off to the right. The 200 K curve has the tallest, narrowest peak, at about 345 m/s. The 300 K peak is at about 420 m/s, and the 600 K curve has the lowest, widest peak, at about 600 m/s. All three curves enclose the same area.](./mb-temperature.svg)
+
+How to read it:
+
+- The **peak** is the most probable speed.
+- The **area under the curve** is the total number of particles. Same sample, same area.
+- **Higher temperature:** the peak moves right (faster), and since the area can't change, the curve gets
+  **lower and wider**. More particles have high speeds.
+
+![Speed distributions at 300 K for Xe (131 g/mol), Ar (40 g/mol), Ne (20 g/mol), and He (4 g/mol). Xe has the tallest, narrowest peak at the lowest speed, about 195 m/s. Ar peaks near 350 m/s, Ne near 500 m/s, and He has a low, very wide curve peaking near 1100 m/s.](./mb-molar-mass.svg)
+
+- **Lower molar mass, same temperature:** the curve looks like the high-temperature one. The peak moves
+  right and the curve spreads out.
+
+<Callout type="ap-tip">
+When asked to sketch the distribution for a higher temperature, draw the peak **to the right and lower**
+than the original, with a longer tail to the right, and keep the area about the same. A taller peak at
+higher temperature is the most common error.
+
+One subtle point: if the x-axis is **kinetic energy** instead of speed, two different gases at the same
+temperature have the **same** curve, because they have the same distribution of kinetic energies. Only the
+speed distributions differ.
+</Callout>
+
+## 4. How KMT explains the gas laws (10.6)
+
+Each law follows from one idea: **pressure comes from collisions with the walls**, and it depends on how
+often the particles hit and how hard.
+
+| Change | What the particles do | Result |
+|---|---|---|
+| Decrease $V$ ($n$, $T$ constant) | Same speeds, less room: more collisions per second on each part of the wall | $P$ increases (Boyle) |
+| Increase $T$ ($n$, $V$ constant) | Faster particles hit more often and harder | $P$ increases |
+| Increase $T$ ($n$, $P$ constant) | Collisions become harder and more frequent, so the gas expands until the pressure is back where it was | $V$ increases (Charles) |
+| Add gas ($T$, $V$ constant) | More particles, more collisions | $P$ increases |
+| Mix gases | Particles don't interact, so each gas hits the walls as if alone | Partial pressures add (Dalton) |
+
+<Reveal label="Worked example: explaining a pressure change">
+
+**Question:** A rigid container of gas is heated from 300 K to 400 K. Explain, in terms of the particles, why
+the pressure increases.
+
+**Answer:** At higher temperature the average kinetic energy of the particles is greater, so they move
+faster. They collide with the walls more often, and with more force, so the pressure increases. The volume
+can't change because the container is rigid.
+
+</Reveal>
+
+## 5. Effusion and diffusion (10.7)
+
+**Effusion** is gas escaping through a tiny hole into a vacuum, one particle at a time. **Diffusion** is one
+gas spreading through another. Both are faster for **lighter** particles, because lighter particles move
+faster at the same temperature. That's why a helium balloon goes flat faster than an air-filled one.
+
+![Left: effusion. Gas particles in one half of a box pass one at a time through a tiny hole into a vacuum in the other half. Right: diffusion. Ammonia (17.0 g/mol) enters one end of a glass tube and hydrogen chloride (36.5 g/mol) enters the other. Where they meet, a white ring of solid ammonium chloride forms, closer to the HCl end, about 59% of the way from the NH₃ end, because the lighter ammonia travels farther in the same time.](./effusion-diffusion.svg)
+
+Diffusion is much slower than the particles' speeds suggest. A nitrogen molecule at room temperature moves
+at about 500 m/s, but a smell takes seconds or minutes to cross a room. The molecule keeps colliding with
+other molecules and changing direction. The average distance it travels between collisions is the **mean
+free path**, about 70 nm in air at sea level.
+
+<Callout type="not-on-ap" title="Graham's law is class-only">
+The AP exam asks you to explain **qualitatively** that lighter gases effuse and diffuse faster (topic 3.5).
+The calculations below aren't in the AP course description or on the equation sheet. They are in the
+textbook and may be on the class test.
+</Callout>
+
+**Graham's law of effusion:** the rates of effusion of two gases at the same temperature and pressure are
+inversely proportional to the square roots of their molar masses:
+
+$$
+\frac{r_1}{r_2} = \sqrt{\frac{\mathcal{M}_2}{\mathcal{M}_1}}
+$$
+
+The time to effuse a fixed amount is the reverse: the heavier gas takes longer, by the same factor.
+
+The **root-mean-square speed** is one way to describe a typical particle speed:
+
+$$
+u_\text{rms} = \sqrt{\frac{3RT}{\mathcal{M}}}
+$$
+
+Use $R = 8.314$ J/(mol·K) and $\mathcal{M}$ in **kg/mol** so that the speed comes out in m/s.
+
+<Reveal label="Worked example: Graham's law">
+
+**(a)** How many times faster does He effuse than $\ce{O2}$ at the same conditions?
+
+$$
+\frac{r_\text{He}}{r_{\ce{O2}}} = \sqrt{\frac{32.00}{4.003}} = 2.83
+$$
+
+**(b)** An unknown gas takes 4.00 times as long as He to effuse. What is its molar mass?
+
+The unknown's rate is $1/4.00$ of helium's, so
+
+$$
+\frac{r_\text{He}}{r_x} = 4.00 = \sqrt{\frac{\mathcal{M}_x}{4.003}} \qquad \mathcal{M}_x = 4.003 \times 4.00^2 = 64.0\ \text{g/mol}
+$$
+
+That matches $\ce{SO2}$ (64.07 g/mol).
+
+**(c)** What is $u_\text{rms}$ for $\ce{N2}$ at 25 °C?
+
+$$
+u_\text{rms} = \sqrt{\frac{3(8.314)(298.15)}{0.02802}} = 515\ \text{m/s}
+$$
+
+</Reveal>

@@ -56,7 +56,14 @@
       "Memorizing solubility rules beyond “all sodium, potassium, ammonium, and nitrate salts are soluble”",
       "The terms “oxidizing agent” and “reducing agent”"
     ],
-    "sections": []
+    "sections": [
+      { "id": "4.1", "title": "General Properties of Aqueous Solutions" },
+      { "id": "4.2", "title": "Precipitation Reactions" },
+      { "id": "4.3", "title": "Acids, Bases, and Neutralization Reactions" },
+      { "id": "4.4", "title": "Oxidation–Reduction Reactions" },
+      { "id": "4.5", "title": "Concentrations of Solutions" },
+      { "id": "4.6", "title": "Solution Stoichiometry and Chemical Analysis" }
+    ]
   },
   {
     "number": 5,
@@ -66,7 +73,17 @@
       "Technical distinctions between enthalpy and internal energy",
       "The concept of state functions"
     ],
-    "sections": []
+    "sections": [
+      { "id": "5.1", "title": "The Nature of Chemical Energy" },
+      { "id": "5.2", "title": "The First Law of Thermodynamics" },
+      { "id": "5.3", "title": "Enthalpy" },
+      { "id": "5.4", "title": "Enthalpies of Reaction" },
+      { "id": "5.5", "title": "Calorimetry" },
+      { "id": "5.6", "title": "Hess’s Law" },
+      { "id": "5.7", "title": "Enthalpies of Formation" },
+      { "id": "5.8", "title": "Bond Enthalpies" },
+      { "id": "5.9", "title": "Foods and Fuels" }
+    ]
   },
   {
     "number": 6,

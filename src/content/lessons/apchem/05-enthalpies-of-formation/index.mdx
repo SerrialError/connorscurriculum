@@ -1,0 +1,200 @@
+---
+title: Enthalpies of Formation and Bond Enthalpies
+subject: apchem
+chapter: 5
+sections: ["5.7", "5.8"]
+cedTopics: ["6.7", "6.8"]
+order: 5
+authors: ["Claude"]
+summary: Standard states, formation equations, calculating ΔH° of a reaction from enthalpies of formation, working backward to an unknown ΔH°f, and how bond enthalpies give an estimate instead.
+resources:
+  - kind: video
+    title: Using Enthalpy of Formation to Calculate ΔH - AP Chem Unit 6, Topic 8
+    url: https://www.youtube.com/watch?v=PVciNA7tVnM
+    by: Jeremy Krug
+    minutes: 12
+    why: What enthalpy of formation means, then several ΔH° calculations with the products-minus-reactants equation (sections 1 to 3).
+  - kind: practice
+    title: Enthalpy of formation
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:thermodynamics/x2eef969c74e0d802:enthalpy-of-formation/e/enthalpy-of-formation
+    by: Khan Academy
+    why: AP practice on topic 6.8.
+  - kind: practice
+    title: Bond enthalpies
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:thermodynamics/x2eef969c74e0d802:bond-enthalpies/e/bond-enthalpies
+    by: Khan Academy
+    why: AP practice on topic 6.7, for section 4.
+---
+
+## 1. Standard enthalpy of formation (5.7)
+
+Tables can't list ΔH for every possible reaction. Instead they list one value per compound, its
+**standard enthalpy of formation**, ΔH°f: the enthalpy change when **1 mole** of the compound forms from
+its **elements in their standard states**.
+
+- The **standard state** of a substance is its pure form at 1 atm (and usually 25 °C).
+- The ° means standard conditions.
+
+Each ΔH°f belongs to a **formation equation**, which always has exactly 1 mol of product and only
+elements as reactants:
+
+$$
+\ce{2C(s) + 3H2(g) + 1/2O2(g) -> C2H5OH(l)} \qquad \Delta H^\circ_f = -277.7\ \text{kJ/mol}
+$$
+
+Fractions are normal here, because the product's coefficient must be 1.
+
+**An element in its standard state has ΔH°f = 0.** Forming $\ce{O2(g)}$ from $\ce{O2(g)}$ is no change
+at all. That applies to $\ce{O2(g)}$, $\ce{H2(g)}$, $\ce{N2(g)}$, $\ce{Br2(l)}$, C(graphite), Na(s), and
+Fe(s). It does **not** apply to an element in another form: $\ce{O3(g)}$, $\ce{Br2(g)}$, C(diamond), and
+O(g) all have nonzero values.
+
+<Reveal label="Worked example: is it a formation equation?">
+
+Which of these has ΔH° equal to ΔH°f of the product?
+
+**(a)** $\ce{H2(g) + 1/2O2(g) -> H2O(l)}$. Yes: 1 mol of product, from elements in their standard states.
+
+**(b)** $\ce{2H2(g) + O2(g) -> 2H2O(l)}$. No: 2 mol of product. Its ΔH° is $2 \times \Delta H^\circ_f$.
+
+**(c)** $\ce{CO(g) + 1/2O2(g) -> CO2(g)}$. No: CO is a compound, not an element.
+
+**(d)** $\ce{C(s) + 2Cl2(l) -> CCl4(l)}$. No: chlorine's standard state is a gas, not a liquid.
+
+</Reveal>
+
+Some values, in kJ/mol at 25 °C. An AP question supplies the ones it needs, so this table is for reading,
+not memorizing:
+
+| Substance | ΔH°f | Substance | ΔH°f |
+|---|---|---|---|
+| $\ce{CO2(g)}$ | −393.5 | $\ce{CH4(g)}$ | −74.8 |
+| $\ce{CO(g)}$ | −110.5 | $\ce{C3H8(g)}$ | −103.8 |
+| $\ce{H2O(l)}$ | −285.8 | $\ce{C2H5OH(l)}$ | −277.7 |
+| $\ce{H2O(g)}$ | −241.8 | $\ce{C2H2(g)}$ | +226.7 |
+| $\ce{NH3(g)}$ | −46.2 | $\ce{NO(g)}$ | +90.4 |
+| $\ce{HCl(g)}$ | −92.3 | $\ce{NO2(g)}$ | +33.8 |
+| $\ce{CaCO3(s)}$ | −1207.1 | $\ce{CaO(s)}$ | −635.5 |
+
+Most compounds have negative values: they're lower in enthalpy, more stable, than their elements. A
+positive value, like acetylene's, means the compound has more enthalpy than its elements.
+
+## 2. ΔH° of a reaction from formation values (5.7, AP topic 6.8)
+
+$$
+\Delta H^\circ_\text{rxn} = \sum n\,\Delta H^\circ_f(\text{products}) - \sum m\,\Delta H^\circ_f(\text{reactants})
+$$
+
+This is on the equation sheet. n and m are the coefficients in the balanced equation.
+
+It's Hess's law in disguise. Picture taking the reactants apart into their elements (the reverse of their
+formation reactions), then building the products from those elements:
+
+![Enthalpy diagram. Elements in their standard states at the top. An arrow from Reactants up to the elements is labeled undo formation of reactants, minus the sum of ΔH°f of the reactants. An arrow from the elements down to Products is labeled form products, plus the sum of ΔH°f of the products. A dashed arrow straight from reactants to products is ΔH°rxn. Below: ΔH°rxn = Σ ΔH°f(products) − Σ ΔH°f(reactants).](./formation-path.svg)
+
+<Reveal label="Worked example: burning propane">
+
+$$
+\ce{C3H8(g) + 5O2(g) -> 3CO2(g) + 4H2O(l)}
+$$
+
+Use the table above.
+
+**Products:** $3(-393.5) + 4(-285.8) = -1180.5 - 1143.2 = -2323.7$ kJ
+
+**Reactants:** $(-103.8) + 5(0) = -103.8$ kJ
+
+$$
+\Delta H^\circ_\text{rxn} = -2323.7 - (-103.8) = -2219.9\ \text{kJ}
+$$
+
+</Reveal>
+
+<Reveal label="Worked example: work backward to a ΔH°f (hard)">
+
+Ethanol burns with $\Delta H^\circ = -1367$ kJ:
+
+$$
+\ce{C2H5OH(l) + 3O2(g) -> 2CO2(g) + 3H2O(l)}
+$$
+
+Use the values for $\ce{CO2(g)}$ and $\ce{H2O(l)}$ to find ΔH°f of ethanol.
+
+$$
+-1367 = [2(-393.5) + 3(-285.8)] - [\Delta H^\circ_f(\ce{C2H5OH}) + 3(0)]
+$$
+
+$$
+-1367 = -1644.4 - \Delta H^\circ_f(\ce{C2H5OH})
+$$
+
+$$
+\Delta H^\circ_f(\ce{C2H5OH}) = -1644.4 + 1367 = -277\ \text{kJ/mol}
+$$
+
+That matches the table value of −277.7 kJ/mol to the precision of the data.
+
+</Reveal>
+
+<Reveal label="Worked example: decomposing limestone">
+
+Find ΔH° for $\ce{CaCO3(s) -> CaO(s) + CO2(g)}$.
+
+$$
+\Delta H^\circ = [(-635.5) + (-393.5)] - (-1207.1) = -1029.0 + 1207.1 = +178.1\ \text{kJ}
+$$
+
+Positive: making lime from limestone takes a steady supply of heat, which is why it's done in a kiln.
+
+</Reveal>
+
+<Callout type="warning">
+The four usual mistakes:
+
+- forgetting to multiply each ΔH°f by its **coefficient**,
+- doing reactants minus products, which flips the sign,
+- using $\ce{H2O(g)}$ when the equation has $\ce{H2O(l)}$, or the reverse,
+- giving $\ce{O2}$ or another element a nonzero value.
+</Callout>
+
+## 3. Bond enthalpies (5.8, AP topic 6.7)
+
+A second way to find ΔH uses **bond enthalpies**, the energy to break 1 mol of a given bond in the gas
+phase. Breaking bonds takes energy and forming them releases it:
+
+$$
+\Delta H \approx \sum(\text{bonds broken}) - \sum(\text{bonds formed})
+$$
+
+The Chapter 8 lesson on bond enthalpies covers the method in detail, with a table of values. One example
+here, to compare the two methods:
+
+<Reveal label="Worked example: ammonia both ways">
+
+$\ce{N2(g) + 3H2(g) -> 2NH3(g)}$. Bond enthalpies: N≡N 941, H–H 436, N–H 391 kJ/mol.
+
+**Bonds broken:** one N≡N and three H–H: $941 + 3(436) = 2249$ kJ
+
+**Bonds formed:** six N–H (three in each $\ce{NH3}$): $6(391) = 2346$ kJ
+
+$$
+\Delta H \approx 2249 - 2346 = -97\ \text{kJ}
+$$
+
+**From formation values:** $\Delta H^\circ = 2(-46.2) - 0 = -92.4$ kJ.
+
+The two are close but not equal, because bond enthalpies are averages over many molecules.
+
+</Reveal>
+
+| | Enthalpies of formation | Bond enthalpies |
+|---|---|---|
+| Formula | products − reactants | broken − formed |
+| Result | Accurate (from measured data) | An estimate (average values) |
+| Works for | Any states, if values are listed | Gases; needs every bond drawn from Lewis structures |
+
+<Callout type="ap-tip">
+The two equations run in **opposite orders**: ΔH°f is products minus reactants, but bond enthalpy is
+reactants (broken) minus products (formed). Only the ΔH°f equation is on the equation sheet, so learn
+the bond-enthalpy order from its meaning: breaking costs energy (+), forming releases it (−).
+</Callout>

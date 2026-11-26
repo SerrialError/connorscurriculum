@@ -118,8 +118,11 @@ These come from Connor's corrections. Breaking one has meant redoing work.
 - If something is on neither the AP exam nor the class tests, delete it from lessons and questions.
   Don't keep it with a "not on AP" note. For Chapters 1–3 that meant Fahrenheit, R_f values,
   calories, mass spectra of molecules, and organic naming (2.9). The atom-history experiments
-  (Dalton, Thomson, Millikan, Rutherford) were on the class test, so they stay.
-- Review sheets list only what to memorize. Don't restate what the equation sheet gives.
+  (Dalton, Thomson, Millikan, Rutherford) were on the class test, so they stay. In Chapters 4–5 the
+  class covered ΔE = q + w with work signs, state functions, the longer solubility-rules table, and
+  HClO₃ as a strong acid, so those stay as class-only content.
+- Review sheets list only what to memorize. Don't restate what the equation sheet gives, not even as a
+  "Given on the sheet" list.
 - The CED has no list of polyatomic ions, but AP questions name compounds and expect the formula.
   The site teaches the common 16 plus hydronium.
 - The Chapters 1–3 format (45 MCQ, about 20 of them math, including empirical formulas and

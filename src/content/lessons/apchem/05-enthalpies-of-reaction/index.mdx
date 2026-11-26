@@ -1,0 +1,153 @@
+---
+title: Enthalpies of Reaction
+subject: apchem
+chapter: 5
+sections: ["5.4"]
+cedTopics: ["6.2", "6.6"]
+order: 2
+authors: ["Claude"]
+summary: Thermochemical equations, the three rules for scaling, reversing, and changing states, energy diagrams, and the heat released or absorbed by a given amount of reactant.
+resources:
+  - kind: video
+    title: How to Calculate Enthalpy of Reaction - AP Chem Unit 6, Topic 6a
+    url: https://www.youtube.com/watch?v=LNPoyiCpLgM
+    by: Jeremy Krug
+    minutes: 11
+    why: ΔH used in stoichiometry, and what happens to ΔH when a reaction is reversed or multiplied (sections 2 and 4).
+  - kind: practice
+    title: Introduction to enthalpy of reaction
+    url: https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:thermodynamics/x2eef969c74e0d802:introduction-to-enthalpy-of-reaction/e/introduction-to-enthalpy-of-reaction
+    by: Khan Academy
+    why: AP practice on topic 6.6.
+---
+
+## 1. Thermochemical equations (5.4)
+
+A balanced equation with its enthalpy change is a **thermochemical equation**:
+
+$$
+\ce{2H2(g) + O2(g) -> 2H2O(g)} \qquad \Delta H = -483.6\ \text{kJ}
+$$
+
+The ΔH belongs to the equation **as written**: when 2 mol of $\ce{H2}$ react with 1 mol of $\ce{O2}$ to
+make 2 mol of water vapor, 483.6 kJ of heat is released. Tables often write the unit as kJ/mol, meaning
+"per mole of reaction," one run of the equation with these coefficients.
+
+## 2. Three rules (5.4)
+
+**ΔH scales with the amount.** Enthalpy is an extensive property. Half the reaction, half the heat:
+
+$$
+\ce{H2(g) + 1/2O2(g) -> H2O(g)} \qquad \Delta H = -241.8\ \text{kJ}
+$$
+
+**Reversing a reaction flips the sign.** The same amount of energy is involved, in the other direction:
+
+$$
+\ce{2H2O(g) -> 2H2(g) + O2(g)} \qquad \Delta H = +483.6\ \text{kJ}
+$$
+
+**States matter.** Making liquid water releases more heat than making water vapor, because steam
+condensing to liquid also releases heat:
+
+$$
+\ce{2H2(g) + O2(g) -> 2H2O(l)} \qquad \Delta H = -571.6\ \text{kJ}
+$$
+
+The difference, $571.6 - 483.6 = 88.0$ kJ, is the heat released when 2 mol of water vapor condense.
+
+## 3. Energy diagrams (AP topic 6.2)
+
+An **energy diagram** (enthalpy diagram) draws reactants and products as levels on a vertical enthalpy
+scale. The arrow from reactants to products is ΔH.
+
+![Two enthalpy diagrams. Exothermic, methane burning: CH₄ + 2O₂ is high and CO₂ + 2H₂O(l) is lower, with a downward arrow labeled ΔH = −890 kJ. Endothermic, CaCO₃ decomposing: CaCO₃(s) is low and CaO(s) + CO₂(g) is higher, with an upward arrow labeled ΔH = +178 kJ.](./enthalpy-diagrams.svg)
+
+- **Products lower** than reactants: energy was released. Exothermic, ΔH < 0.
+- **Products higher** than reactants: energy was absorbed. Endothermic, ΔH > 0.
+
+The same kind of diagram works for physical changes. Liquid water sits below water vapor, so condensing is
+a downward (exothermic) arrow and boiling is an upward one.
+
+<Callout type="note">
+Chapter 14 adds a hump between reactants and products, the activation energy, to the same diagram. The
+height of the hump controls the rate; the difference between the two ends is still ΔH.
+</Callout>
+
+## 4. Heat from an amount of reactant (5.4, AP topic 6.6)
+
+Because ΔH scales with the amount, it works like one more mole ratio. For the equation as written,
+"−890 kJ" pairs with each coefficient:
+
+$$
+\ce{CH4(g) + 2O2(g) -> CO2(g) + 2H2O(l)} \qquad \Delta H = -890\ \text{kJ}
+$$
+
+$$
+\frac{890\ \text{kJ released}}{1\ \text{mol CH}_4} \qquad \frac{890\ \text{kJ released}}{2\ \text{mol O}_2}
+$$
+
+<Reveal label="Worked example: heat from burning methane">
+
+How much heat is released when 10.0 g of $\ce{CH4}$ burns?
+
+$\mathcal{M}(\ce{CH4}) = 12.01 + 4(1.008) = 16.04$ g/mol
+
+$$
+10.0\ \text{g} \times \frac{1\ \text{mol}}{16.04\ \text{g}} \times \frac{-890\ \text{kJ}}{1\ \text{mol CH}_4} = -555\ \text{kJ}
+$$
+
+555 kJ is released. Write $q = -555$ kJ for the reaction, or say "555 kJ released." Both are correct;
+"−555 kJ released" is a double negative.
+
+</Reveal>
+
+<Reveal label="Worked example: mass from an amount of heat">
+
+$\ce{CaCO3(s) -> CaO(s) + CO2(g)}$, $\Delta H = +178$ kJ. What mass of $\ce{CaCO3}$ can be decomposed
+by 500. kJ of heat?
+
+$$
+500.\ \text{kJ} \times \frac{1\ \text{mol CaCO}_3}{178\ \text{kJ}} = 2.81\ \text{mol}
+$$
+
+$\mathcal{M}(\ce{CaCO3}) = 40.08 + 12.01 + 3(16.00) = 100.09$ g/mol
+
+$$
+2.81\ \text{mol} \times 100.09\ \text{g/mol} = 281\ \text{g}
+$$
+
+</Reveal>
+
+<Reveal label="Worked example: heat with a limiting reactant (hard)">
+
+$\ce{2H2(g) + O2(g) -> 2H2O(l)}$, $\Delta H = -571.6$ kJ. A mixture of 4.00 g $\ce{H2}$ and 16.0 g
+$\ce{O2}$ reacts. How much heat is released?
+
+- $\ce{H2}$: $4.00 / 2.016 = 1.98$ mol
+- $\ce{O2}$: $16.0 / 32.00 = 0.500$ mol
+
+0.500 mol $\ce{O2}$ needs $2 \times 0.500 = 1.00$ mol $\ce{H2}$, and 1.98 mol is available. **$\ce{O2}$
+is limiting.**
+
+$$
+0.500\ \text{mol O}_2 \times \frac{571.6\ \text{kJ}}{1\ \text{mol O}_2} = 286\ \text{kJ released}
+$$
+
+The heat depends on how much reaction actually happens, so it comes from the limiting reactant.
+
+</Reveal>
+
+## 5. Why the temperature changes (AP topic 6.6)
+
+In an exothermic reaction, the products have **less chemical potential energy** than the reactants
+(stronger bonds formed). The difference first shows up as faster-moving product particles: higher
+kinetic energy, so a higher temperature. Those particles then collide with the surroundings and pass the
+energy on, until everything reaches the same temperature. An endothermic reaction does the reverse: the
+products have more potential energy, the particles slow down, and heat flows in from the surroundings.
+
+<Callout type="ap-tip">
+On AP free-response questions, put a sign and units on every ΔH, and keep the sign of the **heat**
+straight: q for the surroundings (the water) has the opposite sign to q for the reaction. When a question
+asks for heat "released," a positive number with the word "released" is fine.
+</Callout>

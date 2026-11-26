@@ -1,0 +1,1466 @@
+# Practice questions for Chapter 5 (Thermochemistry). Original; not taken from the textbook or College
+# Board materials. Endothermic and exothermic processes are AP topic 6.1, energy diagrams 6.2, heat
+# transfer and thermal equilibrium 6.3, heat capacity and calorimetry 6.4, enthalpy of reaction 6.6,
+# bond enthalpies 6.7, enthalpies of formation 6.8, and Hess's law 6.9. Internal energy, work, and state
+# functions are class only (the CED excludes them), so those questions have cedTopics: [].
+# The specific heat of water, 4.18 J/(g·°C), isn't on the equation sheet, so prompts give it.
+# calculation: true marks questions that need a numeric calculation.
+
+# ---------------------------------------------------------------------------
+# 5.1–5.3 Energy, the first law, and enthalpy
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-exothermic-signs
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: ["6.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement describes every **exothermic** process?
+  choices:
+    - { id: a, text: "Heat flows from the surroundings into the system, so q is positive" }
+    - { id: b, text: "Heat flows from the system to the surroundings, so q is negative" }
+    - { id: c, text: "Heat flows from the system to the surroundings, so q is positive" }
+    - { id: d, text: "No heat flows, but the temperature of the system rises" }
+  answer: b
+  explanation: |
+    Exothermic means the system releases heat. Signs are from the system's point of view, so energy leaving the system makes q (and ΔH) negative. (A) describes an endothermic process, and (C) has the right direction but the wrong sign.
+
+- id: apchem-05-cold-pack
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: ["6.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    When ammonium chloride dissolves in water, the beaker becomes cold. Which statement is correct?
+  choices:
+    - { id: a, text: "The dissolving is exothermic, because the beaker loses heat to the room" }
+    - { id: b, text: "The dissolving is exothermic, because cold is released into the water" }
+    - { id: c, text: "The dissolving is exothermic, because heat flows from the room into the beaker" }
+    - { id: d, text: "The dissolving is endothermic, because heat flows from the water into the process" }
+  answer: d
+  explanation: |
+    The water (part of the surroundings) gets colder, so energy left it and went into the dissolving process. The process absorbs heat: endothermic, ΔH > 0.
+    Heat from the room (C) warms the beaker back up later; it isn't what the dissolving does, and the beaker losing heat (A) would make it warmer, not colder. "Cold" (B) isn't a form of energy.
+
+- id: apchem-05-thermal-equilibrium-particles
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.1"]
+  cedTopics: ["6.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A hot copper block is placed in cool water in an insulated container. Which statement best explains, at the particle level, why the two eventually reach the same temperature?
+  choices:
+    - { id: a, text: "Copper atoms gradually move into the water until both parts of the container hold equal numbers of particles" }
+    - { id: b, text: "Collisions transfer kinetic energy from faster to slower particles until the average kinetic energies are equal" }
+    - { id: c, text: "Cold flows from the water into the copper block until the copper has absorbed as much cold as the water holds" }
+    - { id: d, text: "The total kinetic energy of all the copper atoms becomes equal to the total kinetic energy of all the water molecules" }
+  answer: b
+  explanation: |
+    Temperature measures average kinetic energy. The copper particles move faster on average; in collisions they pass energy to the slower water molecules until the averages, and so the temperatures, are equal.
+    (D) is a common slip: the **totals** need not be equal, because the copper and the water have different numbers of particles.
+
+- id: apchem-05-heat-vs-temperature
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.1"]
+  cedTopics: ["6.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Sample X is 100 g of water at 50 °C. Sample Y is 200 g of water at 50 °C. Which statement is true?
+  choices:
+    - { id: a, text: "The water molecules in Y have a greater average kinetic energy than those in X" }
+    - { id: b, text: "Heat flows from Y to X when they touch, because Y contains more thermal energy" }
+    - { id: c, text: "The molecules have the same average kinetic energy, but Y has more total thermal energy" }
+    - { id: d, text: "X and Y contain the same total thermal energy, because they have the same temperature" }
+  answer: c
+  explanation: |
+    Same temperature means the same average kinetic energy per molecule. Y has twice as many molecules, so its total thermal energy is larger.
+    No heat flows between objects at the same temperature (B), whatever their sizes.
+
+- id: apchem-05-endothermic-bond-breaking
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.1"]
+  cedTopics: ["6.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which process is **endothermic**?
+  choices:
+    - { id: a, text: "$\\ce{2Cl(g) -> Cl2(g)}$" }
+    - { id: b, text: "$\\ce{H2O(g) -> H2O(l)}$" }
+    - { id: c, text: "$\\ce{Na+(g) + Cl-(g) -> NaCl(s)}$" }
+    - { id: d, text: "$\\ce{Cl2(g) -> 2Cl(g)}$" }
+  answer: d
+  explanation: |
+    Breaking a bond always takes energy. The other three bring attracted particles together (forming a bond, condensing, and forming an ionic lattice), which releases energy.
+
+- id: apchem-05-dissolving-exothermic-reason
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: ["6.1"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    When solid $\ce{CaCl2}$ dissolves in water, the temperature of the solution rises. Which statement explains this?
+  choices:
+    - { id: a, text: "Breaking the ionic attractions in the solid releases more energy than forming the ion–water attractions absorbs" }
+    - { id: b, text: "Forming ion–water attractions releases more energy than separating the ions and the water molecules requires" }
+    - { id: c, text: "No attractions are broken when an ionic solid dissolves, so the process can only release energy" }
+    - { id: d, text: "The ions gain kinetic energy as they leave the crystal, which requires heat to flow in from outside" }
+  answer: b
+  explanation: |
+    Dissolving breaks attractions (ion–ion in the solid and some between water molecules), which costs energy, and forms ion–dipole attractions, which releases energy. The temperature rose, so the energy released was larger: exothermic.
+    (A) has the energy directions backward: breaking attractions never releases energy.
+
+- id: apchem-05-system-surroundings
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: ["6.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A reaction between two dissolved substances is carried out in a coffee-cup calorimeter. Which is part of the **system**?
+  choices:
+    - { id: a, text: "The water the reactants are dissolved in" }
+    - { id: b, text: "The foam cups and the lid" }
+    - { id: c, text: "The reacting ions or molecules" }
+    - { id: d, text: "The thermometer and the stirrer" }
+  answer: c
+  explanation: |
+    The system is the reaction itself. The water, cups, and thermometer are the surroundings; the water's temperature change is how the heat of the system is measured.
+
+- id: apchem-05-first-law-calc
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A gas absorbs 120 J of heat and does 45 J of work as it expands. What is ΔE for the gas? (Use $\Delta E = q + w$.)
+  choices:
+    - { id: a, text: "+75 J" }
+    - { id: b, text: "+165 J" }
+    - { id: c, text: "−75 J" }
+    - { id: d, text: "−165 J" }
+  answer: a
+  explanation: |
+    Heat absorbed: $q = +120$ J. Work done **by** the system: $w = -45$ J. $\Delta E = 120 + (-45) = +75$ J.
+    (B) treats the work as done on the gas.
+
+- id: apchem-05-work-sign
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A gas in a cylinder is compressed by a piston while no heat flows in or out. Which describes the work and the internal energy of the gas?
+  choices:
+    - { id: a, text: "w is negative, and the internal energy of the gas decreases" }
+    - { id: b, text: "w is negative, and the internal energy of the gas increases" }
+    - { id: c, text: "w is positive, and the internal energy of the gas decreases" }
+    - { id: d, text: "w is positive, and the internal energy of the gas increases" }
+  answer: d
+  explanation: |
+    Work done **on** the system is positive. With $q = 0$, $\Delta E = w > 0$, so the internal energy rises (and the gas warms up).
+
+- id: apchem-05-state-function
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which quantity is a **state function**, depending only on the starting and ending states of a system?
+  choices:
+    - { id: a, text: "The heat q transferred during the change" }
+    - { id: b, text: "The work w done during the change" }
+    - { id: c, text: "The enthalpy change ΔH of the change" }
+    - { id: d, text: "The time taken to make the change" }
+  answer: c
+  explanation: |
+    Enthalpy (like internal energy) is a state function: ΔH depends only on the start and end. Heat and work separately depend on the path taken, even though their sum doesn't. This is why Hess's law works.
+
+- id: apchem-05-delta-h-meaning
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.3"]
+  cedTopics: ["6.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What does the enthalpy change, ΔH, of a reaction carried out in an open beaker represent?
+  choices:
+    - { id: a, text: "The heat absorbed or released by the reaction at constant pressure" }
+    - { id: b, text: "The total energy contained in the bonds of the products" }
+    - { id: c, text: "The minimum energy the reactants need to start reacting" }
+    - { id: d, text: "The change in temperature of the surroundings during the reaction" }
+  answer: a
+  explanation: |
+    At constant pressure, $\Delta H = q_P$: the heat gained (positive) or released (negative) by the reaction. (C) is the activation energy (Chapter 14). (D) is a temperature, not an energy; it's used to **measure** ΔH.
+
+- id: apchem-05-temperature-rise-why
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.3"]
+  cedTopics: ["6.6"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    An exothermic reaction in solution makes the solution warmer. Which statement best explains the temperature rise?
+  choices:
+    - { id: a, text: "The products have more potential energy than the reactants, and the extra comes from the water" }
+    - { id: b, text: "The reactants absorb heat from the solution, which causes the product molecules to move faster" }
+    - { id: c, text: "The products have less potential energy than the reactants, and the difference becomes kinetic energy of particles" }
+    - { id: d, text: "Bonds in the reactants release energy as they break, which then raises the temperature of the water" }
+  answer: c
+  explanation: |
+    Stronger bonds form than were broken, so the products have lower chemical potential energy. That energy appears as faster particle motion (higher kinetic energy), which collisions pass on to the water, raising its temperature.
+    (D) is wrong: breaking bonds absorbs energy. (A) and (B) describe an endothermic reaction.
+
+# ---------------------------------------------------------------------------
+# 5.4 Enthalpies of reaction
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-reverse-sign
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: ammonia-synthesis-dh
+  prompt: |
+    $\ce{N2(g) + 3H2(g) -> 2NH3(g)}$ has $\Delta H = -92.4$ kJ. What is ΔH for $\ce{2NH3(g) -> N2(g) + 3H2(g)}$?
+  choices:
+    - { id: a, text: "−92.4 kJ" }
+    - { id: b, text: "−46.2 kJ" }
+    - { id: c, text: "+46.2 kJ" }
+    - { id: d, text: "+92.4 kJ" }
+  answer: d
+  explanation: |
+    Reversing a reaction changes the sign of ΔH but not its size. The amounts are the same (2 mol $\ce{NH3}$), so the magnitude stays 92.4 kJ.
+
+- id: apchem-05-scale-dh
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: ammonia-synthesis-dh
+  prompt: |
+    $\ce{N2(g) + 3H2(g) -> 2NH3(g)}$ has $\Delta H = -92.4$ kJ. What is ΔH for $\ce{1/2N2(g) + 3/2H2(g) -> NH3(g)}$?
+  choices:
+    - { id: a, text: "−46.2 kJ" }
+    - { id: b, text: "−92.4 kJ" }
+    - { id: c, text: "−184.8 kJ" }
+    - { id: d, text: "+46.2 kJ" }
+  answer: a
+  explanation: |
+    Every coefficient was halved, so ΔH is halved: $-92.4 / 2 = -46.2$ kJ. The direction didn't change, so the sign stays negative.
+
+- id: apchem-05-heat-burning-hydrogen
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{2H2(g) + O2(g) -> 2H2O(l)}$, $\Delta H = -571.6$ kJ. How much heat is released when 5.00 g of $\ce{H2}$ burns in excess oxygen?
+  choices:
+    - { id: a, text: "286 kJ" }
+    - { id: b, text: "1420 kJ" }
+    - { id: c, text: "709 kJ" }
+    - { id: d, text: "354 kJ" }
+  answer: c
+  explanation: |
+    $5.00 / 2.016 = 2.480$ mol $\ce{H2}$. The equation releases 571.6 kJ per 2 mol $\ce{H2}$: $2.480 \times \tfrac{571.6}{2} = 709$ kJ.
+    (B) uses 571.6 kJ per mole of $\ce{H2}$ instead of per 2 mol. (D) divides by 2 twice.
+
+- id: apchem-05-heat-forming-no
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{N2(g) + O2(g) -> 2NO(g)}$, $\Delta H = +180.8$ kJ. How much heat is absorbed when 15.0 g of NO forms?
+  choices:
+    - { id: a, text: "90.4 kJ" }
+    - { id: b, text: "45.2 kJ" }
+    - { id: c, text: "22.6 kJ" }
+    - { id: d, text: "180.8 kJ" }
+  answer: b
+  explanation: |
+    $\mathcal{M}(\ce{NO}) = 14.01 + 16.00 = 30.01$ g/mol, so $15.0 / 30.01 = 0.4998$ mol NO. 180.8 kJ goes with 2 mol NO: $0.4998 \times \tfrac{180.8}{2} = 45.2$ kJ.
+    (A) gives the heat for 1 mol of NO. (D) uses 180.8 kJ per mole of NO.
+
+- id: apchem-05-mass-propane-for-heat
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{C3H8(g) + 5O2(g) -> 3CO2(g) + 4H2O(l)}$, $\Delta H = -2220$ kJ. What mass of propane must burn to release $1.00 \times 10^4$ kJ?
+  choices:
+    - { id: a, text: "4.50 g" }
+    - { id: b, text: "199 g" }
+    - { id: c, text: "9.79 g" }
+    - { id: d, text: "227 g" }
+  answer: b
+  explanation: |
+    $1.00 \times 10^4 / 2220 = 4.505$ mol propane. $\mathcal{M}(\ce{C3H8}) = 3(12.01) + 8(1.008) = 44.09$ g/mol, so $4.505 \times 44.09 = 199$ g.
+    (A) is the moles, not the mass. (C) divides the molar mass by the moles. (D) divides the heat by the molar mass.
+
+- id: apchem-05-diagram-endothermic
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    On an enthalpy diagram for a reaction, the products are drawn **higher** than the reactants. What does this show?
+  choices:
+    - { id: a, text: "The reaction is exothermic, and ΔH is negative" }
+    - { id: b, text: "The reaction is exothermic, and ΔH is positive" }
+    - { id: c, text: "The reaction is endothermic, and ΔH is negative" }
+    - { id: d, text: "The reaction is endothermic, and ΔH is positive" }
+  answer: d
+  explanation: |
+    Products higher in enthalpy than reactants means the system gained energy: $\Delta H = H_\text{products} - H_\text{reactants} > 0$, endothermic.
+
+- id: apchem-05-liquid-vs-gas-water
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Methane burns to form either $\ce{H2O(l)}$ or $\ce{H2O(g)}$. Which reaction releases more heat per mole of methane, and why?
+  choices:
+    - { id: a, text: "Forming $\\ce{H2O(g)}$, because gas molecules carry more kinetic energy away" }
+    - { id: b, text: "Forming $\\ce{H2O(l)}$, because water vapor releases heat when it condenses" }
+    - { id: c, text: "Forming $\\ce{H2O(g)}$, because breaking attractions between water molecules releases heat" }
+    - { id: d, text: "Both the same, because the same bonds are broken and formed in each reaction" }
+  answer: b
+  explanation: |
+    Liquid water is lower in enthalpy than water vapor. Making liquid water is like making vapor and then condensing it, and condensing releases heat, so ΔH is more negative.
+    (C) has the energy backward: separating molecules absorbs energy. (D) ignores the attractions between molecules, which differ between the states.
+
+- id: apchem-05-limiting-heat
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{CH4(g) + 2O2(g) -> CO2(g) + 2H2O(l)}$, $\Delta H = -890$ kJ. A mixture of 8.00 g of $\ce{CH4}$ and 16.0 g of $\ce{O2}$ reacts until one reactant is used up. How much heat is released?
+  choices:
+    - { id: a, text: "444 kJ" }
+    - { id: b, text: "890 kJ" }
+    - { id: c, text: "223 kJ" }
+    - { id: d, text: "111 kJ" }
+  answer: c
+  explanation: |
+    $\ce{CH4}$: $8.00 / 16.04 = 0.499$ mol. $\ce{O2}$: $16.0 / 32.00 = 0.500$ mol, but 0.499 mol $\ce{CH4}$ would need 0.998 mol $\ce{O2}$, so **$\ce{O2}$ is limiting**.
+    890 kJ is released per 2 mol $\ce{O2}$: $0.500 \times \tfrac{890}{2} = 223$ kJ.
+    (A) is the heat if all the methane burned, which there isn't enough oxygen for.
+
+- id: apchem-05-heat-per-mole-oxygen
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.6"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  group: ethane-combustion-heat
+  prompt: |
+    $\ce{2C2H6(g) + 7O2(g) -> 4CO2(g) + 6H2O(l)}$, $\Delta H = -3120$ kJ. How much heat is released per mole of $\ce{O2}$ consumed?
+  choices:
+    - { id: a, text: "446 kJ" }
+    - { id: b, text: "3120 kJ" }
+    - { id: c, text: "1560 kJ" }
+    - { id: d, text: "780 kJ" }
+  answer: a
+  explanation: |
+    3120 kJ is released when 7 mol $\ce{O2}$ react: $3120 / 7 = 446$ kJ per mole of $\ce{O2}$.
+    (C) is the heat per mole of ethane, and (D) per mole of $\ce{CO2}$.
+
+- id: apchem-05-freezing-diagram
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["6.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which describes a correct enthalpy diagram for water freezing, $\ce{H2O(l) -> H2O(s)}$?
+  choices:
+    - { id: a, text: "$\\ce{H2O(s)}$ above $\\ce{H2O(l)}$, with an upward arrow, because freezing absorbs heat" }
+    - { id: b, text: "$\\ce{H2O(s)}$ and $\\ce{H2O(l)}$ at the same level, because no bonds are broken" }
+    - { id: c, text: "$\\ce{H2O(s)}$ above $\\ce{H2O(l)}$, with a downward arrow, because freezing releases heat" }
+    - { id: d, text: "$\\ce{H2O(s)}$ below $\\ce{H2O(l)}$, with a downward arrow, because freezing releases heat" }
+  answer: d
+  explanation: |
+    Freezing forms more attractions between molecules, which releases energy, so the solid is lower in enthalpy. The arrow from liquid to solid points down: ΔH < 0.
+    A physical change still has an enthalpy change (B), from attractions between molecules. (C) contradicts itself: a product above the reactant can't be reached by a downward arrow.
+
+# ---------------------------------------------------------------------------
+# 5.5 Calorimetry
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-heat-warm-water
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How much heat is needed to warm 150. g of water from 20.0 °C to 45.0 °C? The specific heat of water is 4.18 J/(g·°C).
+  choices:
+    - { id: a, text: "15.7 kJ" }
+    - { id: b, text: "28.2 kJ" }
+    - { id: c, text: "0.897 kJ" }
+    - { id: d, text: "40.8 kJ" }
+  answer: a
+  explanation: |
+    $q = mc\Delta T = (150.)(4.18)(25.0) = 15{,}700$ J $= 15.7$ kJ.
+    (B) uses the final temperature, 45.0 °C, as ΔT. (D) uses 65.0 °C, the sum of the temperatures.
+
+- id: apchem-05-which-warms-more
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Equal masses of aluminum ($c = 0.897$ J/(g·°C)) and copper ($c = 0.385$ J/(g·°C)), both at 20 °C, each absorb 500 J of heat. Which statement is correct?
+  choices:
+    - { id: a, text: "The aluminum ends at the higher temperature, because its specific heat is larger" }
+    - { id: b, text: "Both end at the same temperature, because they absorbed the same amount of heat" }
+    - { id: c, text: "The copper ends at the higher temperature, because its specific heat is smaller" }
+    - { id: d, text: "The copper ends at the lower temperature, because copper conducts heat better" }
+  answer: c
+  explanation: |
+    $\Delta T = q / (mc)$. With the same q and m, the smaller c gives the larger ΔT. Copper needs less energy per degree, so the same 500 J warms it more (about 2.3 times as much).
+
+- id: apchem-05-find-specific-heat
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 25.0 g piece of metal absorbs 450. J of heat, and its temperature rises by 40.0 °C. What is the specific heat of the metal?
+  choices:
+    - { id: a, text: "0.450 J/(g·°C)" }
+    - { id: b, text: "2.22 J/(g·°C)" }
+    - { id: c, text: "18.0 J/(g·°C)" }
+    - { id: d, text: "0.0222 J/(g·°C)" }
+  answer: a
+  explanation: |
+    $c = q / (m\Delta T) = 450. / (25.0 \times 40.0) = 0.450$ J/(g·°C).
+    (B) is the reciprocal. (C) divides q by m only.
+
+- id: apchem-05-mix-water-final-temp
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.3", "6.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    100.0 g of water at 80.0 °C is mixed with 50.0 g of water at 20.0 °C in an insulated cup. What is the final temperature?
+  choices:
+    - { id: a, text: "50.0 °C" }
+    - { id: b, text: "40.0 °C" }
+    - { id: c, text: "53.3 °C" }
+    - { id: d, text: "60.0 °C" }
+  answer: d
+  explanation: |
+    $100.0(4.18)(T_f - 80.0) + 50.0(4.18)(T_f - 20.0) = 0$. The 4.18 cancels: $100T_f - 8000 + 50T_f - 1000 = 0$, so $150T_f = 9000$ and $T_f = 60.0$ °C.
+    (A) is the simple average, which only works for equal masses. The final temperature is closer to the starting temperature of the larger sample.
+
+- id: apchem-05-copper-in-water
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.3", "6.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 75.0 g copper block ($c = 0.385$ J/(g·°C)) at 98.0 °C is placed in 150.0 g of water ($c = 4.18$ J/(g·°C)) at 21.0 °C. Assuming no heat is lost, what is the final temperature?
+  choices:
+    - { id: a, text: "59.5 °C" }
+    - { id: b, text: "24.4 °C" }
+    - { id: c, text: "27.7 °C" }
+    - { id: d, text: "21.3 °C" }
+  answer: b
+  explanation: |
+    $(75.0)(0.385)(T_f - 98.0) + (150.0)(4.18)(T_f - 21.0) = 0$
+
+    $28.875\,T_f - 2829.8 + 627.0\,T_f - 13{,}167 = 0$, so $655.9\,T_f = 15{,}996.8$ and $T_f = 24.4$ °C.
+
+    The water's heat capacity (627 J/°C) is much larger than the copper's (28.9 J/°C), so the final temperature is close to the water's starting temperature. (A) is the average of the two starting temperatures.
+
+- id: apchem-05-identify-metal
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 40.0 g sample of an unknown metal at 100.0 °C is placed in 60.0 g of water at 20.0 °C. The final temperature is 24.6 °C. Which metal is it? The specific heat of water is 4.18 J/(g·°C).
+
+    | Metal | c (J/(g·°C)) |
+    |---|---|
+    | Aluminum | 0.897 |
+    | Iron | 0.449 |
+    | Copper | 0.385 |
+    | Gold | 0.129 |
+  choices:
+    - { id: a, text: "Aluminum" }
+    - { id: b, text: "Iron" }
+    - { id: c, text: "Gold" }
+    - { id: d, text: "Copper" }
+  answer: d
+  explanation: |
+    Heat gained by the water: $(60.0)(4.18)(24.6 - 20.0) = 1154$ J. The metal lost the same amount while cooling $100.0 - 24.6 = 75.4$ °C:
+
+    $c = 1154 / (40.0 \times 75.4) = 0.383$ J/(g·°C), closest to copper.
+
+    Using the water's ΔT for the metal too gives a value about 16 times too large, which matches nothing in the table.
+
+- id: apchem-05-temperature-drops-sign
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A salt is dissolved in water in a calorimeter, and the temperature of the solution **falls** from 22.4 °C to 19.1 °C. What can you conclude about the dissolving process?
+  choices:
+    - { id: a, text: "It is exothermic, and ΔH is negative" }
+    - { id: b, text: "It is endothermic, and ΔH is positive" }
+    - { id: c, text: "It is exothermic, and ΔH is positive" }
+    - { id: d, text: "It is endothermic, and ΔH is negative" }
+  answer: b
+  explanation: |
+    The solution (surroundings) lost energy, so the dissolving process absorbed it: endothermic, with a positive ΔH. A falling temperature always means the process absorbed heat.
+
+- id: apchem-05-neutralization-dh
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4", "6.6"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    25.0 mL of 2.00 M HCl is mixed with 25.0 mL of 2.00 M NaOH in a coffee-cup calorimeter. The temperature rises by 13.4 °C. Assume the solution has a mass of 50.0 g and a specific heat of 4.18 J/(g·°C). What is ΔH per mole of water formed?
+  choices:
+    - { id: a, text: "+56.0 kJ/mol" }
+    - { id: b, text: "−28.0 kJ/mol" }
+    - { id: c, text: "−112 kJ/mol" }
+    - { id: d, text: "−56.0 kJ/mol" }
+  answer: d
+  explanation: |
+    $q_\text{soln} = (50.0)(4.18)(13.4) = 2801$ J, so $q_\text{rxn} = -2801$ J. Moles of water $= 0.0250 \times 2.00 = 0.0500$ mol.
+    $\Delta H = -2.801\ \text{kJ} / 0.0500\ \text{mol} = -56.0$ kJ/mol.
+    (A) has the wrong sign: the solution warmed, so the reaction released heat. (B) and (C) use 0.100 mol and 0.0250 mol.
+
+- id: apchem-05-calcium-chloride-dissolving
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4", "6.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    5.55 g of $\ce{CaCl2}$ (110.98 g/mol) is dissolved in 100.0 g of water in a calorimeter. The temperature rises by 9.2 °C. Take the mass of the solution as the total mass and its specific heat as 4.18 J/(g·°C). What is ΔH for dissolving $\ce{CaCl2}$?
+  choices:
+    - { id: a, text: "+81 kJ/mol" }
+    - { id: b, text: "−77 kJ/mol" }
+    - { id: c, text: "−81 kJ/mol" }
+    - { id: d, text: "−4.1 kJ/mol" }
+  answer: c
+  explanation: |
+    Mass of solution $= 100.0 + 5.55 = 105.6$ g. $q_\text{soln} = (105.6)(4.18)(9.2) = 4060$ J, so $q_\text{rxn} = -4.06$ kJ.
+    Moles $= 5.55 / 110.98 = 0.0500$ mol. $\Delta H = -4.06 / 0.0500 = -81$ kJ/mol.
+    (B) uses only the 100.0 g of water. (D) is the heat in kJ, not divided by moles.
+
+- id: apchem-05-bomb-calorimeter
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 1.20 g sample of a fuel burns in a bomb calorimeter whose heat capacity is 8.50 kJ/°C. The temperature rises by 3.15 °C. How much heat does the fuel release per gram?
+  choices:
+    - { id: a, text: "26.8 kJ/g" }
+    - { id: b, text: "32.1 kJ/g" }
+    - { id: c, text: "22.3 kJ/g" }
+    - { id: d, text: "2.70 kJ/g" }
+  answer: c
+  explanation: |
+    $q = C_\text{cal}\Delta T = (8.50)(3.15) = 26.8$ kJ released by 1.20 g, so $26.8 / 1.20 = 22.3$ kJ/g.
+    (A) forgets to divide by the mass. (B) multiplies by 1.20 instead.
+
+- id: apchem-05-no-lid-error
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A student measures ΔH for an exothermic neutralization in a foam cup but forgets the lid, so some heat escapes to the air. How does this affect the calculated ΔH?
+  choices:
+    - { id: a, text: "ΔH is more negative than the true value, because the lost heat is added to q" }
+    - { id: b, text: "ΔH is less negative than the true value, because the measured ΔT is too small" }
+    - { id: c, text: "ΔH is positive instead of negative, because heat left the calorimeter" }
+    - { id: d, text: "ΔH is unaffected, because the same amounts of acid and base react" }
+  answer: b
+  explanation: |
+    Heat that escapes doesn't warm the solution, so the measured temperature rise is too small. The calculated q, and so the magnitude of ΔH, is too small: the value is less negative than it should be.
+
+- id: apchem-05-heat-capacity-vs-specific
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A large iron pot and a small iron nail are heated with the same burner. Which statement is correct?
+  choices:
+    - { id: a, text: "The pot has a larger specific heat, so its temperature rises more slowly" }
+    - { id: b, text: "The nail has a larger heat capacity, so its temperature rises more quickly" }
+    - { id: c, text: "Both have the same heat capacity, because they are made of the same metal" }
+    - { id: d, text: "Both have the same specific heat, but the pot has the larger heat capacity" }
+  answer: d
+  explanation: |
+    Specific heat is a property of the substance (per gram), so both are 0.449 J/(g·°C). Heat capacity is for the whole object ($C = mc$), so the heavier pot needs more heat per degree.
+
+- id: apchem-05-molar-heat-capacity
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    The specific heat of water is 4.18 J/(g·°C). What is its **molar** heat capacity?
+  choices:
+    - { id: a, text: "0.232 J/(mol·°C)" }
+    - { id: b, text: "4.18 J/(mol·°C)" }
+    - { id: c, text: "75.3 J/(mol·°C)" }
+    - { id: d, text: "22.2 J/(mol·°C)" }
+  answer: c
+  explanation: |
+    One mole of water is 18.02 g: $4.18 \times 18.02 = 75.3$ J/(mol·°C). (A) divides by the molar mass instead.
+
+# ---------------------------------------------------------------------------
+# 5.6 Hess's law
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-hess-reverse-double
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    For $\ce{A -> 2B}$, $\Delta H = +40$ kJ. What is ΔH for $\ce{4B -> 2A}$?
+  choices:
+    - { id: a, text: "+80 kJ" }
+    - { id: b, text: "−80 kJ" }
+    - { id: c, text: "−20 kJ" }
+    - { id: d, text: "−40 kJ" }
+  answer: b
+  explanation: |
+    The new equation is the original reversed (sign changes) and doubled (size doubles): $-2 \times 40 = -80$ kJ.
+
+- id: apchem-05-hess-sulfur-trioxide
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Use these reactions to find ΔH for $\ce{2S(s) + 3O2(g) -> 2SO3(g)}$.
+
+    | | Equation | ΔH (kJ) |
+    |---|---|---|
+    | (1) | $\ce{S(s) + O2(g) -> SO2(g)}$ | −296.8 |
+    | (2) | $\ce{2SO2(g) + O2(g) -> 2SO3(g)}$ | −197.8 |
+  choices:
+    - { id: a, text: "−494.6 kJ" }
+    - { id: b, text: "−395.8 kJ" }
+    - { id: c, text: "−791.4 kJ" }
+    - { id: d, text: "−989.2 kJ" }
+  answer: c
+  explanation: |
+    Double (1) to get 2S and 2 $\ce{SO2}$: $2(-296.8) = -593.6$ kJ. Add (2) as written; the 2 $\ce{SO2}$ cancel and the $\ce{O2}$ adds to 3. $-593.6 + (-197.8) = -791.4$ kJ.
+    (A) forgets to double (1).
+
+- id: apchem-05-hess-graphite-diamond
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{C(graphite) + O2(g) -> CO2(g)}$, $\Delta H = -393.5$ kJ
+
+    $\ce{C(diamond) + O2(g) -> CO2(g)}$, $\Delta H = -395.4$ kJ
+
+    What is ΔH for $\ce{C(graphite) -> C(diamond)}$?
+  choices:
+    - { id: a, text: "−1.9 kJ" }
+    - { id: b, text: "−788.9 kJ" }
+    - { id: c, text: "+788.9 kJ" }
+    - { id: d, text: "+1.9 kJ" }
+  answer: d
+  explanation: |
+    Keep the graphite equation and reverse the diamond one ($+395.4$ kJ). Adding them, $\ce{O2}$ and $\ce{CO2}$ cancel: $-393.5 + 395.4 = +1.9$ kJ.
+    Diamond is slightly higher in enthalpy than graphite, so the conversion is endothermic.
+
+- id: apchem-05-hess-hydrogenation
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: ethylene-hydrogenation
+  prompt: |
+    Use these combustion reactions to find ΔH for $\ce{C2H4(g) + H2(g) -> C2H6(g)}$.
+
+    | | Equation | ΔH (kJ) |
+    |---|---|---|
+    | (1) | $\ce{C2H4(g) + 3O2(g) -> 2CO2(g) + 2H2O(l)}$ | −1411 |
+    | (2) | $\ce{H2(g) + 1/2O2(g) -> H2O(l)}$ | −285.8 |
+    | (3) | $\ce{C2H6(g) + 7/2O2(g) -> 2CO2(g) + 3H2O(l)}$ | −1560 |
+  choices:
+    - { id: a, text: "−137 kJ" }
+    - { id: b, text: "+137 kJ" }
+    - { id: c, text: "−3257 kJ" }
+    - { id: d, text: "−434 kJ" }
+  answer: a
+  explanation: |
+    Keep (1) and (2), and reverse (3) ($+1560$ kJ). Adding: $\ce{2CO2}$ and $\ce{3H2O}$ cancel, and the $\ce{O2}$ cancels too ($3 + \tfrac{1}{2} = \tfrac{7}{2}$).
+    $\Delta H = -1411 - 285.8 + 1560 = -137$ kJ.
+    (C) adds all three without reversing (3).
+
+- id: apchem-05-hess-no2-decompose
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    $\ce{2NO(g) + O2(g) -> 2NO2(g)}$ has $\Delta H = -113.1$ kJ. What is ΔH for $\ce{NO2(g) -> NO(g) + 1/2O2(g)}$?
+  choices:
+    - { id: a, text: "−56.6 kJ" }
+    - { id: b, text: "+113.1 kJ" }
+    - { id: c, text: "+56.6 kJ" }
+    - { id: d, text: "−226.2 kJ" }
+  answer: c
+  explanation: |
+    The new equation is the original reversed and halved: $-\tfrac{1}{2}(-113.1) = +56.6$ kJ.
+
+- id: apchem-05-why-hess-works
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Why can the enthalpy change of an overall reaction be found by adding the enthalpy changes of a series of steps?
+  choices:
+    - { id: a, text: "Each step in the series must release heat, so the amounts can simply be added" }
+    - { id: b, text: "The steps always happen at the same rate, so their enthalpy changes are equal" }
+    - { id: c, text: "Energy is conserved, and ΔH depends only on the starting and ending substances" }
+    - { id: d, text: "The intermediate substances store the energy, so they must be added back in" }
+  answer: c
+  explanation: |
+    Energy is neither created nor destroyed, so going from the same reactants to the same products by any route involves the same total enthalpy change. The steps can be endothermic or exothermic (A), and rates have nothing to do with it (B).
+
+- id: apchem-05-hess-peroxide
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.6"]
+  cedTopics: ["6.9"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Use these reactions to find ΔH for $\ce{2H2O2(l) -> 2H2O(l) + O2(g)}$.
+
+    | | Equation | ΔH (kJ) |
+    |---|---|---|
+    | (1) | $\ce{H2(g) + O2(g) -> H2O2(l)}$ | −187.8 |
+    | (2) | $\ce{H2(g) + 1/2O2(g) -> H2O(l)}$ | −285.8 |
+  choices:
+    - { id: a, text: "−98.0 kJ" }
+    - { id: b, text: "−196.0 kJ" }
+    - { id: c, text: "+196.0 kJ" }
+    - { id: d, text: "−947.2 kJ" }
+  answer: b
+  explanation: |
+    $\ce{H2O2}$ is a reactant, so reverse (1) and double it: $+375.6$ kJ. Double (2) for 2 $\ce{H2O}$: $-571.6$ kJ. Adding, the 2 $\ce{H2}$ cancel and one $\ce{O2}$ is left over as a product.
+    $\Delta H = 375.6 - 571.6 = -196.0$ kJ.
+    (A) is the value per mole of $\ce{H2O2}$, without doubling.
+
+# ---------------------------------------------------------------------------
+# 5.7 Enthalpies of formation
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-zero-formation
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which substance has a standard enthalpy of formation of **zero**?
+  choices:
+    - { id: a, text: "$\\ce{Br2(g)}$" }
+    - { id: b, text: "$\\ce{O3(g)}$" }
+    - { id: c, text: "$\\ce{H2O(l)}$" }
+    - { id: d, text: "$\\ce{Br2(l)}$" }
+  answer: d
+  explanation: |
+    Only an element in its standard state has ΔH°f = 0. Bromine is a liquid at 25 °C and 1 atm, so $\ce{Br2(l)}$ is zero and $\ce{Br2(g)}$ is not. Ozone isn't oxygen's standard form ($\ce{O2}$ is), and water is a compound.
+
+- id: apchem-05-formation-equation-ammonia
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which equation has a ΔH° equal to the standard enthalpy of formation of $\ce{NH3(g)}$?
+  choices:
+    - { id: a, text: "$\\ce{N2(g) + 3H2(g) -> 2NH3(g)}$" }
+    - { id: b, text: "$\\ce{1/2N2(g) + 3/2H2(g) -> NH3(g)}$" }
+    - { id: c, text: "$\\ce{N(g) + 3H(g) -> NH3(g)}$" }
+    - { id: d, text: "$\\ce{NH4+(aq) + OH-(aq) -> NH3(g) + H2O(l)}$" }
+  answer: b
+  explanation: |
+    A formation equation makes **1 mol** of the compound from its elements in their **standard states**. (A) makes 2 mol. (C) uses N and H atoms, which aren't the standard states. (D) doesn't start from elements.
+
+- id: apchem-05-methane-combustion-formation
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Use the standard enthalpies of formation to find ΔH° for $\ce{CH4(g) + 2O2(g) -> CO2(g) + 2H2O(g)}$.
+
+    | Substance | ΔH°f (kJ/mol) |
+    |---|---|
+    | $\ce{CH4(g)}$ | −74.8 |
+    | $\ce{CO2(g)}$ | −393.5 |
+    | $\ce{H2O(g)}$ | −241.8 |
+  choices:
+    - { id: a, text: "−560.5 kJ" }
+    - { id: b, text: "−802.3 kJ" }
+    - { id: c, text: "−951.9 kJ" }
+    - { id: d, text: "+802.3 kJ" }
+  answer: b
+  explanation: |
+    Products: $-393.5 + 2(-241.8) = -877.1$ kJ. Reactants: $-74.8 + 2(0) = -74.8$ kJ. $\Delta H^\circ = -877.1 - (-74.8) = -802.3$ kJ.
+    (A) forgets the 2 in front of $\ce{H2O}$. (C) adds the reactant value instead of subtracting it. (D) is reactants minus products.
+
+- id: apchem-05-ammonia-oxidation-formation
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Find ΔH° for $\ce{4NH3(g) + 5O2(g) -> 4NO(g) + 6H2O(g)}$.
+
+    | Substance | ΔH°f (kJ/mol) |
+    |---|---|
+    | $\ce{NH3(g)}$ | −46.2 |
+    | $\ce{NO(g)}$ | +90.4 |
+    | $\ce{H2O(g)}$ | −241.8 |
+  choices:
+    - { id: a, text: "−904.4 kJ" }
+    - { id: b, text: "−1274.0 kJ" }
+    - { id: c, text: "−105.2 kJ" }
+    - { id: d, text: "−1089.2 kJ" }
+  answer: a
+  explanation: |
+    Products: $4(90.4) + 6(-241.8) = 361.6 - 1450.8 = -1089.2$ kJ. Reactants: $4(-46.2) + 5(0) = -184.8$ kJ.
+    $\Delta H^\circ = -1089.2 - (-184.8) = -904.4$ kJ.
+    (D) leaves out the reactants, and (B) adds them instead of subtracting. (C) uses only one mole of each substance.
+
+- id: apchem-05-glucose-formation-backward
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Glucose burns according to $\ce{C6H12O6(s) + 6O2(g) -> 6CO2(g) + 6H2O(l)}$, with $\Delta H^\circ = -2803$ kJ. ΔH°f is −393.5 kJ/mol for $\ce{CO2(g)}$ and −285.8 kJ/mol for $\ce{H2O(l)}$. What is ΔH°f of glucose?
+  choices:
+    - { id: a, text: "−6879 kJ/mol" }
+    - { id: b, text: "+1273 kJ/mol" }
+    - { id: c, text: "−1273 kJ/mol" }
+    - { id: d, text: "−2124 kJ/mol" }
+  answer: c
+  explanation: |
+    Products: $6(-393.5) + 6(-285.8) = -4075.8$ kJ. Then $-2803 = -4075.8 - \Delta H^\circ_f(\text{glucose})$, so $\Delta H^\circ_f = -4075.8 + 2803 = -1273$ kJ/mol.
+    (B) has the sign flipped.
+
+- id: apchem-05-reactants-minus-products-error
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    A student calculates ΔH° for a reaction as Σ ΔH°f(reactants) − Σ ΔH°f(products), using correct values and coefficients. How does the result compare with the true ΔH°?
+  choices:
+    - { id: a, text: "It has the same size but the opposite sign" }
+    - { id: b, text: "It is exactly the same, because only the order of subtraction changed" }
+    - { id: c, text: "It is too large by the sum of the reactant values" }
+    - { id: d, text: "It is correct only if the reaction is exothermic" }
+  answer: a
+  explanation: |
+    $a - b = -(b - a)$. Reversing the subtraction gives the same magnitude with the wrong sign, so an exothermic reaction would look endothermic.
+
+- id: apchem-05-thermite-formation
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Find ΔH° for the thermite reaction, $\ce{2Al(s) + Fe2O3(s) -> Al2O3(s) + 2Fe(s)}$. ΔH°f is −822.2 kJ/mol for $\ce{Fe2O3(s)}$ and −1669.8 kJ/mol for $\ce{Al2O3(s)}$.
+  choices:
+    - { id: a, text: "+847.6 kJ" }
+    - { id: b, text: "−2492.0 kJ" }
+    - { id: c, text: "−1669.8 kJ" }
+    - { id: d, text: "−847.6 kJ" }
+  answer: d
+  explanation: |
+    Al and Fe are elements in their standard states (0). $\Delta H^\circ = -1669.8 - (-822.2) = -847.6$ kJ, strongly exothermic, which is why thermite melts the iron it makes.
+
+- id: apchem-05-positive-formation-meaning
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Acetylene, $\ce{C2H2(g)}$, has ΔH°f = +226.7 kJ/mol. What does the positive sign mean?
+  choices:
+    - { id: a, text: "Acetylene can't be made from carbon and hydrogen under any conditions" }
+    - { id: b, text: "Acetylene has more enthalpy than the carbon and hydrogen it is made from" }
+    - { id: c, text: "Burning acetylene absorbs heat instead of releasing it to the surroundings" }
+    - { id: d, text: "Acetylene has less enthalpy than the carbon and hydrogen it is made from" }
+  answer: b
+  explanation: |
+    ΔH°f is the enthalpy of the compound minus that of its elements. Positive means the compound is higher, so forming it from the elements absorbs heat. Its combustion is still strongly exothermic (C is false), because $\ce{CO2}$ and $\ce{H2O}$ are far lower in enthalpy.
+
+# ---------------------------------------------------------------------------
+# 5.8 Bond enthalpies
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-bond-enthalpy-hf
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.8"]
+  cedTopics: ["6.7"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Estimate ΔH for $\ce{H2(g) + F2(g) -> 2HF(g)}$. Bond enthalpies: H–H 436 kJ/mol, F–F 155 kJ/mol, H–F 567 kJ/mol.
+  choices:
+    - { id: a, text: "+543 kJ" }
+    - { id: b, text: "+24 kJ" }
+    - { id: c, text: "−543 kJ" }
+    - { id: d, text: "−976 kJ" }
+  answer: c
+  explanation: |
+    Broken: $436 + 155 = 591$ kJ. Formed: $2(567) = 1134$ kJ. $\Delta H \approx 591 - 1134 = -543$ kJ.
+    (B) counts only one H–F bond. (A) is formed minus broken.
+
+- id: apchem-05-bond-enthalpy-hydrogenation
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.8"]
+  cedTopics: ["6.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: ethylene-hydrogenation
+  prompt: |
+    Estimate ΔH for $\ce{H2C=CH2(g) + H2(g) -> H3C-CH3(g)}$ using bond enthalpies (kJ/mol): C=C 614, C–C 348, C–H 413, H–H 436.
+  choices:
+    - { id: a, text: "+124 kJ" }
+    - { id: b, text: "−124 kJ" }
+    - { id: c, text: "−538 kJ" }
+    - { id: d, text: "+702 kJ" }
+  answer: b
+  explanation: |
+    Only the bonds that change need counting. Broken: one C=C and one H–H, $614 + 436 = 1050$ kJ. Formed: one C–C and two new C–H, $348 + 2(413) = 1174$ kJ. $\Delta H \approx 1050 - 1174 = -124$ kJ.
+    (Counting every bond in both molecules gives the same answer, because the four original C–H bonds cancel.) (D) forgets the two new C–H bonds. (A) is formed minus broken.
+
+- id: apchem-05-bond-estimate-why-differs
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.8"]
+  cedTopics: ["6.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    ΔH for $\ce{CH4(g) + 2O2(g) -> CO2(g) + 2H2O(g)}$ is −798 kJ estimated from bond enthalpies, but −802 kJ calculated from enthalpies of formation. What best explains the difference?
+  choices:
+    - { id: a, text: "Bond enthalpies are averages over many compounds, so they give only an estimate" }
+    - { id: b, text: "Enthalpies of formation leave out the energy of the bonds in the reactants" }
+    - { id: c, text: "Bond enthalpies apply only to liquids, but this reaction is in the gas phase" }
+    - { id: d, text: "Enthalpies of formation are estimates, while bond enthalpies are exact values" }
+  answer: a
+  explanation: |
+    A table lists one average C–H value, but the real strength of a C–H bond varies a little from molecule to molecule. Enthalpies of formation come from measurements on the actual compounds, so they are more accurate (the opposite of D). Bond enthalpies are for gases, so (C) is backward.
+
+- id: apchem-05-stronger-bonds-formed
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.8"]
+  cedTopics: ["6.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    In a reaction, the bonds formed in the products are stronger overall than the bonds broken in the reactants. What is true about the reaction?
+  choices:
+    - { id: a, text: "It is endothermic, because forming strong bonds requires more energy than breaking weak ones" }
+    - { id: b, text: "It is exothermic, because breaking the weaker bonds in the reactants releases energy" }
+    - { id: c, text: "It is endothermic, because strong bonds are harder to form and absorb energy as they form" }
+    - { id: d, text: "It is exothermic, because forming the bonds releases more energy than breaking costs" }
+  answer: d
+  explanation: |
+    $\Delta H \approx \Sigma(\text{broken}) - \Sigma(\text{formed})$. If the bonds formed are stronger, more energy is released than absorbed, so ΔH is negative. Breaking bonds always costs energy (B), and forming them always releases it (A, C).
+
+# ---------------------------------------------------------------------------
+# More practice across sections
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-chemical-potential-energy
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.1"]
+  cedTopics: ["6.1"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The energy stored in a fuel such as natural gas is mostly which kind of energy?
+  choices:
+    - { id: a, text: "Potential energy from the attractions between electrons and nuclei in bonds" }
+    - { id: b, text: "Kinetic energy from the motion of the gas molecules in the fuel tank" }
+    - { id: c, text: "Thermal energy that was absorbed by the fuel when it was last heated" }
+    - { id: d, text: "Kinetic energy of the electrons orbiting the nuclei of each atom" }
+  answer: a
+  explanation: |
+    Chemical energy is potential energy stored in the arrangement of charged particles: electrons and nuclei in bonds. Burning the fuel forms stronger bonds in $\ce{CO2}$ and $\ce{H2O}$, and the difference is released as heat.
+
+- id: apchem-05-heat-aluminum-pan
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    How much heat is needed to warm a 500. g aluminum pan ($c = 0.897$ J/(g·°C)) from 25 °C to 175 °C?
+  choices:
+    - { id: a, text: "67.3 kJ" }
+    - { id: b, text: "78.5 kJ" }
+    - { id: c, text: "11.2 kJ" }
+    - { id: d, text: "314 kJ" }
+  answer: a
+  explanation: |
+    $q = mc\Delta T = (500.)(0.897)(150) = 67{,}300$ J $= 67.3$ kJ.
+    (B) uses 175 °C as ΔT. (C) uses 25 °C. (D) uses the specific heat of water.
+
+- id: apchem-05-heat-lost-equals-gained
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.3"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A hot iron bar is dropped into cool water in a perfectly insulated container. Once the bar and water reach the same temperature, which statement is true?
+  choices:
+    - { id: a, text: "The heat lost by the iron equals the heat gained by the water" }
+    - { id: b, text: "The temperature change of the iron equals that of the water" }
+    - { id: c, text: "The iron lost less heat than the water gained, because iron is denser" }
+    - { id: d, text: "The water lost heat to the iron until both reached the same temperature" }
+  answer: a
+  explanation: |
+    Energy is conserved, so $q_\text{iron} = -q_\text{water}$. The temperature **changes** usually differ (B), because the two have different masses and specific heats. Heat flows from the hotter iron to the water, not the reverse (D).
+
+- id: apchem-05-formation-equation-co2
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.7"]
+  cedTopics: ["6.8"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which reaction's ΔH° equals the standard enthalpy of formation of $\ce{CO2(g)}$?
+  choices:
+    - { id: a, text: "$\\ce{C(graphite) + O2(g) -> CO2(g)}$" }
+    - { id: b, text: "$\\ce{CO(g) + 1/2O2(g) -> CO2(g)}$" }
+    - { id: c, text: "$\\ce{C(diamond) + O2(g) -> CO2(g)}$" }
+    - { id: d, text: "$\\ce{C(g) + 2O(g) -> CO2(g)}$" }
+  answer: a
+  explanation: |
+    The elements must be in their standard states: graphite (the stable form of carbon) and $\ce{O2(g)}$. (B) starts from a compound. Diamond (C) and gaseous atoms (D) aren't standard states, so their ΔH° values differ from ΔH°f.
+
+- id: apchem-05-bonds-broken-methane
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.8"]
+  cedTopics: ["6.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    To estimate ΔH for $\ce{CH4(g) + 2O2(g) -> CO2(g) + 2H2O(g)}$ from bond enthalpies, which bonds are broken and which are formed?
+  choices:
+    - { id: a, text: "Broken: 4 C–H and 2 O=O. Formed: 2 C=O and 4 O–H" }
+    - { id: b, text: "Broken: 4 C–H and 1 O=O. Formed: 2 C=O and 2 O–H" }
+    - { id: c, text: "Broken: 2 C=O and 4 O–H. Formed: 4 C–H and 2 O=O" }
+    - { id: d, text: "Broken: 4 C–H and 2 O=O. Formed: 1 C=O and 4 O–H" }
+  answer: a
+  explanation: |
+    Methane has 4 C–H bonds, and each $\ce{O2}$ has one O=O: 2 in total. $\ce{CO2}$ is O=C=O (2 C=O), and each of the two water molecules has 2 O–H bonds (4 in total). (C) swaps broken and formed.
+
+- id: apchem-05-silver-chloride-calorimetry
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4", "6.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    50.0 mL of 0.100 M $\ce{AgNO3}$ and 50.0 mL of 0.100 M NaCl, both at 22.00 °C, are mixed in a calorimeter, and AgCl precipitates. The temperature rises to 22.78 °C. Assume the mixture has a mass of 100.0 g and a specific heat of 4.18 J/(g·°C). What is ΔH for $\ce{Ag+(aq) + Cl-(aq) -> AgCl(s)}$?
+  choices:
+    - { id: a, text: "−65 kJ/mol" }
+    - { id: b, text: "+65 kJ/mol" }
+    - { id: c, text: "−33 kJ/mol" }
+    - { id: d, text: "−0.33 kJ/mol" }
+  answer: a
+  explanation: |
+    $q_\text{soln} = (100.0)(4.18)(0.78) = 326$ J, so $q_\text{rxn} = -326$ J. Moles of AgCl $= 0.0500 \times 0.100 = 0.00500$ mol.
+    $\Delta H = -0.326\ \text{kJ} / 0.00500\ \text{mol} = -65$ kJ/mol (two significant figures, from ΔT = 0.78 °C).
+    (C) divides by 0.0100 mol, the total moles of both reactants. (D) is the heat in kJ, not per mole.
+
+# ---------------------------------------------------------------------------
+# Free response
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-naoh-dissolving-frq
+  type: frq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2", "5.5"]
+  cedTopics: ["6.1", "6.4", "6.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A student dissolves 2.00 g of solid NaOH in 100.0 g of water in a foam-cup calorimeter with a lid. The temperature of the water rises from 21.0 °C to 26.2 °C. Assume the solution has a specific heat of 4.18 J/(g·°C) and that no heat is absorbed by the cup.
+  parts:
+    - label: a
+      points: 1
+      prompt: Is the dissolving of NaOH exothermic or endothermic? Justify your answer using the data.
+      scoring:
+        - "Exothermic: the temperature of the solution (the surroundings) rose, so the dissolving process released heat."
+    - label: b
+      points: 1
+      prompt: Calculate the heat absorbed by the solution, in joules.
+      scoring:
+        - "q = (102.0 g)(4.18 J/(g·°C))(5.2 °C) = 2200 J (2.2 × 10³ J). Using 100.0 g (2170 J) also earns the point."
+    - label: c
+      points: 1
+      prompt: Calculate the number of moles of NaOH dissolved.
+      scoring:
+        - "2.00 g / 40.00 g/mol = 0.0500 mol."
+    - label: d
+      points: 1
+      prompt: Calculate ΔH for dissolving NaOH, in kJ/mol. Include the sign.
+      scoring:
+        - "ΔH = −2.2 kJ / 0.0500 mol = −44 kJ/mol, consistent with (b), with a negative sign."
+    - label: e
+      points: 1
+      prompt: Dissolving NaOH breaks the attractions between Na⁺ and OH⁻ ions in the solid and forms attractions between the ions and water molecules. Explain, in terms of these attractions, why the process releases energy.
+      scoring:
+        - "Breaking the ion–ion attractions absorbs energy and forming ion–dipole attractions releases energy; more energy is released by forming the ion–water attractions than is absorbed in separating the ions."
+    - label: f
+      points: 1
+      prompt: Another student forgets the lid. Would that student's calculated value of ΔH be more negative, less negative, or the same? Explain.
+      scoring:
+        - "Less negative (smaller magnitude): heat escapes, so the measured temperature rise and the calculated q are too small."
+  explanation: |
+    **(a)** The water warmed, so heat left the dissolving process and entered the water. Exothermic.
+
+    **(b)** Mass of solution $= 100.0 + 2.00 = 102.0$ g, and $\Delta T = 26.2 - 21.0 = 5.2$ °C. $q = (102.0)(4.18)(5.2) = 2217$ J, or $2.2 \times 10^3$ J to two significant figures.
+
+    **(c)** $\mathcal{M}(\ce{NaOH}) = 22.99 + 16.00 + 1.008 = 40.00$ g/mol. $2.00 / 40.00 = 0.0500$ mol.
+
+    **(d)** $q_\text{rxn} = -2.2$ kJ. $\Delta H = -2.2 / 0.0500 = -44$ kJ/mol.
+
+    **(e)** Separating the ions costs energy; surrounding each ion with oriented water molecules releases energy. The overall process released energy, so the ion–water attractions formed release more than the ion–ion attractions broken cost.
+
+    **(f)** Less negative. Some of the released heat warms the air instead of the solution.
+
+- id: apchem-05-methanol-combustion-frq
+  type: frq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4", "5.7"]
+  cedTopics: ["6.2", "6.6", "6.8"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Methanol, $\ce{CH3OH(l)}$, is used as a racing fuel. It burns according to:
+
+    $$
+    \ce{2CH3OH(l) + 3O2(g) -> 2CO2(g) + 4H2O(l)}
+    $$
+
+    | Substance | ΔH°f (kJ/mol) |
+    |---|---|
+    | $\ce{CH3OH(l)}$ | −238.6 |
+    | $\ce{CO2(g)}$ | −393.5 |
+    | $\ce{H2O(l)}$ | −285.8 |
+    | $\ce{H2O(g)}$ | −241.8 |
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the balanced equation for the formation reaction of $\ce{CH3OH(l)}$ from its elements in their standard states.
+      scoring:
+        - "$\\ce{C(s) + 2H2(g) + 1/2O2(g) -> CH3OH(l)}$, with 1 mol of product and standard states."
+    - label: b
+      points: 1
+      prompt: Calculate ΔH° for the combustion reaction as written above.
+      scoring:
+        - "Products: 2(−393.5) + 4(−285.8) = −1930.2; reactants: 2(−238.6) = −477.2; ΔH° = −1930.2 − (−477.2) = −1453.0 kJ."
+    - label: c
+      points: 1
+      prompt: Calculate the heat released when 8.00 g of methanol burns.
+      scoring:
+        - "8.00 / 32.04 = 0.2497 mol; × 1453.0 / 2 = 181 kJ released."
+    - label: d
+      points: 1
+      prompt: Sketch or describe an enthalpy diagram for the combustion reaction, labeling the reactants, the products, and ΔH.
+      scoring:
+        - "Reactants (2CH₃OH + 3O₂) drawn higher than products (2CO₂ + 4H₂O), with a downward arrow labeled ΔH = −1453 kJ."
+    - label: e
+      points: 1
+      prompt: If the water formed were $\ce{H2O(g)}$ instead of $\ce{H2O(l)}$, would ΔH° be more negative, less negative, or the same? Justify your answer.
+      scoring:
+        - "Less negative: H₂O(g) is higher in enthalpy than H₂O(l) (ΔH°f −241.8 vs −285.8), so less heat is released; the heat of condensing the water isn't released."
+  explanation: |
+    **(a)** One mole of methanol from C(s), $\ce{H2(g)}$, and $\ce{O2(g)}$: $\ce{C(s) + 2H2(g) + 1/2O2(g) -> CH3OH(l)}$.
+
+    **(b)** Products: $2(-393.5) + 4(-285.8) = -787.0 - 1143.2 = -1930.2$ kJ. Reactants: $2(-238.6) + 3(0) = -477.2$ kJ. $\Delta H^\circ = -1930.2 + 477.2 = -1453.0$ kJ.
+
+    **(c)** $\mathcal{M}(\ce{CH3OH}) = 12.01 + 4(1.008) + 16.00 = 32.04$ g/mol. $8.00 / 32.04 = 0.2497$ mol. The equation releases 1453.0 kJ per 2 mol: $0.2497 \times 726.5 = 181$ kJ.
+
+    **(d)** Exothermic, so the products sit below the reactants and the arrow points down.
+
+    **(e)** Less negative. With $\ce{H2O(g)}$, the products are $4 \times 44.0 = 176.0$ kJ higher, so $\Delta H^\circ = -1277.0$ kJ.
+
+- id: apchem-05-ethane-hess-frq
+  type: frq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4", "5.6"]
+  cedTopics: ["6.6", "6.9"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: ethane-combustion-heat
+  prompt: |
+    The standard enthalpy of formation of ethane, $\ce{C2H6(g)}$, can't be measured directly, because carbon and hydrogen don't react cleanly to form ethane. It can be found from these reactions:
+
+    | | Equation | ΔH (kJ) |
+    |---|---|---|
+    | (1) | $\ce{C(s) + O2(g) -> CO2(g)}$ | −393.5 |
+    | (2) | $\ce{H2(g) + 1/2O2(g) -> H2O(l)}$ | −285.8 |
+    | (3) | $\ce{C2H6(g) + 7/2O2(g) -> 2CO2(g) + 3H2O(l)}$ | −1560 |
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the target equation, the formation reaction of ethane.
+      scoring:
+        - "$\\ce{2C(s) + 3H2(g) -> C2H6(g)}$."
+    - label: b
+      points: 1
+      prompt: State how each of equations (1), (2), and (3) must be changed to add up to the target equation.
+      scoring:
+        - "(1) × 2; (2) × 3; (3) reversed. All three needed for the point."
+    - label: c
+      points: 1
+      prompt: Calculate ΔH°f of ethane.
+      scoring:
+        - "2(−393.5) + 3(−285.8) + 1560 = −787.0 − 857.4 + 1560 = −84 kJ/mol."
+    - label: d
+      points: 1
+      prompt: Explain why adding the ΔH values of the adjusted equations gives ΔH for the target reaction.
+      scoring:
+        - "The adjusted equations add up to the target reaction, and energy is conserved: the enthalpy change depends only on the starting substances and the final substances, so the total for the steps equals the enthalpy change of the overall reaction."
+    - label: e
+      points: 1
+      prompt: Using equation (3), calculate the heat released when 1.00 mol of $\ce{O2}$ reacts with excess ethane.
+      scoring:
+        - "1560 kJ per 3.5 mol O₂: 1560 / 3.5 = 446 kJ released."
+  explanation: |
+    **(a)** One mole of ethane from its elements: $\ce{2C(s) + 3H2(g) -> C2H6(g)}$.
+
+    **(b)** Double (1) to get 2C, triple (2) to get $\ce{3H2}$, and reverse (3) to put $\ce{C2H6}$ on the product side. Then $\ce{2CO2}$ and $\ce{3H2O}$ cancel, and $\ce{O2}$ cancels ($2 + \tfrac{3}{2} = \tfrac{7}{2}$).
+
+    **(c)** $2(-393.5) + 3(-285.8) + (+1560) = -84$ kJ/mol. (Equation (3) is given to the nearest kJ, so the answer is good to about ±1 kJ.)
+
+    **(d)** Hess's law. The steps add up to the target, and because energy is conserved, the enthalpy change for going from the same reactants to the same products is the same whatever the route.
+
+    **(e)** 1560 kJ is released for every 7/2 = 3.5 mol of $\ce{O2}$: $1560 / 3.5 = 446$ kJ.

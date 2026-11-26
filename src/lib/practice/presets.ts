@@ -71,7 +71,8 @@ export function quickStarts(
       ...(all && { alt: { label: all.label, filters: all.filters } }),
     });
     if (latest.exam) {
-      presets.push({ label: `Practice exam: ${latest.title}`, filters: examStart(latest.id).filters, exam: true, note: examFormat(latest.exam) });
+      const note = `${examFormat(latest.exam)}${latest.exam.tentative ? " (a stand-in until the format is announced)" : ""}`;
+      presets.push({ label: `Practice exam: ${latest.title}`, filters: examStart(latest.id).filters, exam: true, note });
     }
   }
   const mixed = mixedReview(questions, taught);

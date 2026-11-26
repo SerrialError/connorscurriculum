@@ -1464,3 +1464,106 @@
     **(d)** Hess's law. The steps add up to the target, and because energy is conserved, the enthalpy change for going from the same reactants to the same products is the same whatever the route.
 
     **(e)** 1560 kJ is released for every 7/2 = 3.5 mol of $\ce{O2}$: $1560 / 3.5 = 446$ kJ.
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-05-sg-q-w-signs
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.2"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    For a chemical system, $q$ is negative and $w$ is negative. What does this mean?
+  choices:
+    - { id: a, text: "Heat flows into the system, and the surroundings do work on the system" }
+    - { id: b, text: "Heat flows out of the system, and the surroundings do work on the system" }
+    - { id: c, text: "Heat flows into the system, and the system does work on the surroundings" }
+    - { id: d, text: "Heat flows out of the system, and the system does work on the surroundings" }
+  answer: d
+  explanation: |
+    Signs are from the system's point of view: negative means energy **leaves** the system. $q < 0$ means heat flows out (exothermic). $w < 0$ means the system does work on the surroundings, as when a gas made in a reaction expands and pushes back a piston.
+    Both lower the system's energy, so $\Delta E = q + w$ is negative.
+
+- id: apchem-05-sg-heat-kelvin
+  type: mcq
+  subject: apchem
+  chapter: 5
+  sections: ["5.5"]
+  cedTopics: ["6.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 20.0 g sample has a specific heat of 0.983 J/(g·°C). How much heat is needed to raise its temperature from 80.0 K to 100.0 K?
+  choices:
+    - { id: a, text: "1.97 × 10³ J" }
+    - { id: b, text: "393 J" }
+    - { id: c, text: "−393 J" }
+    - { id: d, text: "1.57 × 10³ J" }
+  answer: b
+  explanation: |
+    A kelvin and a Celsius degree are the same size, so a change of 20.0 K is a change of 20.0 °C. No conversion is needed.
+    $q = mc\Delta T = (20.0\ \text{g})(0.983\ \text{J/(g·°C)})(20.0\ \text{°C}) = 393$ J. It's positive because the sample absorbs heat.
+    (A) uses 100.0 K as $\Delta T$, and (D) uses 80.0 K. (C) has the wrong sign.
+
+- id: apchem-05-sg-ethane-frq
+  type: frq
+  subject: apchem
+  chapter: 5
+  sections: ["5.4"]
+  cedTopics: ["4.2", "4.5", "6.6"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: ethane-combustion-heat
+  prompt: |
+    A student mistakenly believes that 237.0 kJ of heat is released when ethane, $\ce{C2H6}$, burns. They use $\Delta H = -237.0$ kJ for the balanced equation with the smallest whole-number coefficients. Use the student's value throughout. (The real value is about 13 times larger.)
+  parts:
+    - label: a
+      points: 1
+      prompt: Write the balanced equation for the complete combustion of ethane.
+      scoring:
+        - "$\\ce{2C2H6(g) + 7O2(g) -> 4CO2(g) + 6H2O(l)}$, ΔH = −237.0 kJ."
+    - label: b
+      points: 1
+      prompt: Find ΔH when 6.00 mol of ethane burns in excess oxygen.
+      scoring:
+        - "6.00 mol is 3 times the 2 mol in the equation: 3 × (−237.0 kJ) = −711.0 kJ."
+    - label: c
+      points: 1
+      prompt: Find ΔH when 20.0 g of ethane burns in excess oxygen.
+      scoring:
+        - "20.0 g ÷ 30.07 g/mol = 0.665 mol; 0.665 mol × (−237.0 kJ / 2 mol) = −78.8 kJ."
+    - label: d
+      points: 1
+      prompt: What is ΔH for the reverse of the equation you wrote in (a)?
+      scoring:
+        - "+237.0 kJ: the same size with the opposite sign."
+    - label: e
+      points: 2
+      prompt: 5.0 g of ethane and 10.0 g of oxygen react. Which reactant is limiting? Support your answer by calculating the mass of CO₂ each reactant could produce.
+      scoring:
+        - "C₂H₆: 5.0 / 30.07 = 0.166 mol × 4/2 = 0.333 mol CO₂ = 15 g. O₂: 10.0 / 32.00 = 0.3125 mol × 4/7 = 0.179 mol CO₂ = 7.86 g."
+        - "O₂ is limiting, because it makes less CO₂; the reaction gives 7.86 g CO₂."
+  explanation: |
+    **(a)** $\ce{2C2H6(g) + 7O2(g) -> 4CO2(g) + 6H2O(l)}$. For one $\ce{C2H6}$: 2 $\ce{CO2}$ and 3 $\ce{H2O}$ need $4 + 3 = 7$ O atoms, or $\tfrac{7}{2}$ $\ce{O2}$. Doubling clears the fraction.
+
+    **(b)** ΔH scales with the amount: $\dfrac{6.00\ \text{mol}}{2\ \text{mol}} \times (-237.0\ \text{kJ}) = -711.0$ kJ.
+
+    **(c)** $20.0 / 30.07 = 0.665$ mol $\ce{C2H6}$, and $0.665 \times \dfrac{-237.0\ \text{kJ}}{2\ \text{mol}} = -78.8$ kJ. Divide by 2, because −237.0 kJ goes with **2** mol of ethane.
+
+    **(d)** Reversing a reaction flips the sign of ΔH: $+237.0$ kJ.
+
+    **(e)** Convert each reactant to moles of $\ce{CO2}$:
+
+    | | Moles | Moles $\ce{CO2}$ | Grams $\ce{CO2}$ |
+    |---|---|---|---|
+    | $\ce{C2H6}$ | $5.0 / 30.07 = 0.166$ | $0.166 \times \tfrac{4}{2} = 0.333$ | $0.333 \times 44.01 = 15$ |
+    | $\ce{O2}$ | $10.0 / 32.00 = 0.3125$ | $0.3125 \times \tfrac{4}{7} = 0.179$ | $0.179 \times 44.01 = 7.86$ |
+
+    $\ce{O2}$ makes less $\ce{CO2}$, so **$\ce{O2}$ is limiting**, and the reaction gives 7.86 g of $\ce{CO2}$. Another check: 0.166 mol of ethane would need $0.166 \times \tfrac{7}{2} = 0.582$ mol of $\ce{O2}$, and only 0.3125 mol is there.

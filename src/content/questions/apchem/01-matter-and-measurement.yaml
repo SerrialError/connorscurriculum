@@ -1167,3 +1167,71 @@
     $$
 
     **(c)** The attraction between $\ce{Mg^2+}$ and $\ce{O^2-}$ is about five times stronger: four times the charge product, at a shorter distance. Melting requires pulling the ions apart enough to move past each other, which takes much more energy in MgO, so it melts at a far higher temperature. Chapter 8 returns to this as lattice energy.
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-01-sg-round-sigfigs
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.6"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    How many significant figures does 0.008890 have, and what is it rounded to two significant figures?
+  choices:
+    - { id: a, text: "3 significant figures; 0.0089" }
+    - { id: b, text: "6 significant figures; 0.0089" }
+    - { id: c, text: "4 significant figures; 0.0089" }
+    - { id: d, text: "4 significant figures; 0.0088" }
+  answer: c
+  explanation: |
+    Leading zeros only place the decimal point, so they aren't significant. The trailing zero after the decimal point is, so 0.008**890** has 4 significant figures.
+    To round to two, keep 8 and 8 and look at the next digit, 9. It's 5 or more, so round up: **0.0089**.
+    (A) drops the trailing zero. (B) counts the leading zeros. (D) truncates instead of rounding.
+
+- id: apchem-01-sg-density-liters
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.5", "1.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A 0.356 g sample has a density of 6.0 g/mL. What is its volume in **liters**?
+  choices:
+    - { id: a, text: "2.1 × 10⁻³ L" }
+    - { id: b, text: "5.9 × 10⁻⁵ L" }
+    - { id: c, text: "5.93 × 10⁻⁵ L" }
+    - { id: d, text: "5.9 × 10⁻² L" }
+  answer: b
+  explanation: |
+    $V = \dfrac{m}{d} = \dfrac{0.356\ \text{g}}{6.0\ \text{g/mL}} = 0.0593\ \text{mL}$, and $0.0593\ \text{mL} \times \dfrac{1\ \text{L}}{1000\ \text{mL}} = 5.93 \times 10^{-5}$ L.
+    The density has only two significant figures, so the answer is $5.9 \times 10^{-5}$ L.
+    (C) keeps three significant figures. (A) multiplies mass by density instead of dividing. (D) is the volume in milliliters ($5.9 \times 10^{-2}$ mL) labeled as liters.
+
+- id: apchem-01-sg-boiling-bonds
+  type: mcq
+  subject: apchem
+  chapter: 1
+  sections: ["1.3"]
+  cedTopics: ["4.4"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    When liquid water boils, what is overcome?
+  choices:
+    - { id: a, text: "The attractions between H₂O molecules, which are much weaker than the O–H bonds inside them" }
+    - { id: b, text: "The O–H bonds inside each molecule, which are weaker than the attractions between molecules" }
+    - { id: c, text: "The O–H bonds inside each molecule, so H₂ and O₂ gases are released as the water boils" }
+    - { id: d, text: "The attractions between H₂O molecules, which are much stronger than the O–H bonds inside them" }
+  answer: a
+  explanation: |
+    Boiling is a physical change: the steam is still $\ce{H2O}$, so no O–H bonds break. Only the attractions **between** molecules are overcome, which happens at 100 °C.
+    Breaking the covalent bonds **inside** the molecules takes far more energy, which is why splitting water into $\ce{H2}$ and $\ce{O2}$ needs electrolysis or very high temperatures.
+    In general, chemical bonds (ionic, covalent, and metallic) are much stronger than the attractions between molecules. Chapter 11 covers those attractions in detail.

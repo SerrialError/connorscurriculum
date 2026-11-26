@@ -66,6 +66,17 @@ export function inTest(test: SubjectData['tests'][number], entry: { id: string; 
   return test.sections.length === 0 || entry.data.sections.some((s) => test.sections.includes(s));
 }
 
+/**
+ * A test's review sheets, newest chapter first, so a final's own sheet comes before the sheets of
+ * the chapter tests it also covers.
+ */
+export function reviewSheets<L extends { id: string; data: { chapter: number; sections: string[]; kind?: string } }>(
+  test: SubjectData['tests'][number],
+  lessons: L[],
+): L[] {
+  return lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)).sort((a, b) => b.data.chapter - a.data.chapter);
+}
+
 /** Class tests, latest first (undated tests last, in file order). Practice quizzes aren't class tests. */
 export function testsByDate(data: SubjectData) {
   return data.tests.filter((t) => t.kind === 'test').sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));

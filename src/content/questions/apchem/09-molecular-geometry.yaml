@@ -1395,6 +1395,7 @@
   cedTopics: []
   difficulty: 3
   authors: ["Claude"]
+  group: mo-b2
   prompt: |
     Removing one electron from $\ce{B2}$ gives $\ce{B2+}$. What happens to the bond?
   choices:
@@ -2051,3 +2052,50 @@
       prompt: How many σ bonds and how many π bonds does one resonance structure of acetate have?
       scoring:
         - "6 σ and 1 π."
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-09-sg-sp3-sp2-sp
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which molecule has at least one sp³, one sp², and one sp carbon atom?
+  choices:
+    - { id: a, text: '$\ce{CH3-CH2-CH=CH2}$' }
+    - { id: b, text: '$\ce{CH2=CH-C#N}$' }
+    - { id: c, text: '$\ce{CH3-CH=CH-C#N}$' }
+    - { id: d, text: '$\ce{CH3-C#C-CH3}$' }
+  answer: c
+  explanation: |
+    Count the electron domains on each carbon: four single bonds make it sp³, one double bond (3 domains) makes it sp², and a triple bond (2 domains) makes it sp.
+    In (C), the $\ce{CH3}$ carbon is sp³, the two carbons in C=C are sp², and the carbon in C≡N is sp.
+    (A) has sp³ and sp² but no sp. (B) has sp² and sp but no sp³. (D) has sp³ and sp but no sp².
+
+- id: apchem-09-sg-b2-mo
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.8"]
+  cedTopics: []
+  difficulty: 3
+  authors: ["Claude"]
+  group: mo-b2
+  prompt: |
+    Fill the molecular orbital diagram for $\ce{B2}$. What are its bond order and magnetism?
+  choices:
+    - { id: a, text: "Bond order 1; paramagnetic, with two unpaired electrons" }
+    - { id: b, text: "Bond order 1; diamagnetic, with all of its electrons paired" }
+    - { id: c, text: "Bond order 2; diamagnetic, with all of its electrons paired" }
+    - { id: d, text: "Bond order 0; B₂ is not expected to exist as a molecule" }
+  answer: a
+  explanation: |
+    $\ce{B2}$ has 6 valence electrons (3 from each B). For B₂, C₂, and N₂, the π₂ₚ orbitals are **below** σ₂ₚ, so the order is σ₂ₛ² σ\*₂ₛ² π₂ₚ². The two π₂ₚ orbitals have equal energy, so by Hund's rule the last two electrons go one in each, with parallel spins: **paramagnetic**.
+    Bond order $= \tfrac{1}{2}(4 - 2) = 1$. It's greater than 0, so $\ce{B2}$ is stable enough to exist.
+    (B) fills σ₂ₚ first, the order for O₂ and F₂, which would pair the last two electrons.

@@ -85,7 +85,7 @@ export function coverage(data: SubjectData, lessons: Lesson[], questions: Questi
 export const practiceUrl = (subject: string, query = '') => url(`${subject}/practice/${query}`);
 
 export { getSubjectData };
-export { currentChapters, inCedOrder, inTest, isClassContent, isSample, isTaught, nextChapter, nowChapters, quizzes, testsByDate } from './class-status';
+export { currentChapters, inCedOrder, inTest, isClassContent, isSample, isTaught, nextChapter, nowChapters, quizzes, reviewSheets, testsByDate } from './class-status';
 export { LESSON_KINDS, groupLessons, kindCounts, kindLabel } from './lesson-kinds';
 
 /** A class's dashboard data (see classSummary), loaded from its content. */

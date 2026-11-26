@@ -1,7 +1,7 @@
 // What a class home page shows, worked out from the class's data so the page only renders it:
 // the chapters it's on now, its latest test, the lessons of its latest chapters, and its progress
 // through the AP topics.
-import { inCedOrder, inTest, type nowChapters } from './class-status';
+import { inCedOrder, inTest, type nowChapters, reviewSheets } from './class-status';
 import { hasTopics } from './features';
 import { type FrqLink, frqCountLabel, matchFrqs } from './frqs';
 import { kindCounts } from './lesson-kinds';
@@ -85,7 +85,7 @@ export function classHome<L extends HomeLesson, Q extends HomeQuestion>(
     now: { label: now.label, chapters: now.chapters.map((c) => chapter(c.number)) },
     test: test && {
       test,
-      review: lessons.filter((l) => l.data.kind === 'review' && inTest(test, l)),
+      review: reviewSheets(test, lessons),
       practice: testCount > 0 ? practiceStarts({ test: test.id }, testCount) : null,
       /** The test's practice exam (tests.json "exam"), or null without one or with no questions. */
       exam: testCount > 0 && test.exam ? examStart(test.id) : null,

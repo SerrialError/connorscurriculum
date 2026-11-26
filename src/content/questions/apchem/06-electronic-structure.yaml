@@ -1617,3 +1617,122 @@
   explanation: |
     Moving one 4s electron into 3d gives five 3d electrons, one in each orbital with parallel spins. A half-filled (or completely filled) d subshell is extra stable, so the atom ends up lower in energy this way. Copper does the same to reach $3d^{10}$.
     (B) is false because 4s fills first in K and Ca. (C) is false: an orbital can hold two electrons with opposite spins. (D) misstates Hund's rule, which is about equal-energy orbitals in one subshell.
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# (the Bohr model's limitation is apchem-06-bohr-limitation above)
+# ---------------------------------------------------------------------------
+
+- id: apchem-06-sg-wavelength-double
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.1", "6.2"]
+  cedTopics: ["3.12"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Light A has twice the wavelength of light B. Compared with light B, light A has
+  choices:
+    - { id: a, text: "twice the frequency and twice the photon energy" }
+    - { id: b, text: "half the frequency and twice the photon energy" }
+    - { id: c, text: "half the frequency and half the photon energy" }
+    - { id: d, text: "the same frequency and half the photon energy" }
+  answer: c
+  explanation: |
+    All light travels at the same speed $c$, and $c = \lambda\nu$, so frequency is inversely proportional to wavelength: twice the wavelength means half the frequency. Photon energy is $E = h\nu$, proportional to frequency, so it halves too. Together, $E = hc/\lambda$: longer wavelength, lower frequency, lower energy.
+
+- id: apchem-06-sg-n2-to-n4
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.3"]
+  cedTopics: []
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    An electron in a hydrogen atom moves from $n = 2$ to $n = 4$. What happens?
+  choices:
+    - { id: a, text: "A photon with a wavelength of 486 nm is emitted" }
+    - { id: b, text: "A photon with a wavelength of 486 nm is absorbed" }
+    - { id: c, text: "A photon with a wavelength of 656 nm is absorbed" }
+    - { id: d, text: "A photon with a wavelength of 122 nm is absorbed" }
+  answer: b
+  explanation: |
+    Moving to a higher level raises the electron's energy, so a photon is **absorbed**. Its energy is the gap between the levels:
+    $\Delta E = (2.18 \times 10^{-18}\ \text{J})\left(\dfrac{1}{2^2} - \dfrac{1}{4^2}\right) = 4.09 \times 10^{-19}$ J.
+
+    $\lambda = \dfrac{hc}{\Delta E} = \dfrac{(6.626 \times 10^{-34})(2.998 \times 10^8)}{4.09 \times 10^{-19}} = 4.86 \times 10^{-7}$ m $= 486$ nm.
+
+    That's what you can get from a transition: the energy gap, and from it the frequency and wavelength of the photon. An electron falling from $n = 4$ back to $n = 2$ emits light of the same wavelength, one of hydrogen's visible lines.
+    (A) has the direction backward. (C) is the $n = 2 \to 3$ jump, and (D) is $n = 1 \to 2$.
+
+- id: apchem-06-sg-allowed-sets
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which of these sets of quantum numbers are allowed?
+
+    - I. $n = 3$, $l = 3$, $m_l = 0$
+    - II. $n = 2$, $l = -2$, $m_l = 0$
+    - III. $n = 3$, $l = 2$, $m_l = -2$
+  choices:
+    - { id: a, text: "III only" }
+    - { id: b, text: "I and III only" }
+    - { id: c, text: "II and III only" }
+    - { id: d, text: "I, II, and III" }
+  answer: a
+  explanation: |
+    $l$ runs from 0 to $n - 1$, and $m_l$ from $-l$ to $+l$.
+    I breaks the first rule: for $n = 3$, $l$ can only be 0, 1, or 2. II breaks it too, because $l$ is never negative. III is a 3d orbital ($l = 2$ allows $m_l$ from −2 to +2), so it's allowed.
+
+- id: apchem-06-sg-electrons-n3
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.5"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the greatest number of electrons in one atom that can have $n = 3$?
+  choices:
+    - { id: a, text: "8" }
+    - { id: b, text: "9" }
+    - { id: c, text: "32" }
+    - { id: d, text: "18" }
+  answer: d
+  explanation: |
+    The $n = 3$ shell has 3s (1 orbital), 3p (3), and 3d (5): $n^2 = 9$ orbitals. Each holds 2 electrons, so $2n^2 = 18$.
+    (A) Period 3 has only 8 elements, because 3d fills after 4s, in period 4, but the shell still holds 18. (B) counts orbitals instead of electrons. (C) is the $n = 4$ shell.
+
+- id: apchem-06-sg-pauli-helium
+  type: mcq
+  subject: apchem
+  chapter: 6
+  sections: ["6.8"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which orbital diagram for helium breaks the **Pauli exclusion principle**?
+  choices:
+    - { id: a, text: "1s: ↑↓" }
+    - { id: b, text: "1s: ↑↑" }
+    - { id: c, text: "1s: ↑ and 2s: ↑" }
+    - { id: d, text: "1s: ↑ and 2s: ↓" }
+  answer: b
+  explanation: |
+    The three filling rules:
+
+    - **Pauli exclusion principle:** no two electrons in an atom have the same four quantum numbers, so an orbital holds at most two electrons, with opposite spins. Two parallel spins in 1s break it.
+    - **Aufbau principle:** electrons fill the lowest-energy orbitals first. (C) and (D) break this one, not Pauli: they're excited states of helium.
+    - **Hund's rule:** in orbitals of equal energy (such as the three 2p orbitals), electrons go in singly with parallel spins before any pair up.
+
+    (A) is helium's correct ground state.

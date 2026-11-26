@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { hasTests } from '../../../lib/features';
-import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, practiceUrl, quizzes, subjectPathsWith, testsByDate, url } from '../../../lib/content';
+import { currentChapters, formatDate, getLessons, getQuestions, getSubjectData, inTest, isPastTest, lessonSlug, practiceUrl, quizzes, reviewSheets, subjectPathsWith, testsByDate, url } from '../../../lib/content';
 import { examFormat } from '../../../lib/practice/exam';
 import { examStart, practiceStarts } from '../../../lib/practice/links';
 import { chapterRange } from '../../../lib/text';
@@ -18,7 +18,7 @@ const tests = testsByDate(data).map((t) => {
   const n = questions.filter((q) => inTest(t, q)).length;
   return {
     t,
-    review: lessons.filter((l) => l.data.kind === 'review' && inTest(t, l)),
+    review: reviewSheets(t, lessons),
     practice: n > 0 ? practiceStarts({ test: t.id }, n) : null,
   };
 });

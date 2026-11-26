@@ -82,6 +82,8 @@ export interface PracticeExam {
   frq: { count: number; points: number; calculations?: boolean };
   /** Only questions at least this hard are drawn (1 = any). */
   minDifficulty?: number;
+  /** The teacher hasn't announced the format yet, so this is a stand-in. */
+  tentative?: boolean;
   /** What the screens call it: "exam" for a class test's practice exam, "quiz" for a practice quiz. */
   noun?: 'exam' | 'quiz';
 }

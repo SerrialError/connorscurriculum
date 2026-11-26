@@ -1268,3 +1268,165 @@
     **(c)** Dalton's postulate that compounds form from whole atoms in whole-number ratios. B has twice as many O atoms per Cu atom as A.
 
     **(d)** If B has $\ce{Cu^2+}$ and $\ce{O^2-}$, it's CuO, copper(II) oxide. A has half as much O per Cu: $\ce{Cu2O}$, which contains $\ce{Cu+}$, so it's copper(I) oxide. (Check: $2(63.55) / 143.10 = 88.82\%$ Cu.)
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-02-sg-si-ion-counts
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: sg-silicon-27
+  prompt: |
+    How many protons, neutrons, and electrons are in one $\ce{^{27}Si^2+}$ ion?
+  choices:
+    - { id: a, text: "14 protons, 13 neutrons, 16 electrons" }
+    - { id: b, text: "14 protons, 13 neutrons, 12 electrons" }
+    - { id: c, text: "14 protons, 27 neutrons, 12 electrons" }
+    - { id: d, text: "13 protons, 14 neutrons, 12 electrons" }
+  answer: b
+  explanation: |
+    Silicon's atomic number is 14, so it has **14 protons**. Neutrons = mass number − protons = $27 - 14 =$ **13**. A 2+ charge means two electrons were lost: $14 - 2 =$ **12 electrons**.
+    (A) adds electrons for a positive charge. (C) uses the mass number as the neutron count. (D) swaps protons and neutrons.
+
+- id: apchem-02-sg-si-isotope
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.3"]
+  cedTopics: ["1.5"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: sg-silicon-27
+  prompt: |
+    Which of these is an **isotope** of $\ce{^{27}Si^2+}$?
+  choices:
+    - { id: a, text: '$\ce{^{27}Al}$' }
+    - { id: b, text: '$\ce{^{27}Si^3+}$' }
+    - { id: c, text: '$\ce{^{28}Si}$' }
+    - { id: d, text: '$\ce{^{28}P}$' }
+  answer: c
+  explanation: |
+    Isotopes have the same number of protons (the same element) but different numbers of neutrons. $\ce{^{28}Si}$ has 14 protons and 14 neutrons, while $\ce{^{27}Si}$ has 13 neutrons. The charge doesn't matter: $\ce{^{28}Si^2+}$ would be an isotope too.
+    (A) has the same mass number but only 13 protons, so it's a different element. (B) has the same nucleus and differs only in electrons, so it's an ion of the same isotope. (D) has 13 neutrons like $\ce{^{27}Si}$, but 15 protons.
+
+- id: apchem-02-sg-name-fes
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.8"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    What is the name of $\ce{FeS}$?
+  choices:
+    - { id: a, text: "iron sulfide" }
+    - { id: b, text: "iron(II) sulfite" }
+    - { id: c, text: "iron(I) sulfide" }
+    - { id: d, text: "iron(II) sulfide" }
+  answer: d
+  explanation: |
+    A single S atom as an anion is sulfide, $\ce{S^2-}$. One $\ce{S^2-}$ is balanced by one iron ion, so the iron is $\ce{Fe^2+}$. Iron forms both $\ce{Fe^2+}$ and $\ce{Fe^3+}$, so the name needs the Roman numeral: **iron(II) sulfide**.
+    (A) leaves out the Roman numeral. (B) is $\ce{FeSO3}$, since sulfite is $\ce{SO3^2-}$. (C) would need $\ce{Fe2S}$.
+
+- id: apchem-02-sg-multiple-proportions-co
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which observation supports the **law of multiple proportions**?
+  choices:
+    - { id: a, text: "CO has 1.33 g of O per gram of C, and CO₂ has 2.66 g of O per gram of C" }
+    - { id: b, text: "Pure water is 11.2% hydrogen by mass no matter where the sample came from" }
+    - { id: c, text: "Heating 10.0 g of CaCO₃ gives 5.6 g of CaO and 4.4 g of CO₂ with no mass lost" }
+    - { id: d, text: "Every carbon atom in a sample of CO₂ has exactly the same mass, 12.00 u" }
+  answer: a
+  explanation: |
+    The law of multiple proportions is about two elements that form **more than one** compound. For a fixed mass of one element, the masses of the other are in a small whole-number ratio. Here $2.66 / 1.33 = 2$, a 2 : 1 ratio, because $\ce{CO2}$ has twice as many O atoms per C atom as CO.
+    (B) is the law of definite proportions (one compound always has the same composition). (C) is the law of conservation of mass: $5.6 + 4.4 = 10.0$ g. (D) is false, since carbon has isotopes ($^{12}$C and $^{13}$C), and 12.01 is an average.
+
+- id: apchem-02-sg-conservation-mgo
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.1"]
+  cedTopics: []
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Burning 2.43 g of magnesium in oxygen produces 4.03 g of magnesium oxide and nothing else. What mass of oxygen reacted?
+  choices:
+    - { id: a, text: "6.46 g" }
+    - { id: b, text: "1.60 g" }
+    - { id: c, text: "2.43 g" }
+    - { id: d, text: "4.03 g" }
+  answer: b
+  explanation: |
+    By the **law of conservation of mass**, the mass of the products equals the mass of the reactants: $2.43\ \text{g Mg} + m_{\ce{O2}} = 4.03$ g, so $m_{\ce{O2}} = 4.03 - 2.43 = 1.60$ g.
+    (A) adds the two masses.
+
+- id: apchem-02-sg-alkaline-earth-18e
+  type: mcq
+  subject: apchem
+  chapter: 2
+  sections: ["2.5", "2.7"]
+  cedTopics: ["1.8"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    An alkaline earth metal forms an ion with 18 electrons. Which metal is it?
+  choices:
+    - { id: a, text: "Magnesium" }
+    - { id: b, text: "Potassium" }
+    - { id: c, text: "Strontium" }
+    - { id: d, text: "Calcium" }
+  answer: d
+  explanation: |
+    The alkaline earth metals are group 2. They lose 2 electrons to form 2+ ions, so the atom has $18 + 2 = 20$ electrons and 20 protons: **calcium**.
+    (A) $\ce{Mg^2+}$ has 10 electrons, and (C) $\ce{Sr^2+}$ has 36. (B) $\ce{K+}$ does have 18 electrons, but potassium is an alkali metal (group 1).
+
+- id: apchem-02-sg-scientists-frq
+  type: frq
+  subject: apchem
+  chapter: 2
+  sections: ["2.2"]
+  cedTopics: []
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Our picture of the atom came from a series of experiments around 1900.
+  parts:
+    - label: a
+      points: 2
+      prompt: What did Thomson observe in his cathode-ray experiments, and what did he conclude?
+      scoring:
+        - "The rays were bent by electric and magnetic fields, toward the positive plate, whatever metal the cathode was made of."
+        - "Atoms contain tiny negatively charged particles (electrons), so atoms can be divided; he measured the electron's charge-to-mass ratio."
+    - label: b
+      points: 1
+      prompt: What did Millikan's oil-drop experiment measure?
+      scoring:
+        - "The charge of an electron, $1.60 \\times 10^{-19}$ C. With Thomson's charge-to-mass ratio, this gave the electron's mass."
+    - label: c
+      points: 2
+      prompt: What did Rutherford observe when he fired alpha particles at gold foil, and what did he conclude?
+      scoring:
+        - "Most alpha particles went straight through, but a few were deflected at large angles and some bounced almost straight back."
+        - "The atom is mostly empty space, with all of its positive charge and nearly all of its mass in a tiny, dense nucleus."
+  explanation: |
+    **(a)** The rays came from the negative electrode and bent toward a positive plate, so they were negatively charged particles, and they were the same whatever metal the cathode was made of. Thomson concluded that every atom contains these **electrons**, which led to his "plum-pudding" model of electrons spread through a positive sphere.
+
+    **(b)** Millikan measured the charge on tiny oil drops and found it was always a whole-number multiple of $1.60 \times 10^{-19}$ C, the charge of one electron. Combined with Thomson's charge-to-mass ratio, it gave the electron's mass.
+
+    **(c)** If the plum-pudding model were right, every alpha particle would pass through with little deflection. The few large deflections meant they had hit something small, dense, and positive: the **nucleus**. Because most passed straight through, the atom is mostly empty space.

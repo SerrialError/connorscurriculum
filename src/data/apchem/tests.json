@@ -94,6 +94,7 @@
     ],
     "exam": {
       "mcqPoints": 2.8,
+      "tentative": true,
       "sections": [
         { "id": "ionic", "label": "Ions, ionic bonding, and Lewis symbols", "count": 4, "match": { "chapters": [8], "sections": ["8.1", "8.2"] } },
         { "id": "covalent", "label": "Covalent bonds, electronegativity, and bond polarity", "count": 3, "match": { "chapters": [8], "sections": ["8.3", "8.4"] } },
@@ -129,6 +130,33 @@
       ],
       "extra": 1,
       "frq": { "count": 1, "points": 8, "calculations": false }
+    }
+  },
+  {
+    "id": "semester-1-final",
+    "title": "Semester 1 Final",
+    "date": "2026-12-07",
+    "chapters": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "sections": [],
+    "handouts": [
+      { "title": "AP Chemistry equation sheet", "url": "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-sheet.pdf" }
+    ],
+    "exam": {
+      "mcqPoints": 2,
+      "tentative": true,
+      "sections": [
+        { "id": "ch1", "label": "Measurement, significant figures, density, and matter", "count": 4, "match": { "chapters": [1] }, "minCalculations": 1, "maxCalculations": 2 },
+        { "id": "ch2", "label": "Atomic laws, historical experiments, atoms, the periodic table, and naming", "count": 5, "match": { "chapters": [2] }, "maxCalculations": 1 },
+        { "id": "ch3", "label": "Moles, percent composition, formulas, balancing, and limiting reactants", "count": 6, "match": { "chapters": [3] }, "minCalculations": 3, "maxCalculations": 4 },
+        { "id": "ch4", "label": "Electrolytes, precipitation, acids and bases, redox, and solution calculations", "count": 6, "match": { "chapters": [4] }, "minCalculations": 2, "maxCalculations": 3 },
+        { "id": "ch5", "label": "Energy, heat and work, enthalpy, calorimetry, and Hess's law", "count": 5, "match": { "chapters": [5] }, "minCalculations": 2, "maxCalculations": 3 },
+        { "id": "ch6", "label": "Light and photons, the Bohr model, quantum numbers, and electron configurations", "count": 5, "match": { "chapters": [6] }, "maxCalculations": 2 },
+        { "id": "ch7", "label": "Periodic trends", "count": 4, "match": { "chapters": [7], "sections": ["7.2", "7.3", "7.4", "7.5"] }, "maxCalculations": 1 },
+        { "id": "ch8", "label": "Bond types, electronegativity, lattice and bond energies, Lewis structures, and resonance", "count": 5, "match": { "chapters": [8] }, "maxCalculations": 1 },
+        { "id": "ch9", "label": "Shapes, polarity, hybridization, and molecular orbitals", "count": 5, "match": { "chapters": [9] } },
+        { "id": "ch10", "label": "Gas laws, gas stoichiometry, partial pressures, kinetic-molecular theory, and real gases", "count": 5, "match": { "chapters": [10] }, "minCalculations": 2, "maxCalculations": 3 }
+      ],
+      "frq": { "count": 2, "points": 20 }
     }
   }
 ]

@@ -1888,3 +1888,74 @@
     **(d)** The leftover liquid is weighed as if it were vapor, so $m$ is too large. The moles come from $P$, $V$, and $T$, which don't change, so $\mathcal{M} = m/n$ is too high.
 
     **(e)** A substance that is a liquid at room temperature has much stronger attractions between its molecules than $\ce{N2}$, which stays a gas down to about −196 °C. Close to its boiling point, those attractions pull the molecules together enough that the gas deviates noticeably from $PV = nRT$.
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-10-sg-gas-laws-frq
+  type: frq
+  subject: apchem
+  chapter: 10
+  sections: ["10.3", "10.4", "10.5"]
+  cedTopics: ["3.4"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    State each gas law, then use it to solve the problem. Assume ideal behavior.
+  parts:
+    - label: a
+      points: 2
+      prompt: Boyle's law. A gas occupies 2.00 L at 1.00 atm. At constant temperature it is compressed to 0.500 L. Find the new pressure.
+      scoring:
+        - "At constant temperature and moles, pressure and volume are inversely proportional: P₁V₁ = P₂V₂."
+        - "P₂ = (1.00 atm)(2.00 L) / 0.500 L = 4.00 atm."
+    - label: b
+      points: 2
+      prompt: Charles's law. A balloon holds 3.00 L at 27 °C. At constant pressure it is warmed to 177 °C. Find its new volume.
+      scoring:
+        - "At constant pressure and moles, volume is directly proportional to Kelvin temperature: V₁/T₁ = V₂/T₂."
+        - "T₁ = 300. K and T₂ = 450. K, so V₂ = 3.00 L × 450./300. = 4.50 L."
+    - label: c
+      points: 2
+      prompt: The ideal gas law. How many moles of gas are in a 5.00 L tank at 2.00 atm and 25 °C?
+      scoring:
+        - "PV = nRT, with P the pressure, V the volume, n the moles, R the gas constant (0.08206 L·atm/(mol·K)), and T the Kelvin temperature."
+        - "n = PV / RT = (2.00 atm)(5.00 L) / [(0.08206)(298 K)] = 0.409 mol."
+    - label: d
+      points: 2
+      prompt: Dalton's law of partial pressures. A mixture of 0.300 mol N₂ and 0.100 mol O₂ has a total pressure of 2.00 atm. Find the partial pressure of O₂.
+      scoring:
+        - "The total pressure of a gas mixture is the sum of the partial pressures of its gases: P_total = P₁ + P₂ + …"
+        - "Mole fraction of O₂ = 0.100 / 0.400 = 0.250; P(O₂) = 0.250 × 2.00 atm = 0.500 atm."
+  explanation: |
+    **(a)** Squeezing a gas into a quarter of the volume makes the particles hit the walls four times as often: $P_2 = \dfrac{(1.00)(2.00)}{0.500} = 4.00$ atm.
+
+    **(b)** Gas laws need Kelvin temperatures: $27 + 273 = 300.$ K and $177 + 273 = 450.$ K. $V_2 = 3.00\ \text{L} \times \dfrac{450.}{300.} = 4.50$ L. Using Celsius would give $3.00 \times 177/27 = 19.7$ L, which is far too large.
+
+    **(c)** $T = 25 + 273 = 298$ K. $n = \dfrac{PV}{RT} = \dfrac{(2.00)(5.00)}{(0.08206)(298)} = 0.409$ mol.
+
+    **(d)** Each gas's partial pressure is its mole fraction times the total: $X_{\ce{O2}} = \dfrac{0.100}{0.300 + 0.100} = 0.250$, and $P_{\ce{O2}} = 0.250 \times 2.00 = 0.500$ atm. $P_{\ce{N2}}$ is then 1.50 atm, and the two add up to 2.00 atm.
+
+- id: apchem-10-sg-graham-h2-o2
+  type: mcq
+  subject: apchem
+  chapter: 10
+  sections: ["10.7"]
+  cedTopics: []
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Under the same conditions, how many times faster does $\ce{H2}$ effuse than $\ce{O2}$?
+  choices:
+    - { id: a, text: "3.98 times faster" }
+    - { id: b, text: "15.9 times faster" }
+    - { id: c, text: "7.94 times faster" }
+    - { id: d, text: "0.251 times as fast" }
+  answer: a
+  explanation: |
+    **Graham's law:** the rate of effusion is inversely proportional to the square root of the molar mass.
+    $\dfrac{r_{\ce{H2}}}{r_{\ce{O2}}} = \sqrt{\dfrac{\mathcal{M}_{\ce{O2}}}{\mathcal{M}_{\ce{H2}}}} = \sqrt{\dfrac{32.00}{2.016}} = \sqrt{15.87} = 3.98$.
+    (B) leaves out the square root. (C) halves the ratio instead of taking its square root. (D) flips the ratio, which would make $\ce{H2}$ slower.

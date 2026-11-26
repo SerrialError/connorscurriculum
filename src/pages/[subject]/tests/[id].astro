@@ -17,6 +17,7 @@ import {
   inTest,
   lessonSlug,
   practiceUrl,
+  reviewSheets,
   subjectIds,
   topicIds,
   url,
@@ -35,7 +36,7 @@ const pool = { test: test.id };
 const { start, all } = practiceStarts(pool, questions.length);
 const weakest = weakestStart(pool, questions.length);
 const topics = inCedOrder(data, new Set([...lessons, ...questions].flatMap(topicIds)));
-const reviewSheets = lessons.filter((l) => l.data.kind === 'review');
+const sheets = reviewSheets(test, lessons);
 const others = lessons.filter((l) => l.data.kind !== 'review');
 const byChapter = test.chapters.map((n) => ({ n, chapter: data.chapterMap.get(n)!, lessons: others.filter((l) => l.data.chapter === n) }));
 const exam = test.exam;
@@ -71,11 +72,11 @@ if (exam) {
     </p>
   )}
 
-  {reviewSheets.length > 0 && (
+  {sheets.length > 0 && (
     <section class="card review-card" aria-labelledby="review-h">
-      <p class="eyebrow" id="review-h">{reviewSheets.length > 1 ? 'Review sheets' : 'Review sheet'}</p>
+      <p class="eyebrow" id="review-h">{sheets.length > 1 ? 'Review sheets' : 'Review sheet'}</p>
       <ul class="plain-list">
-        {reviewSheets.map((l) => (
+        {sheets.map((l) => (
           <li>
             <a class="title" href={url(`${subject}/lessons/${lessonSlug(l)}/`)}>{l.data.title}</a>
             {l.data.summary && <p class="small muted">{l.data.summary}</p>}
@@ -122,7 +123,7 @@ if (exam) {
     <section class="card exam-card" aria-labelledby="exam-h" data-pagefind-ignore>
       <h2 id="exam-h">Practice exam</h2>
       <p>
-        The test's format: {examFormat(exam)} ({examPointsNote(exam)}). Nothing is marked until you submit, and each exam
+        {exam.tentative ? "The format hasn't been announced yet, so the practice exam uses a stand-in" : "The test's format"}: {examFormat(exam)} ({examPointsNote(exam)}). Nothing is marked until you submit, and each exam
         is drawn fresh from the practice questions:
       </p>
       <ul>

@@ -133,11 +133,13 @@ chapter's lessons and questions:
 ```
 
 Copy section numbers and titles from the book itself, not from memory or another edition.
-Chapters 1–9 have lists so far. Chapters 1–3 were copied from the 15th edition's table of
+Chapters 1–10 have lists so far. Chapters 1–3 were copied from the 15th edition's table of
 contents in Pearson's preview (ISBN 9780137493609). Chapters 4–5 were copied from the table of
 contents in the preview of the 15th edition in SI Units (Global Edition, ISBN 9781292407623), whose
-Chapter 3 numbering matches the US edition. Check their titles against the US edition when a copy
-is available.
+Chapter 3 numbering matches the US edition. Chapter 10 was copied from Pearson's table-of-contents PDF
+for the 15th edition in SI Units, Expanded Edition (ISBN 9781292408767,
+https://pearson.com/en-au/media/vwnd02wq/9781292408767-toc.pdf), whose Chapter 9 list matches the one
+here exactly. Check their titles against the US edition when a copy is available.
 
 ## Topics the textbook covers thinly
 

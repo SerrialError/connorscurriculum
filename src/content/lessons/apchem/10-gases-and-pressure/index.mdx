@@ -1,0 +1,151 @@
+---
+title: Gases and Pressure
+subject: apchem
+chapter: 10
+sections: ["10.1", "10.2"]
+cedTopics: ["3.4"]
+order: 1
+authors: ["Claude"]
+summary: How gases differ from liquids and solids, pressure as the force of particle collisions on a wall, the units atm, mm Hg, torr, and kPa, the barometer, and reading a manometer.
+resources:
+  - kind: simulation
+    title: Gas Properties
+    url: https://phet.colorado.edu/en/simulations/gas-properties
+    by: PhET Interactive Simulations
+    why: Pump particles into a box and watch the pressure gauge respond. Add particles, heat the box, or shrink it, and watch how the wall collisions change.
+---
+
+## 1. What makes a gas different (10.1)
+
+A gas has no fixed volume or shape. It spreads out to fill whatever container it's in, and it can be
+squeezed into a much smaller space. Any two gases mix completely. A liquid or solid does none of these
+things, because its particles are already touching.
+
+![The same 24 particles as a liquid and as a gas. In the liquid they touch at the bottom of the container. In the gas they are spread through the whole box with mostly empty space between them. One mole of liquid water takes up about 18 mL, and one mole of a gas at STP takes up about 22,400 mL.](./gas-vs-liquid.svg)
+
+All of these properties come from one fact: the particles in a gas are **far apart** compared with their
+own size. A mole of liquid water fills about 18 mL. The same mole as a gas at STP fills about 22,400 mL,
+over a thousand times as much, and nearly all of that is empty space. That's why
+
+- gases are easy to compress: there's room to push the particles closer,
+- gases have low densities, around 1 g/L instead of around 1 g/mL,
+- gases mix: each one's particles move into the empty space among the other's,
+- and **every gas follows the same laws**, whatever it's made of. The particles are so far apart that
+  what they are hardly matters. Liquids and solids don't share a single equation like this.
+
+The substances that are gases at room temperature are mostly made of small molecules of nonmetals:
+$\ce{H2}$, $\ce{N2}$, $\ce{O2}$, $\ce{F2}$, $\ce{Cl2}$, the noble gases, $\ce{CO}$, $\ce{CO2}$, $\ce{CH4}$,
+$\ce{NH3}$, $\ce{HCl}$, $\ce{H2S}$, $\ce{SO2}$, and $\ce{NO2}$. A gas made from something that is usually a
+liquid or solid at room temperature, like water, is often called a **vapor**.
+
+## 2. Pressure (10.2)
+
+**Pressure** is force per unit area:
+
+$$
+P = \frac{F}{A}
+$$
+
+A gas exerts pressure because its particles are constantly hitting the walls of the container. Each
+collision pushes on the wall a tiny bit. Billions of them every second add up to a steady force.
+
+![A box of gas particles moving in random directions. Particles that hit a wall push on it, shown with red arrows pointing outward. Pressure is the total force of the collisions divided by the area of the wall: more collisions per second, or harder collisions, means a higher pressure.](./pressure-collisions.svg)
+
+So the pressure of a gas goes up if the particles hit the walls **more often** (more particles, or less
+room) or **harder** (faster particles, from a higher temperature). The next lesson uses this idea to
+explain each of the gas laws.
+
+<Callout type="ap-tip">
+AP free-response questions often ask why a pressure changed. Answer in terms of collisions: "the particles
+collide with the walls of the container more frequently" or "collide with greater force." "The particles
+have more energy" or "there are more particles" isn't a complete explanation by itself.
+</Callout>
+
+### Units of pressure
+
+The SI unit is the **pascal**: 1 Pa = 1 N/m². A pascal is tiny, so kilopascals (kPa) are more common.
+Chemists also use atmospheres and millimeters of mercury.
+
+| Unit | Equal to 1 atm | Where it comes from |
+|---|---|---|
+| atmosphere (atm) | 1 atm | Average air pressure at sea level |
+| millimeters of mercury (mm Hg) | 760 mm Hg | Height of a mercury column the atmosphere supports |
+| torr | 760 torr | Another name for mm Hg |
+| kilopascal (kPa) | 101.325 kPa | SI unit, 1000 Pa |
+
+The equation sheet gives **1 atm = 760 mm Hg = 760 torr**. It doesn't give the kPa value, so a
+question that needs it will give it to you.
+
+<Reveal label="Worked example: converting pressure units">
+
+**(a)** Convert 0.850 atm to mm Hg.
+
+$$
+0.850\ \text{atm} \times \frac{760\ \text{mm Hg}}{1\ \text{atm}} = 646\ \text{mm Hg}
+$$
+
+**(b)** A weather report gives 98.5 kPa. What is that in atm?
+
+$$
+98.5\ \text{kPa} \times \frac{1\ \text{atm}}{101.325\ \text{kPa}} = 0.972\ \text{atm}
+$$
+
+**(c)** Convert 735 torr to kPa. Go through atm:
+
+$$
+735\ \text{torr} \times \frac{1\ \text{atm}}{760\ \text{torr}} \times \frac{101.325\ \text{kPa}}{1\ \text{atm}} = 98.0\ \text{kPa}
+$$
+
+</Reveal>
+
+## 3. Atmospheric pressure and the barometer (10.2)
+
+The air above you has weight, and it presses on everything. A **barometer** measures this pressure. Fill
+a long glass tube with mercury, turn it upside down into a dish of mercury, and the mercury falls until
+the column is about 760 mm tall at sea level. The space above the column is a vacuum, so nothing pushes
+down on top of the mercury. The air pushing down on the dish holds the column up.
+
+![Left: a mercury barometer, a tube of mercury upside down in a dish, with a vacuum at the top and a column height h of about 760 mm at sea level. Middle: a U-tube manometer where the gas pressure is greater than atmospheric pressure; the mercury is pushed toward the open side, and P(gas) = P(atm) + h. Right: a manometer where the gas pressure is less than atmospheric; the mercury is pushed toward the gas, and P(gas) = P(atm) − h.](./barometer-manometer.svg)
+
+Mercury is used because it is very dense, 13.6 g/mL. Water is 13.6 times less dense, so a water
+barometer would need a column 13.6 times taller: $760\ \text{mm} \times 13.6 = 10{,}300$ mm, about 10 m.
+
+Atmospheric pressure is lower at higher altitude, because there's less air above pushing down. It also
+changes a little with the weather.
+
+## 4. Manometers (10.2)
+
+<Callout type="not-on-ap">
+Manometer readings aren't part of the AP course description. They are in the textbook and may be on the
+class test.
+</Callout>
+
+A **manometer** measures the pressure of a gas in a container by comparing it with the atmosphere. In an
+open-end manometer, one arm of a U-tube of mercury connects to the gas and the other is open to the air.
+The mercury is pushed away from whichever side has the higher pressure, and the difference in heights,
+$h$, is the difference in pressure (in mm Hg).
+
+- Mercury **higher on the open side**: the gas pushes harder than the air. $P_\text{gas} = P_\text{atm} + h$
+- Mercury **higher on the gas side**: the air pushes harder than the gas. $P_\text{gas} = P_\text{atm} - h$
+
+Check your answer with common sense: whichever side the mercury is pushed down on has the higher pressure.
+
+<Reveal label="Worked example: reading an open-end manometer">
+
+The atmospheric pressure is 752 torr.
+
+**(a)** The mercury level on the open side is 36 mm higher than on the gas side. The gas pushed the
+mercury toward the open side, so its pressure is higher than the atmosphere's:
+
+$$
+P_\text{gas} = 752 + 36 = 788\ \text{torr} \qquad 788\ \text{torr} \times \frac{1\ \text{atm}}{760\ \text{torr}} = 1.04\ \text{atm}
+$$
+
+**(b)** Now the mercury on the gas side is 24 mm higher than on the open side. The air pushed the mercury
+toward the gas, so the gas pressure is lower:
+
+$$
+P_\text{gas} = 752 - 24 = 728\ \text{torr}
+$$
+
+</Reveal>

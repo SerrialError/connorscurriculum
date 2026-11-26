@@ -1,0 +1,197 @@
+---
+title: The Gas Laws
+subject: apchem
+chapter: 10
+sections: ["10.3"]
+cedTopics: ["3.4"]
+order: 2
+authors: ["Claude"]
+summary: Boyle's, Charles's, and Avogadro's laws and the pressure–temperature law, why temperatures must be in kelvins, the combined gas law, what each law's graph looks like, and how particle collisions explain each one.
+resources:
+  - kind: video
+    title: Boyle's Law, Charles' Law, Gay-Lussac's Law - AP Chem Unit 3, Topic 4A
+    url: https://www.youtube.com/watch?v=rZxN6Zfzipc
+    by: Jeremy Krug
+    minutes: 17
+    why: Worked problems for each two-variable law and the combined gas law.
+  - kind: simulation
+    title: Gas Properties
+    url: https://phet.colorado.edu/en/simulations/gas-properties
+    by: PhET Interactive Simulations
+    why: Hold one variable constant and change another to test each law yourself. Predict the new pressure or volume before you change anything.
+---
+
+Four quantities describe a sample of gas: pressure $P$, volume $V$, temperature $T$, and amount $n$ (in
+moles). Each gas law holds two of them constant and says how the other two are related.
+
+## 1. Temperature has to be in kelvins
+
+Every gas law uses **absolute temperature**:
+
+$$
+\text{K} = {}^\circ\text{C} + 273.15
+$$
+
+(This is on the equation sheet.) The reason shows up in Charles's law below: a gas's volume is
+proportional to its temperature only when temperature is measured from absolute zero. Going from 20 °C to
+40 °C doesn't double anything. Going from 293 K to 586 K does.
+
+## 2. Boyle's law: pressure and volume (10.3)
+
+At constant temperature and amount of gas, **pressure and volume are inversely proportional**. Halve the
+volume and the pressure doubles.
+
+$$
+P_1V_1 = P_2V_2 \qquad (n, T \text{ constant})
+$$
+
+**Particle view:** the particles still move at the same speeds (same temperature), but in half the space
+they hit each part of the wall twice as often.
+
+![Three piston cylinders holding the same 8 particles. Center, the start. Left, the volume is halved at the same temperature: the particles move at the same speeds but hit the walls twice as often, so the pressure doubles. Right, the kelvin temperature is doubled at the same pressure: the particles move faster and the piston rises until the volume has doubled.](./piston-particles.svg)
+
+<Reveal label="Worked example: Boyle's law">
+
+A gas occupies 2.50 L at 1.20 atm. At constant temperature, it is compressed to 0.800 L. What is the new
+pressure?
+
+$$
+P_2 = \frac{P_1V_1}{V_2} = \frac{(1.20\ \text{atm})(2.50\ \text{L})}{0.800\ \text{L}} = 3.75\ \text{atm}
+$$
+
+Check the direction: the volume went down, so the pressure should go up. It did.
+
+</Reveal>
+
+## 3. Charles's law: volume and temperature (10.3)
+
+At constant pressure and amount, **volume is proportional to absolute temperature**:
+
+$$
+\frac{V_1}{T_1} = \frac{V_2}{T_2} \qquad (n, P \text{ constant})
+$$
+
+**Particle view:** hotter particles move faster and hit the walls harder and more often. To keep the
+pressure the same, the gas has to spread out until the collisions on each part of the wall are back to
+what they were. A balloon taken outside on a cold day shrinks for this reason.
+
+If you plot the volume of a gas against temperature in °C and extend the line to the left, it reaches zero
+volume at **−273.15 °C**, whatever the gas or its amount. That temperature is **absolute zero**, 0 K. (Real
+gases condense to liquids before they get there, which is why the lines below are dashed at the left.)
+
+<Reveal label="Worked example: Charles's law">
+
+A balloon holds 1.50 L of air at 22.0 °C. It is warmed to 95.0 °C at constant pressure. What is its new
+volume?
+
+Convert to kelvins first: $T_1 = 295.15$ K and $T_2 = 368.15$ K.
+
+$$
+V_2 = V_1 \times \frac{T_2}{T_1} = 1.50\ \text{L} \times \frac{368.15\ \text{K}}{295.15\ \text{K}} = 1.87\ \text{L}
+$$
+
+Using Celsius would give $1.50 \times 95.0/22.0 = 6.48$ L, more than four times the volume, which can't be
+right for a 73-degree change.
+
+</Reveal>
+
+## 4. Pressure and temperature (10.3)
+
+At constant volume and amount, **pressure is proportional to absolute temperature**. This one is sometimes
+called Gay-Lussac's law.
+
+$$
+\frac{P_1}{T_1} = \frac{P_2}{T_2} \qquad (n, V \text{ constant})
+$$
+
+**Particle view:** the walls can't move, so faster particles simply hit them more often and harder. This is
+why a sealed can or a car tire's pressure rises when it gets hot.
+
+<Reveal label="Worked example: heating a sealed container">
+
+A sealed can holds gas at 2.00 atm and 20 °C. It is left in a car that reaches 120 °C. What is the
+pressure inside?
+
+$$
+P_2 = P_1 \times \frac{T_2}{T_1} = 2.00\ \text{atm} \times \frac{393.15\ \text{K}}{293.15\ \text{K}} = 2.68\ \text{atm}
+$$
+
+The Celsius mistake, $2.00 \times 120/20$, gives 12.0 atm.
+
+</Reveal>
+
+## 5. Avogadro's law: volume and amount (10.3)
+
+At constant temperature and pressure, **volume is proportional to the number of moles**:
+
+$$
+\frac{V_1}{n_1} = \frac{V_2}{n_2} \qquad (P, T \text{ constant})
+$$
+
+Put another way, **equal volumes of gases at the same temperature and pressure contain equal numbers of
+particles**, whatever the gas. A liter of $\ce{H2}$ and a liter of $\ce{CO2}$ at the same conditions have
+the same number of molecules, even though the $\ce{CO2}$ is 22 times heavier.
+
+**Particle view:** more particles means more collisions, so at constant pressure the gas takes up more room.
+
+<Reveal label="Worked example: Avogadro's law">
+
+A cylinder with a movable piston holds 0.200 mol of gas in 4.00 L. Another 0.100 mol is added at the same
+temperature and pressure. What is the new volume?
+
+$$
+V_2 = V_1 \times \frac{n_2}{n_1} = 4.00\ \text{L} \times \frac{0.300\ \text{mol}}{0.200\ \text{mol}} = 6.00\ \text{L}
+$$
+
+</Reveal>
+
+## 6. The combined gas law
+
+When $n$ stays the same but $P$, $V$, and $T$ all change, combine the laws:
+
+$$
+\frac{P_1V_1}{T_1} = \frac{P_2V_2}{T_2}
+$$
+
+This is on the equation sheet. Any one of the laws above is this equation with one variable crossed out
+on both sides.
+
+<Reveal label="Worked example: correcting a volume to STP">
+
+A gas sample has a volume of 500. mL at 25 °C and 745 torr. What volume would it have at STP (273.15 K and
+1 atm, or 760 torr)?
+
+Solve for $V_2$ and check each ratio's direction:
+
+$$
+V_2 = V_1 \times \frac{P_1}{P_2} \times \frac{T_2}{T_1} = 500.\ \text{mL} \times \frac{745\ \text{torr}}{760\ \text{torr}} \times \frac{273.15\ \text{K}}{298.15\ \text{K}} = 449\ \text{mL}
+$$
+
+The pressure goes up (745 → 760 torr), which shrinks the gas, so the pressure ratio is less than 1. The
+temperature goes down, which also shrinks it, so the temperature ratio is less than 1 too. Pressure units
+don't need converting here, as long as both are the same unit.
+
+</Reveal>
+
+## 7. Reading gas-law graphs (AP topic 3.4)
+
+The AP course description expects you to read and sketch graphs of these relationships.
+
+![Six small graphs. Boyle's law: P against V is a curve that falls steeply and then levels off; P against 1/V is a straight line through the origin. Avogadro's law: V against n is a straight line through the origin. Charles's law: V against temperature in °C gives straight lines for different amounts of gas that all extend back to zero volume at −273 °C; V against temperature in kelvins is a straight line through the origin. At constant volume, P against temperature in kelvins is a straight line through the origin.](./gas-law-graphs.svg)
+
+| Held constant | Relationship | Graph |
+|---|---|---|
+| $n$, $T$ | $P$ and $V$ inversely proportional | $P$ vs $V$ curves down; $P$ vs $1/V$ is a line through 0 |
+| $n$, $P$ | $V \propto T$ (K) | Line through 0 in kelvins; reaches 0 at −273 °C in Celsius |
+| $n$, $V$ | $P \propto T$ (K) | Line through 0 in kelvins |
+| $P$, $T$ | $V \propto n$ | Line through 0 |
+
+A straight line through the origin means the two quantities are **directly proportional**: doubling one
+doubles the other. A straight line that doesn't pass through the origin, like $V$ against °C, means they
+are related linearly but not proportional.
+
+<Callout type="warning">
+The most common gas-law mistake is leaving temperature in °C. The second is getting a ratio upside down.
+After you set up a calculation, ask whether the answer should be bigger or smaller than the starting value,
+and check that your ratio is greater or less than 1 to match.
+</Callout>

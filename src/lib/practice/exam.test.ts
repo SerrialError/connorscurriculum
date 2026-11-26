@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { inTest } from '../class-status';
 import { getSubjectData } from '../registry';
 import { compareSections, drawExam, drawable, examFormat, examFrqs, examMax, examParts, examPointsNote, examPools, examQuestions, examShortfalls, mcqCount, scoreExam, sectionOf } from './exam';
 import { seededRng } from './random';
@@ -158,6 +159,14 @@ describe('examPointsNote', () => {
   });
 });
 
+type Test = ReturnType<typeof getSubjectData>['tests'][number];
+
+/** A test's questions from the question files, picked the way the site picks them (inTest). */
+const testQuestions = (test: Test) =>
+  readQuestionFiles()
+    .filter((q) => q.subject === 'apchem' && inTest(test, { id: q.id, data: { chapter: q.chapter, sections: q.sections ?? [] } }))
+    .map((q) => ({ ...q, sections: q.sections ?? [], groups: q.group ? [q.group].flat() : undefined }));
+
 describe('apchem: the Chapters 4–5 practice exam', () => {
   const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch4-5-test')!;
 
@@ -169,9 +178,7 @@ describe('apchem: the Chapters 4–5 practice exam', () => {
   });
 
   it('has at least twice as many questions as each section draws, and twice the concept questions it needs', () => {
-    const questions = readQuestionFiles()
-      .filter((q) => q.subject === 'apchem' && test.chapters.includes(q.chapter))
-      .map((q) => ({ ...q, sections: q.sections ?? [] }));
+    const questions = testQuestions(test);
     for (const p of examPools(questions, test.exam!)) {
       expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
       expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
@@ -189,9 +196,7 @@ describe('apchem: the Chapters 6–7 practice exam', () => {
 
   // So that two practice exams don't keep repeating the same questions.
   it('has at least twice as many questions as each section draws, and twice the concept questions it needs', () => {
-    const questions = readQuestionFiles()
-      .filter((q) => q.subject === 'apchem' && test.chapters.includes(q.chapter))
-      .map((q) => ({ ...q, sections: q.sections ?? [] }));
+    const questions = testQuestions(test);
     for (const p of examPools(questions, test.exam!)) {
       expect(p.questions.length, p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
       expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
@@ -199,11 +204,48 @@ describe('apchem: the Chapters 6–7 practice exam', () => {
   });
 });
 
+describe('apchem: the Chapters 8–9 practice exam', () => {
+  const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-test')!;
+  const questions = testQuestions(test);
+
+  it('is 36 multiple choice at 2.8 points and a 7.2-point FRQ, like the Chapters 6–7 test', () => {
+    expect(mcqCount(test.exam!)).toBe(36);
+    expect(examMax(test.exam!)).toBe(108);
+  });
+
+  // Molecular orbitals (9.7–9.8) are on the final, not this test.
+  it('leaves out molecular orbitals', () => {
+    expect(test.sections).not.toContain('9.7');
+    expect(test.sections).not.toContain('9.8');
+    for (let i = 0; i < 50; i++) {
+      const drawn = drawExam(questions, test.exam!, seededRng(`seed${i}`));
+      expect(drawn).toHaveLength(37);
+      expect(drawn.flatMap((q) => q.sections).filter((s) => s === '9.7' || s === '9.8')).toEqual([]);
+    }
+  });
+
+  // Lattice energy is on the AP exam but not the class test; its questions are excluded by id.
+  it('leaves out lattice energy, and excludes only questions that exist', () => {
+    const ids = new Set(readQuestionFiles().map((q) => q.id));
+    expect(test.exclude.filter((id) => !ids.has(id))).toEqual([]);
+    const asked = (q: (typeof questions)[number]) =>
+      [q.prompt, ...(q.choices ?? []).map((c) => c.text), ...(q.parts ?? []).map((p) => p.prompt)].join(' ');
+    expect(questions.filter((q) => /lattice energ|born.haber/i.test(asked(q))).map((q) => q.id)).toEqual([]);
+  });
+
+  // So that two practice exams don't keep repeating the same questions.
+  it('has at least twice as many questions as each section draws, and twice the concept questions it needs', () => {
+    expect(examShortfalls(questions, test.exam!)).toEqual([]);
+    for (const p of examPools(questions, test.exam!)) {
+      expect(drawable(p.questions), p.section.id).toBeGreaterThanOrEqual(2 * p.section.count);
+      expect(p.concepts, `${p.section.id} concept questions`).toBeGreaterThanOrEqual(2 * (p.section.count - (p.section.maxCalculations ?? p.section.count)));
+    }
+  });
+});
+
 describe('apchem: the Chapters 1–3 practice exam', () => {
   const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch1-3-test')!;
-  const questions = readQuestionFiles()
-    .filter((q) => q.subject === 'apchem' && test.chapters.includes(q.chapter))
-    .map((q) => ({ ...q, sections: q.sections ?? [] }));
+  const questions = testQuestions(test);
 
   it('is 45 multiple choice with no free response, about 20 of them calculations', () => {
     expect(mcqCount(test.exam!)).toBe(45);
@@ -237,10 +279,7 @@ describe('apchem: the Chapters 1–3 practice exam', () => {
 
 describe('apchem: the Chapters 8–9 practice quiz', () => {
   const quiz = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-quiz')!;
-  const inQuiz = readQuestionFiles()
-    .filter((q) => q.subject === 'apchem' && quiz.chapters.includes(q.chapter))
-    .map((q) => ({ ...q, sections: q.sections ?? [], groups: q.group ? [q.group].flat() : undefined }))
-    .filter((q) => q.sections.some((s) => quiz.sections.includes(s)));
+  const inQuiz = testQuestions(quiz);
 
   it('is a quiz, not a class test: 16 multiple choice at 2 points and an 8-point FRQ', () => {
     expect(quiz.kind).toBe('quiz');
@@ -260,10 +299,7 @@ describe('apchem: the Chapters 8–9 practice quiz', () => {
 
 describe('drawing the Chapters 8–9 quiz', () => {
   const quiz = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-quiz')!;
-  const inQuiz = readQuestionFiles()
-    .filter((q) => q.subject === 'apchem' && quiz.chapters.includes(q.chapter))
-    .map((q) => ({ ...q, sections: q.sections ?? [], groups: q.group ? [q.group].flat() : undefined }))
-    .filter((q) => q.sections.some((s) => quiz.sections.includes(s)));
+  const inQuiz = testQuestions(quiz);
 
   it('never draws two questions from one group, an excluded question, or a calculation FRQ', () => {
     for (let i = 0; i < 200; i++) {
@@ -275,7 +311,7 @@ describe('drawing the Chapters 8–9 quiz', () => {
       const groups = drawn.flatMap((q) => q.groups ?? []);
       expect(new Set(groups).size, groups.join(', ')).toBe(groups.length);
       for (const q of drawn) {
-        expect(quiz.exam!.exclude).not.toContain(q.id);
+        expect(quiz.exclude).not.toContain(q.id);
         expect(q.difficulty).toBeGreaterThanOrEqual(2);
       }
     }

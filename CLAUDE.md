@@ -109,6 +109,9 @@ These come from Connor's corrections. Breaking one has meant redoing work.
 - Students don't memorize the order of the EM spectrum by wavelength.
 - Dipole moments are compared qualitatively only (larger ΔEN or longer bond → larger μ). Don't
   write μ = Qr calculations, debyes, or partial-charge math.
+- Lattice energy is not on the class test but is on the AP exam (CED 2.2.A.3: comparing ion
+  attraction with Coulomb's law). Mark it "AP exam only" in lessons and list its questions in the
+  test's `exclude`. Born–Haber cycles are on neither, so they were removed.
 - The teacher stresses theory over math. Don't ask for facts the class doesn't teach and can't be
   reasoned out ("which halogen is a liquid?"). Give the facts in the prompt and ask for reasoning.
 - AP vs class only follows the CED exclusions. Not assessed: assigning quantum numbers,

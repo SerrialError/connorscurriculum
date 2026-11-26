@@ -28,6 +28,11 @@ describe('filterQuestions', () => {
     expect(ids(filterQuestions(questions, { ...emptyFilters(), test: 'missing' }, tests))).toEqual([]);
   });
 
+  it('leaves out the questions a test excludes', () => {
+    const withExclude = tests.map((t) => (t.id === 'ch14' ? { ...t, exclude: ['q1'] } : t));
+    expect(ids(filterQuestions(questions, { ...emptyFilters(), test: 'ch14' }, withExclude))).toEqual(['q2']);
+  });
+
   it('filters by textbook section', () => {
     const qs = [mcq('a', { sections: ['14.1'] }), mcq('b', { sections: ['14.2', '14.3'] }), mcq('c')];
     expect(ids(filterQuestions(qs, { ...emptyFilters(), sections: ['14.3'] }, tests))).toEqual(['b']);

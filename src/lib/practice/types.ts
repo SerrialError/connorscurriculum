@@ -82,8 +82,6 @@ export interface PracticeExam {
   frq: { count: number; points: number; calculations?: boolean };
   /** Only questions at least this hard are drawn (1 = any). */
   minDifficulty?: number;
-  /** Question ids never drawn (in its chapters and sections, but off-topic for it). */
-  exclude?: string[];
   /** What the screens call it: "exam" for a class test's practice exam, "quiz" for a practice quiz. */
   noun?: 'exam' | 'quiz';
 }
@@ -95,6 +93,8 @@ export interface PracticeTest {
   kind?: 'test' | 'quiz';
   chapters: number[];
   sections: string[];
+  /** Question ids in its chapters and sections that it doesn't cover. */
+  exclude?: string[];
   exam?: PracticeExam;
 }
 

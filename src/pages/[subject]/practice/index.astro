@@ -51,6 +51,7 @@ const course: PracticeCourse = {
     kind: t.kind,
     chapters: t.chapters,
     sections: t.sections,
+    exclude: t.exclude,
     exam: t.exam && { ...t.exam, noun: t.kind === 'quiz' ? ('quiz' as const) : ('exam' as const) },
   })),
   frqs: pastFrqLinks(data),

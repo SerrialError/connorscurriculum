@@ -15,7 +15,10 @@ export interface QuestionFileEntry {
   difficulty: number;
   /** As written in the YAML: one group or a list. */
   group?: string | string[];
+  prompt: string;
   choices?: { id: string; text: string }[];
+  /** FRQ parts. */
+  parts?: { prompt: string }[];
   answer?: string;
 }
 

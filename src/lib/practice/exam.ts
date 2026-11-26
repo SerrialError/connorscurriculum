@@ -17,14 +17,11 @@ export interface ExamCandidate {
 
 /**
  * The questions an exam can draw from `questions` (its test's): at least as hard as minDifficulty,
- * not excluded, and (when the exam says so) no calculation FRQs.
+ * and (when the exam says so) no calculation FRQs.
  */
 export function examQuestions<Q extends ExamCandidate>(questions: Q[], exam: PracticeExam): Q[] {
   const min = exam.minDifficulty ?? 1;
-  const excluded = new Set(exam.exclude ?? []);
-  return questions.filter(
-    (q) => q.difficulty >= min && !excluded.has(q.id) && !(q.type === 'frq' && q.calculation && exam.frq.calculations === false),
-  );
+  return questions.filter((q) => q.difficulty >= min && !(q.type === 'frq' && q.calculation && exam.frq.calculations === false));
 }
 
 const fits = (q: ExamCandidate, s: ExamSection) =>

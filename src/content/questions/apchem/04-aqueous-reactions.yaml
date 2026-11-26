@@ -1692,3 +1692,168 @@
     **(d)** $1.00 / 65.38 = 0.01530$ mol Zn. Two Ag form per Zn: $0.03059$ mol Ag, and $0.03059 \times 107.87 = 3.30$ g.
 
     **(e)** No reaction. The observations show zinc is more easily oxidized than silver. The reverse reaction, Ag reducing $\ce{Zn^2+}$, would need silver to give up electrons more easily than zinc.
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-04-sg-water-facts
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.1"]
+  cedTopics: ["3.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Which statement about water is correct?
+  choices:
+    - { id: a, text: "Water is a linear molecule, so the dipoles of its two O–H bonds cancel" }
+    - { id: b, text: "Pure water conducts electricity well, since it is a strong electrolyte" }
+    - { id: c, text: "Polar water molecules surround ions, which lets water dissolve many salts" }
+    - { id: d, text: "In NaCl solution, water molecules point their H atoms toward the Na⁺ ions" }
+  answer: c
+  explanation: |
+    Water is a **bent**, **polar** molecule: O is partly negative and the H atoms partly positive. When a salt dissolves, water molecules surround each ion (hydration), with the O end toward cations and the H ends toward anions.
+    (A) Water is bent, not linear, so its bond dipoles don't cancel. (B) Pure water is a very weak electrolyte, because only a tiny fraction of its molecules form ions. (D) The partly negative O end points toward $\ce{Na+}$. The H ends point toward $\ce{Cl-}$.
+
+- id: apchem-04-sg-h2so4-vs-hcl
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3", "4.6"]
+  cedTopics: ["4.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  group: sg-neutralize-naoh
+  prompt: |
+    Two identical samples of NaOH are neutralized, one with 1.0 M HCl and the other with 1.0 M $\ce{H2SO4}$. Which acid takes less volume, and by how much?
+  choices:
+    - { id: a, text: "H₂SO₄, which takes half the volume that HCl does" }
+    - { id: b, text: "HCl, which takes half the volume that H₂SO₄ does" }
+    - { id: c, text: "Neither, because both acids have the same molarity" }
+    - { id: d, text: "H₂SO₄, which takes one-third less volume than HCl" }
+  answer: a
+  explanation: |
+    Each $\ce{H2SO4}$ gives two $\ce{H+}$, and each HCl gives one:
+
+    $$
+    \ce{HCl + NaOH -> NaCl + H2O} \qquad \ce{H2SO4 + 2NaOH -> Na2SO4 + 2H2O}
+    $$
+
+    So 1 mol of $\ce{H2SO4}$ neutralizes 2 mol of NaOH. At the same molarity, $\ce{H2SO4}$ takes **half** the volume, 50% less (a 1 : 2 ratio). For 0.10 mol NaOH: 0.10 L of HCl, but only 0.050 L of $\ce{H2SO4}$.
+    (C) Molarity counts moles of acid, not moles of $\ce{H+}$.
+
+- id: apchem-04-sg-h2so4-naoh-equation
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.3"]
+  cedTopics: ["4.2"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: sg-neutralize-naoh
+  prompt: |
+    Which is the balanced molecular equation for the neutralization of sulfuric acid by sodium hydroxide?
+  choices:
+    - { id: a, text: '$\ce{H2SO4 + NaOH -> NaSO4 + H2O}$' }
+    - { id: b, text: '$\ce{H2SO4 + 2NaOH -> Na2SO4 + H2O}$' }
+    - { id: c, text: '$\ce{H2SO4 + 2NaOH -> Na2SO4 + 2H2O}$' }
+    - { id: d, text: '$\ce{H2SO4 + 2NaOH -> 2NaSO4 + 2H2O}$' }
+  answer: c
+  explanation: |
+    Sulfate is $\ce{SO4^2-}$, so it takes two $\ce{Na+}$: $\ce{Na2SO4}$. Two $\ce{H+}$ from the acid and two $\ce{OH-}$ from the base make two $\ce{H2O}$. Check: Na 2 = 2, S 1 = 1, H 4 = 4, O 6 = 6.
+    (A) and (D) use the wrong formula, $\ce{NaSO4}$. (B) leaves the H and O unbalanced.
+
+- id: apchem-04-sg-fe2-half-reaction
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: []
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Complete the half-reaction $\ce{Fe^2+ -> Fe}$ with electrons. Which statement is correct?
+  choices:
+    - { id: a, text: '$\ce{Fe^2+ -> Fe + 2e-}$; it is oxidation, and $\ce{Fe^2+}$ is the reducing agent' }
+    - { id: b, text: '$\ce{Fe^2+ + 2e- -> Fe}$; it is reduction, and $\ce{Fe^2+}$ is the reducing agent' }
+    - { id: c, text: '$\ce{Fe^2+ + 2e- -> Fe}$; it is oxidation, and $\ce{Fe}$ is the oxidizing agent' }
+    - { id: d, text: '$\ce{Fe^2+ + 2e- -> Fe}$; it is reduction, and $\ce{Fe^2+}$ is the oxidizing agent' }
+  answer: d
+  explanation: |
+    The left side has a 2+ charge and the right side is neutral, so two electrons go on the left: $\ce{Fe^2+ + 2e- -> Fe}$. Gaining electrons (the oxidation number drops from +2 to 0) is **reduction**.
+    The species that is reduced takes electrons from something else, so it is the **oxidizing agent**. (B) swaps the two agents. (A) has the electrons on the wrong side, which leaves a 2+ charge on the left and 2− on the right.
+
+- id: apchem-04-sg-dichromate-iodide
+  type: mcq
+  subject: apchem
+  chapter: 4
+  sections: ["4.4"]
+  cedTopics: ["4.9"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    Balance this reaction in acidic solution with the smallest whole-number coefficients:
+
+    $$
+    \ce{Cr2O7^2- + I- -> Cr^3+ + I2}
+    $$
+
+    What are the coefficients of $\ce{I-}$ and $\ce{H+}$?
+  choices:
+    - { id: a, text: "2 and 14" }
+    - { id: b, text: "6 and 14" }
+    - { id: c, text: "6 and 7" }
+    - { id: d, text: "3 and 8" }
+  answer: b
+  explanation: |
+    **Reduction:** $\ce{Cr2O7^2- -> 2Cr^3+}$. Add 7 $\ce{H2O}$ to balance O, then 14 $\ce{H+}$ to balance H. The charge is $+12$ on the left and $+6$ on the right, so add 6 electrons to the left:
+    $\ce{Cr2O7^2- + 14H+ + 6e- -> 2Cr^3+ + 7H2O}$.
+
+    **Oxidation:** $\ce{2I- -> I2 + 2e-}$. Multiply by 3 to give 6 electrons.
+
+    **Add them:** $\ce{Cr2O7^2- + 14H+ + 6I- -> 2Cr^3+ + 3I2 + 7H2O}$. Check the charge: $-2 + 14 - 6 = +6$ on the left and $2(+3) = +6$ on the right.
+    (A) doesn't multiply the iodide half-reaction by 3, so the electrons don't cancel. (C) uses the number of $\ce{H2O}$ for $\ce{H+}$.
+
+- id: apchem-04-sg-make-hcl-frq
+  type: frq
+  subject: apchem
+  chapter: 4
+  sections: ["4.5"]
+  cedTopics: ["3.7"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    Your class needs 1.00 L of 2.00 M HCl. The stockroom has 6.00 M HCl.
+  parts:
+    - label: a
+      points: 1
+      prompt: Define molarity.
+      scoring:
+        - "Moles of solute per liter of solution: M = mol solute / L solution."
+    - label: b
+      points: 1
+      prompt: How many moles of HCl are in 1.00 L of 2.00 M HCl?
+      scoring:
+        - "2.00 mol/L × 1.00 L = 2.00 mol HCl."
+    - label: c
+      points: 1
+      prompt: What volume of the 6.00 M stock contains that many moles?
+      scoring:
+        - "2.00 mol ÷ 6.00 mol/L = 0.333 L = 333 mL (or M₁V₁ = M₂V₂: V₁ = (2.00 M)(1.00 L) / 6.00 M)."
+    - label: d
+      points: 2
+      prompt: Describe how you would make the solution.
+      scoring:
+        - "Measure 333 mL of the 6.00 M stock and add it to a 1.00 L volumetric flask that already holds some water (acid into water)."
+        - "Add water up to the 1.00 L mark and mix. About 667 mL of water is added, not 1.00 L, because the final volume is 1.00 L."
+  explanation: |
+    **(a)** Molarity is moles of solute per liter of **solution** (not per liter of solvent).
+
+    **(b)** $n = MV = (2.00\ \text{mol/L})(1.00\ \text{L}) = 2.00$ mol HCl.
+
+    **(c)** All 2.00 mol has to come from the stock: $V = n / M = 2.00 / 6.00 = 0.333$ L, or 333 mL. Diluting doesn't change the moles of HCl, which is why $M_1V_1 = M_2V_2$ works.
+
+    **(d)** Measure 333 mL of the stock, pour it into a 1.00 L volumetric flask partly filled with water, then add water to the mark and mix. Adding acid to water, not water to concentrated acid, keeps the heat released from boiling and spattering the acid. Adding 1.00 L of water to the stock would give about 1.33 L, which is too dilute.

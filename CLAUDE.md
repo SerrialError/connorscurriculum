@@ -109,9 +109,13 @@ These come from Connor's corrections. Breaking one has meant redoing work.
 - Students don't memorize the order of the EM spectrum by wavelength.
 - Dipole moments are compared qualitatively only (larger ΔEN or longer bond → larger μ). Don't
   write μ = Qr calculations, debyes, or partial-charge math.
-- Lattice energy is not on the class test but is on the AP exam (CED 2.2.A.3: comparing ion
-  attraction with Coulomb's law). Mark it "AP exam only" in lessons and list its questions in the
-  test's `exclude`. Born–Haber cycles are on neither, so they were removed.
+- Lattice energy was left off the Chapters 8–9 test (its questions are in that test's `exclude`) but
+  is on the Semester 1 final's topic list and the AP exam (CED 2.2.A.3: comparing ion attraction with
+  Coulomb's law). Born–Haber cycles are on neither, so they were removed.
+- The Semester 1 final (Dec 7, 2026) covers Chapters 1–10; the teacher crossed Chapters 11–12 off the
+  topic list. The teacher's 38 review questions are reworded as `apchem-NN-sg-*` practice questions
+  (two matched existing ones), and the final's review sheet links them in study-guide order. Its
+  practice-exam format is a placeholder until the real one is announced.
 - The teacher stresses theory over math. Don't ask for facts the class doesn't teach and can't be
   reasoned out ("which halogen is a liquid?"). Give the facts in the prompt and ask for reasoning.
 - AP vs class only follows the CED exclusions. Not assessed: assigning quantum numbers,

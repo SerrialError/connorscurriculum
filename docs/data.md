@@ -78,7 +78,8 @@ Add an entry to `tests.json`:
 ```
 
 Empty `sections` means the whole chapters, and `date` is optional. A `kind: review` lesson in one of
-the test's chapters is featured on the test page and the class home.
+the test's chapters is featured on the test page and the class home, newest chapter first, so a
+final's own review sheet comes before those of the chapter tests it covers.
 
 `exclude` (optional) lists question ids in the test's chapters and sections that the test doesn't
 cover, such as AP-only material the teacher left out. They're left out of the test page, the "Class
@@ -118,6 +119,8 @@ exam":
 - `frq.count` free-response questions come from the test's chapters, self-scored and scaled to
   `frq.points`.
 - Questions sharing a `group` are never drawn together.
+- `tentative: true` marks a stand-in format, for a test whose format the teacher hasn't announced.
+  The test page and Practice say so. Remove it once the real format is in.
 
 The build stops if a section has fewer matching questions than it draws. For a real test, aim for
 at least twice as many, so that two practice exams don't repeat each other. A unit test checks this

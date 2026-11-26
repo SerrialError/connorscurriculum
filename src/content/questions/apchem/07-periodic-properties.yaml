@@ -1461,3 +1461,47 @@
     **(d)** K is $[\ce{Ar}]\,4s^1$. Losing the 4s electron removes the whole $n = 4$ shell, so the outer electrons of $\ce{K+}$ are in $n = 3$. On top of that, 19 protons now pull on 18 electrons instead of 19.
 
     **(e)** First IE: both lose a 4s electron from the same shell, and Ca has 20 protons vs. 19, so the higher Zeff makes Ca's IE₁ larger. Second IE: $\ce{K+}$ is $[\ce{Ar}]$, so K's second electron is a 3p core electron, a shell closer and much less shielded (IE₂ ≈ 3050 kJ/mol). $\ce{Ca+}$ still has a 4s electron to lose (IE₂ ≈ 1145 kJ/mol).
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-07-sg-radius-be-c-o-f
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3"]
+  cedTopics: ["1.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Place C, F, Be, and O in order of **decreasing** atomic radius.
+  choices:
+    - { id: a, text: "F > O > C > Be" }
+    - { id: b, text: "Be > C > F > O" }
+    - { id: c, text: "C > Be > O > F" }
+    - { id: d, text: "Be > C > O > F" }
+  answer: d
+  explanation: |
+    All four are in period 2, so their valence electrons are in the same shell. Moving right, the effective nuclear charge increases and pulls that shell in, so radius decreases in the order of the table: Be (group 2), C (14), O (16), F (17).
+    (A) is the order of increasing radius.
+
+- id: apchem-07-sg-trends-across
+  type: mcq
+  subject: apchem
+  chapter: 7
+  sections: ["7.3", "7.4"]
+  cedTopics: ["1.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which describes the trends from left to right across a period, leaving out the noble gases?
+  choices:
+    - { id: a, text: "Atomic radius decreases, and ionization energy and electronegativity increase" }
+    - { id: b, text: "Atomic radius increases, and ionization energy and electronegativity decrease" }
+    - { id: c, text: "Atomic radius decreases, ionization energy increases, and electronegativity decreases" }
+    - { id: d, text: "Atomic radius stays about the same, while ionization energy and electronegativity increase" }
+  answer: a
+  explanation: |
+    Across a period, electrons are added to the same shell while the effective nuclear charge rises. The valence electrons are held more tightly, so the atom is **smaller**, they're **harder to remove** (higher ionization energy), and the atom **attracts bonding electrons more** (higher electronegativity). Electron affinity generally becomes more negative too, with exceptions such as groups 2 and 15.
+    Down a group, each new shell is farther from the nucleus, so the trends reverse. For ions, a cation is smaller than its atom and an anion is larger, and in an isoelectronic series the ion with more protons is smaller.

@@ -68,4 +68,10 @@ describe('quickStarts', () => {
     expect(presets[1]).toMatchObject({ exam: true, note: '36 multiple choice and 1 free response, 108 points in all' });
     expect(filtersToQuery(presets[1]!.filters)).toBe('?test=ch6-7-test');
   });
+
+  it("says when the practice exam's format is a stand-in", () => {
+    const exam = { mcqPoints: 2, sections: [{ id: 's', label: 'All', count: 50, match: { chapters: [6], sections: [] } }], extra: 0, frq: { count: 2, points: 20 }, tentative: true };
+    const presets = quickStarts([{ ...test(116), exam }], qs, new Set([6, 7]));
+    expect(presets[1]!.note).toBe('50 multiple choice and 2 free response, 120 points in all (a stand-in until the format is announced)');
+  });
 });

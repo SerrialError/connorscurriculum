@@ -112,7 +112,8 @@ const ahead = !isTaught(data, chapter.number);
       {lesson.data.title}
       {lesson.data.draft && <span class="badge">Draft</span>}
     </h1>
-    <TopicBadges subject={subject} topics={topics} />
+    {/* A review sheet with no topics covers a whole test, not class-only material. */}
+    <TopicBadges subject={subject} topics={topics} classOnlyBadge={lesson.data.kind !== 'review'} />
     {/* "Textbook §7.2 · By Jaya": where it is in the book, and who wrote it. */}
     {(byLine || lesson.data.sections.length > 0) && (
       <p class="small muted byline" data-pagefind-ignore>

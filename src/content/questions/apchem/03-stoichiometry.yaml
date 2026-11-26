@@ -1447,3 +1447,99 @@
     **(c)** $1.170 / 2.000 \times 100\% = 58.51\%$ NaCl. (The rest, 41.49%, is $\ce{NaNO3}$.)
 
     **(d)** Too high. Leftover water makes the precipitate look heavier, so the calculated moles of AgCl are too large. That gives too much NaCl, and since the 2.000 g sample mass didn't change, the percent comes out too high.
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# (percent nitrogen in NH4NO3 is apchem-03-percent-n above)
+# ---------------------------------------------------------------------------
+
+- id: apchem-03-sg-atom-mass-molar-mass
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.4"]
+  cedTopics: ["1.1"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    One atom of an unknown element has a mass of $3.2 \times 10^{-23}$ g. What is the element's atomic weight (molar mass)?
+  choices:
+    - { id: a, text: "1.9 × 10⁴⁶ g/mol" }
+    - { id: b, text: "32 g/mol" }
+    - { id: c, text: "19 g/mol" }
+    - { id: d, text: "5.3 × 10⁻⁴⁷ g/mol" }
+  answer: c
+  explanation: |
+    A mole is $6.022 \times 10^{23}$ atoms, so the mass of one mole is
+    $(3.2 \times 10^{-23}\ \text{g/atom})(6.022 \times 10^{23}\ \text{atoms/mol}) = 19$ g/mol, close to fluorine (19.00).
+    (A) divides Avogadro's number by the mass, and (D) divides the mass by Avogadro's number. Check the units: only multiplying gives g/mol.
+
+- id: apchem-03-sg-molecular-ch2
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 1
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A compound has the empirical formula $\ce{CH2}$ and a molar mass of 28.02 g/mol. What is its molecular formula?
+  choices:
+    - { id: a, text: "CH₂" }
+    - { id: b, text: "C₂H₄" }
+    - { id: c, text: "C₄H₈" }
+    - { id: d, text: "C₂H₂" }
+  answer: b
+  explanation: |
+    The empirical formula mass is $12.01 + 2(1.008) = 14.03$ g/mol. The molar mass is $28.02 / 14.03 = 2.00$ times that, so multiply the subscripts by 2: $\ce{C2H4}$.
+    (C) has a molar mass of about 56 g/mol. (D) has a different C : H ratio, so it can't have the empirical formula $\ce{CH2}$.
+
+- id: apchem-03-sg-limiting-method
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.7"]
+  cedTopics: ["4.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The limiting reactant decides how much product a reaction can make. Which method **always** identifies it?
+  choices:
+    - { id: a, text: "Find which reactant makes less product when each is converted by mole ratio" }
+    - { id: b, text: "Find the reactant with the smaller starting mass, since it will run out first" }
+    - { id: c, text: "Find the reactant that has the smaller coefficient in the balanced equation" }
+    - { id: d, text: "Find the reactant with fewer moles present, without using the coefficients" }
+  answer: a
+  explanation: |
+    The limiting reactant is used up first, so it sets the most product that can form (the theoretical yield), and some of the other reactant is left over. To find it, convert each reactant to moles, then use the mole ratio to see how much product each could make. The one that makes **less** is limiting. (Or: work out how much of the second reactant the first would need, and compare that with what's there.)
+    (B) Grams don't count particles: 10 g of $\ce{H2}$ is far more moles than 10 g of $\ce{O2}$. (C) and (D) each use only half the information. In $\ce{2H2 + O2 -> 2H2O}$, 1.5 mol $\ce{H2}$ with 1.0 mol $\ce{O2}$ has more moles of $\ce{H2}$, but $\ce{H2}$ is limiting, because 1.0 mol $\ce{O2}$ would need 2.0 mol $\ce{H2}$.
+
+- id: apchem-03-sg-empirical-c2h6o
+  type: mcq
+  subject: apchem
+  chapter: 3
+  sections: ["3.5"]
+  cedTopics: ["1.3"]
+  difficulty: 2
+  calculation: true
+  authors: ["Claude"]
+  prompt: |
+    A compound is 52.14% C, 13.13% H, and 34.73% O by mass. What is its empirical formula?
+  choices:
+    - { id: a, text: "CH₃O" }
+    - { id: b, text: "C₂H₅O" }
+    - { id: c, text: "C₃H₈O" }
+    - { id: d, text: "C₂H₆O" }
+  answer: d
+  explanation: |
+    Take 100 g, so the percentages become grams, and convert each to moles:
+
+    | | Moles | ÷ 2.171 |
+    |---|---|---|
+    | C | $52.14 / 12.01 = 4.341$ | 2.000 |
+    | H | $13.13 / 1.008 = 13.03$ | 6.000 |
+    | O | $34.73 / 16.00 = 2.171$ | 1.000 |
+
+    The ratio is 2 : 6 : 1, so the empirical formula is $\ce{C2H6O}$.

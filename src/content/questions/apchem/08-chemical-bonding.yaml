@@ -2045,6 +2045,7 @@
   cedTopics: ["2.6"]
   difficulty: 2
   authors: ["Claude"]
+  group: co2-formal-charge
   prompt: |
     In the Lewis structure of $\ce{CO2}$ drawn as $\ce{O-C#O}$ (three lone pairs on the single-bonded O, one lone pair on the triple-bonded O), what are the formal charges on the single-bonded O, the C, and the triple-bonded O?
   choices:
@@ -2276,3 +2277,108 @@
       scoring:
         - "sp (two electron domains)."
         - "2 σ and 2 π."
+
+# ---------------------------------------------------------------------------
+# Semester 1 final: the teacher's review questions, reworded as practice questions
+# ---------------------------------------------------------------------------
+
+- id: apchem-08-sg-bond-type-examples
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.1", "8.3", "8.4"]
+  cedTopics: ["2.1"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    Which list pairs each type of bond with a correct example?
+  choices:
+    - { id: a, text: "Ionic: HCl; polar covalent: KBr; nonpolar covalent: Cl₂; metallic: Cu" }
+    - { id: b, text: "Ionic: KBr; polar covalent: Cl₂; nonpolar covalent: HCl; metallic: Cu" }
+    - { id: c, text: "Ionic: KBr; polar covalent: HCl; nonpolar covalent: Cl₂; metallic: Cu" }
+    - { id: d, text: "Ionic: Cu; polar covalent: HCl; nonpolar covalent: Cl₂; metallic: KBr" }
+  answer: c
+  explanation: |
+    - **Ionic:** a metal transfers electrons to a nonmetal, and the ions attract ($\ce{K+}$ and $\ce{Br-}$).
+    - **Polar covalent:** two nonmetals share electrons unequally, because their electronegativities differ (Cl pulls the H–Cl electrons toward itself).
+    - **Nonpolar covalent:** electrons shared equally, as between two identical atoms (Cl–Cl).
+    - **Metallic:** metal cations in a "sea" of delocalized valence electrons (Cu).
+
+- id: apchem-08-sg-ethane-bond-enthalpy
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.8"]
+  cedTopics: ["6.7"]
+  difficulty: 3
+  calculation: true
+  authors: ["Claude"]
+  group: ethane-combustion-heat
+  prompt: |
+    Use these average bond enthalpies to estimate ΔH for the combustion of **one mole** of ethane:
+
+    $$
+    \ce{C2H6(g) + 7/2O2(g) -> 2CO2(g) + 3H2O(g)}
+    $$
+
+    | Bond | C–H | C–C | O=O | C=O (in CO₂) | O–H |
+    |---|---|---|---|---|---|
+    | kJ/mol | 413 | 348 | 495 | 799 | 463 |
+  choices:
+    - { id: a, text: "+1416 kJ" }
+    - { id: b, text: "−1416 kJ" }
+    - { id: c, text: "−2831 kJ" }
+    - { id: d, text: "−1764 kJ" }
+  answer: b
+  explanation: |
+    Ethane is $\ce{H3C-CH3}$: six C–H bonds and one C–C bond. Each $\ce{CO2}$ has two C=O, and each $\ce{H2O}$ has two O–H.
+
+    | | Bonds | kJ |
+    |---|---|---|
+    | Broken | 6 C–H + 1 C–C + 3.5 O=O | $6(413) + 348 + 3.5(495) = 4558.5$ |
+    | Formed | 4 C=O + 6 O–H | $4(799) + 6(463) = 5974$ |
+
+    $\Delta H \approx \sum D_\text{broken} - \sum D_\text{formed} = 4558.5 - 5974 = -1416$ kJ. Table values are averages, so this is an estimate.
+    (A) is formed minus broken. (C) is for 2 mol of ethane. (D) leaves out the C–C bond.
+
+- id: apchem-08-sg-co2-formal-charge
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.6"]
+  difficulty: 1
+  authors: ["Claude"]
+  group: co2-formal-charge
+  prompt: |
+    In the best Lewis structure of $\ce{CO2}$, what is the formal charge on C, and how many lone pairs are in the whole structure?
+  choices:
+    - { id: a, text: "+4, with 4 lone pairs" }
+    - { id: b, text: "0, with 6 lone pairs" }
+    - { id: c, text: "+2, with 2 lone pairs" }
+    - { id: d, text: "0, with 4 lone pairs" }
+  answer: d
+  explanation: |
+    $\ce{CO2}$ has $4 + 2(6) = 16$ valence electrons. The best structure is O=C=O, with two lone pairs on each O: 8 electrons in bonds and **4 lone pairs**.
+    Formal charge on C $= 4 - 0 - \tfrac{1}{2}(8) =$ **0**. Each O is $6 - 4 - \tfrac{1}{2}(4) = 0$ too.
+    (A) +4 is carbon's oxidation number, which gives all the shared electrons to O.
+
+- id: apchem-08-sg-states-generalization
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.2"]
+  cedTopics: ["2.3"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    At room temperature, NaCl is a solid, $\ce{H2O}$ is a liquid, and $\ce{CO2}$ is a gas. Which generalization do these examples support?
+  choices:
+    - { id: a, text: "Molecular compounds are usually solids, while ionic compounds are often liquids or gases" }
+    - { id: b, text: "Ionic compounds are usually solids; small molecular ones are often liquids or gases" }
+    - { id: c, text: "A compound's state depends only on its molar mass, so the heaviest compounds are solids" }
+    - { id: d, text: "Compounds with polar bonds are gases, since their molecules repel each other strongly" }
+  answer: b
+  explanation: |
+    In an ionic solid, every ion is held by strong attractions to all of its neighbors, so ionic compounds are solids with high melting points (NaCl melts at 801 °C). In a molecular compound, the covalent bonds **inside** each molecule are strong, but the attractions **between** molecules are much weaker, so many small molecular compounds are gases or liquids. Polar molecules such as $\ce{H2O}$ attract each other more strongly than nonpolar ones such as $\ce{CO2}$.
+    (C) $\ce{CO2}$ (44 g/mol) is a gas while $\ce{H2O}$ (18 g/mol) is a liquid. Chapter 11 covers the attractions between molecules.

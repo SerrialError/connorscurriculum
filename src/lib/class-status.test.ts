@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { classSummary, inCedOrder, inTest, isClassContent, nowChapters, testsByDate } from './class-status';
+import { classSummary, inCedOrder, inTest, isClassContent, nowChapters, reviewSheets, testsByDate } from './class-status';
 import { type SubjectData, loadRegistry } from './registry';
 
 // The fixture "chem" class, given three chapters: 1 finished, 2 in class now, 3 not reached.
@@ -43,6 +43,13 @@ describe('class status', () => {
     expect(inTest(test, at(2, [], 'review'))).toBe(true);
     expect(inTest(test, at(1, [], 'review'))).toBe(false);
     expect(inTest({ ...test, sections: [] }, at(2, []))).toBe(true);
+  });
+
+  it("lists a test's review sheets newest chapter first", () => {
+    const final = { id: 'final', title: 'Final', kind: 'test' as const, chapters: [1, 2, 3], sections: ['1.1'], exclude: [], handouts: [] };
+    const sheet = (id: string, chapter: number, kind = 'review') => ({ id, data: { chapter, sections: [], kind } });
+    const lessons = [sheet('ch1-2', 2), sheet('lesson', 3, 'lesson'), sheet('final', 3), sheet('other', 4)];
+    expect(reviewSheets(final, lessons).map((l) => l.id)).toEqual(['final', 'ch1-2']);
   });
 
   it('leaves out the ids a test excludes', () => {

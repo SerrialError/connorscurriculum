@@ -89,6 +89,8 @@ export const examSchema = z.object({
   extra: z.number().int().nonnegative().default(0),
   /** Only questions at least this hard (1 easy, 2 medium, 3 hard) are drawn, multiple choice and FRQ. */
   minDifficulty: z.number().int().min(1).max(3).default(1),
+  /** The teacher hasn't announced the format yet, so this one is a stand-in; pages say so. */
+  tentative: z.boolean().default(false),
   frq: z.object({
     count: z.number().int().nonnegative(),
     points: z.number().nonnegative(),

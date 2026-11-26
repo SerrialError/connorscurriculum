@@ -1,7 +1,7 @@
 # Practice questions for Chapter 8 (Basic Concepts of Chemical Bonding). Original; not taken from the
-# textbook or College Board materials. Questions with cedTopics: [] cover class material that is not on
-# the AP exam (Born–Haber calculations, dipole-moment calculations). calculation: true marks questions
-# that need a numeric calculation.
+# textbook or College Board materials. Lattice-energy questions are on the AP exam but not the class
+# test, so the Chapters 8–9 test lists them in its exclude (tests.json). calculation: true marks
+# questions that need a numeric calculation.
 
 # --- 8.1 Lewis symbols and the octet rule ---
 
@@ -271,56 +271,7 @@
     - { id: d, text: "Na²⁺ would be larger than Na⁺, so it could not fit into a crystal lattice" }
   answer: c
   explanation: |
-    $\ce{Na+}$ is $[\ce{Ne}]$. A second electron would have to come from the 2p subshell, which is much closer to the nucleus and far less shielded; Na's second ionization energy is about ten times its first. The extra lattice energy from a +2 ion can't pay for that. (B) is backward: $\ce{Na+}$ already has the noble-gas configuration, and $\ce{Na^2+}$ would not have one. (D) has the size backward. (A) overstates it: the electron can be removed, it just costs far more energy than forming the compound can pay back.
-
-- id: apchem-08-born-haber-calc
-  type: mcq
-  subject: apchem
-  chapter: 8
-  sections: ["8.2"]
-  cedTopics: []
-  difficulty: 3
-  calculation: true
-  authors: ["Claude"]
-  prompt: |
-    Use these values (kJ/mol) to find the lattice energy of NaBr.
-
-    | $\ce{Na(s) -> Na(g)}$ | $\ce{1/2Br2(l) -> Br(g)}$ | First IE of Na | Electron affinity of Br | $\Delta H^\circ_f$ of NaBr(s) |
-    |---|---|---|---|---|
-    | +108 | +112 | +496 | −325 | −361 |
-  choices:
-    - { id: a, text: "+30 kJ/mol" }
-    - { id: b, text: "+644 kJ/mol" }
-    - { id: c, text: "+752 kJ/mol" }
-    - { id: d, text: "+1402 kJ/mol" }
-  answer: c
-  explanation: |
-    By Hess's law, $\Delta H^\circ_f = \Delta H_{\text{sub}} + \Delta H(\ce{Br(g)}) + \text{IE} + \text{EA} - \Delta H_{\text{lattice}}$, so
-
-    $$
-    \Delta H_{\text{lattice}} = 108 + 112 + 496 + (-325) - (-361) = +752\ \text{kJ/mol}
-    $$
-
-    (A) adds $\Delta H^\circ_f$ instead of subtracting it. (D) uses +325 for the electron affinity. (B) leaves out the sublimation of Na.
-
-- id: apchem-08-born-haber-sign
-  type: mcq
-  subject: apchem
-  chapter: 8
-  sections: ["8.2"]
-  cedTopics: []
-  difficulty: 2
-  authors: ["Claude"]
-  prompt: |
-    In the Born–Haber cycle for KCl, which step **releases** energy?
-  choices:
-    - { id: a, text: '$\ce{K(s) -> K(g)}$' }
-    - { id: b, text: '$\ce{Cl(g) + e- -> Cl-(g)}$' }
-    - { id: c, text: '$\ce{1/2Cl2(g) -> Cl(g)}$' }
-    - { id: d, text: '$\ce{K(g) -> K+(g) + e-}$' }
-  answer: b
-  explanation: |
-    Adding an electron to a gaseous Cl atom releases energy; chlorine's electron affinity is −349 kJ/mol. Sublimation (A), breaking the Cl–Cl bond (C), and ionization (D) all absorb energy. The other energy-releasing step in the cycle is the last one, the gaseous ions coming together into the solid.
+    $\ce{Na+}$ is $[\ce{Ne}]$. A second electron would have to come from the 2p subshell, which is much closer to the nucleus and far less shielded; Na's second ionization energy is about ten times its first. Forming a compound can't release enough energy to pay for that. (B) is backward: $\ce{Na+}$ already has the noble-gas configuration, and $\ce{Na^2+}$ would not have one. (D) has the size backward. (A) overstates it: the electron can be removed, it just costs far more energy than forming the compound can pay back.
 
 # --- 8.3 Covalent bonding ---
 
@@ -1236,15 +1187,12 @@
   chapter: 8
   sections: ["8.2"]
   cedTopics: ["2.2", "2.3"]
-  difficulty: 3
+  difficulty: 2
   calculation: true
   authors: ["Claude"]
   prompt: |
-    Lithium chloride is an ionic solid. Use this data (kJ/mol) for parts (b) and (c).
-
-    | $\ce{Li(s) -> Li(g)}$ | $\ce{1/2Cl2(g) -> Cl(g)}$ | First IE of Li | Electron affinity of Cl | $\Delta H^\circ_f$ of LiCl(s) |
-    |---|---|---|---|---|
-    | +159 | +122 | +520 | −349 | −409 |
+    Lithium chloride is an ionic solid. The first ionization energy of Li is 520 kJ/mol, and the
+    electron affinity of Cl is −349 kJ/mol.
   parts:
     - label: a
       points: 1
@@ -1253,15 +1201,10 @@
         - "$\\ce{LiCl(s) -> Li+(g) + Cl-(g)}$."
     - label: b
       points: 1
-      prompt: Use the data to calculate the lattice energy of LiCl.
-      scoring:
-        - "$159 + 122 + 520 + (-349) - (-409) = +861$ kJ/mol."
-    - label: c
-      points: 1
       prompt: Making $\ce{Li+(g)}$ and $\ce{Cl-(g)}$ from Li(g) and Cl(g) is endothermic. Use the data to show this, and explain why LiCl(s) still forms from its elements with a negative $\Delta H^\circ_f$.
       scoring:
-        - "$520 + (-349) = +171$ kJ/mol is endothermic; the lattice energy released when the gaseous ions form the solid (861 kJ/mol) is much larger, so the overall process is exothermic."
-    - label: d
+        - "$520 + (-349) = +171$ kJ/mol is endothermic; the energy released when the gaseous ions come together into the solid (the lattice energy) is much larger, so the overall process is exothermic."
+    - label: c
       points: 1
       prompt: Would you expect the lattice energy of MgS to be larger or smaller than that of LiCl? Justify your answer with Coulomb's law.
       scoring:
@@ -1269,11 +1212,9 @@
   explanation: |
     **(a)** Lattice energy separates one mole of the solid into gaseous ions: $\ce{LiCl(s) -> Li+(g) + Cl-(g)}$.
 
-    **(b)** $\Delta H^\circ_f = \Delta H_{\text{sub}} + \Delta H(\ce{Cl(g)}) + \text{IE} + \text{EA} - \Delta H_{\text{lattice}}$, so $\Delta H_{\text{lattice}} = 159 + 122 + 520 - 349 + 409 = +861$ kJ/mol.
+    **(b)** Removing Li's electron costs 520 kJ/mol and adding it to Cl releases 349, for a net +171 kJ/mol. The ions then come together into the solid and release the lattice energy, which is several times larger and more than makes up for it.
 
-    **(c)** Removing Li's electron costs 520 kJ/mol and adding it to Cl releases 349, for a net +171 kJ/mol. The ions then come together into the lattice and release 861 kJ/mol, which more than makes up for it.
-
-    **(d)** By Coulomb's law, attraction is proportional to $Q_1Q_2/d$. MgS has +2 and −2 ions, so $Q_1Q_2$ is four times that of LiCl. $\ce{S^2-}$ is larger than $\ce{Cl-}$, which increases $d$ a little, but the charge effect is much bigger. MgS has the larger lattice energy.
+    **(c)** By Coulomb's law, attraction is proportional to $Q_1Q_2/d$. MgS has +2 and −2 ions, so $Q_1Q_2$ is four times that of LiCl. $\ce{S^2-}$ is larger than $\ce{Cl-}$, which increases $d$ a little, but the charge effect is much bigger. MgS has the larger lattice energy.
 
 # --- More practice, mostly hard ---
 
@@ -1314,36 +1255,6 @@
   answer: b
   explanation: |
     By Coulomb's law, doubling both charges makes the attraction about four times as large, so MgO's lattice energy is huge. That release outweighs the endothermic steps. (A) is false: the steps don't cancel; ionizing Mg and forming $\ce{O^2-}$ both cost energy. (C) is backward: breaking a bond absorbs energy. (D) is the octet misconception; making $\ce{O^2-}$ from $\ce{O-}$ costs energy.
-
-- id: apchem-08-born-haber-formation
-  type: mcq
-  subject: apchem
-  chapter: 8
-  sections: ["8.2"]
-  cedTopics: []
-  difficulty: 3
-  calculation: true
-  authors: ["Claude"]
-  prompt: |
-    Use these values (kJ/mol) to calculate $\Delta H^\circ_f$ of NaCl(s).
-
-    | $\ce{Na(s) -> Na(g)}$ | $\ce{1/2Cl2(g) -> Cl(g)}$ | First IE of Na | Electron affinity of Cl | Lattice energy of NaCl |
-    |---|---|---|---|---|
-    | +108 | +122 | +496 | −349 | +788 |
-  choices:
-    - { id: a, text: "−411 kJ/mol" }
-    - { id: b, text: "+1165 kJ/mol" }
-    - { id: c, text: "+287 kJ/mol" }
-    - { id: d, text: "−1213 kJ/mol" }
-  answer: a
-  explanation: |
-    The last step of the cycle, ions coming together into the solid, releases the lattice energy, so it enters as −788:
-
-    $$
-    \Delta H^\circ_f = 108 + 122 + 496 + (-349) - 788 = -411\ \text{kJ/mol}
-    $$
-
-    (B) adds the lattice energy instead of subtracting it. (C) uses +349 for the electron affinity. (D) leaves out sublimation, atomization, and ionization.
 
 - id: apchem-08-cu2-config
   type: mcq

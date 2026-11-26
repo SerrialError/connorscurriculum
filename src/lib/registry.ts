@@ -89,8 +89,6 @@ export const examSchema = z.object({
   extra: z.number().int().nonnegative().default(0),
   /** Only questions at least this hard (1 easy, 2 medium, 3 hard) are drawn, multiple choice and FRQ. */
   minDifficulty: z.number().int().min(1).max(3).default(1),
-  /** Question ids never drawn: in the test's chapters and sections, but off-topic for it. */
-  exclude: z.array(z.string()).default([]),
   frq: z.object({
     count: z.number().int().nonnegative(),
     points: z.number().nonnegative(),
@@ -114,6 +112,11 @@ export const testSchema = z.object({
   date: z.iso.date().optional(),
   chapters: z.array(z.number().int()).min(1),
   sections: z.array(z.string()).default([]),
+  /**
+   * Question ids in the test's chapters and sections that it doesn't cover (off-topic for a quiz, or
+   * AP-only material the teacher left out). They're left out of the test everywhere, practice exam included.
+   */
+  exclude: z.array(z.string()).default([]),
   /** Handed out with the test, e.g. an equation sheet: linked from the test page. */
   handouts: z.array(z.object({ title: z.string().min(1), url: z.url({ protocol: /^https$/ }) })).default([]),
   exam: examSchema.optional(),

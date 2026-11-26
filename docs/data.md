@@ -80,6 +80,11 @@ Add an entry to `tests.json`:
 Empty `sections` means the whole chapters, and `date` is optional. A `kind: review` lesson in one of
 the test's chapters is featured on the test page and the class home.
 
+`exclude` (optional) lists question ids in the test's chapters and sections that the test doesn't
+cover, such as AP-only material the teacher left out. They're left out of the test page, the "Class
+test" practice filter, and the practice exam. The Chapters 8–9 test excludes its lattice-energy
+questions this way, and a unit test fails if one of the remaining questions asks about lattice energy.
+
 `handouts` (optional) lists what students get with the test, such as an equation sheet:
 
 ```json
@@ -116,7 +121,7 @@ exam":
 
 The build stops if a section has fewer matching questions than it draws. For a real test, aim for
 at least twice as many, so that two practice exams don't repeat each other. A unit test checks this
-for the Chapters 1–3 and 6–7 exams.
+for each class test that has an exam.
 
 ## Textbook sections
 

@@ -130,7 +130,6 @@
     "title": "Basic Concepts of Chemical Bonding",
     "cedTopics": ["1.7", "1.8", "2.1", "2.2", "2.3", "2.5", "2.6"],
     "notOnAP": [
-      "Born–Haber cycle calculations of lattice energy (the AP exam compares lattice energies with Coulomb's law)",
       "Calculating dipole moments and partial charges with μ = Qr"
     ],
     "sections": [

@@ -15,10 +15,10 @@ const data: SubjectData = {
   chapters,
   chapterMap: new Map(chapters.map((c) => [c.number, c])),
   progress: { ...base.progress, chapters: new Set([1, 2, 3]), current: [4], topics: new Map([['1.1', 'skipped']]) },
-  tests: [{ id: 'ch1-test', title: 'Chapter 1 Test', kind: 'test', date: '2026-10-01', chapters: [1], sections: [], handouts: [] }],
+  tests: [{ id: 'ch1-test', title: 'Chapter 1 Test', kind: 'test', date: '2026-10-01', chapters: [1], sections: [], exclude: [], handouts: [] }],
 };
-const lesson = (chapter: number, kind: 'lesson' | 'notes' | 'review', sample = false) => ({ data: { chapter, kind, sample, sections: [] } });
-const question = (chapter: number) => ({ data: { chapter, sections: [], sample: false } });
+const lesson = (chapter: number, kind: 'lesson' | 'notes' | 'review', sample = false) => ({ id: `${kind}-${chapter}`, data: { chapter, kind, sample, sections: [] } });
+const question = (chapter: number) => ({ id: `q-${chapter}`, data: { chapter, sections: [], sample: false } });
 
 describe('classHome', () => {
   const lessons = [lesson(1, 'lesson'), lesson(1, 'notes'), lesson(1, 'review'), lesson(3, 'lesson'), lesson(4, 'lesson', true)];

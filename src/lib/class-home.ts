@@ -9,9 +9,11 @@ import { type PracticeStart, examStart, practiceStarts } from './practice/links'
 import type { SubjectData } from './registry';
 
 interface HomeLesson {
+  id: string;
   data: { chapter: number; sections: string[]; kind: 'lesson' | 'notes' | 'review' };
 }
 interface HomeQuestion {
+  id: string;
   data: { chapter: number; sections: string[] };
 }
 

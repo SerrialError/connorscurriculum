@@ -63,11 +63,12 @@ export function filterQuestions<Q extends QuestionMeta>(questions: Q[], f: Filte
   if (f.test && !test) return [];
   const testChapters = new Set(test?.chapters ?? []);
   const testSections = test?.sections ?? [];
+  const testExcludes = new Set(test?.exclude ?? []);
   return questions.filter((q) => {
     if (chapters.size && !chapters.has(q.chapter)) return false;
     if (!inSections(q, sections)) return false;
     if (q.extra && !chapters.has(q.chapter) && !testChapters.has(q.chapter)) return false;
-    if (test && (!testChapters.has(q.chapter) || !inSections(q, testSections))) return false;
+    if (test && (!testChapters.has(q.chapter) || !inSections(q, testSections) || testExcludes.has(q.id))) return false;
     if (units.size || topics.size) {
       if (!q.units.some((u) => units.has(u)) && !q.cedTopics.some((t) => topics.has(t))) return false;
     }

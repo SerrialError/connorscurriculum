@@ -55,9 +55,14 @@ export function inCedOrder(data: SubjectData, ids: Iterable<string>): string[] {
   return [...ids].sort((a, b) => order.indexOf(a) - order.indexOf(b));
 }
 
-/** Lessons and questions in a class test (whole chapters, or only the listed sections). */
-export function inTest(test: SubjectData['tests'][number], entry: { data: { chapter: number; sections: string[] } }): boolean {
-  if (!test.chapters.includes(entry.data.chapter)) return false;
+/**
+ * Lessons and questions in a class test (whole chapters, or only the listed sections), less the ids it
+ * excludes. A review sheet covers its test as a whole, so it counts whenever it's in one of the test's
+ * chapters.
+ */
+export function inTest(test: SubjectData['tests'][number], entry: { id: string; data: { chapter: number; sections: string[]; kind?: string } }): boolean {
+  if (!test.chapters.includes(entry.data.chapter) || test.exclude.includes(entry.id)) return false;
+  if (entry.data.kind === 'review') return true;
   return test.sections.length === 0 || entry.data.sections.some((s) => test.sections.includes(s));
 }
 

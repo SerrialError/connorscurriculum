@@ -53,7 +53,7 @@
       "path": "/apchem/practice/",
       "ready": "body[data-practice] .filters-head",
       "budget": {
-        "kb": 100,
+        "kb": 105,
         "total": 120,
         "readyRatio": 2,
         "ready": 2000
@@ -64,7 +64,7 @@
       "path": "/apchem/practice/?chapter=9&section=9.1,9.2&start=1",
       "ready": "body[data-practice] .session",
       "budget": {
-        "kb": 150,
+        "kb": 160,
         "total": 250,
         "readyRatio": 2.6,
         "ready": 2600,

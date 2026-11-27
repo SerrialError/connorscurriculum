@@ -234,3 +234,8 @@ Traps that have slowed every page without anyone noticing:
   `GITHUB_CLIENT_ID` are in that repo's `wrangler.toml`. The client secret is a dashboard Secret.
   Its `package.json` pins pnpm, because Cloudflare's default pnpm 9 rejects the lockfile. Every
   push there redeploys the Worker.
+- Question feedback: "Report a problem" under each practice question (`components/practice/QuestionFeedback.svelte`,
+  `lib/practice/feedback.ts`) posts to the same Worker's `/feedback` endpoint, which files an anonymous
+  GitHub issue labeled "question feedback". It needs the `GITHUB_FEEDBACK_TOKEN` Secret (a fine-grained
+  token with Issues: Read and write on this repo) and only accepts requests from `ALLOWED_DOMAINS`, so it
+  fails from a LAN address. Feedback kinds are listed in both repos and must match.

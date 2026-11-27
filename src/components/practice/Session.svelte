@@ -12,6 +12,7 @@
   import { getCourse } from './context';
   import FrqParts from './FrqParts.svelte';
   import McqChoices from './McqChoices.svelte';
+  import QuestionFeedback from './QuestionFeedback.svelte';
   import SessionHeader from './SessionHeader.svelte';
 
   interface Props {
@@ -245,11 +246,16 @@
         </div>
       </article>
     {/key}
-    {#if q.type === 'mcq'}
-      <p class="small muted kbd-hint">
-        Keyboard: press A–{q.choices.at(-1)!.id.toUpperCase()} to choose{attempt.taking ? '' : ', Enter to check'}, ← → to move between questions.
-      </p>
-    {/if}
+    <div class="under-card">
+      {#key q.id}
+        <QuestionFeedback questionId={q.id} number={attempt.index + 1} picked={q.type === 'mcq' ? attempt.picks[q.id] : undefined} />
+      {/key}
+      {#if q.type === 'mcq'}
+        <p class="small muted kbd-hint">
+          Keyboard: press A–{q.choices.at(-1)!.id.toUpperCase()} to choose{attempt.taking ? '' : ', Enter to check'}, ← → to move between questions.
+        </p>
+      {/if}
+    </div>
   </section>
 {/if}
 
@@ -393,8 +399,17 @@
   .spacer {
     flex: 1;
   }
+  /* "Report a problem" on the left, the keyboard hint on the right; stacked when narrow. */
+  .under-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    margin-top: 0.5rem;
+  }
   .kbd-hint {
-    margin-top: 0.6rem;
+    margin: 0;
   }
   /* No keyboard hint on touch screens and phones. */
   @media (hover: none), (pointer: coarse), (max-width: 640px) {

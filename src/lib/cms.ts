@@ -1,11 +1,12 @@
 // Sveltia CMS configuration, generated from the registry so the chapter and AP topic
 // pickers always match chapters.json and ced.json. One lesson collection per subject.
 import type { SubjectData } from './registry';
+import { WORKER_URL } from './worker';
 
 export const CMS_REPO = 'SerrialError/connorscurriculum';
 
-// GitHub sign-in goes through a sveltia-cms-auth Cloudflare Worker (see CLAUDE.md, "Hosting").
-export const CMS_AUTH_URL = 'https://sveltia-cms-auth.serrialerror.workers.dev';
+// GitHub sign-in goes through the site's Worker (see CLAUDE.md, "Hosting").
+export const CMS_AUTH_URL = WORKER_URL;
 
 const BODY_HINT = [
   'Markdown. Math: `$k = 0.693/t_{1/2}$` inline, `$$ ... $$` on their own lines for display. Chemistry: `$\\ce{2H2 + O2 -> 2H2O}$`.',

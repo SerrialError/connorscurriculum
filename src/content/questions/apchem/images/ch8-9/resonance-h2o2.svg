@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="170" viewBox="0 0 280 170" font-family="Helvetica, Arial, sans-serif">
+<rect width="280" height="170" fill="#fff"/>
+<line x1="120" y1="95" x2="165" y2="95" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="93.9" y1="105" x2="66.1" y2="130" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="191.1" y1="85" x2="218.9" y2="60" stroke="#1d2321" stroke-width="2.2"/>
+<circle cx="88.1" cy="80.7" r="2.8" fill="#1d2321"/>
+<circle cx="95.8" cy="74.2" r="2.8" fill="#1d2321"/>
+<circle cx="110.7" cy="73.2" r="2.8" fill="#1d2321"/>
+<circle cx="119.3" cy="78.2" r="2.8" fill="#1d2321"/>
+<circle cx="196.9" cy="105.3" r="2.8" fill="#1d2321"/>
+<circle cx="189.2" cy="111.8" r="2.8" fill="#1d2321"/>
+<circle cx="174.3" cy="112.8" r="2.8" fill="#1d2321"/>
+<circle cx="165.7" cy="107.8" r="2.8" fill="#1d2321"/>
+<text x="105" y="104" text-anchor="middle" font-size="26" fill="#1d2321">O</text>
+<text x="180" y="104" text-anchor="middle" font-size="26" fill="#1d2321">O</text>
+<text x="55" y="149" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<text x="230" y="59" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+
+</svg>

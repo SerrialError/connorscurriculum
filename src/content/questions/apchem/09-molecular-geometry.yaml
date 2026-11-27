@@ -88,6 +88,7 @@
   sections: ["9.2"]
   cedTopics: ["2.7"]
   difficulty: 1
+  group: clf3
   authors: ["Claude"]
   prompt: |
     What is the molecular geometry of $\ce{ClF3}$?
@@ -2253,3 +2254,179 @@
     $\ce{B2}$ has 6 valence electrons (3 from each B). For B₂, C₂, and N₂, the π₂ₚ orbitals are **below** σ₂ₚ, so the order is σ₂ₛ² σ\*₂ₛ² π₂ₚ². The two π₂ₚ orbitals have equal energy, so by Hund's rule the last two electrons go one in each, with parallel spins: **paramagnetic**.
     Bond order $= \tfrac{1}{2}(4 - 2) = 1$. It's greater than 0, so $\ce{B2}$ is stable enough to exist.
     (B) fills σ₂ₚ first, the order for O₂ and F₂, which would pair the last two electrons.
+
+# --- Drawn structures and two-line choices (images from scripts/question-figures.mjs) ---
+
+- id: apchem-09-count-hybridizations
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 3
+  authors: ["Claude"]
+  prompt: |
+    The molecule below is drawn with every bond, but its lone pairs are not shown. Counting the C, N, and O atoms (not H), how many are sp, sp², and sp³ hybridized?
+  image: ./images/ch8-9/hybrid-count.svg
+  imageAlt: "CH3–CH(OH)–CH=CH–C≡N with every H drawn: a CH3 carbon, a carbon with one H and an O–H group, two carbons joined by a double bond with one H each, and a carbon triple-bonded to N."
+  choices:
+    - id: a
+      text: |-
+        sp: 1\
+        sp²: 2\
+        sp³: 2
+    - id: b
+      text: |-
+        sp: 2\
+        sp²: 2\
+        sp³: 3
+    - id: c
+      text: |-
+        sp: 2\
+        sp²: 2\
+        sp³: 2
+    - id: d
+      text: |-
+        sp: 1\
+        sp²: 3\
+        sp³: 3
+  answer: b
+  explanation: |
+    Count electron domains on each atom, adding the lone pairs the drawing leaves out. The $\ce{CH3}$ carbon and the carbon with the OH have 4 single bonds each: sp³. The O has 2 bonds and 2 lone pairs: also sp³, for 3 in all. The two carbons in the C=C have 3 domains each: sp². The carbon in the C≡N has 2 domains (a single bond and a triple bond): sp. The N has the triple bond and one lone pair, 2 domains: also sp. So sp 2, sp² 2, sp³ 3. (A) counts only the carbons. (C) forgets the O. (D) counts N's lone pair and triple bond as 3 domains.
+
+- id: apchem-09-count-sigma-pi-drawn
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.6"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    How many σ bonds and how many π bonds are in the molecule below?
+  image: ./images/ch8-9/sigma-pi-count.svg
+  imageAlt: "H2C=CH–C≡C–CH2–OH with every H drawn: a CH2 double-bonded to a CH, which is bonded to a carbon triple-bonded to another carbon, which is bonded to a CH2 carrying an O–H group."
+  choices:
+    - { id: a, text: "14 σ, 3 π" }
+    - { id: b, text: "11 σ, 2 π" }
+    - { id: c, text: "11 σ, 3 π" }
+    - { id: d, text: "5 σ, 3 π" }
+  answer: c
+  explanation: |
+    Every bond between two atoms has exactly one σ bond; a double bond adds one π and a triple bond adds two. There are 11 pairs of bonded atoms: 5 C–H, 1 O–H, 1 C–O, and 4 between carbons (two single bonds, the C=C, and the C≡C). That's 11 σ. The C=C adds 1 π and the C≡C adds 2: 3 π. (A) counts every line as a σ bond, including the extra lines of the double and triple bonds. (B) counts the triple bond as having one π. (D) leaves out the bonds to H.
+
+- id: apchem-09-ash3-drawn
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2", "9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    Arsine, $\ce{AsH3}$, is drawn below in 3D: the wedge is a bond pointing toward you and the dashed bond points away. What are the hybridization of As and the molecular geometry?
+  image: ./images/ch8-9/ash3-3d.svg
+  imageAlt: "As with one lone pair on top and three bonds to H angled downward: one drawn as a plain line, one as a solid wedge, and one as a dashed wedge."
+  choices:
+    - id: a
+      text: |-
+        sp²\
+        Trigonal planar
+    - id: b
+      text: |-
+        sp³\
+        Tetrahedral
+    - id: c
+      text: |-
+        sp²\
+        Trigonal pyramidal
+    - id: d
+      text: |-
+        sp³\
+        Trigonal pyramidal
+  answer: d
+  explanation: |
+    As (group 15) has 5 valence electrons: three bond to H and two form a lone pair. Three bonds and one lone pair are 4 domains, so As is sp³, and with only three of the corners holding atoms the molecule is trigonal pyramidal, like $\ce{NH3}$. (A) leaves out the lone pair. (B) gives the electron-domain geometry instead of the molecular geometry. (C) has the right shape but counts only the bonds for the hybridization; the lone pair counts too.
+
+- id: apchem-09-domains-drawing
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.2"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The drawing shows a central atom A with two bonded atoms B and one lone pair (the lobe). Which describes both the electron-domain geometry around A and the molecular geometry?
+  image: ./images/ch8-9/two-bonds-one-pair.svg
+  imageAlt: "Atom A with single bonds to two B atoms angled downward, and a teardrop-shaped lobe holding a lone pair pointing straight up from A."
+  choices:
+    - id: a
+      text: |-
+        Electron domains: trigonal planar\
+        Molecule: bent
+    - id: b
+      text: |-
+        Electron domains: tetrahedral\
+        Molecule: bent
+    - id: c
+      text: |-
+        Electron domains: linear\
+        Molecule: linear
+    - id: d
+      text: |-
+        Electron domains: bent\
+        Molecule: trigonal planar
+  answer: a
+  explanation: |
+    A has 3 electron domains (two bonds and one lone pair), which spread out in a trigonal plane. The molecular geometry names only where the atoms are, so with one corner taken by the lone pair the molecule is bent, with an angle a little under 120°, like $\ce{SO2}$. (B) would need two lone pairs, as in water. (C) ignores the lone pair. (D) swaps the two: "bent" describes atoms, not electron domains.
+
+- id: apchem-09-angle-to-hybrid
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    A central atom has ideal angles of 120° between **all** of its electron domains. What is its hybridization?
+  choices:
+    - { id: a, text: "sp" }
+    - { id: b, text: "sp²" }
+    - { id: c, text: "sp³" }
+    - { id: d, text: "None of these: it has five domains in a trigonal bipyramid" }
+  answer: b
+  explanation: |
+    Three domains in a trigonal plane are 120° apart, and three domains mean sp² (one s and two p orbitals mixed). (A) gives 2 domains at 180°. (C) gives 4 domains at 109.5°. (D) has some 120° angles, between the equatorial positions, but the axial positions are 90° from them, so not every angle is 120°.
+
+- id: apchem-09-cs2-hybrid-polar
+  type: mcq
+  subject: apchem
+  chapter: 9
+  sections: ["9.3", "9.5"]
+  cedTopics: ["2.7"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    What are the hybridization of C in carbon disulfide, $\ce{CS2}$, and the polarity of the molecule?
+  choices:
+    - id: a
+      text: |-
+        sp\
+        Polar
+    - id: b
+      text: |-
+        sp²\
+        Nonpolar
+    - id: c
+      text: |-
+        sp³\
+        Polar
+    - id: d
+      text: |-
+        sp\
+        Nonpolar
+  answer: d
+  explanation: |
+    $4 + 2(6) = 16$ valence electrons give S=C=S with two lone pairs on each S and none on C. C has 2 domains (a double bond counts as one), so it's sp and the molecule is linear. The two C=S bond dipoles point in opposite directions and cancel, so $\ce{CS2}$ is nonpolar. (A) has the right hybridization, but a linear molecule with identical ends can't be polar. (B) would need three domains on C. (C) gives C lone pairs it doesn't have.

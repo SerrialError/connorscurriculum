@@ -2382,3 +2382,167 @@
   explanation: |
     In an ionic solid, every ion is held by strong attractions to all of its neighbors, so ionic compounds are solids with high melting points (NaCl melts at 801 °C). In a molecular compound, the covalent bonds **inside** each molecule are strong, but the attractions **between** molecules are much weaker, so many small molecular compounds are gases or liquids. Polar molecules such as $\ce{H2O}$ attract each other more strongly than nonpolar ones such as $\ce{CO2}$.
     (C) $\ce{CO2}$ (44 g/mol) is a gas while $\ce{H2O}$ (18 g/mol) is a liquid. Chapter 11 covers the attractions between molecules.
+
+# --- Drawn structures: pick a Lewis structure, or read one (images from scripts/question-figures.mjs) ---
+
+- id: apchem-08-resonance-which-drawn
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6"]
+  cedTopics: ["2.6"]
+  difficulty: 1
+  authors: ["Claude"]
+  prompt: |
+    The Lewis structures of four molecules are drawn below, with every bond and lone pair. Which molecule has resonance structures?
+  choices:
+    - id: a
+      text: "Formaldehyde: C double-bonded to O and bonded to two H, with two lone pairs on O"
+      image: ./images/ch8-9/resonance-h2co.svg
+    - id: b
+      text: "Hypochlorous acid: H–O–Cl, all single bonds, two lone pairs on O and three on Cl"
+      image: ./images/ch8-9/resonance-hocl.svg
+    - id: c
+      text: "Ozone: O–O=O, bent, with one lone pair on the middle O and lone pairs on both ends"
+      image: ./images/ch8-9/resonance-o3.svg
+    - id: d
+      text: "Hydrogen peroxide: H–O–O–H, all single bonds, two lone pairs on each O atom"
+      image: ./images/ch8-9/resonance-h2o2.svg
+  answer: c
+  explanation: |
+    In ozone the double bond can be drawn to either end O, with the same atoms in the same places, so there are two resonance structures. The real molecule is the average of the two: both O–O bonds are the same length, between a single and a double bond (bond order 1.5). (A) has a double bond, but there's only one place it can go: H can't form a second bond, so C=O is the only option. (B) and (D) have only single bonds, so there's no double bond to move.
+
+- id: apchem-08-skeleton-double-bonds
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The skeleton of acrylic acid, $\ce{C3H4O2}$, is drawn below. It shows which atoms are bonded, but not the bond types or any lone pairs. In the correct Lewis structure, which numbered bonds are **double** bonds?
+  image: ./images/ch8-9/skeleton-acrylic-acid.svg
+  imageAlt: "Skeleton of acrylic acid drawn with single lines: a carbon bonded to two H, bonded (bond 1) to a carbon with one H, bonded (bond 2) to a third carbon. The third carbon is bonded (bond 3) to an O above it and (bond 4) to an O that is bonded to H."
+  choices:
+    - { id: a, text: "1 and 2" }
+    - { id: b, text: "2 and 4" }
+    - { id: c, text: "1 and 3" }
+    - { id: d, text: "3 and 4" }
+  answer: c
+  explanation: |
+    $3(4) + 4(1) + 2(6) = 28$ valence electrons. With only the single bonds drawn, the first carbon has 3 bonds and so does the second, so they share a double bond (bond 1). The third carbon also has only 3 bonds, and the top O has just one, so they share the other double bond (bond 3). Then every C has 4 bonds, each O has 2 bonds and 2 lone pairs, and the count works: 10 bonds (20 electrons) + 4 lone pairs (8) = 28. (A) and (D) give one carbon 5 bonds. (B) leaves the first carbon with only 3 bonds and gives the O–H oxygen a third bond.
+
+- id: apchem-08-clf3-lewis-drawn
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  group: clf3
+  authors: ["Claude"]
+  prompt: |
+    Which is the correct Lewis structure of $\ce{ClF3}$?
+  choices:
+    - id: a
+      text: "Cl single-bonded to three F atoms, with two lone pairs on the Cl atom"
+      image: ./images/ch8-9/clf3-two-pairs.svg
+    - id: b
+      text: "Cl single-bonded to three F atoms, with one lone pair on the Cl atom"
+      image: ./images/ch8-9/clf3-one-pair.svg
+    - id: c
+      text: "Cl double-bonded to one F and single-bonded to two, two lone pairs on Cl"
+      image: ./images/ch8-9/clf3-double-bond.svg
+    - id: d
+      text: "Cl single-bonded to three F atoms, with three lone pairs on the Cl atom"
+      image: ./images/ch8-9/clf3-three-pairs.svg
+  answer: a
+  explanation: |
+    $7 + 3(7) = 28$ valence electrons. Three Cl–F bonds use 6 and three lone pairs on each F use 18, leaving 4: **two lone pairs on Cl**, which then has 10 electrons. That's allowed because Cl is in period 3. (B) has only 26 electrons and (D) has 30. (C) has the right 28, but the double-bonded F gets a formal charge of +1 and Cl −1, while in (A) every formal charge is 0.
+
+- id: apchem-08-identify-x-xf4
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.7"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    The Lewis structure of a neutral molecule, $\ce{XF4}$, is drawn below with every lone pair. Every atom has a formal charge of 0. Which element is most likely X?
+  image: ./images/ch8-9/identify-x-xf4.svg
+  imageAlt: "X in the center, single-bonded to four F atoms (up, down, left, and right), with one lone pair on X and three lone pairs on each F."
+  choices:
+    - { id: a, text: "S" }
+    - { id: b, text: "C" }
+    - { id: c, text: "Si" }
+    - { id: d, text: "Xe" }
+  answer: a
+  explanation: |
+    With a formal charge of 0, X "owns" one electron from each of its 4 bonds plus both electrons of its lone pair: $4 + 2 = 6$ valence electrons, so X is in group 16. It also has 10 electrons around it, more than an octet, so it must be in period 3 or below. Sulfur fits ($\ce{SF4}$). (B) and (C) have 4 valence electrons, so $\ce{CF4}$ and $\ce{SiF4}$ have no lone pair on the central atom. (D) has 8, so $\ce{XeF4}$ has two lone pairs on Xe.
+
+- id: apchem-08-so2cl2-formal-charge
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5", "8.7"]
+  cedTopics: ["2.6"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In sulfuryl chloride, $\ce{SO2Cl2}$, S is bonded to both O atoms and both Cl atoms. Which Lewis structure gives formal charges **closest to zero**?
+  choices:
+    - id: a
+      text: "S single-bonded to all four atoms, with three lone pairs on each O"
+      image: ./images/ch8-9/so2cl2-single.svg
+    - id: b
+      text: "One S=O double bond and one S–O single bond, no lone pair on S"
+      image: ./images/ch8-9/so2cl2-one-double.svg
+    - id: c
+      text: "Two S=O double bonds and one lone pair on the S atom"
+      image: ./images/ch8-9/so2cl2-double-pair.svg
+    - id: d
+      text: "Two S=O double bonds and no lone pair on the S atom"
+      image: ./images/ch8-9/so2cl2-double.svg
+  answer: d
+  explanation: |
+    $6 + 2(6) + 2(7) = 32$ valence electrons. In (D), S has two double bonds and two single bonds, 12 bonding electrons (allowed in period 3), and every formal charge is 0: S is $6 - 0 - \tfrac{1}{2}(12) = 0$ and each O is $6 - 4 - \tfrac{1}{2}(4) = 0$. (A) obeys the octet rule, but S is +2 and each O is −1; it's the structure to draw only when a question says to keep every atom at an octet. (B) leaves S at +1 and the single-bonded O at −1. (C) has 34 electrons, two too many.
+
+- id: apchem-08-strongest-co-bond
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.6", "8.8"]
+  cedTopics: ["2.2"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In acetone, $\ce{(CH3)2CO}$, the carbon and oxygen atoms are joined by a double bond. Which of these has a **stronger** carbon–oxygen bond than acetone?
+  choices:
+    - { id: a, text: '$\ce{CH3OH}$' }
+    - { id: b, text: '$\ce{CO}$' }
+    - { id: c, text: '$\ce{HCOO-}$' }
+    - { id: d, text: '$\ce{CH3OCH3}$' }
+  answer: b
+  explanation: |
+    Draw each Lewis structure and find the bond order. Carbon monoxide has a C≡O triple bond (bond order 3), stronger than acetone's double bond (2). (A) and (D) have C–O single bonds (1). (C), formate, has two resonance structures that put the double bond on either O, so each C–O bond has a bond order of 1.5, weaker than a full double bond.
+
+- id: apchem-08-methanimine-cn-bond
+  type: mcq
+  subject: apchem
+  chapter: 8
+  sections: ["8.5"]
+  cedTopics: ["2.5"]
+  difficulty: 2
+  authors: ["Claude"]
+  prompt: |
+    In methanimine, $\ce{CH2NH}$, C is bonded to two H atoms and to N, and N is bonded to the third H. In its Lewis structure, how is N bonded to C, and how many lone pairs does N have?
+  choices:
+    - { id: a, text: "C–N single bond; two lone pairs on N" }
+    - { id: b, text: "C=N double bond; one lone pair on N" }
+    - { id: c, text: "C≡N triple bond; no lone pairs on N" }
+    - { id: d, text: "C=N double bond; two lone pairs on N" }
+  answer: b
+  explanation: |
+    $4 + 3(1) + 5 = 12$ valence electrons. Four single bonds (two C–H, C–N, N–H) use 8, and the last 4 go on N as two lone pairs, but that leaves C with only 6 electrons. Moving one N lone pair into the C–N bond gives a C=N double bond: C has 8 electrons and N has 2 bonds' worth plus one lone pair, also 8. (A) is the structure before that step, with C short of an octet. (C) gives C five bonds. (D) has 14 electrons, two too many.

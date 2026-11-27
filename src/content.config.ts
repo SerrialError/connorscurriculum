@@ -165,7 +165,15 @@ const mcq = z
     ...questionBase,
     type: z.literal('mcq'),
     choices: z
-      .array(z.object({ id: z.string().regex(/^[a-z]$/, 'choice id must be a single letter'), text: z.string().min(1) }))
+      .array(
+        z.object({
+          id: z.string().regex(/^[a-z]$/, 'choice id must be a single letter'),
+          // With an image (a Lewis structure, say), the text is the image's description: screen
+          // readers read it, and the choice-balance check measures it, but it isn't shown.
+          text: z.string().min(1),
+          image: z.string().optional(),
+        }),
+      )
       .min(2, 'mcq needs 2–5 choices')
       .max(5, 'mcq needs 2–5 choices'),
     answer: z.string(),
@@ -249,9 +257,13 @@ function questionsLoader(): Loader {
               throw new Error(`${filePath} → [${i}].id: duplicate question id "${id}" (already used in ${seen.get(id)})`);
             }
             seen.set(id, filePath);
-            const image = (item as { image?: unknown }).image;
-            if (typeof image === 'string' && !existsSync(join(dirname(abs), image))) {
-              throw new Error(`${filePath} → ${id}.image: file "${image}" not found next to the YAML file`);
+            const { image, choices } = item as { image?: unknown; choices?: unknown };
+            const images: [string, unknown][] = [['image', image]];
+            if (Array.isArray(choices)) choices.forEach((c, j) => images.push([`choices[${j}].image`, (c as { image?: unknown })?.image]));
+            for (const [field, file] of images) {
+              if (typeof file === 'string' && !existsSync(join(dirname(abs), file))) {
+                throw new Error(`${filePath} → ${id}.${field}: file "${file}" not found next to the YAML file`);
+              }
             }
             const data = await parseData({ id, data: { ...(item as Record<string, unknown>), position: position++ }, filePath });
             store.set({ id, data, filePath });

@@ -213,6 +213,12 @@ Every `id` must be unique across the whole site. Use `<subject>-<chapter>-<short
     - { id: c, text: "25%" }
     - { id: d, text: "6.25%" }
   answer: b                # one of the choice ids
+  # A choice can be a picture (a Lewis structure, say). Its text then becomes the image's alt
+  # text: describe what's drawn, at about the same length as the other choices.
+  #   - id: a
+  #     text: "Cl bonded to three F atoms, with two lone pairs on Cl"
+  #     image: ./images/ch8-9/clf3-two-pairs.svg
+  # For a choice on two lines, end the first line with a backslash inside a |- block.
   explanation: |
     Why (B) is right, and why the others are wrong. Students see the choices
     labeled A, B, C, D, so refer to them as (A), (B), and so on.

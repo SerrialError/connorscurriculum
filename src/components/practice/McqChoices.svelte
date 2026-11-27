@@ -12,9 +12,11 @@
 
   let { q, attempt }: Props = $props();
   const done = $derived(!!attempt.checked[q.id]);
+  // All drawn choices (Lewis structures) sit side by side in a grid instead of tall rows.
+  const pictures = $derived(q.choices.every((c) => c.image));
 </script>
 
-<fieldset class="choices" disabled={done}>
+<fieldset class="choices" class:pictures disabled={done}>
   <legend class="visually-hidden">Choices</legend>
   {#each q.choices as c (c.id)}
     {@const isAnswer = done && c.id === q.answer}
@@ -28,7 +30,11 @@
         bind:group={attempt.picks[q.id]}
       />
       <span class="letter" aria-hidden="true">{c.id.toUpperCase()}</span>
-      <span class="choice-text" data-scroll-x={`Choice ${c.id.toUpperCase()}`}>{@html c.html}</span>
+      {#if c.image}
+        <img class="choice-image" src={c.image.src} width={c.image.width} height={c.image.height} alt={c.image.alt} decoding="async" />
+      {:else}
+        <span class="choice-text" data-scroll-x={`Choice ${c.id.toUpperCase()}`}>{@html c.html}</span>
+      {/if}
       {#if isAnswer}<span class="mark">✓ Correct answer</span>{/if}
       {#if isWrongPick}<span class="mark">✗ Your answer</span>{/if}
     </label>
@@ -49,6 +55,25 @@
   }
   .choice {
     flex-wrap: wrap;
+  }
+  .pictures {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  }
+  .pictures .choice {
+    position: relative;
+    align-items: flex-start;
+  }
+  /* The drawing at its own size, centered in the space beside the letter. */
+  .pictures .choice-image {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-inline: auto;
+  }
+  /* "✓ Correct answer" in the corner, so it doesn't squeeze the drawing. */
+  .pictures .mark {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.75rem;
   }
   .choices:disabled .choice {
     cursor: default;
@@ -108,6 +133,16 @@
     min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
+  }
+  /* A drawn choice (a Lewis structure): its own size up to the row's width, on white so dark
+     mode doesn't hide black lines. */
+  .choice-image {
+    flex: 0 1 auto;
+    max-width: min(100%, 22rem);
+    height: auto;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    background: #fff;
   }
   .mark {
     font-weight: 700;

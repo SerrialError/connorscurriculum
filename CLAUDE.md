@@ -132,10 +132,11 @@ These come from Connor's corrections. Breaking one has meant redoing work.
   "Given on the sheet" list.
 - The CED has no list of polyatomic ions, but AP questions name compounds and expect the formula.
   The site teaches the common 16 plus hydronium.
-- The Chapters 1–3 format (45 MCQ, about 20 of them math, including empirical formulas and
-  limiting/excess reactants) and the Chapters 6–7 format (36 MCQ × 2.8 + one 7.2-point FRQ) are
-  encoded in `src/data/apchem/tests.json`. Ask for the format of any new test rather than guessing
-  it.
+- Test formats are encoded in `src/data/apchem/tests.json`: Chapters 1–3 (45 MCQ, about 20 of them
+  math, including empirical formulas and limiting/excess reactants), Chapters 6–7 (36 MCQ × 2.8 + one
+  7.2-point FRQ), and Chapters 8–9 (36 MCQ × 3, no FRQ, no MO; some questions ask for two answers at
+  once, and most of Chapter 9 depends on drawing the right Lewis structure). Ask for the format of any
+  new test rather than guessing it.
 
 **Questions**
 - `src/lib/practice/choice-balance.test.ts` fails a chapter when the correct choice is the longest

@@ -233,7 +233,8 @@ Traps that have slowed every page without anyone noticing:
   `SerrialError/sveltia-cms-auth` (`CMS_AUTH_URL` in `lib/cms.ts`). `ALLOWED_DOMAINS` and
   `GITHUB_CLIENT_ID` are in that repo's `wrangler.toml`. The client secret is a dashboard Secret.
   Its `package.json` pins pnpm, because Cloudflare's default pnpm 9 rejects the lockfile. Every
-  push there redeploys the Worker.
+  push to its `main` redeploys the Worker. Branch builds run `wrangler preview`, which reads the
+  `[previews]` block in `wrangler.toml`: add any new var or binding there too, or the build fails.
 - Question feedback: "Report a problem" under each practice question (`components/practice/QuestionFeedback.svelte`,
   `lib/practice/feedback.ts`) posts to the same Worker's `/feedback` endpoint, which files an anonymous
   GitHub issue labeled "question feedback". It needs the `GITHUB_FEEDBACK_TOKEN` Secret (a fine-grained

@@ -7,24 +7,25 @@ import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import { type Question, getSubjectData, isClassContent, topicIds } from '../content';
 import { renderInlineMarkdown, renderMarkdown, renderPlainText } from '../markdown';
-import type { PracticeQuestion, QuestionMeta } from './types';
+import type { PracticeImage, PracticeQuestion, QuestionMeta } from './types';
 
 const images = import.meta.glob<ImageMetadata>('/src/content/questions/**/*.{png,jpg,jpeg,webp,gif,avif,svg}', {
   eager: true,
   import: 'default',
 });
 
-async function questionImage(q: Question) {
-  if (!q.data.image) return undefined;
-  const key = '/' + join(dirname(q.filePath!), q.data.image).replaceAll('\\', '/');
+/** An image next to the question's YAML file, resized for the page. */
+async function questionImage(q: Question, file: string | undefined, alt: string, field = 'image'): Promise<PracticeImage | undefined> {
+  if (!file) return undefined;
+  const key = '/' + join(dirname(q.filePath!), file).replaceAll('\\', '/');
   const meta = images[key];
-  if (!meta) throw new Error(`${q.filePath} → ${q.id}.image: could not load "${q.data.image}"`);
+  if (!meta) throw new Error(`${q.filePath} → ${q.id}.${field}: could not load "${file}"`);
   const img = await getImage({ src: meta, width: Math.min(meta.width, 900) });
   return {
     src: img.src,
     width: Number(img.attributes.width ?? meta.width),
     height: Number(img.attributes.height ?? meta.height),
-    alt: q.data.imageAlt ?? '',
+    alt,
   };
 }
 
@@ -54,7 +55,7 @@ export async function toPractice(subject: string, q: Question): Promise<Practice
     ...meta,
     promptHtml: await renderMarkdown(q.data.prompt),
     promptText: await renderPlainText(q.data.prompt),
-    image: await questionImage(q),
+    image: await questionImage(q, q.data.image, q.data.imageAlt ?? ''),
     explanationHtml: await renderMarkdown(q.data.explanation),
   };
   if (q.data.type === 'mcq') {
@@ -63,7 +64,11 @@ export async function toPractice(subject: string, q: Question): Promise<Practice
       type: 'mcq',
       answer: q.data.answer,
       choices: await Promise.all(
-        q.data.choices.map(async (c) => ({ id: c.id, html: await renderInlineMarkdown(c.text), text: await renderPlainText(c.text) })),
+        q.data.choices.map(async (c, i) => {
+          const text = await renderPlainText(c.text);
+          const image = await questionImage(q, c.image, text, `choices[${i}].image`);
+          return { id: c.id, html: await renderInlineMarkdown(c.text), text, ...(image ? { image } : {}) };
+        }),
       ),
     };
   }

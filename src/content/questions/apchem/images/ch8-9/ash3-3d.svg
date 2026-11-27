@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="200" viewBox="0 0 260 200" font-family="Helvetica, Arial, sans-serif">
+<rect width="260" height="200" fill="#fff"/>
+<line x1="112.9" y1="97.2" x2="72.2" y2="126.3" stroke="#1d2321" stroke-width="2.2"/>
+<path d="M140.8,103 L163,149.7 L171.6,144.6 Z" fill="#1d2321"/>
+<line x1="152.5" y1="97.6" x2="154.1" y2="94.1" stroke="#1d2321" stroke-width="2"/>
+<line x1="158.2" y1="100.9" x2="160.2" y2="96.4" stroke="#1d2321" stroke-width="2"/>
+<line x1="163.9" y1="104.1" x2="166.4" y2="98.7" stroke="#1d2321" stroke-width="2"/>
+<line x1="169.6" y1="107.4" x2="172.6" y2="100.9" stroke="#1d2321" stroke-width="2"/>
+<line x1="175.2" y1="110.7" x2="178.7" y2="103.2" stroke="#1d2321" stroke-width="2"/>
+<line x1="180.9" y1="114" x2="184.9" y2="105.4" stroke="#1d2321" stroke-width="2"/>
+<line x1="186.6" y1="117.2" x2="191.1" y2="107.7" stroke="#1d2321" stroke-width="2"/>
+<circle cx="125" cy="58" r="2.8" fill="#1d2321"/>
+<circle cx="135" cy="58" r="2.8" fill="#1d2321"/>
+<text x="130" y="94" text-anchor="middle" font-size="26" fill="#1d2321">As</text>
+<text x="60" y="144" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<text x="175" y="169" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<text x="205" y="129" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+
+</svg>

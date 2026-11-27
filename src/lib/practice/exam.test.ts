@@ -208,18 +208,22 @@ describe('apchem: the Chapters 8–9 practice exam', () => {
   const test = getSubjectData('apchem').tests.find((t) => t.id === 'ch8-9-test')!;
   const questions = testQuestions(test);
 
-  it('is 36 multiple choice at 2.8 points and a 7.2-point FRQ, like the Chapters 6–7 test', () => {
+  // The format the teacher announced: 36 questions at 3 points each, no free response.
+  it('is 36 multiple choice at 3 points each with no FRQ, 108 in all', () => {
     expect(mcqCount(test.exam!)).toBe(36);
+    expect(test.exam!.mcqPoints).toBe(3);
+    expect(test.exam!.frq.count).toBe(0);
+    expect(test.exam!.tentative).toBeFalsy();
     expect(examMax(test.exam!)).toBe(108);
   });
 
-  // Molecular orbitals (9.7–9.8) are on the final, not this test.
+  // The teacher confirmed no molecular orbitals (9.7–9.8) on this test.
   it('leaves out molecular orbitals', () => {
     expect(test.sections).not.toContain('9.7');
     expect(test.sections).not.toContain('9.8');
     for (let i = 0; i < 50; i++) {
       const drawn = drawExam(questions, test.exam!, seededRng(`seed${i}`));
-      expect(drawn).toHaveLength(37);
+      expect(drawn).toHaveLength(36);
       expect(drawn.flatMap((q) => q.sections).filter((s) => s === '9.7' || s === '9.8')).toEqual([]);
     }
   });

@@ -8,6 +8,15 @@ export interface PracticeChoice {
    * that is only math (MathML) as empty.
    */
   text: string;
+  /** A picture shown instead of the text (whose words become its alt text). */
+  image?: PracticeImage;
+}
+
+export interface PracticeImage {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
 }
 
 export interface PracticePart {

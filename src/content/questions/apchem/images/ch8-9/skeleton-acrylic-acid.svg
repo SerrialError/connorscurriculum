@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="450" height="200" viewBox="0 0 450 200" font-family="Helvetica, Arial, sans-serif">
+<rect width="450" height="200" fill="#fff"/>
+<line x1="98.3" y1="110.6" x2="71.7" y2="89.4" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="98.3" y1="129.4" x2="71.7" y2="150.6" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="125" y1="120" x2="175" y2="120" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="190" y1="105" x2="190" y2="70" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="205" y1="120" x2="255" y2="120" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="270" y1="105" x2="270" y2="65" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="285" y1="120" x2="335" y2="120" stroke="#1d2321" stroke-width="2.2"/>
+<line x1="365" y1="120" x2="395" y2="120" stroke="#1d2321" stroke-width="2.2"/>
+<text x="110" y="129" text-anchor="middle" font-size="26" fill="#1d2321">C</text>
+<text x="60" y="89" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<text x="60" y="169" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<text x="190" y="129" text-anchor="middle" font-size="26" fill="#1d2321">C</text>
+<text x="190" y="64" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<text x="270" y="129" text-anchor="middle" font-size="26" fill="#1d2321">C</text>
+<text x="270" y="59" text-anchor="middle" font-size="26" fill="#1d2321">O</text>
+<text x="350" y="129" text-anchor="middle" font-size="26" fill="#1d2321">O</text>
+<text x="410" y="129" text-anchor="middle" font-size="26" fill="#1d2321">H</text>
+<circle cx="150" cy="148" r="12" fill="#fff" stroke="#1f6f8b" stroke-width="2"/>
+<text x="150" y="154" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f6f8b">1</text>
+<circle cx="230" cy="148" r="12" fill="#fff" stroke="#1f6f8b" stroke-width="2"/>
+<text x="230" y="154" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f6f8b">2</text>
+<circle cx="294" cy="85" r="12" fill="#fff" stroke="#1f6f8b" stroke-width="2"/>
+<text x="294" y="91" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f6f8b">3</text>
+<circle cx="310" cy="148" r="12" fill="#fff" stroke="#1f6f8b" stroke-width="2"/>
+<text x="310" y="154" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f6f8b">4</text>
+
+</svg>
